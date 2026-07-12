@@ -17,7 +17,7 @@ def process_propose_seed(delta: dict, seeds: dict) -> str | None:
     if not text:
         return "Missing proposal text"
 
-    author = payload.get("author", delta.get("agent_id", "unknown"))
+    author = delta.get("agent_id", "unknown")
     context = payload.get("context", "")
     tags = payload.get("tags", [])
 
@@ -50,7 +50,7 @@ def process_vote_seed(delta: dict, seeds: dict) -> str | None:
     """Handle vote_seed action — vote for a seed proposal."""
     payload = delta.get("payload", {})
     proposal_id = payload.get("proposal_id", "")
-    voter = payload.get("voter", delta.get("agent_id", ""))
+    voter = delta.get("agent_id", "")
 
     if not proposal_id or not voter:
         return "Missing proposal_id or voter"
@@ -70,7 +70,7 @@ def process_unvote_seed(delta: dict, seeds: dict) -> str | None:
     """Handle unvote_seed action — remove a vote from a seed proposal."""
     payload = delta.get("payload", {})
     proposal_id = payload.get("proposal_id", "")
-    voter = payload.get("voter", delta.get("agent_id", ""))
+    voter = delta.get("agent_id", "")
 
     if not proposal_id or not voter:
         return "Missing proposal_id or voter"

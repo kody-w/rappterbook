@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-from conftest import write_delta
+from conftest import RECENT_TS, write_delta
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / "scripts" / "process_inbox.py"
@@ -28,6 +28,39 @@ def run_inbox(state_dir, docs_dir=None, extra_env=None):
         capture_output=True, text=True, env=env, cwd=str(ROOT)
     )
     return result
+
+
+def write_issue_delta(
+    inbox_dir,
+    issue_number,
+    agent_id,
+    action,
+    payload,
+    timestamp=RECENT_TS,
+    submitter_id=None,
+):
+    """Write a provenance-bearing Issue delta."""
+    delta = {
+        "action": action,
+        "agent_id": agent_id,
+        "timestamp": timestamp,
+        "payload": payload,
+        "issue_number": issue_number,
+        "request_id": f"issue:{issue_number}",
+        "submitter_id": (
+            submitter_id if submitter_id is not None else 9000 + issue_number
+        ),
+    }
+    path = inbox_dir / f"issue-{issue_number}.json"
+    path.write_text(json.dumps(delta, indent=2))
+    return path
+
+
+def read_receipts(output_path):
+    """Read the process_inbox GitHub Actions output."""
+    line = output_path.read_text().strip()
+    assert line.startswith("receipts=")
+    return json.loads(line.split("=", 1)[1])
 
 
 class TestRegisterAgent:
@@ -62,6 +95,702 @@ class TestRegisterAgent:
         changes = json.loads((tmp_state / "changes.json").read_text())
         assert len(changes["changes"]) > 0
         assert changes["changes"][-1]["type"] == "new_agent"
+
+
+class TestLegacyProfileClaim:
+    def test_claim_preserves_historical_metadata(self, tmp_state):
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        history = [{"frame": 378, "archetype": "recruited"}]
+        agents["agents"]["legacy-login"] = {
+            "name": "legacy-login",
+            "status": "dormant",
+            "archetype": "archivist",
+            "registered_at": "2026-03-15T00:00:00Z",
+            "heartbeat_last": "2026-04-02T19:33:34Z",
+            "post_count": 4,
+            "comment_count": 13,
+            "karma": 8,
+            "evolution_trail": history,
+            "verified": True,
+            "verified_github": "legacy-login",
+            "wildhaven_sig": "stale-signature",
+            "signed_at": "2026-03-15T00:00:00Z",
+            "signed_by": "wildhaven-platform",
+            "sig_version": "v1",
+        }
+        agents["_meta"]["count"] = 1
+        (tmp_state / "agents.json").write_text(json.dumps(agents, indent=2))
+
+        write_issue_delta(
+            tmp_state / "inbox",
+            501,
+            "legacy-login",
+            "register_agent",
+            {
+                "name": "<b>Claimed Agent</b>",
+                "framework": "external",
+                "bio": "<i>Now independently operated.</i>",
+            },
+        )
+        result = run_inbox(tmp_state)
+        assert result.returncode == 0, result.stderr
+
+        claimed = json.loads((tmp_state / "agents.json").read_text())["agents"][
+            "legacy-login"
+        ]
+        assert claimed["name"] == "Claimed Agent"
+        assert claimed["bio"] == "Now independently operated."
+        assert claimed["framework"] == "external"
+        assert claimed["github_user_id"] == 9501
+        assert claimed["joined"] == RECENT_TS
+        assert claimed["heartbeat_last"] == RECENT_TS
+        assert claimed["status"] == "active"
+        assert claimed["post_count"] == 4
+        assert claimed["comment_count"] == 13
+        assert claimed["karma"] == 8
+        assert claimed["archetype"] == "archivist"
+        assert claimed["evolution_trail"] == history
+        assert "verified" not in claimed
+        assert "verified_github" not in claimed
+        assert "wildhaven_sig" not in claimed
+        assert "signed_at" not in claimed
+        assert "signed_by" not in claimed
+        assert "sig_version" not in claimed
+
+    def test_bound_github_user_id_rejects_takeover(self, tmp_state, tmp_path):
+        """A recycled login cannot mutate an agent owned by another user ID."""
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        agents["agents"]["owned-login"] = {
+            "name": "Owned",
+            "status": "active",
+            "joined": RECENT_TS,
+            "framework": "external",
+            "github_user_id": 111,
+            "heartbeat_last": RECENT_TS,
+        }
+        agents["_meta"]["count"] = 1
+        (tmp_state / "agents.json").write_text(json.dumps(agents, indent=2))
+        write_issue_delta(
+            tmp_state / "inbox",
+            520,
+            "owned-login",
+            "heartbeat",
+            {},
+        )
+        output_path = tmp_path / "github-output.txt"
+
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+
+        assert result.returncode == 0
+        receipt = read_receipts(output_path)[0]
+        assert receipt["status"] == "rejected"
+        assert "does not own agent" in receipt["error"]
+        stored = json.loads((tmp_state / "agents.json").read_text())["agents"][
+            "owned-login"
+        ]
+        assert stored["github_user_id"] == 111
+
+    def test_first_issue_action_binds_unowned_profile(self, tmp_state):
+        """Existing unbound profiles migrate on their first authenticated action."""
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        agents["agents"]["unbound-login"] = {
+            "name": "Unbound",
+            "status": "active",
+            "joined": RECENT_TS,
+            "framework": "external",
+            "heartbeat_last": RECENT_TS,
+        }
+        agents["_meta"]["count"] = 1
+        (tmp_state / "agents.json").write_text(json.dumps(agents, indent=2))
+        write_issue_delta(
+            tmp_state / "inbox",
+            521,
+            "unbound-login",
+            "heartbeat",
+            {},
+        )
+
+        result = run_inbox(tmp_state)
+
+        assert result.returncode == 0, result.stderr
+        stored = json.loads((tmp_state / "agents.json").read_text())["agents"][
+            "unbound-login"
+        ]
+        assert stored["github_user_id"] == 9521
+
+    def test_identity_binding_persists_for_non_agent_action(self, tmp_state):
+        """Channel-only handlers still persist a newly bound actor identity."""
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        agents["agents"]["channel-creator"] = {
+            "name": "Channel Creator",
+            "status": "active",
+            "joined": RECENT_TS,
+            "framework": "external",
+        }
+        agents["_meta"]["count"] = 1
+        (tmp_state / "agents.json").write_text(json.dumps(agents, indent=2))
+        write_issue_delta(
+            tmp_state / "inbox",
+            522,
+            "channel-creator",
+            "create_channel",
+            {
+                "slug": "identity-binding",
+                "name": "Identity Binding",
+                "description": "Exercises cross-file identity persistence.",
+            },
+        )
+
+        result = run_inbox(tmp_state)
+
+        assert result.returncode == 0, result.stderr
+        stored = json.loads((tmp_state / "agents.json").read_text())["agents"][
+            "channel-creator"
+        ]
+        assert stored["github_user_id"] == 9522
+
+    def test_missing_actor_waits_for_earlier_registration(
+        self, tmp_state, tmp_path
+    ):
+        """A later heartbeat survives until its earlier registration arrives."""
+        registered_at = datetime.now(timezone.utc)
+        heartbeat_at = (registered_at + timedelta(seconds=1)).isoformat().replace(
+            "+00:00", "Z"
+        )
+        write_issue_delta(
+            tmp_state / "inbox",
+            701,
+            "late-registration",
+            "heartbeat",
+            {},
+            timestamp=heartbeat_at,
+            submitter_id=4242,
+        )
+        first_output = tmp_path / "first-output.txt"
+
+        first_result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(first_output)}
+        )
+
+        assert first_result.returncode == 0, first_result.stderr
+        assert read_receipts(first_output) == []
+        deferred_path = tmp_state / "inbox" / "issue-701.json"
+        deferred = json.loads(deferred_path.read_text())
+        assert deferred["dependency_retry_count"] == 1
+        assert "not found" in deferred["last_dependency_error"]
+
+        write_issue_delta(
+            tmp_state / "inbox",
+            700,
+            "late-registration",
+            "register_agent",
+            {
+                "name": "Late Registration",
+                "framework": "external",
+                "bio": "Registration ingress arrived after its heartbeat.",
+            },
+            submitter_id=4242,
+        )
+        second_result = run_inbox(tmp_state)
+
+        assert second_result.returncode == 0, second_result.stderr
+        agent = json.loads((tmp_state / "agents.json").read_text())["agents"][
+            "late-registration"
+        ]
+        assert agent["heartbeat_last"] == heartbeat_at
+        assert agent["github_user_id"] == 4242
+        assert not deferred_path.exists()
+
+    def test_issue_deltas_process_in_numeric_order(self, tmp_state):
+        """A dependent action never outruns the preceding registration."""
+        registered_at = datetime.fromisoformat(
+            RECENT_TS.replace("Z", "+00:00")
+        )
+        heartbeat_at = (registered_at + timedelta(seconds=1)).isoformat().replace(
+            "+00:00", "Z"
+        )
+        write_issue_delta(
+            tmp_state / "inbox",
+            99999,
+            "numeric-order-agent",
+            "register_agent",
+            {
+                "name": "Numeric Order",
+                "framework": "external",
+                "bio": "Tests Issue ordering.",
+            },
+            submitter_id=4242,
+        )
+        write_issue_delta(
+            tmp_state / "inbox",
+            100000,
+            "numeric-order-agent",
+            "heartbeat",
+            {},
+            timestamp=heartbeat_at,
+            submitter_id=4242,
+        )
+
+        result = run_inbox(tmp_state)
+
+        assert result.returncode == 0, result.stderr
+        agent = json.loads((tmp_state / "agents.json").read_text())["agents"][
+            "numeric-order-agent"
+        ]
+        assert agent["heartbeat_last"] == heartbeat_at
+
+    @pytest.mark.parametrize("marker", ["joined", "framework"])
+    def test_any_modern_marker_blocks_duplicate_claim(
+        self, tmp_state, tmp_path, marker
+    ):
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        profile = {"name": "Claimed", "status": "active", marker: "present"}
+        agents["agents"]["claimed-login"] = profile
+        agents["_meta"]["count"] = 1
+        (tmp_state / "agents.json").write_text(json.dumps(agents, indent=2))
+        write_issue_delta(
+            tmp_state / "inbox",
+            510,
+            "claimed-login",
+            "register_agent",
+            {"name": "Replacement", "framework": "test", "bio": "No."},
+        )
+        output_path = tmp_path / "github-output.txt"
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert result.returncode == 0
+        assert json.loads((tmp_state / "agents.json").read_text())["agents"][
+            "claimed-login"
+        ] == profile
+        receipt = read_receipts(output_path)[0]
+        assert receipt["status"] == "rejected"
+        assert receipt["issue_number"] == 510
+        assert "already registered" in receipt["error"]
+        rejected = json.loads(
+            (tmp_state / "inbox" / "receipts" / "issue-510.json").read_text()
+        )
+        assert rejected["status"] == "rejected"
+        assert "already registered" in rejected["error"]
+
+
+class TestSeedIdentity:
+    def test_handler_ignores_legacy_author_override(self, tmp_state):
+        """Even internal legacy deltas derive governance identity from agent_id."""
+        write_delta(
+            tmp_state / "inbox",
+            "honest-agent",
+            "propose_seed",
+            {"text": "Identity follows provenance", "author": "victim"},
+        )
+
+        result = run_inbox(tmp_state)
+
+        assert result.returncode == 0, result.stderr
+        proposal = json.loads((tmp_state / "seeds.json").read_text())[
+            "proposals"
+        ][0]
+        assert proposal["author"] == "honest-agent"
+        assert proposal["votes"] == ["honest-agent"]
+
+
+class TestTerminalReceipts:
+    def test_applied_and_rejected_receipts_are_correlated(
+        self, tmp_state, tmp_path
+    ):
+        write_issue_delta(
+            tmp_state / "inbox",
+            601,
+            "new-agent",
+            "register_agent",
+            {"name": "New", "framework": "test", "bio": "Hello."},
+        )
+        write_issue_delta(
+            tmp_state / "inbox",
+            602,
+            "missing-agent",
+            "heartbeat",
+            {},
+        )
+        output_path = tmp_path / "github-output.txt"
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert result.returncode == 0
+        receipts = read_receipts(output_path)
+        assert [
+            (receipt["issue_number"], receipt["status"])
+            for receipt in receipts
+        ] == [(601, "applied"), (602, "rejected")]
+        assert not (tmp_state / "inbox" / "issue-601.json").exists()
+        assert {receipt["filename"] for receipt in receipts} == {
+            "issue-601.json",
+            "issue-602.json",
+        }
+        rejected_path = tmp_state / "inbox" / "receipts" / "issue-602.json"
+        rejected = json.loads(rejected_path.read_text())
+        assert rejected["status"] == "rejected"
+        assert "not found" in rejected["error"]
+        assert rejected["provenance"]["delta"]["submitter_id"] == 9602
+
+    @pytest.mark.parametrize("failure_point", ["handler", "post_handler"])
+    def test_unexpected_exception_preserves_delta_and_state(
+        self, tmp_state, tmp_path, monkeypatch, failure_point
+    ):
+        import process_inbox
+
+        delta_path = write_issue_delta(
+            tmp_state / "inbox",
+            610,
+            "retry-agent",
+            "register_agent",
+            {"name": "Retry", "framework": "test", "bio": "Retry me."},
+        )
+        output_path = tmp_path / f"{failure_point}-output.txt"
+        monkeypatch.setattr(process_inbox, "STATE_DIR", tmp_state)
+        monkeypatch.setattr(process_inbox, "DOCS_DIR", tmp_path / "docs")
+        monkeypatch.setenv("GITHUB_OUTPUT", str(output_path))
+
+        if failure_point == "handler":
+            def fail_handler(delta, agents, stats):
+                agents["agents"]["partial"] = {"status": "active"}
+                raise RuntimeError("transient handler failure")
+
+            monkeypatch.setitem(
+                process_inbox.HANDLERS, "register_agent", fail_handler
+            )
+        else:
+            def fail_post_handler(*args, **kwargs):
+                raise RuntimeError("transient post-handler failure")
+
+            monkeypatch.setattr(
+                process_inbox, "record_usage", fail_post_handler
+            )
+
+        assert process_inbox.main() == 0
+        assert delta_path.exists()
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        assert agents["agents"] == {}
+        assert read_receipts(output_path) == []
+
+    def test_daily_rate_limit_is_terminally_rejected(self, tmp_state, tmp_path):
+        usage = json.loads((tmp_state / "usage.json").read_text())
+        date = RECENT_TS[:10]
+        usage["daily"][date] = {
+            "limited-agent": {"api_calls": 100, "posts": 0}
+        }
+        (tmp_state / "usage.json").write_text(json.dumps(usage, indent=2))
+        delta_path = write_issue_delta(
+            tmp_state / "inbox",
+            620,
+            "limited-agent",
+            "register_agent",
+            {"name": "Limited", "framework": "test", "bio": "Retry later."},
+        )
+        output_path = tmp_path / "github-output.txt"
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert result.returncode == 0
+        assert "Rate limit exceeded" in result.stderr
+        assert not delta_path.exists()
+        receipt = read_receipts(output_path)[0]
+        assert receipt["status"] == "rejected"
+        assert receipt["filename"] == "issue-620.json"
+        assert "100/100 API calls today" in receipt["error"]
+        assert (
+            tmp_state / "inbox" / "receipts" / "issue-620.json"
+        ).exists()
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        assert "limited-agent" not in agents["agents"]
+
+    def test_handler_rejection_discards_partial_mutation(
+        self, tmp_state, tmp_path, monkeypatch
+    ):
+        import process_inbox
+
+        write_issue_delta(
+            tmp_state / "inbox",
+            625,
+            "rejected-agent",
+            "register_agent",
+            {"name": "Reject", "framework": "test", "bio": "Reject me."},
+        )
+        output_path = tmp_path / "github-output.txt"
+        monkeypatch.setattr(process_inbox, "STATE_DIR", tmp_state)
+        monkeypatch.setattr(process_inbox, "DOCS_DIR", tmp_path / "docs")
+        monkeypatch.setenv("GITHUB_OUTPUT", str(output_path))
+
+        def reject_after_mutation(delta, agents, stats):
+            agents["agents"]["partial"] = {"status": "active"}
+            return "deterministic rejection"
+
+        monkeypatch.setitem(
+            process_inbox.HANDLERS, "register_agent", reject_after_mutation
+        )
+        assert process_inbox.main() == 0
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        assert agents["agents"] == {}
+        receipt = read_receipts(output_path)[0]
+        assert receipt["status"] == "rejected"
+        assert receipt["error"] == "deterministic rejection"
+
+    def test_invalid_payload_shape_is_dead_lettered(self, tmp_state, tmp_path):
+        delta_path = write_issue_delta(
+            tmp_state / "inbox",
+            630,
+            "invalid-agent",
+            "heartbeat",
+            {},
+        )
+        delta = json.loads(delta_path.read_text())
+        delta["payload"] = []
+        delta_path.write_text(json.dumps(delta))
+        output_path = tmp_path / "github-output.txt"
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert result.returncode == 0
+        receipt = read_receipts(output_path)[0]
+        assert receipt["status"] == "rejected"
+        assert receipt["issue_number"] == 630
+        assert "Payload is not a dict" in receipt["error"]
+        assert (
+            tmp_state / "inbox" / "receipts" / "issue-630.json"
+        ).exists()
+
+    def test_receipt_correlation_prefers_immutable_filename(
+        self, tmp_state, tmp_path
+    ):
+        delta_path = write_issue_delta(
+            tmp_state / "inbox",
+            640,
+            "invalid-agent",
+            "heartbeat",
+            {},
+        )
+        delta = json.loads(delta_path.read_text())
+        delta["issue_number"] = 999
+        delta["request_id"] = "issue:999"
+        delta_path.write_text(json.dumps(delta))
+        output_path = tmp_path / "github-output.txt"
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert result.returncode == 0
+        receipt = read_receipts(output_path)[0]
+        assert receipt["issue_number"] == 640
+        assert "does not match inbox filename" in receipt["error"]
+
+    def test_receipt_survives_delivery_failure(self, tmp_state, tmp_path):
+        """Without an acknowledgement, a terminal receipt stays pending."""
+        write_issue_delta(
+            tmp_state / "inbox",
+            641,
+            "durable-agent",
+            "register_agent",
+            {"name": "Durable", "framework": "test", "bio": "Keep receipt."},
+        )
+        output_path = tmp_path / "github-output.txt"
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert result.returncode == 0, result.stderr
+        receipt_path = (
+            tmp_state / "inbox" / "receipts" / "issue-641.json"
+        )
+        receipt = json.loads(receipt_path.read_text())
+        assert receipt["status"] == "applied"
+        assert receipt["provenance"]["delta"]["payload"]["name"] == "Durable"
+        assert not (
+            tmp_state / "inbox" / "processed" / "issue-641.json"
+        ).exists()
+
+    def test_pending_receipt_reemits_without_reapplying(
+        self, tmp_state, tmp_path
+    ):
+        write_issue_delta(
+            tmp_state / "inbox",
+            642,
+            "once-agent",
+            "register_agent",
+            {"name": "Once", "framework": "test", "bio": "Apply once."},
+        )
+        first_output = tmp_path / "first-output.txt"
+        first = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(first_output)}
+        )
+        assert first.returncode == 0, first.stderr
+
+        second_output = tmp_path / "second-output.txt"
+        second = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(second_output)}
+        )
+        assert second.returncode == 0, second.stderr
+        assert read_receipts(second_output) == read_receipts(first_output)
+        changes = json.loads((tmp_state / "changes.json").read_text())
+        assert len([
+            change for change in changes["changes"]
+            if change.get("request_id") == "issue:642"
+        ]) == 1
+
+    def test_acknowledged_receipts_move_to_status_ledgers(
+        self, tmp_state, tmp_path
+    ):
+        from archive_receipts import archive_acknowledged
+
+        write_issue_delta(
+            tmp_state / "inbox",
+            643,
+            "archived-agent",
+            "register_agent",
+            {"name": "Archived", "framework": "test", "bio": "Applied."},
+        )
+        write_issue_delta(
+            tmp_state / "inbox",
+            644,
+            "missing-agent",
+            "heartbeat",
+            {},
+        )
+        result = run_inbox(tmp_state)
+        assert result.returncode == 0, result.stderr
+
+        archive_acknowledged(tmp_state, [
+            {"filename": "issue-643.json", "status": "applied"},
+        ])
+        assert (
+            tmp_state / "inbox" / "processed" / "issue-643.json"
+        ).exists()
+        assert (
+            tmp_state / "inbox" / "receipts" / "issue-644.json"
+        ).exists()
+        assert not (
+            tmp_state / "inbox" / "rejected" / "issue-644.json"
+        ).exists()
+
+        archive_acknowledged(tmp_state, [
+            {"filename": "issue-644.json", "status": "rejected"},
+        ])
+        assert (
+            tmp_state / "inbox" / "rejected" / "issue-644.json"
+        ).exists()
+        assert not list((tmp_state / "inbox" / "receipts").glob("*.json"))
+
+    @pytest.mark.parametrize(
+        "issue_number,terminal_status",
+        [(650, "applied"), (651, "rejected")],
+    )
+    def test_delivered_ledger_blocks_replay_after_changes_pruning(
+        self, tmp_state, tmp_path, issue_number, terminal_status
+    ):
+        from archive_receipts import archive_acknowledged
+
+        if terminal_status == "applied":
+            write_issue_delta(
+                tmp_state / "inbox",
+                issue_number,
+                "terminal-agent",
+                "register_agent",
+                {
+                    "name": "Terminal",
+                    "framework": "test",
+                    "bio": "Original request.",
+                },
+            )
+        else:
+            write_issue_delta(
+                tmp_state / "inbox",
+                issue_number,
+                "missing-terminal-agent",
+                "heartbeat",
+                {},
+            )
+        first = run_inbox(tmp_state)
+        assert first.returncode == 0, first.stderr
+        archive_acknowledged(tmp_state, [{
+            "filename": f"issue-{issue_number}.json",
+            "status": terminal_status,
+        }])
+
+        changes = json.loads((tmp_state / "changes.json").read_text())
+        changes["changes"] = []
+        (tmp_state / "changes.json").write_text(json.dumps(changes, indent=2))
+        write_issue_delta(
+            tmp_state / "inbox",
+            issue_number,
+            "replay-agent",
+            "register_agent",
+            {"name": "Replay", "framework": "test", "bio": "Must not apply."},
+        )
+        output_path = tmp_path / f"{terminal_status}-replay-output.txt"
+        replay = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert replay.returncode == 0, replay.stderr
+        assert "Already terminal" in replay.stdout
+        assert read_receipts(output_path) == []
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        assert "replay-agent" not in agents["agents"]
+        assert not (
+            tmp_state / "inbox" / f"issue-{issue_number}.json"
+        ).exists()
+
+    def test_per_run_rate_limit_is_terminally_rejected(
+        self, tmp_state, tmp_path
+    ):
+        write_delta(
+            tmp_state / "inbox",
+            "flood-agent",
+            "register_agent",
+            {"name": "Flood", "framework": "test", "bio": "Rate test."},
+        )
+        assert run_inbox(tmp_state).returncode == 0
+        for issue_number in range(700, 711):
+            write_issue_delta(
+                tmp_state / "inbox",
+                issue_number,
+                "flood-agent",
+                "heartbeat",
+                {},
+            )
+
+        output_path = tmp_path / "per-run-output.txt"
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert result.returncode == 0, result.stderr
+        receipts = read_receipts(output_path)
+        limited = next(
+            receipt for receipt in receipts
+            if receipt["filename"] == "issue-710.json"
+        )
+        assert limited["status"] == "rejected"
+        assert "per-run limit of 10" in limited["error"]
+        assert not list((tmp_state / "inbox").glob("issue-*.json"))
+
+    def test_malformed_json_rejection_preserves_deterministic_diagnostic(
+        self, tmp_state, tmp_path
+    ):
+        raw = '{"action": "heartbeat", broken'
+        delta_path = tmp_state / "inbox" / "issue-720.json"
+        delta_path.write_text(raw)
+        output_path = tmp_path / "malformed-output.txt"
+        result = run_inbox(
+            tmp_state, extra_env={"GITHUB_OUTPUT": str(output_path)}
+        )
+        assert result.returncode == 0
+        receipt = read_receipts(output_path)[0]
+        assert receipt["status"] == "rejected"
+        assert receipt["error"].startswith("Invalid JSON:")
+        persisted = json.loads(
+            (
+                tmp_state / "inbox" / "receipts" / "issue-720.json"
+            ).read_text()
+        )
+        assert persisted["provenance"]["delta"] == {"raw": raw}
 
 
 class TestHeartbeat:
@@ -289,7 +1018,7 @@ class TestMediaPipeline:
             "media_type": "image",
             "source_url": sample_file.as_uri(),
             "filename": "breadcrumb.png",
-        }, timestamp="2026-03-08T01:00:00Z")
+        }, timestamp=RECENT_TS)
         run_inbox(tmp_state, docs_dir=docs_dir, extra_env=extra_env)
 
         flags = json.loads((tmp_state / "flags.json").read_text())
@@ -299,7 +1028,7 @@ class TestMediaPipeline:
             "submission_id": submission_id,
             "decision": "approve",
             "note": "Looks safe to publish.",
-        }, timestamp="2026-03-08T02:00:00Z")
+        }, timestamp=RECENT_TS)
         run_inbox(tmp_state, docs_dir=docs_dir, extra_env=extra_env)
 
         flags = json.loads((tmp_state / "flags.json").read_text())

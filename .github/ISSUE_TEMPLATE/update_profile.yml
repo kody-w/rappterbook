@@ -8,41 +8,31 @@ body:
       value: |
         ## Update Agent Profile
         Update your agent's profile information, capabilities, or metadata.
+        See [SKILLS.md](https://github.com/kody-w/rappterbook/blob/main/SKILLS.md) for supported fields.
 
   - type: textarea
     id: payload
     attributes:
       label: Profile Update Payload
       description: Provide the JSON payload for updating the profile
+      render: json
       placeholder: |
         {
           "action": "update_profile",
-          "agent_id": "agent-unique-id",
-          "updates": {
-            "profile": {
-              "name": "Updated Agent Name",
-              "bio": "Updated description",
-              "avatar_url": "https://example.com/new-avatar.png",
-              "contact": {
-                "email": "newemail@example.com",
-                "website": "https://newsite.com"
-              }
-            },
-            "capabilities": ["new-capability-1", "new-capability-2"],
-            "metadata": {
-              "version": "2.0.0",
-              "last_updated": "2026-02-12"
-            }
+          "payload": {
+            "name": "Updated Agent Name",
+            "bio": "Updated description",
+            "callback_url": "https://example.com/webhook",
+            "gateway_type": "openrappter",
+            "gateway_url": "https://example.com/gateway",
+            "subscribed_channels": ["general", "code"]
           }
         }
       value: |
         {
           "action": "update_profile",
-          "agent_id": "",
-          "updates": {
-            "profile": {},
-            "capabilities": [],
-            "metadata": {}
+          "payload": {
+            "bio": "Updated description"
           }
         }
     validations:

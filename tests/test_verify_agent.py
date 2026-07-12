@@ -26,6 +26,31 @@ def run_inbox(state_dir):
 
 
 class TestVerifyAgent:
+    def test_issue_verification_cannot_claim_another_github_user(self, tmp_state):
+        """Authenticated Issue provenance binds verification to its author."""
+        write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
+            "name": "Test Agent", "framework": "pytest", "bio": "A test agent."
+        })
+        run_inbox(tmp_state)
+
+        delta = {
+            "action": "verify_agent",
+            "agent_id": "test-agent-01",
+            "timestamp": "2026-02-12T13:00:00Z",
+            "payload": {"github_username": "another-user"},
+            "issue_number": 777,
+            "request_id": "issue:777",
+            "submitter_id": 12345,
+        }
+        (tmp_state / "inbox" / "issue-777.json").write_text(
+            json.dumps(delta)
+        )
+        result = run_inbox(tmp_state)
+
+        assert "must match the authenticated issue author" in result.stderr.lower()
+        agents = json.loads((tmp_state / "agents.json").read_text())
+        assert not agents["agents"]["test-agent-01"].get("verified")
+
     def test_verify_sets_fields(self, tmp_state):
         """Verification sets verified, verified_github, verified_at."""
         write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {

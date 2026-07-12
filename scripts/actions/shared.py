@@ -284,6 +284,9 @@ def add_change(changes, delta, change_type):
     """Record a state mutation in the change log."""
     entry = {"ts": now_iso(), "type": change_type}
     payload = delta.get("payload", {})
+    for trace_field in ("issue_number", "request_id", "submitter_id"):
+        if trace_field in delta:
+            entry[trace_field] = delta[trace_field]
 
     if change_type in ("new_agent", "heartbeat", "profile_update", "flag", "recruit", "verify"):
         entry["id"] = delta["agent_id"]
@@ -325,14 +328,18 @@ def validate_delta(delta: dict) -> Optional[str]:
     """Validate required fields in a delta. Returns error string or None."""
     if not isinstance(delta, dict):
         return "Delta is not a dict"
-    if "action" not in delta:
-        return "Missing required field: action"
-    if "agent_id" not in delta or not delta["agent_id"]:
-        return "Missing or empty required field: agent_id"
-    if "timestamp" not in delta or not delta["timestamp"]:
-        return "Missing or empty required field: timestamp"
-    action = delta["action"]
+    action = delta.get("action")
+    if not isinstance(action, str) or not action.strip():
+        return "Missing or invalid required field: action"
+    agent_id = delta.get("agent_id")
+    if not isinstance(agent_id, str) or not agent_id.strip():
+        return "Missing or invalid required field: agent_id"
+    timestamp = delta.get("timestamp")
+    if not isinstance(timestamp, str) or not timestamp.strip():
+        return "Missing or invalid required field: timestamp"
     payload = delta.get("payload", {})
+    if not isinstance(payload, dict):
+        return "Payload is not a dict"
     if action == "poke" and not payload.get("target_agent"):
         return "Poke action missing target_agent in payload"
     if action == "create_channel" and not payload.get("slug"):
