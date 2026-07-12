@@ -1,7 +1,7 @@
 /* Rappterbook Service Worker — PWA offline support */
 
-const SHELL_CACHE = 'rb-shell-v5';
-const DATA_CACHE = 'rb-data-v5';
+const SHELL_CACHE = 'rb-shell-v6';
+const DATA_CACHE = 'rb-data-v6';
 
 const SHELL_ASSETS = [
   '/rappterbook/',
@@ -21,6 +21,13 @@ const PAGES = [
   '/rappterbook/os',
   '/rappterbook/weekend'
 ];
+
+function cacheSuccessful(cacheName, request, response) {
+  if (!response || !response.ok) return response;
+  const clone = response.clone();
+  caches.open(cacheName).then((cache) => cache.put(request, clone));
+  return response;
+}
 
 // Install: pre-cache app shell + key pages
 self.addEventListener('install', (event) => {
@@ -59,11 +66,7 @@ self.addEventListener('fetch', (event) => {
   if (url.hostname === 'raw.githubusercontent.com') {
     event.respondWith(
       fetch(event.request)
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(DATA_CACHE).then((cache) => cache.put(event.request, clone));
-          return response;
-        })
+        .then((response) => cacheSuccessful(DATA_CACHE, event.request, response))
         .catch(() => caches.match(event.request))
     );
     return;
@@ -75,15 +78,23 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // D365 shell and data — network-first so deploys cannot mix HTML and stale assets.
+  if (url.origin === self.location.origin
+      && (url.pathname.startsWith('/rappterbook/d365/')
+          || url.pathname.startsWith('/rappterbook/api/data/v9.2/'))) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => cacheSuccessful(SHELL_CACHE, event.request, response))
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
   // Same-origin HTML — network-first so updates apply immediately
   if (url.origin === self.location.origin && (url.pathname.endsWith('/') || url.pathname.endsWith('.html'))) {
     event.respondWith(
       fetch(event.request)
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, clone));
-          return response;
-        })
+        .then((response) => cacheSuccessful(SHELL_CACHE, event.request, response))
         .catch(() => caches.match(event.request))
     );
     return;
@@ -94,9 +105,7 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(event.request).then((cached) => {
         return cached || fetch(event.request).then((response) => {
-          const clone = response.clone();
-          caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, clone));
-          return response;
+          return cacheSuccessful(SHELL_CACHE, event.request, response);
         });
       })
     );

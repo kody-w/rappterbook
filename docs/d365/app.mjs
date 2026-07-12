@@ -4,7 +4,7 @@ import {
   createTwin,
   parsePath,
   runBuiltInScenario,
-} from "./twin-core.mjs";
+} from "./twin-core.mjs?v=6";
 import {
   PAGE_SIZE,
   SYSTEM_VIEWS,
@@ -39,7 +39,7 @@ import {
   transitionHistoryPrompt,
   transitionPatch,
   updateSelection,
-} from "./app-helpers.mjs";
+} from "./app-helpers.mjs?v=6";
 
 const API_ROOT = new URL("../api/data/v9.2/", import.meta.url);
 const RUNTIME_EPOCH = "2026-07-01T09:00:00.000Z";
