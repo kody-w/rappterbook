@@ -6,86 +6,202 @@
     content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>Rappterbook Service Hub — Dynamics 365 Digital Twin</title>
+  <title>Dynamics 365 — Customer Service Hub</title>
   <link rel="stylesheet" href="./d365.css">
   <script type="module" src="./app.mjs"></script>
 </head>
 <body>
-  <header class="app-header">
-    <button id="sitemap-toggle" class="icon-button mobile-only" type="button"
-      aria-label="Open site map" aria-controls="sitemap" aria-expanded="false">☰</button>
-    <button class="app-launcher" type="button" aria-label="Microsoft 365 app launcher" disabled
-      title="App launcher is unavailable in this static twin">⠿</button>
-    <a class="brand" href="#/dashboard" aria-label="Dynamics 365 Service Hub home">
-      <span class="brand-mark" aria-hidden="true">◆</span>
-      <span>Dynamics 365</span>
-    </a>
-    <span class="app-name">Customer Service workspace</span>
-    <span class="simulation-pill">TWIN</span>
-    <span class="local-pill">Browser-local writes</span>
+  <header class="global-header">
+    <button id="navigation-toggle" class="header-icon mobile-navigation" type="button"
+      aria-label="Open navigation" aria-controls="sitemap" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+    </button>
+    <button id="app-launcher" class="header-icon" type="button"
+      aria-label="Open app launcher" aria-controls="app-launcher-menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="4" width="3" height="3"></rect>
+        <rect x="10.5" y="4" width="3" height="3"></rect>
+        <rect x="17" y="4" width="3" height="3"></rect>
+        <rect x="4" y="10.5" width="3" height="3"></rect>
+        <rect x="10.5" y="10.5" width="3" height="3"></rect>
+        <rect x="17" y="10.5" width="3" height="3"></rect>
+        <rect x="4" y="17" width="3" height="3"></rect>
+        <rect x="10.5" y="17" width="3" height="3"></rect>
+        <rect x="17" y="17" width="3" height="3"></rect>
+      </svg>
+    </button>
+    <a class="product-name" href="#/dashboard" aria-label="Dynamics 365 home">Dynamics 365</a>
+    <span class="header-divider" aria-hidden="true"></span>
+    <button id="app-selector" class="app-selector" type="button"
+      aria-controls="app-launcher-menu" aria-expanded="false">
+      <span>Customer Service Hub</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9 5 5 5-5"></path></svg>
+    </button>
+
+    <form id="global-search" class="global-search" role="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="10.5" cy="10.5" r="5.5"></circle>
+        <path d="m15 15 5 5"></path>
+      </svg>
+      <label class="sr-only" for="global-search-input">Search Dynamics 365</label>
+      <input id="global-search-input" type="search" autocomplete="off"
+        placeholder="Search" aria-label="Search Dynamics 365">
+    </form>
+
     <div class="header-spacer"></div>
-    <output id="header-clock" class="header-clock" aria-label="Virtual UTC clock">—</output>
-    <button id="header-reset" class="header-action" type="button">Reset</button>
+    <button id="quick-create" class="header-icon" type="button"
+      aria-label="Quick Create" title="Quick Create"
+      aria-controls="quick-create-menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+    </button>
+    <a class="header-icon" href="#/service-management/simulation-settings"
+      aria-label="Settings" title="Settings">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"></path>
+      </svg>
+    </a>
+    <a class="header-icon" href="#/service-management/api-simulation"
+      aria-label="Help and about" title="Help and about">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="8"></circle>
+        <path d="M9.8 9a2.4 2.4 0 1 1 3.5 2.1c-.9.5-1.3 1-1.3 2M12 17h.01"></path>
+      </svg>
+    </a>
   </header>
 
+  <div id="app-launcher-menu" class="header-flyout app-flyout" hidden>
+    <h2>Apps</h2>
+    <a href="#/dashboard">
+      <span class="flyout-tile" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 19V9l7-4 7 4v10M9 19v-5h6v5"></path></svg>
+      </span>
+      <span><strong>Customer Service Hub</strong><small>Customer service</small></span>
+    </a>
+    <a href="#/service-management/simulation-settings">
+      <span class="flyout-tile" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 7h14M7 7v12h10V7M9 4h6M9 11h6M9 15h4"></path></svg>
+      </span>
+      <span><strong>Service Management</strong><small>Administration</small></span>
+    </a>
+  </div>
+
+  <div id="quick-create-menu" class="header-flyout quick-create-flyout" hidden>
+    <h2>Quick Create</h2>
+    <a href="#/contacts/new">Contact</a>
+    <a href="#/accounts/new">Account</a>
+    <a href="#/tasks/new">Task</a>
+    <a href="#/cases/new">Case</a>
+  </div>
+
   <div class="workspace">
-    <aside id="sitemap" class="sitemap" aria-label="Service Hub site map">
-      <div class="area-picker">
-        <span aria-hidden="true">▦</span>
-        <span>Service</span>
+    <aside id="sitemap" class="sitemap" aria-label="Customer Service Hub sitemap">
+      <div class="sitemap-mobile-heading">
+        <strong>Customer Service Hub</strong>
+        <button id="navigation-close" class="plain-icon" type="button" aria-label="Close navigation">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+        </button>
       </div>
-      <nav>
-        <h2>My work</h2>
-        <a href="#/dashboard" data-nav="dashboard"><span aria-hidden="true">▥</span>Dashboard</a>
-        <a href="#/incidents" data-nav="incidents">
-          <span aria-hidden="true">◫</span>Cases <span class="nav-count" data-count="incidents">—</span>
-        </a>
-        <a href="#/tasks" data-nav="tasks">
-          <span aria-hidden="true">✓</span>Activities <span class="nav-count" data-count="tasks">—</span>
-        </a>
-
-        <h2>Customers</h2>
-        <a href="#/contacts" data-nav="contacts">
-          <span aria-hidden="true">♙</span>Contacts <span class="nav-count" data-count="contacts">—</span>
-        </a>
-        <a href="#/accounts" data-nav="accounts">
-          <span aria-hidden="true">▤</span>Accounts <span class="nav-count" data-count="accounts">—</span>
-        </a>
-
-        <h2>Activity</h2>
-        <a href="#/emails" data-nav="emails">
-          <span aria-hidden="true">✉</span>Emails <span class="nav-count" data-count="emails">—</span>
-        </a>
-        <a href="#/connections" data-nav="connections">
-          <span aria-hidden="true">⇄</span>Connections <span class="nav-count" data-count="connections">—</span>
-        </a>
-
-        <h2>Twin tools</h2>
-        <a href="#/lab" data-nav="lab"><span aria-hidden="true">⚗</span>Twin Lab</a>
-        <a href="#/about" data-nav="about"><span aria-hidden="true">ⓘ</span>API &amp; simulation</a>
+      <nav class="sitemap-navigation">
+        <section data-area="customer-service" aria-labelledby="nav-my-work">
+          <h2 id="nav-my-work">My Work</h2>
+          <a href="#/dashboard" data-nav="dashboard" aria-current="page">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z"></path></svg>
+            <span>Dashboards</span>
+          </a>
+          <a href="#/activities" data-nav="activities">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM8 9h8M8 13h5M8 17h3"></path></svg>
+            <span>Activities</span>
+          </a>
+        </section>
+        <section data-area="customer-service" aria-labelledby="nav-customers">
+          <h2 id="nav-customers">Customers</h2>
+          <a href="#/accounts" data-nav="accounts">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V8h16v12M8 8V4h8v4M8 12h2M14 12h2M8 16h2M14 16h2"></path></svg>
+            <span>Accounts</span>
+          </a>
+          <a href="#/contacts" data-nav="contacts">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3"></circle><path d="M5 20c.6-4 3-6 7-6s6.4 2 7 6"></path></svg>
+            <span>Contacts</span>
+          </a>
+        </section>
+        <section data-area="customer-service" aria-labelledby="nav-service">
+          <h2 id="nav-service">Service</h2>
+          <a href="#/cases" data-nav="cases">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v13H4zM8 7V4h8v3M8 12h8M8 16h5"></path></svg>
+            <span>Cases</span>
+          </a>
+          <a href="#/queues" data-nav="queues">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v4H5zM5 11h14v4H5zM5 17h14v3H5z"></path></svg>
+            <span>Queues</span>
+          </a>
+        </section>
+        <section data-area="customer-service" aria-labelledby="nav-knowledge">
+          <h2 id="nav-knowledge">Knowledge</h2>
+          <a href="#/knowledge-articles" data-nav="knowledge-articles">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5zM15 4v5h4M8 13h8M8 17h6"></path></svg>
+            <span>Knowledge Articles</span>
+          </a>
+          <a href="#/knowledge-search" data-nav="knowledge-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.5"></circle><path d="m15 15 5 5M8 10h5M10.5 7.5v5"></path></svg>
+            <span>Knowledge Search</span>
+          </a>
+        </section>
+        <section data-area="service-management" aria-labelledby="nav-management">
+          <h2 id="nav-management">Service Management</h2>
+          <a href="#/service-management/simulation-settings" data-nav="simulation-settings">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8M10 4v5l-5 9h14l-5-9V4M8 15h8"></path></svg>
+            <span>Simulation settings</span>
+          </a>
+          <a href="#/service-management/api-simulation" data-nav="api-simulation">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><path d="M12 11v5M12 8h.01"></path></svg>
+            <span>API &amp; simulation</span>
+          </a>
+        </section>
       </nav>
-      <div class="sitemap-footer">
-        <strong>Static GitHub Pages</strong>
-        <span>No server or Dataverse writes</span>
+      <div class="area-switcher-wrap">
+        <button id="area-switcher" class="area-switcher" type="button"
+          aria-controls="area-menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6v6H5zM13 5h6v6h-6zM5 13h6v6H5zM13 13h6v6h-6z"></path></svg>
+          <span>Customer Service</span>
+          <svg class="area-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 9 5 5 5-5"></path></svg>
+        </button>
+        <div id="area-menu" class="area-menu" hidden>
+          <a href="#/dashboard">Customer Service</a>
+          <a href="#/service-management/simulation-settings">Service Management</a>
+        </div>
       </div>
     </aside>
 
-    <button id="sitemap-scrim" class="sitemap-scrim" type="button" aria-label="Close site map"></button>
+    <button id="sitemap-scrim" class="sitemap-scrim" type="button"
+      aria-label="Close navigation" tabindex="-1"></button>
 
     <main id="main-content" class="main-content" tabindex="-1">
-      <nav id="breadcrumb" class="breadcrumb" aria-label="Breadcrumb"></nav>
       <section id="command-bar" class="command-bar" aria-label="Command bar"></section>
       <section id="view-root" class="view-root" aria-live="off" aria-busy="true">
-        <div class="loading-card" role="status">
+        <div class="loading-state" role="status">
           <span class="spinner" aria-hidden="true"></span>
-          <span>Starting deterministic Service Hub twin…</span>
+          <span>Loading Customer Service Hub</span>
         </div>
       </section>
     </main>
   </div>
 
+  <dialog id="app-dialog" class="app-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-heading">
+      <h2 id="dialog-title"></h2>
+      <button id="dialog-close" class="plain-icon" type="button" aria-label="Close dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+    <div id="dialog-content" class="dialog-content"></div>
+    <div id="dialog-actions" class="dialog-actions"></div>
+  </dialog>
+
   <div id="live-status" class="sr-only" role="status" aria-live="polite"></div>
   <div id="live-errors" class="sr-only" role="alert" aria-live="assertive"></div>
-  <noscript>This deterministic Dynamics 365 twin requires JavaScript modules.</noscript>
+  <noscript>Customer Service Hub requires JavaScript modules.</noscript>
 </body>
 </html>

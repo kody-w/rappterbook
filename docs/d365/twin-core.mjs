@@ -271,6 +271,31 @@ function normalizeHeaders(headers = {}) {
   return normalized;
 }
 
+function normalizedRecordId(value) {
+  let normalized = String(value ?? "").trim().toLowerCase();
+  normalized = normalized.replace(/^['"]|['"]$/g, "").trim();
+  if (normalized.startsWith("{") && normalized.endsWith("}")) {
+    normalized = normalized.slice(1, -1).trim();
+  }
+  return normalized;
+}
+
+function boundAccountId(value) {
+  const match = String(value ?? "").trim().match(
+    /(?:^|\/)accounts\s*\(\s*(\{?[^{}()/?#]+\}?)\s*\)(?:[?#].*)?$/i,
+  );
+  return normalizedRecordId(match?.[1]);
+}
+
+function emailReferencesAccount(email, accountId) {
+  const normalized = normalizedRecordId(accountId);
+  return Boolean(normalized)
+    && (
+      normalizedRecordId(email?._regardingobjectid_value) === normalized
+      || boundAccountId(email?.["regardingobjectid_account@odata.bind"]) === normalized
+    );
+}
+
 function normalizeSeed(seed = {}) {
   const state = {};
   for (const entity of Object.keys(ENTITY_DEFINITIONS).sort()) {
@@ -848,6 +873,27 @@ export class TwinCore {
     if (!this._checkEtag(current, spec)) {
       return this._failure(412, ERROR_CODES.precondition, "The row version does not match the current ETag.", spec);
     }
+    if (entity === "contacts" && (this._state.connections || []).some((connection) => {
+      const contactId = String(id).toLowerCase();
+      return String(connection._record1id_value || "").toLowerCase() === contactId
+        || String(connection._record2id_value || "").toLowerCase() === contactId;
+    })) {
+      return this._failure(
+        409,
+        ERROR_CODES.conflict,
+        "The contact cannot be deleted because a Connection record references it. Deactivate the contact instead.",
+        spec,
+      );
+    }
+    if (entity === "accounts" && (this._state.emails || []).some((email) =>
+      emailReferencesAccount(email, id))) {
+      return this._failure(
+        409,
+        ERROR_CODES.conflict,
+        "The account cannot be deleted because an Email record references it. Deactivate the account instead.",
+        spec,
+      );
+    }
     this._state[entity].splice(index, 1);
     this._event("commit.deleted", { requestId: spec.logicalRequestId, entity, recordId: id });
     const result = response(204, null, {}, spec.logicalRequestId, this.now());
@@ -934,12 +980,6 @@ export class TwinCore {
   _applyTransitions() {
     const nowMs = Number(this.clock.valueOf());
     const transitionTargets = [];
-    for (const task of this._state.tasks) {
-      const due = Date.parse(task.scheduledend || "");
-      if (task.statecode === 0 && Number.isFinite(due) && due <= nowMs) {
-        transitionTargets.push({ entity: "tasks", record: task, transition: "task.completed" });
-      }
-    }
     for (const incident of this._state.incidents) {
       const due = Date.parse(incident.new_sla_due || "");
       if (incident.statecode === 0 && incident.new_sla_status !== "Breached" && Number.isFinite(due) && due <= nowMs) {
@@ -960,14 +1000,8 @@ export class TwinCore {
     const index = this._findIndex(target.entity, target.record[primaryKey]);
     if (index < 0) return;
     const updated = { ...this._state[target.entity][index] };
-    if (target.transition === "task.completed") {
-      updated.statecode = 1;
-      updated.statuscode = 5;
-      updated.actualend = this.now();
-    } else {
-      updated.new_sla_status = "Breached";
-      updated.prioritycode = 1;
-    }
+    updated.new_sla_status = "Breached";
+    updated.prioritycode = 1;
     if (Object.hasOwn(definition.fields, "modifiedon")) updated.modifiedon = this.now();
     updated["@odata.etag"] = nextRecordEtag(updated, this._state[target.entity][index]["@odata.etag"]);
     this._state[target.entity][index] = updated;
@@ -1154,7 +1188,7 @@ async function timeScenario(twin) {
   const currentTask = await twin.request({ method: "GET", path: `/tasks(${task.body.activityid})`, logicalRequestId: "scenario-time-read-task" });
   const currentCase = await twin.request({ method: "GET", path: `/incidents(${incident.body.incidentid})`, logicalRequestId: "scenario-time-read-case" });
   return [
-    assertion("Due task completes", currentTask.body.statecode === 1, currentTask.body.statecode, 1),
+    assertion("Due task remains open", currentTask.body.statecode === 0, currentTask.body.statecode, 0),
     assertion("SLA breaches", currentCase.body.new_sla_status === "Breached", currentCase.body.new_sla_status, "Breached"),
   ];
 }
@@ -1183,7 +1217,7 @@ export const BUILT_IN_SCENARIOS = Object.freeze([
   { id: "malformed-payload", label: "Malformed payload", description: "Return 400 and prove state is unchanged.", entities: ["contacts"] },
   { id: "transient-retry", label: "503 → 429 → success", description: "Honor exponential backoff and Retry-After.", entities: ["tasks"] },
   { id: "stale-etag", label: "Two-client ETag conflict", description: "Client B receives a deterministic 412.", entities: ["tasks"] },
-  { id: "virtual-time", label: "Task and SLA clock", description: "Advance UTC time and apply due transitions once.", entities: ["tasks", "incidents"] },
+  { id: "virtual-time", label: "Task and SLA clock", description: "Advance UTC time; keep overdue tasks open and apply the SLA transition once.", entities: ["tasks", "incidents"] },
   { id: "chaos", label: "Lost response chaos", description: "Retry a post-commit response loss without double apply.", entities: ["tasks"] },
 ]);
 
