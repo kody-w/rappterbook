@@ -67,6 +67,28 @@ def test_service_worker_handles_raw_github():
     assert "raw.githubusercontent.com" in sw
 
 
+def test_service_worker_refreshes_d365_without_caching_failures():
+    """D365 deploys use network-first responses and never persist 4xx/5xx assets."""
+    sw = (DOCS_DIR / "sw.js").read_text()
+    assert "rb-shell-v6" in sw
+    assert "/rappterbook/d365/" in sw
+    assert "/rappterbook/api/data/v9.2/" in sw
+    assert "if (!response || !response.ok) return response;" in sw
+    d365_branch = sw.index("D365 shell and data")
+    generic_static_branch = sw.index("Same-origin static assets")
+    assert d365_branch < generic_static_branch
+
+
+def test_d365_shell_uses_versioned_assets():
+    """Versioned D365 URLs bypass any poisoned cache left by an older worker."""
+    html = (DOCS_DIR / "d365" / "index.html").read_text()
+    app = (DOCS_DIR / "d365" / "app.mjs").read_text()
+    assert 'href="./d365.css?v=6"' in html
+    assert 'src="./app.mjs?v=6"' in html
+    assert 'from "./twin-core.mjs?v=6"' in app
+    assert 'from "./app-helpers.mjs?v=6"' in app
+
+
 # --- Bundled HTML ---
 
 def test_html_has_manifest_link():
