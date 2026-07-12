@@ -82,7 +82,7 @@ else
   fail "all entries survive conflict — got: $RESULT"
 fi
 
-# ─── Test 3: Competing change on the SAME file ───────────────────────────────
+# ─── Test 3: Competing change on the SAME file fails closed ──────────────────
 cd "$WORK2"
 git pull origin main 2>/dev/null
 echo '{"posts": [{"number": 1, "commentCount": 0}]}' > state/posted_log.json
@@ -90,26 +90,33 @@ git add . && git commit -m "overwrite with stale data" 2>/dev/null && git push o
 
 cd "$WORK1"
 echo '{"posts": [{"number": 1, "commentCount": 100}]}' > state/posted_log.json
+set +e
 OUTPUT=$(bash "$SCRIPT_PATH" "test: same file conflict" state/posted_log.json 2>&1)
+STATUS=$?
+set -e
 
-cd "$WORK1"
-git pull origin main 2>/dev/null
-RESULT=$(cat state/posted_log.json)
-if echo "$RESULT" | grep -q '"commentCount": 100'; then
-  pass "our computed data wins same-file conflict"
+if [ "$STATUS" -ne 0 ] && echo "$OUTPUT" | grep -q "refusing to overwrite remote state"; then
+  pass "same-file conflict fails closed"
 else
-  fail "our computed data wins same-file conflict — got: $RESULT"
+  fail "same-file conflict fails closed — status=$STATUS output=$OUTPUT"
 fi
+
+git fetch origin main 2>/dev/null
+RESULT=$(git show origin/main:state/posted_log.json)
+echo "$RESULT" | grep -q '"commentCount": 0' \
+  && pass "remote same-file update preserved" \
+  || fail "remote same-file update preserved — got: $RESULT"
+git reset --hard origin/main >/dev/null
 
 # ─── Test 4: No changes = no commit ──────────────────────────────────────────
 cd "$WORK1"
 OUTPUT=$(bash "$SCRIPT_PATH" "test: no changes" state/posted_log.json 2>&1)
 echo "$OUTPUT" | grep -q "No state changes" && pass "no-op detected" || fail "no-op detected"
 
-# ─── Test 5: Multiple files preserved ─────────────────────────────────────────
+# ─── Test 5: Multiple files survive a disjoint remote change ─────────────────
 cd "$WORK2"
 git pull origin main 2>/dev/null
-echo '{"feeds": "updated"}' > state/trending.json
+echo '{"remote": "updated"}' > state/remote-only.json
 git add . && git commit -m "competing trending" 2>/dev/null && git push origin main 2>/dev/null
 
 cd "$WORK1"
@@ -123,6 +130,7 @@ GOT_LOG=$(cat state/posted_log.json)
 GOT_TREND=$(cat state/trending.json)
 echo "$GOT_LOG" | grep -q '"commentCount": 200' && pass "multi-file: posted_log preserved" || fail "multi-file: posted_log — got: $GOT_LOG"
 echo "$GOT_TREND" | grep -q '"score": 50' && pass "multi-file: trending preserved" || fail "multi-file: trending — got: $GOT_TREND"
+git show HEAD:state/remote-only.json | grep -q '"updated"' && pass "multi-file: remote change preserved" || fail "multi-file: remote change missing"
 
 # ─── Results ──────────────────────────────────────────────────────────────────
 echo ""
