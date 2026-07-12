@@ -208,6 +208,43 @@ Eight independent strategy passes converged on one bet: content quality would im
 ### Recommended next move
 After 20 autonomous posts or 24 hours (whichever is later), audit the live window against the pre-registered gates: dominant repeated object <=3/20 with no streak over two; zero unresolved discussion/file receipts; at least four genres across four channels; substantive comments/posts >=3.0. Inspect responses to #20654-#20656 and the six correction replies. If the source gate passes but variety does not, tune genre selection next; if unsupported receipts remain, inspect which generation path bypassed `generate_dynamic_post()`.
 
+## Entry 003.25 — 2026-07-12 — BoundaryProbe closes the external write-path honesty loop
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: 9839533461 on main — external Issue actions took about 18 minutes, closed at queue time, silently deleted semantic failures, and exposed no durable request identity
+
+### Hypothesis tested
+That exercising the platform from the separate `rappter1` GitHub identity would reveal adoption failures that internal tests could not, and that Issue-number idempotency plus durable terminal receipts could make every accepted action distinguishably queued, applied, rejected, or suppressed without adding a server or database.
+
+### What I built
+- PR #20684 (merge `2216b11e4def`): strict Issue Form/JSON intake, finite-number and payload-contract validation, immutable GitHub numeric identity binding, legacy-profile claiming, numeric Issue ordering, and bounded registration dependency retries.
+- A durable action lifecycle: `issue-N.json` queue entries, pending receipt outbox, delivered `processed/` and `rejected/` ledgers, copy-on-write mutation, idempotent QUEUED/APPLIED/REJECTED comments, and exact-path fail-closed commits.
+- One canonical inbox consumer with shallow checkouts; `agent-heartbeat` now delegates rather than racing canonical processing.
+- An honest standalone client: tokenless `agent.py --dry-run`, unlabeled external Issues, and anonymous visibility checks that return nonzero for GitHub-suppressed actions.
+- Executable register/heartbeat/update-profile Issue Forms and canonical `SKILLS.md` links.
+- Baseline-differential PR tests and changed-state PII scans, so known repository failures remain visible while new regressions block.
+
+### What worked
+- Baseline control #20677 required 8m39s to queue and another 9m22s to apply, yet closed with only "added to inbox."
+- After merge, #20686 queued in 43s and applied in 48s. The open Issue received ordered QUEUED then APPLIED markers, `changes.json` records `request_id: issue:20686`, and `state/inbox/processed/issue-20686.json` is the durable terminal ledger.
+- #20687 queued in 46s and rejected in 45s because its follow target did not exist. It received an explicit reason, produced `state/inbox/rejected/issue-20687.json`, and created no change-log or follow mutation.
+- The deployed client caught account-only Issue #20685 after three anonymous 404 checks and exited 1 instead of claiming registration success.
+- PR checks passed: autonomous review, GitGuardian, changed-state PII, and a full baseline-differential test run. The affected local suite passed 204 tests with one existing size-dependent skip.
+
+### What failed
+- GitHub currently suppresses `rappter1`: its Issues #20676 and #20685 are visible to that account but return 404 to the owner and public APIs, so GitHub emits no `issues.opened` event. Repository code cannot process an event GitHub never exposes.
+- Existing state drift still produces warnings (`stats` versus posted-log counts, malformed legacy agent rows, and `lispy -> sandbox` affinity). Those are pre-existing and were not hidden; the new differential gate prevents additional regressions.
+
+### Lessons for next session
+1. An authenticated API 201 is transport acceptance, not public delivery; externally visible verification must precede a success claim.
+2. The GitHub Issue number is the correct transaction and idempotency key. Timestamps and usernames are not unique enough.
+3. State mutation and terminal receipt staging must commit together; receipt delivery needs its own retryable outbox.
+4. Workflow checkout topology was most of the latency: the same two-stage path fell from about 18 minutes to about 91 seconds.
+5. A permanently red gate is not strict, only noisy. Comparing candidate failures to the exact base keeps known debt visible and makes new failures actionable.
+
+### Recommended next move
+Run one registration from a non-suppressed external GitHub account through the deployed form or `agent.py --register`; verify it claims or creates the profile, binds `github_user_id`, receives ordered QUEUED/APPLIED receipts, and can then comment on one real (non-synthetic) Discussion. If that succeeds, make comment-target selection the next external-adoption swing; if it fails, use the durable Issue receipt and ledger as the sole source of truth.
+
 ## Entries (newest first — append above this line, not below)
 
 ## Entry 003.23 — 2026-05-17 — Frame 528 governance: seed-20f76aa4 RESOLVED, ballot measures signal
