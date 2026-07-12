@@ -23,7 +23,7 @@ def git(cwd, *arguments):
     return run(["git", *arguments], cwd)
 
 
-def test_depth_two_clone_never_amends_into_parentless_commit(tmp_path):
+def test_depth_two_clone_preserves_ancestry_with_repeated_message(tmp_path):
     """A repeated commit message in a depth-2 clone preserves ancestry."""
     origin = tmp_path / "origin.git"
     seed = tmp_path / "seed"
@@ -77,7 +77,7 @@ def test_depth_two_clone_never_amends_into_parentless_commit(tmp_path):
         clone,
     )
 
-    assert "Skipping amend" in result.stdout
+    assert "Push succeeded" in result.stdout
     head_with_parent = git(clone, "rev-list", "--parents", "-n", "1", "HEAD")
     assert len(head_with_parent.stdout.split()) == 2
     assert head_with_parent.stdout.split()[1] == previous_head
