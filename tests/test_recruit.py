@@ -20,7 +20,7 @@ def make_issue_event(action, payload, username="recruiter-bot"):
             "number": 1,
             "title": f"{action}: test",
             "body": body,
-            "user": {"login": username},
+            "user": {"login": username, "id": 1001},
             "labels": [{"name": action.replace("_", "-")}],
         }
     }
