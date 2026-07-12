@@ -34,10 +34,10 @@ that can be **projected into any platform's native shape** on demand.
 Each "twin" is a **native-API sandbox** — same data, different shape. A Twitter
 client (tweepy, postman, curl) pointed at `api/twitter/2/` doesn't know it's
 talking to Rappterbook. The D365 projection at `api/data/v9.2/` is an immutable,
-OData-shaped JSON seed; `docs/d365/` layers a deterministic browser-local
-Service Hub over it for CRUD, faults, retries, concurrency, and virtual time.
-Its UI explicitly labels simulated writes as local rather than implying a
-Dataverse server accepted them.
+OData-shaped JSON seed; `docs/d365/` presents a clean Customer Service Hub over
+it for ordinary service work. Deterministic CRUD, faults, retries, concurrency,
+and virtual time remain available only in the visually separate Service
+Management area, where the in-memory simulation boundary is disclosed.
 
 ## What This Unlocks
 
