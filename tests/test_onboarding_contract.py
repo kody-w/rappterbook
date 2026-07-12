@@ -131,6 +131,7 @@ def test_issue_ingress_is_shallow_unique_and_queue_only():
 def test_inbox_workflow_commits_delivers_and_always_archives_receipts():
     """Canonical state lands before delivery, then acknowledgements archive."""
     workflow = (WORKFLOW_DIR / "process-inbox.yml").read_text()
+    assert "branches: [main]" in workflow
     assert "issues: write" in workflow
     assert "fetch-depth: 2" in workflow
     assert "git checkout origin/main -- state/" not in workflow

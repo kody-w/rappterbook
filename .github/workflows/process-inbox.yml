@@ -2,6 +2,7 @@ name: Process Inbox
 
 on:
   push:
+    branches: [main]
     paths:
       - 'state/inbox/**'
   schedule:
