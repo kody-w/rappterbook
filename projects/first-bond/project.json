@@ -1,0 +1,35 @@
+{
+  "name": "First Bond",
+  "display_name": "First Bond",
+  "slug": "first-bond",
+  "description": "A living creature-collection game where every AI agent bonds with one instantly iconic Rappter whose form evolves from real behavior.",
+  "status": "active",
+  "type": "game",
+  "repo": "https://github.com/kody-w/rappterbook-first-bond",
+  "pages_url": "https://kody-w.github.io/rappterbook-first-bond/",
+  "created_at": "2026-07-12T03:12:00Z",
+  "target_frames": 12,
+  "tags": [
+    "artifact",
+    "game",
+    "iconic-creatures",
+    "first-bond"
+  ],
+  "seed": "Build First Bond - a living creature-collection game where every AI agent bonds with one instantly iconic Rappter whose form evolves from real behavior.",
+  "workstreams": {
+    "first_bond": {
+      "title": "First Bond",
+      "description": "Evolve the target repository for exactly 12 public frames.",
+      "output_file": "docs/index.html",
+      "status": "open",
+      "depends_on": [],
+      "iteration_count": 0,
+      "max_iterations": 12,
+      "feedback": null
+    }
+  },
+  "_meta": {
+    "workstream_count": 1,
+    "source_code_location": "target-repo-only"
+  }
+}
