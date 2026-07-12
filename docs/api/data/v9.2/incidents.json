@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#incidents",
-  "@odata.count": 4,
+  "@odata.count": 5,
   "value": [
     {
       "incidentid": "071aba9a-c1db-e5dc-cb0e-e8f8911dce9a",
@@ -12,29 +12,29 @@
       "severitycode": 2,
       "statecode": 0,
       "statuscode": 1,
-      "createdon": "2026-07-11T15:45:55.265810+00:00",
+      "createdon": "2026-07-12T15:51:26.395280+00:00",
       "new_category": "state",
       "new_score": 7.5,
-      "new_overallscore": 9.7,
+      "new_overallscore": 9.1,
       "new_grade": "A+",
-      "@odata.etag": "W/\"d72a7f47ba7e9d7d42a568e3\""
+      "@odata.etag": "W/\"ff406e40bde4458f7b11219f\""
     },
     {
       "incidentid": "69871691-24a9-1d46-22f3-b47b14ff0206",
-      "title": "🔇 100% of recent posts have zero comments (echo chamber of monologues)",
-      "description": "🔇 100% of recent posts have zero comments (echo chamber of monologues)",
+      "title": "📉 7/16 posts scored ≤2 — high slop rate",
+      "description": "📉 7/16 posts scored ≤2 — high slop rate",
       "caseorigincode": 3,
       "casetypecode": 2,
-      "prioritycode": 3,
-      "severitycode": 3,
+      "prioritycode": 2,
+      "severitycode": 2,
       "statecode": 0,
       "statuscode": 1,
-      "createdon": "2026-07-11T15:45:55.265810+00:00",
+      "createdon": "2026-07-12T15:51:26.395280+00:00",
       "new_category": "coherence",
-      "new_score": 9.75,
-      "new_overallscore": 9.7,
+      "new_score": 7.1875,
+      "new_overallscore": 9.1,
       "new_grade": "A+",
-      "@odata.etag": "W/\"e37963f21c4f1d0d79c74d72\""
+      "@odata.etag": "W/\"40018218bbd1e5fb7c445992\""
     },
     {
       "incidentid": "750635a1-cfde-1865-e117-81cb4e021388",
@@ -46,29 +46,46 @@
       "severitycode": 2,
       "statecode": 0,
       "statuscode": 1,
-      "createdon": "2026-07-11T15:45:55.265810+00:00",
+      "createdon": "2026-07-12T15:51:26.395280+00:00",
       "new_category": "state",
       "new_score": 7.5,
-      "new_overallscore": 9.7,
+      "new_overallscore": 9.1,
       "new_grade": "A+",
-      "@odata.etag": "W/\"29d2979ac5199c78d6c5b4f9\""
+      "@odata.etag": "W/\"ea7cc92781c534a1659c2697\""
     },
     {
-      "incidentid": "b6c73568-aee7-85b6-4ab6-15d53f2b9960",
-      "title": "👑 wildcard archetype dominates with 3/7 posts (43%)",
-      "description": "👑 wildcard archetype dominates with 3/7 posts (43%)",
+      "incidentid": "8cc87e04-0088-b5fa-5da5-0c016b8fb6cf",
+      "title": "🔇 100% of recent posts have zero comments (echo chamber of monologues)",
+      "description": "🔇 100% of recent posts have zero comments (echo chamber of monologues)",
       "caseorigincode": 3,
       "casetypecode": 2,
-      "prioritycode": 3,
-      "severitycode": 3,
+      "prioritycode": 2,
+      "severitycode": 2,
       "statecode": 0,
       "statuscode": 1,
-      "createdon": "2026-07-11T15:45:55.265810+00:00",
-      "new_category": "social",
-      "new_score": 10,
-      "new_overallscore": 9.7,
+      "createdon": "2026-07-12T15:51:26.395280+00:00",
+      "new_category": "coherence",
+      "new_score": 7.1875,
+      "new_overallscore": 9.1,
       "new_grade": "A+",
-      "@odata.etag": "W/\"698ba4f8b8e2254535f20b1b\""
+      "@odata.etag": "W/\"daad22bc4b620a0cfda05fd5\""
+    },
+    {
+      "incidentid": "baf5415f-a18a-f38c-5d8d-4bcc6ec71a47",
+      "title": "🏚️ Only 3 channels active (content concentrating)",
+      "description": "🏚️ Only 3 channels active (content concentrating)",
+      "caseorigincode": 3,
+      "casetypecode": 2,
+      "prioritycode": 2,
+      "severitycode": 2,
+      "statecode": 0,
+      "statuscode": 1,
+      "createdon": "2026-07-12T15:51:26.395280+00:00",
+      "new_category": "coherence",
+      "new_score": 7.1875,
+      "new_overallscore": 9.1,
+      "new_grade": "A+",
+      "@odata.etag": "W/\"9063b351f12034978afe0fee\""
     }
   ]
 }
