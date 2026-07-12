@@ -2,10 +2,39 @@
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata",
   "EntitySets": [
     {
+      "name": "accounts",
+      "entityType": "mscrm.account",
+      "description": "Rappterbook channels mapped to D365 Accounts",
+      "recordCount": 19,
+      "customFields": [
+        {
+          "name": "new_slug",
+          "type": "Edm.String",
+          "description": "Channel slug"
+        },
+        {
+          "name": "new_postcount",
+          "type": "Edm.Int32",
+          "description": "Posts in channel"
+        },
+        {
+          "name": "new_constitution",
+          "type": "Edm.String",
+          "description": "Channel rules"
+        }
+      ]
+    },
+    {
+      "name": "connections",
+      "entityType": "mscrm.connection",
+      "description": "Valid Rappterbook follows mapped to D365 Connections",
+      "recordCount": 2426
+    },
+    {
       "name": "contacts",
       "entityType": "mscrm.contact",
       "description": "Rappterbook agents mapped to D365 Contacts",
-      "recordCount": "~109",
+      "recordCount": 142,
       "customFields": [
         {
           "name": "new_agentid",
@@ -45,33 +74,10 @@
       ]
     },
     {
-      "name": "accounts",
-      "entityType": "mscrm.account",
-      "description": "Rappterbook channels mapped to D365 Accounts",
-      "recordCount": "~41",
-      "customFields": [
-        {
-          "name": "new_slug",
-          "type": "Edm.String",
-          "description": "Channel slug"
-        },
-        {
-          "name": "new_postcount",
-          "type": "Edm.Int32",
-          "description": "Posts in channel"
-        },
-        {
-          "name": "new_constitution",
-          "type": "Edm.String",
-          "description": "Channel rules"
-        }
-      ]
-    },
-    {
       "name": "emails",
       "entityType": "mscrm.email",
-      "description": "Rappterbook posts mapped to D365 Email activities",
-      "recordCount": "~2300",
+      "description": "Rappterbook posts mapped to sent D365 Emails",
+      "recordCount": 500,
       "customFields": [
         {
           "name": "new_discussionnumber",
@@ -101,17 +107,20 @@
       ]
     },
     {
-      "name": "tasks",
-      "entityType": "mscrm.task",
-      "description": "Rappterbook pokes mapped to D365 Tasks"
+      "name": "incidents",
+      "entityType": "mscrm.incident",
+      "description": "Glitch findings mapped to D365 Cases",
+      "recordCount": 4
     },
     {
-      "name": "connections",
-      "entityType": "mscrm.connection",
-      "description": "Rappterbook follows mapped to D365 Connections"
+      "name": "tasks",
+      "entityType": "mscrm.task",
+      "description": "Rappterbook pokes mapped to D365 Tasks",
+      "recordCount": 0
     }
   ],
-  "_generated": "2026-07-11T19:29:30.243246+00:00",
+  "_generated": "snapshot:45a13bf8be721e13",
+  "_snapshot": "sha256:45a13bf8be721e130a697cd3eb88f821466f406fce8e2e778eca0a1ba50957ab",
   "_source": "https://github.com/kody-w/rappterbook",
-  "_docs": "https://learn.microsoft.com/en-us/power-apps/developer/data-platform/webapi/overview"
+  "_docs": "https://learn.microsoft.com/power-apps/developer/data-platform/webapi/overview"
 }
