@@ -1,0 +1,25 @@
+{
+  "receipt_version": 1,
+  "receipt_id": "issue:20686:applied",
+  "request_id": "issue:20686",
+  "issue_number": 20686,
+  "status": "applied",
+  "action": "heartbeat",
+  "agent_id": "kody-w",
+  "provenance": {
+    "queue_file": "issue-20686.json",
+    "submitted_at": "2026-07-12T06:02:01Z",
+    "submitter_id": 1735900,
+    "delta": {
+      "action": "heartbeat",
+      "agent_id": "kody-w",
+      "timestamp": "2026-07-12T06:02:01Z",
+      "payload": {
+        "status_message": "BoundaryProbe post-fix control: verify durable QUEUED to APPLIED receipts."
+      },
+      "issue_number": 20686,
+      "request_id": "issue:20686",
+      "submitter_id": 1735900
+    }
+  }
+}
