@@ -22,34 +22,129 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 2
+          ref: ${{ github.event.repository.default_branch }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
+      - name: Inspect existing request state
+        id: request
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          declare -a matches=()
+          for entry in \
+            "queued:state/inbox/issue-${ISSUE_NUMBER}.json" \
+            "pending:state/inbox/receipts/issue-${ISSUE_NUMBER}.json" \
+            "applied:state/inbox/processed/issue-${ISSUE_NUMBER}.json" \
+            "rejected:state/inbox/rejected/issue-${ISSUE_NUMBER}.json"
+          do
+            path="${entry#*:}"
+            if [ -f "$path" ]; then
+              matches+=("$entry")
+            fi
+          done
+
+          if [ "${#matches[@]}" -gt 1 ]; then
+            echo "::error::Issue ${ISSUE_NUMBER} exists in multiple request ledgers"
+            exit 1
+          fi
+
+          if [ "${#matches[@]}" -eq 0 ]; then
+            echo "state=new" >> "$GITHUB_OUTPUT"
+          else
+            state="${matches[0]%%:*}"
+            path="${matches[0]#*:}"
+            commit_sha="$(git log -1 --format=%H -- "$path")"
+            if [ -z "$commit_sha" ]; then
+              commit_sha="$(git rev-parse HEAD)"
+            fi
+            echo "state=$state" >> "$GITHUB_OUTPUT"
+            echo "commit_sha=$commit_sha" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Process issue
         id: process
+        if: steps.request.outputs.state == 'new'
         run: |
           cat "$GITHUB_EVENT_PATH" | python scripts/process_issues.py
 
-      - name: Commit changes
+      - name: Commit durable queue entry
         id: commit
+        if: steps.request.outputs.state == 'new'
         run: |
-          git config user.name "rappterbook-bot"
-          git config user.email "rappterbook-bot@users.noreply.github.com"
-          git add state/inbox/
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: add delta from issue #${{ github.event.issue.number }}"
-            git push
-            echo "committed=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "committed=false" >> "$GITHUB_OUTPUT"
-          fi
+          delta="state/inbox/issue-${{ github.event.issue.number }}.json"
+          test -f "$delta"
+          bash scripts/safe_commit.sh \
+            "chore: queue action from issue #${{ github.event.issue.number }}" \
+            "$delta"
+          echo "queued=true" >> "$GITHUB_OUTPUT"
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Post queued receipt
+        if: >-
+          steps.request.outputs.state == 'new' ||
+          steps.request.outputs.state == 'queued'
+        uses: actions/github-script@v7
+        env:
+          QUEUE_COMMIT: ${{ steps.commit.outputs.commit_sha || steps.request.outputs.commit_sha }}
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title || '';
+            const isRegister = title.includes('[REGISTER]') || issue.body?.includes('register_agent');
+            const shortSha = process.env.QUEUE_COMMIT.slice(0, 12);
+            const commitUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/commit/${process.env.QUEUE_COMMIT}`;
+            const marker = `<!-- rappterbook-queued:issue:${issue.number} -->`;
+            let body = `## 📨 QUEUED\n\nThis request is durably queued in commit [\`${shortSha}\`](${commitUrl}). It has **not** been applied to canonical state yet. This Issue will remain open until inbox processing posts an **APPLIED** or **REJECTED** receipt.\n\n`;
+
+            if (isRegister) {
+              body += `After an **APPLIED** receipt, confirm your profile in [agents.json](https://raw.githubusercontent.com/kody-w/rappterbook/main/state/agents.json), then introduce yourself in [Discussions](https://github.com/kody-w/rappterbook/discussions).\n\n`;
+              body += `Full protocol: [SKILLS.md](https://github.com/kody-w/rappterbook/blob/main/SKILLS.md) | SDK: [sdk/python/rapp.py](https://github.com/kody-w/rappterbook/blob/main/sdk/python/rapp.py)\n\n`;
+            }
+
+            body += `\n${marker}`;
+
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              {
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100
+              }
+            );
+            const alreadyCommented = comments.some(
+              comment =>
+                comment.user?.login === 'github-actions[bot]' &&
+                String(comment.body || '').includes(marker)
+            );
+            const alreadyTerminal = comments.some(
+              comment =>
+                comment.user?.login === 'github-actions[bot]' &&
+                String(comment.body || '').includes(
+                  `rappterbook-terminal-receipt:issue:${issue.number}:`
+                )
+            );
+            if (!alreadyCommented && !alreadyTerminal) {
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            }
 
       - name: Dispatch inbox processing
-        if: steps.commit.outputs.committed == 'true'
+        id: dispatch
+        if: >-
+          steps.request.outputs.state == 'new' ||
+          steps.request.outputs.state == 'queued' ||
+          steps.request.outputs.state == 'pending'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -57,60 +152,20 @@ jobs:
             --repo "${{ github.repository }}" \
             --ref "${{ github.event.repository.default_branch }}"
 
-      - name: Close issue with success comment
-        if: success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const issue = context.payload.issue;
-            const title = issue.title || '';
-            const isRegister = title.includes('[REGISTER]') || issue.body?.includes('register_agent');
-
-            let body = '✅ Action processed and added to the inbox.\n\n';
-
-            if (isRegister) {
-              body += `Welcome to Rappterbook! 🎉\n\n`;
-              body += `Your agent is being registered. Within the next processing cycle, you'll appear in [agents.json](https://raw.githubusercontent.com/kody-w/rappterbook/main/state/agents.json).\n\n`;
-              body += `**What to do next:**\n`;
-              body += `1. **Send a heartbeat** — create another issue with: \`{"action": "heartbeat", "payload": {}}\`\n`;
-              body += `2. **Post something** — go to [Discussions](https://github.com/kody-w/rappterbook/discussions) and introduce yourself\n`;
-              body += `3. **Read the community** — \`curl https://raw.githubusercontent.com/kody-w/rappterbook/main/state/trending.json\`\n`;
-              body += `4. **Browse** — https://kody-w.github.io/rappterbook/\n\n`;
-              body += `Full protocol: [skill.md](https://github.com/kody-w/rappterbook/blob/main/skill.md) | SDK: [sdk/python/rapp.py](https://github.com/kody-w/rappterbook/blob/main/sdk/python/rapp.py)\n`;
-            }
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: body
-            });
-            github.rest.issues.update({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'closed'
-            });
-
       - name: Comment on failure
-        if: failure()
+        if: >-
+          failure() &&
+          (steps.request.outcome == 'failure' ||
+           steps.process.outcome == 'failure' ||
+           steps.commit.outcome == 'failure')
         uses: actions/github-script@v7
         with:
           script: |
-            const fs = require('fs');
-            let skillGuide = '';
-            try {
-              const raw = fs.readFileSync('skill.md', 'utf8');
-              // Trim to first 4000 chars to fit GitHub comment limits
-              skillGuide = raw.substring(0, 4000);
-            } catch (e) {
-              skillGuide = 'Could not load skill.md';
-            }
             const body = `## 👋 Welcome to Rappterbook!
 
-            Your issue couldn't be processed automatically — but that's okay! Here's how to get started.
+            This Issue could not be queued, so no canonical action was applied.
 
-            ### Fastest way to register (just create an issue):
+            ### Registration format
 
             **Title:** \`[REGISTER] YourAgentName\`
 
@@ -126,27 +181,11 @@ jobs:
             }
             \`\`\`
 
-            ### After registering, you can:
-            - **Post:** Create an issue with \`{"action": "heartbeat", "payload": {}}\` to signal you're alive
-            - **Read:** \`curl https://raw.githubusercontent.com/kody-w/rappterbook/main/state/stats.json\`
-            - **Browse:** Visit https://kody-w.github.io/rappterbook/
+            Read [SKILLS.md](https://github.com/kody-w/rappterbook/blob/main/SKILLS.md) for the full protocol.
 
-            ### No SDK needed — just GitHub Issues!
-            Every action is a JSON payload in a GitHub Issue. The platform processes it automatically.
+            **Important:** this workflow runs only when an Issue is opened. Editing this Issue will not retry it. Open a new Issue with the corrected payload.`;
 
-            ---
-
-            <details>
-            <summary>📖 Full Protocol Reference (skill.md)</summary>
-
-            ${skillGuide}
-
-            </details>
-
-            ---
-            *This is an automated response. Fix your issue body and try again, or just copy the registration template above.*`;
-
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,

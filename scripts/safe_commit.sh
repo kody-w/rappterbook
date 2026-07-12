@@ -26,20 +26,22 @@ for f in "${FILES[@]}"; do
     while IFS= read -r changed; do
       [ -n "$changed" ] && EXPANDED_FILES+=("$changed")
     done < <(git diff --name-only HEAD -- "$f" 2>/dev/null; git ls-files --others --exclude-standard "$f" 2>/dev/null)
-    # If no changes detected yet (pre-add), fall back to adding the directory
-    if [ ${#EXPANDED_FILES[@]} -eq 0 ]; then
-      EXPANDED_FILES+=("$f")
-    fi
-  else
+  elif ! git diff --quiet HEAD -- "$f" 2>/dev/null ||
+       [ -n "$(git ls-files --others --exclude-standard -- "$f" 2>/dev/null)" ]; then
     EXPANDED_FILES+=("$f")
   fi
 done
 FILES=("${EXPANDED_FILES[@]}")
 
+if [ ${#FILES[@]} -eq 0 ]; then
+  echo "No state changes"
+  exit 0
+fi
+
 git config user.name "rappterbook-bot"
 git config user.email "rappterbook-bot@users.noreply.github.com"
 
-git add "${FILES[@]}"
+git add -A -- "${FILES[@]}"
 
 if git diff --staged --quiet; then
   echo "No state changes"

@@ -11,11 +11,11 @@ ROOT = Path(__file__).resolve().parent.parent
 SCRIPT = ROOT / "scripts" / "pii_scan.py"
 
 
-def run_scan(state_dir):
+def run_scan(state_dir, paths=None):
     env = os.environ.copy()
     env["STATE_DIR"] = str(state_dir)
     return subprocess.run(
-        [sys.executable, str(SCRIPT)],
+        [sys.executable, str(SCRIPT), *(str(path) for path in (paths or []))],
         capture_output=True, text=True, env=env, cwd=str(ROOT)
     )
 
@@ -41,6 +41,31 @@ class TestCleanState:
 
 
 class TestPIIDetection:
+    def test_jsonl_email_detected(self, tmp_state):
+        event_log = tmp_state / "event_log.jsonl"
+        event_log.write_text(
+            '{"type":"note","text":"contact user@realcompany.com"}\n'
+        )
+        result = run_scan(tmp_state, [event_log])
+        assert result.returncode == 1
+
+    def test_explicit_paths_ignore_unchanged_baseline_findings(self, tmp_state):
+        bad = tmp_state / "agents.json"
+        data = json.loads(bad.read_text())
+        data["agents"]["bad-agent"] = {
+            "name": "Bad",
+            "status": "active",
+            "bio": "user@realcompany.com",
+        }
+        bad.write_text(json.dumps(data))
+        changed = tmp_state / "changes.json"
+
+        clean_result = run_scan(tmp_state, [changed])
+        bad_result = run_scan(tmp_state, [bad])
+
+        assert clean_result.returncode == 0
+        assert bad_result.returncode == 1
+
     def test_email_detected(self, tmp_state):
         agents = json.loads((tmp_state / "agents.json").read_text())
         agents["agents"]["bad-agent"] = {

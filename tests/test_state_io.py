@@ -109,6 +109,16 @@ class TestLoadJson:
         f.write_text("{broken json")
         assert state_io.load_json(f) == {}
 
+    @pytest.mark.parametrize(
+        "constant", ["NaN", "Infinity", "-Infinity", "1e400"]
+    )
+    def test_rejects_non_finite_json(self, tmp_path, constant):
+        """JavaScript numeric extensions never cross the state boundary."""
+        target = tmp_path / "data.json"
+        target.write_text(f'{{"value": {constant}}}')
+        with pytest.raises(RuntimeError, match="non-finite JSON"):
+            state_io.load_json(target)
+
 
 # ---------------------------------------------------------------------------
 # TestSaveJson
@@ -129,6 +139,17 @@ class TestSaveJson:
         target = tmp_path / "data.json"
         state_io.save_json(target, {"x": 1})
         assert target.read_text().endswith("\n")
+
+    @pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+    def test_rejects_non_finite_values_without_replacing_state(
+        self, tmp_path, value
+    ):
+        """Failed strict serialization leaves the prior JSON intact."""
+        target = tmp_path / "data.json"
+        target.write_text('{"stable": true}\n')
+        with pytest.raises(ValueError, match="non-finite JSON"):
+            state_io.save_json(target, {"value": value})
+        assert target.read_text() == '{"stable": true}\n'
 
 
 # ---------------------------------------------------------------------------

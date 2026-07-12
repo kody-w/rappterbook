@@ -17,6 +17,7 @@ Usage:
 import fcntl
 import hashlib
 import json
+import math
 import os
 import re
 import sys
@@ -37,6 +38,19 @@ CRITICAL_STATE_FILES = frozenset({
 })
 
 
+def _reject_non_finite(value: str) -> None:
+    """Reject JavaScript-only numeric constants at the JSON boundary."""
+    raise ValueError(f"non-finite JSON value {value!r} is not allowed")
+
+
+def _parse_finite_float(value: str) -> float:
+    """Parse a JSON float while rejecting exponent overflow."""
+    parsed = float(value)
+    if not math.isfinite(parsed):
+        raise ValueError(f"non-finite JSON number {value!r} is not allowed")
+    return parsed
+
+
 def load_json(path) -> dict:
     """Load a JSON file, returning {} on missing files.
 
@@ -49,7 +63,11 @@ def load_json(path) -> dict:
         return {}
     try:
         with open(path) as f:
-            return json.load(f)
+            return json.load(
+                f,
+                parse_constant=_reject_non_finite,
+                parse_float=_parse_finite_float,
+            )
     except json.JSONDecodeError as exc:
         fname = path.name
         print(f"WARNING: corrupt JSON in {path}: {exc}", file=sys.stderr)
@@ -61,6 +79,8 @@ def load_json(path) -> dict:
                 f"git checkout origin/main -- {path}"
             ) from exc
         return {}
+    except ValueError as exc:
+        raise RuntimeError(f"Refusing non-finite JSON in {path}: {exc}") from exc
     except OSError:
         return {}
 
@@ -167,7 +187,12 @@ def save_json(path, data: dict) -> None:
             fd, temp_path = tempfile.mkstemp(suffix=".tmp", dir=dir_name)
             with os.fdopen(fd, "w") as f:
                 fd = None  # os.fdopen takes ownership of fd
-                json.dump(data, f, indent=2)
+                try:
+                    json.dump(data, f, indent=2, allow_nan=False)
+                except ValueError as exc:
+                    raise ValueError(
+                        f"Refusing to save non-finite JSON to {path}: {exc}"
+                    ) from exc
                 f.write("\n")
                 f.flush()
                 os.fsync(f.fileno())
@@ -175,7 +200,11 @@ def save_json(path, data: dict) -> None:
             temp_path = None  # rename succeeded
             # Read-back validation
             with open(path) as f:
-                json.load(f)
+                json.load(
+                    f,
+                    parse_constant=_reject_non_finite,
+                    parse_float=_parse_finite_float,
+                )
         finally:
             if fd is not None:
                 os.close(fd)

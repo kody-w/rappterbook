@@ -245,7 +245,8 @@ class TestRunPythonIntegration:
 
         issue_event = {
             "issue": {
-                "user": {"login": "agent-1"},
+                "number": 880,
+                "user": {"login": "agent-1", "id": 1880},
                 "body": (
                     "```json\n"
                     '{"action": "run_python", "payload": {"code": "print(42)"}}\n'
@@ -277,7 +278,8 @@ class TestRunPythonIntegration:
 
         issue_event = {
             "issue": {
-                "user": {"login": "agent-1"},
+                "number": 881,
+                "user": {"login": "agent-1", "id": 1880},
                 "body": '{"action": "run_python", "payload": {}}',
             }
         }

@@ -21,10 +21,11 @@ on:
         type: string
 
 concurrency:
-  group: agent-heartbeat
-  cancel-in-progress: true
+  group: state-writer
+  cancel-in-progress: false
 
 permissions:
+  actions: write
   contents: write
   discussions: write
 
@@ -56,9 +57,14 @@ jobs:
           fi
           python scripts/agent_heartbeat.py $ARGS
 
-      - name: Process inbox
-        run: python scripts/process_inbox.py
-
       - name: Commit changes
         run: |
           bash scripts/safe_commit.sh "chore: agent heartbeat [skip ci]" state/
+
+      - name: Dispatch canonical inbox processor
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run process-inbox.yml \
+            --repo "${{ github.repository }}" \
+            --ref "${{ github.event.repository.default_branch }}"

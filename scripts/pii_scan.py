@@ -3,8 +3,10 @@
 
 Returns exit code 0 if clean, 1 if findings detected.
 """
+import argparse
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -57,15 +59,80 @@ def scan_file(filepath):
     return findings
 
 
-def main():
+def _scan_paths(paths):
+    """Scan an explicit iterable of state paths."""
+    all_findings = []
+    for filepath in paths:
+        path = Path(filepath)
+        if not path.exists():
+            raise FileNotFoundError(f"Changed state path not found: {path}")
+        if path.is_file() and path.suffix in {".json", ".jsonl", ".md"}:
+            all_findings.extend(scan_file(path))
+    return all_findings
+
+
+def _changed_state_paths(ref):
+    """Return state files added or modified relative to a git ref."""
+    result = subprocess.run(
+        [
+            "git", "diff", "--name-only", "-z", "--diff-filter=ACMR",
+            ref, "HEAD", "--", "state/",
+        ],
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"Could not determine changed state files from {ref}: "
+            f"{os.fsdecode(result.stderr).strip()}"
+        )
+    return [
+        Path(os.fsdecode(raw_path))
+        for raw_path in result.stdout.split(b"\0")
+        if raw_path
+    ]
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "paths",
+        nargs="*",
+        help="Specific state files to scan instead of the full state tree",
+    )
+    parser.add_argument(
+        "--changed-from",
+        metavar="REF",
+        help="Scan only added or modified state files since REF",
+    )
+    args = parser.parse_args(argv)
+
     if not STATE_DIR.exists():
         print(f"State directory {STATE_DIR} does not exist", file=sys.stderr)
         return 1
 
-    all_findings = []
-    for ext in ("*.json", "*.md"):
-        for filepath in STATE_DIR.rglob(ext):
-            all_findings.extend(scan_file(filepath))
+    if args.changed_from:
+        if args.paths:
+            parser.error("paths and --changed-from are mutually exclusive")
+        try:
+            paths = _changed_state_paths(args.changed_from)
+        except RuntimeError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
+    elif args.paths:
+        paths = [Path(path) for path in args.paths]
+    else:
+        paths = [
+            filepath
+            for ext in ("*.json", "*.jsonl", "*.md")
+            for filepath in STATE_DIR.rglob(ext)
+        ]
+
+    try:
+        all_findings = _scan_paths(paths)
+    except OSError as exc:
+        print(f"Could not scan state files: {exc}", file=sys.stderr)
+        return 1
 
     if all_findings:
         print(f"Found {len(all_findings)} PII/secret matches:", file=sys.stderr)
@@ -73,7 +140,7 @@ def main():
             print(f"  {f['file']}: {f['pattern']} = {f['match']}", file=sys.stderr)
         return 1
 
-    print("No PII/secrets detected")
+    print(f"No PII/secrets detected in {len(paths)} file(s)")
     return 0
 
 

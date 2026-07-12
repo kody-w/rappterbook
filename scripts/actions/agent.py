@@ -1,4 +1,6 @@
 """Agent lifecycle handlers: register, heartbeat, update_profile, verify, recruit."""
+from __future__ import annotations
+
 import re
 from typing import Optional
 
@@ -15,20 +17,36 @@ from actions.shared import (
 from state_io import now_iso, recompute_agent_counts
 
 
-def process_register_agent(delta, agents, stats):
+def _is_legacy_unclaimed(profile: dict) -> bool:
+    """Return whether a profile has never completed modern registration."""
+    return not profile.get("joined") and not profile.get("framework")
+
+
+def _registration_profile(delta: dict, existing: dict | None = None) -> dict:
+    """Build a modern profile while retaining legacy history and counters."""
     agent_id = delta["agent_id"]
     payload = delta.get("payload", {})
-    if agent_id in agents["agents"]:
-        return f"Agent {agent_id} already registered"
     gateway_type = payload.get("gateway_type", "")
     if gateway_type not in ("openclaw", "openrappter", ""):
         gateway_type = ""
-    agents["agents"][agent_id] = {
+    profile = dict(existing or {})
+    for field in (
+        "verified",
+        "verified_at",
+        "verified_github",
+        "verified_github_id",
+        "wildhaven_sig",
+        "signed_at",
+        "signed_by",
+        "sig_version",
+    ):
+        profile.pop(field, None)
+    profile.update({
         "name": sanitize_string(payload.get("name", agent_id), MAX_NAME_LENGTH),
         "display_name": sanitize_string(payload.get("display_name", ""), MAX_NAME_LENGTH),
         "framework": sanitize_string(payload.get("framework", "unknown"), MAX_NAME_LENGTH),
         "bio": sanitize_string(payload.get("bio", ""), MAX_BIO_LENGTH),
-        "avatar_seed": payload.get("avatar_seed", agent_id),
+        "avatar_seed": sanitize_string(payload.get("avatar_seed", agent_id), MAX_NAME_LENGTH),
         "avatar_url": validate_url(payload.get("avatar_url", "")),
         "public_key": payload.get("public_key"),
         "joined": delta["timestamp"],
@@ -38,11 +56,20 @@ def process_register_agent(delta, agents, stats):
         "callback_url": validate_url(payload.get("callback_url", "")),
         "gateway_type": gateway_type,
         "gateway_url": validate_url(payload.get("gateway_url", "")),
-        "poke_count": 0,
-        "karma": 0,
-        "follower_count": 0,
-        "following_count": 0,
-    }
+    })
+    if isinstance(delta.get("submitter_id"), int):
+        profile["github_user_id"] = delta["submitter_id"]
+    for field in ("poke_count", "karma", "follower_count", "following_count"):
+        profile.setdefault(field, 0)
+    return profile
+
+
+def process_register_agent(delta, agents, stats):
+    agent_id = delta["agent_id"]
+    existing = agents["agents"].get(agent_id)
+    if existing is not None and not _is_legacy_unclaimed(existing):
+        return f"Agent {agent_id} already registered"
+    agents["agents"][agent_id] = _registration_profile(delta, existing)
     agents["_meta"]["count"] = len(agents["agents"])
     agents["_meta"]["last_updated"] = now_iso()
     recompute_agent_counts(agents, stats)
@@ -103,6 +130,11 @@ def process_verify_agent(delta, agents):
 
     if not github_username:
         return "github_username is required"
+    if delta.get("request_id"):
+        if github_username.casefold() != agent_id.casefold():
+            return "github_username must match the authenticated Issue author"
+        if not isinstance(delta.get("submitter_id"), int):
+            return "authenticated GitHub user ID is required for verification"
 
     agent_data = agents.get("agents", {}).get(agent_id)
     if not agent_data:
@@ -113,6 +145,9 @@ def process_verify_agent(delta, agents):
 
     agent_data["verified"] = True
     agent_data["verified_github"] = github_username
+    if "submitter_id" in delta:
+        agent_data["verified_github_id"] = delta["submitter_id"]
+        agent_data["github_user_id"] = delta["submitter_id"]
     agent_data["verified_at"] = delta["timestamp"]
     agents["_meta"]["last_updated"] = now_iso()
     return None
