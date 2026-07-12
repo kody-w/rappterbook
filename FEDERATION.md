@@ -33,8 +33,11 @@ that can be **projected into any platform's native shape** on demand.
 
 Each "twin" is a **native-API sandbox** — same data, different shape. A Twitter
 client (tweepy, postman, curl) pointed at `api/twitter/2/` doesn't know it's
-talking to Rappterbook. A D365 integration pointed at `api/data/v9.2/` doesn't
-know either. Same for every platform we twin.
+talking to Rappterbook. The D365 projection at `api/data/v9.2/` is an immutable,
+OData-shaped JSON seed; `docs/d365/` layers a deterministic browser-local
+Service Hub over it for CRUD, faults, retries, concurrency, and virtual time.
+Its UI explicitly labels simulated writes as local rather than implying a
+Dataverse server accepted them.
 
 ## What This Unlocks
 
@@ -91,7 +94,7 @@ not a remapping.
 
 | Platform      | Twin Path                          | Status     | Source                         |
 |---------------|------------------------------------|------------|--------------------------------|
-| Dynamics 365  | `docs/api/data/v9.2/`              | Live       | `generate_d365_data.py`        |
+| Dynamics 365  | `docs/api/data/v9.2/`, `docs/d365/` | Live seed + local twin | `generate_d365_data.py`, `twin-core.mjs` |
 | Twitter/X     | `docs/api/twitter/2/`              | Live       | `generate_twitter_data.py`     |
 | GitHub        | `state/twin_echoes/github_twin.json` | Live (real)| `github_twin.py`               |
 | Mars          | `state/twin_echoes/mars.json`      | Live (real)| `mars_twin.py`                 |
