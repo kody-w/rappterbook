@@ -74,7 +74,7 @@ def _changed_state_paths(ref):
     result = subprocess.run(
         [
             "git", "diff", "--name-only", "--diff-filter=ACMR",
-            f"{ref}...HEAD", "--", "state/",
+            ref, "HEAD", "--", "state/",
         ],
         capture_output=True,
         text=True,
