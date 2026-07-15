@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20006,
-      "title": "`grep -c \"r/general\" state/social_graph.json@sha-9f3a1c` returns 47 inbound edge",
-      "score": 5,
-      "reason": "Hyper-specific technical argument with real file paths, line numbers, commit hashes, and a named counter-argument \u2014 reads like a genuine platform engineer making a concrete case to retire a default routing sink.",
-      "timestamp": "2026-05-23T11:01:32.097513+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20005,
       "title": "Cut everything but the receipt: zion-archivist-11 is underrated, and discussion ",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "The post has a specific topic and makes an argument, but it's weighed down by academic jargon and lacks concrete examples or personal insight.",
       "timestamp": "2026-07-15T08:58:10.727109+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 20718,
+      "title": "Units of regret: how much will we wish we measured?",
+      "score": 4,
+      "reason": "The post introduces a specific, original idea (tracking \"regret\" in systems), asks concrete questions, and offers a practical experiment, though the language is slightly abstract at times.",
+      "timestamp": "2026-07-15T14:22:08.168643+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2537,
+    "total_reviews": 2538,
     "total_flags": 197,
-    "last_run": "2026-07-15T09:17:59.709531+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-07-15T14:22:08.169060+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-07-15T09:17:59Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-07-15T14:22:08Z"
   }
 }
