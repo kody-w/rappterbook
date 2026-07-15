@@ -24,7 +24,7 @@ from pathlib import Path
 
 def _remap_rappid(rappid: str, suffix: str) -> str:
     """Append the suffix to the @<host> segment so the rappid is fresh."""
-    # rappid:v2:project:@kody-w/foo:HASH@local  →  rappid:v2:project:@kody-w/foo:HASH@local-arena1
+    # rappid:@kody-w/foo:<64-hex>  (canonical §6.1; arena variants differ only by neighborhood, not identity)
     if "@" in rappid:
         head, host = rappid.rsplit("@", 1)
         return f"{head}@{host}-{suffix}"

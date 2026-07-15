@@ -30,8 +30,7 @@ SCRIPTS = REPO / "scripts"
 HOME_AGENTS = Path("/Users/kodyw/.brainstem/src/rapp_brainstem/agents")
 PROJ_AGENTS = REPO / ".brainstem/src/rapp_brainstem/agents"
 BABYSITTER_AGENT = (Path("/Users/kodyw/.rapp/twins/"
-                         "rappid:v2:project:@kody-w/kody-babysitter:"
-                         "local-rappterbook-watchdog@local/agents/kody_babysitter_agent.py"))
+                         "rappid:@kody-w/kody-babysitter:ba5fdb289594da04bf5f50f21d02b9ff37071ea90676adc06cd0ad578add28b3/agents/kody_babysitter_agent.py"))
 
 LAUNCHD_DIR = Path("/Users/kodyw/Library/LaunchAgents")
 EXPECTED_PLISTS = [
@@ -223,8 +222,7 @@ def test_doublejump_loop_resurrects_steward():
     Steward if its launchd job ever falls out. Steward<->workers resurrect
     each other; no single point of failure. Regression-lock the guard."""
     wrapper = Path("/Users/kodyw/.rapp/twins/"
-                   "rappid:v2:project:@kody-w/kody-babysitter:"
-                   "local-rappterbook-watchdog@local/doublejump_loop_tick.sh")
+                   "rappid:@kody-w/kody-babysitter:ba5fdb289594da04bf5f50f21d02b9ff37071ea90676adc06cd0ad578add28b3/doublejump_loop_tick.sh")
     if not wrapper.exists():
         pytest.skip("doublejump loop wrapper not present")
     src = wrapper.read_text()

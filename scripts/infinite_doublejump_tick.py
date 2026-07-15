@@ -45,10 +45,8 @@ CHRONICLE_DIR.mkdir(parents=True, exist_ok=True)
 LINEAGE_QUARANTINE.mkdir(parents=True, exist_ok=True)
 LINEAGE_SOULS.mkdir(parents=True, exist_ok=True)
 
-TWIN_GLOB = ("/Users/kodyw/.rapp/twins/rappid:v2:project:@kody-w/"
-             "authenticity-twin:rappterbook-outside-visitor@local-swarm-*")
-TWIN_PATH_PREFIX = ("/Users/kodyw/.rapp/twins/rappid:v2:project:@kody-w/"
-                    "authenticity-twin:rappterbook-outside-visitor@local-")
+TWIN_GLOB = ("/Users/kodyw/.rapp/twins/rappid:@kody-w/authenticity-twin:662ed649e6f443ed69d74f813faab286137c2b510936f39b4d5bbd71b74a18e6-swarm-*")
+TWIN_PATH_PREFIX = ("/Users/kodyw/.rapp/twins/rappid:@kody-w/authenticity-twin:662ed649e6f443ed69d74f813faab286137c2b510936f39b4d5bbd71b74a18e6-")
 
 def _path_for_suffix(suffix: str) -> str:
     """suffix is e.g. 'swarm-04' — returns the full twin workspace path."""

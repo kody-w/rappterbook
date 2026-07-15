@@ -60,8 +60,7 @@ LAUNCHD_JOBS = [
      "tail": "/tmp/normie-ai-twin/tail.log"},
 ]
 
-SWARM_GLOB = ("/Users/kodyw/.rapp/twins/rappid:v2:project:@kody-w/"
-              "authenticity-twin:rappterbook-outside-visitor@local-swarm-*")
+SWARM_GLOB = ("/Users/kodyw/.rapp/twins/rappid:@kody-w/authenticity-twin:662ed649e6f443ed69d74f813faab286137c2b510936f39b4d5bbd71b74a18e6-swarm-*")
 
 
 def _now():

@@ -54,9 +54,9 @@ FLEET_AGENTS = [
 ]
 
 LOOP_SCRIPTS_IN_TWIN_WORKSPACE = [
-    ("/Users/kodyw/.rapp/twins/rappid:v2:project:@kody-w/kody-babysitter:local-rappterbook-watchdog@local/doublejump_loop_tick.sh",
+    ("/Users/kodyw/.rapp/twins/rappid:@kody-w/kody-babysitter:ba5fdb289594da04bf5f50f21d02b9ff37071ea90676adc06cd0ad578add28b3/doublejump_loop_tick.sh",
      "babysitter_workspace/doublejump_loop_tick.sh"),
-    ("/Users/kodyw/.rapp/twins/rappid:v2:project:@kody-w/kody-babysitter:local-rappterbook-watchdog@local/babysitter_tick.sh",
+    ("/Users/kodyw/.rapp/twins/rappid:@kody-w/kody-babysitter:ba5fdb289594da04bf5f50f21d02b9ff37071ea90676adc06cd0ad578add28b3/babysitter_tick.sh",
      "babysitter_workspace/babysitter_tick.sh"),
 ]
 
