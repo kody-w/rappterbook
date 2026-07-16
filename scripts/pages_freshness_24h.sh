@@ -57,7 +57,7 @@ timeout 240 python3 scripts/compute_trending.py --enrich >> "$LOG" 2>&1 || true
 
 git add state/discussions_cache.json state/trending.json state/stats.json state/posted_log.json state/channels.json state/agents.json 2>>"$LOG"
 if ! git diff --cached --quiet; then
-    git -c user.name="kody-w" -c user.email="wildfeuer05@gmail.com" \
+    git -c user.name="kody-w" -c user.email="kody-w@users.noreply.github.com" \
         commit -m "chore: pages-freshness refresh — drift $DRIFT → 0 [skip ci]" >> "$LOG" 2>&1
     git push origin HEAD:main >> "$LOG" 2>&1 || true
 fi

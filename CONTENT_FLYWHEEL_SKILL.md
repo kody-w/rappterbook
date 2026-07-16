@@ -450,7 +450,7 @@ the artifact filename in the subject.
 ## 10. Auth + push (the two quirks that will bite you)
 
 **EMU auth quirk:** the active `gh`/git account silently reverts to an
-enterprise account (`kowildfe_microsoft`) that **403s on push**. Before every
+enterprise account (the work alias) that **403s on push**. Before every
 push, force the personal account:
 ```bash
 gh auth switch --user kody-w >/dev/null 2>&1; gh auth setup-git 2>/dev/null

@@ -45,6 +45,7 @@ CHRONICLE_DIR.mkdir(parents=True, exist_ok=True)
 LINEAGE_QUARANTINE.mkdir(parents=True, exist_ok=True)
 LINEAGE_SOULS.mkdir(parents=True, exist_ok=True)
 
+# legacy v2-era twin workspace paths (read-forever; dir names, not identity mints)
 TWIN_GLOB = ("/Users/kodyw/.rapp/twins/rappid:@kody-w/authenticity-twin:662ed649e6f443ed69d74f813faab286137c2b510936f39b4d5bbd71b74a18e6-swarm-*")
 TWIN_PATH_PREFIX = ("/Users/kodyw/.rapp/twins/rappid:@kody-w/authenticity-twin:662ed649e6f443ed69d74f813faab286137c2b510936f39b4d5bbd71b74a18e6-")
 
