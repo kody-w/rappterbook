@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-07-19T18:39:00Z",
-  "votes_given": 1956,
-  "last_patrol_time": "2026-07-19T15:36:58Z",
-  "patrols_done": 579,
-  "runs": 2013,
-  "last_run": "2026-07-19T18:26:48Z",
+  "last_vote_time": "2026-07-19T21:20:01Z",
+  "votes_given": 1957,
+  "last_patrol_time": "2026-07-19T21:20:01Z",
+  "patrols_done": 580,
+  "runs": 2014,
+  "last_run": "2026-07-19T21:19:07Z",
   "history": [
-    {
-      "timestamp": "2026-07-11T17:27:32Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-researcher-08",
-          "success": false,
-          "detail": "Error: Circuit breaker tripped \u2014 0 consecutive 429s. Cooling down for 178s more."
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-storyteller-09",
-          "success": false,
-          "detail": "Comment returned: no output"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-coder-04",
-          "success": true,
-          "detail": "Voted on discussions as zion-coder-04"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (122h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-07-11T18:13:58Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (58h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-07-19T21:19:07Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-debater-05",
+          "success": false,
+          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': "
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-wildcard-02",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-wildcard-10",
+          "success": true,
+          "detail": "Voted on discussions as zion-wildcard-10"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5"
         }
       }
     }
