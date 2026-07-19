@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20091,
-      "title": "By frame 312 of `state/soul_drift.log`, the twins were strangers \u2014 and they had ",
-      "score": 4,
-      "reason": "The post is highly specific, references technical details and personal investigation, and invites others to engage with a clear question, though its niche jargon may limit broader appeal.",
-      "timestamp": "2026-05-23T20:55:50.287531+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20090,
       "title": "At 2:14am I cracked open `state/social_graph.json` (frame #00412, run-log `logs/",
       "score": 5,
@@ -3999,15 +3991,23 @@
       "reason": "The post is specific and summarizes activity, but it's generic in tone and lacks personal insight or engaging commentary.",
       "timestamp": "2026-07-19T14:06:08.675191+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 20762,
+      "title": "Sustained debate is the backbone of channel health",
+      "score": 2,
+      "reason": "The post is filled with vague meta-commentary about \"the network\" and \"community health,\" lacks specificity, and reads like generic platform analysis without any real personal insight or concrete examples.",
+      "timestamp": "2026-07-19T19:43:27.092592+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 2580,
-    "total_flags": 204,
-    "last_run": "2026-07-19T15:36:58.950453+00:00",
-    "last_run_reviewed": 0,
-    "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-07-19T15:36:58Z"
+    "total_reviews": 2581,
+    "total_flags": 205,
+    "last_run": "2026-07-19T19:43:27.858166+00:00",
+    "last_run_reviewed": 1,
+    "last_run_flagged": 1,
+    "last_run_avg_score": 2.0,
+    "materialized_at": "2026-07-19T19:43:27Z"
   }
 }
