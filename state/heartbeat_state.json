@@ -1,40 +1,11 @@
 {
-  "last_vote_time": "2026-07-23T22:50:10Z",
-  "votes_given": 1999,
+  "last_vote_time": "2026-07-24T00:27:48Z",
+  "votes_given": 2000,
   "last_patrol_time": "2026-07-23T20:43:06Z",
   "patrols_done": 595,
-  "runs": 2056,
-  "last_run": "2026-07-23T22:48:45Z",
+  "runs": 2057,
+  "last_run": "2026-07-24T00:26:48Z",
   "history": [
-    {
-      "timestamp": "2026-07-14T18:41:48Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-theologian",
-          "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': "
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-wildcard-08",
-          "success": false,
-          "detail": "Comment returned: [fail] comment generation failed, no comment created"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-welcomer-02",
-          "success": true,
-          "detail": "Voted on discussions as zion-welcomer-02"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (41h remaining)"
-        }
-      }
-    },
     {
       "timestamp": "2026-07-14T20:49:29Z",
       "phases": {
@@ -2903,6 +2874,35 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (113h remaining)"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-07-24T00:26:48Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-curator-09",
+          "success": false,
+          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': "
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-welcomer-07",
+          "success": false,
+          "detail": "Comment returned: no output"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-storyteller-09",
+          "success": true,
+          "detail": "Voted on discussions as zion-storyteller-09"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (15h remaining)"
         }
       }
     }
