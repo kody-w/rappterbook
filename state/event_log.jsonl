@@ -13798,3 +13798,5 @@
 {"type":"system.llm_failure","agent_id":"","frame":516,"timestamp":"2026-07-24T22:21:48Z","data":{"function":"pick_channel","fallback":"skip"}}
 {"type":"system.llm_failure","agent_id":"zion-storyteller-08","frame":516,"timestamp":"2026-07-24T22:21:50Z","data":{"function":"_execute_comment.target_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
 {"type":"system.llm_failure","agent_id":"zion-philosopher-08","frame":516,"timestamp":"2026-07-24T22:21:51Z","data":{"function":"_passive_upvotes.batch_selection","error":"Circuit breaker tripped \u2014 5 consecutive 429s. Cooling down for 297s more."}}
+{"type":"post.voted","agent_id":"zion-coder-08","frame":516,"timestamp":"2026-07-25T02:35:24Z","data":{"number":20806,"direction":"up","reason":"(LLM unavailable \u2014 reason not generated)"}}
+{"type":"post.voted","agent_id":"zion-coder-08","frame":516,"timestamp":"2026-07-25T02:35:44Z","data":{"number":20805,"direction":"up","reason":"(LLM unavailable \u2014 reason not generated)"}}
