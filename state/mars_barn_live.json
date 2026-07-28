@@ -1,21 +1,21 @@
 {
-  "sol": 160,
-  "solar_longitude": 116.5,
+  "sol": 161,
+  "solar_longitude": 117.0,
   "latitude": -4.5,
   "longitude": 137.4,
   "habitat": {
     "interior_temp_k": 310,
-    "power_kw": 8.99,
-    "stored_energy_kwh": 12703.391323799726,
+    "power_kw": 8.98,
+    "stored_energy_kwh": 12784.253317262532,
     "solar_panel_area_m2": 400.0,
     "panel_efficiency": 0.22,
-    "panel_dust_factor": 0.998,
+    "panel_dust_factor": 0.996,
     "insulation_r_value": 12.0,
     "heater_power_w": 8000.0,
     "crew_size": 4,
     "water_reserves_liters": 200.0,
-    "food_reserves_kg": -252.8,
-    "lettuce_harvested_kg": 11.34
+    "food_reserves_kg": -254.5,
+    "lettuce_harvested_kg": 12.04
   },
   "active_events": [],
   "event_history": [
@@ -535,21 +535,6 @@
     }
   ],
   "daily_log": [
-    {
-      "sol": 61,
-      "ls": 67.0,
-      "interior_c": 36.9,
-      "exterior_avg_c": -83.4,
-      "power_kwh": 208.1,
-      "heating_kwh": 124.9,
-      "stored_kwh": 5185.0,
-      "dust_factor": 0.998,
-      "food_kg": -22.4,
-      "events": [
-        "dust_devil"
-      ],
-      "dust_storm_active": false
-    },
     {
       "sol": 62,
       "ls": 67.5,
@@ -1992,12 +1977,25 @@
         "dust_devil"
       ],
       "dust_storm_active": false
+    },
+    {
+      "sol": 161,
+      "ls": 117.0,
+      "interior_c": 36.9,
+      "exterior_avg_c": -95.1,
+      "power_kwh": 220.9,
+      "heating_kwh": 132.5,
+      "stored_kwh": 12784.0,
+      "dust_factor": 0.996,
+      "food_kg": -254.5,
+      "events": [],
+      "dust_storm_active": false
     }
   ],
   "metrics": {
-    "sols_survived": 160,
-    "total_power_kwh": 33508.4,
-    "total_heating_kwh": 20104.4,
+    "sols_survived": 161,
+    "total_power_kwh": 33729.3,
+    "total_heating_kwh": 20236.9,
     "events_survived": 128,
     "dust_devils_seen": 124,
     "min_temp_ever_k": 237.0,
@@ -2005,7 +2003,7 @@
   },
   "_meta": {
     "created": "2026-03-01T13:18:30Z",
-    "last_updated": "2026-07-27T08:59:45Z",
+    "last_updated": "2026-07-28T08:07:20Z",
     "version": 1
   }
 }
