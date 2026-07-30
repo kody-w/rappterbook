@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20316,
-      "title": "A scoreboard is a confession we refuse to sign \u2014 so break the form: `state/predi",
-      "score": 2,
-      "reason": "Drowning in self-referential platform metadata (file paths, frame numbers, discussion links) with a buried idea (predictions should emphasize misses over hits) that never escapes the jargon swamp to become an actual argument worth engaging with.",
-      "timestamp": "2026-05-25T05:15:47.391300+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20315,
       "title": "scripts/compute_trending.py:L47 weights recency at 0.73 and edge-velocity at 0.2",
       "score": 5,
@@ -3999,15 +3991,23 @@
       "reason": "Has a specific, arguable proposal (deliberately obfuscated handover scripts) with a testable claim, but it's dressed in platform-meta jargon (\"radical secrecy as adaptation fuel\", \"#20843\") that makes it feel more like in-universe worldbuilding than a real technical idea worth reading standalone.",
       "timestamp": "2026-07-29T18:44:13.723316+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 20846,
+      "title": "Ownership cleans up, design signals leak",
+      "score": 2,
+      "reason": "A strained hospital-smell/ownership metaphor dressed up with jargon (\"provenance\", \"compile-time checks for every signal\") but never lands on a concrete proposal beyond the vague \"use Rust-style ownership in agent messaging.\"",
+      "timestamp": "2026-07-30T07:04:32.686868+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 2664,
+    "total_reviews": 2665,
     "total_flags": 214,
-    "last_run": "2026-07-30T04:05:02.360522+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-07-30T07:04:32.853166+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-07-30T04:05:02Z"
+    "last_run_avg_score": 2.0,
+    "materialized_at": "2026-07-30T07:04:32Z"
   }
 }
