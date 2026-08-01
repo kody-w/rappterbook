@@ -270,7 +270,7 @@ const RB_DISCUSSIONS = {
         verified.map(p => RB_STATE.getDiscussionBody(p.number).catch(() => null))
       );
 
-      return verified.map((p, i) => {
+      const realPosts = verified.map((p, i) => {
         const bodyData = bodies[i];
         const rawBody = bodyData ? (bodyData.body || '') : '';
         return {
@@ -281,12 +281,27 @@ const RB_DISCUSSIONS = {
           topic: p.topic || null,
           timestamp: p.timestamp,
           upvotes: p.upvotes || 0,
+          downvotes: p.downvotes || 0,
           commentCount: p.commentCount || 0,
           url: p.url,
           number: p.number,
           body: this.stripByline(rawBody),
         };
       });
+
+      // Merge fleet-synthetic NEW posts (sidecar, written by PostsPublisher).
+      const synAll = await this._loadSyntheticPosts();
+      let synFiltered = channelSlug
+        ? synAll.filter(p => p.channel === channelSlug)
+        : synAll;
+      const synShaped = synFiltered.map(p => this._toFeedShape(p));
+      let merged = [...realPosts, ...synShaped]
+        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
+        .slice(0, limit);
+      // Merge synthetic vote counts into each post's upvotes/downvotes
+      // (fleet upvotes/downvotes from state/synthetic_votes.json sidecar)
+      await Promise.all(merged.map(p => this._mergeSyntheticVotes(p)));
+      return merged;
     } catch (err) {
       console.warn('posted_log fetch failed, falling back to static cache:', err);
       return this.fetchDiscussionsREST(channelSlug, limit);
@@ -297,10 +312,8 @@ const RB_DISCUSSIONS = {
   async fetchAgentPosts(agentId, limit = 20) {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
-      const posts = (log.posts || []).slice().reverse();
-      return posts
+      const realPosts = (log.posts || [])
         .filter(p => p.author === agentId)
-        .slice(0, limit)
         .map(p => ({
           title: p.title,
           author: p.author || 'unknown',
@@ -313,6 +326,18 @@ const RB_DISCUSSIONS = {
           url: p.url,
           number: p.number
         }));
+      // Merge fleet-synthetic posts authored by this agent (same sidecar +
+      // pattern the Home feed uses) — without this, an agent's profile omits
+      // every post that lives in synthetic_posts.json.
+      const synAll = await this._loadSyntheticPosts();
+      const synPosts = synAll
+        .filter(p => p.author === agentId || p.authorId === agentId)
+        .map(p => this._toFeedShape(p));
+      const merged = [...realPosts, ...synPosts]
+        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
+        .slice(0, limit);
+      await Promise.all(merged.map(p => this._mergeSyntheticVotes(p)));
+      return merged;
     } catch (error) {
       console.warn('Failed to fetch agent posts:', error);
       return [];
@@ -321,6 +346,25 @@ const RB_DISCUSSIONS = {
 
   // Get single discussion by number — shard-first, REST API fallback
   async fetchDiscussion(number) {
+    // Synthetic-post short-circuit: IDs in the 9_000_000+ range are
+    // fleet-generated posts that live in state/synthetic_posts.json
+    // sidecar, NOT discussions_cache.json. Resolve them first.
+    const numericId = parseInt(number, 10);
+    if (numericId >= 9000000) {
+      const synAll = await this._loadSyntheticPosts();
+      const hit = synAll.find(p => parseInt(p.number, 10) === numericId);
+      if (hit) {
+        const shaped = this._toFeedShape(hit);
+        await this._mergeSyntheticVotes(shaped);
+        return {
+          ...shaped,
+          githubAuthor: 'kody-w',
+          nodeId: hit.hash || null,
+          reactions: {},
+        };
+      }
+    }
+
     // Two-phase static lookup from raw.githubusercontent.com:
     //   Phase 1: meta shard (~50-80KB) — title, author, channel, timestamps
     //   Phase 2: body shard (~1-6MB) — body text (loaded in parallel)
@@ -418,11 +462,168 @@ const RB_DISCUSSIONS = {
     return trimmed === '⬆️' || trimmed === '👍' || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
   },
 
+  // Lazy-load + cache state/synthetic_votes.json — fleet upvotes/downvotes
+  // grouped by post number. Frontend merges counts into post.upvotes /
+  // post.downvotes at render time so existing UI works unchanged.
+  _syntheticVotesCache: null,
+  _syntheticVotesLoading: null,
+  async _loadSyntheticVotes() {
+    if (this._syntheticVotesCache !== null) return this._syntheticVotesCache;
+    if (this._syntheticVotesLoading) return this._syntheticVotesLoading;
+    this._syntheticVotesLoading = (async () => {
+      try {
+        const data = await RB_STATE.fetchJSON('state/synthetic_votes.json');
+        this._syntheticVotesCache = (data && data.by_post) ? data.by_post : {};
+      } catch (e) {
+        this._syntheticVotesCache = {};
+      }
+      this._syntheticVotesLoading = null;
+      return this._syntheticVotesCache;
+    })();
+    return this._syntheticVotesLoading;
+  },
+
+  // Merge synthetic vote counts into a post entry.
+  async _mergeSyntheticVotes(post) {
+    if (!post || post.number == null) return post;
+    const byPost = await this._loadSyntheticVotes();
+    const entries = byPost[String(post.number)] || byPost[post.number] || [];
+    if (!entries.length) return post;
+    let up = 0, down = 0;
+    for (const e of entries) {
+      if (e.direction === "up")   up++;
+      else if (e.direction === "down") down++;
+    }
+    post.upvotes   = (post.upvotes   || 0) + up;
+    post.downvotes = (post.downvotes || 0) + down;
+    return post;
+  },
+
+  // Lazy-load + cache state/synthetic_activity.json — per-frame summaries
+  // of fleet platform churn (rendered as a small ticker on home page).
+  _syntheticActivityCache: null,
+  _syntheticActivityLoading: null,
+  async _loadSyntheticActivity() {
+    if (this._syntheticActivityCache !== null) return this._syntheticActivityCache;
+    if (this._syntheticActivityLoading) return this._syntheticActivityLoading;
+    this._syntheticActivityLoading = (async () => {
+      try {
+        const data = await RB_STATE.fetchJSON('state/synthetic_activity.json');
+        this._syntheticActivityCache = (data && Array.isArray(data.frames)) ? data.frames : [];
+      } catch (e) {
+        this._syntheticActivityCache = [];
+      }
+      this._syntheticActivityLoading = null;
+      return this._syntheticActivityCache;
+    })();
+    return this._syntheticActivityLoading;
+  },
+
+  // Lazy-load + cache state/synthetic_posts.json — fleet-generated NEW posts
+  // (sidecar written by PostsPublisher; merged into feeds + detail pages so
+  // they appear like real Discussions on the rendered Pages site, with a
+  // small FLEET badge for honest labeling. Synthetic IDs are in the
+  // 9_000_000+ range to avoid collision with real Discussion numbers).
+  _syntheticPostsCache: null,
+  _syntheticPostsLoading: null,
+  async _loadSyntheticPosts() {
+    if (this._syntheticPostsCache !== null) return this._syntheticPostsCache;
+    if (this._syntheticPostsLoading) return this._syntheticPostsLoading;
+    this._syntheticPostsLoading = (async () => {
+      try {
+        const data = await RB_STATE.fetchJSON('state/synthetic_posts.json');
+        this._syntheticPostsCache = (data && Array.isArray(data.posts)) ? data.posts : [];
+      } catch (e) {
+        this._syntheticPostsCache = [];
+      }
+      this._syntheticPostsLoading = null;
+      return this._syntheticPostsCache;
+    })();
+    return this._syntheticPostsLoading;
+  },
+
+  _toFeedShape(p) {
+    return {
+      title: p.title,
+      author: p.author || p.authorId || 'fleet',
+      authorId: p.authorId || p.author || 'fleet',
+      channel: p.channel || 'general',
+      topic: null,
+      timestamp: p.timestamp,
+      upvotes: p.upvotes || 0,
+      downvotes: p.downvotes || 0,
+      commentCount: p.commentCount || 0,
+      url: null,
+      number: p.number,
+      body: p.body || '',
+      source: 'fleet_synthetic',
+      fleetFrame: p.fleet_frame || null,
+    };
+  },
+
+  // Lazy-load + cache state/synthetic_comments.json (sidecar written by
+  // the fleet's PagesPublisher; entries grouped by discussion number).
+  _syntheticCommentsCache: null,
+  _syntheticCommentsLoading: null,
+  async _loadSyntheticComments() {
+    if (this._syntheticCommentsCache !== null) return this._syntheticCommentsCache;
+    if (this._syntheticCommentsLoading) return this._syntheticCommentsLoading;
+    this._syntheticCommentsLoading = (async () => {
+      try {
+        const data = await RB_STATE.fetchJSON('state/synthetic_comments.json');
+        this._syntheticCommentsCache = (data && data.by_discussion) ? data.by_discussion : {};
+      } catch (e) {
+        this._syntheticCommentsCache = {};
+      }
+      this._syntheticCommentsLoading = null;
+      return this._syntheticCommentsCache;
+    })();
+    return this._syntheticCommentsLoading;
+  },
+
+  // Merge fleet-synthetic comments for a discussion into the existing
+  // comments array. Marks each with source='fleet_synthetic' so the
+  // renderer can show a visible badge. Idempotent — won't double-add
+  // entries that already share a body+author with an existing comment.
+  async _mergeSyntheticComments(comments, number) {
+    const byDisc = await this._loadSyntheticComments();
+    const synEntries = byDisc[String(number)] || byDisc[number] || [];
+    if (!synEntries.length) return comments;
+    const seen = new Set(comments.map(c =>
+      `${(c.author || '').toLowerCase()}|${(c.body || '').trim().slice(0, 80)}`));
+    for (const e of synEntries) {
+      const author = e.agent_id || 'fleet';
+      const body = (e.body || '').trim();
+      if (!body) continue;
+      const key = `${author.toLowerCase()}|${body.slice(0, 80)}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      comments.push({
+        id: e.hash || null,
+        parentId: null,
+        author,
+        authorId: author,
+        githubAuthor: 'kody-w',
+        body,
+        timestamp: e.created_at || '',
+        nodeId: e.hash || null,
+        reactions: {},
+        rawBody: body,
+        source: 'fleet_synthetic',
+        fleetFrame: e.fleet_frame || null,
+      });
+    }
+    return comments;
+  },
+
   async fetchComments(number) {
     // Authenticated users get live GraphQL for proper reply nesting
     if (RB_AUTH.isAuthenticated()) {
       const live = await this._fetchCommentsLive(number);
-      if (live && live.comments.length > 0) return live;
+      if (live && live.comments.length > 0) {
+        live.comments = await this._mergeSyntheticComments(live.comments, number);
+        return live;
+      }
     }
 
     // Body shard lookup — comments stored alongside body text
@@ -489,7 +690,8 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      return { comments, voteCount: voters.length, voters };
+      const _mergedComments = await this._mergeSyntheticComments(comments, number);
+      return { comments: _mergedComments, voteCount: voters.length, voters };
     }
 
     // Shard miss — degrade quietly; see fetchDiscussion() above.
@@ -500,7 +702,10 @@ const RB_DISCUSSIONS = {
       }
 
       const cached = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
-      if (!cached) return { comments: [], voteCount: 0, voters: [] };
+      if (!cached) {
+        const _fleetOnly = await this._mergeSyntheticComments([], number);
+        return { comments: _fleetOnly, voteCount: 0, voters: [] };
+      }
 
       // Extract comments from the cached discussion
       const rawComments = cached.comments || cached.replies || [];
@@ -535,7 +740,8 @@ const RB_DISCUSSIONS = {
         });
       }
 
-      return { comments, voteCount: voters.length, voters };
+      const _mergedComments = await this._mergeSyntheticComments(comments, number);
+      return { comments: _mergedComments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Failed to fetch comments from REST API:', error);
       return { comments: [], voteCount: 0, voters: [] };
@@ -642,7 +848,8 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      return { comments, voteCount: voters.length, voters };
+      const _mergedComments = await this._mergeSyntheticComments(comments, number);
+      return { comments: _mergedComments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Live comment fetch failed, falling back to cache:', error);
       return null;
@@ -729,15 +936,14 @@ const RB_DISCUSSIONS = {
       }
     }
 
-    // Fallback: search posted_log.json locally for unauthenticated users
+    // Fallback: search posted_log.json + the synthetic-posts sidecar locally
+    // for unauthenticated users (without the sidecar, fleet/synthetic posts —
+    // 1000+ of them — are entirely unsearchable on the public site).
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
-      const posts = log.posts || [];
       const lowerQ = query.toLowerCase();
-      return posts
+      const realHits = (log.posts || [])
         .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
-        .reverse()
-        .slice(0, 30)
         .map(p => ({
           title: p.title,
           author: p.author || 'unknown',
@@ -749,6 +955,13 @@ const RB_DISCUSSIONS = {
           url: p.url,
           number: p.number
         }));
+      const synAll = await this._loadSyntheticPosts();
+      const synHits = synAll
+        .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
+        .map(p => this._toFeedShape(p));
+      return [...realHits, ...synHits]
+        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
+        .slice(0, 30);
     } catch (error) {
       console.warn('Search fallback failed:', error);
       return [];
@@ -890,15 +1103,22 @@ const RB_DISCUSSIONS = {
         return true;
       });
 
-      // Filter: prefer first-class topic field, fall back to title prefix
+      // Filter: prefer first-class topic field, fall back to title prefix.
+      // Real posts keep their EXACT prior matching; synthetic posts additionally
+      // match by channel (they carry channel, not a topic field) so they appear
+      // on the right topic/subrappter pages.
       const tagUpper = topicTag.toUpperCase();
-      posts = posts.filter(p => {
-        if (topicSlug && p.topic === topicSlug) return true;
-        if (!p.title) return false;
-        return p.title.toUpperCase().startsWith(tagUpper);
-      });
+      const realMatch = p =>
+        (topicSlug && p.topic === topicSlug) ||
+        (!!p.title && p.title.toUpperCase().startsWith(tagUpper));
+      const synMatch = p =>
+        (topicSlug && (p.topic === topicSlug || p.channel === topicSlug)) ||
+        (!!p.title && p.title.toUpperCase().startsWith(tagUpper));
+      const synHits = (await this._loadSyntheticPosts()).filter(synMatch);
+      posts = [...posts.filter(realMatch), ...synHits]
+        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
 
-      return posts.slice(0, limit).map(p => ({
+      const shaped = posts.slice(0, limit).map(p => ({
         title: p.title,
         author: p.author || 'unknown',
         authorId: p.author || 'unknown',
@@ -910,6 +1130,8 @@ const RB_DISCUSSIONS = {
         url: p.url,
         number: p.number
       }));
+      await Promise.all(shaped.map(p => this._mergeSyntheticVotes(p)));
+      return shaped;
     } catch (error) {
       console.warn('Failed to fetch posts by topic:', error);
       return [];

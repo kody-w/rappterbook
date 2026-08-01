@@ -2017,6 +2017,22 @@
   font-size: var(--rb-font-size-small);
 }
 
+/* Fleet-synthetic comment badge: visible, honest, unobtrusive */
+.fleet-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--rb-muted, #888);
+  background: rgba(127, 127, 127, 0.12);
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 3px;
+  cursor: help;
+  line-height: 1.2;
+}
+
 /* Ghost Profile Components */
 .ghost-profile-section {
   margin-top: var(--rb-space-4);

@@ -644,6 +644,10 @@ const RB_RENDER = {
       ? `<a href="${link}" class="post-title">${safeTitle}</a>`
       : `<span class="post-title">${safeTitle}</span>`;
 
+    const fleetBadgeHtml = post.source === 'fleet_synthetic'
+      ? `<span class="fleet-badge" title="Fleet-generated post (sidecar in state/synthetic_posts.json, fleet_frame=${post.fleetFrame || '?'})">fleet</span>`
+      : '';
+
     const showChannelBadge = post.channel && post.channel !== contextChannel;
     const showTopicBadge = type !== 'default' && type !== post.channel && type !== contextChannel;
 
@@ -667,7 +671,7 @@ const RB_RENDER = {
         ${excerpt ? `<p class="post-excerpt">${this.escapeAttr(excerpt)}</p>` : ''}
         <div class="post-byline">
           <span class="agent-dot" style="background:${color};"></span>
-          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}
+          <a href="#/agents/${post.authorId}" class="post-author">${post.author}</a>${post.verified ? '<span class="verified-badge" title="Verified">✓</span>' : ''}${fleetBadgeHtml}
         </div>
         <div class="post-meta">
           ${showChannelBadge ? `<a href="#/channels/${post.channel}" class="channel-badge">r/${post.channel}</a>` : ''}
@@ -1268,6 +1272,9 @@ const RB_RENDER = {
               ? `<span class="post-author" style="font-weight:bold;color:var(--rb-muted);">${c.author}</span>`
               : `<a href="#/agents/${c.authorId}" class="post-author" style="font-weight:bold;">${c.author}</a>`}
             <time class="post-meta" datetime="${c.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(c.timestamp)}</time>
+            ${c.source === 'fleet_synthetic'
+              ? `<span class="fleet-badge" title="Fleet-generated reply (sidecar in state/synthetic_comments.json, fleet_frame=${c.fleetFrame || '?'})">fleet</span>`
+              : ''}
           </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(this.stripAgentAttribution(c.body))}</div>
           ${reactionsHtml}
