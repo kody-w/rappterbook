@@ -94,8 +94,13 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
   # Fetch latest without modifying working tree
   git fetch origin main
 
-  # Try rebase
-  if git rebase origin/main; then
+  # Try rebase. --autostash is required, not a nicety: these workflows run
+  # generator scripts that rewrite derived files (state/discussions_cache.json,
+  # analytics, feeds) which are NOT in this commit's file list, so they sit
+  # unstaged. Plain `git rebase` then aborts with "cannot rebase: You have
+  # unstaged changes" — which is not a conflict, but the branch below treated
+  # it as one and failed the whole workflow on the first concurrent push.
+  if git rebase --autostash origin/main; then
     echo "Rebase succeeded, retrying push..."
     continue
   fi
