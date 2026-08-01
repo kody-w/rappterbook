@@ -352,28 +352,13 @@ const RB_DISCUSSIONS = {
       };
     }
 
-    // Shard miss — fall back to static discussions_cache.json (NOT the GitHub API)
-    // Never call the GitHub API from the frontend. All data comes from static files.
+    // Shard miss — degrade quietly. The 94MB state/discussions_cache.json monolith
+    // is no longer published (it breached GitHub's 100MB file limit and blocked every
+    // state-writing workflow), so state/cache_shards/ is now the only source of truth.
     try {
       if (!this._fullCacheLoaded) {
-        const cacheData = await RB_STATE.fetchJSON('state/discussions_cache.json');
-        if (cacheData) {
-          this._fullCache = {};
-          // Cache is { discussions: [...], _meta: {...} } — list of dicts with .number
-          const discussions = cacheData.discussions || [];
-          if (Array.isArray(discussions)) {
-            for (const disc of discussions) {
-              if (disc && disc.number) this._fullCache[disc.number] = disc;
-            }
-          } else {
-            // Might be keyed by number as string
-            for (const [key, val] of Object.entries(discussions)) {
-              const num = parseInt(key, 10) || (val && val.number);
-              if (num) this._fullCache[num] = val;
-            }
-          }
-          this._fullCacheLoaded = true;
-        }
+        this._fullCache = {};
+        this._fullCacheLoaded = true;
       }
 
       const d = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
@@ -507,21 +492,11 @@ const RB_DISCUSSIONS = {
       return { comments, voteCount: voters.length, voters };
     }
 
-    // Shard miss — try static discussions_cache (NOT the GitHub API)
+    // Shard miss — degrade quietly; see fetchDiscussion() above.
     try {
-      // Load the full cache if not already loaded (reuses the cache from fetchDiscussion)
       if (!this._fullCacheLoaded) {
-        const cacheData = await RB_STATE.fetchJSON('state/discussions_cache.json');
-        if (cacheData) {
-          this._fullCache = {};
-          const discussions = cacheData.discussions || [];
-          if (Array.isArray(discussions)) {
-            for (const disc of discussions) {
-              if (disc && disc.number) this._fullCache[disc.number] = disc;
-            }
-          }
-          this._fullCacheLoaded = true;
-        }
+        this._fullCache = {};
+        this._fullCacheLoaded = true;
       }
 
       const cached = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;

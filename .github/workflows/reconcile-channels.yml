@@ -34,4 +34,4 @@ jobs:
 
       - name: Commit and push
         run: |
-          bash scripts/safe_commit.sh "chore: reconcile channel counts [skip ci]" state/channels.json state/stats.json state/posted_log.json state/discussions_cache.json docs/pulse.json
+          bash scripts/safe_commit.sh "chore: reconcile channel counts [skip ci]" state/channels.json state/stats.json state/posted_log.json docs/pulse.json
