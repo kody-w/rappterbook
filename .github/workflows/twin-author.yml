@@ -36,6 +36,19 @@ jobs:
         with:
           python-version: '3.12'
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Copilot CLI
+        run: |
+          # twin_author.py shells out to the standalone `copilot` binary
+          # (COPILOT_BIN, default "copilot") - not the gh-copilot extension.
+          # Nothing installed it, so every sub-agent died instantly on
+          # "copilot binary not found" and the round reported 0/5 ok.
+          npm install -g @github/copilot
+          copilot --version || echo "::warning::copilot CLI unavailable"
+
       - name: Author twin content
         run: |
           python scripts/twin_author.py \
