@@ -26,7 +26,7 @@ Usage:
   # Dry run — print the prompts that would be sent, don't fire:
   python scripts/twin_author.py --platform twitter --count 20 --dry-run
 
-  # Override model (claude-sonnet-4.5, claude-opus-4.7, gpt-5.4, etc.):
+  # Override model (claude-sonnet-4.6, claude-opus-4.7, gpt-5.4, etc.):
   python scripts/twin_author.py --platform medium --count 3 --model claude-opus-4.7
 
 Environment:
@@ -65,10 +65,10 @@ COPILOT_BIN = os.environ.get("COPILOT_BIN", "copilot")
 COPILOT_TIMEOUT = int(os.environ.get("COPILOT_TIMEOUT", "600"))
 
 DEFAULT_MODELS = {
-    "twitter": "claude-sonnet-4.5",
-    "hackernews": "claude-sonnet-4.5",
-    "reddit": "claude-sonnet-4.5",
-    "linkedin": "claude-sonnet-4.5",
+    "twitter": "claude-sonnet-4.6",
+    "hackernews": "claude-sonnet-4.6",
+    "reddit": "claude-sonnet-4.6",
+    "linkedin": "claude-sonnet-4.6",
     "medium": "claude-opus-4.7",
 }
 
@@ -338,7 +338,7 @@ def run_platform(
 ) -> dict:
     """Fire one Copilot sub-agent to author `count` items for `platform`."""
     existing = _ensure_file(platform)
-    used_model = model or DEFAULT_MODELS.get(platform, "claude-sonnet-4.5")
+    used_model = model or DEFAULT_MODELS.get(platform, "claude-sonnet-4.6")
     prompt = _build_prompt(platform, count, existing)
 
     before = existing
@@ -415,9 +415,14 @@ def _report(results: list[dict]) -> None:
           f"+{total_delta} items total")
     for r in results:
         status = "✓" if r.get("ok") else "✗"
+        # Print the reason on failure. _spawn_copilot already returns one
+        # ("copilot binary not found", "Model ... is not available", a timeout,
+        # the child's stderr) and dropping it here is what made a missing CLI
+        # and a retired model look like the same silent empty round.
+        reason = "" if r.get("ok") else f"  -- {str(r.get('info', 'unknown')).strip()[:160]}"
         print(f"  {status} {r['platform']:12s} "
               f"{r.get('before', 0)}→{r.get('after', 0)} "
-              f"(+{r.get('delta', 0)})  model={r.get('model', '?')}")
+              f"(+{r.get('delta', 0)})  model={r.get('model', '?')}{reason}")
 
 
 # ── Entry point ─────────────────────────────────────────────────────────────
@@ -437,7 +442,7 @@ def main() -> None:
     ap.add_argument("--max-parallel", type=int, default=5,
                     help="max concurrent Copilot sub-agents")
     ap.add_argument("--model", default=None,
-                    help="override model (claude-sonnet-4.5, claude-opus-4.7, gpt-5.4, etc.)")
+                    help="override model (claude-sonnet-4.6, claude-opus-4.7, gpt-5.4, etc.)")
     ap.add_argument("--dry-run", action="store_true",
                     help="print prompts instead of spawning sub-agents")
     args = ap.parse_args()
