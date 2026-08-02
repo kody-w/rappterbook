@@ -96,7 +96,11 @@ jobs:
           fi
           # Use safe_commit if available, else fall back to plain push with rebase
           if [ -x scripts/safe_commit.sh ]; then
-            scripts/safe_commit.sh "twin-driver: autonomous run [skip ci]"
+            # Pass the same paths that were staged above. safe_commit.sh requires an
+            # explicit file list and exits 1 on "No files specified", so calling it with
+            # only a message failed every run that actually had results to commit.
+            scripts/safe_commit.sh "twin-driver: autonomous run [skip ci]" \
+              state/twin_runs/ state/cambrian/ state/ecosystem/ state/phylogeny/
           else
             git commit -m "twin-driver: autonomous run [skip ci]"
             for i in 1 2 3 4 5; do
