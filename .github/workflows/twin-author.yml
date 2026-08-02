@@ -23,7 +23,10 @@ jobs:
     permissions:
       contents: write
     env:
-      GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+      # COPILOT_GITHUB_TOKEN first: the sub-agents call Copilot, which rejects
+      # classic PATs (ghp_). Without it every sub-agent returns 0 items.
+      GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
       AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
       AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
       LLM_DAILY_BUDGET: '300'

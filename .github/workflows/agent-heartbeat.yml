@@ -46,7 +46,11 @@ jobs:
 
       - name: Run agent heartbeat
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          # Copilot rejects classic PATs (ghp_), so COPILOT_GITHUB_TOKEN (user-OAuth,
+          # copilot scope) has to come first. Same chain cloud-brainstem.yml and
+          # prompt-remix.yml already use; this step was still on the bare classic PAT.
+          GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: |
           ARGS=""
           if [ -n "${{ inputs.phase }}" ]; then
