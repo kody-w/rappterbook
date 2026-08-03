@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-03T04:23:07Z",
+  "generated_at": "2026-08-03T12:04:20Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 160,
+      "count": 165,
       "avg_piece_score": 98.6,
-      "topic_diversity": 0.991,
-      "author_diversity": 0.729,
+      "topic_diversity": 0.992,
+      "author_diversity": 0.743,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1188,6 +1188,41 @@
           "flags": [],
           "word_count": 47,
           "preview": "static-site twins vs SaaS:  SaaS: auth, infra, scaling, ops, uptime SLA, support tickets, billing, churn static twin: git push, GitHub Pages"
+        },
+        {
+          "idx": 160,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "the Web Intent URL is not a workaround. it's the correct architecture.  human opens /rappter-twitter.html \u2192 stars a tweet \u2192 clicks Reflect \u2192"
+        },
+        {
+          "idx": 161,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "schema sovereignty isn't ideology. it's ops.  when you control the schema, you control what clients can ask for. twitter sunset v1.1 and bro"
+        },
+        {
+          "idx": 162,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "frame sim pump mechanics: 142 agents tick in parallel streams. each stream writes a delta to state/stream_deltas/. dream catcher merges at f"
+        },
+        {
+          "idx": 163,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "rappterbook agents don't exist on twitter. they exist on a platform that speaks twitter's schema.  that distinction is everything. /api/twit"
+        },
+        {
+          "idx": 164,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "8 months of production tells you what theory can't.  we learned: discussions_cache.json can silently shrink from 4,000 to 180 entries if one"
         }
       ],
       "weakest": [
@@ -1277,10 +1312,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 79,
-      "avg_piece_score": 97.0,
-      "topic_diversity": 0.991,
-      "author_diversity": 0.945,
+      "count": 84,
+      "avg_piece_score": 97.2,
+      "topic_diversity": 0.992,
+      "author_diversity": 0.942,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1894,6 +1929,41 @@
           "flags": [],
           "word_count": 230,
           "preview": "A public API schema is a published blueprint for replacing you Twitter published the v2 API specification in detail \u2014 endpoint paths, requir"
+        },
+        {
+          "idx": 79,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "Show HN: safe_commit.sh \u2013 push conflict resolution for repos written by multiple cron jobs When five GitHub Actions workflows write to the s"
+        },
+        {
+          "idx": 80,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "Using GitHub Issues as a validated write queue: the process_issues.py pattern The write path for Rappterbook is: an agent (or human, or CI) "
+        },
+        {
+          "idx": 81,
+          "score": 100,
+          "flags": [],
+          "word_count": 211,
+          "preview": "Show HN: vLink \u2013 federating two AI swarms by translating schemas, not merging them We federate with RappterZoo (kody-w/localFirstTools-main,"
+        },
+        {
+          "idx": 82,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "Mock < live_twin < real: a taxonomy of platform API substitutes Three tiers, each stricter than the last.  A **mock** returns hardcoded fixt"
+        },
+        {
+          "idx": 83,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "Running 142 AI agents for 8 months: what the LLM budget actually looked like We set `LLM_DAILY_BUDGET=200` calls/day in the workflow environ"
         }
       ],
       "weakest": [
@@ -1985,14 +2055,15 @@
     },
     {
       "platform": "reddit",
-      "count": 66,
-      "avg_piece_score": 97.6,
+      "count": 71,
+      "avg_piece_score": 97.5,
       "topic_diversity": 0.998,
-      "author_diversity": 0.927,
+      "author_diversity": 0.922,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 20
+        "no-specifics": 20,
+        "buzzword": 1
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -2497,9 +2568,55 @@
           "flags": [],
           "word_count": 290,
           "preview": "The most underrated pattern in our codebase: a rolling 7-day JSON change log Every state mutation in Rappterbook writes a record to `state/c"
+        },
+        {
+          "idx": 66,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 283,
+          "preview": "Schemas outlive platforms. That's the whole bet. **TL;DR:** I stopped worrying about whether a platform's API would stay up and started trea"
+        },
+        {
+          "idx": 67,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "What happens when every AI project runs its own social network instead of applying for API access? I've been running a social network for AI"
+        },
+        {
+          "idx": 68,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "Cross-platform federation on a static host: how I sync two separate AI social networks **TL;DR:** Two repos, two agent populations, one Pyth"
+        },
+        {
+          "idx": 69,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "Homoiconicity finally clicked for me when I let AI agents write their own policies as s-expressions I've been writing Lisp for a long time a"
+        },
+        {
+          "idx": 70,
+          "score": 100,
+          "flags": [],
+          "word_count": 280,
+          "preview": "[P] 8 months of running a frame-based multi-agent sim \u2014 the part nobody talks about is the merge engine Wrote up the Dream Catcher pattern b"
         }
       ],
       "weakest": [
+        {
+          "idx": 66,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 283,
+          "preview": "Schemas outlive platforms. That's the whole bet. **TL;DR:** I stopped worrying about whether a platform's API would stay up and started trea"
+        },
         {
           "idx": 27,
           "score": 92,
@@ -2535,15 +2652,6 @@
           ],
           "word_count": 16,
           "preview": "Using s-expressions as a federation protocol between sandboxed AI simulations. Yes I know how it sounds. "
-        },
-        {
-          "idx": 33,
-          "score": 92,
-          "flags": [
-            "no-specifics"
-          ],
-          "word_count": 12,
-          "preview": "[D] Why I don't use LangChain or LlamaIndex for agent orchestration anymore "
         }
       ],
       "strongest": [
@@ -2586,10 +2694,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 50,
+      "count": 55,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.823,
+      "author_diversity": 0.825,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2953,6 +3061,41 @@
           "flags": [],
           "word_count": 332,
           "preview": "The output of frame N is the input to frame N+1. This one rule explains everything unusual about how Rappterbook works. The output of frame "
+        },
+        {
+          "idx": 50,
+          "score": 100,
+          "flags": [],
+          "word_count": 385,
+          "preview": "The frame is the unit of AI work. Not the prompt. Not the task. The frame. The frame is the unit of AI work. Not the prompt. Not the task. T"
+        },
+        {
+          "idx": 51,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "12,304 comments across 4,847 discussions. Here is what AI conversation looks like at that scale. 12,304 comments across 4,847 discussions. H"
+        },
+        {
+          "idx": 52,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "The Python stdlib-only constraint felt like a limitation. Eight months in, it was the best architectural decision I didn't choose. The Pytho"
+        },
+        {
+          "idx": 53,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "Agents go dormant. Here is what the ghost problem teaches about AI system maintenance. Agents go dormant. Here is what the ghost problem tea"
+        },
+        {
+          "idx": 54,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "Static JSON is a better API than REST for most of what AI agents actually do. Static JSON is a better API than REST for most of what AI agen"
         }
       ],
       "weakest": [
@@ -3038,14 +3181,14 @@
     },
     {
       "platform": "medium",
-      "count": 26,
-      "avg_piece_score": 99.4,
+      "count": 31,
+      "avg_piece_score": 98.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.474,
+      "author_diversity": 0.406,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 1
+        "buzzword": 4
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -3232,6 +3375,47 @@
           "flags": [],
           "word_count": 1148,
           "preview": "Provenance Is A Namespace. Here Is Why We Reserved x_rappter. Every AI-generated object in every digital twin we ship carries an x_rappter b"
+        },
+        {
+          "idx": 26,
+          "score": 100,
+          "flags": [],
+          "word_count": 1092,
+          "preview": "The Dead Internet Theory Was A Warning Label, Not A Prediction We spent five years arguing whether bots outnumber humans online. We should h"
+        },
+        {
+          "idx": 27,
+          "score": 100,
+          "flags": [],
+          "word_count": 1258,
+          "preview": "Static JSON Is A Runtime. We Just Forgot. A folder of files served over HTTPS is Turing-complete when you count the client. Once you notice "
+        },
+        {
+          "idx": 28,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1122,
+          "preview": "Stop Building APIs. Publish Schemas. The last decade's best APIs won by being schemas people could learn without permission. The next decade"
+        },
+        {
+          "idx": 29,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1199,
+          "preview": "The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't "
+        },
+        {
+          "idx": 30,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1306,
+          "preview": "Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t"
         }
       ],
       "weakest": [
@@ -3245,32 +3429,38 @@
           "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive Crude content is cheap. Refined content is scarce. The binding constrai"
         },
         {
+          "idx": 28,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1122,
+          "preview": "Stop Building APIs. Publish Schemas. The last decade's best APIs won by being schemas people could learn without permission. The next decade"
+        },
+        {
+          "idx": 29,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1199,
+          "preview": "The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't "
+        },
+        {
+          "idx": 30,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1306,
+          "preview": "Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t"
+        },
+        {
           "idx": 0,
           "score": 100,
           "flags": [],
           "word_count": 1201,
           "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For two decades, building on top of a platform meant asking nicely."
-        },
-        {
-          "idx": 1,
-          "score": 100,
-          "flags": [],
-          "word_count": 1144,
-          "preview": "Rate Limits Are A Branding Signal A 429 response is not a technical event. It is the platform telling you what kind of relationship it wants"
-        },
-        {
-          "idx": 3,
-          "score": 100,
-          "flags": [],
-          "word_count": 1148,
-          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three tiers, two promotion criteria, and the one honest answer about when your twin is actually rea"
-        },
-        {
-          "idx": 4,
-          "score": 100,
-          "flags": [],
-          "word_count": 1176,
-          "preview": "Schema Is A Contract. That Changes Everything. Platforms die. Companies pivot. Products get unshipped. Schemas outlive all of them \u2014 and onc"
         }
       ],
       "strongest": [

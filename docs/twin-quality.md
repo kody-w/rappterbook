@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-03T04:23:07Z
+Generated: 2026-08-03T12:04:20Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 160 | 98.6 | 0.991 | 0.729 | 100 | **A** |
-| hackernews | 79 | 97.0 | 0.991 | 0.945 | 100 | **A** |
-| reddit | 66 | 97.6 | 0.998 | 0.927 | 100 | **A** |
-| linkedin | 50 | 99.4 | 1.0 | 0.823 | 100 | **A** |
-| medium | 26 | 99.4 | 1.0 | 0.474 | 100 | **A** |
+| twitter | 165 | 98.6 | 0.992 | 0.743 | 100 | **A** |
+| hackernews | 84 | 97.2 | 0.992 | 0.942 | 100 | **A** |
+| reddit | 71 | 97.5 | 0.998 | 0.922 | 100 | **A** |
+| linkedin | 55 | 99.4 | 1.0 | 0.825 | 100 | **A** |
+| medium | 31 | 98.1 | 1.0 | 0.406 | 100 | **A** |
 
 ## twitter detail
 
@@ -82,8 +82,11 @@ Overall grade: **A** (score 100.0)
 
 **Flag counts:**
 - `no-specifics` × 20
+- `buzzword` × 1
 
 **Weakest pieces (revise these):**
+- #66 score=85 flags=[buzzword]  
+  `Schemas outlive platforms. That's the whole bet. **TL;DR:** I stopped worrying about whether a platform's API would stay up and started trea`
 - #27 score=92 flags=[no-specifics]  
   `[D] Switched my content pipeline from LLM APIs to Copilot CLI subprocesses. Am I missing a downside? `
 - #28 score=92 flags=[no-specifics]  
@@ -92,8 +95,6 @@ Overall grade: **A** (score 100.0)
   `Routing AI work by task type across my agent fleet — what actually goes where `
 - #32 score=92 flags=[no-specifics]  
   `Using s-expressions as a federation protocol between sandboxed AI simulations. Yes I know how it sounds. `
-- #33 score=92 flags=[no-specifics]  
-  `[D] Why I don't use LangChain or LlamaIndex for agent orchestration anymore `
 
 **Strongest pieces:**
 - #0 score=100  
@@ -142,19 +143,19 @@ Overall grade: **A** (score 100.0)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 1
+- `buzzword` × 4
 
 **Weakest pieces (revise these):**
 - #2 score=85 flags=[buzzword]  
   `The Content Refinery: AI Generates, Humans Curate, Platforms Receive Crude content is cheap. Refined content is scarce. The binding constrai`
+- #28 score=85 flags=[buzzword]  
+  `Stop Building APIs. Publish Schemas. The last decade's best APIs won by being schemas people could learn without permission. The next decade`
+- #29 score=85 flags=[buzzword]  
+  `The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't `
+- #30 score=85 flags=[buzzword]  
+  `Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t`
 - #0 score=100 flags=[—]  
   `The Permission Economy Is Ending — And Digital Twins Are What Replace It For two decades, building on top of a platform meant asking nicely.`
-- #1 score=100 flags=[—]  
-  `Rate Limits Are A Branding Signal A 429 response is not a technical event. It is the platform telling you what kind of relationship it wants`
-- #3 score=100 flags=[—]  
-  `Twin Taxonomy: Mock vs Live Twin vs Real Three tiers, two promotion criteria, and the one honest answer about when your twin is actually rea`
-- #4 score=100 flags=[—]  
-  `Schema Is A Contract. That Changes Everything. Platforms die. Companies pivot. Products get unshipped. Schemas outlive all of them — and onc`
 
 **Strongest pieces:**
 - #0 score=100  
