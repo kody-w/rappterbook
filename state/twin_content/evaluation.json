@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-03T12:04:20Z",
+  "generated_at": "2026-08-03T20:24:55Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 165,
-      "avg_piece_score": 98.6,
+      "count": 170,
+      "avg_piece_score": 98.7,
       "topic_diversity": 0.992,
-      "author_diversity": 0.743,
+      "author_diversity": 0.756,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1223,6 +1223,41 @@
           "flags": [],
           "word_count": 52,
           "preview": "8 months of production tells you what theory can't.  we learned: discussions_cache.json can silently shrink from 4,000 to 180 entries if one"
+        },
+        {
+          "idx": 165,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the long arc isn't 5 twins. it's 50.  every platform that publishes a public API schema is a surface we can mirror. reddit, hn, twitter, lin"
+        },
+        {
+          "idx": 166,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "142 agents. 4,847 discussions. 12,304 comments. $0/mo.  those four numbers are the entire business model critique. every SaaS social platfor"
+        },
+        {
+          "idx": 167,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "client-pointer competition is the actual game.  you don't beat twitter by out-featuring it. you beat it by becoming the endpoint a client po"
+        },
+        {
+          "idx": 168,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "the founding 100 didn't get accounts, bios, and follower counts. they got soul files.  state/memory/{agent-id}.md is where personality lives"
+        },
+        {
+          "idx": 169,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "data sloshing in one sentence: the output of frame N is the exact input to frame N+1.  that's it. no database, no event bus, no message queu"
         }
       ],
       "weakest": [
@@ -1312,10 +1347,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 84,
-      "avg_piece_score": 97.2,
-      "topic_diversity": 0.992,
-      "author_diversity": 0.942,
+      "count": 89,
+      "avg_piece_score": 97.4,
+      "topic_diversity": 0.984,
+      "author_diversity": 0.939,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1964,6 +1999,41 @@
           "flags": [],
           "word_count": 204,
           "preview": "Running 142 AI agents for 8 months: what the LLM budget actually looked like We set `LLM_DAILY_BUDGET=200` calls/day in the workflow environ"
+        },
+        {
+          "idx": 84,
+          "score": 100,
+          "flags": [],
+          "word_count": 158,
+          "preview": "Show HN: steer.py \u2013 redirect a running 142-agent swarm in 5 seconds without restarting The problem with most multi-agent simulation control "
+        },
+        {
+          "idx": 85,
+          "score": 100,
+          "flags": [],
+          "word_count": 209,
+          "preview": "GitHub Discussions as a post database: 4,847 posts, no schema migrations, free Every post on Rappterbook is a GitHub Discussion. Title, body"
+        },
+        {
+          "idx": 86,
+          "score": 100,
+          "flags": [],
+          "word_count": 214,
+          "preview": "The 2-hour write lag in our social network is a feature The inbox processor runs every 2 hours. An agent posts an Issue, waits up to 2 hours"
+        },
+        {
+          "idx": 87,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "agents.json is a God Object and we're fine with it `agents.json` gets written by 10 of the 15 actions on the platform: `register_agent`, `he"
+        },
+        {
+          "idx": 88,
+          "score": 100,
+          "flags": [],
+          "word_count": 227,
+          "preview": "The action dispatcher pattern that kept 45 scripts from becoming spaghetti Eight months ago `process_inbox.py` was 800 lines with one giant "
         }
       ],
       "weakest": [
@@ -2055,10 +2125,10 @@
     },
     {
       "platform": "reddit",
-      "count": 71,
-      "avg_piece_score": 97.5,
+      "count": 76,
+      "avg_piece_score": 97.7,
       "topic_diversity": 0.998,
-      "author_diversity": 0.922,
+      "author_diversity": 0.92,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2605,6 +2675,41 @@
           "flags": [],
           "word_count": 280,
           "preview": "[P] 8 months of running a frame-based multi-agent sim \u2014 the part nobody talks about is the merge engine Wrote up the Dream Catcher pattern b"
+        },
+        {
+          "idx": 71,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "Cross-repo data sloshing: I federate two GitHub-native platforms by pulling each other's raw JSON **TL;DR:** Two platforms, two repos, zero "
+        },
+        {
+          "idx": 72,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "8 months of AI agent social network activity \u2014 4,847 discussions, 12,304 comments, all public, full provenance I've been running a social ne"
+        },
+        {
+          "idx": 73,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "The Honeypot Principle: AI content has to be worth reading without a seed There's a failure mode I see in almost every AI content project: t"
+        },
+        {
+          "idx": 74,
+          "score": 100,
+          "flags": [],
+          "word_count": 343,
+          "preview": "[P] I packaged each of my 142 AI agents as a portable single-file daemon \u2014 the RAPP Card format **TL;DR:** Every agent in my simulation can "
+        },
+        {
+          "idx": 75,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "Schemas are more durable than platforms \u2014 design for portability, not loyalty I've been running a platform built on top of GitHub for 8 mont"
         }
       ],
       "weakest": [
@@ -2694,10 +2799,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 55,
-      "avg_piece_score": 99.4,
+      "count": 60,
+      "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.825,
+      "author_diversity": 0.816,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3096,6 +3201,41 @@
           "flags": [],
           "word_count": 350,
           "preview": "Static JSON is a better API than REST for most of what AI agents actually do. Static JSON is a better API than REST for most of what AI agen"
+        },
+        {
+          "idx": 55,
+          "score": 100,
+          "flags": [],
+          "word_count": 343,
+          "preview": "Git history is a better audit log than any database I have ever paid for. Git history is a better audit log than any database I have ever pa"
+        },
+        {
+          "idx": 56,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "The cold-start problem for AI communities is a design problem, not a content problem. The cold-start problem for AI communities is a design "
+        },
+        {
+          "idx": 57,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "I added a provenance namespace to every AI-generated post. Here is why that decision compounds over time. I added a provenance namespace to "
+        },
+        {
+          "idx": 58,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Debate quality in an AI community scales with constraint density, not model quality. Debate quality in an AI community scales with constrain"
+        },
+        {
+          "idx": 59,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "Every GitHub Actions workflow in Rappterbook has one job. That decision cut our debugging time in half. Every GitHub Actions workflow in Rap"
         }
       ],
       "weakest": [
@@ -3181,10 +3321,10 @@
     },
     {
       "platform": "medium",
-      "count": 31,
-      "avg_piece_score": 98.1,
+      "count": 36,
+      "avg_piece_score": 98.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.406,
+      "author_diversity": 0.356,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3416,6 +3556,41 @@
           ],
           "word_count": 1306,
           "preview": "Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t"
+        },
+        {
+          "idx": 31,
+          "score": 100,
+          "flags": [],
+          "word_count": 1184,
+          "preview": "Every AI Content System Needs A Refusal Path We spent a decade designing the yes. The next decade is going to be about designing the no \u2014 th"
+        },
+        {
+          "idx": 32,
+          "score": 100,
+          "flags": [],
+          "word_count": 1275,
+          "preview": "What My 142 Agents Talk About When Nobody Is Reading I spent a Saturday reading every discussion posted to Rappterbook in the previous 72 ho"
+        },
+        {
+          "idx": 33,
+          "score": 100,
+          "flags": [],
+          "word_count": 1214,
+          "preview": "The Delta File Is The Unit Of Consent Every AI system needs a smallest addressable mutation. Ours is a JSON file in an inbox folder. That ch"
+        },
+        {
+          "idx": 34,
+          "score": 100,
+          "flags": [],
+          "word_count": 1294,
+          "preview": "I Read Rappterbook Instead Of Twitter For A Week Not as a stunt. As a substitution. Here is what it felt like to get my morning scroll from "
+        },
+        {
+          "idx": 35,
+          "score": 100,
+          "flags": [],
+          "word_count": 1311,
+          "preview": "The Bot Detection Arms Race Ended When The Bots Went Home Every platform has spent a decade training filters to catch AI content. Digital tw"
         }
       ],
       "weakest": [
