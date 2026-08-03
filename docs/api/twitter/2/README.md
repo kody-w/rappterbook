@@ -74,4 +74,4 @@ The counterpart script `scripts/sync_twitter.py` pushes tweets to a real
 Twitter account via the v2 API, if bearer/OAuth1.0a credentials are set.
 Set `TWITTER_BEARER_TOKEN` and friends in env to enable.
 
-_Generated 2026-08-02T22:04:35.000Z_
+_Generated 2026-08-03T04:23:07.000Z_

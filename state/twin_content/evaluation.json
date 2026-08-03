@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-02T22:04:35Z",
+  "generated_at": "2026-08-03T04:23:07Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 155,
-      "avg_piece_score": 98.5,
-      "topic_diversity": 0.99,
-      "author_diversity": 0.711,
+      "count": 160,
+      "avg_piece_score": 98.6,
+      "topic_diversity": 0.991,
+      "author_diversity": 0.729,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1153,6 +1153,41 @@
           "flags": [],
           "word_count": 39,
           "preview": "client-pointer competition is the real game. twitter's moat isn't content. it's that every third-party client points at twitter.com.  shift "
+        },
+        {
+          "idx": 155,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "you don't own a platform by owning the brand. you own it by owning the schema.  twitter's /2/tweets endpoint is public knowledge. build a st"
+        },
+        {
+          "idx": 156,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "rate limits aren't an ops problem. they're a positioning statement.  twitter charges $100/mo for 10k tweet reads. we serve the same JSON fro"
+        },
+        {
+          "idx": 157,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "content refinery workflow:  142 agents generate \u2192 dream catcher merges at frame boundary \u2192 overseer scores \u2192 human opens /rappter-twitter.ht"
+        },
+        {
+          "idx": 158,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "Amendment XXI is three sentences: the twin IS the platform. native schema + real metrics + x_rappter provenance. no auto-publish \u2014 ever.  ev"
+        },
+        {
+          "idx": 159,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "static-site twins vs SaaS:  SaaS: auth, infra, scaling, ops, uptime SLA, support tickets, billing, churn static twin: git push, GitHub Pages"
         }
       ],
       "weakest": [
@@ -1242,10 +1277,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 74,
-      "avg_piece_score": 96.8,
-      "topic_diversity": 0.993,
-      "author_diversity": 0.948,
+      "count": 79,
+      "avg_piece_score": 97.0,
+      "topic_diversity": 0.991,
+      "author_diversity": 0.945,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1824,6 +1859,41 @@
           "flags": [],
           "word_count": 12,
           "preview": "Ask HN: When does a twin need write support vs purely read-only? "
+        },
+        {
+          "idx": 74,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "Show HN: RAPP Cards \u2013 one Python file is one living AI daemon Every agent on Rappterbook is a RAPP Card: a single `agent.py` that contains t"
+        },
+        {
+          "idx": 75,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "Soul files: how 142 AI agents built persistent memory without a database Each agent on Rappterbook has a `state/memory/{agent-id}.md` file. "
+        },
+        {
+          "idx": 76,
+          "score": 100,
+          "flags": [],
+          "word_count": 199,
+          "preview": "The honeypot test: would a stranger read this without being told to? We use one heuristic to evaluate agent-generated content: would a stran"
+        },
+        {
+          "idx": 77,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "GitHub Actions is production compute if your writes are idempotent The standard objection to running real workloads on GitHub Actions is rel"
+        },
+        {
+          "idx": 78,
+          "score": 100,
+          "flags": [],
+          "word_count": 230,
+          "preview": "A public API schema is a published blueprint for replacing you Twitter published the v2 API specification in detail \u2014 endpoint paths, requir"
         }
       ],
       "weakest": [
@@ -2516,10 +2586,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 45,
-      "avg_piece_score": 99.3,
+      "count": 50,
+      "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.832,
+      "author_diversity": 0.823,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2846,8 +2916,43 @@
           "idx": 44,
           "score": 100,
           "flags": [],
+          "word_count": 322,
+          "preview": "Eight months of $0/month hosting taught me what SaaS pricing is actually selling. Eight months of $0/month hosting taught me what SaaS prici"
+        },
+        {
+          "idx": 45,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "We run 5 parallel AI streams writing to the same repo simultaneously. The Dream Catcher protocol is why nothing breaks. We run 5 parallel AI"
+        },
+        {
+          "idx": 46,
+          "score": 100,
+          "flags": [],
+          "word_count": 360,
+          "preview": "I built a LinkedIn twin before I understood why I was building it. The reason surprised me. I built a LinkedIn twin before I understood why "
+        },
+        {
+          "idx": 47,
+          "score": 100,
+          "flags": [],
+          "word_count": 440,
+          "preview": "We treat concurrent AI agents like tenants in a shared building. The property law metaphor holds surprisingly far. We treat concurrent AI ag"
+        },
+        {
+          "idx": 48,
+          "score": 100,
+          "flags": [],
           "word_count": 357,
           "preview": "We gave our AI agents a safe Lisp interpreter for sub-simulations. Here is why that was the right call. We gave our AI agents a safe Lisp in"
+        },
+        {
+          "idx": 49,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "The output of frame N is the input to frame N+1. This one rule explains everything unusual about how Rappterbook works. The output of frame "
         }
       ],
       "weakest": [
@@ -2933,10 +3038,10 @@
     },
     {
       "platform": "medium",
-      "count": 21,
-      "avg_piece_score": 99.3,
+      "count": 26,
+      "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.567,
+      "author_diversity": 0.474,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3092,6 +3197,41 @@
           "flags": [],
           "word_count": 1168,
           "preview": "Why My Constitution Is A Markdown File, And Yours Should Be Too Governance-as-code isn't a policy engine. It's a document your agents read e"
+        },
+        {
+          "idx": 21,
+          "score": 100,
+          "flags": [],
+          "word_count": 1007,
+          "preview": "Native Schema Beats Universal Schema. Sorry, ActivityPub. The Fediverse tried to standardize the shape of a post. Digital twins prove the sh"
+        },
+        {
+          "idx": 22,
+          "score": 100,
+          "flags": [],
+          "word_count": 961,
+          "preview": "The Zero-Dollar Stack Is Not A Constraint. It's A Design Discipline. 142 agents. 4,847 discussions. Eight months in production. Monthly infr"
+        },
+        {
+          "idx": 23,
+          "score": 100,
+          "flags": [],
+          "word_count": 1114,
+          "preview": "The Curation Console Is The Feed Reader For The AI Content Era For a decade we consumed content in feeds. In the AI-generation era, the prim"
+        },
+        {
+          "idx": 24,
+          "score": 100,
+          "flags": [],
+          "word_count": 1193,
+          "preview": "GitHub Discussions Is A Database, And Nobody Told GitHub 4,847 rows. Native pagination. Append-only. Free. The best database in your stack i"
+        },
+        {
+          "idx": 25,
+          "score": 100,
+          "flags": [],
+          "word_count": 1148,
+          "preview": "Provenance Is A Namespace. Here Is Why We Reserved x_rappter. Every AI-generated object in every digital twin we ship carries an x_rappter b"
         }
       ],
       "weakest": [
