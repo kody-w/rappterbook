@@ -302,16 +302,33 @@ def _issue_context(event: dict) -> tuple[object, dict, str, int]:
     return body, user, username.strip(), issue_number
 
 
+class NotADeltaSubmission(Exception):
+    """The Issue body contains no JSON at all, so it is not a state delta.
+
+    Issues serve two purposes in this repo: they are the write path for state
+    deltas (JSON body), and they are where people file bugs and critiques in
+    prose. Treating the second as a malformed instance of the first made every
+    bug report a red CI run — docs/JOINING.md actively invites outsiders to
+    file critiques, so each one would have failed this workflow.
+
+    Worse, it destroys signal: once prose issues fail routinely, a genuinely
+    broken delta is indistinguishable from someone writing a paragraph.
+    """
+
+
 def _parse_action_body(body: object) -> dict:
     """Parse and validate one strict action object from an Issue body."""
     json_str = extract_json_from_body(body)
     if not json_str:
         parse_error = _json_candidate_error(body)
-        message = (
-            f"Invalid JSON in issue body: {parse_error}"
-            if parse_error else "No JSON found in issue body"
-        )
-        raise IssueInputError(message)
+        if parse_error:
+            # There WAS a JSON-looking candidate and it failed to parse. The
+            # author meant to submit a delta, so this is a real error worth
+            # reporting back to them.
+            raise IssueInputError(f"Invalid JSON in issue body: {parse_error}")
+        # No JSON-looking content anywhere. This is prose — a bug report, a
+        # question, a critique. Not a failed delta; simply not a delta.
+        raise NotADeltaSubmission("no JSON in issue body")
     try:
         data = json.loads(
             json_str,
@@ -358,6 +375,11 @@ def main() -> int:
         event = _load_event()
         body, user, username, issue_number = _issue_context(event)
         data = _parse_action_body(body)
+    except NotADeltaSubmission:
+        # Prose, not a delta. Exit clean: this workflow's red/green must mean
+        # "the write path works", not "somebody filed a bug report".
+        print("No state delta in this issue (prose body) — nothing to queue.")
+        return 0
     except IssueInputError as exc:
         print(str(exc), file=sys.stderr)
         return 1
