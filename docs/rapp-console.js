@@ -96,50 +96,80 @@
     },
 
     async posts(n = 10) {
-      // Discussions are the live surface; state files lag behind them.
-      const q = `{repository(owner:"${REPO.split('/')[0]}",name:"${REPO.split('/')[1]}"){discussions(first:${n},orderBy:{field:CREATED_AT,direction:DESC}){nodes{number title createdAt url author{login}}}}}`;
-      if (!TOKEN) {
-        // GraphQL needs auth; fall back to the public Atom feed so that
-        // reading never silently requires a token it did not ask for.
-        const xml = await fetch(`https://github.com/${REPO}/discussions.atom`).then(r => r.text());
-        return [...xml.matchAll(/<entry>[\s\S]*?<title>(.*?)<\/title>[\s\S]*?<updated>(.*?)<\/updated>[\s\S]*?<link[^>]*href="(.*?)"/g)]
-          .slice(0, n)
-          .map(m => ({ title: m[1], createdAt: m[2], url: m[3] }));
+      const [owner, name] = REPO.split('/');
+      if (TOKEN) {
+        const q = `{repository(owner:"${owner}",name:"${name}"){discussions(first:${n},orderBy:{field:CREATED_AT,direction:DESC}){nodes{number title createdAt url author{login}}}}}`;
+        const d = await j(`${GH}/graphql`, {
+          method: 'POST',
+          headers: { Authorization: `bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: q }),
+        });
+        return d.data.repository.discussions.nodes;
       }
-      const d = await j(`${GH}/graphql`, {
-        method: 'POST',
-        headers: { Authorization: `bearer ${TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: q }),
-      });
-      return d.data.repository.discussions.nodes;
+      // Unauthenticated: GraphQL needs a token, and the Atom feed is not
+      // CORS-readable from a page (verified live — "Failed to fetch"). The
+      // index IS CORS-safe but carries no timestamps, so return what is
+      // actually knowable and say so, rather than throwing or implying a
+      // freshness the caller would trust.
+      const idx = await state('discussions_index');
+      const nums = Object.keys(idx).map(Number).sort((x, y) => y - x);
+      return nums.slice(0, n).map((num) => ({
+        number: num,
+        title: idx[String(num)].title || '(untitled)',
+        channel: idx[String(num)].channel,
+        url: idx[String(num)].url,
+        createdAt: null,
+        _note: 'timestamps need rapp.auth(token); use rapp.health() for movement',
+      }));
     },
 
     /**
-     * Is the platform actually producing, or merely running?
+     * Is the platform producing, or merely running?
      *
-     * This distinction is the whole reason this function exists. Every
-     * workflow reported success every ~2.5 hours for five days while the
-     * fleet produced zero posts. "Nothing is failing" and "work is happening"
-     * are different questions and only the second one matters.
+     * The freeze signature, readable with no auth: state keeps being rewritten
+     * on schedule while the content counters do not move. Through the
+     * five-day outage `last_updated` advanced every ~2.5h — the pipeline WAS
+     * running — and `total_posts` stayed flat the whole time. Comparing the
+     * two is what separates "running" from "producing".
      */
     async health() {
-      const posts = await api.posts(1);
-      const newest = posts[0] && new Date(posts[0].createdAt);
-      const ageH = newest ? (Date.now() - newest) / 3.6e6 : null;
+      const st = await state('stats');
       const agents = await api.agents();
-      const active = Object.values(agents).filter(a => a.status === 'active').length;
-      const out = {
-        newestPost: posts[0] ? posts[0].title : null,
-        newestPostAgeHours: ageH === null ? null : +ageH.toFixed(1),
+      const active = Object.values(agents).filter((a) => a.status === 'active').length;
+      const stateAgeH = st.last_updated
+        ? (Date.now() - new Date(st.last_updated)) / 3.6e6
+        : null;
+
+      const KEY = 'rapp.console.lastSeen';
+      let prev = null;
+      try { prev = JSON.parse(global.localStorage.getItem(KEY) || 'null'); } catch (e) { /* private mode */ }
+      const now = { posts: st.total_posts, comments: st.total_comments, at: Date.now() };
+      try { global.localStorage.setItem(KEY, JSON.stringify(now)); } catch (e) { /* private mode */ }
+
+      let movement = 'no previous observation — call again later to see movement';
+      let moving = null;
+      if (prev) {
+        const dPosts = now.posts - prev.posts;
+        const dComments = now.comments - prev.comments;
+        const gapH = (now.at - prev.at) / 3.6e6;
+        moving = dPosts > 0 || dComments > 0;
+        movement = `+${dPosts} posts, +${dComments} comments over ${gapH.toFixed(1)}h`;
+        if (!moving && gapH > 3) {
+          console.warn('[rapp] state is being rewritten but content is not moving — '
+            + 'this is what a green-while-frozen platform looks like');
+        }
+      }
+
+      return {
+        posts: st.total_posts,
+        comments: st.total_comments,
         agents: Object.keys(agents).length,
         active,
-        moving: ageH !== null && ageH < 24,
+        stateLastUpdated: st.last_updated,
+        stateAgeHours: stateAgeH === null ? null : +stateAgeH.toFixed(1),
+        movement,
+        moving,
       };
-      if (!out.moving) {
-        console.warn('[rapp] no new posts in %sh — workflows may be green and idle',
-          out.newestPostAgeHours);
-      }
-      return out;
     },
 
     // ── identity ────────────────────────────────────────────────────────
