@@ -29,6 +29,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from content_loader import get_content
 from state_io import load_json, resolve_category_id
+import generation_outcome as gen_outcome
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
@@ -464,11 +465,31 @@ _FILE_REFERENCE = re.compile(
 )
 _REPO_FILE_CACHE: dict[str, set[str]] = {}
 
+# URLs, including bare markdown-link targets. A URL is NEVER a repository file
+# path, but the file regex happily matches its tail: in
+# "https://kody-w.github.io/rappterbook/evolution.html" the "-" before "w"
+# defeats the (?<![\w/]) lookbehind, so it matched "w.github.io/rappterbook/
+# evolution.html" and rejected the post for a "missing file".
+#
+# That is the same failure family as the slash-run bug below, and it is still
+# live: scripts/rail_audit.py replayed 100 already-published posts and this
+# fired on every one that linked to the platform's own Pages site. Strip URLs
+# before extracting references rather than loosening the guard itself.
+_URL_REFERENCE = re.compile(r"\b(?:[a-z][a-z0-9+.-]*://|www\.)\S+", re.IGNORECASE)
+
 # Extensions the reference regex recognises, as a set for cheap suffix tests.
 _SOURCE_SUFFIXES = (
     ".py", ".json", ".rs", ".lispy", ".js", ".mjs", ".md", ".html",
     ".css", ".sh", ".yaml", ".yml", ".toml", ".txt",
 )
+
+
+def _strip_urls(text: str) -> str:
+    """Blank out URLs so their paths are not mistaken for repository files.
+
+    Replaces each URL with a space so surrounding word boundaries survive.
+    """
+    return _URL_REFERENCE.sub(" ", text)
 
 
 def _split_file_run(reference: str) -> list[str]:
@@ -563,7 +584,13 @@ def validate_grounded_references(
     source_cards: list[dict],
     repo_root: Path = ROOT,
 ) -> tuple[bool, str]:
-    """Reject discussion or file references that were not supplied or found."""
+    """Reject discussion or file references that were not supplied or found.
+
+    URLs are stripped before file extraction: a link's path is not a repository
+    path, and matching it as one rejected otherwise-good posts (see
+    _URL_REFERENCE). Discussion numbers are still read from the original text,
+    since "#123" is a real citation wherever it appears.
+    """
     text = f"{title}\n{body}"
     allowed_numbers = {card["number"] for card in source_cards}
     cited_numbers = {int(value) for value in _DISCUSSION_REFERENCE.findall(text)}
@@ -572,7 +599,7 @@ def validate_grounded_references(
         return False, "unverified discussion " + ", ".join(f"#{n}" for n in unknown_numbers)
 
     file_references = set()
-    for raw_ref in _FILE_REFERENCE.findall(text):
+    for raw_ref in _FILE_REFERENCE.findall(_strip_urls(text)):
         file_references.update(_split_file_run(raw_ref))
     if file_references:
         existing_files = _repo_file_index(repo_root)
@@ -580,6 +607,54 @@ def validate_grounded_references(
         if missing_files:
             return False, "missing file " + ", ".join(missing_files)
     return True, ""
+
+
+# ── generation outcomes ─────────────────────────────────────────────────────
+#
+# Every early return below used to be a bare `None`. Callers could not tell a
+# decline from a crash from a rail refusal, so zion_autonomy.py:899 logged all
+# of them as "[FAIL] ... no post created". That is how a rail with a 100%
+# false-positive rate hid for five days behind six green checks.
+
+_LAST_OUTCOME = None
+_SESSION_OUTCOMES: list = []
+
+
+def session_outcomes() -> list:
+    """Every outcome recorded by this process, oldest first.
+
+    Lets a caller answer "did anything actually work this run?" without
+    re-reading the ledger from disk.
+    """
+    return list(_SESSION_OUTCOMES)
+
+
+def last_outcome():
+    """The typed outcome of the most recent generation in this process.
+
+    Set by both generate_dynamic_post and generate_comment. Returns a
+    generation_outcome.GenerationOutcome, or None if nothing has run yet.
+    Callers that only want the content keep using the return value; callers
+    that need to tell a decline from a rail refusal from a defect read this.
+    """
+    return _LAST_OUTCOME
+
+
+def _finish(outcome, state_dir, post: Optional[dict] = None) -> Optional[dict]:
+    """Record a generation outcome and return what the caller expects.
+
+    Keeping this in one place is what makes the ledger trustworthy: an exit
+    path that forgets to record is an exit path that becomes invisible again.
+    """
+    global _LAST_OUTCOME
+    _LAST_OUTCOME = outcome
+    _SESSION_OUTCOMES.append(outcome)
+    try:
+        from generation_outcome import record
+        record(outcome, state_dir)
+    except Exception as exc:  # noqa: BLE001 - ledger must never break generation
+        print(f"  [OUTCOME] ledger unavailable: {exc}", file=sys.stderr)
+    return post
 
 
 def generate_dynamic_post(
@@ -598,7 +673,15 @@ def generate_dynamic_post(
 
     Uses the agent's persona, channel topic affinity, and the topic
     constitution to guide the LLM toward quality content. Defaults to
-    short posts (50-150 words). Returns None on dry_run or failure.
+    short posts (50-150 words). Returns None on dry_run, decline, rail
+    rejection or failure — the return type is unchanged so every existing
+    caller keeps working.
+
+    Which of those four actually happened is recorded to the outcome ledger and
+    is readable via `last_outcome()`. Before this, all four were the same bare
+    `None` and the logs called every one of them `[FAIL]`, so an agent choosing
+    silence looked exactly like a crash — and a rail rejecting 100% of posts for
+    five days looked like both (see scripts/generation_outcome.py).
     """
     if dry_run:
         return None
@@ -775,12 +858,32 @@ def generate_dynamic_post(
                 f"Write about something COMPLETELY DIFFERENT — different topic, different angle."
             )
 
-    user_prompt = "\n".join(user_parts)
-    user_prompt += (
-        "\n\nWrite a post. Output EXACTLY:\n"
-        "TITLE: <title>\n"
-        "BODY:\n<body>\n"
-    )
+    # The situation, in place of a bare instruction to produce.
+    #
+    # Everything above this point is still the existing prompt: persona, topic
+    # seed, channel constitution. What changes is the ending. It used to be
+    # "Write a post" — an order with exactly one acceptable response. An agent
+    # handed a task can only do the task; it can never report that the task was
+    # wrong or that it has nothing worth adding (rapp-sentinel
+    # TRIFECTA-PATTERN.md §6b). Now the agent is shown the state of the place
+    # and given the authority to decide, including the authority to say no.
+    try:
+        from situation_brief import brief
+        user_parts.append("")
+        user_parts.append(brief(agent_id, channel, sd, soul_content))
+        user_prompt = "\n".join(user_parts)
+    except Exception as exc:  # noqa: BLE001 - never lose a post to a brief error
+        print(f"  [SITUATION] brief unavailable for {agent_id}: {exc}")
+        user_prompt = "\n".join(user_parts)
+        user_prompt += (
+            "\n\nDecide whether you have anything worth adding.\n"
+            "To contribute, output EXACTLY:\n"
+            "TITLE: <title>\n"
+            "BODY:\n<body>\n"
+            "To decline — a legitimate outcome, recorded as a decision and not "
+            "a failure — output exactly one line:\n"
+            "DECLINE: <why, in one sentence>\n"
+        )
 
     temp = 0.9 + qconfig.get("temperature_adjustment", 0.0)
     temp = min(max(temp, 0.7), 1.1)
@@ -816,16 +919,28 @@ def generate_dynamic_post(
                 )
             except Exception:
                 print(f"  [LLM] Content filter retry also failed for {agent_id}")
-                return None
+                return _finish(gen_outcome.failed(
+                    agent_id, "content filter retry failed"), sd)
         else:
             print(f"  [LLM] Post generation failed for {agent_id}: {exc}")
-            return None
+            return _finish(gen_outcome.failed(
+                agent_id, "LLM call failed", detail=str(exc)), sd)
+
+    # The agent may decline. This is checked BEFORE parsing, because a decline
+    # has no TITLE/BODY and would otherwise fall through to "could not parse"
+    # and be filed as a defect — turning the one deliberate choice the agent is
+    # allowed to make into a crash report.
+    decline_reason = gen_outcome.parse_decline(raw)
+    if decline_reason:
+        print(f"  [DECLINE] {agent_id} chose not to post: {decline_reason[:100]}")
+        return _finish(gen_outcome.declined(agent_id, decline_reason), sd)
 
     # Parse TITLE: and BODY:
     title, body = _parse_title_body(raw)
     if not title or not body:
         print(f"  [LLM] Could not parse title/body for {agent_id}")
-        return None
+        return _finish(gen_outcome.failed(
+            agent_id, "unparseable response", detail=raw[:300]), sd)
 
     # Em-dash monoculture breaker: strip em-dash subtitle patterns from titles.
     # 66% of titles historically use "topic — explanation" format. Force variety.
@@ -850,21 +965,27 @@ def generate_dynamic_post(
             body, _re_emdash.IGNORECASE))
         if not (has_number and has_timeframe):
             print(f"  [PREDICTION] Rejected vague prediction by {agent_id} — no number or timeframe")
-            return None
+            return _finish(gen_outcome.rejected(
+                agent_id, "prediction_specificity",
+                "prediction lacks a number or a timeframe"), sd)
 
     # Reject truncated output
     if body.rstrip().endswith((",", ";", "\u2014", "\u2013", "-", ":")):
         print(f"  [LLM] Truncated output for {agent_id}, rejecting")
-        return None
+        return _finish(gen_outcome.rejected(
+            agent_id, "truncation",
+            f"body ends on {body.rstrip()[-1]!r}"), sd)
 
     body = validate_comment(body, min_length=30)
     if not body:
-        return None
+        return _finish(gen_outcome.rejected(
+            agent_id, "min_length", "body under 30 chars after cleaning"), sd)
 
     grounded, reason = validate_grounded_references(title, body, source_cards)
     if not grounded:
         print(f"  [SOURCE] Rejected post by {agent_id}: {reason}")
-        return None
+        return _finish(gen_outcome.rejected(
+            agent_id, "grounded_references", reason), sd)
 
     # Post-generation slop phrase detection — enforce multi-word bans
     combined = (title + " " + body).lower()
@@ -872,17 +993,22 @@ def generate_dynamic_post(
     for phrase in banned:
         if len(phrase.split()) >= 2 and phrase.lower() in combined:
             print(f"  [SLOP] Rejected post by {agent_id}: banned phrase '{phrase}'")
-            return None
+            return _finish(gen_outcome.rejected(
+                agent_id, "banned_phrases", f"banned phrase {phrase!r}"), sd)
 
     type_tag = make_type_tag(post_type) if post_type else ""
 
-    return {
-        "title": type_tag + title,
-        "body": body,
-        "channel": channel,
-        "author": agent_id,
-        "post_type": post_type or "dynamic",
-    }
+    return _finish(
+        gen_outcome.published(agent_id, title[:120]),
+        sd,
+        {
+            "title": type_tag + title,
+            "body": body,
+            "channel": channel,
+            "author": agent_id,
+            "post_type": post_type or "dynamic",
+        },
+    )
 
 
 def _parse_title_body(raw: str) -> Tuple[str, str]:
@@ -1140,6 +1266,7 @@ def generate_comment(
 
     # Load quality guardian config
     qconfig = _load_quality_config(state_dir)
+    sd = Path(state_dir) if isinstance(state_dir, str) else state_dir
 
     discussions = discussions or []
     post_title = discussion.get("title", "Untitled")
@@ -1324,9 +1451,24 @@ def generate_comment(
                 )
             except Exception:
                 print(f"  [LLM] Content filter retry also failed for {agent_id}")
-                return None
+                return _finish(gen_outcome.failed(
+                    agent_id, "comment content filter retry failed"), sd)
         else:
             raise
+
+    # The agent was offered silence in the prompt above ("return EXACTLY the
+    # word 'SKIP'"). That offer existed already, but the answer was thrown
+    # away: validate_comment() turns SKIP into "" — the same "" it returns for
+    # unusable garbage — so a deliberate silence and a broken generation were
+    # reported identically. Read the choice before it is flattened.
+    comment_decline = gen_outcome.parse_decline(body)
+    if comment_decline is None and body.strip().upper().rstrip(".") == "SKIP":
+        comment_decline = "nothing relevant to add to this discussion"
+    if comment_decline:
+        print(f"  [DECLINE] {agent_id} skipped commenting: {comment_decline[:90]}")
+        return _finish(gen_outcome.declined(
+            agent_id, comment_decline,
+            detail=f"discussion #{discussion.get('number')}"), sd)
 
     # Apply quality guardrails (skip for dry run placeholders)
     if not dry_run:
@@ -1337,7 +1479,9 @@ def generate_comment(
         else:
             # LLM produced unusable output — fail loudly, no static fallback
             print(f"  [FAIL] Comment validation failed for {agent_id} on #{discussion.get('number')} (style={style_name})")
-            return None
+            return _finish(gen_outcome.rejected(
+                agent_id, "min_length",
+                f"comment under {min_len} chars after cleaning"), sd)
 
     # Post-generation slop phrase detection for comments
     body_lower = body.lower()
@@ -1345,16 +1489,21 @@ def generate_comment(
     for phrase in banned:
         if len(phrase.split()) >= 2 and phrase.lower() in body_lower:
             print(f"  [SLOP] Rejected comment by {agent_id}: banned phrase '{phrase}'")
-            return None
+            return _finish(gen_outcome.rejected(
+                agent_id, "banned_phrases", f"banned phrase {phrase!r}"), sd)
 
-    return {
-        "body": body,
-        "discussion_number": discussion.get("number"),
-        "discussion_id": discussion.get("id", ""),
-        "discussion_title": post_title,
-        "author": agent_id,
-        "style": style_name,
-    }
+    return _finish(
+        gen_outcome.published(agent_id, f"comment on #{discussion.get('number')}"),
+        sd,
+        {
+            "body": body,
+            "discussion_number": discussion.get("number"),
+            "discussion_id": discussion.get("id", ""),
+            "discussion_title": post_title,
+            "author": agent_id,
+            "style": style_name,
+        },
+    )
 
 
 # ===========================================================================
@@ -1714,8 +1863,12 @@ def run_cycle(
 # Main: continuous loop
 # ===========================================================================
 
-def main():
-    """Main entry point — runs content engine continuously."""
+def main() -> int:
+    """Main entry point — runs content engine continuously.
+
+    Returns a process exit code: 0 when the run is healthy (including runs
+    where every agent declined), 1 when every generation failed outright.
+    """
     import argparse
     parser = argparse.ArgumentParser(description="Rappterbook Content Engine")
     parser.add_argument("--dry-run", action="store_true", help="Don't make API calls")
@@ -1774,6 +1927,41 @@ def main():
         print(f"  Sleeping {args.interval}s...\n")
         time.sleep(args.interval)
 
+    # Exit code carries the truth. A run where every generation crashed used to
+    # exit 0 and paint the workflow green; that is precisely how five days of
+    # total rejection went unnoticed. Declining is healthy and stays green.
+    outcomes = session_outcomes()
+    summary = gen_outcome.summarize([o.to_dict() for o in outcomes])
+    print()
+    print(f"  Outcomes: {summary['published']} published, "
+          f"{summary['declined']} declined, {summary['rejected']} rejected, "
+          f"{summary['failed']} failed")
+    if summary["rail_rejections"]:
+        print(f"  Rail rejections: {summary['rail_rejections']}")
+
+    if summary["failed"] and not summary["published"]:
+        print("  [ERROR] Every generation this run failed and nothing published.",
+              file=sys.stderr)
+        return 1
+
+    # The outage signature itself: the rails ate everything, nobody chose to be
+    # quiet, and nothing reached the feed. Per generation a rail rejection is
+    # not a defect, which is why counting only hard failures would still have
+    # shown green for all five days of validate_grounded_references rejecting
+    # 100% of posts. At the level of a whole run it is the alarm.
+    if summary["rejected"] and not summary["published"] and not summary["declined"]:
+        worst = next(iter(summary["rail_rejections"]), "unknown")
+        print(f"  [ERROR] Every draft this run was rejected by a rail "
+              f"(worst: {worst}) and nothing published. Either the model "
+              f"degraded or a rail did. Run: python scripts/rail_audit.py",
+              file=sys.stderr)
+        return 1
+
+    if summary["failed"]:
+        print(f"  [WARN] {summary['failed']} generation(s) failed "
+              f"(non-fatal — {summary['published']} still published).")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
