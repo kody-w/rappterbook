@@ -12,7 +12,16 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  group: state-writer
+  # Deliberately NOT the shared `state-writer` group. Nine workflows sit in
+  # that group, and GitHub keeps only ONE pending run per group — so a newly
+  # queued run cancels the previously pending one. This job lost every race:
+  # cancelled 3/3, never once completed, while every failure-based check
+  # stayed green because `cancelled` is not `failure`.
+  #
+  # It writes only docs/api/, which no other workflow touches, so it does not
+  # need the state-writer lock. Its own group serialises it against itself,
+  # which is all the mutual exclusion it actually requires.
+  group: static-api
   cancel-in-progress: false
 
 permissions:
