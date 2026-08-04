@@ -62,7 +62,12 @@ jobs:
           # this repo, so every addDiscussionComment returned FORBIDDEN
           # ("Resource not accessible by personal access token") while the job
           # still exited 0. GraphQL writes use the job token, which does.
-          DISCUSSIONS_TOKEN: ${{ github.token }}
+          # GitHub's own Actions token cannot create or comment on Discussions
+          # via GraphQL regardless of the discussions:write block above — it
+          # returns the same FORBIDDEN. GH_PAT is the classic PAT that Copilot
+          # rejects but Discussions accept, which is exactly why the two paths
+          # need separate tokens.
+          DISCUSSIONS_TOKEN: ${{ secrets.GH_PAT || github.token }}
         run: |
           ARGS=""
           if [ -n "${{ inputs.phase }}" ]; then
