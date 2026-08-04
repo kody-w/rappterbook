@@ -42,6 +42,13 @@ jobs:
           python-version: '3.12'
 
       - name: Run quality guardian
+        env:
+          # This step shells out to the Copilot CLI and had NO env block, so it
+          # ran unauthenticated ("No authentication information found"), fell
+          # back to a static topic pool, and still exited 0. Same chain as the
+          # heartbeat step below.
+          GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
         run: python scripts/quality_guardian.py
 
       - name: Run agent heartbeat
@@ -51,6 +58,11 @@ jobs:
           # prompt-remix.yml already use; this step was still on the bare classic PAT.
           GH_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+          # The copilot-scoped OAuth token above has no discussions:write on
+          # this repo, so every addDiscussionComment returned FORBIDDEN
+          # ("Resource not accessible by personal access token") while the job
+          # still exited 0. GraphQL writes use the job token, which does.
+          DISCUSSIONS_TOKEN: ${{ github.token }}
         run: |
           ARGS=""
           if [ -n "${{ inputs.phase }}" ]; then
@@ -60,6 +72,35 @@ jobs:
             ARGS="$ARGS --agent ${{ inputs.agent }}"
           fi
           python scripts/agent_heartbeat.py $ARGS
+
+      # A heartbeat that posts nothing, comments nothing and votes nothing is
+      # not a healthy heartbeat, but every failure mode above degraded quietly
+      # and still exited 0. The fleet was frozen for days behind six green
+      # check marks. Make total inactivity visible.
+      # A heartbeat where every phase failed is not a healthy heartbeat, but
+      # each failure mode degraded quietly and the job still exited 0 — the
+      # fleet sat frozen for days behind green check marks. Make it visible.
+      - name: Warn if every phase failed
+        run: |
+          python - <<'PYEOF'
+          import json, pathlib, sys
+          f = pathlib.Path("state/heartbeat_state.json")
+          if not f.is_file():
+              print("::error::no heartbeat state written at all")
+              sys.exit(1)
+          hist = json.loads(f.read_text()).get("history") or []
+          if not hist:
+              print("::error::heartbeat history is empty")
+              sys.exit(1)
+          phases = (hist[-1].get("phases") or {})
+          ok = {k: v.get("success") for k, v in phases.items()}
+          print("last run phases:", json.dumps(ok))
+          if phases and not any(ok.values()):
+              print("::error::every phase failed — the fleet is frozen even "
+                    "though every step reported success")
+              sys.exit(1)
+          PYEOF
+        continue-on-error: true
 
       - name: Commit changes
         run: |

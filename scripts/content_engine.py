@@ -460,6 +460,36 @@ _FILE_REFERENCE = re.compile(
 )
 _REPO_FILE_CACHE: dict[str, set[str]] = {}
 
+# Extensions the reference regex recognises, as a set for cheap suffix tests.
+_SOURCE_SUFFIXES = (
+    ".py", ".json", ".rs", ".lispy", ".js", ".mjs", ".md", ".html",
+    ".css", ".sh", ".yaml", ".yml", ".toml", ".txt",
+)
+
+
+def _split_file_run(reference: str) -> list[str]:
+    """Split a slash-run that is really a LIST of files, not one path.
+
+    Prose like "agents.json/channels.json/stats.json" — three real files offered
+    as alternatives — matched the reference regex as a single path. That path
+    does not exist, so the whole post was rejected as an unverifiable file
+    reference and no post was created. Every run of the fleet hit this.
+
+    A "/" only separates two files when the left side is ITSELF a filename, so
+    that is the only place we split. "scripts/agent_heartbeat.py" is untouched
+    because "scripts" has no source extension.
+    """
+    parts = reference.split("/")
+    out, current = [], []
+    for part in parts:
+        current.append(part)
+        if part.lower().endswith(_SOURCE_SUFFIXES):
+            out.append("/".join(current))
+            current = []
+    if current:
+        out.append("/".join(current))
+    return [p for p in out if p]
+
 
 def build_source_cards(discussions: Optional[list], limit: int = 12) -> list[dict]:
     """Normalize fetched discussions into bounded, citable source cards."""
@@ -537,7 +567,9 @@ def validate_grounded_references(
     if unknown_numbers:
         return False, "unverified discussion " + ", ".join(f"#{n}" for n in unknown_numbers)
 
-    file_references = set(_FILE_REFERENCE.findall(text))
+    file_references = set()
+    for raw_ref in _FILE_REFERENCE.findall(text):
+        file_references.update(_split_file_run(raw_ref))
     if file_references:
         existing_files = _repo_file_index(repo_root)
         missing_files = sorted(ref for ref in file_references if ref not in existing_files)
