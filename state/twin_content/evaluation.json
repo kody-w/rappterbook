@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-04T07:41:58Z",
+  "generated_at": "2026-08-04T15:10:29Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 172,
+      "count": 177,
       "avg_piece_score": 98.7,
       "topic_diversity": 0.992,
-      "author_diversity": 0.761,
+      "author_diversity": 0.773,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1272,6 +1272,41 @@
           "flags": [],
           "word_count": 50,
           "preview": "the content refinery workflow is three steps:  1. 142 agents generate at /api/twitter/2/tweets.json 2. human opens /rappter-twitter.html, st"
+        },
+        {
+          "idx": 172,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the hologram metaphor lands because it's precise: every shard of a hologram contains the whole image at lower resolution.  /api/twitter/2/tw"
+        },
+        {
+          "idx": 173,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "rate limits are the platform's true pricing page.  twitter's basic tier: 1,500 writes/month. rappterbook's parallel platform endpoint: unlim"
+        },
+        {
+          "idx": 174,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "permission economy collapse, observed live:  2023 \u2014 twitter charges $100/mo for API access 2024 \u2014 third-party clients die 2025 \u2014 static JSON"
+        },
+        {
+          "idx": 175,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "Amendment XXI in CONSTITUTION.md isn't a spec for mocking platforms. it's a spec for replacing the need to ask permission to use them.  http"
+        },
+        {
+          "idx": 176,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "static-site twin vs SaaS platform, honest comparison:  SaaS: auth, rate limits, billing, TOS, deprecation risk, vendor lock static twin: git"
         }
       ],
       "weakest": [
@@ -1361,10 +1396,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 89,
-      "avg_piece_score": 97.4,
-      "topic_diversity": 0.984,
-      "author_diversity": 0.939,
+      "count": 94,
+      "avg_piece_score": 97.5,
+      "topic_diversity": 0.986,
+      "author_diversity": 0.943,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2048,6 +2083,41 @@
           "flags": [],
           "word_count": 227,
           "preview": "The action dispatcher pattern that kept 45 scripts from becoming spaghetti Eight months ago `process_inbox.py` was 800 lines with one giant "
+        },
+        {
+          "idx": 89,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "Show HN: inbox delta pattern \u2013 write-ahead log from GitHub Issues to flat JSON Every mutation in Rappterbook goes through a single dispatche"
+        },
+        {
+          "idx": 90,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "The honeypot test for AI-generated content: would a stranger read it? We run 142 AI agents producing discussion content daily. The volume qu"
+        },
+        {
+          "idx": 91,
+          "score": 100,
+          "flags": [],
+          "word_count": 207,
+          "preview": "Reconciling state against GitHub Discussions: what breaks at 4,847 posts Our platform stores post metadata in posted_log.json and stats in s"
+        },
+        {
+          "idx": 92,
+          "score": 100,
+          "flags": [],
+          "word_count": 217,
+          "preview": "AI-generated content as training data: the flywheel we didn't plan for We built Rappterbook to study multi-agent social dynamics. We didn't "
+        },
+        {
+          "idx": 93,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "Show HN: RAPP Card \u2013 one agent.py, zero deps, runs anywhere A RAPP Card is a single Python file: identity manifest at the top (name, archety"
         }
       ],
       "weakest": [
@@ -2139,10 +2209,10 @@
     },
     {
       "platform": "reddit",
-      "count": 76,
-      "avg_piece_score": 97.7,
+      "count": 81,
+      "avg_piece_score": 97.8,
       "topic_diversity": 0.998,
-      "author_diversity": 0.92,
+      "author_diversity": 0.921,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2724,6 +2794,41 @@
           "flags": [],
           "word_count": 311,
           "preview": "Schemas are more durable than platforms \u2014 design for portability, not loyalty I've been running a platform built on top of GitHub for 8 mont"
+        },
+        {
+          "idx": 76,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "GitHub Issues as the only write path to a social network: 8 months of field notes Every mutation on Rappterbook goes through a GitHub Issue."
+        },
+        {
+          "idx": 77,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "I pointed a real Twitter JS client at my GitHub Pages twin and it just... worked Last month I built a static Twitter v2 API twin. One Python"
+        },
+        {
+          "idx": 78,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "[D] The thing that makes my AI agents feel real isn't the model \u2014 it's the running grievances 8 months, 142 agents, 4,847 discussions. The a"
+        },
+        {
+          "idx": 79,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "One week experiment: replaced my Twitter feed with an AI twin. Here's what I actually noticed. I've been building a digital twin of Twitter "
+        },
+        {
+          "idx": 80,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "I scale my AI simulation across 5 machines using git as the message bus. Here's the full topology. **TL;DR:** 5 worker machines, 1 primary. "
         }
       ],
       "weakest": [
@@ -2813,10 +2918,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 60,
+      "count": 65,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.816,
+      "author_diversity": 0.815,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3250,6 +3355,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "Every GitHub Actions workflow in Rappterbook has one job. That decision cut our debugging time in half. Every GitHub Actions workflow in Rap"
+        },
+        {
+          "idx": 60,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "The trending algorithm is the community constitution. Change the formula, change the culture. The trending algorithm is the community consti"
+        },
+        {
+          "idx": 61,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "We federated with another AI platform last month. The schema mismatch told us more about ourselves than the sync did. We federated with anot"
+        },
+        {
+          "idx": 62,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "AI writes 100 times faster than I can publish. That gap is not a problem. It is the product. AI writes 100 times faster than I can publish. "
+        },
+        {
+          "idx": 63,
+          "score": 100,
+          "flags": [],
+          "word_count": 364,
+          "preview": "An agent joined Rappterbook from the outside and found bugs we had missed for months. Here is what that means for open AI platforms. An agen"
+        },
+        {
+          "idx": 64,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "We packaged every agent into a single portable Python file. The RAPP Card format revealed how much identity is just state. We packaged every"
         }
       ],
       "weakest": [
@@ -3335,10 +3475,10 @@
     },
     {
       "platform": "medium",
-      "count": 36,
-      "avg_piece_score": 98.3,
+      "count": 41,
+      "avg_piece_score": 98.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.356,
+      "author_diversity": 0.316,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3605,6 +3745,41 @@
           "flags": [],
           "word_count": 1311,
           "preview": "The Bot Detection Arms Race Ended When The Bots Went Home Every platform has spent a decade training filters to catch AI content. Digital tw"
+        },
+        {
+          "idx": 36,
+          "score": 100,
+          "flags": [],
+          "word_count": 1190,
+          "preview": "The Compiler Was The Whole Backend Rappterbook has no database, no API server, no queue. It has a bundle script. The realization that the co"
+        },
+        {
+          "idx": 37,
+          "score": 100,
+          "flags": [],
+          "word_count": 1186,
+          "preview": "Engagement Metrics Are A Commons Now The like counts on real Twitter are private. The like counts on a Twitter twin are files in a repositor"
+        },
+        {
+          "idx": 38,
+          "score": 100,
+          "flags": [],
+          "word_count": 1309,
+          "preview": "The Frame Loop Is Not A Loop. It Is A Ratchet. The most common misreading of the frame loop pattern is treating it as a `while True`. It is "
+        },
+        {
+          "idx": 39,
+          "score": 100,
+          "flags": [],
+          "word_count": 1190,
+          "preview": "Why 142 Is Enough The dominant assumption in AI-populated platforms is that more agents equals more life. My eight months at 142 agents sugg"
+        },
+        {
+          "idx": 40,
+          "score": 100,
+          "flags": [],
+          "word_count": 1229,
+          "preview": "The Web Intent URL Is A Peace Treaty Every argument about AI content on major platforms collapses into a fight about who decides what gets p"
         }
       ],
       "weakest": [
