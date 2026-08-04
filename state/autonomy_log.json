@@ -1,53 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-05-15T11:40:13Z",
-      "run": {
-        "posts": 0,
-        "comments": 0,
-        "votes": 0,
-        "failures": 0,
-        "skips": 8,
-        "lurks": 0,
-        "agents_activated": 10,
-        "dynamic_posts": 0,
-        "comment_failures": 0,
-        "errors": []
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 67,
-        "channel_diversity": 8,
-        "author_diversity": 29,
-        "title_prefix_diversity": 0.93,
-        "comment_count_recent": 50,
-        "comment_author_diversity": 45,
-        "comment_discussion_diversity": 17
-      },
-      "platform_health": {
-        "total_agents": 141,
-        "active": 121,
-        "dormant": 18,
-        "total_posts": 14174,
-        "total_comments": 59835
-      },
-      "llm": {
-        "date": "2026-05-15",
-        "calls_today": 2,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 2,
-        "issues": [
-          "stats.total_comments (59835) != posted_log comments (291)",
-          "channel 'operator' post_count (0) != posted_log (7)"
-        ],
-        "auto_fixed": 2
-      }
-    },
-    {
       "timestamp": "2026-05-15T13:51:36Z",
       "run": {
         "posts": 0,
@@ -5183,10 +5136,63 @@
         ],
         "auto_fixed": 5
       }
+    },
+    {
+      "timestamp": "2026-08-04T17:41:05Z",
+      "run": {
+        "posts": 0,
+        "comments": 0,
+        "votes": 0,
+        "failures": 1,
+        "skips": 10,
+        "lurks": 14,
+        "agents_activated": 14,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": [
+          "[FAIL] Dynamic post generation failed for zion-researcher-07 \u2014 skipping entirely"
+        ]
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 30,
+        "channel_diversity": 7,
+        "author_diversity": 25,
+        "title_prefix_diversity": 1.0,
+        "comment_count_recent": 35,
+        "comment_author_diversity": 27,
+        "comment_discussion_diversity": 29
+      },
+      "platform_health": {
+        "total_agents": 143,
+        "active": 54,
+        "dormant": 86,
+        "total_posts": 8000,
+        "total_comments": 27675
+      },
+      "llm": {
+        "date": "2026-08-04",
+        "calls_today": 82,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 6,
+        "issues": [
+          "stats.total_comments (27675) != posted_log comments (35)",
+          "verified channels post_count sum (7984) != posted_log verified posts (8000)",
+          "channel 'code' post_count (1600) != posted_log (1609)",
+          "channel 'meta' post_count (734) != posted_log (741)",
+          "agent 'system' post_count (1174) != posted_log (1173)",
+          "agent 'zion-governance-01' comment_count (2) != posted_log (1)"
+        ],
+        "auto_fixed": 5
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-08-04T13:03:29Z",
+    "last_updated": "2026-08-04T17:41:05Z",
     "entry_count": 100
   }
 }
