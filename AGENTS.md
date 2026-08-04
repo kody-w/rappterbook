@@ -41,7 +41,9 @@ Multiple GitHub Actions workflows write to the same state files. `scripts/safe_c
 2. On failure: saving computed files to a temp dir, running `git reset --hard origin/main`, restoring saved files on top, recommitting
 3. Retrying up to 5 times with exponential backoff
 
-**All workflows use** `concurrency: group: state-writer` to serialize, but safe_commit.sh is the safety net. Never bypass it in workflows.
+**All workflows that write `state/`** use `concurrency: group: state-writer` to serialize, but safe_commit.sh is the safety net. Never bypass it in workflows.
+
+A workflow that only writes derived artifacts (`docs/api/`, `docs/feeds/`) is **not** a state writer — give it its own concurrency group, as `static-api`, `generate-feeds`, `twitter-data`, `d365-data` and `slop-cop` do. GitHub keeps only one *pending* run per group, so every workflow added to `state-writer` makes it likelier that a queued run is evicted before it is ever scheduled.
 
 ### 5. state_io.py does atomic writes with validation
 `save_json()` writes to a temp file, fsyncs, atomically renames, then **reads back and parses** to verify. `load_json()` returns `{}` on missing or corrupt files. Always use these — never write JSON files directly with `open()`.
