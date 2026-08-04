@@ -106,21 +106,44 @@
         });
         return d.data.repository.discussions.nodes;
       }
-      // Unauthenticated: GraphQL needs a token, and the Atom feed is not
-      // CORS-readable from a page (verified live — "Failed to fetch"). The
-      // index IS CORS-safe but carries no timestamps, so return what is
-      // actually knowable and say so, rather than throwing or implying a
-      // freshness the caller would trust.
+      // Unauthenticated: GraphQL needs a token and the Atom feed is not
+      // CORS-readable from a page (verified live — "Failed to fetch").
+      //
+      // state/discussions_index.json IS CORS-safe, but do not be fooled by
+      // the name: it holds a 32-entry window frozen at discussion #3340 while
+      // the platform is past #20859 — roughly 17,500 behind. Returning it as
+      // "recent posts" would hand callers year-old rows presented as current,
+      // which is the failure this whole file is careful about elsewhere.
       const idx = await state('discussions_index');
       const nums = Object.keys(idx).map(Number).sort((x, y) => y - x);
-      return nums.slice(0, n).map((num) => ({
+      const rows = nums.slice(0, n).map((num) => ({
         number: num,
         title: idx[String(num)].title || '(untitled)',
         channel: idx[String(num)].channel,
         url: idx[String(num)].url,
         createdAt: null,
-        _note: 'timestamps need rapp.auth(token); use rapp.health() for movement',
       }));
+      const stale = nums.length > 0 && (await api._newestKnown()) - nums[0] > 100;
+      if (stale) {
+        console.warn('[rapp] state/discussions_index.json is far behind the live '
+          + 'platform (newest indexed #%s). These are NOT recent posts. '
+          + 'Use rapp.auth(token) for live discussions, or rapp.health() for movement.',
+          nums[0]);
+      }
+      return Object.assign(rows, { _stale: stale, _newestIndexed: nums[0] });
+    },
+
+    /** Highest discussion number the platform can confirm without a token. */
+    async _newestKnown() {
+      // Issues and discussions share one number space on GitHub, and issues
+      // ARE readable unauthenticated with CORS. That gives a lower bound on
+      // how far ahead the platform is without needing a token.
+      try {
+        const r = await j(`${GH}/repos/${REPO}/issues?state=all&per_page=1`);
+        return r.length ? r[0].number : 0;
+      } catch (e) {
+        return 0;
+      }
     },
 
     /**
