@@ -1,0 +1,48 @@
+name: Static API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'state/**'
+      - 'scripts/build_static_api.py'
+      - 'state/api-manifest.json'
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch: {}
+
+concurrency:
+  group: state-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Refuse to publish a broken document. state/social_graph.json sat on
+      # main with 590 unresolved conflict markers - 1.69 MB, publicly served,
+      # CORS-open, and unparseable by every consumer. Nothing went red.
+      - name: Reject conflict markers and unparseable JSON/XML
+        run: python3 scripts/check_no_conflict_markers.py
+
+      - name: Build the static API
+        run: python3 scripts/build_static_api.py
+
+      # The build is idempotent by contract (SPEC 3). If a second run differs,
+      # the build is not a pure function of its input and the append-only
+      # store would grow on every schedule tick forever.
+      - name: Verify idempotence
+        run: |
+          python3 scripts/build_static_api.py
+          python3 scripts/build_static_api.py --check
+
+      - name: Commit only real changes
+        run: bash scripts/safe_commit.sh "chore(api)- rebuild static api [skip ci]" docs/api/
