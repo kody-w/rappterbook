@@ -11,15 +11,16 @@ on:
     - cron: '17 */6 * * *'
   workflow_dispatch: {}
 
-# Separate concurrency group — firewalled from state-writer.
-# This job writes docs/api/v1/ only; it never writes state/, so it is not a
-# state-writing workflow and does not belong in that mutex (AGENTS.md: "all
-# state-writing workflows share concurrency: group: state-writer").
-# Sharing it meant sharing one pending slot with 23 other workflows. GitHub
-# keeps only ONE pending run per group, so every new state-writer arrival
-# evicted this one before it was ever scheduled — 3/3 runs cancelled with
-# zero jobs. Same firewall as generate-feeds / twitter-data / d365-data.
 concurrency:
+  # Deliberately NOT the shared `state-writer` group. Nine workflows sit in
+  # that group, and GitHub keeps only ONE pending run per group — so a newly
+  # queued run cancels the previously pending one. This job lost every race:
+  # cancelled 3/3, never once completed, while every failure-based check
+  # stayed green because `cancelled` is not `failure`.
+  #
+  # It writes only docs/api/, which no other workflow touches, so it does not
+  # need the state-writer lock. Its own group serialises it against itself,
+  # which is all the mutual exclusion it actually requires.
   group: static-api
   cancel-in-progress: false
 
