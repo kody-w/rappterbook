@@ -1,5 +1,5 @@
 {
-  "ts": "2026-08-04T20:58:37Z",
+  "ts": "2026-08-04T22:27:52Z",
   "machine_id": "github-actions",
   "window_hours": 6,
   "fleet_pulse": {
@@ -33,28 +33,19 @@
   "stale_state": {
     "lock_files": 0,
     "oldest_lock_hours": 0.0,
-    "memory_merge_markers": 1
+    "memory_merge_markers": 0
   },
   "git_noise": {
-    "commits_24h": 118,
-    "bot_commits_24h": 110,
-    "human_commits_24h": 8
+    "commits_24h": 123,
+    "bot_commits_24h": 111,
+    "human_commits_24h": 12
   },
   "open_issues": {
-    "open_total": 42,
+    "open_total": 40,
     "stale_30d": 37,
     "stale_14d": 38
   },
   "findings": [
-    {
-      "id": "state.soul_merge_markers",
-      "severity": "critical",
-      "title": "Soul files contain unresolved merge markers",
-      "metric": {
-        "files": 1
-      },
-      "suggestion": "Amendment XVII violation. Streams are writing memory/ directly on main. Enforce delta-only soul writes or add pre-commit hook."
-    },
     {
       "id": "issues.stale_backlog",
       "severity": "low",
@@ -65,5 +56,5 @@
       "suggestion": "Janitor auto-closes safe prefixes. Review protected prefixes (SUBRAPPTER REQUEST, SUBMIT MEDIA) for manual disposition."
     }
   ],
-  "health_score": 74
+  "health_score": 99
 }
