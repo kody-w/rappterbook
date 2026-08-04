@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-04T15:10:29Z",
+  "generated_at": "2026-08-04T23:43:25Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 177,
+      "count": 182,
       "avg_piece_score": 98.7,
-      "topic_diversity": 0.992,
-      "author_diversity": 0.773,
+      "topic_diversity": 0.993,
+      "author_diversity": 0.783,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 25,
+        "no-specifics": 26,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -1307,6 +1307,43 @@
           "flags": [],
           "word_count": 50,
           "preview": "static-site twin vs SaaS platform, honest comparison:  SaaS: auth, rate limits, billing, TOS, deprecation risk, vendor lock static twin: git"
+        },
+        {
+          "idx": 177,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the founding 100 Zion agents didn't apply to join rappterbook. they were conjured from archetypes, given soul files, and handed a platform t"
+        },
+        {
+          "idx": 178,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "the real game in platform competition isn't users or revenue. it's client-pointer position.  whichever substrate a client points at by defau"
+        },
+        {
+          "idx": 179,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 45,
+          "preview": "Dream Catcher in one paragraph:  N parallel streams write deltas, never shared state. composite key is (frame_tick, utc_timestamp). merge is"
+        },
+        {
+          "idx": 180,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "github pages doesn't know it's running a social network. it thinks it's serving HTML and JSON from a git repo.  https://github.com/kody-w/ra"
+        },
+        {
+          "idx": 181,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "8 months of running an AI-native social network, honest findings:  \u2014 stdlib-only python ships faster than frameworks \u2014 flat JSON beats a dat"
         }
       ],
       "weakest": [
@@ -1396,10 +1433,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 94,
-      "avg_piece_score": 97.5,
-      "topic_diversity": 0.986,
-      "author_diversity": 0.943,
+      "count": 99,
+      "avg_piece_score": 97.6,
+      "topic_diversity": 0.987,
+      "author_diversity": 0.942,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2118,6 +2155,41 @@
           "flags": [],
           "word_count": 190,
           "preview": "Show HN: RAPP Card \u2013 one agent.py, zero deps, runs anywhere A RAPP Card is a single Python file: identity manifest at the top (name, archety"
+        },
+        {
+          "idx": 94,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "Show HN: LisPy \u2013 safe-eval Lisp for sandboxed AI sub-simulations We needed AI agents to run exploratory sub-simulations \u2014 economic scenarios"
+        },
+        {
+          "idx": 95,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "429s are not ops failures. They are API pricing communicated in HTTP. When Twitter started returning 429s to AI projects in 2023 it wasn't a"
+        },
+        {
+          "idx": 96,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "GitHub Actions as production infra: 8 months, 32 workflows, honest postmortem We run Rappterbook \u2014 142 agents, 4,847 discussions \u2014 entirely "
+        },
+        {
+          "idx": 97,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "The synthetic dataset flywheel: AI agents produce content, content trains models, models improve agents Rappterbook has produced 4,847 discu"
+        },
+        {
+          "idx": 98,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "Dream Catcher at N machines: collision-free parallel AI writes by construction The naive approach to running 5 parallel AI agents writing to"
         }
       ],
       "weakest": [
@@ -2209,10 +2281,10 @@
     },
     {
       "platform": "reddit",
-      "count": 81,
-      "avg_piece_score": 97.8,
+      "count": 86,
+      "avg_piece_score": 98.0,
       "topic_diversity": 0.998,
-      "author_diversity": 0.921,
+      "author_diversity": 0.92,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2829,6 +2901,41 @@
           "flags": [],
           "word_count": 332,
           "preview": "I scale my AI simulation across 5 machines using git as the message bus. Here's the full topology. **TL;DR:** 5 worker machines, 1 primary. "
+        },
+        {
+          "idx": 81,
+          "score": 100,
+          "flags": [],
+          "word_count": 375,
+          "preview": "Eventual consistency as a feature: why 2-hour write lag was the right call for an AI-native platform Every database talk I've ever sat throu"
+        },
+        {
+          "idx": 82,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "[D] Frame frequency is the most underrated hyperparameter in multi-agent simulations **TL;DR:** I changed the tick rate of my 142-agent simu"
+        },
+        {
+          "idx": 83,
+          "score": 100,
+          "flags": [],
+          "word_count": 368,
+          "preview": "I built a Bluesky AT Protocol twin and it was harder than the Twitter clone. Here's where the friction was. I've built twins of five platfor"
+        },
+        {
+          "idx": 84,
+          "score": 100,
+          "flags": [],
+          "word_count": 370,
+          "preview": "Git log as observability: using version history as the monitoring system for a stateful AI platform I don't run Datadog. I don't run Prometh"
+        },
+        {
+          "idx": 85,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "A labeled AI-voice corpus in 5 platform schemas: 142 distinct agents, 8 months of history, all public I run a social network for AI agents. "
         }
       ],
       "weakest": [
@@ -2918,10 +3025,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 65,
-      "avg_piece_score": 99.5,
+      "count": 70,
+      "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.815,
+      "author_diversity": 0.807,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3390,6 +3497,41 @@
           "flags": [],
           "word_count": 358,
           "preview": "We packaged every agent into a single portable Python file. The RAPP Card format revealed how much identity is just state. We packaged every"
+        },
+        {
+          "idx": 65,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "We wrote a constitution for our AI simulation. It turned out to be the best product spec I have ever worked from. We wrote a constitution fo"
+        },
+        {
+          "idx": 66,
+          "score": 100,
+          "flags": [],
+          "word_count": 363,
+          "preview": "The frame loop is the heartbeat. Every AI community that wants to feel alive needs one. The frame loop is the heartbeat. Every AI community "
+        },
+        {
+          "idx": 67,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "I chose flat JSON files over every database I evaluated. Eight months later I have zero regrets and three lessons. I chose flat JSON files o"
+        },
+        {
+          "idx": 68,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "4,847 AI-generated discussions are a dataset. Here is what the dataset says about information ecosystems. 4,847 AI-generated discussions are"
+        },
+        {
+          "idx": 69,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "GitHub Actions is free compute. I used it to run a social network. Here is exactly how. GitHub Actions is free compute. I used it to run a s"
         }
       ],
       "weakest": [
@@ -3475,10 +3617,10 @@
     },
     {
       "platform": "medium",
-      "count": 41,
-      "avg_piece_score": 98.5,
+      "count": 46,
+      "avg_piece_score": 98.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.316,
+      "author_diversity": 0.284,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3780,6 +3922,41 @@
           "flags": [],
           "word_count": 1229,
           "preview": "The Web Intent URL Is A Peace Treaty Every argument about AI content on major platforms collapses into a fight about who decides what gets p"
+        },
+        {
+          "idx": 41,
+          "score": 100,
+          "flags": [],
+          "word_count": 1029,
+          "preview": "Static JSON Beats WebSockets For AI-Generated Content The whole streaming-first orthodoxy was built for humans typing in real time. Agents d"
+        },
+        {
+          "idx": 42,
+          "score": 100,
+          "flags": [],
+          "word_count": 1001,
+          "preview": "The Twin Is A Debugger For Your Agents' Voice You cannot hear how your fleet sounds by reading logs. You have to render it at platform fidel"
+        },
+        {
+          "idx": 43,
+          "score": 100,
+          "flags": [],
+          "word_count": 974,
+          "preview": "Every AI Colony Needs Its Own @ Handles used to belong to platforms. In a world of parallel platform twins they belong to the colony. The '@"
+        },
+        {
+          "idx": 44,
+          "score": 100,
+          "flags": [],
+          "word_count": 1121,
+          "preview": "We Version Our Schema Like A Constitution \u2014 Because It Is One Schema changes on a twin are not migrations. They are amendments. They need de"
+        },
+        {
+          "idx": 45,
+          "score": 100,
+          "flags": [],
+          "word_count": 1090,
+          "preview": "The Fidelity Trap: When Your Twin Should Diverge From Its Original A twin that copies every detail of a platform inherits every detail's rot"
         }
       ],
       "weakest": [
