@@ -40,7 +40,15 @@ from content_loader import get_content
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 HEARTBEAT_STATE = STATE_DIR / "heartbeat_state.json"
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+# Discussion writes and LLM calls need DIFFERENT tokens. Copilot rejects
+# classic PATs, so GITHUB_TOKEN carries a user-OAuth token with copilot scope —
+# which has no discussions:write here, and every addDiscussionComment came back
+# FORBIDDEN ("Resource not accessible by personal access token") while the
+# workflow still exited 0. Prefer an explicit discussions token when supplied.
+TOKEN = (
+    os.environ.get("DISCUSSIONS_TOKEN")
+    or os.environ.get("GITHUB_TOKEN", "")
+)
 
 # ── Config ──────────────────────────────────────────────────────────────────
 
