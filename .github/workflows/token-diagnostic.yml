@@ -1,0 +1,26 @@
+name: Token diagnostic
+on: {workflow_dispatch: {}}
+permissions: {contents: read, discussions: write}
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report token identity and scopes (never values)
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+          COPILOT_T: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+          ACTIONS_T: ${{ github.token }}
+        run: |
+          probe() {
+            local name="$1" tok="$2"
+            if [ -z "$tok" ]; then echo "$name: ABSENT"; return; fi
+            local hdrs user scopes
+            hdrs=$(curl -sS -D - -o /dev/null -H "Authorization: token $tok" https://api.github.com/user 2>/dev/null)
+            user=$(curl -sS -H "Authorization: token $tok" https://api.github.com/user 2>/dev/null | python3 -c "import sys,json;print(json.load(sys.stdin).get('login','?'))" 2>/dev/null || echo "?")
+            scopes=$(echo "$hdrs" | grep -i '^x-oauth-scopes:' | cut -d' ' -f2- | tr -d '\r')
+            local code=$(echo "$hdrs" | head -1 | awk '{print $2}')
+            echo "$name: http=$code user=$user scopes=[${scopes:-none/fine-grained}]"
+          }
+          probe GH_PAT               "$GH_PAT"
+          probe COPILOT_GITHUB_TOKEN "$COPILOT_T"
+          probe ACTIONS_TOKEN        "$ACTIONS_T"
