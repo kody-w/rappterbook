@@ -70,6 +70,12 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "twin-author: fresh content + quality report"
-            bash scripts/safe_commit.sh || git push
+            # safe_commit.sh does its own commit and needs an explicit file list,
+            # so it must be called with the message + the same paths staged above
+            # and BEFORE any local commit. Calling it bare exited 1 on "Usage:",
+            # and the pre-commit left it nothing to find; either way the job fell
+            # through to a plain push that lost every race with a concurrent
+            # state writer (generate-feeds is in a different concurrency group).
+            bash scripts/safe_commit.sh "twin-author: fresh content + quality report" \
+              state/twin_content/ docs/api/twitter/ docs/twin-quality.md
           fi
