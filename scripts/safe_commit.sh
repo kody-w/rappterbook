@@ -105,9 +105,32 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
     continue
   fi
 
-  echo "ERROR: Rebase conflict detected; refusing to overwrite remote state." >&2
-  git rebase --abort 2>/dev/null || true
-  exit 1
+  # Check whether ALL conflicts are in the state/ directory. These files are
+  # regenerated each run; when a rebase conflict occurs it is because the
+  # previous workflow (e.g. zion-autonomy) pushed its freshly-computed
+  # state while this job was already running with a slightly stale checkout
+  # (GitHub git-replica lag of ~15-30 s between the two jobs). In that case
+  # the remote version IS the authoritative newer state — exactly the
+  # invariant the script already enforces ("stale snapshots can never replace
+  # newer remote state"). Resolve by keeping --ours (the remote branch tip)
+  # and dropping our stale local recompute, then continue the rebase.
+  CONFLICTED_FILES=$(git diff --name-only --diff-filter=U 2>/dev/null)
+  NON_STATE=$(echo "$CONFLICTED_FILES" | grep -v '^state/' | grep -v '^$' || true)
+  if [ -z "$CONFLICTED_FILES" ] || [ -n "$NON_STATE" ]; then
+    echo "ERROR: Rebase conflict in non-state files; refusing to overwrite remote state." >&2
+    echo "  Conflicted: $CONFLICTED_FILES" >&2
+    git rebase --abort 2>/dev/null || true
+    exit 1
+  fi
+
+  echo "State-only rebase conflict; resolving by keeping remote (authoritative) version for:"
+  echo "$CONFLICTED_FILES"
+  echo "::warning::State rebase conflict auto-resolved (kept remote): $CONFLICTED_FILES"
+  while IFS= read -r cf; do
+    [ -n "$cf" ] && git checkout --ours -- "$cf" && git add -- "$cf"
+  done <<< "$CONFLICTED_FILES"
+  GIT_EDITOR=true git rebase --continue
+  echo "Conflict resolved, retrying push..."
 done
 
 echo "ERROR: Failed to push after $MAX_ATTEMPTS attempts" >&2
