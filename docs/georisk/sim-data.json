@@ -6138,7 +6138,6 @@
     {
       "type": "health",
       "body_id": "mars",
-<<<<<<< Updated upstream
       "colony_id": "hellas",
       "health": 55
     },
@@ -6152,10 +6151,19 @@
       "type": "health",
       "body_id": "mars",
       "colony_id": "jezero",
-=======
-      "colony_id": "valles",
->>>>>>> Stashed changes
       "health": 55
+    },
+    {
+      "type": "health",
+      "body_id": "mars",
+      "colony_id": "jezero",
+      "health": 52
+    },
+    {
+      "type": "resource",
+      "body_id": "mars",
+      "resource": "H2O Extract (kL)",
+      "value": 80.31
     },
     {
       "type": "health",
@@ -6164,50 +6172,10 @@
       "health": 52
     },
     {
-<<<<<<< Updated upstream
-      "type": "resource",
-      "body_id": "mars",
-      "resource": "H2O Extract (kL)",
-      "value": 80.31
-=======
       "type": "health",
       "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 56
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-      "health": 54
-    },
-    {
-      "type": "resource",
-      "body_id": "mars",
-      "resource": "H2O Extract (kL)",
-      "value": 48.51
->>>>>>> Stashed changes
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-      "colony_id": "jezero",
-<<<<<<< Updated upstream
-      "health": 52
-=======
-      "health": 55
->>>>>>> Stashed changes
-    },
-    {
-      "type": "health",
-      "body_id": "mars",
-<<<<<<< Updated upstream
       "colony_id": "hellas",
       "health": 52
-=======
-      "colony_id": "olympus",
-      "health": 53
->>>>>>> Stashed changes
     },
     {
       "type": "health",
@@ -6219,22 +6187,13 @@
       "type": "health",
       "body_id": "mars",
       "colony_id": "valles",
-<<<<<<< Updated upstream
       "health": 58
-=======
-      "health": 56
->>>>>>> Stashed changes
     },
     {
       "type": "health",
       "body_id": "mars",
-<<<<<<< Updated upstream
       "colony_id": "jezero",
       "health": 53
-=======
-      "colony_id": "hellas",
-      "health": 52
->>>>>>> Stashed changes
     },
     {
       "type": "health",
@@ -6246,21 +6205,13 @@
       "type": "health",
       "body_id": "mars",
       "colony_id": "olympus",
-<<<<<<< Updated upstream
       "health": 55
-=======
-      "health": 56
->>>>>>> Stashed changes
     },
     {
       "type": "resource",
       "body_id": "mars",
       "resource": "Terraform Index",
-<<<<<<< Updated upstream
       "value": 84.4
-=======
-      "value": 44.48
->>>>>>> Stashed changes
     },
     {
       "type": "health",
@@ -6272,20 +6223,12 @@
       "type": "resource",
       "body_id": "mars",
       "resource": "H2O Extract (kL)",
-<<<<<<< Updated upstream
       "value": 64.28
-=======
-      "value": 94.02
->>>>>>> Stashed changes
     }
   ],
   "meta": {
     "n_events": 1000,
     "seed": 822866,
-<<<<<<< Updated upstream
     "last_mars_sync": "2026-03-30T17:50:49.777694+00:00"
-=======
-    "last_mars_sync": "2026-03-30T19:16:44.020309+00:00"
->>>>>>> Stashed changes
   }
 }
