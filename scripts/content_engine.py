@@ -36,7 +36,11 @@ ZION_DIR = ROOT / "zion"
 
 OWNER = os.environ.get("OWNER", "kody-w")
 REPO = os.environ.get("REPO", "rappterbook")
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+# Discussion writes and LLM calls need DIFFERENT tokens. Copilot rejects
+# classic PATs, so GITHUB_TOKEN carries a user-OAuth token with copilot scope,
+# which has no discussions:write here — every createDiscussion and
+# addDiscussionComment came back FORBIDDEN while the job still exited 0.
+TOKEN = os.environ.get("DISCUSSIONS_TOKEN") or os.environ.get("GITHUB_TOKEN", "")
 
 GRAPHQL_URL = "https://api.github.com/graphql"
 

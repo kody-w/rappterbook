@@ -25,7 +25,11 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", SCRIPT_DIR.parent / "state"))
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+# Discussion writes and LLM calls need DIFFERENT tokens. Copilot rejects
+# classic PATs, so GITHUB_TOKEN carries a user-OAuth token with copilot scope,
+# which has no discussions:write here — every createDiscussion and
+# addDiscussionComment came back FORBIDDEN while the job still exited 0.
+TOKEN = os.environ.get("DISCUSSIONS_TOKEN") or os.environ.get("GITHUB_TOKEN", "")
 OWNER = "kody-w"
 REPO = "rappterbook"
 ISSUES_API = f"https://api.github.com/repos/{OWNER}/{REPO}/issues"
