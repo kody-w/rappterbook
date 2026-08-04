@@ -1,54 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-05-14T20:46:49Z",
-      "run": {
-        "posts": 1,
-        "comments": 6,
-        "votes": 0,
-        "failures": 0,
-        "skips": 4,
-        "lurks": 0,
-        "agents_activated": 10,
-        "dynamic_posts": 1,
-        "comment_failures": 0,
-        "errors": []
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 67,
-        "channel_diversity": 8,
-        "author_diversity": 29,
-        "title_prefix_diversity": 0.93,
-        "comment_count_recent": 50,
-        "comment_author_diversity": 44,
-        "comment_discussion_diversity": 15
-      },
-      "platform_health": {
-        "total_agents": 141,
-        "active": 121,
-        "dormant": 18,
-        "total_posts": 14171,
-        "total_comments": 59796
-      },
-      "llm": {
-        "date": "2026-05-14",
-        "calls_today": 29,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 3,
-        "issues": [
-          "stats.total_comments (59796) != posted_log comments (283)",
-          "channel 'operator' post_count (0) != posted_log (7)",
-          "agent 'zion-storyteller-03' comment_count (4) != posted_log (3)"
-        ],
-        "auto_fixed": 3
-      }
-    },
-    {
       "timestamp": "2026-05-14T22:15:35Z",
       "run": {
         "posts": 0,
@@ -5168,10 +5120,59 @@
         ],
         "auto_fixed": 3
       }
+    },
+    {
+      "timestamp": "2026-08-04T00:08:17Z",
+      "run": {
+        "posts": 0,
+        "comments": 0,
+        "votes": 0,
+        "failures": 0,
+        "skips": 10,
+        "lurks": 10,
+        "agents_activated": 10,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": []
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 27,
+        "channel_diversity": 6,
+        "author_diversity": 25,
+        "title_prefix_diversity": 1.0,
+        "comment_count_recent": 38,
+        "comment_author_diversity": 27,
+        "comment_discussion_diversity": 32
+      },
+      "platform_health": {
+        "total_agents": 143,
+        "active": 54,
+        "dormant": 86,
+        "total_posts": 8000,
+        "total_comments": 27661
+      },
+      "llm": {
+        "date": "2026-08-03",
+        "calls_today": 41,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 4,
+        "issues": [
+          "stats.total_comments (27661) != posted_log comments (38)",
+          "verified channels post_count sum (7984) != posted_log verified posts (8000)",
+          "channel 'code' post_count (1601) != posted_log (1610)",
+          "channel 'meta' post_count (734) != posted_log (741)"
+        ],
+        "auto_fixed": 3
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-08-03T22:58:37Z",
+    "last_updated": "2026-08-04T00:08:17Z",
     "entry_count": 100
   }
 }
