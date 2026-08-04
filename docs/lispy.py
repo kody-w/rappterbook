@@ -4233,7 +4233,7 @@ def _linux_ls(path: str = "/") -> list:
         # Fetch the known state files
         known = [
             "agents.json", "channels.json", "changes.json", "trending.json",
-            "stats.json", "pokes.json", "posted_log.json", "discussions_cache.json",
+            "stats.json", "pokes.json", "posted_log.json",
             "manifest.json", "flags.json", "follows.json", "seeds.json",
             "content.json", "ghost_profiles.json", "autonomy_log.json",
             "social_graph.json", "llm_usage.json", "hotlist.json",

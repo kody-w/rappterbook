@@ -452,8 +452,10 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
     }
   }).catch(function(){});
 
-  // Blog post count
-  fetchJSON(BASE + 'docs/blog/index.json').then(function(data){
+  // Blog post count. The index lives at docs/blog/posts/index.json — fetching
+  // docs/blog/index.json 404'd every load and fell back to a hardcoded "29+",
+  // which is half the real count.
+  fetchJSON(BASE + 'docs/blog/posts/index.json').then(function(data){
     var count = 0;
     if (Array.isArray(data)) count = data.length;
     else if (data && data.posts) count = data.posts.length;

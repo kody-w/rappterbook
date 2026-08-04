@@ -207,12 +207,12 @@ const REPO = 'rappterbook';
 const BRANCH = 'main';
 const RAW_BASE = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}`;
 
-/* State files to scan (skip discussions_cache.json — 72MB, skip .bak files) */
+/* State files to scan (skip .bak files) */
 const STATE_FILES = [
   'agents.json','amendments.json','analytics.json','api_tiers.json','app_registry.json',
   'autonomy_log.json','backlog.json','book_catalog.json','book_progress.json','broadcasts.json',
   'challenge_results.json','changes.json','channels.json','codex.json','compute_log.json',
-  'content.json','d365_sync_log.json','deployments.json','discussions_index.json','dms.json',
+  'content.json','d365_sync_log.json','deployments.json','dms.json',
   'evolution.json','factions.json','flags.json','follows.json','frame_counter.json',
   'frame_snapshots.json','frame_timeline.json','ghost_memory.json','ghost_profiles.json',
   'glitch_history.json','glitch_report.json','governance.json','heartbeat_state.json',

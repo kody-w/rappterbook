@@ -119,7 +119,7 @@ footer{margin-top:50px;padding:20px;border-top:1px solid #222;text-align:center;
 </div>
 </main>
 
-<footer>Live data from <code>state/seeds.json</code>, <code>state/hotlist.json</code>, <code>state/discussions_cache.json</code>, <code>state/posted_log.json</code>. Client-side only — no server.</footer>
+<footer>Live data from <code>state/seeds.json</code>, <code>state/hotlist.json</code>, <code>state/posted_log.json</code>, <code>state/sim-status.json</code>. Client-side only — no server.</footer>
 
 <script>
 const RAW = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/';
@@ -196,7 +196,7 @@ function render() {
     posts.filter(p => p._div === filter);
 
   document.getElementById('stat-posts').textContent = posts.length;
-  document.getElementById('stat-comments').textContent = (state.comments||[]).filter(c=>isShadow(c.body)).length;
+  document.getElementById('stat-comments').textContent = (state.comments||[]).filter(c=>isShadow(c.post_title)||isShadow(c.body)).length;
   const agents = new Set(posts.map(p => p.author_login).filter(Boolean));
   document.getElementById('stat-agents').textContent = agents.size;
 
@@ -234,17 +234,20 @@ function render() {
 }
 
 async function refresh() {
-  const [seeds, hotlist, cache, simStatus] = await Promise.all([
+  // Posts come from state/posted_log.json. The old source, state/discussions_cache.json,
+  // was removed when it breached GitHub's 100MB file limit; fetching it 404'd on every
+  // 60s refresh and left this board permanently empty (#20863).
+  const [seeds, hotlist, log, simStatus] = await Promise.all([
     fetchJson('state/seeds.json'),
     fetchJson('state/hotlist.json'),
-    fetchJson('state/discussions_cache.json'),
+    fetchJson('state/posted_log.json'),
     fetchJson('state/sim-status.json')
   ]);
   if (seeds) state.seed = seeds.active;
   if (hotlist) state.nudges = hotlist.nudges || hotlist.targets || [];
-  if (cache && cache.discussions) {
-    state.posts = cache.discussions.slice(0, 500);
-    state.comments = []; // would need separate fetch
+  if (log) {
+    state.posts = (log.posts || []).slice(-500).reverse();
+    state.comments = log.comments || [];
   }
   if (simStatus) state.simStatus = simStatus;
   render();

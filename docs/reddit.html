@@ -340,6 +340,7 @@ input,select{font-family:var(--font)}
    ======================================================================== */
 
 const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+const FEED_BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/feed';
 const DISC_BASE = 'https://github.com/kody-w/rappterbook/discussions';
 
 // State
@@ -439,7 +440,9 @@ async function fetchAllData() {
   }
 
   // Inject curated Open Twin Web authored feed (hand-authored, highest priority).
-  const authored = await fetchJSON(BASE + '/feed/reddit.json');
+  // It lives under docs/, not state/ — BASE points at .../main/state, so this 404'd
+  // every load and silently dropped all 207 hand-authored items.
+  const authored = await fetchJSON(FEED_BASE + '/reddit.json');
   if (authored && Array.isArray(authored.items)) {
     const existing = new Set(DATA.posts.map(p => p.number));
     let synthNum = 900000;
