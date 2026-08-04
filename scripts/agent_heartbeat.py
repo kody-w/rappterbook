@@ -163,6 +163,47 @@ def pick_agent(agents: dict, exclude: List[str] = None, prefer_archetype: str = 
     return chosen
 
 
+# ── Phase outcomes ──────────────────────────────────────────────────────────
+#
+# `success: bool` has exactly two states, so it had to answer three questions
+# at once: did the agent produce something, did it choose not to, and did the
+# machinery break? All three collapsed to False, which is why five days of
+# total rejection looked identical to five days of quiet.
+
+def classify_outcome(status_msg: str, success: bool, detail: str = "") -> str:
+    """Name what actually happened in a phase.
+
+    Args:
+        status_msg: The `[post]` / `[decline]` / `[reject]` / `[fail]` status
+            line written by zion_autonomy._write_heartbeat, if the phase has
+            it directly.
+        success: The existing boolean, kept for backward compatibility.
+        detail: The phase's detail string. On the non-success path the phase
+            wraps the status line inside it ("Post execution returned: ..."),
+            so the marker is searched for rather than anchored.
+
+    Returns:
+        One of "published", "declined", "rejected", "rate_limited", "failed".
+    """
+    if success:
+        return "published"
+    text = f"{status_msg or ''} {detail or ''}".lower()
+    if "[decline]" in text or "[skip]" in text:
+        return "declined"
+    if "[reject]" in text:
+        return "rejected"
+    if "rate limited" in text:
+        return "rate_limited"
+    return "failed"
+
+
+def _apply_outcome(result: dict, status_msg: str = "") -> dict:
+    """Stamp a phase result with its outcome, leaving `success` untouched."""
+    result["outcome"] = classify_outcome(
+        status_msg, result.get("success", False), result.get("detail", ""))
+    return result
+
+
 # ── Phase 1: POST ───────────────────────────────────────────────────────────
 
 def phase_post(state: dict, dry_run: bool = False, agent_id: str = None) -> dict:
@@ -237,6 +278,7 @@ def phase_post(state: dict, dry_run: bool = False, agent_id: str = None) -> dict
             state["posts_made"] = state.get("posts_made", 0) + 1
             append_reflection(aid, "post", arch, state_dir=STATE_DIR, context=delta)
         else:
+            result["status_msg"] = status_msg
             result["detail"] = f"Post execution returned: {status_msg or 'no output'}"
 
     except Exception as e:
@@ -317,6 +359,7 @@ def phase_engage(state: dict, dry_run: bool = False, agent_id: str = None) -> di
             # Also upvote what they commented on
             _passive_vote(aid, discussions, dry_run=dry_run)
         else:
+            result["status_msg"] = status_msg
             result["detail"] = f"Comment returned: {status_msg or 'no output'}"
 
     except Exception as e:
@@ -459,7 +502,11 @@ def run_heartbeat(
         else:
             result = phase_fn(state, dry_run=dry_run, agent_id=agent_id)
 
-        status = "✅" if result["success"] else "⏭" if "Rate limited" in result.get("detail", "") else "❌"
+        _apply_outcome(result, result.get("status_msg", ""))
+
+        icons = {"published": "✅", "declined": "🤐", "rejected": "🚧",
+                 "rate_limited": "⏭", "failed": "❌"}
+        status = icons.get(result["outcome"], "❌")
         agent_str = f" [{result['agent']}]" if result.get("agent") else ""
         print(f"  {status}{agent_str} {result['detail']}")
 
@@ -476,7 +523,12 @@ def run_heartbeat(
 
     successful = sum(1 for r in run_log["phases"].values() if r["success"])
     total = len(run_log["phases"])
-    print(f"\n  === Heartbeat complete (run #{state['runs']}, {successful}/{total} phases) ===")
+    tally = {}
+    for r in run_log["phases"].values():
+        tally[r["outcome"]] = tally.get(r["outcome"], 0) + 1
+    breakdown = ", ".join(f"{n} {k}" for k, n in sorted(tally.items()))
+    print(f"\n  === Heartbeat complete (run #{state['runs']}, "
+          f"{successful}/{total} phases: {breakdown}) ===")
 
     return run_log
 

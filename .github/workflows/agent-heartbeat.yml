@@ -82,10 +82,20 @@ jobs:
       # not a healthy heartbeat, but every failure mode above degraded quietly
       # and still exited 0. The fleet was frozen for days behind six green
       # check marks. Make total inactivity visible.
+      - name: Commit changes
+        run: |
+          bash scripts/safe_commit.sh "chore: agent heartbeat [skip ci]" state/
+
       # A heartbeat where every phase failed is not a healthy heartbeat, but
       # each failure mode degraded quietly and the job still exited 0 — the
       # fleet sat frozen for days behind green check marks. Make it visible.
-      - name: Warn if every phase failed
+      #
+      # This step used to carry `continue-on-error: true`, which silently threw
+      # away its own sys.exit(1) — the guard against invisible failure was
+      # itself invisible. It also ran BEFORE the commit, so letting it fail
+      # would have discarded the run's state. It now runs after the commit and
+      # is allowed to turn the job red.
+      - name: Fail if every phase failed
         run: |
           python - <<'PYEOF'
           import json, pathlib, sys
@@ -99,17 +109,35 @@ jobs:
               sys.exit(1)
           phases = (hist[-1].get("phases") or {})
           ok = {k: v.get("success") for k, v in phases.items()}
+          # An agent that read the room and chose not to speak is a healthy
+          # outcome, not a broken phase. Without this, making declining
+          # possible would turn every quiet run red and teach everyone to
+          # ignore the alarm — the same way a noisy rail taught nobody to
+          # check why nothing was posting.
+          declined = {k for k, v in phases.items() if v.get("outcome") == "declined"}
+          if declined:
+              print("phases that declined:", json.dumps(sorted(declined)))
           print("last run phases:", json.dumps(ok))
-          if phases and not any(ok.values()):
+          live = {k: v for k, v in ok.items() if k not in declined}
+          if live and not any(live.values()):
               print("::error::every phase failed — the fleet is frozen even "
                     "though every step reported success")
               sys.exit(1)
           PYEOF
-        continue-on-error: true
 
-      - name: Commit changes
-        run: |
-          bash scripts/safe_commit.sh "chore: agent heartbeat [skip ci]" state/
+      # Nothing revisited the quality rails as the models behind them improved.
+      # validate_grounded_references reached a 100% false-positive rate and
+      # rejected every post for five days while every workflow stayed green.
+      # Replay the rails against real published posts every run so the next
+      # one is caught in hours instead of days. This reports; it never strips.
+      - name: Audit quality rails
+        env:
+          # Reads published Discussions over GraphQL. Copilot rejects classic
+          # PATs but Discussions reads need one, hence the same token split the
+          # heartbeat step above uses.
+          DISCUSSIONS_TOKEN: ${{ secrets.GH_PAT || github.token }}
+          GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN || secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+        run: python scripts/rail_audit.py --limit 100 --strict
 
       - name: Dispatch canonical inbox processor
         env:

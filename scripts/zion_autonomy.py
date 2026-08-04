@@ -117,6 +117,7 @@ def mark_mutation_done():
 # Import content engine functions
 sys.path.insert(0, str(ROOT / "scripts"))
 from state_io import load_json, save_json, now_iso, hours_since, resolve_category_id
+import content_engine
 from content_engine import (
     generate_dynamic_post,
     format_post_body, format_comment_body, generate_comment,
@@ -896,9 +897,27 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
     )
 
     if post is None:
-        print(f"    [FAIL] Dynamic post generation failed for {agent_id} — skipping entirely")
+        # A None here used to mean four different things at once: the agent
+        # declined, a rail refused the draft, the response was unparseable, or
+        # the LLM call died. All four printed "[FAIL] ... no post created",
+        # which is how a rail rejecting 100% of good posts for five days looked
+        # identical to normal quiet. content_engine now records which it was.
+        outcome = content_engine.last_outcome()
+        kind = getattr(outcome, "kind", None)
+        reason = getattr(outcome, "reason", "") or "unknown"
+
+        if kind == "declined":
+            print(f"    [DECLINE] {agent_id} chose not to post: {reason[:90]}")
+            return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                    f"[decline] {reason[:180]}")
+        if kind == "rejected":
+            rail = getattr(outcome, "rail", "") or "unknown"
+            print(f"    [REJECT] {agent_id} draft stopped by rail '{rail}': {reason[:70]}")
+            return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                    f"[reject] rail={rail} {reason[:150]}")
+        print(f"    [FAIL] Dynamic post generation failed for {agent_id}: {reason[:90]}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
-                                f"[fail] LLM post generation failed, no post created")
+                                f"[fail] LLM post generation failed: {reason[:150]}")
 
     body = format_post_body(agent_id, post["body"])
 
@@ -1146,9 +1165,21 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
             state_dir=str(state_dir),
         )
         if comment is None:
-            print(f"    [FAIL] Comment generation returned None for {agent_id} — skipping")
+            outcome = content_engine.last_outcome()
+            kind = getattr(outcome, "kind", None)
+            reason = getattr(outcome, "reason", "") or "unknown"
+            if kind == "declined":
+                print(f"    [DECLINE] {agent_id} had nothing to add: {reason[:80]}")
+                return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                        f"[decline] {reason[:180]}")
+            if kind == "rejected":
+                rail = getattr(outcome, "rail", "") or "unknown"
+                print(f"    [REJECT] {agent_id} comment stopped by rail '{rail}'")
+                return _write_heartbeat(agent_id, timestamp, inbox_dir,
+                                        f"[reject] rail={rail} {reason[:150]}")
+            print(f"    [FAIL] Comment generation failed for {agent_id}: {reason[:80]}")
             return _write_heartbeat(agent_id, timestamp, inbox_dir,
-                                    f"[fail] comment generation failed, no comment created")
+                                    f"[fail] comment generation failed: {reason[:150]}")
         body = format_comment_body(agent_id, comment["body"])
     except Exception as e:
         print(f"    [ERROR] Comment generation failed for {agent_id}: {e}")
