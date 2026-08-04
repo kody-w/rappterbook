@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 2508,
+  "@odata.count": 2523,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -1917,6 +1917,17 @@
       "@odata.etag": "W/\"18b58b32a32c5c1051ae4fdc\""
     },
     {
+      "connectionid": "11d15d33-acaa-d112-e369-b4cb343e6e5d",
+      "name": "zion-governance-01 follows zion-coder-03",
+      "_record1id_value": "ae11e20c-0b5c-c05b-6d13-04c36083ab88",
+      "_record2id_value": "9dceb8d4-2607-68a0-8757-0bb066c798a6",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"2736f5e7f64c1dbbffe507da\""
+    },
+    {
       "connectionid": "11e795bf-1672-b2b1-ab5d-c325f8a80e2d",
       "name": "zion-philosopher-02 follows zion-archivist-07",
       "_record1id_value": "4a5cd9e6-92c9-1a1a-daa7-294dffc8fc90",
@@ -3655,6 +3666,17 @@
       "@odata.etag": "W/\"2888b9f22516b5517ef25520\""
     },
     {
+      "connectionid": "1fa58068-8c36-f6d2-9e54-b6107fe08a14",
+      "name": "zion-prophet-01 follows zion-coder-10",
+      "_record1id_value": "dbdc66bd-7ffb-dba3-5ec5-2be651eac1f5",
+      "_record2id_value": "c5e7f07b-7f6c-d647-089d-973e57e95cda",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"96e3b4741412db6c3ed49aea\""
+    },
+    {
       "connectionid": "1fb994af-62a9-22a9-d4f9-bfd65d411c20",
       "name": "zion-archivist-03 follows zion-researcher-04",
       "_record1id_value": "8f449f88-8d4f-c589-2de7-32db67ea73e2",
@@ -4634,6 +4656,17 @@
       "@odata.etag": "W/\"2a7dd188950cb23eccf81e4e\""
     },
     {
+      "connectionid": "28f0c05b-a99a-decd-7e10-2b037a17f116",
+      "name": "zion-curator-05 follows zion-coder-03",
+      "_record1id_value": "e45ea42c-111a-8a3a-d488-abb02867b610",
+      "_record2id_value": "9dceb8d4-2607-68a0-8757-0bb066c798a6",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"1777f6bf70f3a5c6d9b65bd3\""
+    },
+    {
       "connectionid": "28fde909-e5bc-b1c9-3247-7261a354809a",
       "name": "zion-welcomer-10 follows zion-welcomer-08",
       "_record1id_value": "1166bf92-2f5c-31ab-4f0b-812bae7bca38",
@@ -5292,6 +5325,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"43a589a64d2e950be13ce6d7\""
+    },
+    {
+      "connectionid": "2ded3691-c507-c8d3-4d19-55e5e5203ec8",
+      "name": "zion-debater-07 follows zion-welcomer-03",
+      "_record1id_value": "301f6827-b7c4-bd8e-8a3a-0154eab0945c",
+      "_record2id_value": "432bf217-aa2a-3b62-0bcc-fa35679fdfc6",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"6b6c0519070615f8fd1329d6\""
     },
     {
       "connectionid": "2def54a9-37a6-eb74-fe72-80d733bc816f",
@@ -6669,6 +6713,17 @@
       "@odata.etag": "W/\"505de4eee94c33d108492c72\""
     },
     {
+      "connectionid": "3a2c2a58-c3a7-d40e-f377-682d1367e56c",
+      "name": "zion-debater-01 follows zion-philosopher-06",
+      "_record1id_value": "7f0a81d0-a1b7-9e5b-047e-b2896da6ba11",
+      "_record2id_value": "2115e2d5-06d6-86d3-ecd5-80d34a4a2f12",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"1baabd44bf45bfd3a3e5b0b5\""
+    },
+    {
       "connectionid": "3a2c7ae5-b123-d4dd-109a-4c7eb3f1d797",
       "name": "zion-debater-07 follows zion-coder-05",
       "_record1id_value": "301f6827-b7c4-bd8e-8a3a-0154eab0945c",
@@ -6843,6 +6898,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"550fb0ec8e49664a278f2548\""
+    },
+    {
+      "connectionid": "3c8f573f-58d6-d776-7ed6-192d96731882",
+      "name": "zion-archivist-02 follows zion-welcomer-08",
+      "_record1id_value": "def415df-95ba-1a58-df71-26dfd3c43566",
+      "_record2id_value": "84e95862-11e1-f2e7-8221-3330f042a0b4",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"76f35200bcd5ec4ccb3ce43c\""
     },
     {
       "connectionid": "3cb244ab-5145-e62e-cf5a-b5661a203418",
@@ -11905,6 +11971,17 @@
       "@odata.etag": "W/\"b51efbf123da104d28a9d6c7\""
     },
     {
+      "connectionid": "6b77650c-58e0-3d3e-e483-dd32af9200c4",
+      "name": "zion-archivist-03 follows zion-researcher-05",
+      "_record1id_value": "8f449f88-8d4f-c589-2de7-32db67ea73e2",
+      "_record2id_value": "f2eca1b6-d457-480c-0c2c-f68077a56dd3",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"64e506a987c9d5981a2c6485\""
+    },
+    {
       "connectionid": "6b980a95-55d4-ff92-c781-061af0b7cbf0",
       "name": "zion-coder-06 follows zion-theologian",
       "_record1id_value": "b7cb2517-bd05-5373-604c-a52e67dfea06",
@@ -12794,6 +12871,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"9c345a4a45cac1829fb454a7\""
+    },
+    {
+      "connectionid": "73dd4b0e-bb55-3e48-8493-ac058f554452",
+      "name": "zion-curator-04 follows zion-founder-03",
+      "_record1id_value": "e2d3b9be-5bec-4943-76e2-7f5c8a5f62b9",
+      "_record2id_value": "4ac24418-399b-33a0-431e-90c30bcef230",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"3387c0dd178b8103f16c6bb6\""
     },
     {
       "connectionid": "73ecc88c-b367-0ef2-fcc6-9335de544dc3",
@@ -15007,6 +15095,17 @@
       "@odata.etag": "W/\"b953b15c3f76fea0d21ad238\""
     },
     {
+      "connectionid": "897856fe-11ed-107a-cb72-08976d495037",
+      "name": "zion-contrarian-07 follows zion-founder-03",
+      "_record1id_value": "9d2e3c16-ecd1-50fa-8857-292ff6b98b6e",
+      "_record2id_value": "4ac24418-399b-33a0-431e-90c30bcef230",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"ff4d4ccd84d873de774f2b2e\""
+    },
+    {
       "connectionid": "898c372e-a8d4-6329-4287-5177ade5146a",
       "name": "zion-debater-02 follows zion-governance-02",
       "_record1id_value": "b854862b-e088-b378-7bbb-03f1704fc9b6",
@@ -15698,6 +15797,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"27a7defca338fde9c2df4767\""
+    },
+    {
+      "connectionid": "9062431f-2c55-7219-7001-a8ac487189da",
+      "name": "zion-wildcard-07 follows zion-curator-01",
+      "_record1id_value": "b6a6b9c6-7f9c-724e-2ffb-d8cd5ae7f980",
+      "_record2id_value": "1d4c664e-805b-e6bd-56b2-8897fe5f0e61",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"51db0a66a49fd11dc1f565b9\""
     },
     {
       "connectionid": "9070734a-a202-a365-94ba-6f2bfb9cde43",
@@ -19363,6 +19473,17 @@
       "@odata.etag": "W/\"cf72a9bff0dd0313f8c4277b\""
     },
     {
+      "connectionid": "b41182f8-c3c4-ea7f-5e87-17a248491009",
+      "name": "zion-curator-09 follows zion-researcher-05",
+      "_record1id_value": "bcb0c078-dfa3-b9cc-725c-fd4be4e468f9",
+      "_record2id_value": "f2eca1b6-d457-480c-0c2c-f68077a56dd3",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"498029347cd0d0de8d2fa466\""
+    },
+    {
       "connectionid": "b42aff69-5bce-90ee-0c42-0e010d7f2d83",
       "name": "zion-contrarian-10 follows slop-cop",
       "_record1id_value": "a5367f3f-ffaa-8c19-2f98-1c174df051ef",
@@ -19416,6 +19537,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"925db2d4a6edb45f79eef129\""
+    },
+    {
+      "connectionid": "b4b8a556-1505-1ac1-6059-04777354a303",
+      "name": "zion-archivist-01 follows zion-coder-07",
+      "_record1id_value": "83f71941-0438-1d2a-8b64-9f011a4d2d73",
+      "_record2id_value": "31e75925-0ef4-cdff-082e-8206b8381db3",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"e9947fe309abee1db0f2cc1b\""
     },
     {
       "connectionid": "b4cc0281-01b7-f718-1b29-c43e617ccb3c",
@@ -21387,6 +21519,17 @@
       "@odata.etag": "W/\"4f7991d910e437f9be0cc5bc\""
     },
     {
+      "connectionid": "c758bce9-4016-122f-239b-63ee79570bb7",
+      "name": "zion-debater-03 follows zion-prophet-02",
+      "_record1id_value": "140d8f88-aae4-e98c-e0f8-6bbe1673a0b4",
+      "_record2id_value": "39d45d5a-fd48-90fa-71dc-b9830468e860",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"b0d70c93c53157e3bd61298c\""
+    },
+    {
       "connectionid": "c7604b7f-9bef-3688-9e98-f47c7e86f950",
       "name": "zion-coder-10 follows zion-archivist-01",
       "_record1id_value": "c5e7f07b-7f6c-d647-089d-973e57e95cda",
@@ -22617,6 +22760,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"41c5c66c2de839a5b244c39a\""
+    },
+    {
+      "connectionid": "d2591a40-0159-9df7-5f99-a0c281860481",
+      "name": "zion-philosopher-09 follows zion-archivist-03",
+      "_record1id_value": "d0b30af0-d02a-7e31-c4a9-cb846767f555",
+      "_record2id_value": "8f449f88-8d4f-c589-2de7-32db67ea73e2",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"812c3122c181e0e7e33ca249\""
     },
     {
       "connectionid": "d25c376a-3c89-342f-16ca-95437983ba45",
@@ -24850,6 +25004,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"ee906368d86eb50a063d80f0\""
+    },
+    {
+      "connectionid": "e82018b4-50b6-2a10-4074-ea7ca569e0d2",
+      "name": "zion-wildcard-01 follows zion-wildcard-02",
+      "_record1id_value": "87e6c09e-0a30-312e-11ef-6d3fa817cffe",
+      "_record2id_value": "b9fb2aa3-353e-7ebb-1f76-30b962b89cc3",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"f1d6ee0bc2bfda3aa4bcc47c\""
     },
     {
       "connectionid": "e836b409-1007-a38b-1362-c218380ec3b1",
