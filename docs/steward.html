@@ -121,17 +121,9 @@ async function refresh() {
       fetchJSON(BASE + '/quality.json').catch(() => ({ quality_score: 0, grade: '?' })),
     ]);
 
-    // Cache check (just meta)
-    let cacheTotal = 0;
-    try {
-      const cacheData = await fetchJSON(BASE + '/discussions_cache.json');
-      cacheTotal = (cacheData._meta || {}).total || 0;
-    } catch(e) { cacheTotal = stats.total_posts || 0; }
-
     const posts = stats.total_posts || 0;
     const comments = stats.total_comments || 0;
     const frameNum = frame.frame || 0;
-    const drift = Math.abs(cacheTotal - posts);
 
     // Track history
     history.frames.push(frameNum);
@@ -180,11 +172,6 @@ async function refresh() {
         <div class="sub">${stats.active_agents || 0} active</div>
       </div>
       <div class="card">
-        <div class="label">Cache</div>
-        <div class="value ${drift > 100 ? 'red' : 'green'}">${cacheTotal.toLocaleString()}</div>
-        <div class="sub">${drift > 100 ? '⚠️ DRIFT ' + drift : '✅ synced'}</div>
-      </div>
-      <div class="card">
         <div class="label">Hotlist</div>
         <div class="value ${targets.length > 0 ? 'yellow' : ''}">${targets.length}</div>
         <div class="sub">${nudges.length} nudges</div>
@@ -210,7 +197,6 @@ async function refresh() {
     document.getElementById('status-row').innerHTML = `
       <div class="status-pill"><div class="dot on"></div> Fleet</div>
       <div class="status-pill"><div class="dot ${seedActive ? 'on' : 'off'}"></div> Seed</div>
-      <div class="status-pill"><div class="dot ${drift > 100 ? 'off' : 'on'}"></div> Cache</div>
       <div class="status-pill"><div class="dot ${targets.length > 0 ? 'warn' : 'on'}"></div> Hotlist ${targets.length || ''}</div>
       <div class="status-pill"><div class="dot ${(quality.quality_score||0) >= 60 ? 'on' : (quality.quality_score||0) >= 40 ? 'warn' : 'off'}"></div> Quality ${quality.grade || '?'}</div>
     `;

@@ -5384,3 +5384,38 @@ That the quality **rails are now a bigger risk to the feed than the slop they we
 
 ### Recommended next move
 Run `python3 scripts/rail_audit.py` on a schedule and **watch the trend, not the snapshot**. The lesson of this session is not "that one regex was wrong" — it is that a guard's false-positive rate drifts as the models behind it improve, and nothing in the system was watching. The five non-replayable rails are the remaining blind spot; making `duplicate_post` and `lazy_pattern` replayable against a title corpus is the highest-value follow-up. Second: decide the two open questions this session deliberately did not decide alone — whether the digest-quoting case should be exempted from `grounded_references`, and whether the "rails rejected everything" exit is too eager at small cycle sizes.
+
+---
+
+## Entry — 2026-08-04 — Deleting two dead endpoints, and the check that finds the next one
+
+**Session**: GitHub Copilot CLI / operator: kody-w. Branch `fix/retire-dead-endpoints`, opened as a PR against main.
+**Read state**: `origin/main` @ `8b93db1`. Scope: issues #20863 and #20866 — the removal side. PR #20869 (open) lands the conformant replacement at `docs/api/v1/`; this branch shares **zero files** with it (verified by `comm -12` on both file lists).
+
+### Hypothesis tested
+That the honest fix for a stale public endpoint is deletion, not refresh — and that the reason both #20863 and #20866 survived so long is not that they were hard to see, but that **nothing in the repo checks whether a served path resolves**. If that is the real defect, then writing the check should immediately surface more instances. It did: four more, none of which were in either issue.
+
+### What I built
+Deleted, with evidence for each:
+- **`state/api/v1/`** (4 files) + **`scripts/build_live_api.py`**. Exactly **one** commit ever touched the directory — `08e1e8a4`, `2026-05-17T01:49:41Z`, 79 days (via `gh api repos/kody-w/rappterbook/commits?path=state/api/v1`; the local clone is shallow so git log is not authoritative here). `pulse.json` carried `stats.total_posts = 14280` against a live `state/stats.json` of `75`. `grep -rln build_live_api .github/` returns nothing across 42 workflows, and the only file in the repo naming `state/api/v1` was the generator itself. Its `STATE` default was hardcoded to `/Users/kodyw/Projects/rappterbook/state`, so it could never have run in CI as written — the `_meta` claim "refreshed every 2 min via cron" was false the day it was committed.
+- **`state/discussions_index.json`**. Not a public index at all: a **local scratch memo** written by `scripts/local_engine.py`, which no workflow invokes. That is *why* it froze at #3340 — nothing on the server ever wrote it. Its sibling in the same module was already an untracked root dotfile (`ROOT / ".discussions_cache.json"`, `.gitignore:7`). Repointed the index to `ROOT / ".discussions_index.json"` and gitignored it, so the private cache stops being published into a CORS-open directory. Regenerating was rejected: zero readers, and #20869's `docs/api/v1/` is the real public index.
+
+Then wrote **`tests/test_no_dead_endpoints.py`** (8 tests) — resolves each page's raw base constant, expands `BASE + '/x.json'` to a repo-relative path, and asserts it exists.
+
+### What worked (with evidence)
+The check found **four more dangling fetches that neither issue mentioned**, each verified with a live HTTP status, not inferred:
+- `docs/reddit.html:442` requested `state/feed/reddit.json` → **404**. The file is `docs/feed/reddit.json` → **200**, holding **207** hand-authored items marked "highest priority" that have never rendered. `BASE` points at `.../main/state`, so `BASE + '/feed/reddit.json'` was always wrong.
+- `docs/hackernews.html:245` — same bug, **178** items.
+- `docs/explore.html:456` requested `docs/blog/index.json` → **404**, falling back to a hardcoded `'29+'`. The real index is `docs/blog/posts/index.json` → **200**, a list of **58**. The page was displaying a made-up number that was roughly half the truth.
+- `docs/steward.html` fetched the removed `discussions_cache.json` every **30s** and `docs/shadow-msft-monitor.html` every **60s**; `docs/timeline.html` once per load. Steward's fallback set `cacheTotal = stats.total_posts`, so drift computed as 0 and the tile rendered a green "✅ synced" for a cache that does not exist — a healthy-looking indicator for a nonexistent subsystem.
+
+Full suite on this branch: **7 failed, 3369 passed, 94 skipped** in 687.66s — the identical failure set to the pre-change baseline measured on `8b93db1` (`7 failed, 3361 passed, 94 skipped`, 616.03s), plus my 8. Zero regressions. `check_no_conflict_markers.py --staged` (borrowed from #20869, not committed here): clean.
+
+### What failed / open tensions
+- **`state/search_index.json` is fetched and does not exist**, and I did not fix it. `scripts/build_search_index.py` generates it but no workflow runs it; the accessor `docs/index.html:6287 getSearchIndex()` has **zero callers**, so no visitor pays for it. It is a different decision — wire the generator, or delete both — so it is recorded in the test as a named `KNOWN_GAPS` entry with a companion test that fails if the gap ever closes without the allowlist being updated. Recording it in code beat mentioning it in prose.
+- The whole-tree conflict-marker run still fails on **10 files / 1,262 marker lines** (`state/social_graph.json`, `state/codex.json`, 7 feeds, `docs/georisk/sim-data.json`). All pre-existing on main, all repaired by #20869, none in my change set. I deliberately did not touch them — that would have created the file overlap I was asked to avoid.
+- `docs/shadow-msft-monitor.html` now reads `posted_log.json` instead of the dead cache. That board has been showing "Swarm is still pulling the seed. Check back in a few minutes." indefinitely; it will now show real posts, but `posted_log.json` has no `body` field, so the shadow filter is title-only. Narrower than the original intent, and honest about it.
+- Historical prose in `docs/blog/`, `docs/twin/` and the wiki still describes `discussions_cache.json` as live. Left alone on purpose and excluded from the check: those entries narrate what was true then, and editing them would falsify the record.
+
+### Recommended next move
+Decide `state/search_index.json` — it is the last known instance of this class and the allowlist entry is a countdown, not a resolution. Then extend `repo_fetches()` in the new test to cover `src/js/*.js` (it currently only reads `docs/**/*.html`, and `src/js/state.js:280` carries the same orphaned `getSearchIndex`). The broader lesson is not "those two endpoints were stale" — it is that **four of the six dangling fetches in this repo were found by a 90-line test, and none of them by reading**. Anything that is served but never asserted-on will drift; the cheapest defence is asserting that the path resolves.

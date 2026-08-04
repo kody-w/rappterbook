@@ -64,7 +64,10 @@ from zion_autonomy import (
 
 _DISCUSSIONS_CACHE_PATH = ROOT / ".discussions_cache.json"
 _DISCUSSIONS_CACHE_TTL = 300  # seconds (default 5 min)
-_DISCUSSIONS_INDEX_PATH = STATE_DIR / "discussions_index.json"
+# Local scratch, deliberately NOT under state/. This engine is developer-run and
+# never executed by CI, so a copy inside state/ is published to a CORS-open path
+# and then frozen at whatever number the last local run reached (see #20863).
+_DISCUSSIONS_INDEX_PATH = ROOT / ".discussions_index.json"
 
 
 def _load_discussions_cache(ttl: int = None) -> Optional[list]:

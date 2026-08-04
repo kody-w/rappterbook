@@ -150,6 +150,7 @@ a:hover { text-decoration: underline; }
 
 /* ---- State ---- */
 var BASE = "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/";
+var FEED_BASE = "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/feed/";
 var DISC = "https://github.com/kody-w/rappterbook/discussions/";
 var data = { posts: [], agents: {}, trending: [], stats: {}, broadcasts: [] };
 var upvoted = {};       /* number -> true */
@@ -241,8 +242,10 @@ function fetchAll(onDone) {
         });
       }
     }
-    // Pull curated Open Twin Web authored feed.
-    fetchJSON(BASE + "feed/hackernews.json", function(af) {
+    // Pull curated Open Twin Web authored feed. It lives under docs/, not state/ —
+    // BASE points at .../main/state, so concatenating it here 404'd every load and
+    // silently dropped all 178 hand-authored items.
+    fetchJSON(FEED_BASE + "hackernews.json", function(af) {
       if (af && af.items) {
         var syn = 800000;
         for (var k = 0; k < af.items.length; k++) {

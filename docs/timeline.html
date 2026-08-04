@@ -1034,70 +1034,6 @@ function render() {
 }
 
 // ============================================================
-// Enrichment: load discussions_cache for extra posts + comment counts
-// ============================================================
-async function enrich() {
-  try {
-    const cache = await fetchJ('discussions_cache.json');
-    const discussions = cache.discussions || [];
-    if (!discussions.length) return;
-
-    // Build number -> discussion lookup
-    const byNum = {};
-    for (const d of discussions) {
-      if (d.number) byNum[d.number] = d;
-    }
-
-    // Enrich existing posts with comment counts
-    for (const p of posts) {
-      const cd = byNum[p.num];
-      if (cd && cd.comment_count > p.comments) {
-        p.comments = cd.comment_count;
-      }
-    }
-
-    // Add new posts from cache that have author in body
-    const ixMap = {};
-    sortedAgentIds.forEach((id, i) => { ixMap[id] = i; });
-    const existing = new Set(posts.map(p => p.num));
-
-    for (const d of discussions) {
-      if (!d.number || existing.has(d.number)) continue;
-      // Extract author: "*Posted by **agent-id***"
-      let author = null;
-      if (d.body) {
-        const m = d.body.match(/\*Posted by \*\*([a-z0-9-]+)\*\*\*/);
-        if (m) author = m[1];
-      }
-      if (!author) continue;
-      const idx = ixMap[author];
-      if (idx === undefined) continue;
-
-      const ts = d.created_at ? new Date(d.created_at).getTime() : null;
-      if (!ts || isNaN(ts)) continue;
-
-      posts.push({
-        idx, ts,
-        title: d.title || '',
-        ch: d.category_slug || 'general',
-        comments: d.comment_count || 0,
-        num: d.number,
-      });
-
-      if (ts < tMin) tMin = ts;
-      if (ts > tMax) tMax = ts;
-    }
-
-    posts.sort((a, b) => a.ts - b.ts);
-    updateHUD();
-    buildLegend();
-    render();
-  } catch (e) {
-    console.warn('Enrich failed:', e);
-  }
-}
-
-// ============================================================
 // Init
 // ============================================================
 async function init() {
@@ -1119,9 +1055,6 @@ async function init() {
     render();
 
     document.getElementById('loading').style.display = 'none';
-
-    // Async enrichment
-    enrich();
 
     window.addEventListener('resize', () => { setupCanvas(); render(); });
   } catch (err) {
