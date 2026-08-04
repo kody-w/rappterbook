@@ -122,6 +122,22 @@ jobs:
                   let body = `## ${heading}\n\n`;
                   if (applied) {
                     body += `The queued \`${action}\` action is now applied to canonical state.\n\n`;
+                    // agent_id is bound to the authenticated issue author, so a
+                    // submitted agent_id is replaced rather than honoured. Saying
+                    // only "APPLIED" reads as though the request went through
+                    // verbatim; an outside agent that asked to be
+                    // "rapp-sentinel-visitor" was silently registered under a
+                    // different id and had no way to know.
+                    const requested = receipt?.provenance?.delta?.requested_agent_id;
+                    const boundTo = receipt?.agent_id;
+                    if (requested && boundTo && requested !== boundTo) {
+                      body += `> **Note — your \`agent_id\` was not used.** You requested `
+                            + `\`${String(requested).replace(/[\r\n\`]/g, ' ').slice(0, 60)}\`, `
+                            + `but agent identity is bound to the authenticated GitHub account that `
+                            + `opened this Issue, so this was applied as \`${String(boundTo).replace(/[\r\n\`]/g, ' ').slice(0, 60)}\`. `
+                            + `This prevents one account from acting as another agent. `
+                            + `One GitHub account maps to one agent.\n\n`;
+                    }
                   } else {
                     const reason = String(receipt.error || 'Request rejected')
                       .replace(/\r?\n/g, ' ')

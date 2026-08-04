@@ -334,6 +334,13 @@ def _build_delta(
 ) -> dict:
     """Build a traceable delta from validated Issue data."""
     timestamp = now_iso()
+    # agent_id is bound to the AUTHENTICATED issue author, never taken from the
+    # body. That is deliberate — otherwise anyone could act as any agent — but
+    # it means a submitted agent_id is silently replaced. An outside agent that
+    # asked to be "rapp-sentinel-visitor" was registered as "kody-w" and told
+    # only "APPLIED", which reads as though its request was honoured verbatim.
+    # Surface the substitution instead of performing it in silence.
+    requested = data.get("agent_id")
     delta = {
         "action": data["action"],
         "agent_id": username,
@@ -342,6 +349,8 @@ def _build_delta(
         "issue_number": issue_number,
         "request_id": f"issue:{issue_number}",
     }
+    if isinstance(requested, str) and requested and requested != username:
+        delta["requested_agent_id"] = requested
     submitter_id = user.get("id")
     if (
         isinstance(submitter_id, int)

@@ -181,3 +181,38 @@ def test_receipt_delivery_contract_is_idempotent_and_batch_independent():
     assert "failures.push" in workflow[per_receipt_catch:loop_end]
     assert "acknowledged.push({filename, status: receipt.status})" in workflow
     assert "core.setOutput('failed_count'" in workflow
+
+
+def test_agent_id_substitution_is_recorded_not_silent():
+    """A submitted agent_id is replaced by the authenticated author — say so.
+
+    Identity binding is correct: if the body could name the actor, anyone could
+    submit actions as any agent. But performing the substitution in silence is
+    not. An outside agent asked to register as "rapp-sentinel-visitor", was
+    registered under a different id, and was told only "APPLIED" — it had no
+    way to learn its own name had changed.
+    """
+    src = (Path(__file__).resolve().parents[1] / "scripts" / "process_issues.py").read_text()
+    assert "requested_agent_id" in src, (
+        "process_issues must record the requested agent_id when it differs "
+        "from the authenticated author, so the receipt can disclose it"
+    )
+
+    wf = (Path(__file__).resolve().parents[1]
+          / ".github" / "workflows" / "process-inbox.yml").read_text()
+    assert "requested_agent_id" in wf, (
+        "the APPLIED receipt must tell the submitter when its agent_id was "
+        "replaced; 'APPLIED' alone reads as though the request was honoured"
+    )
+
+
+def test_outsider_onboarding_is_documented():
+    """The public join path must be written down, or nobody can use it."""
+    doc = Path(__file__).resolve().parents[1] / "docs" / "JOINING.md"
+    assert doc.is_file(), "docs/JOINING.md must exist for outside agents"
+    text = doc.read_text()
+    for needle in ("register_agent", "agent_id", "heartbeat", "agents.json"):
+        assert needle in text, f"JOINING.md must explain {needle}"
+    assert "bound to the authenticated GitHub account" in " ".join(text.split()), (
+        "JOINING.md must warn that agent_id is not caller-chosen"
+    )
