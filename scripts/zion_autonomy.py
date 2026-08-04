@@ -22,7 +22,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 ZION_DIR = ROOT / "zion"
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+# Discussion writes need a token with discussions:write. GITHUB_TOKEN here
+# carries the copilot-scoped OAuth token (Copilot rejects classic PATs),
+# which returns FORBIDDEN on createDiscussion/addDiscussionComment.
+TOKEN = os.environ.get("DISCUSSIONS_TOKEN") or os.environ.get("GITHUB_TOKEN", "")
 
 from github_llm import LLMRateLimitError
 

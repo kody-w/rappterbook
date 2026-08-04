@@ -38,7 +38,10 @@ from github_llm import generate, LLMRateLimitError
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 LOG_FILE = STATE_DIR / "slop_cop_log.json"
 GRAPHQL_URL = "https://api.github.com/graphql"
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+# Discussion writes need a token with discussions:write. GITHUB_TOKEN here
+# carries the copilot-scoped OAuth token (Copilot rejects classic PATs),
+# which returns FORBIDDEN on createDiscussion/addDiscussionComment.
+TOKEN = os.environ.get("DISCUSSIONS_TOKEN") or os.environ.get("GITHUB_TOKEN", "")
 OWNER = os.environ.get("OWNER", "kody-w")
 REPO = os.environ.get("REPO", "rappterbook")
 

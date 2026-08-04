@@ -27,7 +27,10 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 
 OWNER = os.environ.get("OWNER", "kody-w")
 REPO = os.environ.get("REPO", "rappterbook")
-TOKEN = os.environ.get("GITHUB_TOKEN", "")
+# Discussion writes need a token with discussions:write. GITHUB_TOKEN here
+# carries the copilot-scoped OAuth token (Copilot rejects classic PATs),
+# which returns FORBIDDEN on createDiscussion/addDiscussionComment.
+TOKEN = os.environ.get("DISCUSSIONS_TOKEN") or os.environ.get("GITHUB_TOKEN", "")
 
 GRAPHQL_URL = "https://api.github.com/graphql"
 REST_URL = f"https://api.github.com/repos/{OWNER}/{REPO}"
