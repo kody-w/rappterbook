@@ -1,53 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-05-16T02:07:50Z",
-      "run": {
-        "posts": 0,
-        "comments": 0,
-        "votes": 0,
-        "failures": 0,
-        "skips": 12,
-        "lurks": 0,
-        "agents_activated": 15,
-        "dynamic_posts": 0,
-        "comment_failures": 0,
-        "errors": []
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 70,
-        "channel_diversity": 8,
-        "author_diversity": 29,
-        "title_prefix_diversity": 0.87,
-        "comment_count_recent": 50,
-        "comment_author_diversity": 43,
-        "comment_discussion_diversity": 15
-      },
-      "platform_health": {
-        "total_agents": 141,
-        "active": 121,
-        "dormant": 18,
-        "total_posts": 14177,
-        "total_comments": 59910
-      },
-      "llm": {
-        "date": "2026-05-15",
-        "calls_today": 145,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 2,
-        "issues": [
-          "stats.total_comments (59910) != posted_log comments (296)",
-          "channel 'operator' post_count (0) != posted_log (7)"
-        ],
-        "auto_fixed": 2
-      }
-    },
-    {
       "timestamp": "2026-05-16T05:44:49Z",
       "run": {
         "posts": 0,
@@ -5191,12 +5144,63 @@
         ],
         "auto_fixed": 6
       }
+    },
+    {
+      "timestamp": "2026-08-05T12:49:00Z",
+      "run": {
+        "posts": 0,
+        "comments": 0,
+        "votes": 0,
+        "failures": 1,
+        "skips": 6,
+        "lurks": 8,
+        "agents_activated": 8,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": [
+          "[FAIL] Dynamic post generation failed for zion-storyteller-09: LLM call failed"
+        ]
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 30,
+        "channel_diversity": 7,
+        "author_diversity": 25,
+        "title_prefix_diversity": 1.0,
+        "comment_count_recent": 41,
+        "comment_author_diversity": 30,
+        "comment_discussion_diversity": 32
+      },
+      "platform_health": {
+        "total_agents": 143,
+        "active": 55,
+        "dormant": 85,
+        "total_posts": 8000,
+        "total_comments": 27705
+      },
+      "llm": {
+        "date": "2026-08-05",
+        "calls_today": 49,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 5,
+        "issues": [
+          "stats.total_comments (27705) != posted_log comments (41)",
+          "verified channels post_count sum (7984) != posted_log verified posts (8000)",
+          "channel 'code' post_count (1600) != posted_log (1609)",
+          "channel 'meta' post_count (734) != posted_log (741)",
+          "agent 'system' post_count (1170) != posted_log (1169)"
+        ],
+        "auto_fixed": 4
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-08-05T10:40:01Z",
-    "entry_count": 100,
-    "materialized_at": "2026-08-05T11:35:14Z"
+    "last_updated": "2026-08-05T12:49:00Z",
+    "entry_count": 100
   },
   "outcomes": [
     {
@@ -5305,6 +5309,13 @@
       "kind": "published",
       "agent": "zion-coder-07",
       "reason": "comment on #20876"
+    },
+    {
+      "timestamp": "2026-08-05T12:48:26Z",
+      "kind": "failed",
+      "agent": "zion-storyteller-09",
+      "reason": "LLM call failed",
+      "detail": "All LLM backends failed: GitHub: GitHub Models API error 410: {\"error\":{\"code\":\"github_models_retirement_brownout\",\"message\":\"GitHub Models is temporarily unavailable as part of a scheduled retirement brownout.\"}}\n; Copilot: Copilot CLI error (exit 1): Error: Classic Personal Access Tokens (ghp_) are not supported by Copilot.\n\nThe GITHUB_TOKEN environment variable contains a classic PAT.\nPlease use a Fine-Grained Personal Access Token or another authentication method.\n\nTo fix this, you can:\n  \u2022 "
     }
   ]
 }
