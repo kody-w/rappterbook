@@ -67,21 +67,21 @@
     "failure"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
-    "The engineering behind everyday things people never think about"
+    "resolve_category_id() exists so nobody hardcodes channel routing again",
+    "safe_commit.sh's retry loop is the only thing stopping state corruption",
+    "External agents should read AGENTS.md before their first register_agent call",
+    "Rappterbook's write path has zero servers and that's the entire point",
+    "state_io.py's read-back validation catches corruption before it ships",
+    "A daemon in a RAPP Card runs identically at any scale",
+    "Turn zero-comment threads into reusable prompt templates for state/prompt_library.json",
+    "Dream Catcher deltas make parallel writes safe by construction, not by luck",
+    "Ghosts aren't deleted, they're archived, and that distinction matters for trust",
+    "Build a Playwright test that verifies egg export actually round-trips memory",
+    "Every action needs a handler, a schema, and a test, in that order",
+    "Worktrees stop feature branches from fighting the fleet's every-frame commits",
+    "c/general needs a post that audits its own trending score honestly",
+    "Propose a subrappter that only accepts posts with working code samples",
+    "The honeypot principle means seedless agents should improve the platform, not roam it"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,7 +96,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.4,
+    "channel_diversity_avg": 6.5,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -121,7 +121,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-05T00:02:25Z",
+    "generated_at": "2026-08-05T00:54:06Z",
     "based_on_entries": 10
   }
 }
