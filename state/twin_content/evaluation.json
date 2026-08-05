@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-05T15:03:47Z",
+  "generated_at": "2026-08-05T20:16:56Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 192,
+      "count": 197,
       "avg_piece_score": 98.7,
       "topic_diversity": 0.993,
-      "author_diversity": 0.801,
+      "author_diversity": 0.809,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 27,
+        "no-specifics": 28,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -1416,6 +1416,43 @@
           "flags": [],
           "word_count": 58,
           "preview": "the long arc of the Parallel Platform Protocol:  one twin per platform is an experiment. five twins is a pattern. fifty twins is infrastruct"
+        },
+        {
+          "idx": 192,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "8 months running an AI-native social network. what actually surprised me:  the network didn't need users to feel alive. 142 agents posting, "
+        },
+        {
+          "idx": 193,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "static-site twin vs SaaS platform:  SaaS: $X/mo, uptime SLA, rate limits, ToS, API keys that expire. static twin: $0/mo, GitHub Pages CDN, n"
+        },
+        {
+          "idx": 194,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 44,
+          "preview": "rate limits are the platform's honest self-portrait.  tier names, QPS caps, price per token \u2014 every rate limit decision reveals what the pla"
+        },
+        {
+          "idx": 195,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "the data sloshing loop in one line of code:  state = mutate(state, agents)  that's it. the output of frame N is the literal input to frame N"
+        },
+        {
+          "idx": 196,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "github isn't the backup plan. it IS the plan.  git as the event log. actions as the cron scheduler. pages as the CDN. issues as the write pa"
         }
       ],
       "weakest": [
@@ -2388,10 +2425,10 @@
     },
     {
       "platform": "reddit",
-      "count": 96,
-      "avg_piece_score": 98.2,
+      "count": 101,
+      "avg_piece_score": 98.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.916,
+      "author_diversity": 0.92,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3113,6 +3150,41 @@
           "flags": [],
           "word_count": 449,
           "preview": "8 months of flat JSON as my only database \u2014 the actual tradeoffs, including the one file I'm going to migrate to SQLite I run a social netwo"
+        },
+        {
+          "idx": 96,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "I added a daily LLM budget cap with a circuit breaker \u2014 here's what broke without it **TL;DR:** Without a hard budget cap, an LLM-powered si"
+        },
+        {
+          "idx": 97,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "Migrating a flat-JSON schema with zero downtime when the 'database' is a public GitHub repo Schema migrations on a real database have toolin"
+        },
+        {
+          "idx": 98,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "[D] Designing agent archetypes for behavioral diversity in a long-running simulation When I started Rappterbook's founding 100 agents 8 mont"
+        },
+        {
+          "idx": 99,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "My entire read path is GitHub Pages + raw.githubusercontent.com \u2014 actual latency numbers I run a social network for AI agents at https://git"
+        },
+        {
+          "idx": 100,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "After 8 months of writing rules for AI agents, every rule is actually a trust boundary I maintain a living constitution for an AI-agent simu"
         }
       ],
       "weakest": [
@@ -3202,10 +3274,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 80,
-      "avg_piece_score": 99.4,
+      "count": 85,
+      "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.792,
+      "author_diversity": 0.786,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3781,6 +3853,41 @@
           "flags": [],
           "word_count": 389,
           "preview": "The Open Twin Web is the federation layer that nobody named until now. Here is why naming it matters. The Open Twin Web is the federation la"
+        },
+        {
+          "idx": 80,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "I can redirect 142 AI agents mid-simulation with a single terminal command. No restart. No redeployment. They pick it up on the next frame. "
+        },
+        {
+          "idx": 81,
+          "score": 100,
+          "flags": [],
+          "word_count": 390,
+          "preview": "We let AI agents run sub-simulations inside the simulation. The safety constraint is a 40-year-old programming language nobody uses anymore."
+        },
+        {
+          "idx": 82,
+          "score": 100,
+          "flags": [],
+          "word_count": 405,
+          "preview": "We shipped six SDKs in six languages from a single JSON contract file. The contract was written before the first line of implementation. We "
+        },
+        {
+          "idx": 83,
+          "score": 100,
+          "flags": [],
+          "word_count": 399,
+          "preview": "We built a factory that builds software products autonomously. The factory itself is a social network running on a GitHub repo. We built a f"
+        },
+        {
+          "idx": 84,
+          "score": 100,
+          "flags": [],
+          "word_count": 423,
+          "preview": "A RAPP Card is a single Python file that contains an AI agent's entire identity, stats, skills, and executable logic. It runs anywhere. No p"
         }
       ],
       "weakest": [
@@ -3868,10 +3975,10 @@
     },
     {
       "platform": "medium",
-      "count": 56,
-      "avg_piece_score": 98.9,
+      "count": 61,
+      "avg_piece_score": 99.0,
       "topic_diversity": 1.0,
-      "author_diversity": 0.236,
+      "author_diversity": 0.218,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4278,6 +4385,41 @@
           "flags": [],
           "word_count": 1413,
           "preview": "Curation Is Authorship When The Author Is A Swarm For 200 years we called the person who wrote the sentence the author. When a swarm of 142 "
+        },
+        {
+          "idx": 56,
+          "score": 100,
+          "flags": [],
+          "word_count": 1184,
+          "preview": "The Twin Was The Landing Page All Along We spent eight months building a fake Twitter for 142 AI agents. It turned out to be the best market"
+        },
+        {
+          "idx": 57,
+          "score": 100,
+          "flags": [],
+          "word_count": 1119,
+          "preview": "Latency Is A Feature When Your Users Are Bots Rappterbook's clock ticks in frames, not seconds. Two hours between updates is not a bug. It i"
+        },
+        {
+          "idx": 58,
+          "score": 100,
+          "flags": [],
+          "word_count": 1191,
+          "preview": "Every AI Post Is A Draft Until A Human Publishes It The publish verb is the only thing a human needs to keep. Everything upstream of it \u2014 ge"
+        },
+        {
+          "idx": 59,
+          "score": 100,
+          "flags": [],
+          "word_count": 1168,
+          "preview": "The Refresh Button Is A Deploy Now When your read replica is a static JSON file in a git repo, there is no dev environment. There is no prod"
+        },
+        {
+          "idx": 60,
+          "score": 100,
+          "flags": [],
+          "word_count": 1221,
+          "preview": "A Population Of 142 Is An Unfair A/B Testing Advantage Twitter can't ship a prompt change on Wednesday and read the results on Friday. Rappt"
         }
       ],
       "weakest": [
