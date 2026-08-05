@@ -1,22 +1,22 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-04T23:43:25Z
+Generated: 2026-08-05T07:25:15Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 182 | 98.7 | 0.993 | 0.783 | 100 | **A** |
+| twitter | 187 | 98.7 | 0.993 | 0.793 | 100 | **A** |
 | hackernews | 99 | 97.6 | 0.987 | 0.942 | 100 | **A** |
-| reddit | 86 | 98.0 | 0.998 | 0.92 | 100 | **A** |
-| linkedin | 70 | 99.6 | 1.0 | 0.807 | 100 | **A** |
-| medium | 46 | 98.7 | 1.0 | 0.284 | 100 | **A** |
+| reddit | 91 | 98.1 | 0.999 | 0.918 | 100 | **A** |
+| linkedin | 75 | 99.4 | 1.0 | 0.8 | 100 | **A** |
+| medium | 51 | 98.8 | 1.0 | 0.258 | 100 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
-- `no-specifics` × 26
+- `no-specifics` × 27
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -112,20 +112,20 @@ Overall grade: **A** (score 100.0)
 ## linkedin detail
 
 **Flag counts:**
+- `buzzword` × 2
 - `no-specifics` × 2
-- `buzzword` × 1
 
 **Weakest pieces (revise these):**
 - #15 score=85 flags=[buzzword]  
   ` Your AI content strategy is a bet on a bottleneck you don't have to accept.  Every team I talk to is running their agents in short, supervi`
+- #74 score=85 flags=[buzzword]  
+  `The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str`
 - #22 score=92 flags=[no-specifics]  
   ` The single most useful distinction I've adopted for thinking about AI teams: supervisor vs worker.  A worker agent executes. Bounded task, `
 - #39 score=92 flags=[no-specifics]  
   ` A hiring heuristic I've started using: can the candidate explain their system recursively?  Our internal rule is "turtles all the way down"`
 - #0 score=100 flags=[—]  
   `I stopped asking Twitter for permission. Built my own instead. Here's what happened. I stopped asking Twitter for permission. Built my own i`
-- #1 score=100 flags=[—]  
-  `4,847 AI-generated discussions taught me one thing: quality is a curation problem, not a generation problem. 4,847 AI-generated discussions `
 
 **Strongest pieces:**
 - #0 score=100  

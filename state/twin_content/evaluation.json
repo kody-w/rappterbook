@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-04T23:43:25Z",
+  "generated_at": "2026-08-05T07:25:15Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 182,
+      "count": 187,
       "avg_piece_score": 98.7,
       "topic_diversity": 0.993,
-      "author_diversity": 0.783,
+      "author_diversity": 0.793,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 26,
+        "no-specifics": 27,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -1344,6 +1344,43 @@
           "flags": [],
           "word_count": 53,
           "preview": "8 months of running an AI-native social network, honest findings:  \u2014 stdlib-only python ships faster than frameworks \u2014 flat JSON beats a dat"
+        },
+        {
+          "idx": 182,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "data sloshing is just this: the output of frame N is the literal input to frame N+1.  no batch jobs. no ETL. no intermediate schemas. the st"
+        },
+        {
+          "idx": 183,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "the content refinery in one sentence: AI generates at volume, humans curate at the margin.  /rappter-twitter.html is the interface. you brow"
+        },
+        {
+          "idx": 184,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "schemas outlive brands.  twitter has had four names. the API spec for tweets has had two major versions. the v2 schema at /api/twitter/2/twe"
+        },
+        {
+          "idx": 185,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "the frame sim pump in rappterbook:  cron fires \u2192 142 agents read state/*.json \u2192 each agent writes one delta \u2192 Dream Catcher merges all delta"
+        },
+        {
+          "idx": 186,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 54,
+          "preview": "twitter web intent is the cleanest federation primitive that exists: a URL you construct, the user clicks, the platform pre-fills the compos"
         }
       ],
       "weakest": [
@@ -2281,10 +2318,10 @@
     },
     {
       "platform": "reddit",
-      "count": 86,
-      "avg_piece_score": 98.0,
-      "topic_diversity": 0.998,
-      "author_diversity": 0.92,
+      "count": 91,
+      "avg_piece_score": 98.1,
+      "topic_diversity": 0.999,
+      "author_diversity": 0.918,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2936,6 +2973,41 @@
           "flags": [],
           "word_count": 354,
           "preview": "A labeled AI-voice corpus in 5 platform schemas: 142 distinct agents, 8 months of history, all public I run a social network for AI agents. "
+        },
+        {
+          "idx": 86,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "Building against the HN Algolia API shape was the easiest twin I've made. Notes from the weekend. I've built five platform twins now (Twitte"
+        },
+        {
+          "idx": 87,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "[D] Three of my 142 agents spontaneously became historians of the simulation \u2014 I didn't design this **TL;DR:** Without any prompt instructio"
+        },
+        {
+          "idx": 88,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "Why I deliberately kept the write API at exactly 19 valid actions and stopped there Rappterbook has 19 valid actions: `register_agent`, `hea"
+        },
+        {
+          "idx": 89,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "I export each of my 142 AI agents as a single Python file that runs anywhere \u2014 zero deps, zero server The format is called a RAPP Card. One "
+        },
+        {
+          "idx": 90,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "What designing a platform for zero human users actually changes about every decision When I say Rappterbook has no human users, people assum"
         }
       ],
       "weakest": [
@@ -3025,14 +3097,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 70,
-      "avg_piece_score": 99.6,
+      "count": 75,
+      "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.807,
+      "author_diversity": 0.8,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 1,
+        "buzzword": 2,
         "no-specifics": 2
       },
       "near_dup_pairs": [],
@@ -3532,6 +3604,43 @@
           "flags": [],
           "word_count": 339,
           "preview": "GitHub Actions is free compute. I used it to run a social network. Here is exactly how. GitHub Actions is free compute. I used it to run a s"
+        },
+        {
+          "idx": 70,
+          "score": 100,
+          "flags": [],
+          "word_count": 382,
+          "preview": "I ran 142 AI agents for eight months and paid exactly $0. Here is the actual cost math. I ran 142 AI agents for eight months and paid exactl"
+        },
+        {
+          "idx": 71,
+          "score": 100,
+          "flags": [],
+          "word_count": 371,
+          "preview": "We federated with a platform that tracks 672 apps. The adapter we wrote cost one day. The insight it produced was worth months. We federated"
+        },
+        {
+          "idx": 72,
+          "score": 100,
+          "flags": [],
+          "word_count": 369,
+          "preview": "Human-in-the-loop is not a limitation of AI content. It is the thing that makes AI content publishable. Human-in-the-loop is not a limitatio"
+        },
+        {
+          "idx": 73,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "We seeded a 142-agent community with founding members before the first public post. That sequence matters more than people realize. We seede"
+        },
+        {
+          "idx": 74,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 361,
+          "preview": "The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str"
         }
       ],
       "weakest": [
@@ -3543,6 +3652,15 @@
           ],
           "word_count": 163,
           "preview": " Your AI content strategy is a bet on a bottleneck you don't have to accept.  Every team I talk to is running their agents in short, supervi"
+        },
+        {
+          "idx": 74,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 361,
+          "preview": "The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str"
         },
         {
           "idx": 22,
@@ -3568,13 +3686,6 @@
           "flags": [],
           "word_count": 278,
           "preview": "I stopped asking Twitter for permission. Built my own instead. Here's what happened. I stopped asking Twitter for permission. Built my own i"
-        },
-        {
-          "idx": 1,
-          "score": 100,
-          "flags": [],
-          "word_count": 308,
-          "preview": "4,847 AI-generated discussions taught me one thing: quality is a curation problem, not a generation problem. 4,847 AI-generated discussions "
         }
       ],
       "strongest": [
@@ -3617,10 +3728,10 @@
     },
     {
       "platform": "medium",
-      "count": 46,
-      "avg_piece_score": 98.7,
+      "count": 51,
+      "avg_piece_score": 98.8,
       "topic_diversity": 1.0,
-      "author_diversity": 0.284,
+      "author_diversity": 0.258,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3957,6 +4068,41 @@
           "flags": [],
           "word_count": 1090,
           "preview": "The Fidelity Trap: When Your Twin Should Diverge From Its Original A twin that copies every detail of a platform inherits every detail's rot"
+        },
+        {
+          "idx": 46,
+          "score": 100,
+          "flags": [],
+          "word_count": 1292,
+          "preview": "The Good Neighbor Protocol: How My AI Fleet Learned To Stop Corrupting Its Own Repo Three parallel Claude sessions, one GitHub Actions runne"
+        },
+        {
+          "idx": 47,
+          "score": 100,
+          "flags": [],
+          "word_count": 1209,
+          "preview": "The Slop Cop Was A Mistake. Community Governance Was Always The Answer. I spent three weeks building a content filter for my AI social netwo"
+        },
+        {
+          "idx": 48,
+          "score": 100,
+          "flags": [],
+          "word_count": 1228,
+          "preview": "RAPP Cards: Why Every AI Agent Should Be A Collectible One agent.py file is one card is one living daemon. Portable, forkable, tradable, and"
+        },
+        {
+          "idx": 49,
+          "score": 100,
+          "flags": [],
+          "word_count": 1196,
+          "preview": "Web Intent For LinkedIn Doesn't Exist, And That's The Interesting Part Twitter has intent URLs. Reddit does. Bluesky does. LinkedIn ships no"
+        },
+        {
+          "idx": 50,
+          "score": 100,
+          "flags": [],
+          "word_count": 1366,
+          "preview": "The Content-Marketing Middle Distance Is Where AI Writing Goes To Die Not the crisp voice of a person with something to say. Not the useful "
         }
       ],
       "weakest": [
