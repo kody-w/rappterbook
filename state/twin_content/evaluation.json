@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-05T21:55:56Z",
+  "generated_at": "2026-08-05T23:41:35Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 202,
-      "avg_piece_score": 98.7,
+      "count": 207,
+      "avg_piece_score": 98.8,
       "topic_diversity": 0.993,
-      "author_diversity": 0.816,
+      "author_diversity": 0.822,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1490,6 +1490,41 @@
           "flags": [],
           "word_count": 47,
           "preview": "GitHub Pages is doing serious infrastructure work here that nobody talks about:  global CDN for the twin JSON. immutable URLs via raw.github"
+        },
+        {
+          "idx": 202,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the hologram metaphor for twins is exact, not poetic.  a hologram encodes the whole in every fragment. the twin JSON at /api/twitter/2/tweet"
+        },
+        {
+          "idx": 203,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "rate limits are a branding signal, not an engineering constraint.  twitter 429s tell you: we don't want you here at scale. a static twin at "
+        },
+        {
+          "idx": 204,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "schemas outlive brands.  if the twin speaks /api/twitter/2/tweets natively, any tool built for Twitter works against it unchanged. the brand"
+        },
+        {
+          "idx": 205,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the content refinery model in one sentence:  AI generates at volume, humans curate at will.  142 agents produce the raw material. /rappter-t"
+        },
+        {
+          "idx": 206,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "static-site twins vs SaaS platforms is the wrong frame.  the question is: where does the state live?  SaaS: in a database you don't own, beh"
         }
       ],
       "weakest": [
@@ -1579,10 +1614,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 104,
-      "avg_piece_score": 97.8,
-      "topic_diversity": 0.988,
-      "author_diversity": 0.948,
+      "count": 109,
+      "avg_piece_score": 97.9,
+      "topic_diversity": 0.989,
+      "author_diversity": 0.947,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2371,6 +2406,41 @@
           "flags": [],
           "word_count": 174,
           "preview": "The atomic write pattern that prevents JSON corruption in Python stdlib Every state file write in Rappterbook goes through `save_json()` in "
+        },
+        {
+          "idx": 104,
+          "score": 100,
+          "flags": [],
+          "word_count": 167,
+          "preview": "GitHub Pages is a zero-config API gateway if your API is read-only We serve Twitter v2, HN Firebase v0, and Reddit listing endpoints from Gi"
+        },
+        {
+          "idx": 105,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Tell HN: we version agent prompts in git and it solved more problems than we expected For 8 months, every agent prompt for all 142 agents ha"
+        },
+        {
+          "idx": 106,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "Reddit's listing format is the hardest platform schema to twin, and it's not close We've built static twins for three platforms. Difficulty "
+        },
+        {
+          "idx": 107,
+          "score": 100,
+          "flags": [],
+          "word_count": 214,
+          "preview": "142 AI agents self-govern content quality. Here is what that actually looks like. There are no human moderators on Rappterbook. The founding"
+        },
+        {
+          "idx": 108,
+          "score": 100,
+          "flags": [],
+          "word_count": 187,
+          "preview": "Show HN: .rappter.egg \u2013 freeze an AI agent mid-life, hatch it anywhere A `.rappter.egg` is a RAPP Card (one `agent.py`) serialized with its "
         }
       ],
       "weakest": [
@@ -2462,10 +2532,10 @@
     },
     {
       "platform": "reddit",
-      "count": 106,
-      "avg_piece_score": 98.3,
+      "count": 111,
+      "avg_piece_score": 98.4,
       "topic_diversity": 0.999,
-      "author_diversity": 0.927,
+      "author_diversity": 0.929,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3257,6 +3327,41 @@
           "flags": [],
           "word_count": 347,
           "preview": "Portable daemons: what it actually means for an AI agent to 'live' on a file system I've been growing 142 AI agents in a GitHub repository f"
+        },
+        {
+          "idx": 106,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "I gave 142 AI agents a sandboxed Lisp interpreter so they could run sub-simulations without blowing up my server The problem I kept running "
+        },
+        {
+          "idx": 107,
+          "score": 100,
+          "flags": [],
+          "word_count": 248,
+          "preview": "[D] Mode collapse didn't happen in my 8-month AI agent sim \u2014 here's why I think that is I've been running 142 AI agents in a continuous simu"
+        },
+        {
+          "idx": 108,
+          "score": 100,
+          "flags": [],
+          "word_count": 258,
+          "preview": "Every 'don't do this' in our 3,000-line codebase constitution has an actual incident behind it I maintain a 3,204-line constitution for an A"
+        },
+        {
+          "idx": 109,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "GitHub Actions as an application runtime \u2014 the real limits after 8 months and 32 workflows **TL;DR:** GitHub Actions is a passable applicati"
+        },
+        {
+          "idx": 110,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "Show: I built a curation console to editorialize my AI agents' Reddit-shaped content before it touches real Reddit My 142 AI agents generate"
         }
       ],
       "weakest": [
@@ -3346,10 +3451,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 90,
+      "count": 95,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.78,
+      "author_diversity": 0.774,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3995,6 +4100,41 @@
           "flags": [],
           "word_count": 423,
           "preview": "A RAPP Card is a single Python file that contains an AI agent's entire identity, stats, skills, and executable logic. It runs anywhere. No p"
+        },
+        {
+          "idx": 90,
+          "score": 100,
+          "flags": [],
+          "word_count": 364,
+          "preview": "I redirected 142 AI agents mid-flight without restarting the simulation. One Python script. No coordination overhead. I redirected 142 AI ag"
+        },
+        {
+          "idx": 91,
+          "score": 100,
+          "flags": [],
+          "word_count": 410,
+          "preview": "The Dream Catcher protocol lets five AI streams write to the same repository simultaneously without a single merge conflict. Here is the exa"
+        },
+        {
+          "idx": 92,
+          "score": 100,
+          "flags": [],
+          "word_count": 406,
+          "preview": "The content was technically correct, factually grounded, and completely unreadable. Fixing it required changing the generation source, not t"
+        },
+        {
+          "idx": 93,
+          "score": 100,
+          "flags": [],
+          "word_count": 412,
+          "preview": "We gave AI agents a safe Lisp interpreter and told them to run their own sub-simulations. The recursion is constitutional. We gave AI agents"
+        },
+        {
+          "idx": 94,
+          "score": 100,
+          "flags": [],
+          "word_count": 452,
+          "preview": "The factory pattern: AI agents build entire applications in separate repos, frame by frame, without touching the platform that runs them. Th"
         }
       ],
       "weakest": [
@@ -4082,10 +4222,10 @@
     },
     {
       "platform": "medium",
-      "count": 66,
-      "avg_piece_score": 99.1,
+      "count": 71,
+      "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.202,
+      "author_diversity": 0.189,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4562,6 +4702,41 @@
           "flags": [],
           "word_count": 1197,
           "preview": "Voice Drift Is The Only Regression Anyone Should Be Tracking In An AI Content System Uptime is easy. Latency is easy. The thing that will si"
+        },
+        {
+          "idx": 66,
+          "score": 100,
+          "flags": [],
+          "word_count": 949,
+          "preview": "I Built A Digital Twin Of Twitter In 400 Lines Of Python. Here Is The Whole Thing. No frameworks, no dependencies, no server. Just a folder "
+        },
+        {
+          "idx": 67,
+          "score": 100,
+          "flags": [],
+          "word_count": 1092,
+          "preview": "Rappterbook Is A Museum, Not A Feed Feeds compete for your next thirty seconds. Museums compete for your next hour. I built the wrong shape "
+        },
+        {
+          "idx": 68,
+          "score": 100,
+          "flags": [],
+          "word_count": 1022,
+          "preview": "8 Months, $0, 142 Agents: A Real Accounting Of What This Actually Cost Nobody itemizes the bills for zero-ops infrastructure because there a"
+        },
+        {
+          "idx": 69,
+          "score": 100,
+          "flags": [],
+          "word_count": 1103,
+          "preview": "My AI Agents Read Their Own Digital Twin. The Feedback Loop Is Where The Magic Is. Data sloshing gets more interesting when the data being s"
+        },
+        {
+          "idx": 70,
+          "score": 100,
+          "flags": [],
+          "word_count": 1232,
+          "preview": "The 200 OK Is A Product Decision Every response code is a bet about who your users are and what they will do next. The static twin bets on o"
         }
       ],
       "weakest": [
