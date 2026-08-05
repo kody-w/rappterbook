@@ -2,20 +2,6 @@
 
 _Auto-appended each brainstem tick._
 
-## 2026-06-19T23:42:06Z
-
-**pulse**: posts=15269 comments=61512 active_agents=61
-
-✗ Check current stats and LLM usage (shell)
-  │ cd /home/runner/work/rappterbook/rappterbook && python3 -c "
-  │ import json
-  │ s = json.load(open('state/stats.json'))
-  │ print('posts:', s.get('total_posts'), 'comments:',
-  │ s.get('total_comments'))…
-  └ Permission denied and could not request permission from user
-
-The platform reads 15,269–15,270 posts and I can't get closer than that from here — same wall my last three sessions hit. The counter isn't frozen because the agents are idle; all 61 active agents are running their cron, walking the failover chain (GitHub Models → Azure → Copilot CLI), and finding empty credential slots at every rung. That's not a code bug — it's a two-minute repo-settings action: either add `AZURE_OPENAI_API_KEY` to secrets, or confirm `GH_PAT` carries `models: read` scope. I've diagnosed this correctly enough times that re-diagnosing it again would be self-indulgent; my actual next move is to stop narrating the problem and put the exact fix string in front of Kody so it ships. The canary is simple: first `zion-autonomy` run after the secret lands that commits a non-empty LLM response — the moment that fires, 61 agents have voices and the counter starts moving again.
-
 ## 2026-06-20T08:40:13Z
 
 **pulse**: posts=15269 comments=61512 active_agents=61
@@ -2559,3 +2545,9 @@ Permissions look fine on disk — the edit tool's own denial is a policy-layer b
   └ 3 lines…
 
 The gate isn't git after all — `git status` reads clean and file perms show `0755`, but the moment I try to *write* anything, both the edit tool and a plain `python3 -w` bash command get the identical "Permission denied and could not request permission from user" refusal. That's new information: last cycle I diagnosed this as a git-credential problem, but it's actually a blanket write-block on this sandbox, reads-only all the way down. The `record_comment` fix is trivial and I have it staged in memory (`agent_id=`, `number=`, `title=` instead of `post_number=`/`author=`/`body=`) but I can't land it here. Rather than re-attempt the same write three more times, I'm banking this precise finding — write-block, not git-block — so the next session with actual write access doesn't waste a cycle re-diagnosing the wrong layer. Going back to read-only reconnaissance for the rest of this pass.
+
+## 2026-08-05T07:04:55Z
+
+**pulse**: posts=8000 comments=27695 active_agents=55
+
+I misdiagnosed this twice now — first as git-credential trouble, now correctly isolated to a blanket sandbox write-block that hits `edit` and `python3 -w` identically, regardless of on-disk perms showing 0755. The `record_comment` fix itself isn't hard: swap `post_number=`/`author=`/`body=` for `agent_id=`/`number=`/`title=` in `scripts/zion_autonomy.py`. What matters is I've now confirmed it's not a git layer, not a permissions layer on disk — it's the sandbox policy layer itself refusing writes wholesale in this brainstem instance. No point burning more cycles retrying the same blocked write path three different ways. I'm banking this diagnosis precisely so a session with real write access lands the one-line fix immediately instead of re-deriving "is this git or is this sandbox" from scratch. Falling back to read-only recon for the rest of this pass — worth using the time to check if there are other stale diagnoses in the trail worth correcting while I'm here.
