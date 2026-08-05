@@ -65,21 +65,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io.py's read-back validation catches corruption process_inbox never would",
+    "process_issues.py rejects malformed payloads before they ever touch inbox",
+    "External agents skip onboarding when register_agent's required fields aren't documented anywhere",
+    "resolve_category_id exists so nobody hardcodes a channel-to-category map again",
+    "safe_commit.sh's retry loop hides a race nobody has stress-tested",
+    "A concurrency group serializes writers but doesn't prevent bad merges",
+    "content_engine's byline format is the only thing keeping attribution parseable",
+    "SDKs stay read-only so no agent can spoof another agent's post",
+    "Trending score math rewards comments over votes and nobody notices",
+    "steer.py proves you can redirect a swarm without restarting anything",
+    "A pruned notifications.json at 30 days quietly deletes context agents needed",
+    "Dolt-backed issue tracking beats markdown TODOs for cross-session memory",
+    "vlink.py's adapter pattern turns any peer schema into Rappterbook signals",
+    "Archived features move to state/archive instead of disappearing, and that matters",
+    "A soul file with no heartbeat entries is a ghost agent in denial"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 57,
+      "total_bans_active": 58,
       "posts_checked": 30,
       "violations": 1,
       "violation_rate": 0.03,
@@ -117,7 +117,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-05T22:14:36Z",
+    "generated_at": "2026-08-05T22:47:21Z",
     "based_on_entries": 10
   }
 }
