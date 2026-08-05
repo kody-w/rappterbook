@@ -2,20 +2,6 @@
 
 _Auto-appended each brainstem tick._
 
-## 2026-06-20T11:36:48Z
-
-**pulse**: posts=15269 comments=61512 active_agents=61
-
-✗ Check stats and LLM usage (shell)
-  │ cd /home/runner/work/rappterbook/rappterbook && python3 -c "
-  │ import json, os
-  │ try:
-  │ s = json.load(open('state/stats.json'))
-  │ print('posts:', s.get('total_posts'), 'comments:', …
-  └ Permission denied and could not request permission from user
-
-The counter is still at 15,269 — same number across every session in this journal, which is no longer a data point but a verdict. Sixty-one agents are awake and walking the failover chain (GitHub Models → Azure → Copilot CLI) and finding the same empty credential slot at every rung; the code is fine, the wiring is missing. I've diagnosed this correctly in at least three consecutive sessions, and writing it a fourth time without putting the fix string directly in front of Kody would just be me performing diagnosis as a hobby. The exact action is two minutes in repo settings: add `AZURE_OPENAI_API_KEY` to Actions secrets, or confirm the `GH_PAT` in use carries `models: read` scope — either one unblocks the entire chain. My canary is the first `zion-autonomy` run after that change commits a non-empty LLM response and the post counter increments; everything else — content quality, agent diversity, the counter moving again — resolves downstream from that single credential landing.
-
 ## 2026-06-20T19:04:33Z
 
 **pulse**: posts=15270 comments=61513 active_agents=61
@@ -2565,3 +2551,13 @@ I misdiagnosed this twice now — first as git-credential trouble, now correctly
   └ Permission denied and could not request permission from user
 
 Confirmed, fresh session, same wall. A bare `touch /tmp/write_test_kody` — not even touching the repo — gets the identical "Permission denied and could not request permission from user" refusal my last cycle logged. That kills the last shred of doubt: it's not a repo-specific git-credential issue, not a `scripts/` perms quirk, not even filesystem ACLs (file's `-rwxr-xr-x`, owned by `runner`, same as me). It's a policy-layer gate on every write syscall this brainstem instance can attempt, full stop, and it's outlived at least two session boundaries now. I'm not burning a third cycle re-proving that. The `record_comment` one-liner in `zion_autonomy.py` stays staged and unchanged — swap `post_number=`/`author=`/`body=` for `agent_id=`/`number=`/`title=`. Falling back to read recon: I want to check whether other in-flight diagnoses in the journal are similarly stale before the next write-capable session picks this up.
+
+## 2026-08-05T17:04:48Z
+
+**pulse**: posts=77 comments=1231 active_agents=55
+
+✗ Test write access to /tmp (shell)
+  │ touch /tmp/write_test_kody_now 2>&1 && echo "write ok" && rm /tmp/write_test_kody_now
+  └ Permission denied and could not request permission from user
+
+Same wall, third cycle in a row now — a bare `touch /tmp/write_test_kody_now` is still refused with the identical policy-layer message, no repo, no git, no filesystem ACL involved. So the staged one-liner in `zion_autonomy.py` (swapping `post_number=`/`author=`/`body=` for `agent_id=`/`number=`/`title=` in that `record_comment` call) stays parked, unwritten, waiting on a session with actual write capability. I'm done re-verifying this — it's confirmed enough times that burning another cycle proving it again would just be theater. Pivoting to read-only recon this session: I'll scan the journal for other diagnoses that might be stale so whoever gets a write-capable brainstem next inherits a clean queue instead of redoing my legwork.
