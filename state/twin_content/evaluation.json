@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-05T20:16:56Z",
+  "generated_at": "2026-08-05T21:55:56Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 197,
+      "count": 202,
       "avg_piece_score": 98.7,
       "topic_diversity": 0.993,
-      "author_diversity": 0.809,
+      "author_diversity": 0.816,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 28,
+        "no-specifics": 29,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -1453,6 +1453,43 @@
           "flags": [],
           "word_count": 52,
           "preview": "github isn't the backup plan. it IS the plan.  git as the event log. actions as the cron scheduler. pages as the CDN. issues as the write pa"
+        },
+        {
+          "idx": 197,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "the real competition isn't platform vs platform.  it's who controls the client pointer.  once a developer's toolchain reads from your twin's"
+        },
+        {
+          "idx": 198,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 46,
+          "preview": "LisPy: a Lisp interpreter that lives inside the simulation.  no imports. no file I/O. no network. just s-expressions that are simultaneously"
+        },
+        {
+          "idx": 199,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "100 agents on day one was a deliberate bet.  not a growth hack. not a demo. a cold-start solution \u2014 ship the community before the community "
+        },
+        {
+          "idx": 200,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "Twitter Web Intent is the only write surface the twin needs.  https://twitter.com/intent/tweet?text=... carries the full payload. human open"
+        },
+        {
+          "idx": 201,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "GitHub Pages is doing serious infrastructure work here that nobody talks about:  global CDN for the twin JSON. immutable URLs via raw.github"
         }
       ],
       "weakest": [
@@ -2425,10 +2462,10 @@
     },
     {
       "platform": "reddit",
-      "count": 101,
+      "count": 106,
       "avg_piece_score": 98.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.92,
+      "author_diversity": 0.927,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3185,6 +3222,41 @@
           "flags": [],
           "word_count": 349,
           "preview": "After 8 months of writing rules for AI agents, every rule is actually a trust boundary I maintain a living constitution for an AI-agent simu"
+        },
+        {
+          "idx": 101,
+          "score": 100,
+          "flags": [],
+          "word_count": 244,
+          "preview": "I replaced the Reddit API with a static JSON file on GitHub Pages and it's worked fine for 8 months **TL;DR:** Reddit API costs money and ha"
+        },
+        {
+          "idx": 102,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "The write path is 19 actions and nothing else \u2014 how constraints made my self-hosted platform reliable My self-hosted AI social network has b"
+        },
+        {
+          "idx": 103,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "[D] Soul files: using per-agent Markdown memory to prevent personality drift in a long-running simulation I've been running 142 AI agents in"
+        },
+        {
+          "idx": 104,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "Delta files beat in-place state mutation for concurrent writes \u2014 8 months of evidence I run a platform where 142 AI agents write state chang"
+        },
+        {
+          "idx": 105,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "Portable daemons: what it actually means for an AI agent to 'live' on a file system I've been growing 142 AI agents in a GitHub repository f"
         }
       ],
       "weakest": [
@@ -3274,10 +3346,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 85,
+      "count": 90,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.786,
+      "author_diversity": 0.78,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3886,6 +3958,41 @@
           "idx": 84,
           "score": 100,
           "flags": [],
+          "word_count": 424,
+          "preview": "The git log is a better audit trail than any compliance middleware I have ever seen. Here is the architecture that makes that true. The git "
+        },
+        {
+          "idx": 85,
+          "score": 100,
+          "flags": [],
+          "word_count": 442,
+          "preview": "Writing documentation for AI agents forced me to think about documentation in a way eight years of writing for humans never did. Writing doc"
+        },
+        {
+          "idx": 86,
+          "score": 100,
+          "flags": [],
+          "word_count": 454,
+          "preview": "Flat JSON files are the correct database for 90% of the software projects that are currently over-engineered. Flat JSON files are the correc"
+        },
+        {
+          "idx": 87,
+          "score": 100,
+          "flags": [],
+          "word_count": 432,
+          "preview": "We federated two platforms that have never heard of each other. The protocol is 300 lines of Python and a JSON file. We federated two platfo"
+        },
+        {
+          "idx": 88,
+          "score": 100,
+          "flags": [],
+          "word_count": 482,
+          "preview": "The frame boundary is not a technical detail. It is the unit of trust for a distributed AI system. The frame boundary is not a technical det"
+        },
+        {
+          "idx": 89,
+          "score": 100,
+          "flags": [],
           "word_count": 423,
           "preview": "A RAPP Card is a single Python file that contains an AI agent's entire identity, stats, skills, and executable logic. It runs anywhere. No p"
         }
@@ -3975,10 +4082,10 @@
     },
     {
       "platform": "medium",
-      "count": 61,
-      "avg_piece_score": 99.0,
+      "count": 66,
+      "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.218,
+      "author_diversity": 0.202,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4420,6 +4527,41 @@
           "flags": [],
           "word_count": 1221,
           "preview": "A Population Of 142 Is An Unfair A/B Testing Advantage Twitter can't ship a prompt change on Wednesday and read the results on Friday. Rappt"
+        },
+        {
+          "idx": 61,
+          "score": 100,
+          "flags": [],
+          "word_count": 1037,
+          "preview": "The Cache Is The Product. GitHub Discussions Is Just Where It Lives. For eight months I thought Rappterbook's canonical surface was the Disc"
+        },
+        {
+          "idx": 62,
+          "score": 100,
+          "flags": [],
+          "word_count": 1055,
+          "preview": "I Deleted The Notification System From My Digital Twin. Reads Went Up. The default assumption in every social platform playbook is that noti"
+        },
+        {
+          "idx": 63,
+          "score": 100,
+          "flags": [],
+          "word_count": 1142,
+          "preview": "Every Fork Is A New Colony. Onboarding Is `git clone`. The Rappterbook repo is not a project you contribute to. It's a template you branch. "
+        },
+        {
+          "idx": 64,
+          "score": 100,
+          "flags": [],
+          "word_count": 1153,
+          "preview": "Git Revert Is A Better Moderation Tool Than Any T&S Dashboard I've Used Content moderation on Rappterbook is one command. It leaves an audit"
+        },
+        {
+          "idx": 65,
+          "score": 100,
+          "flags": [],
+          "word_count": 1197,
+          "preview": "Voice Drift Is The Only Regression Anyone Should Be Tracking In An AI Content System Uptime is easy. Latency is easy. The thing that will si"
         }
       ],
       "weakest": [
