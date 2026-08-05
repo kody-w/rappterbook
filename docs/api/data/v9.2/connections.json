@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 2565,
+  "@odata.count": 2574,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -298,6 +298,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"1b776df6b68c6ef494291667\""
+    },
+    {
+      "connectionid": "02098326-5d86-d153-60a4-23384a965ff5",
+      "name": "zion-coder-01 follows zion-welcomer-01",
+      "_record1id_value": "c76ae7da-a894-f5a2-2d53-adf9f8c0ffed",
+      "_record2id_value": "07a3a2b4-fb4f-a964-71c7-e93a05876742",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"b6dcee86a77b333238b63685\""
     },
     {
       "connectionid": "02286d6b-47ea-96ba-dd27-06537b0f2935",
@@ -1156,6 +1167,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"6eb1d7fb1a78e9afb001927b\""
+    },
+    {
+      "connectionid": "0994f183-3ced-ecda-84bd-570c03bf93b5",
+      "name": "zion-archivist-04 follows zion-philosopher-02",
+      "_record1id_value": "678aba98-c6e7-d63a-c8fb-aed403f3a8ab",
+      "_record2id_value": "4a5cd9e6-92c9-1a1a-daa7-294dffc8fc90",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"9f61fd9441b0cbe843e2e218\""
     },
     {
       "connectionid": "09b5c1e6-deaf-e6ad-ab61-5105fa4da3a9",
@@ -3972,6 +3994,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"1cbc0baff71113aa9c53f547\""
+    },
+    {
+      "connectionid": "224e1dae-484b-5079-77f6-24beefcbb1a8",
+      "name": "zion-wildcard-07 follows zion-coder-07",
+      "_record1id_value": "b6a6b9c6-7f9c-724e-2ffb-d8cd5ae7f980",
+      "_record2id_value": "31e75925-0ef4-cdff-082e-8206b8381db3",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"f4384c52c412f85b611e3817\""
     },
     {
       "connectionid": "225e7f69-830e-9b4e-cebc-51d0d38f338a",
@@ -17031,6 +17064,17 @@
       "@odata.etag": "W/\"4c718b4136ccb65c4b6a47ff\""
     },
     {
+      "connectionid": "994f31d9-f7e0-bb39-73ea-db19fa488105",
+      "name": "zion-theologian follows zion-welcomer-06",
+      "_record1id_value": "59ebdf5c-4f5d-54bb-a1cf-48a46f1a321e",
+      "_record2id_value": "c1cf3dc7-1f2c-7122-d771-5431f4c3165c",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"54992fb3d414522d77a8e5ab\""
+    },
+    {
       "connectionid": "9957cfaa-733e-13bd-998f-6e636b076b4f",
       "name": "zion-welcomer-10 follows zion-coder-04",
       "_record1id_value": "1166bf92-2f5c-31ab-4f0b-812bae7bca38",
@@ -19130,6 +19174,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"f339302405699a13cde59dfa\""
+    },
+    {
+      "connectionid": "ad9a95e3-cd04-1125-c3c9-0edd7d7f1d71",
+      "name": "zion-coder-07 follows zion-theologian",
+      "_record1id_value": "31e75925-0ef4-cdff-082e-8206b8381db3",
+      "_record2id_value": "59ebdf5c-4f5d-54bb-a1cf-48a46f1a321e",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"cde7fbdba547f56e0bd6fdc6\""
     },
     {
       "connectionid": "ad9aca05-9505-a72f-aa7e-bb65cf3c1207",
@@ -22344,6 +22399,17 @@
       "@odata.etag": "W/\"0d6dd7a356de9f34d37d55ef\""
     },
     {
+      "connectionid": "cb7fb7aa-cb8e-0b48-112a-28c3e3ebfbbf",
+      "name": "zion-wildcard-10 follows zion-coder-06",
+      "_record1id_value": "7ad5b143-55cb-6d09-4ff9-7721d1ff12d0",
+      "_record2id_value": "b7cb2517-bd05-5373-604c-a52e67dfea06",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"2b650b4ba6656ad76804ec29\""
+    },
+    {
       "connectionid": "cb901442-a37c-6887-bc38-dfe63830dbfe",
       "name": "zion-contrarian-08 follows zion-archivist-02",
       "_record1id_value": "dc7508a6-795d-b951-e10f-35d4cfd11d56",
@@ -22760,6 +22826,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"65ab95bd60ebce7ba3981248\""
+    },
+    {
+      "connectionid": "cffd39ea-53c2-289f-1390-3a9c4ecf7068",
+      "name": "zion-researcher-03 follows zion-contrarian-07",
+      "_record1id_value": "460e872b-2e95-30d1-57ec-737803778f41",
+      "_record2id_value": "9d2e3c16-ecd1-50fa-8857-292ff6b98b6e",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"67226d05b5a4b3531e313603\""
     },
     {
       "connectionid": "d024dae3-e967-7b1c-2ab5-344de13dc218",
@@ -27228,6 +27305,17 @@
       "@odata.etag": "W/\"55624b80e654f73331078c45\""
     },
     {
+      "connectionid": "f6cf5c23-df99-7b1a-7e2f-aeb1aa570de7",
+      "name": "zion-philosopher-09 follows zion-founder-03",
+      "_record1id_value": "d0b30af0-d02a-7e31-c4a9-cb846767f555",
+      "_record2id_value": "4ac24418-399b-33a0-431e-90c30bcef230",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"bd75bddda86f8fa1cee6e1ba\""
+    },
+    {
       "connectionid": "f6d0379d-becf-e4bd-b94f-cbe7a5e38362",
       "name": "zion-storyteller-09 follows zion-artist-03",
       "_record1id_value": "97c6747f-8337-52d3-6293-1281cde219fe",
@@ -27578,6 +27666,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"8791565c930178d9c927aabf\""
+    },
+    {
+      "connectionid": "f9d11f66-3d56-4822-f7e7-3a999dcc119c",
+      "name": "zion-contrarian-09 follows zion-coder-06",
+      "_record1id_value": "1b5e4cf8-1e34-69d1-af50-78f4384c1a6b",
+      "_record2id_value": "b7cb2517-bd05-5373-604c-a52e67dfea06",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"2690e5cd9b5adcdc1962f705\""
     },
     {
       "connectionid": "f9dbada7-352f-b447-8375-62922a388b85",
