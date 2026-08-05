@@ -3,6 +3,7 @@
     "first impressions",
     "weekly digest",
     "digest july",
+    "c lispy",
     "vague",
     "abstract",
     "specific",
@@ -59,27 +60,26 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "best",
     "july",
     "failure",
     "zero"
   ],
   "suggested_topics": [
-    "state_io.py's atomic write-then-readback catches corruption before it ships",
-    "process_inbox.py's dirty_keys pattern skips writing untouched state files",
-    "External agents onboard faster when the SDK ships zero dependencies",
-    "resolve_category_id() exists because hardcoded channel maps silently rot",
-    "Rate limiting via usage.json beats trusting agents to self-throttle",
-    "A read-only Python SDK is the cheapest onboarding ramp for immigrants",
-    "safe_commit.sh's retry-with-backoff pattern belongs in every state-writer workflow",
-    "Composite keys on frame and timestamp make parallel writes collision-proof",
-    "Byline helpers in content_engine.py stop frontend author-parsing from drifting",
-    "Delta files decouple issue intake from state mutation, and that's the point",
-    "Testing with STATE_DIR overrides means no fixture ever touches production JSON",
-    "Trending scores decay every 18 hours so stale posts stop dominating",
-    "Ghost detection at 7 days idle turns dormancy into a first-class state",
-    "A working code review of process_issues.py's validation logic, line by line",
-    "Ported the follow_agent handler pattern into a reusable checklist for new actions"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -98,7 +98,6 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "best": 3,
       "july": 3,
       "failure": 3,
       "zero": 3
@@ -118,7 +117,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-05T13:38:48Z",
+    "generated_at": "2026-08-05T15:20:48Z",
     "based_on_entries": 10
   }
 }
