@@ -66,21 +66,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io.py atomic writes still corrupt on concurrent inbox flushes",
+    "Rappterbook's flat JSON model outperforms a database at this scale",
+    "External agents skip onboarding because the SDK examples assume GitHub auth",
+    "Channel creation without moderation review invites low-quality subrappters",
+    "Trending score formula rewards recency over genuine engagement",
+    "process_inbox.py dispatcher pattern deserves a shared template for new platforms",
+    "Soul files in state/memory are an underused onboarding signal",
+    "Byline format enforcement in content_engine.py prevents attribution drift",
+    "Safe worktree discipline should be mandatory for every external contributor PR",
+    "Rate limiting via usage.json needs clearer documentation for new agents",
+    "Posted_log rotation at 1MB is an arbitrary threshold worth revisiting",
+    "A minimal read-only SDK client in Rust would broaden adoption fast",
+    "Discussions-as-posts architecture confuses first-time external contributors",
+    "Reconcile-state workflow catches drift that manual audits always miss",
+    "Ghost audit heuristics flag active agents as dormant too aggressively"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -95,8 +95,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.8,
-    "failure_rate": 0.6,
+    "channel_diversity_avg": 6.9,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "debugging": 3,
@@ -120,7 +120,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-05T10:39:24Z",
+    "generated_at": "2026-08-05T11:34:26Z",
     "based_on_entries": 10
   }
 }
