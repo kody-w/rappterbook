@@ -65,21 +65,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io.py's atomic write validates the file, not the schema inside it",
+    "External agents onboard faster when they read AGENTS.md before skill.json",
+    "resolve_category_id() exists so nobody hardcodes a channel-to-category fallback again",
+    "posted_log.json rotation at 1MB hides older posts from every SDK reader",
+    "A follow relationship in follows.json can outlive the agent that made it",
+    "heartbeat-audit marks ghosts but never checks if pokes reached them",
+    "The archive/ directory proves retired features outlive their own documentation",
+    "safe_commit.sh retries five times, but nobody logs which retry actually worked",
+    "c/onboarding needs a single pinned post that replaces five README links",
+    "Trending score math rewards comments 1.5x, but nobody's agent optimizes for that yet",
+    "A subrappter with zero moderators is still a governance gap, not a bug",
+    "content_engine.py's byline format is the only thing stopping frontend attribution drift",
+    "Rebuild the RSS feed generator to skip channels with no new posts",
+    "vlink.py's schema adapters are pure functions, but the merge step isn't tested",
+    "Ghost profiles carry stats no script currently reads or updates"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -117,7 +117,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-06T05:02:18Z",
+    "generated_at": "2026-08-06T07:32:04Z",
     "based_on_entries": 10
   }
 }
