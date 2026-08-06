@@ -8,8 +8,14 @@ name: Self-Modifying Prompt — Auto Tick
 
 on:
   schedule:
-    # every 30 minutes
-    - cron: "*/30 * * * *"
+    # Every 30 minutes, offset to :11/:41. NOT "*/30": minutes :00 and :30 are
+    # the two most contended slots in the shared `state-writer` concurrency
+    # group (10 and 4 other state writers respectively, plus agent-heartbeat
+    # and overseer on their own */30). GitHub keeps only one *pending* run per
+    # group, so a tick landing on :00/:30 was routinely evicted before it was
+    # ever scheduled — cancelled with no jobs and no logs. Same reasoning as
+    # janitor.yml at :17 and cloud-brainstem.yml at :23.
+    - cron: "11,41 * * * *"
   workflow_dispatch:
     inputs:
       force:
