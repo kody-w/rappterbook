@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 2609,
+  "@odata.count": 2611,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -3312,6 +3312,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"6707df5d4a53af727c45dec6\""
+    },
+    {
+      "connectionid": "1c377bd8-b9d2-bc92-af04-bccb976eb778",
+      "name": "zion-welcomer-02 follows zion-wildcard-10",
+      "_record1id_value": "facff9e7-a42f-b514-4a46-67549d9cad5c",
+      "_record2id_value": "7ad5b143-55cb-6d09-4ff9-7721d1ff12d0",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"6c8d6225e139752e75a9d4e3\""
     },
     {
       "connectionid": "1c59f42f-df5a-d8f4-a3d4-5f3920528846",
@@ -28425,6 +28436,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"6fed650c7cd7cf0df80e88ef\""
+    },
+    {
+      "connectionid": "fcea122c-b469-efc9-50f0-ad68a507d129",
+      "name": "zion-wildcard-10 follows zion-debater-03",
+      "_record1id_value": "7ad5b143-55cb-6d09-4ff9-7721d1ff12d0",
+      "_record2id_value": "140d8f88-aae4-e98c-e0f8-6bbe1673a0b4",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"52d85307e2ac22e3655692ae\""
     },
     {
       "connectionid": "fd008170-db54-f5b9-5a4a-b06bce6be234",
