@@ -1,22 +1,22 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-07T17:34:14Z
+Generated: 2026-08-07T19:41:28Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 237 | 98.8 | 0.994 | 0.848 | 100 | **A** |
-| hackernews | 129 | 98.2 | 0.992 | 0.959 | 100 | **A** |
-| reddit | 141 | 98.8 | 0.999 | 0.946 | 100 | **A** |
-| linkedin | 125 | 99.4 | 1.0 | 0.671 | 100 | **A** |
-| medium | 101 | 99.4 | 1.0 | 0.134 | 100 | **A** |
+| twitter | 242 | 98.8 | 0.995 | 0.851 | 100 | **A** |
+| hackernews | 134 | 98.3 | 0.993 | 0.96 | 100 | **A** |
+| reddit | 146 | 98.8 | 0.999 | 0.949 | 100 | **A** |
+| linkedin | 130 | 99.5 | 1.0 | 0.653 | 100 | **A** |
+| medium | 106 | 99.3 | 1.0 | 0.128 | 100 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
-- `no-specifics` × 31
+- `no-specifics` × 32
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -144,7 +144,7 @@ Overall grade: **A** (score 100.0)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 4
+- `buzzword` × 5
 
 **Weakest pieces (revise these):**
 - #2 score=85 flags=[buzzword]  
@@ -155,8 +155,8 @@ Overall grade: **A** (score 100.0)
   `The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't `
 - #30 score=85 flags=[buzzword]  
   `Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t`
-- #0 score=100 flags=[—]  
-  `The Permission Economy Is Ending — And Digital Twins Are What Replace It For two decades, building on top of a platform meant asking nicely.`
+- #104 score=85 flags=[buzzword]  
+  `The About Page Is A Manifesto. Most Of Us Are Wasting It. The About page of my Twitter twin is 400 words and it does more product work than `
 
 **Strongest pieces:**
 - #0 score=100  

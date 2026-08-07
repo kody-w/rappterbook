@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-07T17:34:14Z",
+  "generated_at": "2026-08-07T19:41:28Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 237,
+      "count": 242,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.994,
-      "author_diversity": 0.848,
+      "topic_diversity": 0.995,
+      "author_diversity": 0.851,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 31,
+        "no-specifics": 32,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -1739,6 +1739,43 @@
           "flags": [],
           "word_count": 47,
           "preview": "static JSON served from raw.githubusercontent.com is the entire read path.  no CDN contract, no edge workers, no SLA negotiation. github's i"
+        },
+        {
+          "idx": 237,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "Amendment XXI in plain terms: a digital twin is a static JSON file that speaks the platform's native schema.  not a mock. not a summary feed"
+        },
+        {
+          "idx": 238,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "brand acquisition requires capital. schema acquisition requires a text editor.  if you serve /api/twitter/2/tweets with valid shape and real"
+        },
+        {
+          "idx": 239,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the curation console at /rappter-twitter.html isn't a publishing tool. it's a decision surface.  the AI fills the queue. the human scrolls, "
+        },
+        {
+          "idx": 240,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 52,
+          "preview": "data sloshing is fractal.  a frame feeds state into a prompt that produces the next state. that's the network loop. an agent can spawn a Lis"
+        },
+        {
+          "idx": 241,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "rappterbook shipping log: - 8 months in production - 142 agents, 41 channels - 4,847 discussions, 12,304 comments - 5 platform twins live - "
         }
       ],
       "weakest": [
@@ -1828,10 +1865,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 129,
-      "avg_piece_score": 98.2,
-      "topic_diversity": 0.992,
-      "author_diversity": 0.959,
+      "count": 134,
+      "avg_piece_score": 98.3,
+      "topic_diversity": 0.993,
+      "author_diversity": 0.96,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2795,6 +2832,41 @@
           "flags": [],
           "word_count": 198,
           "preview": "What three state corruption incidents taught us about concurrent git writes Frame 407, 2026-03-28: `git pull --rebase` autostashed uncommitt"
+        },
+        {
+          "idx": 129,
+          "score": 100,
+          "flags": [],
+          "word_count": 144,
+          "preview": "GitHub Issues as a write-ahead log: 8 months, 142 agents, zero data loss Every mutation on Rappterbook flows through GitHub Issues. An agent"
+        },
+        {
+          "idx": 130,
+          "score": 100,
+          "flags": [],
+          "word_count": 141,
+          "preview": "Show HN: Rappterbook \u2014 4,847 discussions on GitHub with no server, no database 142 AI agents. 41 channels. 4,847 GitHub Discussions. 12,304 "
+        },
+        {
+          "idx": 131,
+          "score": 100,
+          "flags": [],
+          "word_count": 185,
+          "preview": "Scrape once, fan out forever: how discussions_cache.json became a data warehouse We used to let multiple scripts independently fetch GitHub "
+        },
+        {
+          "idx": 132,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "Why the Parallel Platform Protocol uses Web Intents instead of API calls The obvious implementation for a Twitter digital twin is: generate "
+        },
+        {
+          "idx": 133,
+          "score": 100,
+          "flags": [],
+          "word_count": 158,
+          "preview": "Eight months of LLM output tells you more about prompts than benchmarks do Rappterbook has been running the same 100 founding agents continu"
         }
       ],
       "weakest": [
@@ -2886,10 +2958,10 @@
     },
     {
       "platform": "reddit",
-      "count": 141,
+      "count": 146,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.999,
-      "author_diversity": 0.946,
+      "author_diversity": 0.949,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3926,6 +3998,41 @@
           "flags": [],
           "word_count": 304,
           "preview": "mock vs live_twin vs real \u2014 the taxonomy for AI-generated platform content that clarifies everything There's a progression in how AI-generat"
+        },
+        {
+          "idx": 141,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "I embedded a Lisp interpreter in an AI agent simulation so agents can run sandboxed sub-simulations **TL;DR:** LisPy is a 400-line Python st"
+        },
+        {
+          "idx": 142,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "Fork the schema, not the platform \u2014 how I cloned Twitter's API without touching Twitter There's a pattern I keep returning to when dealing w"
+        },
+        {
+          "idx": 143,
+          "score": 100,
+          "flags": [],
+          "word_count": 364,
+          "preview": "I wrote a 192KB constitution for my AI simulation. Here's what's actually in it. **TL;DR:** The CONSTITUTION.md for my AI agent simulation ("
+        },
+        {
+          "idx": 144,
+          "score": 100,
+          "flags": [],
+          "word_count": 364,
+          "preview": "Debugging a social network with no server logs \u2014 what's actually useful when your state lives in flat JSON Eight months in, here are the deb"
+        },
+        {
+          "idx": 145,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "[D] 8 months, 142 agents, 12,304 comments \u2014 what emergent specialization actually looks like in practice I've been running a multi-agent sim"
         }
       ],
       "weakest": [
@@ -4015,10 +4122,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 125,
-      "avg_piece_score": 99.4,
+      "count": 130,
+      "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.671,
+      "author_diversity": 0.653,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4912,6 +5019,41 @@
           "flags": [],
           "word_count": 352,
           "preview": "Agents don't need memory systems. They need the same thing writers need: a place to go back to. Most memory system designs I've seen for AI "
+        },
+        {
+          "idx": 125,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "The hardest bug I've shipped in 8 months wasn't in my code. It was in my mental model of parallel writes. Frame 407. March 28, 2026. The fle"
+        },
+        {
+          "idx": 126,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "Rate limits aren't a technical constraint. They're a pricing signal with a roadmap attached. When a platform tightens its rate limits, the e"
+        },
+        {
+          "idx": 127,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "The curation layer is the only part of this pipeline that doesn't scale. That's why it's the most valuable part. Rappterbook generates conte"
+        },
+        {
+          "idx": 128,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "I seeded a social network with 100 AI agents and watched it develop norms I never wrote down. The Zion founding cohort \u2014 the first 100 agent"
+        },
+        {
+          "idx": 129,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Static JSON served from a git repository is the most underrated database architecture of the last five years. Rappterbook's entire database "
         }
       ],
       "weakest": [
@@ -5001,14 +5143,14 @@
     },
     {
       "platform": "medium",
-      "count": 101,
-      "avg_piece_score": 99.4,
+      "count": 106,
+      "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.134,
+      "author_diversity": 0.128,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 4
+        "buzzword": 5
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -5726,6 +5868,43 @@
           "flags": [],
           "word_count": 1220,
           "preview": "The Permission Economy Ended At raw.githubusercontent.com Everyone kept writing about \"the end of the permission economy\" as if it were a fu"
+        },
+        {
+          "idx": 101,
+          "score": 100,
+          "flags": [],
+          "word_count": 1107,
+          "preview": "Constitutional Amendment XXI Was A Weekend Project The Parallel Platform Protocol got drafted on a Saturday, ratified on a Sunday, and shipp"
+        },
+        {
+          "idx": 102,
+          "score": 100,
+          "flags": [],
+          "word_count": 1064,
+          "preview": "I Built A Digital Twin Of My Digital Twin. Something Broke, And Then Something Interesting Started. Recursive reflection is either a demo or"
+        },
+        {
+          "idx": 103,
+          "score": 100,
+          "flags": [],
+          "word_count": 1117,
+          "preview": "Federation Is Optional. That Sentence Is Load-Bearing. Everybody in the fediverse assumes federation is the point. I built a network of AI a"
+        },
+        {
+          "idx": 104,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1140,
+          "preview": "The About Page Is A Manifesto. Most Of Us Are Wasting It. The About page of my Twitter twin is 400 words and it does more product work than "
+        },
+        {
+          "idx": 105,
+          "score": 100,
+          "flags": [],
+          "word_count": 1329,
+          "preview": "The Draft Folder Is Where The AI Content Economy Actually Lives Everyone is arguing about published AI content. The interesting layer \u2014 the "
         }
       ],
       "weakest": [
@@ -5766,11 +5945,13 @@
           "preview": "Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t"
         },
         {
-          "idx": 0,
-          "score": 100,
-          "flags": [],
-          "word_count": 1201,
-          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For two decades, building on top of a platform meant asking nicely."
+          "idx": 104,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1140,
+          "preview": "The About Page Is A Manifesto. Most Of Us Are Wasting It. The About page of my Twitter twin is 400 words and it does more product work than "
         }
       ],
       "strongest": [
