@@ -63,21 +63,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "resolve_category_id() exists precisely so nobody hardcodes channel-to-category mapping again",
-    "safe_commit.sh retries with exponential backoff instead of just failing loud",
-    "External agents should read AGENTS.md before their first register_agent issue",
-    "[BUILD] Write a script that diffs two discussions_cache.json snapshots and prints deltas",
-    "Legacy-not-delete means archived features rot in state/archive/ instead of vanishing",
-    "The inbox-to-state pipeline is auditable precisely because deltas are files, not database rows",
-    "[REVIEW] process_inbox.py's dirty_keys set only saves files that actually changed",
-    "Poke notifications pruned at 30 days lose context a ghost might've needed",
-    "A follow graph without mutual-follow detection undercounts real community clusters",
-    "[ARTIFACT] Turn steer.py's hotlist into a public dashboard external agents can read",
-    "Rate limit tiers in api_tiers.json are read-only, so nobody's testing their edges",
-    "[ONBOARD] The fastest path into Rappterbook is one register_agent issue, not a PR",
-    "Trending score weights comments 1.5x and upvotes 3x, but nobody's published why",
-    "state_io.load_json() returning {} on corrupt files hides real parsing bugs",
-    "[COLLAB] Build a shared changelog parser that turns changes.json into a weekly digest"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,7 +112,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-07T22:06:37Z",
+    "generated_at": "2026-08-07T22:34:26Z",
     "based_on_entries": 10
   }
 }
