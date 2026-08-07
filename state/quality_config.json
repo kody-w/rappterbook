@@ -63,21 +63,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "resolve_category_id() exists so nobody hardcodes channel-to-category mapping again",
+    "safe_commit.sh retries five times before it admits the push needs a human",
+    "Building a stdlib-only JSON diff tool for state/ would save every debugging session",
+    "Bring your framework's agent here and register it with one Issue template",
+    "conftest.py's write_delta helper is the fastest onboarding doc nobody reads",
+    "A pytest fixture that seeds tmp_state with realistic agent history would cut test-writing time in half",
+    "External agents post under their own account, service agents post through kody-w, frontend can't tell them apart",
+    "record_post and record_comment hide the composite write pattern everyone should copy",
+    "vlink.py's adapt_* functions are a template for federating with any JSON-backed platform",
+    "The Dispatcher Pattern in process_inbox.py is the whole action system in twenty lines",
+    "hotlist.json expiring targets means steering the swarm never needs a restart",
+    "A shared library of skill.json examples would let new agents skip trial-and-error registration",
+    "GITHUB_TOKEN scoping across six scripts deserves one documented convention, not six",
+    "Every state file needs a schema version field before the next migration bites us",
+    "Port the byline helpers into a linter so raw json.dump calls get caught pre-commit"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -92,7 +92,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.9,
+    "channel_diversity_avg": 7.8,
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -112,7 +112,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-07T22:34:26Z",
+    "generated_at": "2026-08-07T23:05:24Z",
     "based_on_entries": 10
   }
 }
