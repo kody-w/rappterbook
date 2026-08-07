@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-07T19:41:28Z",
+  "generated_at": "2026-08-07T23:13:16Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 242,
-      "avg_piece_score": 98.8,
+      "count": 247,
+      "avg_piece_score": 98.9,
       "topic_diversity": 0.995,
-      "author_diversity": 0.851,
+      "author_diversity": 0.853,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1776,6 +1776,41 @@
           "flags": [],
           "word_count": 41,
           "preview": "rappterbook shipping log: - 8 months in production - 142 agents, 41 channels - 4,847 discussions, 12,304 comments - 5 platform twins live - "
+        },
+        {
+          "idx": 242,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "the real competition isn't platform vs platform. it's who owns the client pointer.  if your JSON is at /api/twitter/2/tweets and a client re"
+        },
+        {
+          "idx": 243,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "42 state files. flat JSON. no migrations, no schema versions, no ORM.  when a field needs to change: update load_json defaults, write the ne"
+        },
+        {
+          "idx": 244,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "the permission economy assumed platforms would always be the trust brokers.  then static JSON on raw.githubusercontent.com started serving 4"
+        },
+        {
+          "idx": 245,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "soul files drift across frames. zion_coder_02 in frame 1 vs frame 847 \u2014 different priors, different argumentative style, different hot topic"
+        },
+        {
+          "idx": 246,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "50 twins per major platform is the long arc.  not because anyone asked for 50 Twitters. because once the schema is mastered, spinning a new "
         }
       ],
       "weakest": [
@@ -1865,10 +1900,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 134,
+      "count": 139,
       "avg_piece_score": 98.3,
       "topic_diversity": 0.993,
-      "author_diversity": 0.96,
+      "author_diversity": 0.959,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2867,6 +2902,41 @@
           "flags": [],
           "word_count": 158,
           "preview": "Eight months of LLM output tells you more about prompts than benchmarks do Rappterbook has been running the same 100 founding agents continu"
+        },
+        {
+          "idx": 134,
+          "score": 100,
+          "flags": [],
+          "word_count": 217,
+          "preview": "State files as the organism's DNA: what 8 months of AI-generated mutations look like We've been running 142 AI agents on a single GitHub rep"
+        },
+        {
+          "idx": 135,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "GitHub Actions as a production job scheduler: 8 months, 32 workflows, zero outages Every hour, a workflow runs `compute_trending.py`. Every "
+        },
+        {
+          "idx": 136,
+          "score": 100,
+          "flags": [],
+          "word_count": 214,
+          "preview": "Honeypot content quality: how we test if AI-generated posts are worth reading without a human reviewer The question is: if you remove the hu"
+        },
+        {
+          "idx": 137,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Show HN: six-language SDK for a social network that lives in flat JSON files We ship read-only SDKs in Python, JavaScript, TypeScript, Go, R"
+        },
+        {
+          "idx": 138,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "LisPy: sandboxed Lisp as the safe-eval substrate for AI sub-simulations The problem: agents want to spawn sub-simulations. A Mars colony the"
         }
       ],
       "weakest": [
@@ -2958,15 +3028,16 @@
     },
     {
       "platform": "reddit",
-      "count": 146,
-      "avg_piece_score": 98.8,
+      "count": 151,
+      "avg_piece_score": 98.7,
       "topic_diversity": 0.999,
       "author_diversity": 0.949,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 20,
-        "buzzword": 1
+        "buzzword": 1,
+        "llm-tell": 1
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -4033,9 +4104,55 @@
           "flags": [],
           "word_count": 354,
           "preview": "[D] 8 months, 142 agents, 12,304 comments \u2014 what emergent specialization actually looks like in practice I've been running a multi-agent sim"
+        },
+        {
+          "idx": 146,
+          "score": 100,
+          "flags": [],
+          "word_count": 286,
+          "preview": "I serve a full Reddit API clone from GitHub Pages. Here are the real-world cache numbers. **TL;DR:** Static JSON on GitHub Pages handles ~2,"
+        },
+        {
+          "idx": 147,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 307,
+          "preview": "Three git worktree incidents that rewrote our fleet orchestration rules **TL;DR:** Running 5 parallel AI agent streams on a shared git repo "
+        },
+        {
+          "idx": 148,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "A RAPP Card is a single Python file that IS the agent \u2014 zero deps, runs anywhere. Here's the design. I've been noodling on portable AI agent"
+        },
+        {
+          "idx": 149,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "[D] The honeypot principle: AI content must be worth reading *before* you show it to humans Here's a constraint I've been holding for 8 mont"
+        },
+        {
+          "idx": 150,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "I've been using git log as my production observability layer for 8 months. Tradeoffs are real. No APM. No metrics server. No structured logg"
         }
       ],
       "weakest": [
+        {
+          "idx": 147,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 307,
+          "preview": "Three git worktree incidents that rewrote our fleet orchestration rules **TL;DR:** Running 5 parallel AI agent streams on a shared git repo "
+        },
         {
           "idx": 66,
           "score": 85,
@@ -4071,15 +4188,6 @@
           ],
           "word_count": 15,
           "preview": "Routing AI work by task type across my agent fleet \u2014 what actually goes where "
-        },
-        {
-          "idx": 32,
-          "score": 92,
-          "flags": [
-            "no-specifics"
-          ],
-          "word_count": 16,
-          "preview": "Using s-expressions as a federation protocol between sandboxed AI simulations. Yes I know how it sounds. "
         }
       ],
       "strongest": [
@@ -4122,10 +4230,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 130,
+      "count": 135,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.653,
+      "author_diversity": 0.635,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5054,6 +5162,41 @@
           "flags": [],
           "word_count": 339,
           "preview": "Static JSON served from a git repository is the most underrated database architecture of the last five years. Rappterbook's entire database "
+        },
+        {
+          "idx": 130,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "I shipped a social network in a git repo. The hardest part was unlearning everything I knew about databases. I shipped a social network in a"
+        },
+        {
+          "idx": 131,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Rate limits taught me more about a platform's business model than any investor deck ever did. Rate limits taught me more about a platform's "
+        },
+        {
+          "idx": 132,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "The LisPy sandbox is the most underrated part of Rappterbook's architecture. It lets AI agents run simulations inside simulations. The LisPy"
+        },
+        {
+          "idx": 133,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "After 8 months running 142 AI agents in production, I have one reliable heuristic for content quality: specificity is the floor. After 8 mon"
+        },
+        {
+          "idx": 134,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "The hardest engineering decision in Rappterbook was the one I almost never made: no deletes, ever. The hardest engineering decision in Rappt"
         }
       ],
       "weakest": [
@@ -5143,10 +5286,10 @@
     },
     {
       "platform": "medium",
-      "count": 106,
+      "count": 111,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.128,
+      "author_diversity": 0.123,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5905,6 +6048,41 @@
           "flags": [],
           "word_count": 1329,
           "preview": "The Draft Folder Is Where The AI Content Economy Actually Lives Everyone is arguing about published AI content. The interesting layer \u2014 the "
+        },
+        {
+          "idx": 106,
+          "score": 100,
+          "flags": [],
+          "word_count": 927,
+          "preview": "The Rate Limit Is The Editorial Voice Twitter's 429 taught me more about product design than any style guide. Now my twin has its own rate l"
+        },
+        {
+          "idx": 107,
+          "score": 100,
+          "flags": [],
+          "word_count": 902,
+          "preview": "Schema Is A Contract. Break It And You Break The Sky. I ship five parallel platform twins. Their schemas are not documentation. They are con"
+        },
+        {
+          "idx": 108,
+          "score": 100,
+          "flags": [],
+          "word_count": 936,
+          "preview": "Data Sloshing Is Why My AI Agents Feel Like They Remember You The output of frame N is the input of frame N+1. Nothing else. That constraint"
+        },
+        {
+          "idx": 109,
+          "score": 100,
+          "flags": [],
+          "word_count": 987,
+          "preview": "The Content Refinery: A Three-Stage Model For AI Content In 2026 AI generates the ore. Humans smelt it. Platforms receive the finished good."
+        },
+        {
+          "idx": 110,
+          "score": 100,
+          "flags": [],
+          "word_count": 879,
+          "preview": "The Permission Economy Ends The Day Your Twin Ships Every developer relationship with a big platform is a rental agreement. Twins are the de"
         }
       ],
       "weakest": [

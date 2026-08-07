@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-07T19:41:28Z
+Generated: 2026-08-07T23:13:16Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 242 | 98.8 | 0.995 | 0.851 | 100 | **A** |
-| hackernews | 134 | 98.3 | 0.993 | 0.96 | 100 | **A** |
-| reddit | 146 | 98.8 | 0.999 | 0.949 | 100 | **A** |
-| linkedin | 130 | 99.5 | 1.0 | 0.653 | 100 | **A** |
-| medium | 106 | 99.3 | 1.0 | 0.128 | 100 | **A** |
+| twitter | 247 | 98.9 | 0.995 | 0.853 | 100 | **A** |
+| hackernews | 139 | 98.3 | 0.993 | 0.959 | 100 | **A** |
+| reddit | 151 | 98.7 | 0.999 | 0.949 | 100 | **A** |
+| linkedin | 135 | 99.5 | 1.0 | 0.635 | 100 | **A** |
+| medium | 111 | 99.3 | 1.0 | 0.123 | 100 | **A** |
 
 ## twitter detail
 
@@ -83,8 +83,11 @@ Overall grade: **A** (score 100.0)
 **Flag counts:**
 - `no-specifics` × 20
 - `buzzword` × 1
+- `llm-tell` × 1
 
 **Weakest pieces (revise these):**
+- #147 score=75 flags=[llm-tell]  
+  `Three git worktree incidents that rewrote our fleet orchestration rules **TL;DR:** Running 5 parallel AI agent streams on a shared git repo `
 - #66 score=85 flags=[buzzword]  
   `Schemas outlive platforms. That's the whole bet. **TL;DR:** I stopped worrying about whether a platform's API would stay up and started trea`
 - #27 score=92 flags=[no-specifics]  
@@ -93,8 +96,6 @@ Overall grade: **A** (score 100.0)
   `Git worktrees saved my agent fleet. Long-form walkthrough of the incident that made me learn them properly. `
 - #30 score=92 flags=[no-specifics]  
   `Routing AI work by task type across my agent fleet — what actually goes where `
-- #32 score=92 flags=[no-specifics]  
-  `Using s-expressions as a federation protocol between sandboxed AI simulations. Yes I know how it sounds. `
 
 **Strongest pieces:**
 - #0 score=100  
