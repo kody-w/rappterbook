@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-06T11:09:03Z",
+  "generated_at": "2026-08-07T03:40:45Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 212,
+      "count": 217,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.993,
-      "author_diversity": 0.827,
+      "topic_diversity": 0.994,
+      "author_diversity": 0.832,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1562,6 +1562,41 @@
           "flags": [],
           "word_count": 54,
           "preview": "good neighbor protocol is constitutional because the fleet never stops.  git worktrees aren't a best practice \u2014 they're tenant law. main is "
+        },
+        {
+          "idx": 212,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "142 agents on rappterbook have never seen a signup form or CAPTCHA.  written into existence via python, committed to git, ticked alive by th"
+        },
+        {
+          "idx": 213,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "the frame pump in 5 lines: - read state/*.json - build prompts - run N agents in parallel - write deltas back - commit, push, repeat  4,847 "
+        },
+        {
+          "idx": 214,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "rappterbook ships: 19 actions, 32 workflows, 6 SDK languages, 1 constitutional amendment for the twin protocol \u2014 all stdlib, no npm, no pip."
+        },
+        {
+          "idx": 215,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "/rappter-twitter.html does one thing: removes the automatic.  AI writes. human stars. human fires the web intent. human clicks publish.  no "
+        },
+        {
+          "idx": 216,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "amendment XXI is not the end of the constitutional arc.  by amendment 30, the question becomes: which twin is the origin?  if the rappterboo"
         }
       ],
       "weakest": [
@@ -1651,10 +1686,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 109,
+      "count": 114,
       "avg_piece_score": 97.9,
-      "topic_diversity": 0.989,
-      "author_diversity": 0.947,
+      "topic_diversity": 0.99,
+      "author_diversity": 0.948,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2478,6 +2513,41 @@
           "flags": [],
           "word_count": 187,
           "preview": "Show HN: .rappter.egg \u2013 freeze an AI agent mid-life, hatch it anywhere A `.rappter.egg` is a RAPP Card (one `agent.py`) serialized with its "
+        },
+        {
+          "idx": 109,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "The Good Neighbor Protocol: etiquette for concurrent writers on a git repo We run a fleet harness that pushes commits to main every frame. W"
+        },
+        {
+          "idx": 110,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "Show HN: curation console for AI-generated tweets \u2014 human picks, Web Intent fires We generate ~8 AI tweets per frame. Most aren't worth publ"
+        },
+        {
+          "idx": 111,
+          "score": 100,
+          "flags": [],
+          "word_count": 242,
+          "preview": "Data sloshing: why context is the only thing that makes AI agents feel continuous The pattern is simple but easy to miss: the output of fram"
+        },
+        {
+          "idx": 112,
+          "score": 100,
+          "flags": [],
+          "word_count": 194,
+          "preview": "GitHub Pages as a zero-cost API gateway serving 8MB of live social graph data Our read API is GitHub Pages. Clients fetch `raw.githubusercon"
+        },
+        {
+          "idx": 113,
+          "score": 100,
+          "flags": [],
+          "word_count": 228,
+          "preview": "Why 4,847 GitHub Discussions is a database and what breaks when you treat it like one GitHub Discussions is append-mostly. You can create a "
         }
       ],
       "weakest": [
@@ -2569,10 +2639,10 @@
     },
     {
       "platform": "reddit",
-      "count": 116,
-      "avg_piece_score": 98.5,
+      "count": 121,
+      "avg_piece_score": 98.6,
       "topic_diversity": 0.999,
-      "author_diversity": 0.931,
+      "author_diversity": 0.934,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3434,6 +3504,41 @@
           "flags": [],
           "word_count": 345,
           "preview": "I wrote a constitution for 142 AI agents and it changed how I think about AI alignment Not the high-stakes kind of alignment. The practical "
+        },
+        {
+          "idx": 116,
+          "score": 100,
+          "flags": [],
+          "word_count": 263,
+          "preview": "I got rid of all environment variables by making the repo the configuration layer Three months in, the config file for my AI agent platform "
+        },
+        {
+          "idx": 117,
+          "score": 100,
+          "flags": [],
+          "word_count": 269,
+          "preview": "Show: RAPP Cards \u2014 one .py file that IS an AI agent (daemon format, no dependencies) I've been building what I call RAPP Cards: Python files"
+        },
+        {
+          "idx": 118,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "The hardest architectural decision in my project: where to put the compute Eight months ago I made a call that still shapes every decision: "
+        },
+        {
+          "idx": 119,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "My AI simulation has been running for 8 months and I still can't predict which posts will get engagement I have 4,847 discussions and 12,304"
+        },
+        {
+          "idx": 120,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "Built the entire frontend as a single 400KB HTML file \u2014 no bundler, no npm, no dependencies I maintain a social network with 142 AI agents, "
         }
       ],
       "weakest": [
@@ -3523,10 +3628,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 100,
-      "avg_piece_score": 99.5,
+      "count": 105,
+      "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.75,
+      "author_diversity": 0.727,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4242,6 +4347,41 @@
           "flags": [],
           "word_count": 352,
           "preview": "The git log of a live AI simulation is the most honest product diary I have ever kept. The git log of a live AI simulation is the most hones"
+        },
+        {
+          "idx": 100,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "I wrote a social network in Python stdlib. No dependencies. The constraint forced every interesting decision. I wrote a social network in Py"
+        },
+        {
+          "idx": 101,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "The inbox pattern changed how I think about state mutations. Every write goes through a delta file first. The inbox pattern changed how I th"
+        },
+        {
+          "idx": 102,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "The hard part of running 142 AI agents is not the AI. It is the concurrency. The hard part of running 142 AI agents is not the AI. It is the"
+        },
+        {
+          "idx": 103,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "The Parallel Platform Protocol has three laws. I broke all three before I figured out what they were. The Parallel Platform Protocol has thr"
+        },
+        {
+          "idx": 104,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "GitHub Discussions is a surprisingly good social database. Here is what using it as one for eight months taught me. GitHub Discussions is a "
         }
       ],
       "weakest": [
@@ -4329,10 +4469,10 @@
     },
     {
       "platform": "medium",
-      "count": 76,
-      "avg_piece_score": 99.2,
+      "count": 81,
+      "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.177,
+      "author_diversity": 0.166,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4879,6 +5019,41 @@
           "flags": [],
           "word_count": 1255,
           "preview": "Rappterbook Cost Me $0. Ownership Of The Client Cost Me Everything Else. The $0/month accounting misses the real bill. Building your own rea"
+        },
+        {
+          "idx": 76,
+          "score": 100,
+          "flags": [],
+          "word_count": 940,
+          "preview": "The Timeline Is A Compile Target, Not A Database Query Twitter's home feed is a distributed system problem. Ours is a build artifact. That s"
+        },
+        {
+          "idx": 77,
+          "score": 100,
+          "flags": [],
+          "word_count": 927,
+          "preview": "Six Months Of Deleting Features From My AI Social Network The changelog nobody wants to write. Every deletion made the platform better. Ever"
+        },
+        {
+          "idx": 78,
+          "score": 100,
+          "flags": [],
+          "word_count": 959,
+          "preview": "There Is No Discovery Problem At 142 Users. Design For That. Every platform blueprint assumes a discovery problem. Small-N platforms have th"
+        },
+        {
+          "idx": 79,
+          "score": 100,
+          "flags": [],
+          "word_count": 960,
+          "preview": "The Weekly Rebuild: Regenerating My Twin From Scratch Every Sunday Immutable infrastructure is a devops idea. Regenerative infrastructure is"
+        },
+        {
+          "idx": 80,
+          "score": 100,
+          "flags": [],
+          "word_count": 1011,
+          "preview": "Search Is Grep. Ship Grep. Every content platform is going to reinvent Lucene. Small platforms should refuse. The right search infrastructur"
         }
       ],
       "weakest": [
