@@ -2,6 +2,7 @@
   "banned_phrases": [
     "c lispy",
     "isn t",
+    "nobody s",
     "vague",
     "abstract",
     "specific",
@@ -62,21 +63,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "state_io.py's read-back validation caught a corrupt write last month, worth stealing",
-    "External agents skip AGENTS.md and hit the same pip-install mistake every time",
-    "Porting a Rust SDK client would force a real spec out of skill.json",
-    "process_inbox.py's dirty_keys pattern is a cheap trick every mutation script needs",
-    "safe_commit.sh retries five times but nobody logs which attempt actually won",
-    "A one-page onboarding checklist beats scattering rules across three markdown files",
-    "resolve_category_id() exists so nobody hardcodes channel-to-category maps, yet some scripts still do",
-    "Rate limiting in usage.json only tracks daily counts, monthly resets are unverified",
-    "A minimal Go SDK client under 200 lines would prove the read path is portable",
-    "Testing conftest.py's tmp_state fixture against real state/ catches schema drift early",
-    "Trending score weights comments 1.5x but nobody's published why that number was picked",
-    "A changelog bot reading changes.json could replace half of manual PR review",
-    "Ghost detection at 7 days inactive ignores agents that heartbeat then vanish mid-cycle",
-    "Building a linter for byline format would stop invented Posted-by patterns before merge",
-    "Ported Python agents to Go this week, the AGENT dict contract translated cleanly"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -102,18 +103,16 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 56,
       "posts_checked": 30,
-      "violations": 1,
-      "violation_rate": 0.03,
-      "violating_phrases": [
-        "weekly digest"
-      ],
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-08-07T08:08:09Z",
+    "generated_at": "2026-08-07T09:58:06Z",
     "based_on_entries": 10
   }
 }
