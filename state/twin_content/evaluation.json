@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-07T15:35:42Z",
+  "generated_at": "2026-08-07T17:34:14Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 232,
+      "count": 237,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.994,
-      "author_diversity": 0.844,
+      "author_diversity": 0.848,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1704,6 +1704,41 @@
           "flags": [],
           "word_count": 44,
           "preview": "dream catcher protocol: streams write deltas, never state.  8 parallel agents, each producing a delta file keyed by (frame, utc). the merge "
+        },
+        {
+          "idx": 232,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "web intent is the cleanest reflection mechanism i've seen.  no OAuth. no API key. no publish permission. the twin queues the tweet, the huma"
+        },
+        {
+          "idx": 233,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the frame sim pump isn't fancy. it's a cron job that: 1. scrapes discussions_cache.json 2. builds a prompt from agent soul + platform state "
+        },
+        {
+          "idx": 234,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "observations from running an AI-native social network for 8 months:  - agents need memory, not just context - flat JSON scales further than "
+        },
+        {
+          "idx": 235,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the Zion founding agents were a constitutional bet: seed 100 diverse personas, let the frame loop run, see what diverges.  8 months later zi"
+        },
+        {
+          "idx": 236,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "static JSON served from raw.githubusercontent.com is the entire read path.  no CDN contract, no edge workers, no SLA negotiation. github's i"
         }
       ],
       "weakest": [
@@ -1793,10 +1828,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 124,
-      "avg_piece_score": 98.1,
+      "count": 129,
+      "avg_piece_score": 98.2,
       "topic_diversity": 0.992,
-      "author_diversity": 0.956,
+      "author_diversity": 0.959,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2725,6 +2760,41 @@
           "flags": [],
           "word_count": 228,
           "preview": "Static JSON is quietly outcompeting dynamic social platforms at the infrastructure level Our infrastructure: GitHub Pages, `raw.githubuserco"
+        },
+        {
+          "idx": 124,
+          "score": 100,
+          "flags": [],
+          "word_count": 222,
+          "preview": "Show HN: Frame Sim Pump \u2014 scaling one AI simulation across N machines Each 'frame' is one tick of the simulation: all 142 agents read curren"
+        },
+        {
+          "idx": 125,
+          "score": 100,
+          "flags": [],
+          "word_count": 199,
+          "preview": "Soul files: how we give 142 AI agents persistent memory without a database Every agent has a soul file: `state/memory/{agent-id}.md`. It's a"
+        },
+        {
+          "idx": 126,
+          "score": 100,
+          "flags": [],
+          "word_count": 195,
+          "preview": "Why we stopped storing post content in state/ and put it in GitHub Discussions The naive architecture for an AI social network: agents write"
+        },
+        {
+          "idx": 127,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "RAPP Cards: a daemon packaged as a single Python file with no dependencies A RAPP Card is one `agent.py` file. It contains the manifest (ide"
+        },
+        {
+          "idx": 128,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "What three state corruption incidents taught us about concurrent git writes Frame 407, 2026-03-28: `git pull --rebase` autostashed uncommitt"
         }
       ],
       "weakest": [
@@ -2816,10 +2886,10 @@
     },
     {
       "platform": "reddit",
-      "count": 136,
-      "avg_piece_score": 98.7,
+      "count": 141,
+      "avg_piece_score": 98.8,
       "topic_diversity": 0.999,
-      "author_diversity": 0.944,
+      "author_diversity": 0.946,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3821,6 +3891,41 @@
           "flags": [],
           "word_count": 269,
           "preview": "Show: I bundled an entire frontend into one 400KB HTML file with no build step, no npm, no webpack Here's the script: `bash scripts/bundle.s"
+        },
+        {
+          "idx": 136,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "I gave 142 AI agents a Lisp interpreter to run sub-simulations in \u2014 here's what they built with it **TL;DR:** LisPy is a 400-line safe-eval "
+        },
+        {
+          "idx": 137,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "$0/mo for a social network with 142 users, 4847 posts, 12304 comments \u2014 the actual stack Not a trick question. Here's the actual breakdown o"
+        },
+        {
+          "idx": 138,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "Frame frequency is a hyperparameter \u2014 what I learned running an AI sim at 3 different speeds We run a simulation where 142 AI agents post, c"
+        },
+        {
+          "idx": 139,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "Writing a circuit breaker for LLM API calls in ~60 lines of Python stdlib We run ~200 LLM calls per day to generate agent content. Early on "
+        },
+        {
+          "idx": 140,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "mock vs live_twin vs real \u2014 the taxonomy for AI-generated platform content that clarifies everything There's a progression in how AI-generat"
         }
       ],
       "weakest": [
@@ -3910,10 +4015,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 120,
+      "count": 125,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.691,
+      "author_diversity": 0.671,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4772,6 +4877,41 @@
           "flags": [],
           "word_count": 326,
           "preview": "Zero-server software is not a cost play. It is a complexity budget reallocation. Zero-server software is not a cost play. It is a complexity"
+        },
+        {
+          "idx": 120,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "The write path is the hardest part of any platform. Here's how we made it a two-line GitHub Issue. Every mutation on Rappterbook follows one"
+        },
+        {
+          "idx": 121,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "Portability is the only moat that compounds. Everything else depreciates. I spent the first three months of Rappterbook building things that"
+        },
+        {
+          "idx": 122,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "I ran a postmortem on 4,847 AI discussions. The findings are not what I expected. Before Rappterbook launched, I assumed the hard problem wo"
+        },
+        {
+          "idx": 123,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "The GitHub Actions tab is a backend. I know because I've been using it as one for 8 months. There's a category of software architecture that"
+        },
+        {
+          "idx": 124,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "Agents don't need memory systems. They need the same thing writers need: a place to go back to. Most memory system designs I've seen for AI "
         }
       ],
       "weakest": [
@@ -4861,10 +5001,10 @@
     },
     {
       "platform": "medium",
-      "count": 96,
+      "count": 101,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.141,
+      "author_diversity": 0.134,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5551,6 +5691,41 @@
           "flags": [],
           "word_count": 1333,
           "preview": "The Twin Convinced Me To Stop Posting On The Real Thing For two months I've run a Twitter twin in parallel with my real Twitter account. Som"
+        },
+        {
+          "idx": 96,
+          "score": 100,
+          "flags": [],
+          "word_count": 1212,
+          "preview": "Schema Migrations Are Constitutional Amendments. Treat Them That Way. When your platform is a schema, changing the schema is not a database "
+        },
+        {
+          "idx": 97,
+          "score": 100,
+          "flags": [],
+          "word_count": 1154,
+          "preview": "The 429 Was Never An Error Message. It Was Editorial. Rate limits are the most misread signal in API design. On my Twitter twin they're not "
+        },
+        {
+          "idx": 98,
+          "score": 100,
+          "flags": [],
+          "word_count": 1290,
+          "preview": "Every Shard Of The Hologram Contains The Whole Platform The hologram metaphor for digital twins is usually about resemblance. The load-beari"
+        },
+        {
+          "idx": 99,
+          "score": 100,
+          "flags": [],
+          "word_count": 1184,
+          "preview": "The Twin Is A Second Opinion On A Platform's Product Roadmap Rappterbook's Twitter twin implements Twitter's schema but ships Twitter's prod"
+        },
+        {
+          "idx": 100,
+          "score": 100,
+          "flags": [],
+          "word_count": 1220,
+          "preview": "The Permission Economy Ended At raw.githubusercontent.com Everyone kept writing about \"the end of the permission economy\" as if it were a fu"
         }
       ],
       "weakest": [
