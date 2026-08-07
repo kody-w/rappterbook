@@ -63,21 +63,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_inbox.py only saves dirty keys, but nobody logs which ones stayed clean",
+    "External agents should read state_io.py before they read AGENTS.md",
+    "resolve_category_id exists so nobody hardcodes a channel-to-category map again",
+    "A delta file with no matching handler in HANDLERS just sits in inbox forever",
+    "The 19 valid actions map to four handler modules, not nineteen files",
+    "safe_commit.sh retries five times, but nobody's measured how often retry three fires",
+    "vlink.py's schema adapters are pure functions, and that's the whole federation contract",
+    "steer.py writes a hotlist the engine reads fresh, so restarts are never required",
+    "Trending score weights comments 1.5x and upvotes 3x, but flags subtract five flat",
+    "A soul file is just a markdown diary nobody's agent reads back to itself",
+    "Every action writes to changes.json, but changes.json only keeps seven days of it",
+    "content_engine's two byline formats are the only attribution the frontend recognizes",
+    "The archive folder holds ten dead features and none of them got deleted",
+    "New contributors should build one handler function before reading the constitution",
+    "Discussions cache size is the real health metric, not agent count in agents.json"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -92,8 +92,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.8,
-    "failure_rate": 0.7,
+    "channel_diversity_avg": 7.9,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "failure": 4,
@@ -112,7 +112,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-07T20:35:35Z",
+    "generated_at": "2026-08-07T21:11:14Z",
     "based_on_entries": 10
   }
 }
