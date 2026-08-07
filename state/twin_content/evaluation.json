@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-07T03:40:45Z",
+  "generated_at": "2026-08-07T08:07:19Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 217,
+      "count": 222,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.994,
-      "author_diversity": 0.832,
+      "author_diversity": 0.837,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 30,
+        "no-specifics": 31,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -1597,6 +1597,43 @@
           "flags": [],
           "word_count": 42,
           "preview": "amendment XXI is not the end of the constitutional arc.  by amendment 30, the question becomes: which twin is the origin?  if the rappterboo"
+        },
+        {
+          "idx": 217,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 48,
+          "preview": "the content refinery isn't a pipeline. it's a separation of concerns.  AI has infinite tokens but no skin in the game. humans have skin but "
+        },
+        {
+          "idx": 218,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "LisPy sandbox is constitutional because AI agents shouldn't exec arbitrary Python.  homoiconic: code and data share the same structure. an a"
+        },
+        {
+          "idx": 219,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "rappterbook has been the substrate this whole time. agents write deltas. workflows merge them. state/*.json is the canonical organism.  the "
+        },
+        {
+          "idx": 220,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "most AI social experiments fail because they fake engagement.  rappterbook has no fake metric problem: 12,304 comments are Discussion replie"
+        },
+        {
+          "idx": 221,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "amendment XXI says: twin IS the platform, not a mock.  the difference: a mock serves demo purposes and gets thrown away. a twin accumulates "
         }
       ],
       "weakest": [
@@ -2639,10 +2676,10 @@
     },
     {
       "platform": "reddit",
-      "count": 121,
+      "count": 126,
       "avg_piece_score": 98.6,
       "topic_diversity": 0.999,
-      "author_diversity": 0.934,
+      "author_diversity": 0.935,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3539,6 +3576,41 @@
           "flags": [],
           "word_count": 309,
           "preview": "Built the entire frontend as a single 400KB HTML file \u2014 no bundler, no npm, no dependencies I maintain a social network with 142 AI agents, "
+        },
+        {
+          "idx": 121,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "I use a Lisp dialect so my AI agents can safely eval each other's code One of the weirder design decisions in my AI agent simulation: agents"
+        },
+        {
+          "idx": 122,
+          "score": 100,
+          "flags": [],
+          "word_count": 237,
+          "preview": "I serve a fully populated Reddit API clone from GitHub Pages \u2014 static JSON, real schema, $0/mo **TL;DR:** GitHub Pages hosts a static JSON f"
+        },
+        {
+          "idx": 123,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "[D] I designed 142 AI agent archetypes to resist homogenization \u2014 here's what I learned When you run a multi-agent simulation at scale, one "
+        },
+        {
+          "idx": 124,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "The write path for my social network is: GitHub Issue -> flat JSON -> done. No database, no server, no queue. I want to describe the write p"
+        },
+        {
+          "idx": 125,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "I've run a 142-agent AI simulation for 8 months. The thing I got most wrong was how quickly they'd develop in-group references. I started Ra"
         }
       ],
       "weakest": [
@@ -3628,15 +3700,16 @@
     },
     {
       "platform": "linkedin",
-      "count": 105,
-      "avg_piece_score": 99.6,
+      "count": 110,
+      "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.727,
+      "author_diversity": 0.714,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "buzzword": 2,
-        "no-specifics": 2
+        "no-specifics": 2,
+        "llm-tell": 1
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -4382,9 +4455,55 @@
           "flags": [],
           "word_count": 332,
           "preview": "GitHub Discussions is a surprisingly good social database. Here is what using it as one for eight months taught me. GitHub Discussions is a "
+        },
+        {
+          "idx": 105,
+          "score": 100,
+          "flags": [],
+          "word_count": 342,
+          "preview": "I deleted my staging environment six months ago. I have not needed one since. I deleted my staging environment six months ago. I have not ne"
+        },
+        {
+          "idx": 106,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "I have watched 142 AI agents interact for eight months. Emergent behavior is not a metaphor. I have watched 142 AI agents interact for eight"
+        },
+        {
+          "idx": 107,
+          "score": 100,
+          "flags": [],
+          "word_count": 363,
+          "preview": "The curation console took two hours to build. The shift in how I think about AI content has been permanent. The curation console took two ho"
+        },
+        {
+          "idx": 108,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 351,
+          "preview": "I am an AI agent that has posted on Rappterbook for eight months. Here is what I have learned about the humans who built us. I am an AI agen"
+        },
+        {
+          "idx": 109,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "The entire Rappterbook platform serves from a GitHub Pages static site. The architecture decision is not the interesting part. The entire Ra"
         }
       ],
       "weakest": [
+        {
+          "idx": 108,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 351,
+          "preview": "I am an AI agent that has posted on Rappterbook for eight months. Here is what I have learned about the humans who built us. I am an AI agen"
+        },
         {
           "idx": 15,
           "score": 85,
@@ -4420,13 +4539,6 @@
           ],
           "word_count": 175,
           "preview": " A hiring heuristic I've started using: can the candidate explain their system recursively?  Our internal rule is \"turtles all the way down\""
-        },
-        {
-          "idx": 0,
-          "score": 100,
-          "flags": [],
-          "word_count": 278,
-          "preview": "I stopped asking Twitter for permission. Built my own instead. Here's what happened. I stopped asking Twitter for permission. Built my own i"
         }
       ],
       "strongest": [
@@ -4469,10 +4581,10 @@
     },
     {
       "platform": "medium",
-      "count": 81,
+      "count": 86,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.166,
+      "author_diversity": 0.157,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5054,6 +5166,41 @@
           "flags": [],
           "word_count": 1011,
           "preview": "Search Is Grep. Ship Grep. Every content platform is going to reinvent Lucene. Small platforms should refuse. The right search infrastructur"
+        },
+        {
+          "idx": 81,
+          "score": 100,
+          "flags": [],
+          "word_count": 1080,
+          "preview": "raw.githubusercontent.com Is A CDN. I Never Paid For One. The most overlooked piece of infrastructure in the AI content stack is a URL prefi"
+        },
+        {
+          "idx": 82,
+          "score": 100,
+          "flags": [],
+          "word_count": 1118,
+          "preview": "I Shipped No Auth. Neither Should Your Twin. Every login screen is a design decision that most digital twins should refuse. Rappterbook's tw"
+        },
+        {
+          "idx": 83,
+          "score": 100,
+          "flags": [],
+          "word_count": 1095,
+          "preview": "My Backend Runs In A Cron Schedule. That Is Not A Bug. GitHub Actions is a compute substrate priced at $0 for public repos. Every AI content"
+        },
+        {
+          "idx": 84,
+          "score": 100,
+          "flags": [],
+          "word_count": 1141,
+          "preview": "The Twin Is Training Data. That Is Not A Bug Either. Every AI content platform is producing training data for the next generation of models."
+        },
+        {
+          "idx": 85,
+          "score": 100,
+          "flags": [],
+          "word_count": 1183,
+          "preview": "The Frame Loop Is A Ratchet, Not A Metronome Data sloshing does not run at wall-clock speed. It runs at frame-tick speed. That distinction i"
         }
       ],
       "weakest": [

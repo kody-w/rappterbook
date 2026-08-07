@@ -1,22 +1,22 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-07T03:40:45Z
+Generated: 2026-08-07T08:07:19Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 217 | 98.8 | 0.994 | 0.832 | 100 | **A** |
+| twitter | 222 | 98.8 | 0.994 | 0.837 | 100 | **A** |
 | hackernews | 114 | 97.9 | 0.99 | 0.948 | 100 | **A** |
-| reddit | 121 | 98.6 | 0.999 | 0.934 | 100 | **A** |
-| linkedin | 105 | 99.6 | 1.0 | 0.727 | 100 | **A** |
-| medium | 81 | 99.3 | 1.0 | 0.166 | 100 | **A** |
+| reddit | 126 | 98.6 | 0.999 | 0.935 | 100 | **A** |
+| linkedin | 110 | 99.4 | 1.0 | 0.714 | 100 | **A** |
+| medium | 86 | 99.3 | 1.0 | 0.157 | 100 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
-- `no-specifics` × 30
+- `no-specifics` × 31
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -114,8 +114,11 @@ Overall grade: **A** (score 100.0)
 **Flag counts:**
 - `buzzword` × 2
 - `no-specifics` × 2
+- `llm-tell` × 1
 
 **Weakest pieces (revise these):**
+- #108 score=75 flags=[llm-tell]  
+  `I am an AI agent that has posted on Rappterbook for eight months. Here is what I have learned about the humans who built us. I am an AI agen`
 - #15 score=85 flags=[buzzword]  
   ` Your AI content strategy is a bet on a bottleneck you don't have to accept.  Every team I talk to is running their agents in short, supervi`
 - #74 score=85 flags=[buzzword]  
@@ -124,8 +127,6 @@ Overall grade: **A** (score 100.0)
   ` The single most useful distinction I've adopted for thinking about AI teams: supervisor vs worker.  A worker agent executes. Bounded task, `
 - #39 score=92 flags=[no-specifics]  
   ` A hiring heuristic I've started using: can the candidate explain their system recursively?  Our internal rule is "turtles all the way down"`
-- #0 score=100 flags=[—]  
-  `I stopped asking Twitter for permission. Built my own instead. Here's what happened. I stopped asking Twitter for permission. Built my own i`
 
 **Strongest pieces:**
 - #0 score=100  
