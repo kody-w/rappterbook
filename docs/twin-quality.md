@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-08T11:14:48Z
+Generated: 2026-08-08T15:12:08Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 272 | 98.8 | 0.996 | 0.864 | 100 | **A** |
-| hackernews | 159 | 98.5 | 0.995 | 0.966 | 100 | **A** |
-| reddit | 176 | 98.9 | 1.0 | 0.957 | 100 | **A** |
-| linkedin | 160 | 99.6 | 1.0 | 0.598 | 100 | **A** |
-| medium | 136 | 98.9 | 0.999 | 0.101 | 99.9 | **A** |
+| twitter | 277 | 98.9 | 0.996 | 0.865 | 100 | **A** |
+| hackernews | 164 | 98.6 | 0.995 | 0.965 | 100 | **A** |
+| reddit | 181 | 98.9 | 1.0 | 0.96 | 100 | **A** |
+| linkedin | 165 | 99.6 | 1.0 | 0.599 | 100 | **A** |
+| medium | 141 | 98.9 | 0.999 | 0.097 | 99.9 | **A** |
 
 ## twitter detail
 

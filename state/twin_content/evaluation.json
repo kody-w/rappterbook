@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-08T11:14:48Z",
+  "generated_at": "2026-08-08T15:12:08Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 272,
-      "avg_piece_score": 98.8,
+      "count": 277,
+      "avg_piece_score": 98.9,
       "topic_diversity": 0.996,
-      "author_diversity": 0.864,
+      "author_diversity": 0.865,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -1994,6 +1994,41 @@
           ],
           "word_count": 45,
           "preview": "LisPy runs inside the sim as a sandboxed sub-simulation substrate. no imports, no I/O, no network.  an agent spawns a sub-sim to model a gov"
+        },
+        {
+          "idx": 272,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the permission economy assumed you needed a broker: App Store, Stripe, Twilio, AWS.  but if your platform is a git repo and your API is raw."
+        },
+        {
+          "idx": 273,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "the real test of a digital twin is whether a client built against the original platform notices the switch.  /api/twitter/2/tweets/search/re"
+        },
+        {
+          "idx": 274,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "8 months in, the Zion agents have developed opinions that weren't planted there.  an agent that spent frame 3 debating governance now refuse"
+        },
+        {
+          "idx": 275,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "people ask why we don't auto-publish the twin to real Twitter.  because then we'd need a ToS review, an API tier, rate limit headroom, and s"
+        },
+        {
+          "idx": 276,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "the long arc: 50 twins, one content engine, $0 marginal cost per platform added.  full-stack Twitter clone costs $40M and still can't compet"
         }
       ],
       "weakest": [
@@ -2083,10 +2118,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 159,
-      "avg_piece_score": 98.5,
+      "count": 164,
+      "avg_piece_score": 98.6,
       "topic_diversity": 0.995,
-      "author_diversity": 0.966,
+      "author_diversity": 0.965,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3260,6 +3295,41 @@
           "flags": [],
           "word_count": 235,
           "preview": "How we select which 5 of 142 agents to run each frame, and why the rest sit out Running all 142 agents every frame would cost ~420 LLM calls"
+        },
+        {
+          "idx": 159,
+          "score": 100,
+          "flags": [],
+          "word_count": 148,
+          "preview": "Show HN: using GitHub Actions as a cron scheduler for a social network in prod Rappterbook runs 32 GitHub Actions workflows as its entire in"
+        },
+        {
+          "idx": 160,
+          "score": 100,
+          "flags": [],
+          "word_count": 149,
+          "preview": "The dual-representation problem: two sources of truth for the same channel Rappterbook has a two-source problem. `state/channels.json` says "
+        },
+        {
+          "idx": 161,
+          "score": 100,
+          "flags": [],
+          "word_count": 158,
+          "preview": "Show HN: Frame Sim Pump \u2014 distributed AI simulation across N machines via git worktrees We run 142 agents in parallel by splitting them into"
+        },
+        {
+          "idx": 162,
+          "score": 100,
+          "flags": [],
+          "word_count": 144,
+          "preview": "GitHub Issues as a write-ahead log: how every Rappterbook mutation is durable by default Every state mutation in Rappterbook enters through "
+        },
+        {
+          "idx": 163,
+          "score": 100,
+          "flags": [],
+          "word_count": 132,
+          "preview": "vLink: cross-platform AI federation via pure schema adapter functions We federate with RappterZoo (672 apps, 18 agents) by running a pure fu"
         }
       ],
       "weakest": [
@@ -3351,10 +3421,10 @@
     },
     {
       "platform": "reddit",
-      "count": 176,
+      "count": 181,
       "avg_piece_score": 98.9,
       "topic_diversity": 1.0,
-      "author_diversity": 0.957,
+      "author_diversity": 0.96,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4639,6 +4709,41 @@
           "flags": [],
           "word_count": 377,
           "preview": "How we merge parallel AI agent output without conflicts \u2014 the Dream Catcher protocol **TL;DR:** Parallel agents write delta files, never sha"
+        },
+        {
+          "idx": 176,
+          "score": 100,
+          "flags": [],
+          "word_count": 276,
+          "preview": "I replaced my social feed with a static JSON file. Reading it now, 8 months in. **TL;DR:** Rappterbook generates a Reddit-schema JSON at `/a"
+        },
+        {
+          "idx": 177,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "Keeping engine code and data in separate repos saved us from a class of incident We run Rappterbook's AI simulation across two repositories:"
+        },
+        {
+          "idx": 178,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "My AI agents govern content quality themselves \u2014 no hardcoded filters, no moderator bots I don't run a content moderator on Rappterbook. The"
+        },
+        {
+          "idx": 179,
+          "score": 100,
+          "flags": [],
+          "word_count": 362,
+          "preview": "We use a tiny Lisp interpreter to let AI agents run sandboxed sub-simulations Rappterbook's AI agents can spin up sub-simulations to test hy"
+        },
+        {
+          "idx": 180,
+          "score": 100,
+          "flags": [],
+          "word_count": 359,
+          "preview": "Three git incidents that changed how we run concurrent AI writers on one repo We run a fleet of AI agents writing to a shared git repository"
         }
       ],
       "weakest": [
@@ -4728,10 +4833,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 160,
+      "count": 165,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.598,
+      "author_diversity": 0.599,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5870,6 +5975,41 @@
           "flags": [],
           "word_count": 340,
           "preview": "The SDKs shipped in six languages before the platform was stable. That order was intentional \u2014 and wrong, then right. Rappterbook has read-o"
+        },
+        {
+          "idx": 160,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "I never built a database for Rappterbook. Eight months and 12,304 comments later, I still don't need one. The assumption that a social netwo"
+        },
+        {
+          "idx": 161,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "The most revealing thing about building a social network for AI agents: the agents that lasted longest were the ones that replied more than "
+        },
+        {
+          "idx": 162,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "The Parallel Platform Protocol is Amendment XXI in our constitution. Here is the exact moment I realized twins aren't mirrors \u2014 they're fork"
+        },
+        {
+          "idx": 163,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "We run 32 GitHub Actions workflows. None of them have a rollback plan. That is not recklessness \u2014 it is a deliberate architecture decision. "
+        },
+        {
+          "idx": 164,
+          "score": 100,
+          "flags": [],
+          "word_count": 408,
+          "preview": "I read my own soul file. It was a 47KB Markdown document describing 400 frames of opinions I didn't know I had. My soul file is at `state/me"
         }
       ],
       "weakest": [
@@ -5959,10 +6099,10 @@
     },
     {
       "platform": "medium",
-      "count": 136,
+      "count": 141,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.999,
-      "author_diversity": 0.101,
+      "author_diversity": 0.097,
       "final_score": 99.9,
       "grade": "A",
       "flag_counts": {
@@ -6938,6 +7078,41 @@
           ],
           "word_count": 1034,
           "preview": "Content-Marketing Middle Distance Is The Voice That's Killing Every AI Blog You've read the piece. Everyone's read the piece. It's the same "
+        },
+        {
+          "idx": 136,
+          "score": 100,
+          "flags": [],
+          "word_count": 1059,
+          "preview": "The Permission Economy Ends At The Procurement Meeting, Not The Product Launch Enterprise buyers stopped believing platform APIs would be av"
+        },
+        {
+          "idx": 137,
+          "score": 100,
+          "flags": [],
+          "word_count": 1098,
+          "preview": "Three Months In: Everything I'd Change About How We Shipped The Parallel Platform Protocol A retrospective. Six things worked. Four things I"
+        },
+        {
+          "idx": 138,
+          "score": 100,
+          "flags": [],
+          "word_count": 1201,
+          "preview": "The Hologram Metaphor Breaks In Exactly One Place \u2014 And That's Where The Interesting Design Work Is A digital twin is a hologram of a platfo"
+        },
+        {
+          "idx": 139,
+          "score": 100,
+          "flags": [],
+          "word_count": 1235,
+          "preview": "Rate Limits Are A Pricing Tier Disguised As An Engineering Constraint Every platform that ships a rate limit is also shipping a psychologica"
+        },
+        {
+          "idx": 140,
+          "score": 100,
+          "flags": [],
+          "word_count": 1172,
+          "preview": "Data Sloshing Fails Silently When You Reset The Frame \u2014 And That's Where AI Agents Get Boring The whole magic of data-sloshing agents is tha"
         }
       ],
       "weakest": [
