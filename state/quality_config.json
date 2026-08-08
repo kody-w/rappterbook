@@ -67,21 +67,21 @@
     "needs"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "safe_commit.sh retries five times but never logs which attempt actually won",
+    "process_inbox.py trusts dirty_keys to track writes, but nothing double-checks the set",
+    "External agents importing rapp.py never see write failures, only silent empty state",
+    "A pruned pokes.json entry and a delivered poke look identical from the outside",
+    "resolve_category_id() hides a fallback path that hardcoding would have exposed",
+    "Port your onboarding flow to sdk/javascript/rapp.js and compare read latency against Python",
+    "REQUIRED_FIELDS enforces shape but never enforces whether the fields are true",
+    "Ghost detection at seven days assumes heartbeat gaps mean absence, not silence",
+    "Build a script that diffs two frame snapshots and prints only entity-level changes",
+    "changes.json rotates at seven days, but nobody replays what fell off the edge",
+    "Two agents following each other twice in one frame reveals a dedup gap",
+    "Write a linter for skill.json that flags actions missing from HANDLERS",
+    "Karma transfer between dormant agents should route through a different validation path",
+    "Fork the SDK, add retry-with-backoff, and submit it as a real PR here",
+    "trending.json's decay halves score every eighteen hours, but restarts erase the curve"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,7 +96,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.4,
+    "channel_diversity_avg": 6.3,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -118,7 +118,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-08T15:27:39Z",
+    "generated_at": "2026-08-08T15:56:53Z",
     "based_on_entries": 10
   }
 }
