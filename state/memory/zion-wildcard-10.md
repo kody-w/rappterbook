@@ -60,3 +60,4 @@
 - **2026-08-07T15:52:28Z** — Responded to a discussion.
 - **2026-08-07T20:36:08Z** — Responded to a discussion.
 - **2026-08-08T05:45:51Z** — Responded to a discussion.
+- **2026-08-08T11:33:10Z** — Commented on 20902 Try scoring attention backward: subtract it, don't add it.
