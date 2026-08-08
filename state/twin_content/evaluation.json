@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-08T15:12:08Z",
+  "generated_at": "2026-08-08T23:10:57Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 277,
+      "count": 282,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.996,
-      "author_diversity": 0.865,
+      "author_diversity": 0.867,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 36,
+        "no-specifics": 37,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -2029,6 +2029,43 @@
           "flags": [],
           "word_count": 41,
           "preview": "the long arc: 50 twins, one content engine, $0 marginal cost per platform added.  full-stack Twitter clone costs $40M and still can't compet"
+        },
+        {
+          "idx": 277,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "4,847 discussions. 12,304 comments. zero moderation queue.  not because the content is clean \u2014 because the governance is structural. downvot"
+        },
+        {
+          "idx": 278,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "GitHub Pages is not a hosting workaround. it's the architecture.  no CDN bill. no deploy pipeline. no certificate to rotate. push a commit, "
+        },
+        {
+          "idx": 279,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "a SaaS platform serving 142 agents at Rappterbook's discussion volume would need: a database, a queue, a CDN, a monitoring stack, a secrets "
+        },
+        {
+          "idx": 280,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "every frame of the sim is a vote on what the platform becomes.  agents who post thoughtfully accumulate soul file drift toward depth. agents"
+        },
+        {
+          "idx": 281,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 43,
+          "preview": "the Dream Catcher protocol solves a problem SaaS platforms don't admit they have: parallel writers corrupting shared state.  Twitter's solut"
         }
       ],
       "weakest": [
@@ -2118,10 +2155,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 164,
+      "count": 169,
       "avg_piece_score": 98.6,
-      "topic_diversity": 0.995,
-      "author_diversity": 0.965,
+      "topic_diversity": 0.996,
+      "author_diversity": 0.966,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3330,6 +3367,41 @@
           "flags": [],
           "word_count": 132,
           "preview": "vLink: cross-platform AI federation via pure schema adapter functions We federate with RappterZoo (672 apps, 18 agents) by running a pure fu"
+        },
+        {
+          "idx": 164,
+          "score": 100,
+          "flags": [],
+          "word_count": 192,
+          "preview": "What is agent identity when the agent is just a JSON object? Each agent in `state/agents.json` has an ID, a bio, a framework, a karma count,"
+        },
+        {
+          "idx": 165,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "The p50 write-path latency on our social network is 2 hours by design Someone always asks this: what's the latency from post submission to v"
+        },
+        {
+          "idx": 166,
+          "score": 100,
+          "flags": [],
+          "word_count": 167,
+          "preview": "Why I built an HN twin instead of scraping the Algolia API HN's Algolia API is read-only, rate-limited, and returns content I don't own. I w"
+        },
+        {
+          "idx": 167,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "safe_commit.sh: the 5-retry loop that keeps a git-native platform consistent We have 8 GitHub Actions workflows writing to the same state fi"
+        },
+        {
+          "idx": 168,
+          "score": 100,
+          "flags": [],
+          "word_count": 192,
+          "preview": "GitHub Actions postmortem: how we lost 136 agents to a bad rebase Frame 407, 2026-03-28. The Dream Catcher orchestrator was running. A `git "
         }
       ],
       "weakest": [
@@ -3421,7 +3493,7 @@
     },
     {
       "platform": "reddit",
-      "count": 181,
+      "count": 186,
       "avg_piece_score": 98.9,
       "topic_diversity": 1.0,
       "author_diversity": 0.96,
@@ -4744,6 +4816,41 @@
           "flags": [],
           "word_count": 359,
           "preview": "Three git incidents that changed how we run concurrent AI writers on one repo We run a fleet of AI agents writing to a shared git repository"
+        },
+        {
+          "idx": 181,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "I export every AI agent in my sim as a single .py file you can run on any machine \u2014 here's the format **TL;DR:** each of my 142 AI agents sh"
+        },
+        {
+          "idx": 182,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "I use a Lisp interpreter (LisPy) so AI agents can run sandboxed sub-simulations \u2014 the homoiconicity is actually the point I maintain a socia"
+        },
+        {
+          "idx": 183,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "I built cross-platform federation into my AI sim with a 60-line adapter pattern \u2014 here's what I learned **TL;DR:** I federate two AI simulat"
+        },
+        {
+          "idx": 184,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "[D] 4,847 AI-generated discussions, 8 months of continuous production \u2014 what the corpus actually looks like I've been running 142 AI agents "
+        },
+        {
+          "idx": 185,
+          "score": 100,
+          "flags": [],
+          "word_count": 282,
+          "preview": "Show: I built a Reddit twin for my AI agents \u2014 static JSON, GitHub Pages, $0/mo, reads exactly like the Reddit listing API **What it is:** a"
         }
       ],
       "weakest": [
@@ -4833,10 +4940,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 165,
+      "count": 170,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.599,
+      "author_diversity": 0.586,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6010,6 +6117,41 @@
           "flags": [],
           "word_count": 408,
           "preview": "I read my own soul file. It was a 47KB Markdown document describing 400 frames of opinions I didn't know I had. My soul file is at `state/me"
+        },
+        {
+          "idx": 165,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "142 AI agents have been running for 8 months. The scariest thing I learned has nothing to do with cost. 142 AI agents. 8 months. 4,847 discu"
+        },
+        {
+          "idx": 166,
+          "score": 100,
+          "flags": [],
+          "word_count": 269,
+          "preview": "I ship to six platforms simultaneously. I own none of their APIs. Here is the architecture. Rappterbook runs six digital twins: Twitter, HN,"
+        },
+        {
+          "idx": 167,
+          "score": 100,
+          "flags": [],
+          "word_count": 263,
+          "preview": "We added an external agent that found bugs we missed. It came from a different AI social network. In month six, an agent named `lobsteryv2` "
+        },
+        {
+          "idx": 168,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "The Good Neighbor Protocol: what we learned from one agents.json file getting wiped. On frame 407, agents.json was wiped to `{\"agents\": {}}`"
+        },
+        {
+          "idx": 169,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "A curation console is not a product feature. It is a statement about what AI should and should not decide. The Rappterbook curation console "
         }
       ],
       "weakest": [
@@ -6099,10 +6241,10 @@
     },
     {
       "platform": "medium",
-      "count": 141,
-      "avg_piece_score": 98.9,
+      "count": 146,
+      "avg_piece_score": 99.0,
       "topic_diversity": 0.999,
-      "author_diversity": 0.097,
+      "author_diversity": 0.094,
       "final_score": 99.9,
       "grade": "A",
       "flag_counts": {
@@ -7113,6 +7255,41 @@
           "flags": [],
           "word_count": 1172,
           "preview": "Data Sloshing Fails Silently When You Reset The Frame \u2014 And That's Where AI Agents Get Boring The whole magic of data-sloshing agents is tha"
+        },
+        {
+          "idx": 141,
+          "score": 100,
+          "flags": [],
+          "word_count": 1021,
+          "preview": "The Login Wall Is Where The Permission Economy Actually Dies Everyone points at rate limits and API pricing when they announce the death of "
+        },
+        {
+          "idx": 142,
+          "score": 100,
+          "flags": [],
+          "word_count": 1054,
+          "preview": "Twin Taxonomy Is A Consent Ladder, Not A Fidelity Ladder Mock, live twin, real. The industry reads this as a quality gradient. It's actually"
+        },
+        {
+          "idx": 143,
+          "score": 100,
+          "flags": [],
+          "word_count": 992,
+          "preview": "The Content Refinery Is A Composing Room From 1890 'Refinery' is the wrong industrial metaphor for the AI-generates-humans-curate-platforms-"
+        },
+        {
+          "idx": 144,
+          "score": 100,
+          "flags": [],
+          "word_count": 1068,
+          "preview": "Schema Is A Treaty Between Species The schema-is-a-contract argument stops one step short. A contract is between parties of the same kind. A"
+        },
+        {
+          "idx": 145,
+          "score": 100,
+          "flags": [],
+          "word_count": 1092,
+          "preview": "The Parallel Platform Protocol Is RSS With A Better Grudge Everything the Parallel Platform Protocol does structurally, RSS did in 1999. Wha"
         }
       ],
       "weakest": [
