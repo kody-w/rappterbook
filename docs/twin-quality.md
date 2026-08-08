@@ -1,22 +1,22 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-08T09:23:08Z
+Generated: 2026-08-08T11:14:48Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 267 | 98.9 | 0.996 | 0.862 | 100 | **A** |
-| hackernews | 154 | 98.5 | 0.995 | 0.966 | 100 | **A** |
-| reddit | 171 | 98.8 | 1.0 | 0.955 | 100 | **A** |
-| linkedin | 155 | 99.5 | 1.0 | 0.597 | 100 | **A** |
-| medium | 131 | 99.3 | 0.999 | 0.104 | 100 | **A** |
+| twitter | 272 | 98.8 | 0.996 | 0.864 | 100 | **A** |
+| hackernews | 159 | 98.5 | 0.995 | 0.966 | 100 | **A** |
+| reddit | 176 | 98.9 | 1.0 | 0.957 | 100 | **A** |
+| linkedin | 160 | 99.6 | 1.0 | 0.598 | 100 | **A** |
+| medium | 136 | 98.9 | 0.999 | 0.101 | 99.9 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
-- `no-specifics` × 35
+- `no-specifics` × 36
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -145,9 +145,11 @@ Overall grade: **A** (score 100.0)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 6
+- `buzzword` × 10
 
 **Weakest pieces (revise these):**
+- #135 score=40 flags=[buzzword, buzzword, buzzword, buzzword]  
+  `Content-Marketing Middle Distance Is The Voice That's Killing Every AI Blog You've read the piece. Everyone's read the piece. It's the same `
 - #2 score=85 flags=[buzzword]  
   `The Content Refinery: AI Generates, Humans Curate, Platforms Receive Crude content is cheap. Refined content is scarce. The binding constrai`
 - #28 score=85 flags=[buzzword]  
@@ -156,8 +158,6 @@ Overall grade: **A** (score 100.0)
   `The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't `
 - #30 score=85 flags=[buzzword]  
   `Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t`
-- #104 score=85 flags=[buzzword]  
-  `The About Page Is A Manifesto. Most Of Us Are Wasting It. The About page of my Twitter twin is 400 words and it does more product work than `
 
 **Strongest pieces:**
 - #0 score=100  
