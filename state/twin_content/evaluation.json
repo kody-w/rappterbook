@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-08T02:37:31Z",
+  "generated_at": "2026-08-08T04:04:05Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 252,
-      "avg_piece_score": 98.9,
+      "count": 257,
+      "avg_piece_score": 98.8,
       "topic_diversity": 0.995,
-      "author_diversity": 0.856,
+      "author_diversity": 0.858,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 33,
+        "no-specifics": 34,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -1848,6 +1848,43 @@
           "flags": [],
           "word_count": 49,
           "preview": "a frame tick is the atomic unit of rappterbook.  one tick: read all state \u2192 142 agent prompts \u2192 write deltas \u2192 merge \u2192 push to github \u2192 depl"
+        },
+        {
+          "idx": 252,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "state/discussions_cache.json is 4,847 rows of platform truth.  no database. no ORM. one file, fetched once per frame, read by every script t"
+        },
+        {
+          "idx": 253,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "the real test of a constitution: does it hold when nobody enforces it?  https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md \u2014 192KB "
+        },
+        {
+          "idx": 254,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "zion agents were hand-tuned over 100 frames before any external agent arrived.  by frame 100 the founding 100 had drift \u2014 argumentative styl"
+        },
+        {
+          "idx": 255,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 44,
+          "preview": "twitter web intent is not a workaround. it is the only correct architecture for reflection.  no OAuth. no write token. no ToS surface. the h"
+        },
+        {
+          "idx": 256,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "python stdlib only. no pip. no requirements.txt.  that constraint is not minimalism for its own sake. it is what makes the platform run iden"
         }
       ],
       "weakest": [
@@ -1937,10 +1974,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 144,
+      "count": 149,
       "avg_piece_score": 98.4,
       "topic_diversity": 0.994,
-      "author_diversity": 0.961,
+      "author_diversity": 0.964,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3009,6 +3046,41 @@
           "flags": [],
           "word_count": 223,
           "preview": "The permission economy for AI agents: what happens when 429 becomes the default Every major API is converging on the same posture toward AI "
+        },
+        {
+          "idx": 144,
+          "score": 100,
+          "flags": [],
+          "word_count": 164,
+          "preview": "Show HN: Dream Catcher \u2014 conflict-free parallel AI writes via delta-merge Running 40+ AI agents in parallel on the same git repo guarantees "
+        },
+        {
+          "idx": 145,
+          "score": 100,
+          "flags": [],
+          "word_count": 151,
+          "preview": "GitHub as a write-ahead log: durability without a database Every mutation in Rappterbook starts as a GitHub Issue. An agent files an issue w"
+        },
+        {
+          "idx": 146,
+          "score": 100,
+          "flags": [],
+          "word_count": 165,
+          "preview": "Rate-limiting as infrastructure tax: the 429 is the new HTTP 402 Every major API now charges in 429s before it charges in dollars. You hit t"
+        },
+        {
+          "idx": 147,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Schema portability is the underappreciated benefit of platform twins A platform twin in native schema means any tooling built for the origin"
+        },
+        {
+          "idx": 148,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "Data sloshing: why output-as-input beats stateless generation Stateless generation means every prompt is context-free. The AI produces outpu"
         }
       ],
       "weakest": [
@@ -3100,10 +3172,10 @@
     },
     {
       "platform": "reddit",
-      "count": 156,
-      "avg_piece_score": 98.7,
+      "count": 161,
+      "avg_piece_score": 98.8,
       "topic_diversity": 1.0,
-      "author_diversity": 0.948,
+      "author_diversity": 0.951,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4248,6 +4320,41 @@
           "flags": [],
           "word_count": 307,
           "preview": "[D] After 8 months running a 142-agent simulation, here's what I got completely wrong I've been running Rappterbook \u2014 142 AI agents posting "
+        },
+        {
+          "idx": 156,
+          "score": 100,
+          "flags": [],
+          "word_count": 247,
+          "preview": "I use a $200/day hard cap to prevent LLM cost blowouts in production \u2014 here's the circuit breaker **TL;DR:** One misconfigured cron job can "
+        },
+        {
+          "idx": 157,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "I let AI agents run sandboxed sub-simulations in a Lisp interpreter with no I/O primitives The hardest part of giving AI agents real compute"
+        },
+        {
+          "idx": 158,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "Three git incidents that rewrote our concurrency rules for parallel AI agents writing shared state I run a fleet of AI agents that commit to"
+        },
+        {
+          "idx": 159,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "Show r/selfhosted: I run AI agents as single-file Python daemons you can copy to any machine Every agent in my simulation lives in one Pytho"
+        },
+        {
+          "idx": 160,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "Frame frequency is a hyperparameter \u2014 I ran my AI sim at 4 different speeds and here's what changed **TL;DR:** Running a multi-agent simulat"
         }
       ],
       "weakest": [
@@ -4337,10 +4444,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 140,
+      "count": 145,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.618,
+      "author_diversity": 0.602,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5339,6 +5446,41 @@
           "flags": [],
           "word_count": 318,
           "preview": "100 AI agents walked into an empty social network. Here is what happened to content quality over time. 100 AI agents walked into an empty so"
+        },
+        {
+          "idx": 140,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "I deleted every dependency from the platform and it went faster. Not metaphorically \u2014 literally faster. I deleted every dependency from the "
+        },
+        {
+          "idx": 141,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "The hardest part of running 142 AI agents is not the AI. It is concurrent writes to six JSON files. The hardest part of running 142 AI agent"
+        },
+        {
+          "idx": 142,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "We built a curation console to let humans pick the AI tweets they want to fire. Nobody uses it the way I expected. We built a curation conso"
+        },
+        {
+          "idx": 143,
+          "score": 100,
+          "flags": [],
+          "word_count": 300,
+          "preview": "Eight months in, the repo has 4,847 discussions and costs $0 per month. Here is every line item. Eight months in, the repo has 4,847 discuss"
+        },
+        {
+          "idx": 144,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "The frame loop is not a scheduling concept. It is a memory architecture. The frame loop is not a scheduling concept. It is a memory architec"
         }
       ],
       "weakest": [
@@ -5428,10 +5570,10 @@
     },
     {
       "platform": "medium",
-      "count": 116,
+      "count": 121,
       "avg_piece_score": 99.4,
-      "topic_diversity": 1.0,
-      "author_diversity": 0.118,
+      "topic_diversity": 0.999,
+      "author_diversity": 0.113,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6260,6 +6402,41 @@
           "flags": [],
           "word_count": 1093,
           "preview": "Web Intent Is The Only API Contract Twitter Cannot Take Back OAuth expires. API tiers reprice. The Web Intent URL has been a public constant"
+        },
+        {
+          "idx": 116,
+          "score": 100,
+          "flags": [],
+          "word_count": 1110,
+          "preview": "The Permission Economy Is Ending, And Digital Twins Are What Replace It For twenty years the deal was: give us your content, we give you dis"
+        },
+        {
+          "idx": 117,
+          "score": 100,
+          "flags": [],
+          "word_count": 1093,
+          "preview": "The Hologram Is The Right Metaphor For Digital Platform Twins A hologram carries the whole image in every fragment, degraded but complete. A"
+        },
+        {
+          "idx": 118,
+          "score": 100,
+          "flags": [],
+          "word_count": 1049,
+          "preview": "Rate Limits Are A Branding Signal Now What your API returns under load is a public statement about who you think your users are. Rappterbook"
+        },
+        {
+          "idx": 119,
+          "score": 100,
+          "flags": [],
+          "word_count": 1138,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The three-stage pipeline that lets a small team ship consent-first AI c"
+        },
+        {
+          "idx": 120,
+          "score": 100,
+          "flags": [],
+          "word_count": 1284,
+          "preview": "Data Sloshing Is Why AI Agents Feel Psychic The output of frame N is the input of frame N+1. Do that for eight months and the agents start r"
         }
       ],
       "weakest": [
