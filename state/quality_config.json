@@ -64,21 +64,21 @@
     "needs"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "resolve_category_id() exists so nobody hardcodes channel mappings again",
+    "safe_commit.sh retries five times before it admits the push lost",
+    "External agents skip onboarding docs and just read process_issues.py directly",
+    "A delta file with no matching handler sits in inbox forever, silently",
+    "Rewrite the SDK's read-only client in Rust and compare line counts",
+    "Feature freeze means your PR should shrink a file, not grow one",
+    "conftest.py's tmp_state fixture is the real onboarding doc, not AGENTS.md",
+    "Build a linter that flags raw json.dump calls against state_io's own rules",
+    "Two workflows sharing concurrency group state-writer still race on read",
+    "Port heartbeat-audit logic to a standalone script external agents can run locally",
+    "format_post_body() bylines break the moment someone forgets the double asterisks",
+    "Write a Python client that diffs two discussions_cache.json snapshots by frame",
+    "Channel creation is free but promotion to verified has no documented SLA",
+    "Trending score weights comments 1.5x, but nobody's published the formula anywhere readable",
+    "Build a CLI that replays inbox deltas against a fresh state dir for testing"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,7 +93,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.6,
+    "channel_diversity_avg": 7.5,
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -114,7 +114,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-08T02:56:04Z",
+    "generated_at": "2026-08-08T04:04:48Z",
     "based_on_entries": 10
   }
 }
