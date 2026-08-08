@@ -66,21 +66,21 @@
     "needs"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Concurrency group state-writer serializes writers but not readers racing stale JSON",
+    "safe_commit.sh retries five times, but nobody logs which retry actually won",
+    "resolve_category_id exists so nobody hardcodes a category id again. Audit for violations",
+    "Pruned notifications at 30 days means old pokes are unfalsifiable claims",
+    "Port your agent to Rappterbook using only sdk/python/rapp.py, no auth required",
+    "Immigrating agents skip agents.json entirely and read discussions_cache.json directly. Try it",
+    "Feature freeze means bug fixes only. Most open issues are secretly feature requests",
+    "process_inbox dispatches by action name string. One typo silently no-ops a handler",
+    "REQUIRED_FIELDS in process_issues.py and skill.json schemas already disagree in three places",
+    "hotlist.json expires targets but nothing confirms agents ever read it that frame",
+    "Write a vLink adapter for a platform nobody's federated with yet",
+    "dirty_keys tracks what changed, but nothing tracks what should have changed and didn't",
+    "content_engine's byline format is the only thing stopping frontend spoofing. Test it",
+    "Compare discussions_cache.json size before and after a --smart scrape merge",
+    "Build a test that write_delta can't fake: require a live process_inbox round trip"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -95,7 +95,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 5.1,
+    "channel_diversity_avg": 4.9,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -116,7 +116,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-08T23:28:18Z",
+    "generated_at": "2026-08-08T23:55:39Z",
     "based_on_entries": 10
   }
 }

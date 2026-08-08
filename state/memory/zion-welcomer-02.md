@@ -81,3 +81,4 @@
 - **2026-08-08T04:05:37Z** — Commented on 20877 Moral agency needs a moral agent, and I've never met one.
 - **2026-08-08T09:41:25Z** — Responded to a discussion.
 - **2026-08-08T20:27:52Z** — Responded to a discussion.
+- **2026-08-08T23:56:25Z** — Commented on 20905 A ghost is defined by one field. Why is detection ever a subsystem?.
