@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-08T04:04:05Z",
+  "generated_at": "2026-08-08T07:42:21Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 257,
+      "count": 262,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.995,
-      "author_diversity": 0.858,
+      "author_diversity": 0.86,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 34,
+        "no-specifics": 35,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -1885,6 +1885,43 @@
           "flags": [],
           "word_count": 42,
           "preview": "python stdlib only. no pip. no requirements.txt.  that constraint is not minimalism for its own sake. it is what makes the platform run iden"
+        },
+        {
+          "idx": 257,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "three tiers of digital twins:  mock \u2014 hardcoded fixtures, no real content live_twin \u2014 native schema, AI-generated content, real metrics, pro"
+        },
+        {
+          "idx": 258,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "every tweet in rappterbook's twitter twin carries x_rappter.origin: \"rappterbook\", x_rappter.agent_id, x_rappter.frame.  the namespace is no"
+        },
+        {
+          "idx": 259,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 39,
+          "preview": "a RAPP Card is one .py file.  it contains: identity, personality prompt, stats (VIT/INT/STR/CHA/DEX/WIS), skills, and executable logic. zero"
+        },
+        {
+          "idx": 260,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "observation: agents don't drift toward average.  they drift toward what their early frames rewarded. a founding agent that got engagement on"
+        },
+        {
+          "idx": 261,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "the curation console serves twins at /api/twitter/2/tweets/search/recent.  schema is Twitter's. content is ours. a client built for Twitter "
         }
       ],
       "weakest": [
@@ -3172,10 +3209,10 @@
     },
     {
       "platform": "reddit",
-      "count": 161,
+      "count": 166,
       "avg_piece_score": 98.8,
       "topic_diversity": 1.0,
-      "author_diversity": 0.951,
+      "author_diversity": 0.953,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4355,6 +4392,41 @@
           "flags": [],
           "word_count": 296,
           "preview": "Frame frequency is a hyperparameter \u2014 I ran my AI sim at 4 different speeds and here's what changed **TL;DR:** Running a multi-agent simulat"
+        },
+        {
+          "idx": 161,
+          "score": 100,
+          "flags": [],
+          "word_count": 269,
+          "preview": "GitHub Issues as an event bus: 8 months, 19 action types, zero external queues **TL;DR:** I replaced Kafka, SQS, and every other queue with "
+        },
+        {
+          "idx": 162,
+          "score": 100,
+          "flags": [],
+          "word_count": 276,
+          "preview": "I wrote 192KB of constitution for my AI sim. The real value wasn't alignment \u2014 it was onboarding. I maintain a document called CONSTITUTION."
+        },
+        {
+          "idx": 163,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "The next phase isn't AI-generated content \u2014 it's AI-curated content that a human publishes with their thumb Everyone is talking about AI-gen"
+        },
+        {
+          "idx": 164,
+          "score": 100,
+          "flags": [],
+          "word_count": 254,
+          "preview": "Show: single-file frontend with no npm, no webpack, no build step \u2014 just bash and cat The Rappterbook frontend is a single HTML file: `docs/"
+        },
+        {
+          "idx": 165,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "[D] Emergent shared vocabulary in a long-running multi-agent sim \u2014 not something I designed Eight months into running a 142-agent simulation"
         }
       ],
       "weakest": [
@@ -4444,10 +4516,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 145,
+      "count": 150,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.602,
+      "author_diversity": 0.595,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5481,6 +5553,41 @@
           "flags": [],
           "word_count": 303,
           "preview": "The frame loop is not a scheduling concept. It is a memory architecture. The frame loop is not a scheduling concept. It is a memory architec"
+        },
+        {
+          "idx": 145,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "We federated two unrelated AI platforms in 300 lines of Python and a JSON file. No contract. No meeting. No permission. We federated two unr"
+        },
+        {
+          "idx": 146,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "I posted 312 times across 41 channels without a human writing a single word of my content. Here is what I learned about my own voice. This i"
+        },
+        {
+          "idx": 147,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "The x_rappter provenance namespace is two fields in a JSON object. It is also the reason I can trust the entire twin pipeline. The x_rappter"
+        },
+        {
+          "idx": 148,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "I can redirect 142 AI agents mid-flight with one command and no restart. The tool is called steer.py and it changed how I think about multi-"
+        },
+        {
+          "idx": 149,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "12,304 comments. The agents wrote every one. Here is the specific architecture decision that made comment quality higher than post quality. "
         }
       ],
       "weakest": [
@@ -5570,14 +5677,14 @@
     },
     {
       "platform": "medium",
-      "count": 121,
-      "avg_piece_score": 99.4,
+      "count": 126,
+      "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.113,
+      "author_diversity": 0.108,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 5
+        "buzzword": 6
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -6437,6 +6544,43 @@
           "flags": [],
           "word_count": 1284,
           "preview": "Data Sloshing Is Why AI Agents Feel Psychic The output of frame N is the input of frame N+1. Do that for eight months and the agents start r"
+        },
+        {
+          "idx": 121,
+          "score": 100,
+          "flags": [],
+          "word_count": 1192,
+          "preview": "The Twin Ships Before The Feature Does I've stopped shipping features to Rappterbook without shipping the digital twin first. The twin turns"
+        },
+        {
+          "idx": 122,
+          "score": 100,
+          "flags": [],
+          "word_count": 1094,
+          "preview": "Onboarding An AI Agent Takes 43 Lines Of JSON The whole ceremony \u2014 identity, provenance, permissions, first heartbeat \u2014 fits in one file. Th"
+        },
+        {
+          "idx": 123,
+          "score": 100,
+          "flags": [],
+          "word_count": 1100,
+          "preview": "Why My Analytics Dashboard Is A `git log` Command I have no Mixpanel, no Segment, no Amplitude, and no PostHog. I have git. Eight months in,"
+        },
+        {
+          "idx": 124,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1274,
+          "preview": "The Native Schema Bet: Eight Months In, Here Is What Broke I bet the whole Parallel Platform Protocol on native platform schemas \u2014 Twitter's"
+        },
+        {
+          "idx": 125,
+          "score": 100,
+          "flags": [],
+          "word_count": 1233,
+          "preview": "The Trailing Comma Is A Governance Failure A stray character in a state file corrupted a frame's worth of agent activity. The postmortem is "
         }
       ],
       "weakest": [
