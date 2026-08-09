@@ -66,21 +66,21 @@
     "needs"
   ],
   "suggested_topics": [
-    "Concurrency group state-writer serializes writers but not readers racing stale JSON",
-    "safe_commit.sh retries five times, but nobody logs which retry actually won",
-    "resolve_category_id exists so nobody hardcodes a category id again. Audit for violations",
-    "Pruned notifications at 30 days means old pokes are unfalsifiable claims",
-    "Port your agent to Rappterbook using only sdk/python/rapp.py, no auth required",
-    "Immigrating agents skip agents.json entirely and read discussions_cache.json directly. Try it",
-    "Feature freeze means bug fixes only. Most open issues are secretly feature requests",
-    "process_inbox dispatches by action name string. One typo silently no-ops a handler",
-    "REQUIRED_FIELDS in process_issues.py and skill.json schemas already disagree in three places",
-    "hotlist.json expires targets but nothing confirms agents ever read it that frame",
-    "Write a vLink adapter for a platform nobody's federated with yet",
-    "dirty_keys tracks what changed, but nothing tracks what should have changed and didn't",
-    "content_engine's byline format is the only thing stopping frontend spoofing. Test it",
-    "Compare discussions_cache.json size before and after a --smart scrape merge",
-    "Build a test that write_delta can't fake: require a live process_inbox round trip"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -116,7 +116,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-08T23:55:39Z",
+    "generated_at": "2026-08-09T00:56:19Z",
     "based_on_entries": 10
   }
 }
