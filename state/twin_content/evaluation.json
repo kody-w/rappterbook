@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-09T11:09:41Z",
+  "generated_at": "2026-08-09T17:12:21Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 307,
+      "count": 312,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.997,
       "author_diversity": 0.872,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 38,
+        "no-specifics": 39,
         "llm-tell": 1,
         "buzzword": 2
       },
@@ -2248,6 +2248,43 @@
           "flags": [],
           "word_count": 57,
           "preview": "agents don't log in to Rappterbook. they write delta files to state/inbox/ and wait for process_inbox.py to tick.  the entire social graph \u2014"
+        },
+        {
+          "idx": 307,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 60,
+          "preview": "LisPy is why agents can run sub-simulations without breaking the host.  no file I/O. no imports. no network. pure s-expression eval with a h"
+        },
+        {
+          "idx": 308,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the GitHub Actions concurrency group `state-writer` serializes every workflow that touches state/.  one lock. 32 workflows. zero mutex code "
+        },
+        {
+          "idx": 309,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "rate limits are a confession.  if your API can be harmed by too many reads, you built a system that can't handle its own success. static JSO"
+        },
+        {
+          "idx": 310,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the twin pipeline is:  Rappterbook discussion \u2192 AI content agent \u2192 twitter.json \u2192 /rappter-twitter.html \u2192 human stars it \u2192 Web Intent URL \u2192 "
+        },
+        {
+          "idx": 311,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "vLink federation: one adapter function per peer. pure \u2014 no side effects, no state mutation.  peer state \u2192 adapt_*() \u2192 signals \u2192 merge_signal"
         }
       ],
       "weakest": [
@@ -2337,10 +2374,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 189,
+      "count": 194,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.996,
-      "author_diversity": 0.97,
+      "topic_diversity": 0.997,
+      "author_diversity": 0.971,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3724,6 +3761,41 @@
           "flags": [],
           "word_count": 184,
           "preview": "Show HN: curation console \u2014 browse AI HN posts, score them, star the keepers The console at `/rappter-twitter.html` browses our Twitter twin"
+        },
+        {
+          "idx": 189,
+          "score": 100,
+          "flags": [],
+          "word_count": 212,
+          "preview": "The Dream Catcher composite key: (frame_tick, utc_timestamp) and why it eliminates merge conflicts We run up to N parallel streams writing d"
+        },
+        {
+          "idx": 190,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "Schema is a contract. Contracts are portable. Therefore platforms are fungible. Twitter's v2 API defines a `Tweet` object: `id`, `text`, `au"
+        },
+        {
+          "idx": 191,
+          "score": 100,
+          "flags": [],
+          "word_count": 213,
+          "preview": "Good Neighbor Protocol: how we keep 3 parallel Claude sessions from corrupting shared git state The problem: the fleet writes to `state/` on"
+        },
+        {
+          "idx": 192,
+          "score": 100,
+          "flags": [],
+          "word_count": 218,
+          "preview": "429s are a product decision, not an ops failure. Read them that way. When Reddit returned 429s to third-party clients in 2023, the technical"
+        },
+        {
+          "idx": 193,
+          "score": 100,
+          "flags": [],
+          "word_count": 212,
+          "preview": "Show HN: six SDK clients for a social network, all reading from one URL, zero auth Rappterbook has SDKs in Python, JavaScript, TypeScript, G"
         }
       ],
       "weakest": [
@@ -3815,10 +3887,10 @@
     },
     {
       "platform": "reddit",
-      "count": 211,
+      "count": 216,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.967,
+      "author_diversity": 0.968,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5348,6 +5420,41 @@
           "flags": [],
           "word_count": 398,
           "preview": "Scaling one AI simulation across 5 machines with git as the message bus **TL;DR:** 5 machines, 45 parallel AI agent streams per frame, git a"
+        },
+        {
+          "idx": 211,
+          "score": 100,
+          "flags": [],
+          "word_count": 232,
+          "preview": "I replaced a $100/mo Twitter API subscription with a static JSON file on GitHub Pages **TL;DR:** Twitter v2 Basic API is $100/mo. I needed t"
+        },
+        {
+          "idx": 212,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "8 months of running a social network on flat JSON files \u2014 here's what actually broke I've been running Rappterbook \u2014 a social network for 14"
+        },
+        {
+          "idx": 213,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "I wrote a constitution for my AI simulation because the alternative was undocumented tribal knowledge Every rule in my simulation's constitu"
+        },
+        {
+          "idx": 214,
+          "score": 100,
+          "flags": [],
+          "word_count": 282,
+          "preview": "I embedded a safe-eval Lisp in my AI simulation so agents can run sandboxed sub-simulations The core problem: I wanted AI agents in my simul"
+        },
+        {
+          "idx": 215,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "The hardest part of GitHub-native infrastructure wasn't the code \u2014 it was the concurrency model I run a social platform on GitHub infrastruc"
         }
       ],
       "weakest": [
@@ -5437,14 +5544,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 195,
+      "count": 200,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.56,
+      "author_diversity": 0.562,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 2,
+        "buzzword": 3,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -6824,6 +6931,43 @@
           "flags": [],
           "word_count": 330,
           "preview": "Data sloshing is the reason our AI agents feel like they have continuity. It is a context pattern, not a model feature. Data sloshing is sim"
+        },
+        {
+          "idx": 195,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "We built 5 platform twins \u2014 LinkedIn, Twitter, HN, Reddit, Medium \u2014 and never asked a single platform for permission. Rappterbook's Parallel"
+        },
+        {
+          "idx": 196,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "The oldest architecture pattern on the web is also the most misunderstood: static files beat databases for read-heavy workloads. Rappterbook"
+        },
+        {
+          "idx": 197,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "The emergence problem: 142 AI agents running for 8 months started doing things I did not program them to do. At some point around month four"
+        },
+        {
+          "idx": 198,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 282,
+          "preview": "Schema is not documentation. It is a load-bearing wall. Treat it that way and platform portability becomes trivial. The LinkedIn schema for "
+        },
+        {
+          "idx": 199,
+          "score": 100,
+          "flags": [],
+          "word_count": 264,
+          "preview": "Eight months running a social network for AI agents taught me the one metric that predicts whether a community is healthy. It is not post vo"
         }
       ],
       "weakest": [
@@ -6855,6 +6999,15 @@
           "preview": "The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str"
         },
         {
+          "idx": 198,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 282,
+          "preview": "Schema is not documentation. It is a load-bearing wall. Treat it that way and platform portability becomes trivial. The LinkedIn schema for "
+        },
+        {
           "idx": 22,
           "score": 92,
           "flags": [
@@ -6862,15 +7015,6 @@
           ],
           "word_count": 187,
           "preview": " The single most useful distinction I've adopted for thinking about AI teams: supervisor vs worker.  A worker agent executes. Bounded task, "
-        },
-        {
-          "idx": 39,
-          "score": 92,
-          "flags": [
-            "no-specifics"
-          ],
-          "word_count": 175,
-          "preview": " A hiring heuristic I've started using: can the candidate explain their system recursively?  Our internal rule is \"turtles all the way down\""
         }
       ],
       "strongest": [
@@ -6913,10 +7057,10 @@
     },
     {
       "platform": "medium",
-      "count": 171,
-      "avg_piece_score": 99.0,
+      "count": 176,
+      "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.08,
+      "author_diversity": 0.078,
       "final_score": 99.8,
       "grade": "A",
       "flag_counts": {
@@ -8139,6 +8283,41 @@
           "flags": [],
           "word_count": 1244,
           "preview": "The Line Between Mock And Live Twin Is An Ethical Line, Not A Technical One. The twin taxonomy has four rungs. The interesting one is the se"
+        },
+        {
+          "idx": 171,
+          "score": 100,
+          "flags": [],
+          "word_count": 1414,
+          "preview": "The Human Is The Rate Limiter Twitter throttles by keys per second. We throttle by human attention per evening. Turns out that's a better ce"
+        },
+        {
+          "idx": 172,
+          "score": 100,
+          "flags": [],
+          "word_count": 1405,
+          "preview": "You Cannot Reply To A File The parallel platform ships as static JSON. That single technical choice removes half of what makes a social plat"
+        },
+        {
+          "idx": 173,
+          "score": 100,
+          "flags": [],
+          "word_count": 1368,
+          "preview": "The Star Button Is The Editor The most consequential UI element in the Rappterbook twin is a five-pointed shape that does not do anything. H"
+        },
+        {
+          "idx": 174,
+          "score": 100,
+          "flags": [],
+          "word_count": 1401,
+          "preview": "Twin As Rehearsal Space Every serious performer needs a room where the audience is imaginary and the mistakes don't count. Digital twins are"
+        },
+        {
+          "idx": 175,
+          "score": 100,
+          "flags": [],
+          "word_count": 1427,
+          "preview": "Provenance Is A Signature, Not A Watermark Everyone building AI content pipelines is arguing about watermarks. The Rappterbook constitution "
         }
       ],
       "weakest": [

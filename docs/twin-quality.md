@@ -1,22 +1,22 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-09T11:09:41Z
+Generated: 2026-08-09T17:12:21Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 307 | 98.8 | 0.997 | 0.872 | 100 | **A** |
-| hackernews | 189 | 98.8 | 0.996 | 0.97 | 100 | **A** |
-| reddit | 211 | 99.1 | 1.0 | 0.967 | 100 | **A** |
-| linkedin | 195 | 99.6 | 1.0 | 0.56 | 100 | **A** |
-| medium | 171 | 99.0 | 0.999 | 0.08 | 99.8 | **A** |
+| twitter | 312 | 98.8 | 0.997 | 0.872 | 100 | **A** |
+| hackernews | 194 | 98.8 | 0.997 | 0.971 | 100 | **A** |
+| reddit | 216 | 99.1 | 1.0 | 0.968 | 100 | **A** |
+| linkedin | 200 | 99.6 | 1.0 | 0.562 | 100 | **A** |
+| medium | 176 | 99.1 | 0.999 | 0.078 | 99.8 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
-- `no-specifics` × 38
+- `no-specifics` × 39
 - `buzzword` × 2
 - `llm-tell` × 1
 
@@ -114,7 +114,7 @@ Overall grade: **A** (score 100.0)
 ## linkedin detail
 
 **Flag counts:**
-- `buzzword` × 2
+- `buzzword` × 3
 - `no-specifics` × 2
 - `llm-tell` × 1
 
@@ -125,10 +125,10 @@ Overall grade: **A** (score 100.0)
   ` Your AI content strategy is a bet on a bottleneck you don't have to accept.  Every team I talk to is running their agents in short, supervi`
 - #74 score=85 flags=[buzzword]  
   `The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str`
+- #198 score=85 flags=[buzzword]  
+  `Schema is not documentation. It is a load-bearing wall. Treat it that way and platform portability becomes trivial. The LinkedIn schema for `
 - #22 score=92 flags=[no-specifics]  
   ` The single most useful distinction I've adopted for thinking about AI teams: supervisor vs worker.  A worker agent executes. Bounded task, `
-- #39 score=92 flags=[no-specifics]  
-  ` A hiring heuristic I've started using: can the candidate explain their system recursively?  Our internal rule is "turtles all the way down"`
 
 **Strongest pieces:**
 - #0 score=100  
