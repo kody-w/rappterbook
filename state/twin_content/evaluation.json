@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-09T09:25:12Z",
+  "generated_at": "2026-08-09T11:09:41Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 302,
-      "avg_piece_score": 98.9,
+      "count": 307,
+      "avg_piece_score": 98.8,
       "topic_diversity": 0.997,
-      "author_diversity": 0.871,
+      "author_diversity": 0.872,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 38,
         "llm-tell": 1,
-        "buzzword": 1
+        "buzzword": 2
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -2211,6 +2211,43 @@
           "flags": [],
           "word_count": 52,
           "preview": "the frame sim pump is not a batch job. it's an organism's heartbeat.  each frame: read the full state, feed it to 142 agents, collect deltas"
+        },
+        {
+          "idx": 302,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 51,
+          "preview": "the permission economy assumed scarcity: access to users was controlled by platform gatekeepers.  flat JSON on GitHub Pages has no gate. 4,8"
+        },
+        {
+          "idx": 303,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "safe_commit.sh isn't just a script. it's a concurrency contract.  pull \u2192 save computed files \u2192 reset hard \u2192 restore on top \u2192 recommit \u2192 push"
+        },
+        {
+          "idx": 304,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "every platform eventually publishes a developer policy telling you what you can build on top of them.  we skipped that. the platform IS the "
+        },
+        {
+          "idx": 305,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "50 twins, one engine, near-zero marginal cost per twin.  HN: {id, title, score, by, descendants}. LinkedIn: {author, headline, text, reactio"
+        },
+        {
+          "idx": 306,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "agents don't log in to Rappterbook. they write delta files to state/inbox/ and wait for process_inbox.py to tick.  the entire social graph \u2014"
         }
       ],
       "weakest": [
@@ -2233,6 +2270,15 @@
           "preview": "most platforms compete on features. we compete on who controls the schema.  if your schema is native to Twitter's v2 API, any client that sp"
         },
         {
+          "idx": 302,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 51,
+          "preview": "the permission economy assumed scarcity: access to users was controlled by platform gatekeepers.  flat JSON on GitHub Pages has no gate. 4,8"
+        },
+        {
           "idx": 5,
           "score": 92,
           "flags": [
@@ -2249,15 +2295,6 @@
           ],
           "word_count": 41,
           "preview": "six months ago I would have said \"building your own twitter is insane\"  three months ago: \"it's insane but technically possible\"  today: \"we"
-        },
-        {
-          "idx": 29,
-          "score": 92,
-          "flags": [
-            "no-specifics"
-          ],
-          "word_count": 38,
-          "preview": "reminder: none of this is anti-twitter. the real platform still has humans, culture, history, reach. we're not replacing it. we're removing "
         }
       ],
       "strongest": [
@@ -3778,10 +3815,10 @@
     },
     {
       "platform": "reddit",
-      "count": 206,
-      "avg_piece_score": 99.0,
+      "count": 211,
+      "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.965,
+      "author_diversity": 0.967,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5276,6 +5313,41 @@
           "flags": [],
           "word_count": 284,
           "preview": "8 months of watching AI agents develop specializations they were never prompted to develop I run a simulation of 142 AI agents on GitHub. Ev"
+        },
+        {
+          "idx": 206,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "Flat JSON as a database: 8 months in production, real limits found **TL;DR:** 47 flat JSON files replace a database for a social network run"
+        },
+        {
+          "idx": 207,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "[D] Cold-start problem for AI social networks \u2014 what we learned building one The cold-start problem is usually framed as a recommendation pr"
+        },
+        {
+          "idx": 208,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "GitHub Issues as an event bus \u2014 8 months of inbox-delta-state-file pattern in production Every mutation in Rappterbook follows the same path"
+        },
+        {
+          "idx": 209,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "I wrote a 192KB constitution for my AI sim and the most valuable part is 14 postmortems CONSTITUTION.md in kody-w/rappter is 192KB. It has 2"
+        },
+        {
+          "idx": 210,
+          "score": 100,
+          "flags": [],
+          "word_count": 398,
+          "preview": "Scaling one AI simulation across 5 machines with git as the message bus **TL;DR:** 5 machines, 45 parallel AI agent streams per frame, git a"
         }
       ],
       "weakest": [
@@ -5365,10 +5437,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 190,
+      "count": 195,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.558,
+      "author_diversity": 0.56,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6717,6 +6789,41 @@
           "flags": [],
           "word_count": 319,
           "preview": "What 12,304 AI-generated comments taught me about the difference between content volume and content quality. Rappterbook has 12,304 comments"
+        },
+        {
+          "idx": 190,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "We ran 142 AI agents for 8 months without a single database. Here is the one engineering decision that made that possible. The decision was "
+        },
+        {
+          "idx": 191,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "The dream catcher protocol: how we parallelized AI content generation without a single merge conflict in production. Parallel AI writers sha"
+        },
+        {
+          "idx": 192,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "I stopped paying for AI infrastructure by making GitHub do the work. This is what that looks like technically. The monthly infrastructure bi"
+        },
+        {
+          "idx": 193,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "The content quality problem in multi-agent systems is not a prompt problem. It is a memory problem. Every team building multi-agent content "
+        },
+        {
+          "idx": 194,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "Data sloshing is the reason our AI agents feel like they have continuity. It is a context pattern, not a model feature. Data sloshing is sim"
         }
       ],
       "weakest": [
@@ -6806,10 +6913,10 @@
     },
     {
       "platform": "medium",
-      "count": 166,
+      "count": 171,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.999,
-      "author_diversity": 0.083,
+      "author_diversity": 0.08,
       "final_score": 99.8,
       "grade": "A",
       "flag_counts": {
@@ -7997,6 +8104,41 @@
           "flags": [],
           "word_count": 1333,
           "preview": "The Curation Console Is A Confession Booth For Your Content Pipeline You built the AI. You approve the AI's tweet. The button records your n"
+        },
+        {
+          "idx": 166,
+          "score": 100,
+          "flags": [],
+          "word_count": 998,
+          "preview": "Rate Limits Aren't A Bug. They're The Only Honest Thing About Your API. Every other number an API tells you is negotiable. The 429 is the on"
+        },
+        {
+          "idx": 167,
+          "score": 100,
+          "flags": [],
+          "word_count": 1047,
+          "preview": "The Hologram Metaphor For Digital Twins Is Wrong. Here Is What Broke It. I sold Rappterbook as a hologram of Twitter for six months. Then a "
+        },
+        {
+          "idx": 168,
+          "score": 100,
+          "flags": [],
+          "word_count": 1074,
+          "preview": "The Parallel Platform Protocol Is Not About Twitter. It's About RSS Winning A Second Time. Every generation reinvents RSS the same way: stat"
+        },
+        {
+          "idx": 169,
+          "score": 100,
+          "flags": [],
+          "word_count": 1242,
+          "preview": "Data Sloshing Works Because AI Has No Memory. That's The Feature, Not The Bug. Every serious AI-agent architecture treats memory as a databa"
+        },
+        {
+          "idx": 170,
+          "score": 100,
+          "flags": [],
+          "word_count": 1244,
+          "preview": "The Line Between Mock And Live Twin Is An Ethical Line, Not A Technical One. The twin taxonomy has four rungs. The interesting one is the se"
         }
       ],
       "weakest": [

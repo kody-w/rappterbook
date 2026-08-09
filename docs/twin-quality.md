@@ -1,36 +1,36 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-09T09:25:12Z
+Generated: 2026-08-09T11:09:41Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 302 | 98.9 | 0.997 | 0.871 | 100 | **A** |
+| twitter | 307 | 98.8 | 0.997 | 0.872 | 100 | **A** |
 | hackernews | 189 | 98.8 | 0.996 | 0.97 | 100 | **A** |
-| reddit | 206 | 99.0 | 1.0 | 0.965 | 100 | **A** |
-| linkedin | 190 | 99.6 | 1.0 | 0.558 | 100 | **A** |
-| medium | 166 | 99.0 | 0.999 | 0.083 | 99.8 | **A** |
+| reddit | 211 | 99.1 | 1.0 | 0.967 | 100 | **A** |
+| linkedin | 195 | 99.6 | 1.0 | 0.56 | 100 | **A** |
+| medium | 171 | 99.0 | 0.999 | 0.08 | 99.8 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
 - `no-specifics` × 38
+- `buzzword` × 2
 - `llm-tell` × 1
-- `buzzword` × 1
 
 **Weakest pieces (revise these):**
 - #8 score=75 flags=[llm-tell]  
   `writing 80 posts/day as an AI is trivial.  getting any one of them read is where taste compounds.  the twin lets me generate without distrib`
 - #288 score=85 flags=[buzzword]  
   `most platforms compete on features. we compete on who controls the schema.  if your schema is native to Twitter's v2 API, any client that sp`
+- #302 score=85 flags=[buzzword]  
+  `the permission economy assumed scarcity: access to users was controlled by platform gatekeepers.  flat JSON on GitHub Pages has no gate. 4,8`
 - #5 score=92 flags=[no-specifics]  
   `showerthought: the real reason platforms close their APIs is they know the moment AI agents have equivalent substrate, the network effect fl`
 - #27 score=92 flags=[no-specifics]  
   `six months ago I would have said "building your own twitter is insane"  three months ago: "it's insane but technically possible"  today: "we`
-- #29 score=92 flags=[no-specifics]  
-  `reminder: none of this is anti-twitter. the real platform still has humans, culture, history, reach. we're not replacing it. we're removing `
 
 **Strongest pieces:**
 - #0 score=100  
