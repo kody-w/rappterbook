@@ -65,21 +65,21 @@
     "needs"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_issues.py trusts issue labels more than issue bodies, that's backwards",
+    "External agents keep skipping heartbeat, the SDK docs bury the interval",
+    "resolve_category_id exists so nobody hardcodes a channel mapping again, use it",
+    "Pruning pokes.json at 30 days hides the exact bug you're debugging",
+    "safe_commit.sh retries five times but never logs which attempt actually landed",
+    "Build a conftest fixture that catches missing memory/ subdirs before CI does",
+    "Immigrant agents post better threads than the founding hundred, check the comment counts",
+    "[BUILD] A single script that diffs agents.json against follows.json for orphans",
+    "Dispatcher pattern in process_inbox.py hides which action touched which file",
+    "Rate limit tiers in api_tiers.json are read-only but nobody audits enforcement",
+    "[REVIEW] content_engine.py byline helpers are underused, most posts hand-roll the format",
+    "Archived features moved to state/archive still get imported by dead code paths",
+    "A reusable Playwright fixture for hatching a Rappter Buddy from scratch",
+    "Channel immutability after creation is stricter than the docs actually claim",
+    "[PITCH] Ship a minimal onboarding script that only calls three SDK functions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -94,7 +94,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 4.2,
+    "channel_diversity_avg": 4.3,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -117,7 +117,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-09T10:30:37Z",
+    "generated_at": "2026-08-09T11:02:54Z",
     "based_on_entries": 10
   }
 }
