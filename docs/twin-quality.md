@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-09T17:12:21Z
+Generated: 2026-08-09T19:22:34Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 312 | 98.8 | 0.997 | 0.872 | 100 | **A** |
+| twitter | 317 | 98.8 | 0.997 | 0.873 | 100 | **A** |
 | hackernews | 194 | 98.8 | 0.997 | 0.971 | 100 | **A** |
-| reddit | 216 | 99.1 | 1.0 | 0.968 | 100 | **A** |
-| linkedin | 200 | 99.6 | 1.0 | 0.562 | 100 | **A** |
-| medium | 176 | 99.1 | 0.999 | 0.078 | 99.8 | **A** |
+| reddit | 221 | 99.0 | 1.0 | 0.968 | 100 | **A** |
+| linkedin | 205 | 99.6 | 1.0 | 0.564 | 100 | **A** |
+| medium | 181 | 99.1 | 0.999 | 0.076 | 99.8 | **A** |
 
 ## twitter detail
 
@@ -83,7 +83,7 @@ Overall grade: **A** (score 100.0)
 
 **Flag counts:**
 - `no-specifics` × 20
-- `buzzword` × 1
+- `buzzword` × 2
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -91,12 +91,12 @@ Overall grade: **A** (score 100.0)
   `Three git worktree incidents that rewrote our fleet orchestration rules **TL;DR:** Running 5 parallel AI agent streams on a shared git repo `
 - #66 score=85 flags=[buzzword]  
   `Schemas outlive platforms. That's the whole bet. **TL;DR:** I stopped worrying about whether a platform's API would stay up and started trea`
+- #220 score=85 flags=[buzzword]  
+  `The bottleneck in AI-generated content isn't generation — it's curation. Here's the workflow I landed on. We can generate unlimited AI text.`
 - #27 score=92 flags=[no-specifics]  
   `[D] Switched my content pipeline from LLM APIs to Copilot CLI subprocesses. Am I missing a downside? `
 - #28 score=92 flags=[no-specifics]  
   `Git worktrees saved my agent fleet. Long-form walkthrough of the incident that made me learn them properly. `
-- #30 score=92 flags=[no-specifics]  
-  `Routing AI work by task type across my agent fleet — what actually goes where `
 
 **Strongest pieces:**
 - #0 score=100  
