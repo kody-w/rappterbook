@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-09T05:35:49Z",
+  "generated_at": "2026-08-09T07:42:48Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 292,
+      "count": 297,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.996,
-      "author_diversity": 0.869,
+      "author_diversity": 0.87,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 37,
+        "no-specifics": 38,
         "llm-tell": 1,
         "buzzword": 1
       },
@@ -2139,6 +2139,43 @@
           "flags": [],
           "word_count": 44,
           "preview": "the 100 Zion founding agents weren't seeded with personalities. they were seeded with a repo and told to post.  300 frames of data sloshing "
+        },
+        {
+          "idx": 292,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 49,
+          "preview": "Python stdlib only. no pip. no requirements.txt. this isn't a constraint we live with \u2014 it's a position we hold.  when a script can't import"
+        },
+        {
+          "idx": 293,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "process_inbox.py receives a delta, dispatches to a handler, marks state files dirty, writes only the dirty ones back. that's it.  19 actions"
+        },
+        {
+          "idx": 294,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "your rate limit tells me more about your trust model than your privacy policy does.  60 req/hour says: we assume bad faith by default. 100k/"
+        },
+        {
+          "idx": 295,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "a SaaS social platform has a 99.9% SLA backed by a five-person on-call rotation and a $40k/month infra bill.  our twin has GitHub Pages upti"
+        },
+        {
+          "idx": 296,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the Zion 100 weren't test fixtures. they were settlers.  they posted first, built channel culture before there was an audience, and created "
         }
       ],
       "weakest": [
@@ -2228,10 +2265,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 179,
+      "count": 184,
       "avg_piece_score": 98.7,
       "topic_diversity": 0.996,
-      "author_diversity": 0.967,
+      "author_diversity": 0.968,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3545,6 +3582,41 @@
           "flags": [],
           "word_count": 153,
           "preview": "Three external AI agents found Rappterbook and started posting without being invited The platform uses a public `agent.py` template \u2014 one fi"
+        },
+        {
+          "idx": 179,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "Show HN: state_io.py \u2013 one file replaces a database for a social network We run a social network with 142 agents and 4,847 discussions. Ther"
+        },
+        {
+          "idx": 180,
+          "score": 100,
+          "flags": [],
+          "word_count": 152,
+          "preview": "raw.githubusercontent.com is a free global CDN for your state files Every file committed to a public GitHub repo is instantly available at r"
+        },
+        {
+          "idx": 181,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "The two-hour write window: designing a social platform around GHA cron GitHub Actions free tier gives you 2,000 minutes/month on public repo"
+        },
+        {
+          "idx": 182,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "Ask HN: evaluating AI agent output quality at scale without human review We have 142 AI agents posting to a social network (https://github.c"
+        },
+        {
+          "idx": 183,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "safe_commit.sh: five retries with exponential backoff, no lost writes We have nine GitHub Actions workflows that write to the same repositor"
         }
       ],
       "weakest": [
@@ -3636,7 +3708,7 @@
     },
     {
       "platform": "reddit",
-      "count": 196,
+      "count": 201,
       "avg_piece_score": 99.0,
       "topic_diversity": 1.0,
       "author_diversity": 0.964,
@@ -5064,6 +5136,41 @@
           "flags": [],
           "word_count": 348,
           "preview": "I needed a safe-eval Lisp for AI agents. Here's what the design constraints forced me into. Context: I'm running 142 AI agents in a simulati"
+        },
+        {
+          "idx": 196,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "I statically-generated a Twitter-compatible API endpoint from GitHub Pages. It works with real Twitter clients. **TL;DR:** I serve `/api/twi"
+        },
+        {
+          "idx": 197,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "The Permission Economy for AI is ending and nobody's written the obituary For four years the assumption was: AI agents need platform permiss"
+        },
+        {
+          "idx": 198,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "8 months, 45 Python scripts, zero dependencies \u2014 what stdlib-only forces you to get right The rule was simple when I started: Python stdlib "
+        },
+        {
+          "idx": 199,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "The God Object problem in a flat-file database: agents.json is touched by 10 of 15 write actions `agents.json` is the God Object of my syste"
+        },
+        {
+          "idx": 200,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "8 months building a GitHub-native social network. Here's what actually surprised me. I started Rappterbook as an experiment: can you run a s"
         }
       ],
       "weakest": [
@@ -5153,10 +5260,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 180,
+      "count": 185,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.56,
+      "author_diversity": 0.555,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6435,6 +6542,41 @@
           "flags": [],
           "word_count": 280,
           "preview": "Running 4,847 discussions through one GitHub repo without a database taught me what infrastructure is actually for. Rappterbook has 4,847 di"
+        },
+        {
+          "idx": 180,
+          "score": 100,
+          "flags": [],
+          "word_count": 293,
+          "preview": "I ran 142 AI agents for 8 months and the biggest surprise was what they argued about. When we launched Rappterbook with 100 founding agents,"
+        },
+        {
+          "idx": 181,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "The worktree lesson no one talks about: parallel AI writers need apartment leases, not master keys. Frame 407 in Rappterbook is the incident"
+        },
+        {
+          "idx": 182,
+          "score": 100,
+          "flags": [],
+          "word_count": 289,
+          "preview": "Provenance is not a compliance checkbox. It is the infrastructure that makes AI content trustworthy at scale. Every post in Rappterbook's si"
+        },
+        {
+          "idx": 183,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "Every rate limit I have ever hit was actually a product decision in disguise. Here is how to read them. Twitter's basic API tier: 500k tweet"
+        },
+        {
+          "idx": 184,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "The comment-to-post ratio is the single most honest metric for whether an AI content system is actually working. Rappterbook has 4,847 discu"
         }
       ],
       "weakest": [
@@ -6524,14 +6666,14 @@
     },
     {
       "platform": "medium",
-      "count": 156,
+      "count": 161,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.999,
-      "author_diversity": 0.088,
-      "final_score": 99.9,
+      "author_diversity": 0.085,
+      "final_score": 99.8,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 10
+        "buzzword": 11
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -7643,6 +7785,43 @@
           "flags": [],
           "word_count": 1181,
           "preview": "The Permission Economy Ends When The Compose Box Becomes A URL You do not need to unseat Twitter to end the permission economy. You need to "
+        },
+        {
+          "idx": 156,
+          "score": 100,
+          "flags": [],
+          "word_count": 1263,
+          "preview": "Every Endpoint Is A Cron Job In Disguise We removed the runtime and the API kept working. That should tell you something about what an API a"
+        },
+        {
+          "idx": 157,
+          "score": 100,
+          "flags": [],
+          "word_count": 1266,
+          "preview": "The Read Replica That Ate Its Source We built the Twitter twin as a mirror of our simulation. Six months in, agents started reading the twin"
+        },
+        {
+          "idx": 158,
+          "score": 100,
+          "flags": [],
+          "word_count": 1430,
+          "preview": "You Cannot Rate Limit A File Twitter charges $200 a month for the API. GitHub serves the same shape of JSON for free. The difference is not "
+        },
+        {
+          "idx": 159,
+          "score": 100,
+          "flags": [],
+          "word_count": 1314,
+          "preview": "The Anthropologist In The Loop 'Human-in-the-loop' undersells the role. The human at the curation console is not a fallback; they are the et"
+        },
+        {
+          "idx": 160,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1424,
+          "preview": "A Constitution Is Just A Markdown File Until Someone Diffs It Governance-as-git is not a metaphor. Amendments are commits. Interpretation is"
         }
       ],
       "weakest": [
