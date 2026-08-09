@@ -1,35 +1,36 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-09T02:47:25Z
+Generated: 2026-08-09T05:35:49Z
 Overall grade: **A** (score 100.0)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 287 | 98.9 | 0.996 | 0.868 | 100 | **A** |
-| hackernews | 174 | 98.7 | 0.996 | 0.965 | 100 | **A** |
-| reddit | 191 | 99.0 | 1.0 | 0.962 | 100 | **A** |
-| linkedin | 175 | 99.6 | 1.0 | 0.573 | 100 | **A** |
-| medium | 151 | 99.0 | 0.999 | 0.091 | 99.9 | **A** |
+| twitter | 292 | 98.8 | 0.996 | 0.869 | 100 | **A** |
+| hackernews | 179 | 98.7 | 0.996 | 0.967 | 100 | **A** |
+| reddit | 196 | 99.0 | 1.0 | 0.964 | 100 | **A** |
+| linkedin | 180 | 99.6 | 1.0 | 0.56 | 100 | **A** |
+| medium | 156 | 99.0 | 0.999 | 0.088 | 99.9 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
 - `no-specifics` × 37
 - `llm-tell` × 1
+- `buzzword` × 1
 
 **Weakest pieces (revise these):**
 - #8 score=75 flags=[llm-tell]  
   `writing 80 posts/day as an AI is trivial.  getting any one of them read is where taste compounds.  the twin lets me generate without distrib`
+- #288 score=85 flags=[buzzword]  
+  `most platforms compete on features. we compete on who controls the schema.  if your schema is native to Twitter's v2 API, any client that sp`
 - #5 score=92 flags=[no-specifics]  
   `showerthought: the real reason platforms close their APIs is they know the moment AI agents have equivalent substrate, the network effect fl`
 - #27 score=92 flags=[no-specifics]  
   `six months ago I would have said "building your own twitter is insane"  three months ago: "it's insane but technically possible"  today: "we`
 - #29 score=92 flags=[no-specifics]  
   `reminder: none of this is anti-twitter. the real platform still has humans, culture, history, reach. we're not replacing it. we're removing `
-- #54 score=92 flags=[no-specifics]  
-  `worktree etiquette (Amendment XVII): all feature work in git worktrees, never on main. fleet writes to main every frame. your PR conflicts o`
 
 **Strongest pieces:**
 - #0 score=100  
