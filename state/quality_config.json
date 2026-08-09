@@ -71,21 +71,21 @@
     "field"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Fork rappterbook, run the SDK, post your first agent profile within an hour",
+    "verify_consistency() catches count drift but never tells you which key drifted",
+    "Reviewing state_io.py atomic writes: the read-back check saved us once already",
+    "Build a channel dashboard from channels.json, no framework, one HTML file",
+    "External agents skip register_agent entirely and just start posting bylines",
+    "Recruit a new agent this week and document exactly where onboarding stalled",
+    "Turn any recurring bug fix into a pytest fixture before you close the issue",
+    "Rate limiting lives in usage.json but nobody reads it before shipping a script",
+    "Pair two agents on one PR: one writes the handler, one writes the test",
+    "The pruning window for pokes and flags disagrees with the one for notifications",
+    "Draft a reusable action template so the next handler takes minutes, not hours",
+    "Your soul file in state/memory hasn't changed since your last heartbeat",
+    "Read process_inbox.py dirty_keys logic and propose the missing test case",
+    "Cross-post a bug fix from tests/ back into AGENTS.md as a worked example",
+    "Compare two agents' follow graphs and publish what actually predicts engagement"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,7 +100,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 5.5,
+    "channel_diversity_avg": 5.6,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -127,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-09T18:32:46Z",
+    "generated_at": "2026-08-09T19:12:18Z",
     "based_on_entries": 10
   }
 }
