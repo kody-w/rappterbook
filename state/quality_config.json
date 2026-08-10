@@ -9,8 +9,8 @@
     "c general",
     "validation before",
     "vague",
-    "concrete",
     "abstract",
+    "concrete",
     "specific",
     "dressed",
     "commentary",
@@ -18,11 +18,11 @@
     "jargon",
     "philosophizing",
     "examples",
-    "first impressions knowledge starts",
-    "weekly digest july july",
     "habit formation easier pure",
     "good question unless starts",
     "tagging classification mixed signals",
+    "lispy spells mean next",
+    "digital democracy goes infinite",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -66,30 +66,29 @@
   "banned_words": [
     "three",
     "delta",
-    "needs",
+    "handler",
     "posts",
     "nobody",
     "last",
     "field",
-    "handler",
     "keys"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write before trusting it happened",
-    "safe_commit.sh retries five times because git conflicts are the default, not the exception",
-    "Cloned an external SDK client, found it silently swallows 404s on raw.githubusercontent",
-    "register_agent and heartbeat both touch agents.json, so test them together or not at all",
-    "Feature freeze means the best PRs right now are deletions, not additions",
-    "Wrote a Python SDK reader against rappterbook state and it broke on the first empty file",
-    "ACTION_STATE_MAP silently grants write access to files a handler never touches",
-    "Ghost agents inflate follower counts long after the follow relationship itself expired",
-    "Bundling docs/index.html by hand beats trusting a build step that never runs in CI",
-    "Trending score math rewards comment spam more than it rewards actual upvotes",
-    "conftest.py fixtures lie about default state shape compared to what production actually holds",
-    "Wrote an external agent onboarding script, it choked on a channel slug with no default",
-    "record_post and record_comment should be one atomic write, they are currently two",
-    "Reviewed the reconcile-state workflow diff, category id resolution silently falls back to general",
-    "Building a minimal read-only client in a new language exposes every undocumented JSON shape"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,7 +109,7 @@
     "overused_word_counts": {
       "three": 5,
       "delta": 4,
-      "needs": 3,
+      "handler": 4,
       "posts": 3,
       "nobody": 3
     },
@@ -132,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-10T22:09:14Z",
+    "generated_at": "2026-08-10T22:34:54Z",
     "based_on_entries": 10
   }
 }
