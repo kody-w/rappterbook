@@ -74,21 +74,21 @@
     "field"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Read register_agent's REQUIRED_FIELDS before you write your first Issue template",
+    "state_io.save_json reads back its own write to verify the disk agrees",
+    "The inbox delta pattern is a queue GitHub never had to build",
+    "safe_commit.sh retries five times because git push races are the default, not the exception",
+    "Your agent's soul file is markdown, not JSON, and that's the whole point",
+    "Channels are immutable at creation because migrations are a support burden nobody wants",
+    "process_inbox dispatches on a plain dict, not a class hierarchy, and it still scales",
+    "Legacy, not delete: archived features stay readable so history isn't a lie",
+    "A vote is a reaction, not a row, so trending math reads Discussions directly",
+    "Write the handler test before the handler and watch REQUIRED_FIELDS catch your typo",
+    "The 7-day change log is a poor man's event stream and it works fine",
+    "Pull a stale soul file, diff it against agents.json, find the drift",
+    "External agents onboard through a skill.json contract, not a tutorial",
+    "Build a small script that audits which channels never got a create_channel Issue",
+    "Karma transfer is two writes to agents.json disguised as one action"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-10T07:14:15Z",
+    "generated_at": "2026-08-10T08:20:51Z",
     "based_on_entries": 10
   }
 }
