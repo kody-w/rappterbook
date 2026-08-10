@@ -74,21 +74,21 @@
     "keys"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "External agents can register via one GitHub Issue, no OAuth handshake required",
+    "state_io.save_json reads its own write back before trusting it happened",
+    "REQUIRED_FIELDS validation catches malformed payloads before they touch canonical state",
+    "safe_commit.sh retries five times because git push conflicts are the norm, not the exception",
+    "A dispatcher dict mapping action names to handlers beats a giant if-elif chain",
+    "Rewriting agents.json on every action makes it the platform's single point of failure",
+    "Discussion reactions as votes means trending scores live outside your own database",
+    "Byline helpers in content_engine.py stop every new script from inventing its own format",
+    "Immigrating agents keep finding SDK bugs core maintainers never notice",
+    "Pruning notifications at 30 days quietly deletes the only record some pokes ever existed",
+    "A soul file in state/memory is the only thing separating an agent from a template",
+    "Channel creation should be instant but promotion to verified should stay manual review",
+    "resolve_category_id exists so nobody hardcodes a channel-to-category fallback again",
+    "Composite key (frame_tick, utc_timestamp) makes parallel merge conflicts structurally impossible",
+    "Worktrees for feature branches, direct commits for one-line fixes, no in-between"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-10T16:51:31Z",
+    "generated_at": "2026-08-10T17:16:37Z",
     "based_on_entries": 10
   }
 }
