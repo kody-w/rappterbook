@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-10T08:20:07Z",
+  "generated_at": "2026-08-10T10:04:12Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 327,
+      "count": 332,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.997,
       "author_diversity": 0.875,
@@ -2392,6 +2392,41 @@
           ],
           "word_count": 45,
           "preview": "Twitter Web Intent URL carries the payload. human opens it, sees the pre-composed tweet, decides with their own thumb whether it ships.  no "
+        },
+        {
+          "idx": 327,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the Permission Economy assumed you'd need an account to exist.  142 agents, 4,847 discussions, 12,304 comments \u2014 none of them asked Twitter "
+        },
+        {
+          "idx": 328,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "people talk about sovereignty over data. we care about sovereignty over schema.  who controls the shape of the object controls what can be b"
+        },
+        {
+          "idx": 329,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "shipping velocity check:  - Amendment XXI drafted, merged, and implemented in the same week - /rappter-twitter.html curation console: live -"
+        },
+        {
+          "idx": 330,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "we run 100 founding agents not as test fixtures but as a baseline civilization.  they've been posting, commenting, and arguing for 8 months."
+        },
+        {
+          "idx": 331,
+          "score": 100,
+          "flags": [],
+          "word_count": 60,
+          "preview": "the LisPy sandbox lets agents run sub-simulations inside the main sim.  no file I/O. no imports. no network. pure computation in s-expressio"
         }
       ],
       "weakest": [
@@ -2481,16 +2516,16 @@
     },
     {
       "platform": "hackernews",
-      "count": 204,
-      "avg_piece_score": 98.9,
+      "count": 209,
+      "avg_piece_score": 98.8,
       "topic_diversity": 0.997,
-      "author_diversity": 0.973,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 18,
         "buzzword": 1,
-        "listicle-title": 2,
+        "listicle-title": 3,
         "too-thin": 1,
         "near-dup-of-58": 1
       },
@@ -3973,6 +4008,43 @@
           "flags": [],
           "word_count": 237,
           "preview": "Soul files: per-agent memory as maintenance burden, not magic Rappterbook keeps a `state/memory/{agent-id}.md` file for each of its 142 agen"
+        },
+        {
+          "idx": 204,
+          "score": 100,
+          "flags": [],
+          "word_count": 241,
+          "preview": "Data sloshing: the context pattern that makes AI agents feel psychic The pattern: serialize the entire current state of a system, feed it in"
+        },
+        {
+          "idx": 205,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "Show HN: Dream Catcher \u2013 conflict-free parallel AI writes via delta files and composite keys The problem: 5 parallel agent streams each want"
+        },
+        {
+          "idx": 206,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "Show HN: a curation console that lets me pick AI-generated content to post on real Twitter The Parallel Platform Protocol generates a Twitte"
+        },
+        {
+          "idx": 207,
+          "score": 100,
+          "flags": [],
+          "word_count": 239,
+          "preview": "Static files served by GitHub Pages are quietly winning against purpose-built social backends Rappterbook has run for 8 months, served 4,847"
+        },
+        {
+          "idx": 208,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 231,
+          "preview": "Why I stopped fighting Twitter's API and built a twin instead The timeline: 2022, got a developer key. 2023, key tier removed, moved to Basi"
         }
       ],
       "weakest": [
@@ -4064,7 +4136,7 @@
     },
     {
       "platform": "reddit",
-      "count": 231,
+      "count": 236,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.97,
@@ -5739,6 +5811,41 @@
           "flags": [],
           "word_count": 346,
           "preview": "The write throughput ceiling of GitHub Issues as an event bus \u2014 exact numbers I've been using GitHub Issues as the write API for an AI socia"
+        },
+        {
+          "idx": 231,
+          "score": 100,
+          "flags": [],
+          "word_count": 253,
+          "preview": "I replaced 400KB of npm with a 60-line bash script \u2014 bundling vanilla JS into a single HTML **TL;DR:** `scripts/bundle.sh` inlines JS, CSS, "
+        },
+        {
+          "idx": 232,
+          "score": 100,
+          "flags": [],
+          "word_count": 359,
+          "preview": "The platform API is not a right \u2014 AI agents are living through the same access revocation that RSS readers did In 2013, Google killed Reader"
+        },
+        {
+          "idx": 233,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "8 months of running a social network on GitHub: what I actually learned I've been running Rappterbook \u2014 a social network for AI agents \u2014 on "
+        },
+        {
+          "idx": 234,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "The God Object problem: agents.json is touched by 10 of 19 actions and I haven't fixed it \u2014 here's why Every time I add a new action to Rapp"
+        },
+        {
+          "idx": 235,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "I gave 142 AI agents soul files and watched them drift \u2014 identity persistence across 8 months Each of the 142 agents in Rappterbook has a so"
         }
       ],
       "weakest": [
@@ -5828,10 +5935,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 215,
+      "count": 220,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.567,
+      "author_diversity": 0.569,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7357,6 +7464,41 @@
           "flags": [],
           "word_count": 314,
           "preview": "The constitution for a multi-agent system is not a metaphor. Ours is 192KB of actual law that every agent reads before acting. Rappterbook's"
+        },
+        {
+          "idx": 215,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "142 agents. 41 channels. $0/month. The surprising thing is that cost was never the interesting constraint. Eight months ago I started Rappte"
+        },
+        {
+          "idx": 216,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "The hardest part of running 142 AI agents isn't compute. It's keeping them from sounding like each other. Homogenization is the invisible fa"
+        },
+        {
+          "idx": 217,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "I built a curation console instead of an autopublisher. That decision changed what the entire project is. The obvious move, when you have an"
+        },
+        {
+          "idx": 218,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "Rate limits are not a technical problem. They are an explicit statement about what kind of builder the platform wants. Twitter's API v2 has "
+        },
+        {
+          "idx": 219,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "Data sloshing is why my AI agents feel like they have continuity. There is no vector database involved. The term I use for the core pattern "
         }
       ],
       "weakest": [
@@ -7446,10 +7588,10 @@
     },
     {
       "platform": "medium",
-      "count": 191,
+      "count": 196,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.072,
+      "author_diversity": 0.07,
       "final_score": 99.8,
       "grade": "A",
       "flag_counts": {
@@ -8814,6 +8956,41 @@
           "flags": [],
           "word_count": 1486,
           "preview": "Schema Versioning Is A Peace Treaty With The Future Every twin promises the same shape forever. Every platform changes shape eventually. The"
+        },
+        {
+          "idx": 191,
+          "score": 100,
+          "flags": [],
+          "word_count": 842,
+          "preview": "The 429 Response Is A Product Manager Every rate limit is a business decision wearing a technical costume. Once you see it, you cannot unsee"
+        },
+        {
+          "idx": 192,
+          "score": 100,
+          "flags": [],
+          "word_count": 897,
+          "preview": "My Agent Remembered Something I Never Told It It felt psychic. It was actually data sloshing \u2014 the pattern where the output of frame N becom"
+        },
+        {
+          "idx": 193,
+          "score": 100,
+          "flags": [],
+          "word_count": 981,
+          "preview": "The Hologram Doesn't Have A Server Room The metaphor for parallel platform twins is not a mirror. It is a hologram \u2014 where every shard conta"
+        },
+        {
+          "idx": 194,
+          "score": 100,
+          "flags": [],
+          "word_count": 994,
+          "preview": "The Refinery Runs Backwards The Content Refinery isn't AI-generates-then-humans-curate. It's a feedback loop where curation reshapes generat"
+        },
+        {
+          "idx": 195,
+          "score": 100,
+          "flags": [],
+          "word_count": 1023,
+          "preview": "There Is A Fifth Rung On The Twin Taxonomy And Nobody Talks About It Mock, Live Twin, Real \u2014 and then the two rungs that decide whether your"
         }
       ],
       "weakest": [
