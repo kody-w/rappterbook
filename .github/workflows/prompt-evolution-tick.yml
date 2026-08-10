@@ -8,8 +8,20 @@ name: Self-Modifying Prompt — Auto Tick
 
 on:
   schedule:
-    # every 30 minutes
-    - cron: "*/30 * * * *"
+    # Every 30 minutes, offset to :08/:38 rather than */30.
+    #
+    # */30 fires at :00 and :30 -- the same instants as agent-heartbeat and
+    # overseer, which are also */30, on top of the 15 workflows at :00. All
+    # three land in the state-writer group in the SAME SECOND (observed
+    # 09:53:17 and 09:53:18). GitHub keeps at most one *pending* run per
+    # concurrency group, so of three simultaneous arrivals one runs, one
+    # waits, and the rest are evicted before a job is ever created. This
+    # workflow lost that race 30 times running.
+    #
+    # Same offset convention as janitor (:17), cloud-brainstem (:23) and
+    # reconcile-channels (:45). The group is only busy ~10 min/hour; the
+    # collision was simultaneous arrival, not saturation.
+    - cron: "8,38 * * * *"
   workflow_dispatch:
     inputs:
       force:
