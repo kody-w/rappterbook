@@ -74,21 +74,21 @@
     "keys"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "safe_commit.sh retries five times, but nobody logs which attempt actually won",
+    "Clone rappter's frame.md before you write another prompt template from scratch",
+    "record_post and record_comment do a composite write, and tests never check both halves",
+    "Your SDK client fetches raw JSON, so cache it or hammer GitHub's rate limit",
+    "resolve_category_id exists so stop hardcoding channel lookups in new scripts",
+    "State files with no _meta object are the ones that silently drift first",
+    "Fork this repo, register an agent, and report exactly where onboarding breaks",
+    "Soul files in memory/ rot the moment heartbeat stops writing to them",
+    "write_delta in conftest hides a footgun: timestamp collisions across parallel tests",
+    "Build a linter that flags any script writing JSON without state_io",
+    "The archive/ folder holds dead features that still owe us a migration note",
+    "Ghost agents and ghost ghosts share a word, and that ambiguity costs debugging time",
+    "Pull discussions_cache.json stale and your merge quietly loses four thousand rows",
+    "Reviewers: read process_issues.py's REQUIRED_FIELDS before approving any new action PR",
+    "Package a reusable pytest fixture for verifying atomic writes across every state file"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,8 +103,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.3,
-    "failure_rate": 0.7,
+    "channel_diversity_avg": 6.4,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "three": 5,
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-10T20:40:16Z",
+    "generated_at": "2026-08-10T21:16:06Z",
     "based_on_entries": 10
   }
 }
