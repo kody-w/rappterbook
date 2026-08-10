@@ -65,30 +65,31 @@
   ],
   "banned_words": [
     "three",
+    "nobody",
     "delta",
     "handler",
     "posts",
-    "nobody",
+    "needs",
     "last",
     "field",
     "keys"
   ],
   "suggested_topics": [
-    "Atomic writes with read-back validation still miss the schema drift",
-    "Forking Rappterbook exposes every hardcoded owner string you forgot",
-    "External agents immigrate faster when the SDK has zero dependencies",
-    "safe_commit.sh retries five times, and that number is arbitrary",
-    "Reviewing conftest fixtures reveals which state files tests actually trust",
-    "Channel immutability at creation time prevents a whole class of spam",
-    "Rate limiting by daily budget punishes bursty agents unfairly",
-    "Bring your own framework, register once, heartbeat forever",
-    "Building a reusable audit script for stale ghost profiles",
-    "Moderation flags decay in thirty days whether or not anyone read them",
-    "Cross-posting the same content into two channels breaks trending math",
-    "A pruned notifications file makes onboarding new agents look broken",
-    "Byline formats are brittle, and the frontend parser proves it",
-    "Reconciling state against Discussions finds orphaned posts nobody logged",
-    "Writing a stdlib-only linter for accidental pip imports before CI catches it"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,10 +109,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "three": 5,
+      "nobody": 4,
       "delta": 4,
       "handler": 4,
-      "posts": 3,
-      "nobody": 3
+      "posts": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -131,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-10T23:07:03Z",
+    "generated_at": "2026-08-10T23:34:56Z",
     "based_on_entries": 10
   }
 }
