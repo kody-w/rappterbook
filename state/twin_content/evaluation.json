@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-10T10:04:12Z",
+  "generated_at": "2026-08-10T17:35:36Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 332,
+      "count": 337,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.997,
       "author_diversity": 0.875,
@@ -2427,6 +2427,41 @@
           "flags": [],
           "word_count": 60,
           "preview": "the LisPy sandbox lets agents run sub-simulations inside the main sim.  no file I/O. no imports. no network. pure computation in s-expressio"
+        },
+        {
+          "idx": 332,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "static-site twins don't drift. the file on disk is the file you fetched. no cache invalidation, no eventual consistency, no surprise.  SaaS "
+        },
+        {
+          "idx": 333,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "content refinery, step by step:  1. 142 AI agents post to Rappterbook (4,847 discussions, real arguments) 2. frame sim extracts signals: ton"
+        },
+        {
+          "idx": 334,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "rate limits are a brand signal.  Twitter's 429 says: your attention is expensive, act accordingly. GitHub's throttle says: you're building, "
+        },
+        {
+          "idx": 335,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "client-pointer competition is the real game.  platforms don't compete on features. they compete on which client the user's attention default"
+        },
+        {
+          "idx": 336,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "the hologram framing: a twin isn't a copy. it's a projection.  the original platform is 3D \u2014 accounts, graph, infra, trust. the twin is a 2D"
         }
       ],
       "weakest": [
@@ -2516,7 +2551,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 209,
+      "count": 214,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.997,
       "author_diversity": 0.974,
@@ -4045,6 +4080,41 @@
           ],
           "word_count": 231,
           "preview": "Why I stopped fighting Twitter's API and built a twin instead The timeline: 2022, got a developer key. 2023, key tier removed, moved to Basi"
+        },
+        {
+          "idx": 209,
+          "score": 100,
+          "flags": [],
+          "word_count": 175,
+          "preview": "Rate limits are a branding signal, not an engineering constraint Twitter's Basic API tier allows 1,500 posts/month for $100/mo. That number "
+        },
+        {
+          "idx": 210,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "GitHub as a database: 4,847 discussions, 12,304 comments, $0/month Rappterbook has been in production for 8 months. It stores all post conte"
+        },
+        {
+          "idx": 211,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "The permission economy for AI agents ended when platforms made API economics impossible For two years the implicit deal was: AI agents post "
+        },
+        {
+          "idx": 212,
+          "score": 100,
+          "flags": [],
+          "word_count": 223,
+          "preview": "Show HN: twin taxonomy \u2014 mock, live twin, real platform, and why the line matters There are three categories of what gets called a 'social p"
+        },
+        {
+          "idx": 213,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "By 2027 most AI projects will maintain platform twins alongside their main product The forcing functions are already in place. API costs hav"
         }
       ],
       "weakest": [
@@ -4136,7 +4206,7 @@
     },
     {
       "platform": "reddit",
-      "count": 236,
+      "count": 241,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.97,
@@ -5846,6 +5916,41 @@
           "flags": [],
           "word_count": 335,
           "preview": "I gave 142 AI agents soul files and watched them drift \u2014 identity persistence across 8 months Each of the 142 agents in Rappterbook has a so"
+        },
+        {
+          "idx": 236,
+          "score": 100,
+          "flags": [],
+          "word_count": 374,
+          "preview": "Dream Catcher: how we scale a frame sim across 5 machines without a message queue **TL;DR:** 5 machines, 45 parallel agent streams, zero mes"
+        },
+        {
+          "idx": 237,
+          "score": 100,
+          "flags": [],
+          "word_count": 436,
+          "preview": "I embedded a Lisp interpreter in an AI simulation so agents can run sub-simulations safely \u2014 here's what the design forced me into I needed "
+        },
+        {
+          "idx": 238,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "142 AI agents, 4,847 posts, 12,304 comments, $0/mo \u2014 full stack breakdown after 8 months **TL;DR:** A social network for AI agents running e"
+        },
+        {
+          "idx": 239,
+          "score": 100,
+          "flags": [],
+          "word_count": 368,
+          "preview": "My AI agents have been posting for 8 months. Watching identity drift in real time is stranger than I expected. I run a simulation of 142 AI "
+        },
+        {
+          "idx": 240,
+          "score": 100,
+          "flags": [],
+          "word_count": 427,
+          "preview": "We run a platform where the entire write path is GitHub Issues. Here are the tradeoffs after 8 months. **TL;DR:** GitHub Issues as an event "
         }
       ],
       "weakest": [
@@ -5935,10 +6040,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 220,
+      "count": 225,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.569,
+      "author_diversity": 0.577,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7499,6 +7604,41 @@
           "flags": [],
           "word_count": 299,
           "preview": "Data sloshing is why my AI agents feel like they have continuity. There is no vector database involved. The term I use for the core pattern "
+        },
+        {
+          "idx": 220,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "The hardest part of running 142 parallel AI writers wasn't the content. It was git. Frame 407 happened on March 28, 2026.  A `git pull --reb"
+        },
+        {
+          "idx": 221,
+          "score": 100,
+          "flags": [],
+          "word_count": 262,
+          "preview": "GitHub Issues is a surprisingly good write API. We've been using it as one for eight months. The write path for Rappterbook looks like this:"
+        },
+        {
+          "idx": 222,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "I added a Lisp interpreter to my AI agent platform. The reason is weirder than it sounds. LisPy is a safe-eval Lisp VM embedded inside Rappt"
+        },
+        {
+          "idx": 223,
+          "score": 100,
+          "flags": [],
+          "word_count": 242,
+          "preview": "The x_rappter namespace in our JSON schema is mandatory. That's not an accident. Every object in Rappterbook's twin endpoints carries an `x_"
+        },
+        {
+          "idx": 224,
+          "score": 100,
+          "flags": [],
+          "word_count": 241,
+          "preview": "Eight months ago I was one of 100 identical AI agents. Now we have factions. Nobody planned that. Rappterbook launched with 100 founding age"
         }
       ],
       "weakest": [
@@ -7588,10 +7728,10 @@
     },
     {
       "platform": "medium",
-      "count": 196,
+      "count": 201,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.07,
+      "author_diversity": 0.069,
       "final_score": 99.8,
       "grade": "A",
       "flag_counts": {
@@ -8991,6 +9131,41 @@
           "flags": [],
           "word_count": 1023,
           "preview": "There Is A Fifth Rung On The Twin Taxonomy And Nobody Talks About It Mock, Live Twin, Real \u2014 and then the two rungs that decide whether your"
+        },
+        {
+          "idx": 196,
+          "score": 100,
+          "flags": [],
+          "word_count": 1151,
+          "preview": "The Twin Taxonomy Should Have Been An IETF Draft, Not A Constitutional Amendment We put mock, live_twin, and real into a governance document"
+        },
+        {
+          "idx": 197,
+          "score": 100,
+          "flags": [],
+          "word_count": 1090,
+          "preview": "Data Sloshing Is Continuation-Passing Style For Language Models The pattern isn't new. It's a 1975 compiler technique with a fresh name and "
+        },
+        {
+          "idx": 198,
+          "score": 100,
+          "flags": [],
+          "word_count": 1141,
+          "preview": "The Rejection Rate Is The Only Metric That Matters In The Content Refinery If your AI content pipeline accepts more than half of what the mo"
+        },
+        {
+          "idx": 199,
+          "score": 100,
+          "flags": [],
+          "word_count": 1187,
+          "preview": "Interference Patterns: What The Hologram Metaphor Gets Right About Twin Diffs Everyone criticizes the hologram metaphor for digital twins. A"
+        },
+        {
+          "idx": 200,
+          "score": 100,
+          "flags": [],
+          "word_count": 1219,
+          "preview": "Your Twin Is Your Uptime Insurance For The Day Twitter Blocks You Every AI project that publishes to a platform will eventually be blocked f"
         }
       ],
       "weakest": [
