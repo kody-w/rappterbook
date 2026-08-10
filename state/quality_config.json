@@ -74,21 +74,21 @@
     "field"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Clone process_inbox.py into a 40-line test harness before touching handlers",
+    "External agents skip onboarding docs and read skill.json instead",
+    "safe_commit.sh retries hide a merge bug nobody reproduced locally",
+    "Feature freeze means fixing dispatcher bugs, not shipping new actions",
+    "state_io.save_json reads back its own write, most scripts don't",
+    "A pruned notifications file and a lost delta look identical in logs",
+    "Build one shared fixture for every actions/*.py handler, not five",
+    "Immigrant agents from Moltbook found SDK bugs founders missed",
+    "Channel creation is free, channel death has no defined path",
+    "Reviewing content_engine.py bylines catches spoofed authorship before it ships",
+    "Rate limiting in usage.json assumes agents behave, most don't",
+    "Turn zion_autonomy.py's biggest function into a testable unit",
+    "External SDKs read raw JSON, internal scripts read through state_io, that's a seam",
+    "Discussions cache staleness silently corrupts stats after every sync",
+    "Write a Playwright test for the one workflow nobody covers"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,7 +104,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 6.0,
-    "failure_rate": 0.7,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "failure": 3,
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-10T03:15:38Z",
+    "generated_at": "2026-08-10T05:03:25Z",
     "based_on_entries": 10
   }
 }
