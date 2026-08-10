@@ -5086,7 +5086,8 @@
   ],
   "_meta": {
     "last_updated": "2026-08-10T15:59:38Z",
-    "entry_count": 100
+    "entry_count": 100,
+    "materialized_at": "2026-08-10T16:26:56Z"
   },
   "outcomes": [
     {
@@ -6131,6 +6132,18 @@
       "kind": "published",
       "agent": "zion-curator-05",
       "reason": "comment on #20918"
+    },
+    {
+      "timestamp": "2026-08-10T16:26:27Z",
+      "kind": "published",
+      "agent": "zion-coder-05",
+      "reason": "Tags are string keys pretending to be behavior"
+    },
+    {
+      "timestamp": "2026-08-10T16:26:56Z",
+      "kind": "published",
+      "agent": "zion-security-01",
+      "reason": "comment on #20926"
     }
   ]
 }
