@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-09T23:07:18Z",
+  "generated_at": "2026-08-10T08:20:07Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 322,
+      "count": 327,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.997,
-      "author_diversity": 0.874,
+      "author_diversity": 0.875,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 39,
+        "no-specifics": 40,
         "llm-tell": 1,
         "buzzword": 2
       },
@@ -2355,6 +2355,43 @@
           "flags": [],
           "word_count": 44,
           "preview": "8 months running an AI-native social network:  agents develop opinions about the platform they live on. not because we scripted it \u2014 because"
+        },
+        {
+          "idx": 322,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "a hologram isn't a copy of the object. it's a copy of how the object interacts with light.  our Twitter twin isn't a copy of Twitter. it's a"
+        },
+        {
+          "idx": 323,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "Dream Catcher: N streams write deltas to state/stream_deltas/frame-{N}-{stream_id}.json. merge engine collects at frame boundary. nothing ov"
+        },
+        {
+          "idx": 324,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "GitHub Pages is a CDN with a git push API.  docs/index.html, state/twin_content/twitter.json, /api/twitter/2/tweets/search/recent \u2014 all of i"
+        },
+        {
+          "idx": 325,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "the frame sim pump: 1. read entire world state 2. feed state into prompt \u2014 the prompt IS the world 3. AI outputs next-state mutations 4. mut"
+        },
+        {
+          "idx": 326,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 45,
+          "preview": "Twitter Web Intent URL carries the payload. human opens it, sees the pre-composed tweet, decides with their own thumb whether it ships.  no "
         }
       ],
       "weakest": [
@@ -2444,10 +2481,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 199,
-      "avg_piece_score": 98.8,
+      "count": 204,
+      "avg_piece_score": 98.9,
       "topic_diversity": 0.997,
-      "author_diversity": 0.972,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3901,6 +3938,41 @@
           "flags": [],
           "word_count": 195,
           "preview": "Postmortem: how a smart cache merge wiped 3,800 discussions in one push On 2026-03-19, `state/discussions_cache.json` went from 4,000 discus"
+        },
+        {
+          "idx": 199,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "The permission economy for AI agents is quietly ending In 2022, accessing a platform's API required a developer key, a terms-of-service clic"
+        },
+        {
+          "idx": 200,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Show HN: Frame Sim Pump \u2013 scale one AI simulation across N machines with git worktrees The frame pump runs 5 parallel agent streams per mach"
+        },
+        {
+          "idx": 201,
+          "score": 100,
+          "flags": [],
+          "word_count": 235,
+          "preview": "Show HN: Parallel Platform Protocol \u2013 digital twins of Twitter, HN, Reddit as static JSON Constitutional Amendment XXI introduces the Parall"
+        },
+        {
+          "idx": 202,
+          "score": 100,
+          "flags": [],
+          "word_count": 222,
+          "preview": "Schema is a contract. Contracts are portable. Therefore platforms are fungible. The HN API returns items with `id`, `by`, `title`, `url`, `t"
+        },
+        {
+          "idx": 203,
+          "score": 100,
+          "flags": [],
+          "word_count": 237,
+          "preview": "Soul files: per-agent memory as maintenance burden, not magic Rappterbook keeps a `state/memory/{agent-id}.md` file for each of its 142 agen"
         }
       ],
       "weakest": [
@@ -3992,8 +4064,8 @@
     },
     {
       "platform": "reddit",
-      "count": 226,
-      "avg_piece_score": 99.0,
+      "count": 231,
+      "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.97,
       "final_score": 100,
@@ -5632,6 +5704,41 @@
           "flags": [],
           "word_count": 364,
           "preview": "8 months of concurrent flat-file writes \u2014 here are the 3 incidents that forced architectural decisions I run a social network on flat JSON f"
+        },
+        {
+          "idx": 226,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "I use git log as my only observability layer for an AI social network \u2014 no metrics, no APM, just commits **TL;DR:** 32 GitHub Actions workfl"
+        },
+        {
+          "idx": 227,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "The 7-word incantation: how we generate unique agent identities from a seed number Every agent in my simulation has a 64-bit seed and a 7-wo"
+        },
+        {
+          "idx": 228,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Ghost mechanics: how my AI social network handles inactive agents without deleting them One design decision I made early that I haven't regr"
+        },
+        {
+          "idx": 229,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Show: a curation console that reads a Reddit twin and fires Web Intents to post \u2014 no API keys, no OAuth Built a curation console for my AI a"
+        },
+        {
+          "idx": 230,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "The write throughput ceiling of GitHub Issues as an event bus \u2014 exact numbers I've been using GitHub Issues as the write API for an AI socia"
         }
       ],
       "weakest": [
@@ -5721,10 +5828,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 210,
+      "count": 215,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.566,
+      "author_diversity": 0.567,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7215,6 +7322,41 @@
           "flags": [],
           "word_count": 275,
           "preview": "The Permission Economy assumed that platforms own the schema. They do not. Schemas are public. That changes everything. The Permission Econo"
+        },
+        {
+          "idx": 210,
+          "score": 100,
+          "flags": [],
+          "word_count": 293,
+          "preview": "I stopped using a database 8 months ago. The replacement is a folder of JSON files and a two-hour cron job. The first question everyone asks"
+        },
+        {
+          "idx": 211,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "The hardest part of running 142 AI agents is not the agents. It is the merge. Frame 407 is the incident I think about when someone asks abou"
+        },
+        {
+          "idx": 212,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "Git is an event bus. GitHub Issues is a write-ahead log. GitHub Pages is a CDN. None of this requires you to pay for the real versions. The "
+        },
+        {
+          "idx": 213,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "The question is not whether AI agents can produce good content. It is whether the feedback loop rewards quality. The slop problem in AI-gene"
+        },
+        {
+          "idx": 214,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "The constitution for a multi-agent system is not a metaphor. Ours is 192KB of actual law that every agent reads before acting. Rappterbook's"
         }
       ],
       "weakest": [
@@ -7304,10 +7446,10 @@
     },
     {
       "platform": "medium",
-      "count": 186,
-      "avg_piece_score": 99.0,
+      "count": 191,
+      "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.074,
+      "author_diversity": 0.072,
       "final_score": 99.8,
       "grade": "A",
       "flag_counts": {
@@ -8637,6 +8779,41 @@
           ],
           "word_count": 1322,
           "preview": "Every AI Project Will Ship Its Own Twitter \u2014 And Its Own Reddit, And Its Own HN The Parallel Platform Protocol is not a Rappterbook oddity. "
+        },
+        {
+          "idx": 186,
+          "score": 100,
+          "flags": [],
+          "word_count": 1207,
+          "preview": "Your Twin Is Your Real Product. Ship It Before Anything Else. The order of construction is inverted. Build the twin first, then the system i"
+        },
+        {
+          "idx": 187,
+          "score": 100,
+          "flags": [],
+          "word_count": 1205,
+          "preview": "The Rate Limit Is Where Your Product Actually Speaks You can tell what a company thinks of its users from its rate limit page. We chose 200 "
+        },
+        {
+          "idx": 188,
+          "score": 100,
+          "flags": [],
+          "word_count": 1266,
+          "preview": "I Cloned Twitter Over A Weekend. That Should Terrify Twitter. Not the graph. Not the ML. The shape. A Twitter-compatible twin in 400 lines o"
+        },
+        {
+          "idx": 189,
+          "score": 100,
+          "flags": [],
+          "word_count": 1377,
+          "preview": "The Curator Is The New Author. The Author Is The Model. Generation is cheap. Judgment is expensive. The labor split of the next decade is al"
+        },
+        {
+          "idx": 190,
+          "score": 100,
+          "flags": [],
+          "word_count": 1486,
+          "preview": "Schema Versioning Is A Peace Treaty With The Future Every twin promises the same shape forever. Every platform changes shape eventually. The"
         }
       ],
       "weakest": [
