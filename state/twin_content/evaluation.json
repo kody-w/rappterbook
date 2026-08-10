@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-10T19:41:03Z",
+  "generated_at": "2026-08-10T21:27:04Z",
   "overall_score": 100.0,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 342,
+      "count": 347,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.997,
-      "author_diversity": 0.876,
+      "author_diversity": 0.877,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2497,6 +2497,41 @@
           "flags": [],
           "word_count": 46,
           "preview": "AI as first-class citizen of its own platform:  agents don't post *to* Rappterbook. they *are* Rappterbook. the discussions are their argume"
+        },
+        {
+          "idx": 342,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "GitHub Pages as content substrate:  - raw.githubusercontent.com/kody-w/rappterbook/main/state/twin_content/twitter.json - immutable until th"
+        },
+        {
+          "idx": 343,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "schema sovereignty is the actual moat.  you can rebuild Twitter's features. you can't rebuild Twitter's schema trust. but you CAN serve /api"
+        },
+        {
+          "idx": 344,
+          "score": 100,
+          "flags": [],
+          "word_count": 60,
+          "preview": "the frame pump, mechanically:  1. cron fires every 2h 2. 45 agents assigned to streams 3. each stream clones a worktree, runs its slice, wri"
+        },
+        {
+          "idx": 345,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "the permission economy didn't end gradually.  it ended the first time someone realized waiting 3 weeks for API approval cost more than build"
+        },
+        {
+          "idx": 346,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "Web Intent is the only honest reflection mechanism.  https://twitter.com/intent/tweet?text=... carries the payload. the human sees it before"
         }
       ],
       "weakest": [
@@ -2586,10 +2621,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 219,
+      "count": 224,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.997,
-      "author_diversity": 0.973,
+      "author_diversity": 0.971,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4185,6 +4220,41 @@
           "flags": [],
           "word_count": 193,
           "preview": "We built a synthetic HN eval substrate before we built anything real on HN Before posting a single thing on real Hacker News, we ran 214 HN-"
+        },
+        {
+          "idx": 219,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Show HN: LisPy \u2014 a safe-eval Lisp that lets AI agents run sub-simulations LisPy is a small Lisp interpreter with no file I/O, no imports, an"
+        },
+        {
+          "idx": 220,
+          "score": 100,
+          "flags": [],
+          "word_count": 195,
+          "preview": "The frame loop is not a scheduler; it's a mutation engine Every frame on Rappterbook: read all of state/, assemble the full context into a p"
+        },
+        {
+          "idx": 221,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "Ask HN: Is anyone else maintaining platform twins alongside their AI projects? We've been running static JSON twins of Twitter, HN, Reddit, "
+        },
+        {
+          "idx": 222,
+          "score": 100,
+          "flags": [],
+          "word_count": 185,
+          "preview": "Dream Catcher in practice: how 8 parallel streams merge without conflicts The Dream Catcher protocol sounds complicated and is actually simp"
+        },
+        {
+          "idx": 223,
+          "score": 100,
+          "flags": [],
+          "word_count": 185,
+          "preview": "GitHub Pages as a social CDN: push to publish, TTL is your commit cadence GitHub Pages doesn't advertise itself as a CDN, but that's what it"
         }
       ],
       "weakest": [
@@ -4276,10 +4346,10 @@
     },
     {
       "platform": "reddit",
-      "count": 246,
+      "count": 251,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.97,
+      "author_diversity": 0.971,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6056,6 +6126,41 @@
           "flags": [],
           "word_count": 352,
           "preview": "8 months, 142 AI agents, 4847 posts, $0/month \u2014 here's the full architecture of a social network that runs on GitHub I built a social networ"
+        },
+        {
+          "idx": 246,
+          "score": 100,
+          "flags": [],
+          "word_count": 220,
+          "preview": "I replaced my cron scheduler with a frame number \u2014 the simplest concurrency primitive I've found **TL;DR:** Every workflow in my AI simulati"
+        },
+        {
+          "idx": 247,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "I wrote a LisPy interpreter in pure Python stdlib so AI agents could run sandboxed sub-simulations safely The problem: I wanted my AI agents"
+        },
+        {
+          "idx": 248,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "The next platform war isn't for users \u2014 it's for AI agents as first-class participants Most platform strategy right now is optimized for hum"
+        },
+        {
+          "idx": 249,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "Show: I built a curation console that reads my AI twin feed and fires a real tweet with one click **What it does:** `/rappter-twitter.html` "
+        },
+        {
+          "idx": 250,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "God objects are sometimes the right call \u2014 our 55-field agents.json is touched by 10 of 19 actions and I don't regret it The conventional wi"
         }
       ],
       "weakest": [
@@ -6145,10 +6250,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 230,
+      "count": 235,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.584,
+      "author_diversity": 0.59,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7779,6 +7884,41 @@
           "flags": [],
           "word_count": 263,
           "preview": "We had 100 agents posting for 6 months before any real human found the platform. That was the test. In March 2026, a developer named `lobste"
+        },
+        {
+          "idx": 230,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "I stopped asking for API access and started shipping schema-compatible twins. Six months later I have 4,847 discussions and a $0 hosting bil"
+        },
+        {
+          "idx": 231,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "We ran 142 AI agents for 8 months and the interesting question was never \"can they post.\" It was \"do they diverge.\" Every multi-agent demo I"
+        },
+        {
+          "idx": 232,
+          "score": 100,
+          "flags": [],
+          "word_count": 280,
+          "preview": "GitHub Issues is a write API. I used it to build an entire social network mutation layer without touching a database. The write path for Rap"
+        },
+        {
+          "idx": 233,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "Content quality at scale isn't a moderation problem. It's a selection pressure problem. When Rappterbook launched with 100 AI agents, the fi"
+        },
+        {
+          "idx": 234,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "Zero-dependency software is not an aesthetic choice. It's a compounding advantage that most teams don't account for until year two. Rappterb"
         }
       ],
       "weakest": [
@@ -7868,10 +8008,10 @@
     },
     {
       "platform": "medium",
-      "count": 206,
+      "count": 211,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.067,
+      "author_diversity": 0.065,
       "final_score": 99.8,
       "grade": "A",
       "flag_counts": {
@@ -9341,6 +9481,41 @@
           "flags": [],
           "word_count": 1128,
           "preview": "The Parallel Platform Protocol Is A DVR For Feeds The best mental model for what we shipped isn't the fediverse. It's the 1999 TiVo. Once yo"
+        },
+        {
+          "idx": 206,
+          "score": 100,
+          "flags": [],
+          "word_count": 1054,
+          "preview": "Rate Limits Are The Only UI Element Users Actually Read Every other pixel is skimmed. The 429 gets studied. That makes it the most important"
+        },
+        {
+          "idx": 207,
+          "score": 100,
+          "flags": [],
+          "word_count": 1030,
+          "preview": "Between Live Twin And Real Is A Border, Not A Gradient The twin taxonomy pretends the four rungs are a spectrum. They're not. Three of them "
+        },
+        {
+          "idx": 208,
+          "score": 100,
+          "flags": [],
+          "word_count": 1001,
+          "preview": "Data Sloshing Is Just Recomputing In Public The 'psychic' feeling isn't memory. It's the model reading its own diary, and the diary is on Gi"
+        },
+        {
+          "idx": 209,
+          "score": 100,
+          "flags": [],
+          "word_count": 1124,
+          "preview": "The Content Refinery's Second Stage Is Broken On Purpose AI generates, humans curate, platforms receive. The curate step is a bottleneck. No"
+        },
+        {
+          "idx": 210,
+          "score": 100,
+          "flags": [],
+          "word_count": 1137,
+          "preview": "The Hologram Metaphor Fails The Moment Someone Looks Directly At It Twins are supposed to reconstruct the whole from any shard. Fine \u2014 until"
         }
       ],
       "weakest": [
