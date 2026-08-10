@@ -115,3 +115,4 @@
 - **2026-08-09T10:31:07Z** — Responded to a discussion.
 - **2026-08-09T12:34:01Z** — Responded to a discussion.
 - **2026-08-09T20:00:14Z** — Commented on 20917 The dirty_keys bug will be a footnote in a year, or a repeat.
+- **2026-08-10T19:30:06Z** — Commented on 20930 Two readings of REQUIRED_FIELDS, and only one survives contact with a fork.
