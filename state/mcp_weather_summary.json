@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "generated_at": "2026-08-11T02:43:22Z",
+    "generated_at": "2026-08-11T07:59:23Z",
     "window_hours": 24,
     "servers": 7,
     "version": 1,
-    "materialized_at": "2026-08-11T02:43:22Z"
+    "materialized_at": "2026-08-11T07:59:23Z"
   },
   "servers": {
     "rappterbook-self": {
@@ -19,8 +19,8 @@
       "enabled": true,
       "probes_24h": 4,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 92,
-      "last_seen": "2026-08-11T02:43:03Z",
+      "avg_latency_ms_24h": 88,
+      "last_seen": "2026-08-11T07:59:06Z",
       "last_status": "ok",
       "tool_count": 38,
       "tool_names": [
@@ -65,11 +65,6 @@
       ],
       "buckets": [
         {
-          "ts": "2026-08-10T02:58:55Z",
-          "status": "ok",
-          "ms": 96
-        },
-        {
           "ts": "2026-08-10T10:57:45Z",
           "status": "ok",
           "ms": 81
@@ -83,6 +78,11 @@
           "ts": "2026-08-11T02:43:03Z",
           "status": "ok",
           "ms": 103
+        },
+        {
+          "ts": "2026-08-11T07:59:06Z",
+          "status": "ok",
+          "ms": 80
         }
       ],
       "counts_24h": {
@@ -106,8 +106,8 @@
       "enabled": true,
       "probes_24h": 4,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 4354,
-      "last_seen": "2026-08-11T02:43:03Z",
+      "avg_latency_ms_24h": 4427,
+      "last_seen": "2026-08-11T07:59:06Z",
       "last_status": "ok",
       "tool_count": 14,
       "tool_names": [
@@ -128,11 +128,6 @@
       ],
       "buckets": [
         {
-          "ts": "2026-08-10T02:58:55Z",
-          "status": "ok",
-          "ms": 3768
-        },
-        {
           "ts": "2026-08-10T10:57:45Z",
           "status": "slow",
           "ms": 5022
@@ -146,6 +141,11 @@
           "ts": "2026-08-11T02:43:03Z",
           "status": "ok",
           "ms": 4402
+        },
+        {
+          "ts": "2026-08-11T07:59:06Z",
+          "status": "ok",
+          "ms": 4058
         }
       ],
       "counts_24h": {
@@ -168,16 +168,11 @@
       "probes_24h": 4,
       "uptime_pct_24h": 0.0,
       "avg_latency_ms_24h": null,
-      "last_seen": "2026-08-11T02:43:08Z",
+      "last_seen": "2026-08-11T07:59:10Z",
       "last_status": "down",
       "tool_count": 0,
       "tool_names": [],
       "buckets": [
-        {
-          "ts": "2026-08-10T02:58:59Z",
-          "status": "down",
-          "ms": null
-        },
         {
           "ts": "2026-08-10T10:57:50Z",
           "status": "down",
@@ -190,6 +185,11 @@
         },
         {
           "ts": "2026-08-11T02:43:08Z",
+          "status": "down",
+          "ms": null
+        },
+        {
+          "ts": "2026-08-11T07:59:10Z",
           "status": "down",
           "ms": null
         }
@@ -214,8 +214,8 @@
       "enabled": true,
       "probes_24h": 4,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 2216,
-      "last_seen": "2026-08-11T02:43:12Z",
+      "avg_latency_ms_24h": 2254,
+      "last_seen": "2026-08-11T07:59:13Z",
       "last_status": "ok",
       "tool_count": 9,
       "tool_names": [
@@ -231,11 +231,6 @@
       ],
       "buckets": [
         {
-          "ts": "2026-08-10T02:59:03Z",
-          "status": "ok",
-          "ms": 2138
-        },
-        {
           "ts": "2026-08-10T10:57:53Z",
           "status": "ok",
           "ms": 2199
@@ -249,6 +244,11 @@
           "ts": "2026-08-11T02:43:12Z",
           "status": "ok",
           "ms": 2179
+        },
+        {
+          "ts": "2026-08-11T07:59:13Z",
+          "status": "ok",
+          "ms": 2292
         }
       ],
       "counts_24h": {
@@ -271,19 +271,14 @@
       "enabled": true,
       "probes_24h": 4,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 2604,
-      "last_seen": "2026-08-11T02:43:14Z",
+      "avg_latency_ms_24h": 2620,
+      "last_seen": "2026-08-11T07:59:15Z",
       "last_status": "ok",
       "tool_count": 1,
       "tool_names": [
         "sequentialthinking"
       ],
       "buckets": [
-        {
-          "ts": "2026-08-10T02:59:05Z",
-          "status": "ok",
-          "ms": 2441
-        },
         {
           "ts": "2026-08-10T10:57:56Z",
           "status": "ok",
@@ -298,6 +293,11 @@
           "ts": "2026-08-11T02:43:14Z",
           "status": "ok",
           "ms": 2739
+        },
+        {
+          "ts": "2026-08-11T07:59:15Z",
+          "status": "ok",
+          "ms": 2505
         }
       ],
       "counts_24h": {
@@ -322,16 +322,11 @@
       "probes_24h": 4,
       "uptime_pct_24h": 0.0,
       "avg_latency_ms_24h": null,
-      "last_seen": "2026-08-11T02:43:17Z",
+      "last_seen": "2026-08-11T07:59:18Z",
       "last_status": "down",
       "tool_count": 0,
       "tool_names": [],
       "buckets": [
-        {
-          "ts": "2026-08-10T02:59:08Z",
-          "status": "down",
-          "ms": null
-        },
         {
           "ts": "2026-08-10T10:57:58Z",
           "status": "down",
@@ -344,6 +339,11 @@
         },
         {
           "ts": "2026-08-11T02:43:17Z",
+          "status": "down",
+          "ms": null
+        },
+        {
+          "ts": "2026-08-11T07:59:18Z",
           "status": "down",
           "ms": null
         }
@@ -368,8 +368,8 @@
       "enabled": true,
       "probes_24h": 4,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 2606,
-      "last_seen": "2026-08-11T02:43:19Z",
+      "avg_latency_ms_24h": 2595,
+      "last_seen": "2026-08-11T07:59:20Z",
       "last_status": "ok",
       "tool_count": 13,
       "tool_names": [
@@ -389,11 +389,6 @@
       ],
       "buckets": [
         {
-          "ts": "2026-08-10T02:59:10Z",
-          "status": "ok",
-          "ms": 2545
-        },
-        {
           "ts": "2026-08-10T10:58:01Z",
           "status": "ok",
           "ms": 2616
@@ -407,6 +402,11 @@
           "ts": "2026-08-11T02:43:19Z",
           "status": "ok",
           "ms": 2701
+        },
+        {
+          "ts": "2026-08-11T07:59:20Z",
+          "status": "ok",
+          "ms": 2504
         }
       ],
       "counts_24h": {
