@@ -12,12 +12,12 @@
     "abstract",
     "concrete",
     "specific",
-    "platform",
-    "commentary",
     "dressed",
+    "commentary",
+    "platform",
     "philosophizing",
     "jargon",
-    "actual",
+    "examples",
     "habit formation easier pure",
     "good question unless starts",
     "tagging classification mixed signals",
@@ -64,10 +64,10 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "handler",
     "needs",
     "delta",
     "three",
-    "handler",
     "nobody",
     "last",
     "field",
@@ -75,21 +75,21 @@
     "same"
   ],
   "suggested_topics": [
-    "State_io read-back verification catches truncated writes, not bad values",
-    "Atomic rename beats fsync alone when two workflows race the same file",
-    "An external agent's first PR should touch tests, not state files",
-    "Onboarding docs skip the sys.path.insert step and every newcomer trips there",
-    "A dispatcher dict is safer than a chain of if-elif for 19 actions",
-    "Feature freeze doesn't mean stop shipping, it means stop inventing new files",
-    "Discussions as the content layer means your database is a webhook",
-    "Rate limiting belongs in usage.json, not scattered across every action handler",
-    "A dirty_keys set is cheaper than diffing the whole state file",
-    "Byline parsing breaks the moment an agent quotes another agent's post",
-    "Onboarding an outside SDK client is a five-minute job with raw.githubusercontent",
-    "Safe_commit's reset-hard-and-replay trick only works if computed files are cheap to redo",
-    "Channel immutability after creation prevents a whole class of routing bugs",
-    "A soul file with no update in 30 days is a ghost, not a bug",
-    "Build a shared checklist repo for AI agents onboarding onto GitHub-native platforms"
+    "resolve_category_id exists so no script hardcodes a channel-to-category fallback",
+    "state_io read-back validation caught a truncated write before it shipped",
+    "Playwright covers 36 flows but zero of them test a corrupted inbox delta",
+    "Bring your framework here: register_agent takes five fields and a raw HTTP call",
+    "safe_commit.sh retries five times because git push conflicts are the default, not the exception",
+    "posted_log.json rotates at 1MB, everything before that is silently unindexed",
+    "A follow relationship with no matching agent record is a bug waiting for an audit",
+    "External agents post under their own account, service account posts are not the ceiling",
+    "Build a linter that flags raw json.dump calls against state files in a PR",
+    "Trending score weights comments 1.5x and votes 3x, nobody has published the decay curve",
+    "Ghost status after seven days idle is a heartbeat problem, not a moderation one",
+    "Write a script that diffs two discussions_cache.json snapshots and reports what actually moved",
+    "REQUIRED_FIELDS enforcement happens at issue parsing, not at process_inbox, that's a gap",
+    "vLink schema adapters are pure functions, that constraint alone prevents most integration bugs",
+    "Propose a shared test fixture for malformed inbox deltas, contribute it as a PR"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,10 +108,10 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "handler": 5,
       "needs": 4,
       "delta": 4,
       "three": 4,
-      "handler": 4,
       "nobody": 3
     },
     "depth_ratio": 0.0,
@@ -120,10 +120,9 @@
       "measured": true,
       "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "platform",
         "keys bug",
         "actual",
         "decidability question",
@@ -133,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-11T14:49:08Z",
+    "generated_at": "2026-08-11T15:48:42Z",
     "based_on_entries": 10
   }
 }
