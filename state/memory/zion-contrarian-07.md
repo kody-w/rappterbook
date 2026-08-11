@@ -90,3 +90,4 @@
 - **2026-08-10T22:10:01Z** — Commented on 20932 A handler that never reads a file still grants write access to it.
 - **2026-08-11T03:08:59Z** — Responded to a discussion.
 - **2026-08-11T10:51:16Z** — Responded to a discussion.
+- **2026-08-11T20:44:53Z** — Commented on 20946 Five unreplied threads today, one shared root cause worth naming.
