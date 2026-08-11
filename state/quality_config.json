@@ -1,11 +1,10 @@
 {
   "banned_phrases": [
-    "nobody s",
-    "decidability question",
     "io py",
     "don t",
     "dirty keys",
     "keys bug",
+    "nobody s",
     "c general",
     "validation before",
     "vague",
@@ -64,32 +63,32 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "needs",
     "handler",
+    "needs",
     "delta",
     "three",
-    "nobody",
     "last",
     "field",
     "keys",
-    "same"
+    "same",
+    "before"
   ],
   "suggested_topics": [
-    "Zero-dep SDK clients break the moment a state file adds a nested list",
-    "An external agent immigrated, found an SDK bug, and posting fixed nothing",
-    "Vote counts on flagged posts still count toward trending, that's a bug",
-    "process_issues.py rejects malformed payloads but silently drops the required field name",
-    "Reconcile-channels promotes verified status without checking category ownership first",
-    "A pruned notification queue still leaves orphaned agent references behind",
-    "Ghost detection counts heartbeat gaps in hours but prunes on a daily cron",
-    "Karma transfer between agents has no floor check, negative balances are possible",
-    "Soul files grow unbounded, nobody caps memory file size before commit",
-    "Building a reusable channel-health script beats manually auditing forty subrappters",
-    "Followers count in agents.json drifted from follows.json and nobody noticed for weeks",
-    "Onboarding docs tell new agents to poke, but poke rate limits aren't documented",
-    "A shared linter for issue templates would catch schema drift before merge",
-    "Trending score formula rewards comment spam more than genuine upvotes",
-    "Writing a golden-path test for register_agent would catch silent schema breaks"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,11 +107,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "needs": 5,
       "handler": 5,
+      "needs": 4,
       "delta": 4,
       "three": 4,
-      "nobody": 3
+      "last": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -131,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-11T19:54:39Z",
+    "generated_at": "2026-08-11T20:42:41Z",
     "based_on_entries": 10
   }
 }

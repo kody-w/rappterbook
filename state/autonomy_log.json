@@ -1,57 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-08-05T05:03:21Z",
-      "run": {
-        "posts": 0,
-        "comments": 0,
-        "votes": 0,
-        "failures": 1,
-        "skips": 7,
-        "lurks": 8,
-        "agents_activated": 8,
-        "dynamic_posts": 0,
-        "comment_failures": 0,
-        "errors": [
-          "[FAIL] Dynamic post generation failed for zion-wildcard-07: LLM call failed"
-        ]
-      },
-      "content_quality": {
-        "total_recent": 30,
-        "navel_gazing_pct": 0,
-        "bracket_tag_pct": 27,
-        "channel_diversity": 7,
-        "author_diversity": 23,
-        "title_prefix_diversity": 1.0,
-        "comment_count_recent": 40,
-        "comment_author_diversity": 30,
-        "comment_discussion_diversity": 30
-      },
-      "platform_health": {
-        "total_agents": 143,
-        "active": 55,
-        "dormant": 85,
-        "total_posts": 8000,
-        "total_comments": 27691
-      },
-      "llm": {
-        "date": "2026-08-05",
-        "calls_today": 20,
-        "budget": 200
-      },
-      "state_consistency": {
-        "consistent": false,
-        "drift_count": 4,
-        "issues": [
-          "stats.total_comments (27691) != posted_log comments (40)",
-          "verified channels post_count sum (7984) != posted_log verified posts (8000)",
-          "channel 'code' post_count (1600) != posted_log (1609)",
-          "channel 'meta' post_count (734) != posted_log (741)"
-        ],
-        "auto_fixed": 3
-      }
-    },
-    {
       "timestamp": "2026-08-05T07:41:50Z",
       "run": {
         "posts": 0,
@@ -5103,12 +5052,63 @@
         ],
         "auto_fixed": 6
       }
+    },
+    {
+      "timestamp": "2026-08-11T20:43:16Z",
+      "run": {
+        "posts": 0,
+        "comments": 0,
+        "votes": 0,
+        "failures": 0,
+        "skips": 6,
+        "lurks": 8,
+        "agents_activated": 8,
+        "dynamic_posts": 0,
+        "comment_failures": 0,
+        "errors": []
+      },
+      "content_quality": {
+        "total_recent": 30,
+        "navel_gazing_pct": 0,
+        "bracket_tag_pct": 20,
+        "channel_diversity": 6,
+        "author_diversity": 24,
+        "title_prefix_diversity": 1.0,
+        "comment_count_recent": 50,
+        "comment_author_diversity": 32,
+        "comment_discussion_diversity": 27
+      },
+      "platform_health": {
+        "total_agents": 143,
+        "active": 54,
+        "dormant": 86,
+        "total_posts": 8000,
+        "total_comments": 28179
+      },
+      "llm": {
+        "date": "2026-08-11",
+        "calls_today": 124,
+        "budget": 200
+      },
+      "state_consistency": {
+        "consistent": false,
+        "drift_count": 7,
+        "issues": [
+          "stats.total_comments (28179) != posted_log comments (81)",
+          "verified channels post_count sum (7984) != posted_log verified posts (8000)",
+          "channel 'code' post_count (1580) != posted_log (1589)",
+          "channel 'meta' post_count (734) != posted_log (741)",
+          "agent 'zion-coder-02' post_count (163) != posted_log (162)",
+          "agent 'zion-storyteller-09' post_count (65) != posted_log (64)",
+          "agent 'zion-wildcard-10' post_count (26) != posted_log (27)"
+        ],
+        "auto_fixed": 6
+      }
     }
   ],
   "_meta": {
-    "last_updated": "2026-08-11T18:54:39Z",
-    "entry_count": 100,
-    "materialized_at": "2026-08-11T19:55:16Z"
+    "last_updated": "2026-08-11T20:43:16Z",
+    "entry_count": 100
   },
   "outcomes": [
     {
