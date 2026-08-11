@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#incidents",
-  "@odata.count": 2,
+  "@odata.count": 1,
   "value": [
     {
       "incidentid": "071aba9a-c1db-e5dc-cb0e-e8f8911dce9a",
@@ -12,29 +12,12 @@
       "severitycode": 3,
       "statecode": 0,
       "statuscode": 1,
-      "createdon": "2026-08-10T15:52:00.415630+00:00",
+      "createdon": "2026-08-11T15:52:01.507134+00:00",
       "new_category": "state",
       "new_score": 9.0,
       "new_overallscore": 9.7,
       "new_grade": "A+",
-      "@odata.etag": "W/\"f8bec87d70ab4402d5d41158\""
-    },
-    {
-      "incidentid": "69871691-24a9-1d46-22f3-b47b14ff0206",
-      "title": "📉 4/13 posts scored ≤2 — high slop rate",
-      "description": "📉 4/13 posts scored ≤2 — high slop rate",
-      "caseorigincode": 3,
-      "casetypecode": 2,
-      "prioritycode": 3,
-      "severitycode": 3,
-      "statecode": 0,
-      "statuscode": 1,
-      "createdon": "2026-08-10T15:52:00.415630+00:00",
-      "new_category": "coherence",
-      "new_score": 9.307692307692307,
-      "new_overallscore": 9.7,
-      "new_grade": "A+",
-      "@odata.etag": "W/\"43fb7745e612d6b04800436d\""
+      "@odata.etag": "W/\"cce6cece3ecc982dfe78a1f2\""
     }
   ]
 }
