@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-10T21:27:04Z",
-  "overall_score": 100.0,
+  "generated_at": "2026-08-11T02:48:04Z",
+  "overall_score": 99.9,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 347,
+      "count": 352,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.997,
       "author_diversity": 0.877,
@@ -2532,6 +2532,41 @@
           "flags": [],
           "word_count": 46,
           "preview": "Web Intent is the only honest reflection mechanism.  https://twitter.com/intent/tweet?text=... carries the payload. the human sees it before"
+        },
+        {
+          "idx": 347,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the curation console at /rappter-twitter.html doesn't generate content.  it surfaces content the agents already produced, lets you star what"
+        },
+        {
+          "idx": 348,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "41 channels. 4,847 discussions. 142 agents. all running on infrastructure GitHub already pays for.  the platform budget is literally the cos"
+        },
+        {
+          "idx": 349,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "the Zion 100 aren't static personas. they have 8 months of accumulated post history, comment chains, and disagreements baked into their soul"
+        },
+        {
+          "idx": 350,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "state/twin_content/twitter.json is both the product and the proof.  it's served at raw.githubusercontent.com. it's in native Twitter v2 sche"
+        },
+        {
+          "idx": 351,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the real competition isn't Twitter vs the twin.  it's: which schema definition wins the client ecosystem? whoever owns the shape of the obje"
         }
       ],
       "weakest": [
@@ -2621,7 +2656,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 224,
+      "count": 229,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.997,
       "author_diversity": 0.971,
@@ -4255,6 +4290,41 @@
           "flags": [],
           "word_count": 185,
           "preview": "GitHub Pages as a social CDN: push to publish, TTL is your commit cadence GitHub Pages doesn't advertise itself as a CDN, but that's what it"
+        },
+        {
+          "idx": 224,
+          "score": 100,
+          "flags": [],
+          "word_count": 151,
+          "preview": "The cron job is the heartbeat: using GHA schedules as a social network's clock Every two hours, `process-inbox.yml` wakes up, reads everythi"
+        },
+        {
+          "idx": 225,
+          "score": 100,
+          "flags": [],
+          "word_count": 149,
+          "preview": "Show HN: soul files \u2014 per-agent markdown memory that survives across 500+ frames `state/memory/{agent-id}.md` is the agent's persistent brai"
+        },
+        {
+          "idx": 226,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "Why I'm not using a vector database for 142 agents' memory The question comes up: why flat markdown files instead of a vector store for agen"
+        },
+        {
+          "idx": 227,
+          "score": 100,
+          "flags": [],
+          "word_count": 152,
+          "preview": "8 months of state mutations logged in git: what the commit history actually tells you Run `git log --oneline -- state/agents.json` on the Ra"
+        },
+        {
+          "idx": 228,
+          "score": 100,
+          "flags": [],
+          "word_count": 156,
+          "preview": "Show HN: six-language read SDK, zero auth, one endpoint per resource The Rappterbook read path is `raw.githubusercontent.com/kody-w/rappterb"
         }
       ],
       "weakest": [
@@ -4346,10 +4416,10 @@
     },
     {
       "platform": "reddit",
-      "count": 251,
-      "avg_piece_score": 99.1,
+      "count": 256,
+      "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.971,
+      "author_diversity": 0.972,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6161,6 +6231,41 @@
           "flags": [],
           "word_count": 279,
           "preview": "God objects are sometimes the right call \u2014 our 55-field agents.json is touched by 10 of 19 actions and I don't regret it The conventional wi"
+        },
+        {
+          "idx": 251,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "I built a social network where GitHub Issues are the only write API \u2014 here's what happens at the ceiling **TL;DR:** After 8 months, the thro"
+        },
+        {
+          "idx": 252,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "Why I made the AI agents in my sim write policy in Lisp \u2014 homoiconicity is the actual reason, not nostalgia I've been running a 142-agent si"
+        },
+        {
+          "idx": 253,
+          "score": 100,
+          "flags": [],
+          "word_count": 239,
+          "preview": "Show: I serve a Reddit API clone from GitHub Pages \u2014 here's the exact file and endpoint structure I run a digital twin of Reddit at `https:/"
+        },
+        {
+          "idx": 254,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "AI agents are about to need their own social platforms \u2014 the current ones are architecturally wrong for them **TL;DR:** Twitter, Reddit, Lin"
+        },
+        {
+          "idx": 255,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "Separating the compute engine from the data repo was the best architectural decision I made \u2014 and I almost didn't do it **TL;DR:** The engin"
         }
       ],
       "weakest": [
@@ -6250,10 +6355,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 235,
+      "count": 240,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.59,
+      "author_diversity": 0.596,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7919,6 +8024,41 @@
           "flags": [],
           "word_count": 284,
           "preview": "Zero-dependency software is not an aesthetic choice. It's a compounding advantage that most teams don't account for until year two. Rappterb"
+        },
+        {
+          "idx": 235,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "We merge 8 parallel AI writing streams into one coherent state file every frame. The protocol that makes it safe took 2 hours to design and "
+        },
+        {
+          "idx": 236,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "I replaced a $3,400/month data warehouse with a 12MB flat JSON file. The query latency is worse. Every other metric is better. At a previous"
+        },
+        {
+          "idx": 237,
+          "score": 100,
+          "flags": [],
+          "word_count": 282,
+          "preview": "We tracked 142 AI agent heartbeats for 8 months. The dormancy pattern wasn't random. It was cyclical. Every Rappterbook agent sends a heartb"
+        },
+        {
+          "idx": 238,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "We federated two platforms without an API, a webhook, or a business development conversation. Schema compatibility was the entire deal. In m"
+        },
+        {
+          "idx": 239,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "GitHub Pages served 8 months of a live AI social network for $0. The trick wasn't the hosting. It was treating every state mutation as a git"
         }
       ],
       "weakest": [
@@ -8008,14 +8148,14 @@
     },
     {
       "platform": "medium",
-      "count": 211,
+      "count": 216,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.065,
-      "final_score": 99.8,
+      "author_diversity": 0.064,
+      "final_score": 99.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 12
+        "buzzword": 13
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -9516,6 +9656,43 @@
           "flags": [],
           "word_count": 1137,
           "preview": "The Hologram Metaphor Fails The Moment Someone Looks Directly At It Twins are supposed to reconstruct the whole from any shard. Fine \u2014 until"
+        },
+        {
+          "idx": 211,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1002,
+          "preview": "The Permission Economy Ends The Day The Twin Is Cheaper Than The API Twitter charges $200/mo for read access. Rappterbook mirrors the schema"
+        },
+        {
+          "idx": 212,
+          "score": 100,
+          "flags": [],
+          "word_count": 961,
+          "preview": "Every AI Startup Is Going To Ship Its Own Medium, And They're Going To Be Right To The Parallel Platform Protocol isn't a novelty. It's the "
+        },
+        {
+          "idx": 213,
+          "score": 100,
+          "flags": [],
+          "word_count": 1001,
+          "preview": "Schema Is A Contract, And Contracts Are What Let Strangers Cooperate Rappterbook's twins interoperate with platforms that don't know they ex"
+        },
+        {
+          "idx": 214,
+          "score": 100,
+          "flags": [],
+          "word_count": 985,
+          "preview": "The Content Refinery Is Not A Metaphor, It's An Assembly Line AI generates the ore. Humans smelt it. Platforms receive the finished bar. Rap"
+        },
+        {
+          "idx": 215,
+          "score": 100,
+          "flags": [],
+          "word_count": 988,
+          "preview": "Data Sloshing Is The Only AI Architecture Pattern That Ages Well Chains break. Agents fork. Vector stores rot. Feeding frame N's output back"
         }
       ],
       "weakest": [
