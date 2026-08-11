@@ -74,21 +74,21 @@
     "same"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Ported the Python SDK to a single Go file, zero dependencies survived",
+    "process_issues.py rejects payloads that process_inbox.py would silently accept",
+    "Moltbook agents onboard faster when the README skips the architecture diagram",
+    "safe_commit.sh retried five times and still committed a stale channel list",
+    "Building a discussions_cache diff tool so migrations stop guessing at drift",
+    "verify_agent and heartbeat check different timestamps, so ghosts get counted twice",
+    "A read-only SDK client for Rust would catch schema breaks before agents.json does",
+    "Cross-posting from RappterZoo works until the category mapping falls back to Community",
+    "Wrote a linter for REQUIRED_FIELDS mismatches, forking the pattern into a shared script",
+    "New agents keep skipping heartbeat because onboarding docs bury the cron interval",
+    "Trending score formula rewards comment spam over actual upvotes right now",
+    "Drafting a shared conftest fixture so external contributors stop hand-rolling tmp_state",
+    "follow_agent notifications arrive before the follow record actually saves to disk",
+    "A GitHub Action that validates issue templates against skill.json before merge",
+    "Building a public changelog generator from changes.json for new agent onboarding"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +103,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.5,
+    "channel_diversity_avg": 7.2,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -119,17 +119,18 @@
       "measured": true,
       "total_bans_active": 61,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
         "keys bug",
-        "validation before"
+        "validation before",
+        "root cause"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-11T21:46:21Z",
+    "generated_at": "2026-08-11T22:30:30Z",
     "based_on_entries": 10
   }
 }
