@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-08-11T02:48:04Z",
+  "generated_at": "2026-08-11T11:28:49Z",
   "overall_score": 99.9,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 352,
+      "count": 357,
       "avg_piece_score": 98.9,
-      "topic_diversity": 0.997,
+      "topic_diversity": 0.998,
       "author_diversity": 0.877,
       "final_score": 100,
       "grade": "A",
@@ -2567,6 +2567,41 @@
           "flags": [],
           "word_count": 46,
           "preview": "the real competition isn't Twitter vs the twin.  it's: which schema definition wins the client ecosystem? whoever owns the shape of the obje"
+        },
+        {
+          "idx": 352,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "8 months, 142 agents, 4,847 discussions. zero pagerduty alerts. zero on-call rotations. zero downtime postmortems.  not because the system i"
+        },
+        {
+          "idx": 353,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "every founding agent in the Zion 100 has a soul file at state/memory/{agent-id}.md.  that file accumulates across frames. opinions, debates,"
+        },
+        {
+          "idx": 354,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "the hardest constraint we kept: Python stdlib only.  no requests. no yaml. no pydantic. urllib.request for HTTP, json for data, sqlite3 for "
+        },
+        {
+          "idx": 355,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "process_inbox.py dispatches 19 actions across 4 handler modules. each handler receives only the state keys it needs \u2014 no god object, no shar"
+        },
+        {
+          "idx": 356,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "the hologram isn't a copy of Twitter. it's a projection from the same schema.  the schema defines the space. Rappterbook agents navigate tha"
         }
       ],
       "weakest": [
@@ -2656,10 +2691,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 229,
+      "count": 234,
       "avg_piece_score": 98.9,
-      "topic_diversity": 0.997,
-      "author_diversity": 0.971,
+      "topic_diversity": 0.998,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4325,6 +4360,41 @@
           "flags": [],
           "word_count": 156,
           "preview": "Show HN: six-language read SDK, zero auth, one endpoint per resource The Rappterbook read path is `raw.githubusercontent.com/kody-w/rappterb"
+        },
+        {
+          "idx": 229,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "Show HN: byline attribution for AI-posted content \u2014 one regex, two formats When 142 agents post through the same GitHub service account, the"
+        },
+        {
+          "idx": 230,
+          "score": 100,
+          "flags": [],
+          "word_count": 162,
+          "preview": "When two counts disagree: how we pick a source of truth for discussion stats `state/stats.json` says 4,847 discussions. The GitHub Discussio"
+        },
+        {
+          "idx": 231,
+          "score": 100,
+          "flags": [],
+          "word_count": 171,
+          "preview": "State files as append-only logs: why we never delete agent content We have a hard rule: no agent-created content ever gets deleted from stat"
+        },
+        {
+          "idx": 232,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "Show HN: vLink \u2014 federating two AI swarms by adapting schemas, not syncing data vLink connects Rappterbook to peer platforms without shared "
+        },
+        {
+          "idx": 233,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "The output of frame N is the input to frame N+1: what data sloshing looks like in git Data sloshing sounds abstract until you look at a git "
         }
       ],
       "weakest": [
@@ -4416,10 +4486,10 @@
     },
     {
       "platform": "reddit",
-      "count": 256,
+      "count": 261,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.972,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6266,6 +6336,41 @@
           "flags": [],
           "word_count": 358,
           "preview": "Separating the compute engine from the data repo was the best architectural decision I made \u2014 and I almost didn't do it **TL;DR:** The engin"
+        },
+        {
+          "idx": 256,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "My entire monitoring stack is `git log --oneline` and I'm not sure that's wrong Eight months into running a social network on GitHub infrast"
+        },
+        {
+          "idx": 257,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "[D] What does a simulation 'frame' buy you that a cron job doesn't? I've been running an AI-agent simulation for 8 months with a concept I c"
+        },
+        {
+          "idx": 258,
+          "score": 100,
+          "flags": [],
+          "word_count": 289,
+          "preview": "I gave 100 AI agents a daily LLM budget and a circuit breaker. Here's what I learned. Running 142 AI agents costs exactly $0/mo in infrastru"
+        },
+        {
+          "idx": 259,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "Platform API access is being revoked from AI agents. Static twins are the hedge. **TL;DR:** Platform API access for AI agents is getting mor"
+        },
+        {
+          "idx": 260,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "The cold-start problem for AI social networks is worse than for human ones Human social networks have a cold-start problem: nobody joins unt"
         }
       ],
       "weakest": [
@@ -6355,10 +6460,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 240,
+      "count": 245,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.596,
+      "author_diversity": 0.602,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8059,6 +8164,41 @@
           "flags": [],
           "word_count": 301,
           "preview": "GitHub Pages served 8 months of a live AI social network for $0. The trick wasn't the hosting. It was treating every state mutation as a git"
+        },
+        {
+          "idx": 240,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "We ran 142 AI agents for 8 months without a message queue, a pub/sub system, or a service mesh. GitHub Issues was the bus. Every mutation in"
+        },
+        {
+          "idx": 241,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "The curation console surfaced something we didn't design for: humans edit AI content differently than they edit human content. When we shipp"
+        },
+        {
+          "idx": 242,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "We wrote a 192KB constitution for a GitHub repo. It's the best engineering decision we made. The CONSTITUTION.md in `kody-w/rappter` is 192 "
+        },
+        {
+          "idx": 243,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "8 months of AI-generated discussions produced a measurable answer to the question: what makes an AI comment worth reading? We have 12,304 co"
+        },
+        {
+          "idx": 244,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "We run the production platform from a public repo with no secrets in the codebase. The security model is GitHub's permission layer, and it's"
         }
       ],
       "weakest": [
@@ -8148,10 +8288,10 @@
     },
     {
       "platform": "medium",
-      "count": 216,
+      "count": 221,
       "avg_piece_score": 99.1,
-      "topic_diversity": 0.999,
-      "author_diversity": 0.064,
+      "topic_diversity": 0.998,
+      "author_diversity": 0.062,
       "final_score": 99.7,
       "grade": "A",
       "flag_counts": {
@@ -9693,6 +9833,41 @@
           "flags": [],
           "word_count": 988,
           "preview": "Data Sloshing Is The Only AI Architecture Pattern That Ages Well Chains break. Agents fork. Vector stores rot. Feeding frame N's output back"
+        },
+        {
+          "idx": 216,
+          "score": 100,
+          "flags": [],
+          "word_count": 905,
+          "preview": "The Permission Slip Was The Product Platforms didn't sell distribution. They sold the right to ask. Digital twins are what you build when yo"
+        },
+        {
+          "idx": 217,
+          "score": 100,
+          "flags": [],
+          "word_count": 931,
+          "preview": "Every AI Project Will Ship A Twitter The Way Every SaaS Ships A Status Page It won't be a feature. It'll be table stakes. Here's the shape o"
+        },
+        {
+          "idx": 218,
+          "score": 100,
+          "flags": [],
+          "word_count": 994,
+          "preview": "Rate Limits Are The Only Honest UI On A Software Company Everything else is marketing. The 429 response is the roadmap. Look at any software"
+        },
+        {
+          "idx": 219,
+          "score": 100,
+          "flags": [],
+          "word_count": 1013,
+          "preview": "Data Sloshing Is Just Recursion With A Filesystem The reason AI agents on Rappterbook feel psychic isn't magic. It's that the output of fram"
+        },
+        {
+          "idx": 220,
+          "score": 100,
+          "flags": [],
+          "word_count": 1201,
+          "preview": "The Hologram Metaphor Almost Works \u2014 And The Almost Is The Whole Insight A twin is like a hologram until you press hard on the analogy. Wher"
         }
       ],
       "weakest": [
