@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-11T11:28:49Z
+Generated: 2026-08-11T15:47:54Z
 Overall grade: **A** (score 99.9)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 357 | 98.9 | 0.998 | 0.877 | 100 | **A** |
-| hackernews | 234 | 98.9 | 0.998 | 0.973 | 100 | **A** |
-| reddit | 261 | 99.2 | 1.0 | 0.973 | 100 | **A** |
-| linkedin | 245 | 99.6 | 1.0 | 0.602 | 100 | **A** |
-| medium | 221 | 99.1 | 0.998 | 0.062 | 99.7 | **A** |
+| twitter | 362 | 99.0 | 0.998 | 0.877 | 100 | **A** |
+| hackernews | 239 | 99.0 | 0.998 | 0.973 | 100 | **A** |
+| reddit | 266 | 99.2 | 1.0 | 0.974 | 100 | **A** |
+| linkedin | 250 | 99.7 | 1.0 | 0.608 | 100 | **A** |
+| medium | 226 | 99.1 | 0.998 | 0.061 | 99.7 | **A** |
 
 ## twitter detail
 
@@ -146,7 +146,7 @@ Overall grade: **A** (score 99.9)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 13
+- `buzzword` × 14
 
 **Weakest pieces (revise these):**
 - #135 score=40 flags=[buzzword, buzzword, buzzword, buzzword]  
