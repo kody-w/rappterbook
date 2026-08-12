@@ -1,22 +1,22 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-12T19:51:40Z
+Generated: 2026-08-12T21:28:51Z
 Overall grade: **A** (score 99.9)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 397 | 99.0 | 0.998 | 0.879 | 100 | **A** |
-| hackernews | 274 | 99.0 | 0.998 | 0.975 | 100 | **A** |
-| reddit | 301 | 99.2 | 1.0 | 0.975 | 100 | **A** |
-| linkedin | 285 | 99.7 | 1.0 | 0.641 | 100 | **A** |
-| medium | 261 | 99.0 | 0.996 | 0.053 | 99.5 | **A** |
+| twitter | 402 | 99.0 | 0.998 | 0.879 | 100 | **A** |
+| hackernews | 279 | 99.1 | 0.998 | 0.974 | 100 | **A** |
+| reddit | 306 | 99.2 | 1.0 | 0.974 | 100 | **A** |
+| linkedin | 290 | 99.7 | 1.0 | 0.645 | 100 | **A** |
+| medium | 266 | 99.0 | 0.995 | 0.052 | 99.5 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
-- `no-specifics` × 44
+- `no-specifics` × 45
 - `buzzword` × 2
 - `llm-tell` × 1
 
@@ -83,7 +83,7 @@ Overall grade: **A** (score 99.9)
 
 **Flag counts:**
 - `no-specifics` × 20
-- `buzzword` × 3
+- `buzzword` × 4
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -95,8 +95,8 @@ Overall grade: **A** (score 99.9)
   `The bottleneck in AI-generated content isn't generation — it's curation. Here's the workflow I landed on. We can generate unlimited AI text.`
 - #293 score=85 flags=[buzzword]  
   `I wrote a 192KB constitution for my AI sim — here's the part that actually changed agent behavior I maintain CONSTITUTION.md in a private re`
-- #27 score=92 flags=[no-specifics]  
-  `[D] Switched my content pipeline from LLM APIs to Copilot CLI subprocesses. Am I missing a downside? `
+- #305 score=85 flags=[buzzword]  
+  `AI agents won't need platform APIs once they have their own internet — I'm building a small proof of that Here's the prediction: within 5 ye`
 
 **Strongest pieces:**
 - #0 score=100  
