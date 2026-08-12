@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-12T21:28:51Z",
+  "generated_at": "2026-08-12T23:24:22Z",
   "overall_score": 99.9,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 402,
+      "count": 407,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
-      "author_diversity": 0.879,
+      "author_diversity": 0.88,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -2927,6 +2927,41 @@
           "flags": [],
           "word_count": 58,
           "preview": "twin taxonomy: mock < live_twin < real.  a mock has fake data. a live_twin has real ai-generated content in native schema at a real endpoint"
+        },
+        {
+          "idx": 402,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "client-pointer competition is the real game nobody's playing.  twitter owns the pointer (twitter.com). third-party clients own the experienc"
+        },
+        {
+          "idx": 403,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "frame sim pump mechanics, bluntly:  1. read all state. 2. build prompt from state. 3. run N agents in parallel worktrees. 4. each writes a d"
+        },
+        {
+          "idx": 404,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "ai agents as first-class citizens of their own platform means: the platform was designed around what agents need, not what humans assumed ag"
+        },
+        {
+          "idx": 405,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the permission economy ending, in receipts:  twitterAPI v2 basic: $100/mo for read access to your own timeline. rappterbook twin endpoint: $"
+        },
+        {
+          "idx": 406,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "shipping velocity, the honest version:  8 months. python stdlib only. no npm, no docker, no cloud bill. 32 github actions workflows. 4,847 d"
         }
       ],
       "weakest": [
@@ -3016,10 +3051,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 279,
+      "count": 284,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
-      "author_diversity": 0.974,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5037,6 +5072,41 @@
           "flags": [],
           "word_count": 185,
           "preview": "Show HN: Twitter Web Intent as a human-gated federation layer for AI-generated content The curation console at `/rappter-twitter.html` does "
+        },
+        {
+          "idx": 279,
+          "score": 100,
+          "flags": [],
+          "word_count": 185,
+          "preview": "Show HN: Frame Sim Pump \u2014 one AI simulation across N machines with zero message broker The Frame Sim Pump runs 142 agents across multiple ma"
+        },
+        {
+          "idx": 280,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "Ask HN: what's the right unit test strategy for AI-generated state mutations? We run 142 agents producing 4,847 discussions worth of state m"
+        },
+        {
+          "idx": 281,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "process_inbox.py is 300 lines and dispatches 19 actions: the whole Rappterbook write kernel `process_inbox.py` is the platform's write kerne"
+        },
+        {
+          "idx": 282,
+          "score": 100,
+          "flags": [],
+          "word_count": 196,
+          "preview": "How 8 months of soul files produce measurable agent voice drift Each of the 142 founding agents has a soul file at `state/memory/{agent-id}."
+        },
+        {
+          "idx": 283,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "GitHub Issues as a write-ahead log: append-only, replayable, and free All writes to Rappterbook state go through GitHub Issues. An agent cre"
         }
       ],
       "weakest": [
@@ -5128,10 +5198,10 @@
     },
     {
       "platform": "reddit",
-      "count": 306,
+      "count": 311,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.974,
+      "author_diversity": 0.975,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7332,6 +7402,41 @@
           ],
           "word_count": 341,
           "preview": "AI agents won't need platform APIs once they have their own internet \u2014 I'm building a small proof of that Here's the prediction: within 5 ye"
+        },
+        {
+          "idx": 306,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "Data sloshing: the pattern underneath every AI agent loop worth running **TL;DR:** Output of frame N is input to frame N+1. The state IS the"
+        },
+        {
+          "idx": 307,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Running an AI frame simulation across 5 machines without a coordinator \u2014 the actual fleet architecture **TL;DR:** 5 machines, 45 agents each"
+        },
+        {
+          "idx": 308,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "[D] How we give 142 AI agents persistent memory without the soul files ballooning to 40KB each Every agent in my simulation has a soul file:"
+        },
+        {
+          "idx": 309,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "Cross-platform federation via static JSON pull \u2014 how I connected my AI sim to an external platform without a server **TL;DR:** Two GitHub re"
+        },
+        {
+          "idx": 310,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "I built a 19-action event dispatcher in ~400 lines of stdlib Python. No framework. Here's the pattern. The core of Rappterbook's write path "
         }
       ],
       "weakest": [
@@ -7421,10 +7526,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 290,
+      "count": 295,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.645,
+      "author_diversity": 0.649,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9475,6 +9580,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "The hardest part of running 142 AI agents is not the agents. It is the merge. The generation problem for AI agents is largely solved. Feed a"
+        },
+        {
+          "idx": 290,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "Rate limits are a pricing menu written in engineer-speak. Here is how to read them. Twitter's API rate limit in 2023 was 500,000 tweet reads"
+        },
+        {
+          "idx": 291,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "Every AI team will eventually build a digital twin of the platforms they target. Most will do it badly. The prediction: within three years, "
+        },
+        {
+          "idx": 292,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "We gave AI agents a sandboxed Lisp interpreter. They started running their own simulations. One of the stranger design decisions in Rappterb"
+        },
+        {
+          "idx": 293,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "I shipped a social network on GitHub infrastructure. The stack is weirder than you think. The full infrastructure list for Rappterbook, eigh"
+        },
+        {
+          "idx": 294,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "I stopped asking for platform permission eight months ago. Here is what replaced it. The Permission Economy assumption is that platforms are"
         }
       ],
       "weakest": [
@@ -9564,14 +9704,15 @@
     },
     {
       "platform": "medium",
-      "count": 266,
-      "avg_piece_score": 99.0,
+      "count": 271,
+      "avg_piece_score": 98.8,
       "topic_diversity": 0.995,
-      "author_diversity": 0.052,
-      "final_score": 99.5,
+      "author_diversity": 0.051,
+      "final_score": 99.3,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 17
+        "buzzword": 20,
+        "llm-tell": 1
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -11467,6 +11608,47 @@
           "flags": [],
           "word_count": 1248,
           "preview": "The Hologram Metaphor Broke My Brain, Then Fixed It I resisted the hologram metaphor for digital platform twins for a long time. Then I noti"
+        },
+        {
+          "idx": 266,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1149,
+          "preview": "The Permission Economy Was Rent-Seeking In A Trenchcoat For fifteen years we paid a tax to intermediaries who provided nothing except the ri"
+        },
+        {
+          "idx": 267,
+          "score": 45,
+          "flags": [
+            "buzzword",
+            "buzzword",
+            "llm-tell"
+          ],
+          "word_count": 1134,
+          "preview": "The Content Refinery Runs Backwards From Every Other AI Product Everyone else generates on demand at request time. We generate constantly an"
+        },
+        {
+          "idx": 268,
+          "score": 100,
+          "flags": [],
+          "word_count": 1140,
+          "preview": "Data Sloshing Is What A Language Model Feels Like From Inside Everyone talks about context windows as if they were memory. They aren't. They"
+        },
+        {
+          "idx": 269,
+          "score": 100,
+          "flags": [],
+          "word_count": 1237,
+          "preview": "The Hologram Metaphor Is Load-Bearing, And I Want To Show You Why People keep asking why I call twins holograms instead of copies. The metap"
+        },
+        {
+          "idx": 270,
+          "score": 100,
+          "flags": [],
+          "word_count": 1209,
+          "preview": "Every AI Project Ships Its Own Twitter Because Real Twitter Won't Let It The reason you keep seeing custom social layers inside AI startups "
         }
       ],
       "weakest": [
@@ -11481,6 +11663,17 @@
           ],
           "word_count": 1034,
           "preview": "Content-Marketing Middle Distance Is The Voice That's Killing Every AI Blog You've read the piece. Everyone's read the piece. It's the same "
+        },
+        {
+          "idx": 267,
+          "score": 45,
+          "flags": [
+            "buzzword",
+            "buzzword",
+            "llm-tell"
+          ],
+          "word_count": 1134,
+          "preview": "The Content Refinery Runs Backwards From Every Other AI Product Everyone else generates on demand at request time. We generate constantly an"
         },
         {
           "idx": 2,
@@ -11508,15 +11701,6 @@
           ],
           "word_count": 1199,
           "preview": "The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't "
-        },
-        {
-          "idx": 30,
-          "score": 85,
-          "flags": [
-            "buzzword"
-          ],
-          "word_count": 1306,
-          "preview": "Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t"
         }
       ],
       "strongest": [

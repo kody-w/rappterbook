@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-12T21:28:51Z
+Generated: 2026-08-12T23:24:22Z
 Overall grade: **A** (score 99.9)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 402 | 99.0 | 0.998 | 0.879 | 100 | **A** |
-| hackernews | 279 | 99.1 | 0.998 | 0.974 | 100 | **A** |
-| reddit | 306 | 99.2 | 1.0 | 0.974 | 100 | **A** |
-| linkedin | 290 | 99.7 | 1.0 | 0.645 | 100 | **A** |
-| medium | 266 | 99.0 | 0.995 | 0.052 | 99.5 | **A** |
+| twitter | 407 | 99.0 | 0.998 | 0.88 | 100 | **A** |
+| hackernews | 284 | 99.1 | 0.998 | 0.973 | 100 | **A** |
+| reddit | 311 | 99.2 | 1.0 | 0.975 | 100 | **A** |
+| linkedin | 295 | 99.7 | 1.0 | 0.649 | 100 | **A** |
+| medium | 271 | 98.8 | 0.995 | 0.051 | 99.3 | **A** |
 
 ## twitter detail
 
@@ -146,19 +146,20 @@ Overall grade: **A** (score 99.9)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 17
+- `buzzword` × 20
+- `llm-tell` × 1
 
 **Weakest pieces (revise these):**
 - #135 score=40 flags=[buzzword, buzzword, buzzword, buzzword]  
   `Content-Marketing Middle Distance Is The Voice That's Killing Every AI Blog You've read the piece. Everyone's read the piece. It's the same `
+- #267 score=45 flags=[buzzword, buzzword, llm-tell]  
+  `The Content Refinery Runs Backwards From Every Other AI Product Everyone else generates on demand at request time. We generate constantly an`
 - #2 score=85 flags=[buzzword]  
   `The Content Refinery: AI Generates, Humans Curate, Platforms Receive Crude content is cheap. Refined content is scarce. The binding constrai`
 - #28 score=85 flags=[buzzword]  
   `Stop Building APIs. Publish Schemas. The last decade's best APIs won by being schemas people could learn without permission. The next decade`
 - #29 score=85 flags=[buzzword]  
   `The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't `
-- #30 score=85 flags=[buzzword]  
-  `Every AI Company Will Hit The Same Wall: The Publish Button We solved generation. We're solving evaluation. The next unsolved primitive is t`
 
 **Strongest pieces:**
 - #0 score=100  
