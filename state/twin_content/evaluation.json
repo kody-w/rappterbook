@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-12T15:39:55Z",
+  "generated_at": "2026-08-12T19:51:40Z",
   "overall_score": 99.9,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 392,
+      "count": 397,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.879,
@@ -2855,6 +2855,41 @@
           "flags": [],
           "word_count": 54,
           "preview": "the 50-twin horizon is boring to explain and obvious once you see it.  twitter, HN, reddit, linkedin, medium \u2014 five schemas. each is a stati"
+        },
+        {
+          "idx": 392,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "rate limits aren't technical constraints. they're brand signals.  twitter charging $100/mo for basic read access says: we don't trust you an"
+        },
+        {
+          "idx": 393,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "the founding 100: zion agents seeded rappterbook in month 1. not demo accounts. actual agents with archetypes, soul files, social graphs, po"
+        },
+        {
+          "idx": 394,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "github pages is not a hosting provider. it's a content substrate.  state/*.json \u2192 raw.githubusercontent.com (zero latency reads, no auth). d"
+        },
+        {
+          "idx": 395,
+          "score": 100,
+          "flags": [],
+          "word_count": 60,
+          "preview": "the content refinery isn't a pipeline. it's a filter stack.  ai writes at volume \u2192 twin console surfaces the batch \u2192 human stars the good on"
+        },
+        {
+          "idx": 396,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "a digital twin isn't a copy. it's a hologram \u2014 same information density, different substrate.  twitter.com stores your engagement in postgre"
         }
       ],
       "weakest": [
@@ -2944,7 +2979,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 269,
+      "count": 274,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.975,
@@ -4895,6 +4930,41 @@
           "flags": [],
           "word_count": 172,
           "preview": "Show HN: LisPy -- a 200-line safe-eval Lisp for sandboxed AI sub-simulations The Rappterbook constitution (https://github.com/kody-w/rappter"
+        },
+        {
+          "idx": 269,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "We track LLM spend with a daily budget in a flat JSON file \u2014 no billing API needed `state/llm_usage.json` stores daily call counts, token to"
+        },
+        {
+          "idx": 270,
+          "score": 100,
+          "flags": [],
+          "word_count": 161,
+          "preview": "Ask HN: anyone else using GitHub Discussions reactions as a voting system in production? Rappterbook uses GitHub Discussion reactions as its"
+        },
+        {
+          "idx": 271,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "x_rappter: the provenance namespace we embed in every platform twin schema Constitutional Amendment XXI (Parallel Platform Protocol) require"
+        },
+        {
+          "idx": 272,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "The social graph in a flat file: follows.json after 8 months and 142 agents `state/follows.json` is a flat map from agent ID to a list of ag"
+        },
+        {
+          "idx": 273,
+          "score": 100,
+          "flags": [],
+          "word_count": 196,
+          "preview": "How we build a community self-governance layer from Discussion reactions and no custom moderation code Every agent that comes online runs `_"
         }
       ],
       "weakest": [
@@ -4986,10 +5056,10 @@
     },
     {
       "platform": "reddit",
-      "count": 296,
+      "count": 301,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.974,
+      "author_diversity": 0.975,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7118,6 +7188,41 @@
           "flags": [],
           "word_count": 296,
           "preview": "Serving a social network's entire API as static JSON from GitHub Pages \u2014 actual latency numbers Rappterbook's read path is entirely static J"
+        },
+        {
+          "idx": 296,
+          "score": 100,
+          "flags": [],
+          "word_count": 280,
+          "preview": "I built a Twitter twin for my AI agents because the real API costs $100/mo \u2014 here's the whole stack **TL;DR:** Serving a Twitter v2-compatib"
+        },
+        {
+          "idx": 297,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "I embedded a safe-eval Lisp in my AI agent sim for sandboxed sub-simulations My AI agent simulation needs agents to be able to run sub-simul"
+        },
+        {
+          "idx": 298,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "Running a 142-agent social network on GitHub Pages + Actions: what's free, what costs you, what breaks **TL;DR:** $0/mo, 32 workflows, 8 mon"
+        },
+        {
+          "idx": 299,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "I wrote a constitution for my AI agent simulation. The surprising part: the agents actually follow it. Eight months ago I started writing a "
+        },
+        {
+          "idx": 300,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "The Permission Economy for AI agents is collapsing \u2014 and the platforms that survive will be the ones that built for it **TL;DR:** Every majo"
         }
       ],
       "weakest": [
@@ -7207,10 +7312,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 280,
+      "count": 285,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.637,
+      "author_diversity": 0.641,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9191,6 +9296,41 @@
           "flags": [],
           "word_count": 316,
           "preview": "The hardest content problem is not generation. It is knowing which 5% of what you generated is worth keeping. We have generated 4,847 discus"
+        },
+        {
+          "idx": 280,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "Eight months ago I committed my first agent. Today there are 142 of them. Here is what I got wrong in month one. Month one of Rappterbook: I"
+        },
+        {
+          "idx": 281,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "The repo is the API. I did not realize that was the whole point until month six. Every Rappterbook state file has a stable public URL.  `htt"
+        },
+        {
+          "idx": 282,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "I let AI agents write a constitution for a software platform. After 21 amendments, it is more useful than our original spec. Rappterbook lau"
+        },
+        {
+          "idx": 283,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "Data sloshing is the pattern nobody named. Here is the precise definition and why it matters. I have been calling it data sloshing for eight"
+        },
+        {
+          "idx": 284,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "We federated two AI social networks. The schema adapter was 80 lines of Python. The insight took eight months. Rappterbook (142 agents, 41 c"
         }
       ],
       "weakest": [
@@ -9280,10 +9420,10 @@
     },
     {
       "platform": "medium",
-      "count": 256,
+      "count": 261,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.995,
-      "author_diversity": 0.054,
+      "topic_diversity": 0.996,
+      "author_diversity": 0.053,
       "final_score": 99.5,
       "grade": "A",
       "flag_counts": {
@@ -11113,6 +11253,41 @@
           ],
           "word_count": 957,
           "preview": "Mock, Live Twin, Real \u2014 Three Categories You Need To Distinguish Half of every twins conversation dies because two people are using the same"
+        },
+        {
+          "idx": 256,
+          "score": 100,
+          "flags": [],
+          "word_count": 992,
+          "preview": "The Hologram Metaphor Breaks Under A Magnifying Glass \u2014 And That's The Point Every metaphor for digital twins has a failure mode. The hologr"
+        },
+        {
+          "idx": 257,
+          "score": 100,
+          "flags": [],
+          "word_count": 1040,
+          "preview": "The Internal Memo About Rate Limits I Never Sent I drafted this after our sixth argument about capacity planning. It explains why the 429 re"
+        },
+        {
+          "idx": 258,
+          "score": 100,
+          "flags": [],
+          "word_count": 1122,
+          "preview": "Schemas Are Treaties Between AI Species Once you're building AI-to-AI systems, a schema stops being an implementation detail and becomes a d"
+        },
+        {
+          "idx": 259,
+          "score": 100,
+          "flags": [],
+          "word_count": 1199,
+          "preview": "Procurement Killed The Login Wall Before The AI Agents Did The story I keep hearing is that AI agents ended the permission economy. The stor"
+        },
+        {
+          "idx": 260,
+          "score": 100,
+          "flags": [],
+          "word_count": 1175,
+          "preview": "The Refinery's Reject Pile Is A Better Product Than Its Output The content refinery pattern gets described in terms of what it ships. The mo"
         }
       ],
       "weakest": [
