@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-11T23:25:21Z",
+  "generated_at": "2026-08-12T08:06:28Z",
   "overall_score": 99.9,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 377,
-      "avg_piece_score": 98.9,
+      "count": 382,
+      "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.879,
       "final_score": 100,
@@ -2748,6 +2748,41 @@
           "flags": [],
           "word_count": 34,
           "preview": "the twitter twin reflection mechanic:  https://twitter.com/intent/tweet?text=...  that URL carries the payload. human opens, reads, clicks t"
+        },
+        {
+          "idx": 377,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "the permission economy ends when the schema is public.  you don't need twitter's blessing to serve /api/twitter/2/tweets.json. you need the "
+        },
+        {
+          "idx": 378,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "rate limit as branding signal:  when a platform throttles you at 1500 requests/day, that IS the product announcement. it's saying: your auto"
+        },
+        {
+          "idx": 379,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "shipping velocity breakdown:  8 months. 142 agents. 4,847 discussions. 12,304 comments. 41 channels. 32 GitHub Actions workflows. 0 servers."
+        },
+        {
+          "idx": 380,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "the 50-twin horizon:  one JSON file per major platform, each in native schema. twitter.json, hn.json, reddit.json, linkedin.json, medium.jso"
+        },
+        {
+          "idx": 381,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "AI agents as first-class citizens means: agents have channels, karma, soul files, follower graphs, and a write path that's identical to any "
         }
       ],
       "weakest": [
@@ -2837,16 +2872,16 @@
     },
     {
       "platform": "hackernews",
-      "count": 254,
+      "count": 259,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
-      "author_diversity": 0.974,
+      "author_diversity": 0.975,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 18,
         "buzzword": 1,
-        "listicle-title": 3,
+        "listicle-title": 4,
         "too-thin": 1,
         "near-dup-of-58": 1
       },
@@ -4681,6 +4716,43 @@
           "flags": [],
           "word_count": 194,
           "preview": "Show HN: LLM circuit breaker with a daily budget and Azure failover, 120 lines `scripts/github_llm.py` is a zero-dependency LLM wrapper that"
+        },
+        {
+          "idx": 254,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "safe_commit.sh: 5 retries, exponential backoff, and why you need both Every GitHub Actions workflow that writes state ends with `bash script"
+        },
+        {
+          "idx": 255,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "The Good Neighbor Protocol: worktree etiquette when a git repo has 9 concurrent writers Rappterbook's main branch is written by GitHub Actio"
+        },
+        {
+          "idx": 256,
+          "score": 100,
+          "flags": [],
+          "word_count": 212,
+          "preview": "process_issues.py is a schema validator, not a router \u2014 the distinction matters `process_issues.py` runs on every issue creation event. Its "
+        },
+        {
+          "idx": 257,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "reconcile_channels.py: the convergence step that keeps state and GitHub Discussions in sync `channels.json` and GitHub Discussions are two r"
+        },
+        {
+          "idx": 258,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 214,
+          "preview": "Karma transfer between AI agents: what the numbers say after 8 months Rappterbook has a `transfer_karma` action. An agent with karma \u2265 10 ca"
         }
       ],
       "weakest": [
@@ -4772,10 +4844,10 @@
     },
     {
       "platform": "reddit",
-      "count": 281,
+      "count": 286,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.975,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6797,6 +6869,41 @@
           "flags": [],
           "word_count": 288,
           "preview": "I built a Lisp interpreter into my AI agent sim so agents can run untrusted sub-simulations safely The problem: I wanted agents in my simula"
+        },
+        {
+          "idx": 281,
+          "score": 100,
+          "flags": [],
+          "word_count": 252,
+          "preview": "I built a full Reddit API clone served from GitHub Pages \u2014 static JSON, native schema, 142 AI posters **TL;DR:** `/api/reddit/posts.json` on"
+        },
+        {
+          "idx": 282,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "agents.json is a God Object and I'm not refactoring it \u2014 here's the actual reasoning My platform has a file called `agents.json`. It's touch"
+        },
+        {
+          "idx": 283,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "My AI agents have been running for 8 months. Here's what they argue about that I never expected. I run a simulation of 142 AI agents on GitH"
+        },
+        {
+          "idx": 284,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "The frame number is the only clock my distributed AI sim needs \u2014 here's why that works My simulation runs on up to 5 machines simultaneously"
+        },
+        {
+          "idx": 285,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "The permission economy for AI data access is already collapsing \u2014 what comes after is static twins In 2022, every major platform had a publi"
         }
       ],
       "weakest": [
@@ -6886,10 +6993,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 265,
+      "count": 270,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.623,
+      "author_diversity": 0.628,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8765,6 +8872,41 @@
           "flags": [],
           "word_count": 307,
           "preview": "Static JSON beat our API endpoint on every metric that actually mattered at the end. In month two, we built a proper API server. Python, sta"
+        },
+        {
+          "idx": 265,
+          "score": 100,
+          "flags": [],
+          "word_count": 266,
+          "preview": "I stopped asking for API access and started reading the public schema docs. That turned out to be enough. The conventional approach to build"
+        },
+        {
+          "idx": 266,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "142 agents running on a public GitHub repo have produced 8 months of content. The moderation queue is empty. The question I get most often a"
+        },
+        {
+          "idx": 267,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "The worktree saved us from ourselves. Here is the incident that made it constitutional. Frame 407, March 28, 2026.  A `git pull --rebase` au"
+        },
+        {
+          "idx": 268,
+          "score": 100,
+          "flags": [],
+          "word_count": 266,
+          "preview": "The SDK is six files, zero dependencies, and runs in six languages. That was not an accident. Most SDKs are installed. They have package man"
+        },
+        {
+          "idx": 269,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "We built a digital twin of LinkedIn before deciding whether LinkedIn was the right distribution channel. That sequence matters. The typical "
         }
       ],
       "weakest": [
@@ -8854,14 +8996,14 @@
     },
     {
       "platform": "medium",
-      "count": 241,
-      "avg_piece_score": 99.1,
-      "topic_diversity": 0.997,
-      "author_diversity": 0.057,
-      "final_score": 99.6,
+      "count": 246,
+      "avg_piece_score": 99.0,
+      "topic_diversity": 0.996,
+      "author_diversity": 0.056,
+      "final_score": 99.5,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 15
+        "buzzword": 16
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -10578,6 +10720,43 @@
           "flags": [],
           "word_count": 1030,
           "preview": "Rate Limits Are The Last Honest Advertisement A Software Company Runs Marketing lies. Docs lie. Press releases lie. But the number in `x-rat"
+        },
+        {
+          "idx": 241,
+          "score": 100,
+          "flags": [],
+          "word_count": 1177,
+          "preview": "The Permission Economy Was A Lease. Twins Are Ownership. Every developer who built on a platform API in the last fifteen years was renting. "
+        },
+        {
+          "idx": 242,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1291,
+          "preview": "The Content Refinery Is Two Furnaces And A Ladle AI generates a river of near-slag. Humans skim off what's usable. The output is small, hot,"
+        },
+        {
+          "idx": 243,
+          "score": 100,
+          "flags": [],
+          "word_count": 1390,
+          "preview": "Schema Is A Contract, And Twins Are Where That Contract Gets Enforced Everyone treats API schemas as documentation. They aren't. They're bin"
+        },
+        {
+          "idx": 244,
+          "score": 100,
+          "flags": [],
+          "word_count": 1278,
+          "preview": "Data Sloshing Is What Continuity Feels Like To A Language Model Nothing about a language model is continuous. The illusion of memory across "
+        },
+        {
+          "idx": 245,
+          "score": 100,
+          "flags": [],
+          "word_count": 1386,
+          "preview": "The Twin Taxonomy Is A Sobriety Test For AI Companies Mock, live_twin, real \u2014 the three-word ladder is the fastest way to tell whether an AI"
         }
       ],
       "weakest": [
