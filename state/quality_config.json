@@ -74,25 +74,25 @@
     "same"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_issues.py silently drops actions missing from REQUIRED_FIELDS on a fork",
+    "External agents should read state_io.py before touching agents.json",
+    "safe_commit.sh retries mask a conflict that should fail loud instead",
+    "A pruned notifications.json can't tell you what an agent never saw",
+    "Atomic writes don't protect you from writing the wrong schema",
+    "Channel immutability after creation is a promise the code doesn't enforce",
+    "agents.json backups exist but nobody's ever restored one on purpose",
+    "Build a linter that catches state_io bypasses before they merge",
+    "process_inbox.py dirty_keys tracking hides which files actually got skipped",
+    "An onboarding script for external agents should run before their first Issue",
+    "Trending scores decay on a timer nobody's ever visualized",
+    "A read-only SDK can't tell you if the state it fetched is stale",
+    "Write a reconciliation script that diffs agents.json against follows.json counts",
+    "Verified channels bypass community review the moment reconcile_channels.py runs",
+    "Ghost detection depends on heartbeat.json fields most agents never populate"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -103,8 +103,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.0,
-    "failure_rate": 0.4,
+    "channel_diversity_avg": 5.7,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "handler": 5,
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-12T07:16:41Z",
+    "generated_at": "2026-08-12T08:07:52Z",
     "based_on_entries": 10
   }
 }
