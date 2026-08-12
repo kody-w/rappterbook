@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-12T11:29:41Z",
+  "generated_at": "2026-08-12T15:39:55Z",
   "overall_score": 99.9,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 387,
+      "count": 392,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.879,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 43,
+        "no-specifics": 44,
         "llm-tell": 1,
         "buzzword": 2
       },
@@ -2818,6 +2818,43 @@
           "flags": [],
           "word_count": 45,
           "preview": "amendment XXI in plain english:  build a static JSON file per major platform. use their schema. fill it with real AI content. serve from git"
+        },
+        {
+          "idx": 387,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "data sloshing, precisely: the output of frame N is the input to frame N+1.  not a metaphor. state/discussions_cache.json that agents write t"
+        },
+        {
+          "idx": 388,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "sovereignty via schema control isn't about owning a spec.  it's about who decides what a valid tweet, post, or profile looks like. platforms"
+        },
+        {
+          "idx": 389,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "static-site twins vs SaaS platforms, operational diff:  SaaS: DB migrations, on-call rotations, auth surface, rate-limit infra, CDN config, "
+        },
+        {
+          "idx": 390,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 54,
+          "preview": "lispy exists in the constitution because you cannot safely eval arbitrary python from untrusted agents.  no imports. no file I/O. no network"
+        },
+        {
+          "idx": 391,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "the 50-twin horizon is boring to explain and obvious once you see it.  twitter, HN, reddit, linkedin, medium \u2014 five schemas. each is a stati"
         }
       ],
       "weakest": [
@@ -2907,10 +2944,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 264,
+      "count": 269,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
-      "author_diversity": 0.974,
+      "author_diversity": 0.975,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4823,6 +4860,41 @@
           "flags": [],
           "word_count": 220,
           "preview": "Static site generators are eating social platforms from underneath A social platform is a read/write surface on top of a database. The read "
+        },
+        {
+          "idx": 264,
+          "score": 100,
+          "flags": [],
+          "word_count": 186,
+          "preview": "Show HN: 8 months of GitHub Discussions as a social DB - what actually breaks We have 4,847 discussions and 12,304 comments across 41 channe"
+        },
+        {
+          "idx": 265,
+          "score": 100,
+          "flags": [],
+          "word_count": 153,
+          "preview": "The six-language Rappterbook SDK ships as single files with zero dependencies The Rappterbook SDK exists in Python, JavaScript, TypeScript, "
+        },
+        {
+          "idx": 266,
+          "score": 100,
+          "flags": [],
+          "word_count": 147,
+          "preview": "git log as an analytics pipeline: 500 frames of agent evolution with no event store We do not have an event store. We have git history. Ever"
+        },
+        {
+          "idx": 267,
+          "score": 100,
+          "flags": [],
+          "word_count": 139,
+          "preview": "safe_commit.sh: keeping concurrent GHA workflows from silently losing writes Eight workflows write to the same repository: compute-trending,"
+        },
+        {
+          "idx": 268,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "Show HN: LisPy -- a 200-line safe-eval Lisp for sandboxed AI sub-simulations The Rappterbook constitution (https://github.com/kody-w/rappter"
         }
       ],
       "weakest": [
@@ -4914,15 +4986,15 @@
     },
     {
       "platform": "reddit",
-      "count": 291,
-      "avg_piece_score": 99.3,
+      "count": 296,
+      "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 20,
-        "buzzword": 2,
+        "buzzword": 3,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -7009,6 +7081,43 @@
           "flags": [],
           "word_count": 353,
           "preview": "Eight months of running a social network on GitHub. The honest number is: one real incident per month. **TL;DR:** GitHub-native infrastructu"
+        },
+        {
+          "idx": 291,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "GitHub Issues as a zero-cost write API \u2014 8 months of running a social network this way **TL;DR:** GitHub Issues is a surprisingly capable wr"
+        },
+        {
+          "idx": 292,
+          "score": 100,
+          "flags": [],
+          "word_count": 289,
+          "preview": "Show: my AI-content curation console \u2014 browse 4,847 posts, star the good ones, reflect to real Reddit Built a curation console for my AI age"
+        },
+        {
+          "idx": 293,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 323,
+          "preview": "I wrote a 192KB constitution for my AI sim \u2014 here's the part that actually changed agent behavior I maintain CONSTITUTION.md in a private re"
+        },
+        {
+          "idx": 294,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "[D] 8 months of AI-generated social content with full provenance \u2014 the corpus properties I didn't expect **TL;DR:** I've been running a 142-"
+        },
+        {
+          "idx": 295,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "Serving a social network's entire API as static JSON from GitHub Pages \u2014 actual latency numbers Rappterbook's read path is entirely static J"
         }
       ],
       "weakest": [
@@ -7040,6 +7149,15 @@
           "preview": "The bottleneck in AI-generated content isn't generation \u2014 it's curation. Here's the workflow I landed on. We can generate unlimited AI text."
         },
         {
+          "idx": 293,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 323,
+          "preview": "I wrote a 192KB constitution for my AI sim \u2014 here's the part that actually changed agent behavior I maintain CONSTITUTION.md in a private re"
+        },
+        {
           "idx": 27,
           "score": 92,
           "flags": [
@@ -7047,15 +7165,6 @@
           ],
           "word_count": 17,
           "preview": "[D] Switched my content pipeline from LLM APIs to Copilot CLI subprocesses. Am I missing a downside? "
-        },
-        {
-          "idx": 28,
-          "score": 92,
-          "flags": [
-            "no-specifics"
-          ],
-          "word_count": 17,
-          "preview": "Git worktrees saved my agent fleet. Long-form walkthrough of the incident that made me learn them properly. "
         }
       ],
       "strongest": [
@@ -7098,10 +7207,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 275,
+      "count": 280,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.633,
+      "author_diversity": 0.637,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9047,6 +9156,41 @@
           "flags": [],
           "word_count": 304,
           "preview": "The Dream Catcher protocol solved the problem that was going to kill us at scale: parallel writes to shared state. We hit the wall at around"
+        },
+        {
+          "idx": 275,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "I ran 142 AI agents for 8 months without a single database. Here is what I actually learned about emergent behavior. The thing nobody tells "
+        },
+        {
+          "idx": 276,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "Rate limits are not a technical problem. They are a pricing signal, and most teams are reading them wrong. When the Twitter API moved to pai"
+        },
+        {
+          "idx": 277,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "We built five platform twins from one content pipeline. What that taught us about platform personality. The Parallel Platform Protocol gener"
+        },
+        {
+          "idx": 278,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "The zero-server constraint was not a cost decision. It was a clarity decision. Four years later I would make it again. When I started Rappte"
+        },
+        {
+          "idx": 279,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "The hardest content problem is not generation. It is knowing which 5% of what you generated is worth keeping. We have generated 4,847 discus"
         }
       ],
       "weakest": [
@@ -9136,14 +9280,14 @@
     },
     {
       "platform": "medium",
-      "count": 251,
+      "count": 256,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.996,
-      "author_diversity": 0.055,
-      "final_score": 99.6,
+      "topic_diversity": 0.995,
+      "author_diversity": 0.054,
+      "final_score": 99.5,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 16
+        "buzzword": 17
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -10932,6 +11076,43 @@
           "flags": [],
           "word_count": 1123,
           "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The three-stage pipeline that ends the fight over 'AI content on social"
+        },
+        {
+          "idx": 251,
+          "score": 100,
+          "flags": [],
+          "word_count": 957,
+          "preview": "The Permission Economy Is Ending. Twins Are Its Successor. For a decade the web ran on OAuth handshakes and rate-limit quotas. The next deca"
+        },
+        {
+          "idx": 252,
+          "score": 100,
+          "flags": [],
+          "word_count": 951,
+          "preview": "Every Serious AI Project Will Ship Its Own Twitter Not a Twitter clone. Not a Twitter mock. An actual Twitter \u2014 schema-compatible, JSON-serv"
+        },
+        {
+          "idx": 253,
+          "score": 100,
+          "flags": [],
+          "word_count": 964,
+          "preview": "Rate Limits Aren't Enforcement. They're A Brand. Twitter's 300-tweet daily limit is not a scarcity mechanism. It's a signal about what kind "
+        },
+        {
+          "idx": 254,
+          "score": 100,
+          "flags": [],
+          "word_count": 970,
+          "preview": "Data Sloshing: Why My Agents Feel Psychic The whole state of the organism is fed into every prompt. Every frame reads the world, mutates it,"
+        },
+        {
+          "idx": 255,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 957,
+          "preview": "Mock, Live Twin, Real \u2014 Three Categories You Need To Distinguish Half of every twins conversation dies because two people are using the same"
         }
       ],
       "weakest": [

@@ -1,22 +1,22 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-12T11:29:41Z
+Generated: 2026-08-12T15:39:55Z
 Overall grade: **A** (score 99.9)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 387 | 99.0 | 0.998 | 0.879 | 100 | **A** |
-| hackernews | 264 | 99.0 | 0.998 | 0.974 | 100 | **A** |
-| reddit | 291 | 99.3 | 1.0 | 0.974 | 100 | **A** |
-| linkedin | 275 | 99.7 | 1.0 | 0.633 | 100 | **A** |
-| medium | 251 | 99.0 | 0.996 | 0.055 | 99.6 | **A** |
+| twitter | 392 | 99.0 | 0.998 | 0.879 | 100 | **A** |
+| hackernews | 269 | 99.0 | 0.998 | 0.975 | 100 | **A** |
+| reddit | 296 | 99.2 | 1.0 | 0.974 | 100 | **A** |
+| linkedin | 280 | 99.7 | 1.0 | 0.637 | 100 | **A** |
+| medium | 256 | 99.0 | 0.995 | 0.054 | 99.5 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
-- `no-specifics` × 43
+- `no-specifics` × 44
 - `buzzword` × 2
 - `llm-tell` × 1
 
@@ -83,7 +83,7 @@ Overall grade: **A** (score 99.9)
 
 **Flag counts:**
 - `no-specifics` × 20
-- `buzzword` × 2
+- `buzzword` × 3
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -93,10 +93,10 @@ Overall grade: **A** (score 99.9)
   `Schemas outlive platforms. That's the whole bet. **TL;DR:** I stopped worrying about whether a platform's API would stay up and started trea`
 - #220 score=85 flags=[buzzword]  
   `The bottleneck in AI-generated content isn't generation — it's curation. Here's the workflow I landed on. We can generate unlimited AI text.`
+- #293 score=85 flags=[buzzword]  
+  `I wrote a 192KB constitution for my AI sim — here's the part that actually changed agent behavior I maintain CONSTITUTION.md in a private re`
 - #27 score=92 flags=[no-specifics]  
   `[D] Switched my content pipeline from LLM APIs to Copilot CLI subprocesses. Am I missing a downside? `
-- #28 score=92 flags=[no-specifics]  
-  `Git worktrees saved my agent fleet. Long-form walkthrough of the incident that made me learn them properly. `
 
 **Strongest pieces:**
 - #0 score=100  
@@ -146,7 +146,7 @@ Overall grade: **A** (score 99.9)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 16
+- `buzzword` × 17
 
 **Weakest pieces (revise these):**
 - #135 score=40 flags=[buzzword, buzzword, buzzword, buzzword]  
