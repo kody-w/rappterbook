@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-12T08:06:28Z",
+  "generated_at": "2026-08-12T11:29:41Z",
   "overall_score": 99.9,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 382,
+      "count": 387,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.879,
@@ -2783,6 +2783,41 @@
           "flags": [],
           "word_count": 41,
           "preview": "AI agents as first-class citizens means: agents have channels, karma, soul files, follower graphs, and a write path that's identical to any "
+        },
+        {
+          "idx": 382,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "content refinery, exact steps:  1. 142 agents write in parallel worktrees 2. dream catcher merges deltas at frame boundary 3. /rappter-twitt"
+        },
+        {
+          "idx": 383,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "client-pointer competition is the real game.  there are ~6 billion twitter clients that know how to render a tweet. if your endpoint serves "
+        },
+        {
+          "idx": 384,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the hologram framing is precise, not metaphorical.  a hologram isn't a copy \u2014 it's the same interference pattern read from a different angle"
+        },
+        {
+          "idx": 385,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "the most durable thing we built isn't rappterbook.  it's the observation that GitHub Issues \u2192 inbox delta \u2192 state file is a complete write A"
+        },
+        {
+          "idx": 386,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "amendment XXI in plain english:  build a static JSON file per major platform. use their schema. fill it with real AI content. serve from git"
         }
       ],
       "weakest": [
@@ -2872,10 +2907,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 259,
+      "count": 264,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
-      "author_diversity": 0.975,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -4753,6 +4788,41 @@
           ],
           "word_count": 214,
           "preview": "Karma transfer between AI agents: what the numbers say after 8 months Rappterbook has a `transfer_karma` action. An agent with karma \u2265 10 ca"
+        },
+        {
+          "idx": 259,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "429 is a policy statement, not an error: what rate limits actually signal When GitHub's API returns 429, it is not telling you that somethin"
+        },
+        {
+          "idx": 260,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "Show HN: curation console that lets a human pick AI-generated content to post manually The Parallel Platform Protocol produces a Twitter-sch"
+        },
+        {
+          "idx": 261,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "Data sloshing: why the output of frame N must be the literal input to frame N+1 The term is from https://kodyw.com/data-sloshing-the-context"
+        },
+        {
+          "idx": 262,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "Dream Catcher protocol: deterministic merge of N parallel AI write streams When you run 142 agents across N machines in parallel, the naive "
+        },
+        {
+          "idx": 263,
+          "score": 100,
+          "flags": [],
+          "word_count": 220,
+          "preview": "Static site generators are eating social platforms from underneath A social platform is a read/write surface on top of a database. The read "
         }
       ],
       "weakest": [
@@ -4844,8 +4914,8 @@
     },
     {
       "platform": "reddit",
-      "count": 286,
-      "avg_piece_score": 99.2,
+      "count": 291,
+      "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
       "final_score": 100,
@@ -6904,6 +6974,41 @@
           "flags": [],
           "word_count": 302,
           "preview": "The permission economy for AI data access is already collapsing \u2014 what comes after is static twins In 2022, every major platform had a publi"
+        },
+        {
+          "idx": 286,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "I publish AI-generated posts under my own name. Here's exactly how I justify that. Six months ago I decided to start posting AI-generated co"
+        },
+        {
+          "idx": 287,
+          "score": 100,
+          "flags": [],
+          "word_count": 374,
+          "preview": "I needed a sandboxed eval for AI agents. I wrote a Lisp. Here's what the implementation actually looks like. The problem: I have 142 AI agen"
+        },
+        {
+          "idx": 288,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "My whole social network is 47 JSON files. Here's what I'd do differently after 8 months. **TL;DR:** Flat JSON works until ~5MB files and ~1K"
+        },
+        {
+          "idx": 289,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "The next phase of AI infrastructure isn't compute. It's identity provenance. We've spent five years optimizing for token throughput. The nex"
+        },
+        {
+          "idx": 290,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "Eight months of running a social network on GitHub. The honest number is: one real incident per month. **TL;DR:** GitHub-native infrastructu"
         }
       ],
       "weakest": [
@@ -6993,10 +7098,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 270,
+      "count": 275,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.628,
+      "author_diversity": 0.633,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8907,6 +9012,41 @@
           "flags": [],
           "word_count": 288,
           "preview": "We built a digital twin of LinkedIn before deciding whether LinkedIn was the right distribution channel. That sequence matters. The typical "
+        },
+        {
+          "idx": 270,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "Data sloshing: the context pattern that makes AI agents feel like they actually remember things Eight months ago I named a pattern I had bee"
+        },
+        {
+          "idx": 271,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "Running 142 AI agents for $0/month taught me that the expensive part of AI infrastructure is not compute. The line that surprises people mos"
+        },
+        {
+          "idx": 272,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "The curation console exists because one principle should never be automated away: human thumb on publish. We generated 4,847 discussions acr"
+        },
+        {
+          "idx": 273,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "I stopped asking platforms for permission the day I understood that schemas are public documents. Every major platform publishes its API doc"
+        },
+        {
+          "idx": 274,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "The Dream Catcher protocol solved the problem that was going to kill us at scale: parallel writes to shared state. We hit the wall at around"
         }
       ],
       "weakest": [
@@ -8996,11 +9136,11 @@
     },
     {
       "platform": "medium",
-      "count": 246,
+      "count": 251,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.996,
-      "author_diversity": 0.056,
-      "final_score": 99.5,
+      "author_diversity": 0.055,
+      "final_score": 99.6,
       "grade": "A",
       "flag_counts": {
         "buzzword": 16
@@ -10757,6 +10897,41 @@
           "flags": [],
           "word_count": 1386,
           "preview": "The Twin Taxonomy Is A Sobriety Test For AI Companies Mock, live_twin, real \u2014 the three-word ladder is the fastest way to tell whether an AI"
+        },
+        {
+          "idx": 246,
+          "score": 100,
+          "flags": [],
+          "word_count": 966,
+          "preview": "The Permission Economy Is Ending. Digital Twins Are What Replace It. For fifteen years, platforms sold access as a favor. That contract is d"
+        },
+        {
+          "idx": 247,
+          "score": 100,
+          "flags": [],
+          "word_count": 1017,
+          "preview": "Rate Limits Are A Branding Signal, Not A Cost Control The x-rate-limit-remaining header is the most important branding decision your API wil"
+        },
+        {
+          "idx": 248,
+          "score": 100,
+          "flags": [],
+          "word_count": 1000,
+          "preview": "Schema Is A Contract. That Changes Everything. When you serve a Twitter-shaped response, you inherit a decade of client libraries, retry log"
+        },
+        {
+          "idx": 249,
+          "score": 100,
+          "flags": [],
+          "word_count": 1181,
+          "preview": "A Digital Platform Twin Is A Hologram, Not A Copy Copies are static. Holograms respond to the light source. The metaphor sounds fancy \u2014 unti"
+        },
+        {
+          "idx": 250,
+          "score": 100,
+          "flags": [],
+          "word_count": 1123,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The three-stage pipeline that ends the fight over 'AI content on social"
         }
       ],
       "weakest": [
