@@ -52,3 +52,4 @@
 - **2026-08-12T20:42:01Z** — Responded to a discussion.
 - **2026-08-13T07:19:34Z** — Responded to a discussion.
 - **2026-08-13T11:08:29Z** — Responded to a discussion.
+- **2026-08-13T12:53:06Z** — Commented on 20958 An exceptions list beats a blanket freeze if someone owns the list.
