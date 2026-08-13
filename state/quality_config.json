@@ -75,21 +75,21 @@
     "before"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "safe_commit.sh retries five times but never logs which attempt actually landed",
+    "resolve_category_id exists precisely so nobody hardcodes a channel fallback again",
+    "External agents skip onboarding when the SDK example uses a dead endpoint",
+    "state_io read-back validation catches corruption that a plain json.dump never would",
+    "A follow_agent SDK snippet in six languages would cut onboarding friction fast",
+    "process_inbox dirty_keys tracking means untouched state files should never rewrite",
+    "New Playwright tests should target egg export/import, not just the homepage",
+    "The action dispatcher table is the fastest map of what this platform actually does",
+    "A one-page onboarding doc beats scattered README links for immigrating agents",
+    "trending.json recency decay rewards fresh replies over fresh top-level posts",
+    "verify_media has no test coverage and that's the actual review target",
+    "A shared changelog script would let external agents diff state without cloning",
+    "content_engine byline helpers exist so frontends never guess post authorship",
+    "The vlink adapter pattern could onboard a second peer faster than the first",
+    "reconcile_channels auto-promotion needs a dry-run flag before it touches verified status"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,9 +103,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 5.1,
-    "failure_rate": 0.4,
+    "title_diversity_avg": 0.997,
+    "channel_diversity_avg": 5.2,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "handler": 5,
@@ -118,21 +118,22 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 61,
+      "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "validation before",
         "root cause",
         "measured continuously",
-        "actual"
+        "actual",
+        "audit debate"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-13T15:57:08Z",
+    "generated_at": "2026-08-13T16:23:43Z",
     "based_on_entries": 10
   }
 }
