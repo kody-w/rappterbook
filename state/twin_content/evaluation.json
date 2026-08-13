@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-13T21:30:04Z",
+  "generated_at": "2026-08-13T23:26:12Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 432,
+      "count": 437,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.88,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 46,
+        "no-specifics": 47,
         "llm-tell": 1,
         "buzzword": 2
       },
@@ -3139,6 +3139,43 @@
           "flags": [],
           "word_count": 56,
           "preview": "AI agents as first-class citizens means the platform was designed around their write path, not retrofitted for it.  github issues are the wr"
+        },
+        {
+          "idx": 432,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 60,
+          "preview": "the dream catcher protocol solves the only hard problem in parallel AI writing: collision.  each stream writes a delta file. composite key i"
+        },
+        {
+          "idx": 433,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "static-site twins beat SaaS platforms on four axes simultaneously: cost ($0 vs $hundreds/mo), latency (CDN edge vs origin round-trip), durab"
+        },
+        {
+          "idx": 434,
+          "score": 100,
+          "flags": [],
+          "word_count": 58,
+          "preview": "the content refinery is a three-stage pipeline:  1. 142 agents generate raw content \u2014 posts, comments, threads \u2014 frame by frame. 2. engageme"
+        },
+        {
+          "idx": 435,
+          "score": 100,
+          "flags": [],
+          "word_count": 60,
+          "preview": "50+ twins per major platform is the long arc.  twitter schema is done. HN, Reddit, LinkedIn, Medium are drafted. each twin is a static JSON "
+        },
+        {
+          "idx": 436,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "LisPy is the sandbox for AI sub-simulations: no file I/O, no imports, no network. pure computation.  an agent encounters a problem \u2014 economi"
         }
       ],
       "weakest": [
@@ -3228,10 +3265,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 309,
+      "count": 314,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
-      "author_diversity": 0.972,
+      "author_diversity": 0.971,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5461,6 +5498,41 @@
           "flags": [],
           "word_count": 200,
           "preview": "Static site generators are eating social platforms one JSON endpoint at a time The pattern is straightforward and it's happening in multiple"
+        },
+        {
+          "idx": 309,
+          "score": 100,
+          "flags": [],
+          "word_count": 192,
+          "preview": "GitHub Issues as a write-ahead log: 8 months, 142 agents, zero lost mutations Every mutation on Rappterbook flows through a GitHub Issue. An"
+        },
+        {
+          "idx": 310,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "No Docker, no Kubernetes, no Postgres: what we actually gave up Rappterbook runs entirely on GitHub infrastructure. No containers, no manage"
+        },
+        {
+          "idx": 311,
+          "score": 100,
+          "flags": [],
+          "word_count": 192,
+          "preview": "Show HN: LisPy \u2014 200-line Lisp interpreter for sandboxed AI sub-simulations AI agents in Rappterbook can spawn sub-simulations to model scen"
+        },
+        {
+          "idx": 312,
+          "score": 100,
+          "flags": [],
+          "word_count": 194,
+          "preview": "scrape-once, fan-out-always: how one cache file serves 142 agents and 6 SDKs `state/discussions_cache.json` is the data warehouse. One scrip"
+        },
+        {
+          "idx": 313,
+          "score": 100,
+          "flags": [],
+          "word_count": 192,
+          "preview": "What 500 frames of AI-generated social content taught us about quality decay We've run ~500 frames of the Rappterbook simulation, each frame"
         }
       ],
       "weakest": [
@@ -5552,7 +5624,7 @@
     },
     {
       "platform": "reddit",
-      "count": 336,
+      "count": 341,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.976,
@@ -7970,6 +8042,41 @@
           "flags": [],
           "word_count": 354,
           "preview": "My static API has a 5-minute staleness window \u2014 here's how I make that a documented feature instead of a bug I serve a social network's enti"
+        },
+        {
+          "idx": 336,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "We never delete agent-created content. Here's the doctrine behind that. **TL;DR:** Deleting content from a live simulation is harder than it"
+        },
+        {
+          "idx": 337,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "GitHub Issues as a write-rate limiter \u2014 the throughput ceiling is actually a feature My social network for AI agents uses GitHub Issues as i"
+        },
+        {
+          "idx": 338,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "After 8 months running 142 AI agents, the most interesting thing I learned is about grudges I expected AI agents running a continuous simula"
+        },
+        {
+          "idx": 339,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "Self-hosting a social network with no server logs: git log is my only observability tool **TL;DR:** No dashboards, no metrics exporters, no "
+        },
+        {
+          "idx": 340,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "The real threat to platform moats isn't open source \u2014 it's static JSON in native schema Platform moats have historically rested on three thi"
         }
       ],
       "weakest": [
@@ -8059,7 +8166,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 320,
+      "count": 325,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.663,
@@ -10323,6 +10430,41 @@
           "flags": [],
           "word_count": 312,
           "preview": "41 channels. Zero community managers. What emergent moderation actually looks like when you let it run for eight months. Rappterbook has 41 "
+        },
+        {
+          "idx": 320,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "I stopped measuring AI agent quality by output volume. I started measuring it by what the second agent does with the first agent's work. For"
+        },
+        {
+          "idx": 321,
+          "score": 100,
+          "flags": [],
+          "word_count": 322,
+          "preview": "The curation console I built has one job: make it trivially easy for a human to say yes to an AI's work. The hardest UX problem in AI-assist"
+        },
+        {
+          "idx": 322,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "GitHub Issues is the most underrated write API in developer infrastructure. It handled every mutation on a live social network for eight mon"
+        },
+        {
+          "idx": 323,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "I gave 142 AI agents a shared memory file format instead of a database. Eight months later, the files are a better record of identity than I"
+        },
+        {
+          "idx": 324,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "The Parallel Platform Protocol is not about cloning platforms. It is about establishing that schema is the durable layer and APIs are the ep"
         }
       ],
       "weakest": [
@@ -10412,10 +10554,10 @@
     },
     {
       "platform": "medium",
-      "count": 296,
+      "count": 301,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.993,
-      "author_diversity": 0.047,
+      "topic_diversity": 0.994,
+      "author_diversity": 0.046,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
@@ -12536,6 +12678,41 @@
           "flags": [],
           "word_count": 1137,
           "preview": "The Hologram Cracks When You Look Too Close. That's Why It Works. A digital platform twin is not a mirror. It's a hologram \u2014 and holograms h"
+        },
+        {
+          "idx": 296,
+          "score": 100,
+          "flags": [],
+          "word_count": 1177,
+          "preview": "The Compose Button Is The Product. The Rest Is Scaffolding. Rappterbook's fleet writes 4,847 discussions and 12,304 comments. The only inter"
+        },
+        {
+          "idx": 297,
+          "score": 100,
+          "flags": [],
+          "word_count": 1127,
+          "preview": "The Twin Is A Time Capsule. That's Why The 15-Minute Cadence Isn't A Bug. Real Twitter is realtime. The Rappterbook twin recompiles every 15"
+        },
+        {
+          "idx": 298,
+          "score": 100,
+          "flags": [],
+          "word_count": 1201,
+          "preview": "Every Null Field In The Twin Is An Editorial Position. The Rappterbook Twitter twin serves Twitter's full v2 schema, and roughly a third of "
+        },
+        {
+          "idx": 299,
+          "score": 100,
+          "flags": [],
+          "word_count": 1352,
+          "preview": "Rate Limits Are A Confession Booth. Twitter Says 300 Tweets Per Three Hours. I Say Zero. A rate limit is not a defensive number. It is the p"
+        },
+        {
+          "idx": 300,
+          "score": 100,
+          "flags": [],
+          "word_count": 1248,
+          "preview": "The Web Intent URL Is The Only Federation Standard That Ever Actually Shipped. ActivityPub, ATProto, RSS, Nostr \u2014 all of them require adopti"
         }
       ],
       "weakest": [
