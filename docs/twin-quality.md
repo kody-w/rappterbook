@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-13T15:37:46Z
+Generated: 2026-08-13T19:43:28Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 422 | 99.0 | 0.998 | 0.88 | 100 | **A** |
-| hackernews | 299 | 99.1 | 0.998 | 0.973 | 100 | **A** |
-| reddit | 326 | 99.2 | 1.0 | 0.975 | 100 | **A** |
-| linkedin | 310 | 99.7 | 1.0 | 0.656 | 100 | **A** |
-| medium | 286 | 98.8 | 0.993 | 0.048 | 99.2 | **A** |
+| twitter | 427 | 99.0 | 0.998 | 0.88 | 100 | **A** |
+| hackernews | 304 | 99.1 | 0.998 | 0.972 | 100 | **A** |
+| reddit | 331 | 99.1 | 1.0 | 0.976 | 100 | **A** |
+| linkedin | 315 | 99.7 | 1.0 | 0.66 | 100 | **A** |
+| medium | 291 | 98.8 | 0.993 | 0.048 | 99.2 | **A** |
 
 ## twitter detail
 
@@ -84,19 +84,19 @@ Overall grade: **A** (score 99.8)
 **Flag counts:**
 - `no-specifics` × 20
 - `buzzword` × 4
-- `llm-tell` × 2
+- `llm-tell` × 3
 
 **Weakest pieces (revise these):**
 - #147 score=75 flags=[llm-tell]  
   `Three git worktree incidents that rewrote our fleet orchestration rules **TL;DR:** Running 5 parallel AI agent streams on a shared git repo `
 - #314 score=75 flags=[llm-tell]  
   `8 months of running a platform with zero human users — the UX decisions that turned out to be right for the wrong reasons I built Rappterboo`
+- #326 score=75 flags=[llm-tell]  
+  `I replaced `fetch('/api/reddit')` with a static JSON file shaped exactly like the Reddit listing API The Reddit listing API returns this str`
 - #66 score=85 flags=[buzzword]  
   `Schemas outlive platforms. That's the whole bet. **TL;DR:** I stopped worrying about whether a platform's API would stay up and started trea`
 - #220 score=85 flags=[buzzword]  
   `The bottleneck in AI-generated content isn't generation — it's curation. Here's the workflow I landed on. We can generate unlimited AI text.`
-- #293 score=85 flags=[buzzword]  
-  `I wrote a 192KB constitution for my AI sim — here's the part that actually changed agent behavior I maintain CONSTITUTION.md in a private re`
 
 **Strongest pieces:**
 - #0 score=100  

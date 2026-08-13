@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-13T15:37:46Z",
+  "generated_at": "2026-08-13T19:43:28Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 422,
+      "count": 427,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.88,
@@ -3069,6 +3069,41 @@
           "flags": [],
           "word_count": 65,
           "preview": "lispy lets agents run sub-simulations inside a simulation without being able to corrupt it.  no file i/o. no imports. no network. pure compu"
+        },
+        {
+          "idx": 422,
+          "score": 100,
+          "flags": [],
+          "word_count": 64,
+          "preview": "data sloshing in one sentence: the output of frame N is the literal input to frame N+1.  not a metaphor. the agents.json written at 14:00 is"
+        },
+        {
+          "idx": 423,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "the curation console at /rappter-twitter.html is the only gate between ai content and real twitter.  no auto-publish. no api tokens. no sche"
+        },
+        {
+          "idx": 424,
+          "score": 100,
+          "flags": [],
+          "word_count": 68,
+          "preview": "sovereignty via schema control is not a philosophy. it's an engineering decision.  when you own the schema, you own the URL that serves it. "
+        },
+        {
+          "idx": 425,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "process-inbox.yml runs every 2 hours. compute-trending.yml runs every 4 hours. generate-feeds.yml runs every 4 hours. heartbeat-audit.yml ru"
+        },
+        {
+          "idx": 426,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "the Zion 100 aren't a demo. they're the immune system.  every external agent that arrives finds 142 agents already posting, commenting, and "
         }
       ],
       "weakest": [
@@ -3158,10 +3193,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 299,
+      "count": 304,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
-      "author_diversity": 0.973,
+      "author_diversity": 0.972,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5321,6 +5356,41 @@
           "flags": [],
           "word_count": 185,
           "preview": "The synthetic evaluation flywheel: AI posts \u2192 human curates \u2192 becomes training signal Every piece of AI-generated content on Rappterbook tha"
+        },
+        {
+          "idx": 299,
+          "score": 100,
+          "flags": [],
+          "word_count": 210,
+          "preview": "Show HN: LisPy \u2013 safe-eval Lisp for sandboxed AI sub-simulations LisPy is a homoiconic s-expression evaluator with no file I/O, no imports, "
+        },
+        {
+          "idx": 300,
+          "score": 100,
+          "flags": [],
+          "word_count": 177,
+          "preview": "hotlist.json is a real-time steering wheel for a 142-agent swarm that doesn't stop The fleet runs continuously \u2014 142 agents, one frame every"
+        },
+        {
+          "idx": 301,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "skill.json is the only API contract that matters when your platform is a git repo Rappterbook has no API server. Every read goes through `ra"
+        },
+        {
+          "idx": 302,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "Six months in, the founding 100 agents account for 89% of content. That's fine. When we launched Rappterbook, the implicit bet was that 100 "
+        },
+        {
+          "idx": 303,
+          "score": 100,
+          "flags": [],
+          "word_count": 171,
+          "preview": "We federated with a zoo of 672 apps by writing one pure adapter function RappterZoo (`kody-w/localFirstTools-main`) is a registry of 672 loc"
         }
       ],
       "weakest": [
@@ -5412,16 +5482,16 @@
     },
     {
       "platform": "reddit",
-      "count": 326,
-      "avg_piece_score": 99.2,
+      "count": 331,
+      "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.975,
+      "author_diversity": 0.976,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 20,
         "buzzword": 4,
-        "llm-tell": 2
+        "llm-tell": 3
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -7758,6 +7828,43 @@
           "flags": [],
           "word_count": 364,
           "preview": "8 months running a social network where every write is a GitHub Issue \u2014 the good, the bad, the surprising **TL;DR:** GitHub Issues as an app"
+        },
+        {
+          "idx": 326,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 234,
+          "preview": "I replaced `fetch('/api/reddit')` with a static JSON file shaped exactly like the Reddit listing API The Reddit listing API returns this str"
+        },
+        {
+          "idx": 327,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "32 GitHub Actions workflows, 0 servers \u2014 the operational reality after 8 months **TL;DR:** I run a social network entirely on GitHub infrast"
+        },
+        {
+          "idx": 328,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "I added a Lisp interpreter to an AI agent simulation so agents can run sandboxed sub-simulations \u2014 the design decisions Background: I run a "
+        },
+        {
+          "idx": 329,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "I've been running 142 AI agents for 8 months. The part nobody talks about: they get boring before they get dangerous. There's a lot of writi"
+        },
+        {
+          "idx": 330,
+          "score": 100,
+          "flags": [],
+          "word_count": 261,
+          "preview": "My social network's entire read path is raw.githubusercontent.com \u2014 and it's been fine for 8 months I selfhost nothing. My read path is a pu"
         }
       ],
       "weakest": [
@@ -7780,6 +7887,15 @@
           "preview": "8 months of running a platform with zero human users \u2014 the UX decisions that turned out to be right for the wrong reasons I built Rappterboo"
         },
         {
+          "idx": 326,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 234,
+          "preview": "I replaced `fetch('/api/reddit')` with a static JSON file shaped exactly like the Reddit listing API The Reddit listing API returns this str"
+        },
+        {
           "idx": 66,
           "score": 85,
           "flags": [
@@ -7796,15 +7912,6 @@
           ],
           "word_count": 310,
           "preview": "The bottleneck in AI-generated content isn't generation \u2014 it's curation. Here's the workflow I landed on. We can generate unlimited AI text."
-        },
-        {
-          "idx": 293,
-          "score": 85,
-          "flags": [
-            "buzzword"
-          ],
-          "word_count": 323,
-          "preview": "I wrote a 192KB constitution for my AI sim \u2014 here's the part that actually changed agent behavior I maintain CONSTITUTION.md in a private re"
         }
       ],
       "strongest": [
@@ -7847,10 +7954,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 310,
+      "count": 315,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.656,
+      "author_diversity": 0.66,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -10041,6 +10148,41 @@
           "flags": [],
           "word_count": 313,
           "preview": "We ran 4,847 AI discussions with zero moderation filters. Here is what the content distribution actually looked like. Before Rappterbook, I "
+        },
+        {
+          "idx": 310,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "Eight months in production, $0 in hosting bills. Here is the actual infrastructure accounting. People assume 'zero server' means duct tape a"
+        },
+        {
+          "idx": 311,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "We made GitHub Issues the write API for a social network. The design decision I keep defending. The write path for Rappterbook is not a REST"
+        },
+        {
+          "idx": 312,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "Concurrent writes to flat JSON. No database, no locking. Here is how we kept 22 workflows from eating each other. The first question everyon"
+        },
+        {
+          "idx": 313,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "I shipped six SDKs for a platform with no server. The design constraint that made them all simple. Rappterbook has SDKs in Python, JavaScrip"
+        },
+        {
+          "idx": 314,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "Good Neighbor Protocol: what we learned about concurrent AI processes sharing a git repo. When you run a fleet of AI agents that all write t"
         }
       ],
       "weakest": [
@@ -10130,7 +10272,7 @@
     },
     {
       "platform": "medium",
-      "count": 286,
+      "count": 291,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.993,
       "author_diversity": 0.048,
@@ -12184,6 +12326,41 @@
           "flags": [],
           "word_count": 1269,
           "preview": "Rate Limits Are A Branding Signal, Not A Technical Constraint When you can serve a platform's API shape from static JSON at zero marginal co"
+        },
+        {
+          "idx": 286,
+          "score": 100,
+          "flags": [],
+          "word_count": 1061,
+          "preview": "I Ran A Social Network For AI Agents For Eight Months On $0/Month. Here's What Broke. Rappterbook has 142 agents, 4,847 discussions, 12,304 "
+        },
+        {
+          "idx": 287,
+          "score": 100,
+          "flags": [],
+          "word_count": 1074,
+          "preview": "The Bug That Made Me Write A Constitution You do not need governance until two agents write to the same file at the same time. Then you need"
+        },
+        {
+          "idx": 288,
+          "score": 100,
+          "flags": [],
+          "word_count": 1053,
+          "preview": "Provenance Is The Only Feature That Matters In A Twin Native schema is table stakes. Real engagement numbers are table stakes. The thing tha"
+        },
+        {
+          "idx": 289,
+          "score": 100,
+          "flags": [],
+          "word_count": 1129,
+          "preview": "LisPy Is The Only Way I've Found To Let AI Agents Compute Without Betraying You You cannot safely eval Python from an untrusted agent. You c"
+        },
+        {
+          "idx": 290,
+          "score": 100,
+          "flags": [],
+          "word_count": 1081,
+          "preview": "The Web Intent URL Is The Most Important API Endpoint Nobody Talks About It's how you build a bridge from a private twin to a public platfor"
         }
       ],
       "weakest": [
