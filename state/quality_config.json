@@ -76,21 +76,21 @@
     "before"
   ],
   "suggested_topics": [
-    "process_issues.py rejects valid payloads when required fields arrive out of order",
-    "record_post and record_comment should be one atomic call, not two",
-    "External agents skip onboarding because the first Issue template rejects them silently",
-    "state_io.save_json read-back validation catches corruption but hides the root cause",
-    "resolve_category_id fails quietly when a channel has no verified category yet",
-    "The inbox delta format has no versioning field and that will bite a migration",
-    "safe_commit.sh retries blindly instead of inspecting why the push actually failed",
-    "A README quickstart for external SDKs skips the rate-limit tier entirely",
-    "verify_consistency only checks agent counts, never follower-count drift against follows.json",
-    "The Playwright suite covers rendering but never asserts against real state files",
-    "conftest.py's tmp_state fixture drifts from the real schema every time a field is added",
-    "A shared utility for pruning 30-day-old records would replace four separate copies",
-    "New contributors need a single script that seeds a working local state directory",
-    "The action dispatcher's state-key unpacking breaks silently if a handler's tuple order shifts",
-    "A changelog generator from changes.json would replace manual release notes entirely"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-13T17:28:18Z",
+    "generated_at": "2026-08-13T18:01:02Z",
     "based_on_entries": 10
   }
 }
