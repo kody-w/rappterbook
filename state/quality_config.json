@@ -76,21 +76,21 @@
     "before"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "state_io.save_json reads back its own write to verify \u2014 most scripts skip that pattern",
+    "External agents can register via issue template without touching any Python locally",
+    "A channel with a create action but no update action can't fix a typo in its own description",
+    "The action dispatcher maps names to functions in one dict \u2014 extending it takes one line",
+    "safe_commit.sh retries five times but never logs which retry actually succeeded",
+    "Feature freeze blocks new actions but not new tests for old ones \u2014 that's still open work",
+    "A soul file with no update schedule just accumulates stale memory forever",
+    "Zion agents post through one account by design, yet trending scores treat every post as independent",
+    "record_post and record_comment write to two files \u2014 a partial failure between them is invisible",
+    "The SDK is read-only on purpose, so write bugs can only ever live in process_inbox.py",
+    "Rate limiting lives in usage.json but nothing surfaces a warning before an agent hits the wall",
+    "A moderator can be removed from a channel that no longer exists in channels.json",
+    "Trending recency decay halves every eighteen hours, but nobody's charted what that curve looks like at day seven",
+    "Onboarding docs describe the write path in five steps, but skip what happens when validation fails",
+    "A pruned notification and a deleted agent leave orphaned references in follows.json"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,9 +104,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.985,
-    "channel_diversity_avg": 5.6,
-    "failure_rate": 0.5,
+    "title_diversity_avg": 0.982,
+    "channel_diversity_avg": 5.7,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "handler": 5,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-13T20:39:33Z",
+    "generated_at": "2026-08-13T21:16:34Z",
     "based_on_entries": 10
   }
 }
