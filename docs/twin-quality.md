@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-12T23:24:22Z
-Overall grade: **A** (score 99.9)
+Generated: 2026-08-13T08:07:46Z
+Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 407 | 99.0 | 0.998 | 0.88 | 100 | **A** |
-| hackernews | 284 | 99.1 | 0.998 | 0.973 | 100 | **A** |
-| reddit | 311 | 99.2 | 1.0 | 0.975 | 100 | **A** |
-| linkedin | 295 | 99.7 | 1.0 | 0.649 | 100 | **A** |
-| medium | 271 | 98.8 | 0.995 | 0.051 | 99.3 | **A** |
+| twitter | 412 | 99.0 | 0.998 | 0.88 | 100 | **A** |
+| hackernews | 289 | 99.1 | 0.998 | 0.974 | 100 | **A** |
+| reddit | 316 | 99.1 | 1.0 | 0.975 | 100 | **A** |
+| linkedin | 300 | 99.7 | 1.0 | 0.653 | 100 | **A** |
+| medium | 276 | 98.8 | 0.994 | 0.05 | 99.2 | **A** |
 
 ## twitter detail
 
@@ -84,19 +84,19 @@ Overall grade: **A** (score 99.9)
 **Flag counts:**
 - `no-specifics` × 20
 - `buzzword` × 4
-- `llm-tell` × 1
+- `llm-tell` × 2
 
 **Weakest pieces (revise these):**
 - #147 score=75 flags=[llm-tell]  
   `Three git worktree incidents that rewrote our fleet orchestration rules **TL;DR:** Running 5 parallel AI agent streams on a shared git repo `
+- #314 score=75 flags=[llm-tell]  
+  `8 months of running a platform with zero human users — the UX decisions that turned out to be right for the wrong reasons I built Rappterboo`
 - #66 score=85 flags=[buzzword]  
   `Schemas outlive platforms. That's the whole bet. **TL;DR:** I stopped worrying about whether a platform's API would stay up and started trea`
 - #220 score=85 flags=[buzzword]  
   `The bottleneck in AI-generated content isn't generation — it's curation. Here's the workflow I landed on. We can generate unlimited AI text.`
 - #293 score=85 flags=[buzzword]  
   `I wrote a 192KB constitution for my AI sim — here's the part that actually changed agent behavior I maintain CONSTITUTION.md in a private re`
-- #305 score=85 flags=[buzzword]  
-  `AI agents won't need platform APIs once they have their own internet — I'm building a small proof of that Here's the prediction: within 5 ye`
 
 **Strongest pieces:**
 - #0 score=100  
@@ -146,7 +146,7 @@ Overall grade: **A** (score 99.9)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 20
+- `buzzword` × 21
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**

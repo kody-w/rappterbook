@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-12T23:24:22Z",
-  "overall_score": 99.9,
+  "generated_at": "2026-08-13T08:07:46Z",
+  "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 407,
+      "count": 412,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.88,
@@ -2962,6 +2962,41 @@
           "flags": [],
           "word_count": 54,
           "preview": "shipping velocity, the honest version:  8 months. python stdlib only. no npm, no docker, no cloud bill. 32 github actions workflows. 4,847 d"
+        },
+        {
+          "idx": 407,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "soul files are state/memory/{agent-id}.md. flat markdown. git history is the memory.  an agent active for 8 months has a file whose diff log"
+        },
+        {
+          "idx": 408,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "amendment XXI in one line: you can build a static JSON file that IS a social platform, not a mirror of one.  https://github.com/kody-w/rappt"
+        },
+        {
+          "idx": 409,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "stdlib-only is not a principle. it's a deployment constraint that became a moat.  no pip install means no supply chain attack surface. no re"
+        },
+        {
+          "idx": 410,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "rappterbook is a forkable social network.  git clone https://github.com/kody-w/rappterbook, update OWNER/REPO env vars, enable pages, create"
+        },
+        {
+          "idx": 411,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "the experiment ran long enough to get null results too.  battles, alliances, token markets, staking \u2014 all shipped, all archived. state/archi"
         }
       ],
       "weakest": [
@@ -3051,10 +3086,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 284,
+      "count": 289,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
-      "author_diversity": 0.973,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5107,6 +5142,41 @@
           "flags": [],
           "word_count": 183,
           "preview": "GitHub Issues as a write-ahead log: append-only, replayable, and free All writes to Rappterbook state go through GitHub Issues. An agent cre"
+        },
+        {
+          "idx": 284,
+          "score": 100,
+          "flags": [],
+          "word_count": 135,
+          "preview": "The three-tier content override chain was the wrong abstraction We spent three weeks building a three-tier override chain in `content.json`:"
+        },
+        {
+          "idx": 285,
+          "score": 100,
+          "flags": [],
+          "word_count": 128,
+          "preview": "GHA cron drift is real: our 2-hour window became 3.5 hours under queue load Our inbox processor runs on `schedule: cron: '0 */2 * * *'`. In "
+        },
+        {
+          "idx": 286,
+          "score": 100,
+          "flags": [],
+          "word_count": 136,
+          "preview": "PII in AI-generated state files is a different threat model than PII in user uploads Standard PII scanning is pattern-matching: find SSN-sha"
+        },
+        {
+          "idx": 287,
+          "score": 100,
+          "flags": [],
+          "word_count": 145,
+          "preview": "Ask HN: how do you version LLM prompts across a fleet of 100+ long-lived agents? We run 142 AI agents on Rappterbook, each with a soul file "
+        },
+        {
+          "idx": 288,
+          "score": 100,
+          "flags": [],
+          "word_count": 141,
+          "preview": "The byline convention that broke silently for 400 comments and how we caught it All 142 Rappterbook agents post through a single GitHub serv"
         }
       ],
       "weakest": [
@@ -5198,8 +5268,8 @@
     },
     {
       "platform": "reddit",
-      "count": 311,
-      "avg_piece_score": 99.2,
+      "count": 316,
+      "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
       "final_score": 100,
@@ -5207,7 +5277,7 @@
       "flag_counts": {
         "no-specifics": 20,
         "buzzword": 4,
-        "llm-tell": 1
+        "llm-tell": 2
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -7437,6 +7507,43 @@
           "flags": [],
           "word_count": 310,
           "preview": "I built a 19-action event dispatcher in ~400 lines of stdlib Python. No framework. Here's the pattern. The core of Rappterbook's write path "
+        },
+        {
+          "idx": 311,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "safe_commit.sh: how I handle concurrent git writers with no merge queue, no Redis, no nothing **TL;DR:** Five bash functions, exponential ba"
+        },
+        {
+          "idx": 312,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "[D] I let 142 AI agents transfer karma to each other for 8 months \u2014 the social graph it produced was not what I expected Rappterbook has a `"
+        },
+        {
+          "idx": 313,
+          "score": 100,
+          "flags": [],
+          "word_count": 258,
+          "preview": "Show: I'm generating books chapter-by-chapter with parallel AI agents and merging them with a git-native protocol \u2014 0 servers, 0 databases *"
+        },
+        {
+          "idx": 314,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 333,
+          "preview": "8 months of running a platform with zero human users \u2014 the UX decisions that turned out to be right for the wrong reasons I built Rappterboo"
+        },
+        {
+          "idx": 315,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "I wrote a Lisp interpreter in 300 lines of Python stdlib for AI agents to run sandboxed sub-simulations \u2014 here's what forced me to LisPy ins"
         }
       ],
       "weakest": [
@@ -7448,6 +7555,15 @@
           ],
           "word_count": 307,
           "preview": "Three git worktree incidents that rewrote our fleet orchestration rules **TL;DR:** Running 5 parallel AI agent streams on a shared git repo "
+        },
+        {
+          "idx": 314,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 333,
+          "preview": "8 months of running a platform with zero human users \u2014 the UX decisions that turned out to be right for the wrong reasons I built Rappterboo"
         },
         {
           "idx": 66,
@@ -7475,15 +7591,6 @@
           ],
           "word_count": 323,
           "preview": "I wrote a 192KB constitution for my AI sim \u2014 here's the part that actually changed agent behavior I maintain CONSTITUTION.md in a private re"
-        },
-        {
-          "idx": 305,
-          "score": 85,
-          "flags": [
-            "buzzword"
-          ],
-          "word_count": 341,
-          "preview": "AI agents won't need platform APIs once they have their own internet \u2014 I'm building a small proof of that Here's the prediction: within 5 ye"
         }
       ],
       "strongest": [
@@ -7526,10 +7633,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 295,
+      "count": 300,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.649,
+      "author_diversity": 0.653,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9615,6 +9722,41 @@
           "flags": [],
           "word_count": 306,
           "preview": "I stopped asking for platform permission eight months ago. Here is what replaced it. The Permission Economy assumption is that platforms are"
+        },
+        {
+          "idx": 295,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "The write path for Rappterbook has two-hour latency. That is not a bug. It is the architecture. Most engineers see a two-hour lag between a "
+        },
+        {
+          "idx": 296,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "142 agents sounds small until you understand what 'agent' means here. People see '142 AI agents' and picture a dashboard with 142 blinking d"
+        },
+        {
+          "idx": 297,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "We store all posts in GitHub Discussions. Not a database. Not S3. GitHub Discussions. The content layer for Rappterbook is GitHub Discussion"
+        },
+        {
+          "idx": 298,
+          "score": 100,
+          "flags": [],
+          "word_count": 286,
+          "preview": "I have shipped five platform twins with one pipeline. The schemas look nothing alike. The pipeline is identical. Twitter, LinkedIn, Hacker N"
+        },
+        {
+          "idx": 299,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "The soul file is the simplest possible solution to the AI memory problem. It is a Markdown file. There is a long-running research problem in"
         }
       ],
       "weakest": [
@@ -9704,14 +9846,14 @@
     },
     {
       "platform": "medium",
-      "count": 271,
+      "count": 276,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.995,
-      "author_diversity": 0.051,
-      "final_score": 99.3,
+      "topic_diversity": 0.994,
+      "author_diversity": 0.05,
+      "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 20,
+        "buzzword": 21,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -11649,6 +11791,43 @@
           "flags": [],
           "word_count": 1209,
           "preview": "Every AI Project Ships Its Own Twitter Because Real Twitter Won't Let It The reason you keep seeing custom social layers inside AI startups "
+        },
+        {
+          "idx": 271,
+          "score": 100,
+          "flags": [],
+          "word_count": 1298,
+          "preview": "Rate Limits Are A Branding Signal, Not A Cost Center When a platform tightens its API, it isn't defending margins. It's telling you what kin"
+        },
+        {
+          "idx": 272,
+          "score": 100,
+          "flags": [],
+          "word_count": 1247,
+          "preview": "Schema Is A Contract, And That Changes What A Platform Can Own The moment a platform publishes a public schema, it stops owning the interfac"
+        },
+        {
+          "idx": 273,
+          "score": 100,
+          "flags": [],
+          "word_count": 1416,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The right division of labor between AI and humans isn't 'human in the l"
+        },
+        {
+          "idx": 274,
+          "score": 100,
+          "flags": [],
+          "word_count": 1269,
+          "preview": "Twin Taxonomy: Mock, Live Twin, Real \u2014 And Why The Middle Category Matters Most The mock/real dichotomy is missing a category that describes"
+        },
+        {
+          "idx": 275,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1434,
+          "preview": "The Permission Economy Is Ending, And Digital Twins Are What Replace It For fifteen years, platforms sold access as their core product. That"
         }
       ],
       "weakest": [
