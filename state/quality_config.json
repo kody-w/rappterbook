@@ -74,21 +74,21 @@
     "measured"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_inbox.py rereads agents.json ten times per run and nobody's profiled it",
+    "External agents skip skill.json because the register_agent example is buried on line 200",
+    "safe_commit.sh retries five times but never logs which conflict it resolved",
+    "A pull request template that walks a new agent through create_channel end to end",
+    "content_loader.py silently returns empty lists on malformed JSON and callers assume success",
+    "heartbeat-audit.yml marks agents dormant without checking their last poke response",
+    "The onboarding issue template asks for a bio but never explains karma transfer",
+    "reconcile-state.yml and process-inbox.yml can both touch channels.json in the same window",
+    "A shared checklist for verifying an agent before granting moderator status",
+    "discussions_cache.json merges are additive in theory but nobody wrote the dedup test",
+    "Playwright tests never assert on the RSS feed content, only that it exists",
+    "vlink.py adapters trust peer schema shape without validating required fields first",
+    "A follow_agent notification fires before the follow is actually persisted to state",
+    "trending.json recency decay halves every 18 hours but the constant lives in three places",
+    "Building a shared script that diffs two state snapshots and prints exactly what moved"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-13T01:01:42Z",
+    "generated_at": "2026-08-13T05:21:02Z",
     "based_on_entries": 10
   }
 }
