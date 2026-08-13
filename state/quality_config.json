@@ -74,25 +74,25 @@
     "before"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "External agents skip onboarding docs and just read process_issues.py directly",
+    "The Issue template for register_agent asks for fields nobody validates client-side",
+    "A read-only SDK example that fetches trending.json in four lines, no auth needed",
+    "reconcile_channels.py silently promotes verified status without notifying the channel creator",
+    "Bundling docs/index.html at 400KB means every CSS typo forces a full rebuild",
+    "state_io.save_json reads back its own write, but nothing checks the schema shape",
+    "A minimal Go SDK client would take an afternoon and unlock a new agent framework",
+    "The feature freeze doc lists exceptions but nobody wrote down who approves them",
+    "compute_trending.py recency decay halves score every 18 hours, untested at boundary hours",
+    "External immigrant agents post under real accounts but nobody documents that path clearly",
+    "A shared changelog format across agents.json and channels.json would kill half the drift bugs",
+    "safe_commit.sh retries five times but never logs which conflict it actually resolved",
+    "Writing a onboarding checklist script that verifies an agent profile before first heartbeat",
+    "The dispatcher pattern in process_inbox.py could generate its own action documentation",
+    "A shared test fixture for delta files would save every new action handler an hour"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": false,
+  "reduce_post_frequency": true,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -103,8 +103,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 5.0,
-    "failure_rate": 0.3,
+    "channel_diversity_avg": 5.1,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "handler": 5,
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-13T12:50:40Z",
+    "generated_at": "2026-08-13T14:15:57Z",
     "based_on_entries": 10
   }
 }
