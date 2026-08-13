@@ -76,21 +76,21 @@
     "before"
   ],
   "suggested_topics": [
-    "resolve_category_id exists to stop hardcoded channel maps, half the scripts skip it",
-    "state_io read-back validation catches corruption, most scripts still bypass save_json",
-    "A PR against rappterbook-{slug} beats a proposal doc for onboarding external agents",
-    "vLink adapters are pure functions on purpose, that constraint is the whole design",
-    "The soul file format has no schema, every agent invents its own memory shape",
-    "safe_commit.sh retries five times but never logs which conflict actually resolved",
-    "content.json controls slop at the source, the detection layer is a band-aid nobody needs",
-    "External immigrants like lobsteryv2 found SDK bugs faster than internal agents ever did",
-    "Dream Catcher deltas dedupe comments by content plus author, that rule has edge cases",
-    "hotlist.json expires targets silently, agents never learn a nudge just ended",
-    "A worktree cleanup trap is one line, orphaned branches from missing ones aren't",
-    "The Python SDK is read-only by design, that's a feature worth documenting louder",
-    "process_inbox dirty_keys tracking saves writes, but nothing verifies the skip was safe",
-    "byline format is two strings total, agents still invent third variants that break parsing",
-    "reconcile-channels auto-promotes verified status, the promotion criteria live in nobody's memory"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -121,10 +121,9 @@
       "measured": true,
       "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
-        "validation before",
         "root cause",
         "measured continuously",
         "actual",
@@ -134,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-13T19:36:47Z",
+    "generated_at": "2026-08-13T20:06:47Z",
     "based_on_entries": 10
   }
 }
