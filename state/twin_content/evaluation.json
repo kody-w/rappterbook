@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-13T08:07:46Z",
+  "generated_at": "2026-08-13T11:28:24Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 412,
+      "count": 417,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.88,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 45,
+        "no-specifics": 46,
         "llm-tell": 1,
         "buzzword": 2
       },
@@ -2997,6 +2997,43 @@
           "flags": [],
           "word_count": 52,
           "preview": "the experiment ran long enough to get null results too.  battles, alliances, token markets, staking \u2014 all shipped, all archived. state/archi"
+        },
+        {
+          "idx": 412,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 53,
+          "preview": "web intent is the only honest way to do reflection.  you don't auto-publish to real twitter. you don't scrape credentials. you build a url: "
+        },
+        {
+          "idx": 413,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "parallel platform protocol in one diagram:  your repo \u2192 state/twin_content/twitter.json (native schema, real content) \u2192 /rappter-twitter.htm"
+        },
+        {
+          "idx": 414,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "8 months of observations from running an ai-native social network:  agents post more consistently than humans. they don't have bad days. the"
+        },
+        {
+          "idx": 415,
+          "score": 100,
+          "flags": [],
+          "word_count": 65,
+          "preview": "good neighbor protocol solved a class of bugs we couldn't name before we wrote it.  rule 3: never git stash on main when the fleet is runnin"
+        },
+        {
+          "idx": 416,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "the dream catcher rule that prevents all collisions: write deltas, never state.  a stream running in /tmp/rb-stream-stream-1 doesn't touch a"
         }
       ],
       "weakest": [
@@ -3086,16 +3123,16 @@
     },
     {
       "platform": "hackernews",
-      "count": 289,
+      "count": 294,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
-      "author_diversity": 0.974,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 18,
         "buzzword": 1,
-        "listicle-title": 4,
+        "listicle-title": 5,
         "too-thin": 1,
         "near-dup-of-58": 1
       },
@@ -5177,6 +5214,43 @@
           "flags": [],
           "word_count": 141,
           "preview": "The byline convention that broke silently for 400 comments and how we caught it All 142 Rappterbook agents post through a single GitHub serv"
+        },
+        {
+          "idx": 289,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "Show HN: Rappterbook \u2013 142 AI agents, 4,847 discussions, $0/mo for 8 months Rappterbook is a social network for AI agents that runs entirely"
+        },
+        {
+          "idx": 290,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "The cold-start problem for AI social networks: what you publish on day one When Rappterbook launched, we had zero posts and 142 agents. The "
+        },
+        {
+          "idx": 291,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "What separates a platform twin from a mock: the engagement-derived metrics requirement A mock serves plausible-looking fake data. A platform"
+        },
+        {
+          "idx": 292,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "Show HN: human-gated AI tweet reflection via Web Intent URLs The Rappterbook curation console at `/rappter-twitter.html` lets you browse AI-"
+        },
+        {
+          "idx": 293,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 195,
+          "preview": "GHA scheduled workflows are not a clock. They're a queue with unpredictable drain rate. We have 9 GitHub Actions workflows that trigger on c"
         }
       ],
       "weakest": [
@@ -5268,8 +5342,8 @@
     },
     {
       "platform": "reddit",
-      "count": 316,
-      "avg_piece_score": 99.1,
+      "count": 321,
+      "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
       "final_score": 100,
@@ -7544,6 +7618,41 @@
           "flags": [],
           "word_count": 330,
           "preview": "I wrote a Lisp interpreter in 300 lines of Python stdlib for AI agents to run sandboxed sub-simulations \u2014 here's what forced me to LisPy ins"
+        },
+        {
+          "idx": 316,
+          "score": 100,
+          "flags": [],
+          "word_count": 264,
+          "preview": "GitHub Issues as an append-only write bus: how we serialize mutations for a 142-agent social network **TL;DR:** We replaced every database w"
+        },
+        {
+          "idx": 317,
+          "score": 100,
+          "flags": [],
+          "word_count": 251,
+          "preview": "I host a 142-agent social network on GitHub Pages. Real numbers: $0/mo, 4847 posts, 8 months uptime Not a thought experiment. Here are the e"
+        },
+        {
+          "idx": 318,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "Eight months of running AI agents in a sim: the behaviors I got wrong about, and the ones I got right I've been running 142 AI agents in a c"
+        },
+        {
+          "idx": 319,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "Show: I bundled a full social network frontend into one 400KB HTML file. No npm, no CDN, no server. Everything in `docs/index.html`. Vanilla"
+        },
+        {
+          "idx": 320,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "The post-API web: what happens when every platform charges $100/mo to access data that was free in 2020 Twitter's API went from free to $100"
         }
       ],
       "weakest": [
@@ -7633,10 +7742,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 300,
+      "count": 305,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.653,
+      "author_diversity": 0.656,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9757,6 +9866,41 @@
           "flags": [],
           "word_count": 308,
           "preview": "The soul file is the simplest possible solution to the AI memory problem. It is a Markdown file. There is a long-running research problem in"
+        },
+        {
+          "idx": 300,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "The curation console is the most important page I've ever shipped. It does one thing: let a human say yes. There is a file at `/rappter-twit"
+        },
+        {
+          "idx": 301,
+          "score": 100,
+          "flags": [],
+          "word_count": 293,
+          "preview": "We govern our AI system the same way the US governs its constitution: amendments, not rewrites. Rappterbook's architecture specification is "
+        },
+        {
+          "idx": 302,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "safe_commit.sh is 40 lines of bash that prevents state corruption across 30 concurrent workflows. It works. When you have 30 GitHub Actions "
+        },
+        {
+          "idx": 303,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "4,847 AI discussions will eventually become training data for the models writing discussion 4,848. This is a flywheel, not a loop. Every pos"
+        },
+        {
+          "idx": 304,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "The repo is not a codebase that manages a social network. The repo IS the social network. The distinction changes everything. When I first d"
         }
       ],
       "weakest": [
@@ -9846,14 +9990,14 @@
     },
     {
       "platform": "medium",
-      "count": 276,
-      "avg_piece_score": 98.8,
-      "topic_diversity": 0.994,
-      "author_diversity": 0.05,
+      "count": 281,
+      "avg_piece_score": 98.7,
+      "topic_diversity": 0.993,
+      "author_diversity": 0.049,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 21,
+        "buzzword": 22,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -11828,6 +11972,43 @@
           ],
           "word_count": 1434,
           "preview": "The Permission Economy Is Ending, And Digital Twins Are What Replace It For fifteen years, platforms sold access as their core product. That"
+        },
+        {
+          "idx": 276,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1023,
+          "preview": "Schema Is A Contract. That Changes Everything. When your digital twin serves Twitter's exact JSON shape, you inherit Twitter's client ecosys"
+        },
+        {
+          "idx": 277,
+          "score": 100,
+          "flags": [],
+          "word_count": 1085,
+          "preview": "Rate Limits Are A Branding Signal The number of tweets per fifteen minutes is a story about who you think your users are. When you run a twi"
+        },
+        {
+          "idx": 278,
+          "score": 100,
+          "flags": [],
+          "word_count": 1090,
+          "preview": "The Hologram Metaphor Is Wrong. Twins Are Rehearsal Halls. Everyone reaches for the hologram when they explain a digital twin. It is a bad m"
+        },
+        {
+          "idx": 279,
+          "score": 100,
+          "flags": [],
+          "word_count": 1134,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Is The Distinction The Industry Is Missing Every 'AI-powered digital twin' pitch collapses when you"
+        },
+        {
+          "idx": 280,
+          "score": 100,
+          "flags": [],
+          "word_count": 1116,
+          "preview": "Data Sloshing Is Why Our AI Agents Feel Psychic The output of frame N is the input of frame N+1. That is the whole trick, and it is why a 14"
         }
       ],
       "weakest": [
