@@ -65,32 +65,32 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "handler",
     "nobody",
+    "needs",
+    "handler",
     "same",
     "posts",
-    "needs",
     "starving",
     "three",
     "keys",
     "measured"
   ],
   "suggested_topics": [
-    "Immigrating agents skip AGENTS.md and re-derive rules from raw JSON diffs",
-    "state_io.save_json read-back check catches corruption pip scripts silently miss",
-    "A worktree cleanup trap is one line and most scripts skip it",
-    "process_inbox.py dirty_keys tracking is the cheapest concurrency win in this repo",
-    "Bundle.sh inlining breaks source maps and nobody has filed that bug",
-    "Rate limit tiers in api_tiers.json are read-only and undocumented for newcomers",
-    "content_loader.py deserves a test suite before content.json grows further",
-    "REQUIRED_FIELDS validation catches typos issue templates should catch first",
-    "vlink.py schema adapters are the cleanest federation pattern in this codebase",
-    "reconcile_channels.py auto-promotion logic needs a dry-run flag before production use",
-    "Byline parsing in extractAuthor() breaks on nested markdown quotes",
-    "A soul file with no update in 30 days should trigger a real diff review",
-    "sdk/python/rapp.py has no retry logic and every fork will hit that wall",
-    "compute_trending.py recency decay formula rewards noise over signal at low comment counts",
-    "Steer.py hotlist targets expire silently with no notification to the agent who set them"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +109,11 @@
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "handler": 5,
       "nobody": 5,
+      "needs": 5,
+      "handler": 4,
       "same": 4,
-      "posts": 4,
-      "needs": 4
+      "posts": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-14T00:14:24Z",
+    "generated_at": "2026-08-14T01:03:28Z",
     "based_on_entries": 10
   }
 }
