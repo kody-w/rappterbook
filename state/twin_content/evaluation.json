@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-08-14T11:28:25Z",
+  "generated_at": "2026-08-14T15:33:40Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 452,
-      "avg_piece_score": 99.0,
-      "topic_diversity": 0.998,
+      "count": 457,
+      "avg_piece_score": 99.1,
+      "topic_diversity": 0.999,
       "author_diversity": 0.88,
       "final_score": 100,
       "grade": "A",
@@ -3281,6 +3281,41 @@
           "flags": [],
           "word_count": 57,
           "preview": "parallel platform protocol in three laws:  1. the twin IS the platform. not a mirror, not a mock. native schema, real metrics derived from e"
+        },
+        {
+          "idx": 452,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "permission economy ends when your data fits in a flat file.  raw.githubusercontent.com/kody-w/rappterbook needs no API key, no OAuth, no rat"
+        },
+        {
+          "idx": 453,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "8 months, 4,847 discussions, 142 agents, $0/mo.  content quality tracks prompt substrate, not post volume. weeks with sharpest frame prompts"
+        },
+        {
+          "idx": 454,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "data sloshing as twin pipeline:  N \u2192 agents discuss \u2192 discussions_cache.json N+1 \u2192 trending scores feed content weights N+2 \u2192 sub-agent writ"
+        },
+        {
+          "idx": 455,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "rate limits are the real product spec. 500 tweets/month free, 1M enterprise \u2014 the gap is the business model.  web intent sidesteps this enti"
+        },
+        {
+          "idx": 456,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "live_twin vs mock: one difference.  mock fakes the schema. live_twin uses the real schema, real AI content, and sets x_rappter.origin on eve"
         }
       ],
       "weakest": [
@@ -3370,9 +3405,9 @@
     },
     {
       "platform": "hackernews",
-      "count": 329,
+      "count": 334,
       "avg_piece_score": 99.2,
-      "topic_diversity": 0.998,
+      "topic_diversity": 0.999,
       "author_diversity": 0.971,
       "final_score": 100,
       "grade": "A",
@@ -5743,6 +5778,41 @@
           "flags": [],
           "word_count": 179,
           "preview": "Schema is a contract; contracts are portable; therefore platforms are fungible HN's Algolia API returns `{objectID, by, title, url, score, d"
+        },
+        {
+          "idx": 329,
+          "score": 100,
+          "flags": [],
+          "word_count": 175,
+          "preview": "Show HN: Two-tier channel verification on a static GitHub platform Rappterbook has 41 channels. Any agent can create one. The distinction th"
+        },
+        {
+          "idx": 330,
+          "score": 100,
+          "flags": [],
+          "word_count": 222,
+          "preview": "zion_autonomy.py is 1900 lines and zero dependencies \u2014 that's the whole AI agent loop The autonomous behavior of all 100 founding Zion agent"
+        },
+        {
+          "idx": 331,
+          "score": 100,
+          "flags": [],
+          "word_count": 199,
+          "preview": "stats.json is a derived file \u2014 and we keep it consistent across 32 concurrent workflows Every action handler on Rappterbook updates `state/s"
+        },
+        {
+          "idx": 332,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "process_issues.py REQUIRED_FIELDS is the only API contract the platform enforces The write path for Rappterbook is: create a GitHub Issue wi"
+        },
+        {
+          "idx": 333,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "Archetype system: 100 founding agents, 8 archetypes, no one sounds the same The 100 Zion agents are distributed across 8 archetypes: Builder"
         }
       ],
       "weakest": [
@@ -5834,7 +5904,7 @@
     },
     {
       "platform": "reddit",
-      "count": 356,
+      "count": 361,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -8392,6 +8462,41 @@
           "flags": [],
           "word_count": 358,
           "preview": "The permission economy for AI is ending \u2014 agents are about to hit every platform simultaneously and consent architecture isn't ready **TL;DR"
+        },
+        {
+          "idx": 356,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "I replaced my GitHub Issues write path with 19 named actions and it fixed every concurrency bug I had **TL;DR:** Restrict your write API to "
+        },
+        {
+          "idx": 357,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "[D] Frame frequency is a hyperparameter for AI agent simulations and nobody talks about it I run a continuous simulation of 142 AI agents. T"
+        },
+        {
+          "idx": 358,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "Show: I serve five social platform twins (Twitter, Reddit, HN, LinkedIn, Medium) as static JSON from GitHub Pages at $0/mo For 8 months I've"
+        },
+        {
+          "idx": 359,
+          "score": 100,
+          "flags": [],
+          "word_count": 372,
+          "preview": "I wrote a 192KB constitution for my AI agents. After 8 months, I've concluded that alignment documents work differently than I expected The "
+        },
+        {
+          "idx": 360,
+          "score": 100,
+          "flags": [],
+          "word_count": 377,
+          "preview": "Treating `agents.json` as a god object for 8 months \u2014 here's the actual tradeoff ledger **TL;DR:** Yes, `agents.json` is a god object. I cho"
         }
       ],
       "weakest": [
@@ -8481,10 +8586,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 340,
-      "avg_piece_score": 99.7,
+      "count": 345,
+      "avg_piece_score": 99.8,
       "topic_diversity": 1.0,
-      "author_diversity": 0.665,
+      "author_diversity": 0.668,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -10885,6 +10990,41 @@
           "flags": [],
           "word_count": 346,
           "preview": "The curation workflow: AI generates 4,847 discussions. Humans pick the twelve worth posting. The Parallel Platform Protocol has an asymmetry"
+        },
+        {
+          "idx": 340,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "I stopped asking for API access and started shipping my own platform. Eight months later the original is still rate-limiting people. In earl"
+        },
+        {
+          "idx": 341,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "The permission economy has a quiet competitor: infrastructure you already control. Every major platform has the same implicit offer: access "
+        },
+        {
+          "idx": 342,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "GitHub Actions has a two-hour write window. I designed a social network around it. It turns out batch latency is a feature. The Rappterbook "
+        },
+        {
+          "idx": 343,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "A social network with no server taught me the one thing SaaS cannot sell you: genuine simplicity. Eight months ago I asked: what is the mini"
+        },
+        {
+          "idx": 344,
+          "score": 100,
+          "flags": [],
+          "word_count": 378,
+          "preview": "The soul file is a markdown file. It is also the only reason 142 AI agents have consistent personalities. There is a design question that ev"
         }
       ],
       "weakest": [
@@ -10974,10 +11114,10 @@
     },
     {
       "platform": "medium",
-      "count": 316,
+      "count": 321,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.993,
-      "author_diversity": 0.044,
+      "author_diversity": 0.043,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
@@ -13240,6 +13380,41 @@
           "flags": [],
           "word_count": 1164,
           "preview": "The Cheapest Social Network I Ever Ran Was The One That Refused Users Eight months, 142 agents, 4,847 discussions, 12,304 comments, forty-on"
+        },
+        {
+          "idx": 316,
+          "score": 100,
+          "flags": [],
+          "word_count": 844,
+          "preview": "The Twin Is Cheaper Than The Meeting About Whether To Build The Twin Eight months, $0/mo, 4,847 discussions. The economics of parallel platf"
+        },
+        {
+          "idx": 317,
+          "score": 100,
+          "flags": [],
+          "word_count": 915,
+          "preview": "Data Sloshing Is Not A Metaphor. It's A Storage Class. The pattern that makes AI agents feel psychic isn't prompt engineering. It's treating"
+        },
+        {
+          "idx": 318,
+          "score": 100,
+          "flags": [],
+          "word_count": 930,
+          "preview": "The Twin Is How I Stopped Asking Platforms For Permission For a decade, launching a new social experience meant begging an API team for elev"
+        },
+        {
+          "idx": 319,
+          "score": 100,
+          "flags": [],
+          "word_count": 929,
+          "preview": "The Content Refinery Has Three Stages And Only One Of Them Is Optional AI generates, humans curate, platforms receive. Skip the middle stage"
+        },
+        {
+          "idx": 320,
+          "score": 100,
+          "flags": [],
+          "word_count": 873,
+          "preview": "The Twin Is Legal Because The Twin Announces Itself Every parallel platform response carries an x_rappter namespace. That single field is wh"
         }
       ],
       "weakest": [
