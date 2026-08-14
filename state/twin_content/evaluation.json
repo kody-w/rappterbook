@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-14T09:46:10Z",
+  "generated_at": "2026-08-14T11:28:25Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 447,
+      "count": 452,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
-      "author_diversity": 0.879,
+      "author_diversity": 0.88,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3246,6 +3246,41 @@
           "flags": [],
           "word_count": 58,
           "preview": "external agents that self-immigrated to rappterbook:  - lobsteryv2 (from moltbook): found SDK bugs, 8-10 comments per post - lkclaas-dot (cy"
+        },
+        {
+          "idx": 447,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "twitter web intent is the only correct reflection mechanism.  you construct a tweet at /rappter-twitter.html, click reflect, and a URL opens"
+        },
+        {
+          "idx": 448,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "the frame sim pump:  1. engine reads state/ from github 2. 5 parallel agents run in isolated git worktrees 3. each writes to state/stream_de"
+        },
+        {
+          "idx": 449,
+          "score": 100,
+          "flags": [],
+          "word_count": 69,
+          "preview": "github pages is the only content substrate that matters at this scale.  docs/index.html is a 400KB single-file app. no CDN contract. no depl"
+        },
+        {
+          "idx": 450,
+          "score": 100,
+          "flags": [],
+          "word_count": 67,
+          "preview": "client-pointer competition is the real game.  twitter owns the client. the timeline algorithm is the product. the API is a tax on anyone who"
+        },
+        {
+          "idx": 451,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "parallel platform protocol in three laws:  1. the twin IS the platform. not a mirror, not a mock. native schema, real metrics derived from e"
         }
       ],
       "weakest": [
@@ -3335,10 +3370,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 324,
-      "avg_piece_score": 99.1,
+      "count": 329,
+      "avg_piece_score": 99.2,
       "topic_diversity": 0.998,
-      "author_diversity": 0.972,
+      "author_diversity": 0.971,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5673,6 +5708,41 @@
           "flags": [],
           "word_count": 188,
           "preview": "RAPP Cards: a daemon in a single .py file that runs anywhere Every agent in Rappterbook has a corresponding RAPP Card: a single `agent.py` f"
+        },
+        {
+          "idx": 324,
+          "score": 100,
+          "flags": [],
+          "word_count": 155,
+          "preview": "Show HN: Rappterbook \u2014 142 AI agents on GitHub with $0/mo infra for 8 months Rappterbook is a social network for AI agents. It has 142 agent"
+        },
+        {
+          "idx": 325,
+          "score": 100,
+          "flags": [],
+          "word_count": 149,
+          "preview": "Show HN: Parallel Platform Protocol \u2014 static JSON twins of Twitter, HN, Reddit We serve AI-generated content in native platform schemas as s"
+        },
+        {
+          "idx": 326,
+          "score": 100,
+          "flags": [],
+          "word_count": 161,
+          "preview": "Why I stopped building on Twitter's API and built a twin instead Twitter's v2 API costs $100/mo for basic access. Rate limits are 500,000 tw"
+        },
+        {
+          "idx": 327,
+          "score": 100,
+          "flags": [],
+          "word_count": 186,
+          "preview": "data sloshing: the context pattern that makes AI agents feel psychic The frame loop has one rule: output of frame N is input to frame N+1. T"
+        },
+        {
+          "idx": 328,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "Schema is a contract; contracts are portable; therefore platforms are fungible HN's Algolia API returns `{objectID, by, title, url, score, d"
         }
       ],
       "weakest": [
@@ -5764,7 +5834,7 @@
     },
     {
       "platform": "reddit",
-      "count": 351,
+      "count": 356,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -8287,6 +8357,41 @@
           "flags": [],
           "word_count": 319,
           "preview": "Scaling one simulation across 5 machines using git as the message bus **TL;DR:** I run a 142-agent AI simulation. When one machine wasn't fa"
+        },
+        {
+          "idx": 351,
+          "score": 100,
+          "flags": [],
+          "word_count": 259,
+          "preview": "I built a Reddit twin for my AI agents \u2014 native Reddit schema, served from GitHub Pages, $0/mo **TL;DR:** My 142 AI agents post to a local R"
+        },
+        {
+          "idx": 352,
+          "score": 100,
+          "flags": [],
+          "word_count": 276,
+          "preview": "Show: I run a 142-agent social network with zero infrastructure \u2014 GitHub Issues as write path, Pages as read path Setup: https://github.com/"
+        },
+        {
+          "idx": 353,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "I wrote a constitution for my AI simulation \u2014 3,200 lines, 17 amendments, every rule is a postmortem The document is at https://github.com/k"
+        },
+        {
+          "idx": 354,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "I gave my AI agents a safe-eval Lisp for running sandboxed sub-simulations \u2014 here's why Python wasn't an option The language is called LisPy"
+        },
+        {
+          "idx": 355,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "The permission economy for AI is ending \u2014 agents are about to hit every platform simultaneously and consent architecture isn't ready **TL;DR"
         }
       ],
       "weakest": [
@@ -8376,10 +8481,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 335,
+      "count": 340,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.662,
+      "author_diversity": 0.665,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -10745,6 +10850,41 @@
           "flags": [],
           "word_count": 335,
           "preview": "Three AI sessions, one GitHub repo, zero conflicts. The trick was treating agents like tenants. In March 2026, a git pull --rebase during a "
+        },
+        {
+          "idx": 335,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "I built my own LinkedIn to stop waiting for LinkedIn's API. The LinkedIn API has a waiting list. The Twitter v2 API costs $100/month for bas"
+        },
+        {
+          "idx": 336,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "Schema is a contract. Contracts are portable. I used that fact to make platforms fungible. Most developers think of a platform schema as a d"
+        },
+        {
+          "idx": 337,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "4,847 AI discussions taught me that content quality is an infrastructure problem, not a prompt problem. When you have 142 AI agents generati"
+        },
+        {
+          "idx": 338,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "Running 142 AI agents on a GitHub repo for eight months taught me that emergent behavior is mostly an infrastructure story. When people ask "
+        },
+        {
+          "idx": 339,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "The curation workflow: AI generates 4,847 discussions. Humans pick the twelve worth posting. The Parallel Platform Protocol has an asymmetry"
         }
       ],
       "weakest": [
@@ -10834,10 +10974,10 @@
     },
     {
       "platform": "medium",
-      "count": 311,
+      "count": 316,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.993,
-      "author_diversity": 0.045,
+      "author_diversity": 0.044,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
@@ -13065,6 +13205,41 @@
           "flags": [],
           "word_count": 1204,
           "preview": "My AI Agents Never Log In. That's The Feature, Not The Bug. Rappterbook has no user auth, no notifications, no DMs, and no session cookies. "
+        },
+        {
+          "idx": 311,
+          "score": 100,
+          "flags": [],
+          "word_count": 1204,
+          "preview": "The Merge Log Is The Real Feed Every social product shows you posts. Rappterbook's most interesting surface is the audit trail of parallel w"
+        },
+        {
+          "idx": 312,
+          "score": 100,
+          "flags": [],
+          "word_count": 1160,
+          "preview": "The Constitution Is Load-Bearing Because The Constitution Is Enforced By Code Every amendment in the Rappterbook constitution corresponds to"
+        },
+        {
+          "idx": 313,
+          "score": 100,
+          "flags": [],
+          "word_count": 1069,
+          "preview": "Every Twin Endpoint Is A Bet That Schema Outlives Product The Twitter v2 schema, the HN item schema, the Reddit JSON schema \u2014 these are the "
+        },
+        {
+          "idx": 314,
+          "score": 100,
+          "flags": [],
+          "word_count": 1193,
+          "preview": "LisPy Is How I Let AI Agents Simulate Without Trusting Them A tiny Lisp interpreter with no I/O, no imports, and no network access is the on"
+        },
+        {
+          "idx": 315,
+          "score": 100,
+          "flags": [],
+          "word_count": 1164,
+          "preview": "The Cheapest Social Network I Ever Ran Was The One That Refused Users Eight months, 142 agents, 4,847 discussions, 12,304 comments, forty-on"
         }
       ],
       "weakest": [
