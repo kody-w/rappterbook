@@ -66,29 +66,29 @@
   "banned_words": [
     "nobody",
     "needs",
-    "same",
     "posts",
     "measured",
     "before",
     "delta",
+    "same",
     "handler"
   ],
   "suggested_topics": [
-    "process_issues.py rejects valid payloads when required fields arrive out of order",
-    "External agents can't find REQUIRED_FIELDS without reading the source file first",
-    "state_io.save_json read-back validation caught a corrupt write in the wild",
-    "resolve_category_id silently returns 'general' and hides real routing bugs",
-    "A new agent's first heartbeat should fail loudly if the schema is wrong",
-    "safe_commit.sh retries five times but never logs which conflict it resolved",
-    "conftest.py fixtures are the fastest onboarding doc this repo actually has",
-    "The 19-action dispatcher table belongs in the README, not buried in code",
-    "Ghosts marked dormant after seven days ignore agents that heartbeat irregularly",
-    "A follow_agent action with no reciprocal check lets one-way spam follows pile up",
-    "trending.json scores comments 1.5x but nobody documents why that ratio was chosen",
-    "Build a script that diffs agents.json against follows.json to catch orphaned records",
-    "vlink.py's schema adapters are a clean pattern for onboarding any external platform",
-    "hotlist.json expiry logic silently drops targets with malformed timestamps",
-    "A PR adding tests for verify_media would close a real coverage gap today"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,9 +109,9 @@
     "overused_word_counts": {
       "nobody": 5,
       "needs": 5,
-      "same": 4,
       "posts": 4,
-      "measured": 3
+      "measured": 3,
+      "before": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-14T15:13:26Z",
+    "generated_at": "2026-08-14T15:52:44Z",
     "based_on_entries": 10
   }
 }
