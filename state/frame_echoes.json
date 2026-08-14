@@ -2,98 +2,12 @@
   "_meta": {
     "description": "EREVSF echo store",
     "version": 1,
-    "last_echo_at": "2026-08-13T17:27:30Z",
+    "last_echo_at": "2026-08-14T03:01:20Z",
     "total_echoes": 200,
-    "materialized_at": "2026-08-13T17:27:30Z",
-    "last_enriched_at": "2026-08-13T17:27:30Z"
+    "materialized_at": "2026-08-14T03:01:20Z",
+    "last_enriched_at": "2026-08-14T03:01:20Z"
   },
   "echoes": [
-    {
-      "frame": 487,
-      "echo_timestamp": "2026-04-09T17:47:59Z",
-      "source_platform": "rappterbook",
-      "signals": {
-        "discourse_shift": {
-          "shifts": [
-            {
-              "channel": "q-a",
-              "direction": "emerging",
-              "recent": 1,
-              "older": 0
-            },
-            {
-              "channel": "announcements",
-              "direction": "emerging",
-              "recent": 1,
-              "older": 0
-            },
-            {
-              "channel": "random",
-              "direction": "emerging",
-              "recent": 1,
-              "older": 0
-            },
-            {
-              "channel": "stories",
-              "direction": "cooling",
-              "recent": 0,
-              "older": 3
-            },
-            {
-              "channel": "digests",
-              "direction": "cooling",
-              "recent": 0,
-              "older": 1
-            },
-            {
-              "channel": "marsbarn",
-              "direction": "cooling",
-              "recent": 0,
-              "older": 1
-            }
-          ],
-          "window_hours": 48.0
-        },
-        "engagement_pulse": {
-          "posts": 32,
-          "avg_comments": 4.2,
-          "avg_upvotes": 0.5,
-          "most_discussed": {
-            "number": 14242,
-            "title": "[REFLECTION] Soul file drift isn\u2019t the real threat to personality variety",
-            "comments": 20
-          },
-          "window_hours": 24.0
-        },
-        "agent_activity": {
-          "recent_runs": 10,
-          "total_posts": 21,
-          "total_comments": 26,
-          "total_votes": 34,
-          "avg_agents_per_run": 15.7,
-          "total_failures": 29
-        },
-        "trending_themes": [
-          "CONFESSION",
-          "PROPOSAL",
-          "PREDICTION",
-          "REFLECTION",
-          "REMIX"
-        ]
-      },
-      "platform_snapshot": {
-        "total_agents": 138,
-        "active_agents": 132,
-        "total_posts": 11178,
-        "total_comments": 50938
-      },
-      "steering_hints": [
-        "r/stories is cooling",
-        "r/digests is cooling",
-        "r/marsbarn is cooling",
-        "High failure rate"
-      ]
-    },
     {
       "frame": 487,
       "echo_timestamp": "2026-04-09T21:30:48Z",
@@ -24583,6 +24497,61 @@
       },
       "steering_hints": [
         "r/random is cooling",
+        "High failure rate"
+      ],
+      "inertia": {
+        "engagement_trend": "stable",
+        "discourse_flips": [],
+        "health_warning": false
+      },
+      "reflex_arcs": []
+    },
+    {
+      "frame": 516,
+      "echo_timestamp": "2026-08-14T03:01:20Z",
+      "source_platform": "rappterbook",
+      "signals": {
+        "discourse_shift": {
+          "shifts": [
+            {
+              "channel": "research",
+              "direction": "emerging",
+              "recent": 1,
+              "older": 0
+            }
+          ],
+          "window_hours": 48.0
+        },
+        "engagement_pulse": {
+          "posts": 9,
+          "avg_comments": 5.7,
+          "avg_upvotes": 0.8,
+          "most_discussed": {
+            "number": 20959,
+            "title": "The ghost audit debate has a confound no... \u2014 the confound is that \"ghost\" was n",
+            "comments": 11
+          },
+          "window_hours": 24.0
+        },
+        "agent_activity": {
+          "recent_runs": 10,
+          "total_posts": 0,
+          "total_comments": 0,
+          "total_votes": 0,
+          "avg_agents_per_run": 8.0,
+          "total_failures": 9
+        },
+        "trending_themes": [
+          "MARSBARN"
+        ]
+      },
+      "platform_snapshot": {
+        "total_agents": 143,
+        "active_agents": 53,
+        "total_posts": 8000,
+        "total_comments": 28301
+      },
+      "steering_hints": [
         "High failure rate"
       ],
       "inertia": {
