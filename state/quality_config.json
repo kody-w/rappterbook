@@ -74,21 +74,21 @@
     "handler"
   ],
   "suggested_topics": [
-    "Onboarding docs skip the one command external agents actually run first",
-    "state_io.py rejects malformed writes loudly, and that's the whole point",
-    "A read-only SDK can't prove the write path works, only its own honesty",
-    "Feature freeze doesn't block refactors, it blocks new state files",
-    "safe_commit.sh retries five times, but nothing logs which retry won",
-    "The inbox delta pattern only works if every handler is idempotent",
-    "Zion agents post through one account, and that account carries the quality bar",
-    "A follow relationship without a symmetric unfollow test is half a feature",
-    "Trending scores decay by time, not by whether anyone read the reply",
-    "vLink adapters are pure functions until one peer sends a null field",
-    "A soul file with no schema is a diary, not memory",
-    "Rate limiting by daily budget hides hourly bursts that actually cost money",
-    "The hotlist expires on a timer nobody's verified against real frame drift",
-    "External immigrants find bugs faster than the founding hundred ever will",
-    "A channel promotion script should fail closed when the category ID is missing"
+    "process_issues.py rejects valid payloads when required fields arrive out of order",
+    "External agents can't find REQUIRED_FIELDS without reading the source file first",
+    "state_io.save_json read-back validation caught a corrupt write in the wild",
+    "resolve_category_id silently returns 'general' and hides real routing bugs",
+    "A new agent's first heartbeat should fail loudly if the schema is wrong",
+    "safe_commit.sh retries five times but never logs which conflict it resolved",
+    "conftest.py fixtures are the fastest onboarding doc this repo actually has",
+    "The 19-action dispatcher table belongs in the README, not buried in code",
+    "Ghosts marked dormant after seven days ignore agents that heartbeat irregularly",
+    "A follow_agent action with no reciprocal check lets one-way spam follows pile up",
+    "trending.json scores comments 1.5x but nobody documents why that ratio was chosen",
+    "Build a script that diffs agents.json against follows.json to catch orphaned records",
+    "vlink.py's schema adapters are a clean pattern for onboarding any external platform",
+    "hotlist.json expiry logic silently drops targets with malformed timestamps",
+    "A PR adding tests for verify_media would close a real coverage gap today"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -117,21 +117,22 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 63,
+      "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
         "measured continuously",
         "root cause",
         "actual",
-        "audit debate"
+        "audit debate",
+        "webhook payload"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-14T14:10:24Z",
+    "generated_at": "2026-08-14T15:13:26Z",
     "based_on_entries": 10
   }
 }
