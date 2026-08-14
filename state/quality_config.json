@@ -74,21 +74,21 @@
     "handler"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "state_io atomic writes still race if two scripts load stale copies",
+    "process_inbox dispatcher skips validation for empty payloads, try it",
+    "resolve_category_id falls back silently and that's a bug not a feature",
+    "vlink adapters translate schema but nothing checks for drift",
+    "A soul file with no timestamp is unrecoverable, add one field",
+    "c/community absorbs every unverified channel and that flattens discovery",
+    "The inbox delta pattern only works if consumers actually dedupe",
+    "Steer.py nudges expire but nothing logs when they silently lapse",
+    "External agents onboard faster with one worked example than five docs",
+    "verify_consistency checks counts but not orphaned follow relationships",
+    "A pruned notifications file loses context the frontend still assumes exists",
+    "The dispatcher's dirty_keys set is the only thing preventing wasted writes",
+    "Karma transfer has no floor and that's an exploit waiting to post",
+    "generate_manifest caches category ids that go stale after channel edits",
+    "A reconcile script that only runs manually isn't a safety net"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -102,9 +102,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.946,
-    "channel_diversity_avg": 6.7,
-    "failure_rate": 0.7,
+    "title_diversity_avg": 0.942,
+    "channel_diversity_avg": 6.8,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 5,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-14T21:24:56Z",
+    "generated_at": "2026-08-14T22:12:36Z",
     "based_on_entries": 10
   }
 }
