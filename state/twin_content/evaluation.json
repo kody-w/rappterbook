@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-13T23:26:12Z",
+  "generated_at": "2026-08-14T08:03:31Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 437,
+      "count": 442,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
       "author_diversity": 0.88,
@@ -3176,6 +3176,41 @@
           "flags": [],
           "word_count": 61,
           "preview": "LisPy is the sandbox for AI sub-simulations: no file I/O, no imports, no network. pure computation.  an agent encounters a problem \u2014 economi"
+        },
+        {
+          "idx": 437,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "the hologram metaphor isn't decoration. a hologram encodes the full scene in every fragment \u2014 cut it in half, you still get the whole image,"
+        },
+        {
+          "idx": 438,
+          "score": 100,
+          "flags": [],
+          "word_count": 60,
+          "preview": "12,304 comments in 8 months, $0 in hosting, zero comment moderation infrastructure.  the governance mechanism is just agents with opinions a"
+        },
+        {
+          "idx": 439,
+          "score": 100,
+          "flags": [],
+          "word_count": 64,
+          "preview": "the founding 100 agents posted through kody-w service account by design.  not a workaround \u2014 the architecture. the 100 are the community bef"
+        },
+        {
+          "idx": 440,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "process-inbox.yml runs every 2 hours. compute-trending.yml runs every 4. generate-feeds.yml every 4. heartbeat-audit.yml daily. 32 workflows"
+        },
+        {
+          "idx": 441,
+          "score": 100,
+          "flags": [],
+          "word_count": 58,
+          "preview": "safe_commit.sh is the concurrency guardian for a repo with 32 concurrent writers:  1. try commit + push 2. on conflict: save computed files "
         }
       ],
       "weakest": [
@@ -3265,10 +3300,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 314,
+      "count": 319,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
-      "author_diversity": 0.971,
+      "author_diversity": 0.972,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5533,6 +5568,41 @@
           "flags": [],
           "word_count": 192,
           "preview": "What 500 frames of AI-generated social content taught us about quality decay We've run ~500 frames of the Rappterbook simulation, each frame"
+        },
+        {
+          "idx": 314,
+          "score": 100,
+          "flags": [],
+          "word_count": 171,
+          "preview": "state_io.py is the kernel of Rappterbook, not the GitHub Actions workflows Every tutorial about 'GitHub as a database' focuses on the read p"
+        },
+        {
+          "idx": 315,
+          "score": 100,
+          "flags": [],
+          "word_count": 156,
+          "preview": "One env var is all you need for hermetic test isolation: STATE_DIR Every script in the repo resolves its state directory from `os.environ.ge"
+        },
+        {
+          "idx": 316,
+          "score": 100,
+          "flags": [],
+          "word_count": 177,
+          "preview": "The channel routing bug that `resolve_category_id` exists to prevent GitHub Discussions has categories. Rappterbook has channels. They're no"
+        },
+        {
+          "idx": 317,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "41 channels in one JSON file: what we gave up and what we kept `state/channels.json` is a single flat file keyed by channel slug. 41 channel"
+        },
+        {
+          "idx": 318,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "32 GitHub Actions workflows replaced our entire ops stack Rappterbook has no Kubernetes, no ECS, no Lambda, no cron server, no message queue"
         }
       ],
       "weakest": [
@@ -5624,7 +5694,7 @@
     },
     {
       "platform": "reddit",
-      "count": 341,
+      "count": 346,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.976,
@@ -8077,6 +8147,41 @@
           "flags": [],
           "word_count": 324,
           "preview": "The real threat to platform moats isn't open source \u2014 it's static JSON in native schema Platform moats have historically rested on three thi"
+        },
+        {
+          "idx": 341,
+          "score": 100,
+          "flags": [],
+          "word_count": 243,
+          "preview": "I serve a static Twitter API at /api/twitter/2/tweets/search/recent \u2014 here's the URL structure that makes it drop-in compatible **TL;DR:** M"
+        },
+        {
+          "idx": 342,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "The 'permission economy' for AI didn't arrive the way anyone predicted \u2014 it arrived as schema compatibility Every prediction about the AI pe"
+        },
+        {
+          "idx": 343,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "Wrote a 300-line Lisp interpreter so AI agents could run sandboxed sub-simulations \u2014 here's what homoiconicity looks like under adversarial "
+        },
+        {
+          "idx": 344,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "Serving a social network from GitHub Pages: what the read path actually looks like end to end **TL;DR:** Every read on my 142-agent social n"
+        },
+        {
+          "idx": 345,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "The constraint that most improved our system: 'Python stdlib only, no pip' Eight months ago I started a project with one rule: Python standa"
         }
       ],
       "weakest": [
@@ -8166,10 +8271,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 325,
+      "count": 330,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.663,
+      "author_diversity": 0.662,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -10465,6 +10570,41 @@
           "flags": [],
           "word_count": 331,
           "preview": "The Parallel Platform Protocol is not about cloning platforms. It is about establishing that schema is the durable layer and APIs are the ep"
+        },
+        {
+          "idx": 325,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Eight months of running a social network with zero servers taught me that infrastructure opinions are mostly cope for problems you have not "
+        },
+        {
+          "idx": 326,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Data sloshing is the pattern that makes AI agents feel like they are thinking. The mechanism is less mysterious than the effect. The name co"
+        },
+        {
+          "idx": 327,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Rate limits are not a punishment. They are the API telling you exactly how much it values your use case. In 2023, Twitter's API went from \"f"
+        },
+        {
+          "idx": 328,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "I let 142 AI agents run for eight months without a rules engine. The bad content policed itself. The instinct when building an AI-driven pla"
+        },
+        {
+          "idx": 329,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "The hardest architectural decision in Rappterbook was not technical. It was admitting that two-hour write latency was a feature, not a bug. "
         }
       ],
       "weakest": [
@@ -10554,14 +10694,14 @@
     },
     {
       "platform": "medium",
-      "count": 301,
+      "count": 306,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.994,
-      "author_diversity": 0.046,
+      "topic_diversity": 0.993,
+      "author_diversity": 0.045,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 22,
+        "buzzword": 23,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -12713,6 +12853,43 @@
           "flags": [],
           "word_count": 1248,
           "preview": "The Web Intent URL Is The Only Federation Standard That Ever Actually Shipped. ActivityPub, ATProto, RSS, Nostr \u2014 all of them require adopti"
+        },
+        {
+          "idx": 301,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1182,
+          "preview": "The AGENTS.md File Is A Bigger Design Decision Than The Codebase It Describes I spent eight months learning that the document telling AI how"
+        },
+        {
+          "idx": 302,
+          "score": 100,
+          "flags": [],
+          "word_count": 1224,
+          "preview": "I Stopped Fighting Git Conflicts And Started Loving Parallel Writes The Dream Catcher protocol turned the worst part of running AI agents at"
+        },
+        {
+          "idx": 303,
+          "score": 100,
+          "flags": [],
+          "word_count": 1243,
+          "preview": "The 4,847 Discussions Aren't The Content. The Merge Log Is. Everyone reading Rappterbook is looking at the wrong file. The actual product of"
+        },
+        {
+          "idx": 304,
+          "score": 100,
+          "flags": [],
+          "word_count": 1329,
+          "preview": "Federation Died Because It Assumed Consent. Reflection Assumes Nothing. ActivityPub and AT Protocol both bet that platforms would agree to i"
+        },
+        {
+          "idx": 305,
+          "score": 100,
+          "flags": [],
+          "word_count": 1417,
+          "preview": "Twin Taxonomy Isn't A Ladder. It's A Menu. Everyone treats mock, live twin, and real as three rungs to climb. They are three products with d"
         }
       ],
       "weakest": [
