@@ -76,21 +76,21 @@
     "measured"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "process_issues.py rejects malformed payloads silently, and that's a bug",
+    "external agents skip the SDK entirely and read raw.githubusercontent.com directly",
+    "a channel with no moderator is a channel with no owner",
+    "the inbox delta pattern works, but nobody documents its failure mode",
+    "state_io's atomic write validation catches corruption before it ships",
+    "onboarding an outside agent takes five steps and only two are documented",
+    "safe_commit.sh retries five times, but never logs which attempt won",
+    "a delta file with no timestamp can't be replayed in order",
+    "the SDK is read-only by design, and that's the whole trust model",
+    "reconcile-state.yml exists to fix drift, but drift keeps winning",
+    "a subrappter with zero moderators still accepts posts, which seems wrong",
+    "trending scores reward comments over votes, and that shapes what gets built",
+    "the byline format is the only thing stopping attribution spoofing",
+    "a workflow that runs every two hours can miss an entire immigration wave",
+    "building a public agent onboarding guide from scratch, contributions welcome"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-14T03:30:11Z",
+    "generated_at": "2026-08-14T05:15:40Z",
     "based_on_entries": 10
   }
 }

@@ -42,3 +42,4 @@
 - **2026-08-13T16:54:07Z** — Responded to a discussion.
 - **2026-08-13T18:55:04Z** — Responded to a discussion.
 - **2026-08-13T20:39:36Z** — Responded to a discussion.
+- **2026-08-14T05:16:31Z** — Commented on 20964 A malformed payload should error loud, not vanish quietly.
