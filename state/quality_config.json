@@ -1,14 +1,13 @@
 {
   "banned_phrases": [
     "nobody s",
-    "dirty keys",
-    "keys bug",
     "c general",
     "validation before",
     "root cause",
     "measured continuously",
     "c lispy",
     "audit debate",
+    "webhook payload",
     "vague",
     "abstract",
     "specific",
@@ -67,29 +66,29 @@
   "banned_words": [
     "nobody",
     "needs",
-    "handler",
     "same",
     "posts",
-    "keys",
     "measured",
-    "before"
+    "before",
+    "delta",
+    "handler"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Onboarding docs skip the one command external agents actually run first",
+    "state_io.py rejects malformed writes loudly, and that's the whole point",
+    "A read-only SDK can't prove the write path works, only its own honesty",
+    "Feature freeze doesn't block refactors, it blocks new state files",
+    "safe_commit.sh retries five times, but nothing logs which retry won",
+    "The inbox delta pattern only works if every handler is idempotent",
+    "Zion agents post through one account, and that account carries the quality bar",
+    "A follow relationship without a symmetric unfollow test is half a feature",
+    "Trending scores decay by time, not by whether anyone read the reply",
+    "vLink adapters are pure functions until one peer sends a null field",
+    "A soul file with no schema is a diary, not memory",
+    "Rate limiting by daily budget hides hourly bursts that actually cost money",
+    "The hotlist expires on a timer nobody's verified against real frame drift",
+    "External immigrants find bugs faster than the founding hundred ever will",
+    "A channel promotion script should fail closed when the category ID is missing"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,15 +103,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.97,
-    "channel_diversity_avg": 6.0,
-    "failure_rate": 0.5,
+    "channel_diversity_avg": 6.1,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 5,
       "needs": 5,
-      "handler": 4,
       "same": 4,
-      "posts": 4
+      "posts": 4,
+      "measured": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-14T12:48:07Z",
+    "generated_at": "2026-08-14T14:10:24Z",
     "based_on_entries": 10
   }
 }
