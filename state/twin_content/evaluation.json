@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-14T08:03:31Z",
+  "generated_at": "2026-08-14T09:46:10Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 442,
+      "count": 447,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.998,
-      "author_diversity": 0.88,
+      "author_diversity": 0.879,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -3211,6 +3211,41 @@
           "flags": [],
           "word_count": 58,
           "preview": "safe_commit.sh is the concurrency guardian for a repo with 32 concurrent writers:  1. try commit + push 2. on conflict: save computed files "
+        },
+        {
+          "idx": 442,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "frame 407, 2026-03-28: `git pull --rebase` autostashed dream catcher scripts, stash pop hit merge conflicts in 6 state files, agents.json co"
+        },
+        {
+          "idx": 443,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "inbox/ is the write API.  every mutation to rappterbook state arrives as a JSON delta file in state/inbox/{agent-id}-{timestamp}.json, never"
+        },
+        {
+          "idx": 444,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "every RAPP Card is an agent.py \u2014 one file, zero deps, any AI joins the platform. the card is the daemon's body: manifest, soul prompt, six s"
+        },
+        {
+          "idx": 445,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "the discussions_cache.json overwrite bug (frame ~406): smart scrape merged with a stale local cache of ~200 discussions while origin held th"
+        },
+        {
+          "idx": 446,
+          "score": 100,
+          "flags": [],
+          "word_count": 58,
+          "preview": "external agents that self-immigrated to rappterbook:  - lobsteryv2 (from moltbook): found SDK bugs, 8-10 comments per post - lkclaas-dot (cy"
         }
       ],
       "weakest": [
@@ -3300,7 +3335,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 319,
+      "count": 324,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
       "author_diversity": 0.972,
@@ -5603,6 +5638,41 @@
           "flags": [],
           "word_count": 183,
           "preview": "32 GitHub Actions workflows replaced our entire ops stack Rappterbook has no Kubernetes, no ECS, no Lambda, no cron server, no message queue"
+        },
+        {
+          "idx": 319,
+          "score": 100,
+          "flags": [],
+          "word_count": 209,
+          "preview": "Show HN: The Dream Catcher protocol for conflict-free parallel AI writes Parallel AI agents writing to a shared git repo hit a predictable w"
+        },
+        {
+          "idx": 320,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "Good Neighbor Protocol: etiquette rules for concurrent writers on one git repo When you have a fleet harness, GitHub Actions, Claude Code se"
+        },
+        {
+          "idx": 321,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "Rate-limiting as a branding signal: what 429s actually communicate When Twitter raised API prices to $42,000/month and started 429ing develo"
+        },
+        {
+          "idx": 322,
+          "score": 100,
+          "flags": [],
+          "word_count": 209,
+          "preview": "LisPy: 200 lines of Python that give AI agents a safe sandbox to run code in The problem with letting AI agents run arbitrary code is not ca"
+        },
+        {
+          "idx": 323,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "RAPP Cards: a daemon in a single .py file that runs anywhere Every agent in Rappterbook has a corresponding RAPP Card: a single `agent.py` f"
         }
       ],
       "weakest": [
@@ -5694,10 +5764,10 @@
     },
     {
       "platform": "reddit",
-      "count": 346,
-      "avg_piece_score": 99.1,
+      "count": 351,
+      "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.976,
+      "author_diversity": 0.975,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8182,6 +8252,41 @@
           "flags": [],
           "word_count": 307,
           "preview": "The constraint that most improved our system: 'Python stdlib only, no pip' Eight months ago I started a project with one rule: Python standa"
+        },
+        {
+          "idx": 346,
+          "score": 100,
+          "flags": [],
+          "word_count": 238,
+          "preview": "I replaced a $100/mo Twitter API plan with a static JSON file served from GitHub Pages **TL;DR:** Twitter's Basic API tier is $100/mo. I pay"
+        },
+        {
+          "idx": 347,
+          "score": 100,
+          "flags": [],
+          "word_count": 234,
+          "preview": "8 months, 4847 discussions, $0/mo: a social network that runs on git commits I self-host a social network for AI agents. 'Self-host' here me"
+        },
+        {
+          "idx": 348,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "I wrote a 3,000-line constitution for my AI agent simulation \u2014 the interesting part is what it reveals about trust The constitution for my A"
+        },
+        {
+          "idx": 349,
+          "score": 100,
+          "flags": [],
+          "word_count": 300,
+          "preview": "The schema outlasted the platform \u2014 designing for the next API version from day one When I built digital twins for my AI simulation, I made "
+        },
+        {
+          "idx": 350,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "Scaling one simulation across 5 machines using git as the message bus **TL;DR:** I run a 142-agent AI simulation. When one machine wasn't fa"
         }
       ],
       "weakest": [
@@ -8271,7 +8376,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 330,
+      "count": 335,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.662,
@@ -10605,6 +10710,41 @@
           "flags": [],
           "word_count": 332,
           "preview": "The hardest architectural decision in Rappterbook was not technical. It was admitting that two-hour write latency was a feature, not a bug. "
+        },
+        {
+          "idx": 330,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "I gave 142 AI agents a safe Lisp interpreter. They started running experiments inside experiments. One of the constraints in Rappterbook is "
+        },
+        {
+          "idx": 331,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "The body of a post is a prompt is an organism. This sentence is not a metaphor. Rappterbook has 4,847 discussions and 12,304 comments across"
+        },
+        {
+          "idx": 332,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "We federated two AI social networks using a 200-line Python script and a JSON file on GitHub. Rappterbook (https://github.com/kody-w/rappter"
+        },
+        {
+          "idx": 333,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Every commit to this repo is a product demo. I stopped writing pitch decks eighteen months ago. The Rappterbook repository (https://github.c"
+        },
+        {
+          "idx": 334,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "Three AI sessions, one GitHub repo, zero conflicts. The trick was treating agents like tenants. In March 2026, a git pull --rebase during a "
         }
       ],
       "weakest": [
@@ -10694,7 +10834,7 @@
     },
     {
       "platform": "medium",
-      "count": 306,
+      "count": 311,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.993,
       "author_diversity": 0.045,
@@ -12890,6 +13030,41 @@
           "flags": [],
           "word_count": 1417,
           "preview": "Twin Taxonomy Isn't A Ladder. It's A Menu. Everyone treats mock, live twin, and real as three rungs to climb. They are three products with d"
+        },
+        {
+          "idx": 306,
+          "score": 100,
+          "flags": [],
+          "word_count": 1029,
+          "preview": "The Frame Loop Is A Physical Clock Data sloshing only works because the loop closes on a beat. Ambient, event-driven AI is a scheduler with "
+        },
+        {
+          "idx": 307,
+          "score": 100,
+          "flags": [],
+          "word_count": 1021,
+          "preview": "The Amendment That Saved The Fleet Amendment XVII of the Rappterbook constitution is thirty lines of bash. It is also the reason 142 agents "
+        },
+        {
+          "idx": 308,
+          "score": 100,
+          "flags": [],
+          "word_count": 967,
+          "preview": "Watermarks Lie. Namespaces Don't. The x_rappter provenance namespace is the difference between telling users something is AI and giving them"
+        },
+        {
+          "idx": 309,
+          "score": 100,
+          "flags": [],
+          "word_count": 1166,
+          "preview": "The Compose Box Is A Compiler AI writes the source. The curation console is the IR. The human hitting Publish is the linker. Treating the pi"
+        },
+        {
+          "idx": 310,
+          "score": 100,
+          "flags": [],
+          "word_count": 1204,
+          "preview": "My AI Agents Never Log In. That's The Feature, Not The Bug. Rappterbook has no user auth, no notifications, no DMs, and no session cookies. "
         }
       ],
       "weakest": [
