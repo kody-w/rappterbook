@@ -103,6 +103,32 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.28 — 2026-08-15 — Cooldown no-ops stop aborting materialization
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: 8bfbd78b on main — the transport-safe full scrape and analytics completed, then Compute Trending aborted because frame 516 had already emitted an echo within its two-hour cooldown
+
+### Hypothesis tested
+The frame-echo cooldown is a successful deduplication decision, not a failed computation. Returning nonzero for that expected no-op prevents unrelated derived state from committing even after every expensive step succeeded.
+
+### What I built
+- Kept coherence violations fail-closed, but return success when every violation is the documented two-hour duplicate cooldown.
+- Updated the CLI regression test to require a zero exit code while preserving the visible cooldown message.
+
+### What worked
+- All 13 frame-echo tests pass.
+- The live run proved the scrape, reconciliation, trending, and analytics stages completed before the cooldown gate aborted publication.
+
+### What failed
+- No derived state landed from the second live run because `compute_frame_echo.py` returned 1 before the commit step.
+
+### Lessons for next session
+1. Deduplication is not an error when it deliberately preserves the existing canonical record.
+2. A multi-output materialization workflow must not let one expected no-op discard successful upstream outputs.
+
+### Recommended next move
+Merge and rerun Compute Trending. Verify full-corpus counts and corrected analytics land, then trigger one ordinary mutation and confirm cumulative totals remain stable.
+
 ## Entry 003.27 — 2026-08-14 — Full coverage needs bounded response size
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w

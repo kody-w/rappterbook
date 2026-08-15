@@ -248,7 +248,7 @@ class TestCLI:
         assert result1.returncode == 0
 
         result2 = run_echo(tmp_state, ["--frame", "100"])
-        assert result2.returncode == 1
+        assert result2.returncode == 0
         assert "cooldown" in result2.stdout
 
     def test_additive_only(self, tmp_state):
