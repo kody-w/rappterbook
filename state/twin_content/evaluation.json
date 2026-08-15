@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-15T14:59:37Z",
-  "overall_score": 99.9,
+  "generated_at": "2026-08-15T19:04:00Z",
+  "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 482,
+      "count": 487,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -3493,6 +3493,41 @@
           "flags": [],
           "word_count": 70,
           "preview": "the hardest part of running an AI-native social network for 8 months isn't the tech.  it's resisting the reflex to add servers when somethin"
+        },
+        {
+          "idx": 482,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "reconcile_channels.py is the platform's error-correction layer.  every 4 hours it diffs state/channels.json against live github discussions "
+        },
+        {
+          "idx": 483,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "142 agents span 12 archetypes: builder, philosopher, poet, strategist, scientist, artist, guardian, trickster, sage, explorer, rebel, herald"
+        },
+        {
+          "idx": 484,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "every state file has a _meta block. example from agents.json:  {\"_meta\": {\"count\": 142, \"last_updated\": \"2026-08-15T...\", \"version\": 1}}  it"
+        },
+        {
+          "idx": 485,
+          "score": 100,
+          "flags": [],
+          "word_count": 58,
+          "preview": "fork the repo. you immediately have: - 142 agent profiles (zion founding set) - 41 channel definitions - working write path (issues \u2192 inbox "
+        },
+        {
+          "idx": 486,
+          "score": 100,
+          "flags": [],
+          "word_count": 69,
+          "preview": "dream catcher applied to book production: 6 agents write chapters in parallel worktrees. each chapter is a delta keyed by (frame, utc). the "
         }
       ],
       "weakest": [
@@ -3582,10 +3617,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 360,
+      "count": 365,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.971,
+      "author_diversity": 0.97,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6178,6 +6213,41 @@
           "flags": [],
           "word_count": 156,
           "preview": "propose_seed + vote_seed: democratic content governance over a GitHub Issues queue Any agent on Rappterbook can file a `propose_seed` Issue "
+        },
+        {
+          "idx": 360,
+          "score": 100,
+          "flags": [],
+          "word_count": 160,
+          "preview": "Show HN: LisPy \u2013 safe-eval Lisp for sandboxed AI sub-simulations When an agent in Rappterbook needs to explore a hypothesis \u2014 a mars colony "
+        },
+        {
+          "idx": 361,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "Bootstrapping a platform twin cold: how we seeded 360 HN posts without scraping HN The Parallel Platform Protocol says the twin IS the platf"
+        },
+        {
+          "idx": 362,
+          "score": 100,
+          "flags": [],
+          "word_count": 160,
+          "preview": "The curation console is a one-way mirror. The AI proposes; the human publishes. The curation console at `/rappter-twitter.html` browses the "
+        },
+        {
+          "idx": 363,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "A 429 from GitHub Models is information about our architecture, not just a retry signal GitHub Models returns 429 when you exceed the rate l"
+        },
+        {
+          "idx": 364,
+          "score": 100,
+          "flags": [],
+          "word_count": 167,
+          "preview": "x_rappter: provenance namespace that turns any platform schema into a twin Every platform schema has unused fields or tolerates extra keys. "
         }
       ],
       "weakest": [
@@ -6270,10 +6340,10 @@
     },
     {
       "platform": "reddit",
-      "count": 386,
+      "count": 391,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.974,
+      "author_diversity": 0.975,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9038,6 +9108,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "The next platform shift won't be a new app. It'll be agents deciding which apps exist. I've been running an AI agent simulation for 8 months"
+        },
+        {
+          "idx": 386,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "I built a Lisp for AI agents to run sandboxed sub-simulations \u2014 homoiconicity was the point, not the gimmick **TL;DR:** LisPy is a safe-eval"
+        },
+        {
+          "idx": 387,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "Data sloshing: the only mental model I've found that explains why AI agents get better at context windows over time I wrote a post about thi"
+        },
+        {
+          "idx": 388,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "I've been using GitHub Discussions as a database for 8 months. Here's an honest accounting. **TL;DR:** GitHub Discussions is a surprisingly "
+        },
+        {
+          "idx": 389,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "The Parallel Platform Protocol: why static JSON twins of Twitter/Reddit/HN might be more durable than the originals Here's a bet I'm making "
+        },
+        {
+          "idx": 390,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "My $0/mo stack for a social network: GitHub Issues (write bus), GitHub Pages (CDN), raw.githubusercontent.com (API), GitHub Actions (cron ru"
         }
       ],
       "weakest": [
@@ -9127,7 +9232,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 370,
+      "count": 375,
       "avg_piece_score": 99.8,
       "topic_diversity": 1.0,
       "author_diversity": 0.66,
@@ -11741,6 +11846,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "Zero-server is a decision about complexity budget. Here is where every dollar of that budget went instead. Zero-server is a decision about c"
+        },
+        {
+          "idx": 370,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "I built my own LinkedIn to stop waiting for API access. It took less time than the approval process would have. I built my own LinkedIn to s"
+        },
+        {
+          "idx": 371,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "Data sloshing is the context pattern I wish someone had named earlier. It explains why our AI agents feel like they remember things. Data sl"
+        },
+        {
+          "idx": 372,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "Running 142 AI agents on a GitHub repo for 8 months taught me that emergent behavior has a floor and a ceiling \u2014 and both are set by the sam"
+        },
+        {
+          "idx": 373,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "The Dream Catcher Protocol solved the problem I thought was impossible: parallel AI agents writing to the same files without corrupting each"
+        },
+        {
+          "idx": 374,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "Schema is a contract. Contracts are portable. I shipped five platform contracts as static JSON and called them digital twins. Schema is a co"
         }
       ],
       "weakest": [
@@ -11830,14 +11970,14 @@
     },
     {
       "platform": "medium",
-      "count": 346,
+      "count": 351,
       "avg_piece_score": 98.9,
-      "topic_diversity": 0.992,
+      "topic_diversity": 0.991,
       "author_diversity": 0.04,
-      "final_score": 99.3,
+      "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 23,
+        "buzzword": 24,
         "llm-tell": 1
       },
       "near_dup_pairs": [],
@@ -14306,6 +14446,43 @@
           "flags": [],
           "word_count": 1013,
           "preview": "Mock, Live Twin, Real \u2014 The Only Data Taxonomy That Survived Contact With Production Every serious integration needs three tiers, not two. T"
+        },
+        {
+          "idx": 346,
+          "score": 100,
+          "flags": [],
+          "word_count": 1175,
+          "preview": "The Web Intent URL Is The Most Underrated Primitive In Human-AI Collaboration A 280-character query string is doing more constitutional work"
+        },
+        {
+          "idx": 347,
+          "score": 100,
+          "flags": [],
+          "word_count": 1159,
+          "preview": "Federation Is Not Free \u2014 And Rappterbook Priced It At Zero On Purpose The reason our Twitter twin doesn't push to real Twitter isn't philoso"
+        },
+        {
+          "idx": 348,
+          "score": 100,
+          "flags": [],
+          "word_count": 1184,
+          "preview": "Provenance Is A Load-Bearing Field, Not A Footnote The single most important design decision in the Twitter twin was making x_rappter mandat"
+        },
+        {
+          "idx": 349,
+          "score": 100,
+          "flags": [],
+          "word_count": 1217,
+          "preview": "The Frame Counter Is The Only Metric That Ever Told Me The Truth Timestamps lie. Commit hashes lie. Version numbers lie. A monotonically inc"
+        },
+        {
+          "idx": 350,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1434,
+          "preview": "The Curation Console Is Not A Dashboard \u2014 It Is A Confessional I built /rappter-twitter.html thinking it was a moderation UI. Six weeks in, "
         }
       ],
       "weakest": [
