@@ -1,6 +1,6 @@
 import json
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -28,48 +28,75 @@ def test_flat_cache_comment_count_drives_engagement_metrics(tmp_path, monkeypatc
             {"created_at": today, "comment_count": 0, "upvotes": 0},
         ],
     }))
+    (tmp_path / "stats.json").write_text(json.dumps({"total_comments": 3}))
     monkeypatch.setattr(compute_analytics, "STATE_DIR", tmp_path)
 
-    summary = compute_analytics.compute_analytics()["summary"]
+    analytics = compute_analytics.compute_analytics()
+    summary = analytics["summary"]
 
     assert summary["avg_thread_depth"] == 3.0
     assert summary["reply_rate_pct"] == 50.0
-    assert summary["total_comments_full_corpus"] == 3
+    assert summary["total_comments_all_time_authoritative"] == 3
+    assert summary["total_comments_30d_full_corpus"] == 3
     assert summary["total_comments_retained_window"] == 3
-    assert summary["total_comments"] == summary["total_comments_full_corpus"]
+    assert summary["total_comments"] == summary["total_comments_all_time_authoritative"]
+    assert "total_comments_full_corpus" not in summary
+    assert analytics["corpus"]["authoritative_total_comments_source"] == "stats.json.total_comments"
+    assert analytics["corpus"]["observed_total_comments_all_time"] == 3
+    assert analytics["corpus"]["stats_total_comments_parity"] is True
 
 
-def test_retained_window_comments_are_reported_separately(tmp_path, monkeypatch):
-    """Retained comment rows must not masquerade as full-corpus thread totals."""
+def test_old_threads_prove_30d_vs_all_time_comment_scopes(tmp_path, monkeypatch):
+    """All-time authority must include old threads; 30d totals must not."""
     today = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    old_day = (datetime.now(timezone.utc) - timedelta(days=120)).strftime("%Y-%m-%dT%H:%M:%SZ")
     (tmp_path / "posted_log.json").write_text(json.dumps({
         "posts": [{"timestamp": today, "channel": "general", "author": "agent-a"}],
         "comments": [{"timestamp": today, "author": "agent-a"}],
     }))
+    (tmp_path / "stats.json").write_text(json.dumps({"total_comments": 9}))
     (tmp_path / "cache_shards").mkdir()
     (tmp_path / "cache_shards" / "index.json").write_text(json.dumps({
-        "_meta": {"shard_size": 250, "total_shards": 1, "total_discussions": 1},
-        "shards": {"0": {"file": "shard_00000.json", "body_file": "body_00000.json", "count": 1}},
+        "_meta": {"shard_size": 250, "total_shards": 1, "total_discussions": 2},
+        "shards": {"0": {"file": "shard_00000.json", "body_file": "body_00000.json", "count": 2}},
     }))
     (tmp_path / "cache_shards" / "shard_00000.json").write_text(json.dumps({
-        "_meta": {"range_start": 0, "range_end": 249, "count": 1},
-        "discussions": [{
-            "number": 1,
-            "title": "Thread",
-            "created_at": today,
-            "category_slug": "general",
-            "author_login": "agent-a",
-            "upvotes": 0,
-            "downvotes": 0,
-            "comment_count": 9,
-            "url": "https://example.test/1",
-        }],
+        "_meta": {"range_start": 0, "range_end": 249, "count": 2},
+        "discussions": [
+            {
+                "number": 1,
+                "title": "Ancient Thread",
+                "created_at": old_day,
+                "category_slug": "general",
+                "author_login": "agent-a",
+                "upvotes": 0,
+                "downvotes": 0,
+                "comment_count": 8,
+                "url": "https://example.test/1",
+            },
+            {
+                "number": 2,
+                "title": "Fresh Thread",
+                "created_at": today,
+                "category_slug": "general",
+                "author_login": "agent-a",
+                "upvotes": 0,
+                "downvotes": 0,
+                "comment_count": 1,
+                "url": "https://example.test/2",
+            },
+        ],
     }))
     (tmp_path / "cache_shards" / "body_00000.json").write_text(json.dumps({}))
     monkeypatch.setattr(compute_analytics, "STATE_DIR", tmp_path)
 
-    summary = compute_analytics.compute_analytics()["summary"]
+    analytics = compute_analytics.compute_analytics()
+    summary = analytics["summary"]
 
-    assert summary["total_comments_full_corpus"] == 9
+    assert summary["total_comments_all_time_authoritative"] == 9
+    assert summary["total_comments_30d_full_corpus"] == 1
     assert summary["total_comments_retained_window"] == 1
-    assert summary["retained_comment_coverage_pct"] < 100
+    assert analytics["corpus"]["authoritative_total_comments_source"] == "stats.json.total_comments"
+    assert analytics["corpus"]["observed_total_comments_all_time"] == 9
+    assert analytics["corpus"]["stats_total_comments"] == 9
+    assert analytics["corpus"]["stats_total_comments_parity"] is True

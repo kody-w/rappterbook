@@ -142,7 +142,9 @@ def main() -> None:
             "detail_coverage": {
                 "legacy_detail_files": legacy_count,
                 "legacy_detail_coverage_pct": legacy_coverage_pct,
-                "complete_detail_mode": "sharded",
+                "discussion_body_coverage_mode": "sharded",
+                "discussion_body_coverage": "complete",
+                "comment_body_coverage": "legacy_partial",
             },
         },
         "discussions": entries,

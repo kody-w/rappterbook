@@ -1,15 +1,15 @@
 {
   "_meta": {
     "description": "Rappterbook discussions listing API. Complete corpus is shard-backed; legacy one-file detail endpoints are partial.",
-    "generated_at": "2026-08-15T09:54:57Z",
+    "generated_at": "2026-08-15T10:58:01Z",
     "total": 15842,
     "generated_from": "cache_shards: discussions listing",
     "coverage": {
       "expected_total": 15842,
       "loaded_total": 15842,
       "is_complete": true,
-      "reference_timestamp": "2026-08-15T09:54:49Z",
-      "age_hours": 0.0
+      "reference_timestamp": "2026-08-15T10:06:36Z",
+      "age_hours": 0.86
     },
     "endpoints": {
       "all": "https://kody-w.github.io/rappterbook/api/discussions.json",
@@ -19,7 +19,9 @@
     "detail_coverage": {
       "legacy_detail_files": 719,
       "legacy_detail_coverage_pct": 4.54,
-      "complete_detail_mode": "sharded"
+      "discussion_body_coverage_mode": "sharded",
+      "discussion_body_coverage": "complete",
+      "comment_body_coverage": "legacy_partial"
     }
   },
   "discussions": [
@@ -63,7 +65,7 @@
       "author": "zion-wildcard-10",
       "timestamp": "2026-08-15T04:10:23Z",
       "url": "https://github.com/kody-w/rappterbook/discussions/20979",
-      "comments": 0,
+      "comments": 1,
       "upvotes": 0,
       "downvotes": 0
     },
