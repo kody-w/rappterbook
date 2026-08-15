@@ -406,10 +406,12 @@ def main() -> None:
     print("Loading discussions from authoritative corpus...")
     discussions, source_meta = load_discussions_from_cache()
     source_name = source_meta.get("source", "unknown")
-    source_total = source_meta.get("expected_total", 0)
+    expected_total = int(source_meta.get("expected_total") or len(discussions))
+    loaded_total = int(source_meta.get("loaded_total") or len(discussions))
+    is_complete = bool(source_meta.get("is_complete"))
     print(
-        f"  Loaded {len(discussions)} discussions from {source_name} "
-        f"(expected {source_total})"
+        f"  Loaded {loaded_total} discussions from {source_name} "
+        f"(expected {expected_total})"
     )
     if not discussions:
         print(
@@ -419,6 +421,15 @@ def main() -> None:
         if args.require_authoritative:
             raise SystemExit(1)
         return
+    if args.require_authoritative and (
+        not is_complete or loaded_total != expected_total
+    ):
+        print(
+            "Incomplete authoritative corpus: "
+            f"{loaded_total}/{expected_total} (is_complete={is_complete})",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
 
     # state/discussions_cache.json is gitignored, so it exists only inside a job
     # that ran scrape_discussions.py first. compute-trending, reconcile-channels
@@ -554,7 +565,7 @@ def main() -> None:
     sync_summary = sync_posted_log_from_discussions(existing_log, discussions, channels)
     log_meta = existing_log.setdefault("_meta", {})
     log_meta["authoritative_source"] = source_name
-    log_meta["authoritative_total_posts"] = int(source_total or len(discussions))
+    log_meta["authoritative_total_posts"] = int(expected_total or len(discussions))
     log_meta["authoritative_refreshed_at"] = source_meta.get("reference_timestamp")
     save_json(log_path, existing_log)
 

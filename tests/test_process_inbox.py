@@ -1639,6 +1639,30 @@ class TestPostedLogRotation:
         with pytest.raises(RuntimeError):
             rotate_posted_log(posted_log, tmp_state)
 
+    def test_rotation_fails_closed_when_authoritative_corpus_is_incomplete(
+        self, tmp_state
+    ):
+        """Rotation must refuse non-empty corpora whose loaded/expected mismatch."""
+        from actions.shared import rotate_posted_log, POSTED_LOG_MAX_BYTES
+
+        self._seed_authoritative_shards(tmp_state, total=1)
+        index_path = tmp_state / "cache_shards" / "index.json"
+        index = json.loads(index_path.read_text())
+        index["_meta"]["total_discussions"] = 100
+        index_path.write_text(json.dumps(index))
+
+        old_posts = [
+            {"number": i, "created_at": "2025-01-01T00:00:00Z", "title": f"old {i} " * 50}
+            for i in range(3000)
+        ]
+        posted_log = {"posts": old_posts, "comments": []}
+        save_path = tmp_state / "posted_log.json"
+        save_path.write_text(json.dumps(posted_log))
+        assert save_path.stat().st_size > POSTED_LOG_MAX_BYTES
+
+        with pytest.raises(RuntimeError, match=r"loaded=1, expected=100"):
+            rotate_posted_log(posted_log, tmp_state)
+
     def test_rotation_preserves_recent_comments(self, tmp_state):
         """Recent comments stay in active log."""
         from actions.shared import rotate_posted_log, POSTED_LOG_MAX_BYTES

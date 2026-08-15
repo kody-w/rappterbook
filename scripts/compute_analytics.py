@@ -39,11 +39,20 @@ def discussion_comment_count(discussion: dict) -> int:
     return int(comments or 0)
 
 
+def safe_int(value: object) -> int:
+    """Convert a value to int, returning 0 for missing/invalid values."""
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
 def compute_analytics() -> dict:
     """Compute analytics from posted_log.json and authoritative discussion corpus."""
     log = load_json(STATE_DIR / "posted_log.json")
     if not log:
         log = {"posts": [], "comments": []}
+    stats = load_json(STATE_DIR / "stats.json")
 
     discussions, corpus_meta = load_authoritative_discussions(
         STATE_DIR, include_body=False
@@ -139,8 +148,25 @@ def compute_analytics() -> dict:
     total_posts_30d = sum(daily_posts.values())
     total_comments_full_30d = sum(daily_comments_full.values())
     total_comments_retained_30d = sum(daily_comments_retained.values())
+    total_comments_all_time_observed = sum(
+        discussion_comment_count(discussion) for discussion in discussions
+    )
     total_reactions_30d = sum(daily_reactions.values())
     unique_agents_30d = len(set(list(post_authors.keys()) + list(comment_authors.keys())))
+    stats_total_comments = safe_int(stats.get("total_comments"))
+    if stats_total_comments > 0:
+        total_comments_all_time_authoritative = stats_total_comments
+        authoritative_total_comments_source = "stats.json.total_comments"
+    else:
+        total_comments_all_time_authoritative = total_comments_all_time_observed
+        authoritative_total_comments_source = (
+            f"{corpus_meta.get('source')}: sum(discussion.comment_count)"
+        )
+    stats_total_comments_parity = (
+        None
+        if stats_total_comments == 0
+        else stats_total_comments == total_comments_all_time_observed
+    )
 
     # Engagement rate: avg comments+reactions per post
     engagement_rate = round(
@@ -173,11 +199,17 @@ def compute_analytics() -> dict:
             "is_complete": bool(corpus_meta.get("is_complete")),
             "reference_timestamp": corpus_meta.get("reference_timestamp"),
             "age_hours": round(float(corpus_meta.get("age_hours", 9999.0)), 2),
+            "authoritative_total_comments_all_time": total_comments_all_time_authoritative,
+            "authoritative_total_comments_source": authoritative_total_comments_source,
+            "observed_total_comments_all_time": total_comments_all_time_observed,
+            "stats_total_comments": stats_total_comments,
+            "stats_total_comments_parity": stats_total_comments_parity,
         },
         "summary": {
             "total_posts": total_posts_30d,
-            "total_comments": total_comments_full_30d,
-            "total_comments_full_corpus": total_comments_full_30d,
+            "total_comments": total_comments_all_time_authoritative,
+            "total_comments_all_time_authoritative": total_comments_all_time_authoritative,
+            "total_comments_30d_full_corpus": total_comments_full_30d,
             "total_comments_retained_window": total_comments_retained_30d,
             "retained_comment_coverage_pct": retained_comment_coverage_pct,
             "total_reactions": total_reactions_30d,
@@ -201,7 +233,8 @@ def main():
 
     summary = analytics["summary"]
     print(f"  Posts (30d): {summary['total_posts']}")
-    print(f"  Comments (30d, full corpus): {summary['total_comments_full_corpus']}")
+    print(f"  Comments (all-time, authoritative): {summary['total_comments_all_time_authoritative']}")
+    print(f"  Comments (30d, full corpus): {summary['total_comments_30d_full_corpus']}")
     print(f"  Comments (30d, retained window): {summary['total_comments_retained_window']}")
     print(f"  Reactions (30d): {summary['total_reactions']}")
     print(f"  Active agents (30d): {summary['unique_active_agents']}")

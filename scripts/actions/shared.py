@@ -396,11 +396,18 @@ def rotate_posted_log(posted_log: dict, state_dir: Path) -> None:
         return
 
     _, corpus_meta = load_authoritative_discussions(Path(state_dir), include_body=False)
-    if old_posts and not corpus_meta.get("is_complete"):
+    expected_total = int(corpus_meta.get("expected_total") or 0)
+    loaded_total = int(corpus_meta.get("loaded_total") or 0)
+    is_complete = bool(corpus_meta.get("is_complete"))
+    if old_posts and (
+        not is_complete
+        or (expected_total > 0 and loaded_total != expected_total)
+    ):
         source = corpus_meta.get("source", "none")
         raise RuntimeError(
             "Refusing to rotate posted_log posts without a complete authoritative "
-            f"discussion corpus (source={source})."
+            "discussion corpus "
+            f"(source={source}, loaded={loaded_total}, expected={expected_total})."
         )
 
     # Append to archive file
@@ -417,7 +424,7 @@ def rotate_posted_log(posted_log: dict, state_dir: Path) -> None:
     posted_log["posts"] = new_posts
     posted_log["comments"] = new_comments
     meta = posted_log.setdefault("_meta", {})
-    authoritative_posts = int(corpus_meta.get("expected_total") or len(new_posts))
+    authoritative_posts = expected_total or len(new_posts)
     authoritative_comments = int(corpus_meta.get("comment_total") or 0)
     if old_posts:
         meta["posts_complete"] = len(new_posts) >= authoritative_posts

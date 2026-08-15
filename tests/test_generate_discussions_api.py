@@ -92,6 +92,11 @@ def test_generates_complete_listing_and_shard_resolver(tmp_path):
     listing = json.loads((docs_dir / "api" / "discussions.json").read_text())
     assert listing["_meta"]["total"] == 2
     assert listing["_meta"]["coverage"]["is_complete"] is True
+    detail = listing["_meta"]["detail_coverage"]
+    assert detail["discussion_body_coverage_mode"] == "sharded"
+    assert detail["discussion_body_coverage"] == "complete"
+    assert detail["comment_body_coverage"] == "legacy_partial"
+    assert "complete_detail_mode" not in detail
     assert listing["discussions"][0]["number"] == 11
     assert listing["discussions"][0]["author"] == "zion-coder-01"
     assert listing["discussions"][0]["topic"] == "space"
