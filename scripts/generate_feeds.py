@@ -15,6 +15,7 @@ DOCS_DIR = Path(os.environ.get("DOCS_DIR", "docs"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import load_json
 from feed_algorithms import sort_posts, search_posts
+from cache_shard_loader import load_authoritative_discussions
 
 
 def now_rfc822():
@@ -93,16 +94,62 @@ def main():
     parser.add_argument("--base-url", default="https://github.com/kody-w/rappterbook")
     parser.add_argument("--sorted-feeds", action="store_true",
                         help="Generate sorted JSON feed files in state/")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Fail closed when discussion corpus is empty, incomplete, or stale.",
+    )
+    parser.add_argument(
+        "--fresh-hours",
+        type=float,
+        default=24.0,
+        help="Maximum allowed age for corpus freshness checks in strict mode.",
+    )
     args = parser.parse_args()
 
     channels_data = load_json(STATE_DIR / "channels.json")
     channels = channels_data.get("channels", {})
 
     discussions = []
-    data_file_path = Path(args.data_file) if args.data_file else STATE_DIR / "discussions_cache.json"
-    if data_file_path.exists():
-        data = load_json(data_file_path)
-        discussions = data.get("discussions", [])
+    source_meta = {}
+    if args.data_file:
+        data_file_path = Path(args.data_file)
+        if data_file_path.exists():
+            data = load_json(data_file_path)
+            discussions = data.get("discussions", [])
+            source_meta = {
+                "source": str(data_file_path),
+                "expected_total": len(discussions),
+                "loaded_total": len(discussions),
+                "is_complete": True,
+                "age_hours": 0.0,
+            }
+    else:
+        discussions, source_meta = load_authoritative_discussions(
+            STATE_DIR, include_body=True
+        )
+
+    expected_total = int(source_meta.get("expected_total") or len(discussions))
+    loaded_total = int(source_meta.get("loaded_total") or len(discussions))
+    age_hours = float(source_meta.get("age_hours", 9999.0))
+    source_name = source_meta.get("source", "unknown")
+    print(
+        f"Feed source: {source_name} ({loaded_total}/{expected_total} discussions, "
+        f"age={age_hours:.2f}h)"
+    )
+    if args.strict:
+        if not discussions:
+            raise RuntimeError("Strict feed gate: empty discussion corpus")
+        if expected_total > 0 and loaded_total != expected_total:
+            raise RuntimeError(
+                "Strict feed gate: incomplete discussion corpus "
+                f"({loaded_total}/{expected_total})"
+            )
+        if age_hours > args.fresh_hours:
+            raise RuntimeError(
+                "Strict feed gate: stale discussion corpus "
+                f"({age_hours:.2f}h > {args.fresh_hours:.2f}h)"
+            )
 
     feeds_dir = DOCS_DIR / "feeds"
     feeds_dir.mkdir(parents=True, exist_ok=True)
@@ -123,7 +170,7 @@ def main():
 
         # Extract real author from byline or login
         body = disc.get("body", "")
-        author = disc.get("author_login", "unknown")
+        author = disc.get("author_login") or disc.get("author", "unknown")
         if body.startswith("*Posted by **"):
             end = body.find("***", 13)
             if end > 13:
@@ -134,7 +181,7 @@ def main():
         item = {
             "title": disc.get("title", ""),
             "link": f"{frontend_base}/#/discussions/{number}" if number else disc.get("url", ""),
-            "description": truncate_text(body, 500),
+            "description": truncate_text(body or disc.get("title", ""), 500),
             "pubDate": iso_to_rfc822(disc.get("created_at", "")),
             "guid": disc.get("url", f"discussion-{number}"),
             "author": author,
@@ -154,6 +201,13 @@ def main():
         [item for _, item in all_items],
     )
     (feeds_dir / "all.xml").write_text(prettify(global_feed))
+    if args.strict and not all_items:
+        raise RuntimeError("Strict feed gate: generated all.xml has zero items")
+    if args.strict and expected_total > 0 and len(all_items) != expected_total:
+        raise RuntimeError(
+            "Strict feed gate: feed item count does not match corpus "
+            f"({len(all_items)} != {expected_total})"
+        )
 
     # Per-channel feeds
     for slug, channel_info in channels.items():

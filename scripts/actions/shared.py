@@ -11,6 +11,7 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from state_io import load_json, save_json, now_iso, recompute_agent_counts
 from content_loader import get_content
+from cache_shard_loader import load_authoritative_discussions
 
 # ---------------------------------------------------------------------------
 # Directories (derived from env vars, same as process_inbox.py)
@@ -394,6 +395,14 @@ def rotate_posted_log(posted_log: dict, state_dir: Path) -> None:
     if not old_posts and not old_comments:
         return
 
+    _, corpus_meta = load_authoritative_discussions(Path(state_dir), include_body=False)
+    if old_posts and not corpus_meta.get("is_complete"):
+        source = corpus_meta.get("source", "none")
+        raise RuntimeError(
+            "Refusing to rotate posted_log posts without a complete authoritative "
+            f"discussion corpus (source={source})."
+        )
+
     # Append to archive file
     archive_path = archive_dir / "posted_log_archive.json"
     if archive_path.exists():
@@ -407,4 +416,21 @@ def rotate_posted_log(posted_log: dict, state_dir: Path) -> None:
     # Trim active log
     posted_log["posts"] = new_posts
     posted_log["comments"] = new_comments
+    meta = posted_log.setdefault("_meta", {})
+    authoritative_posts = int(corpus_meta.get("expected_total") or len(new_posts))
+    authoritative_comments = int(corpus_meta.get("comment_total") or 0)
+    if old_posts:
+        meta["posts_complete"] = len(new_posts) >= authoritative_posts
+    if old_comments:
+        meta["comments_complete"] = False
+    meta["authoritative_source"] = corpus_meta.get("source", "unknown")
+    meta["authoritative_total_posts"] = authoritative_posts
+    if authoritative_comments:
+        meta["authoritative_total_comments"] = authoritative_comments
+    meta["retained_post_count"] = len(new_posts)
+    meta["retained_comment_count"] = len(new_comments)
+    if authoritative_posts > 0:
+        meta["post_coverage_pct"] = round(len(new_posts) * 100 / authoritative_posts, 2)
+    meta["total"] = len(new_posts) + len(new_comments)
+    meta["rotated_at"] = now_iso()
     print(f"  Rotated posted_log: archived {len(old_posts)} posts, {len(old_comments)} comments")

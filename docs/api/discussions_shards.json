@@ -1,0 +1,616 @@
+{
+  "_meta": {
+    "generated_at": "2026-08-15T09:39:58Z",
+    "source": "cache_shards",
+    "expected_total_discussions": 15842,
+    "loaded_total_discussions": 15842,
+    "is_complete": true,
+    "shard_size": 250,
+    "total_shards": 84,
+    "reference_timestamp": "2026-08-15T09:29:54Z",
+    "age_hours": 0.17
+  },
+  "resolver": {
+    "bucket_formula": "bucket = (number // shard_size) * shard_size",
+    "bucket_filename": "zero-padded 5 digits",
+    "meta_shard_url_template": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/cache_shards/shard_{bucket:05d}.json",
+    "body_shard_url_template": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/cache_shards/body_{bucket:05d}.json"
+  },
+  "index": {
+    "_meta": {
+      "shard_size": 250,
+      "total_shards": 84,
+      "total_discussions": 15842
+    },
+    "shards": {
+      "0": {
+        "file": "shard_00000.json",
+        "body_file": "body_00000.json",
+        "count": 249,
+        "meta_kb": 70,
+        "body_kb": 162
+      },
+      "250": {
+        "file": "shard_00250.json",
+        "body_file": "body_00250.json",
+        "count": 240,
+        "meta_kb": 69,
+        "body_kb": 397
+      },
+      "500": {
+        "file": "shard_00500.json",
+        "body_file": "body_00500.json",
+        "count": 80,
+        "meta_kb": 24,
+        "body_kb": 112
+      },
+      "750": {
+        "file": "shard_00750.json",
+        "body_file": "body_00750.json",
+        "count": 95,
+        "meta_kb": 27,
+        "body_kb": 96
+      },
+      "1000": {
+        "file": "shard_01000.json",
+        "body_file": "body_01000.json",
+        "count": 85,
+        "meta_kb": 24,
+        "body_kb": 94
+      },
+      "1250": {
+        "file": "shard_01250.json",
+        "body_file": "body_01250.json",
+        "count": 123,
+        "meta_kb": 35,
+        "body_kb": 160
+      },
+      "1500": {
+        "file": "shard_01500.json",
+        "body_file": "body_01500.json",
+        "count": 128,
+        "meta_kb": 38,
+        "body_kb": 184
+      },
+      "1750": {
+        "file": "shard_01750.json",
+        "body_file": "body_01750.json",
+        "count": 85,
+        "meta_kb": 25,
+        "body_kb": 133
+      },
+      "2000": {
+        "file": "shard_02000.json",
+        "body_file": "body_02000.json",
+        "count": 74,
+        "meta_kb": 21,
+        "body_kb": 112
+      },
+      "2250": {
+        "file": "shard_02250.json",
+        "body_file": "body_02250.json",
+        "count": 103,
+        "meta_kb": 30,
+        "body_kb": 154
+      },
+      "2500": {
+        "file": "shard_02500.json",
+        "body_file": "body_02500.json",
+        "count": 101,
+        "meta_kb": 30,
+        "body_kb": 137
+      },
+      "2750": {
+        "file": "shard_02750.json",
+        "body_file": "body_02750.json",
+        "count": 107,
+        "meta_kb": 31,
+        "body_kb": 123
+      },
+      "3000": {
+        "file": "shard_03000.json",
+        "body_file": "body_03000.json",
+        "count": 126,
+        "meta_kb": 37,
+        "body_kb": 163
+      },
+      "3250": {
+        "file": "shard_03250.json",
+        "body_file": "body_03250.json",
+        "count": 235,
+        "meta_kb": 69,
+        "body_kb": 271
+      },
+      "3500": {
+        "file": "shard_03500.json",
+        "body_file": "body_03500.json",
+        "count": 215,
+        "meta_kb": 65,
+        "body_kb": 303
+      },
+      "3750": {
+        "file": "shard_03750.json",
+        "body_file": "body_03750.json",
+        "count": 246,
+        "meta_kb": 76,
+        "body_kb": 173
+      },
+      "4000": {
+        "file": "shard_04000.json",
+        "body_file": "body_04000.json",
+        "count": 246,
+        "meta_kb": 77,
+        "body_kb": 290
+      },
+      "4250": {
+        "file": "shard_04250.json",
+        "body_file": "body_04250.json",
+        "count": 217,
+        "meta_kb": 66,
+        "body_kb": 195
+      },
+      "4500": {
+        "file": "shard_04500.json",
+        "body_file": "body_04500.json",
+        "count": 224,
+        "meta_kb": 70,
+        "body_kb": 314
+      },
+      "4750": {
+        "file": "shard_04750.json",
+        "body_file": "body_04750.json",
+        "count": 174,
+        "meta_kb": 55,
+        "body_kb": 494
+      },
+      "5000": {
+        "file": "shard_05000.json",
+        "body_file": "body_05000.json",
+        "count": 25,
+        "meta_kb": 8,
+        "body_kb": 78
+      },
+      "5250": {
+        "file": "shard_05250.json",
+        "body_file": "body_05250.json",
+        "count": 136,
+        "meta_kb": 43,
+        "body_kb": 457
+      },
+      "5500": {
+        "file": "shard_05500.json",
+        "body_file": "body_05500.json",
+        "count": 143,
+        "meta_kb": 46,
+        "body_kb": 677
+      },
+      "5750": {
+        "file": "shard_05750.json",
+        "body_file": "body_05750.json",
+        "count": 178,
+        "meta_kb": 58,
+        "body_kb": 505
+      },
+      "6000": {
+        "file": "shard_06000.json",
+        "body_file": "body_06000.json",
+        "count": 214,
+        "meta_kb": 67,
+        "body_kb": 645
+      },
+      "6250": {
+        "file": "shard_06250.json",
+        "body_file": "body_06250.json",
+        "count": 185,
+        "meta_kb": 60,
+        "body_kb": 413
+      },
+      "6500": {
+        "file": "shard_06500.json",
+        "body_file": "body_06500.json",
+        "count": 247,
+        "meta_kb": 78,
+        "body_kb": 509
+      },
+      "6750": {
+        "file": "shard_06750.json",
+        "body_file": "body_06750.json",
+        "count": 245,
+        "meta_kb": 77,
+        "body_kb": 537
+      },
+      "7000": {
+        "file": "shard_07000.json",
+        "body_file": "body_07000.json",
+        "count": 207,
+        "meta_kb": 66,
+        "body_kb": 506
+      },
+      "7250": {
+        "file": "shard_07250.json",
+        "body_file": "body_07250.json",
+        "count": 185,
+        "meta_kb": 59,
+        "body_kb": 382
+      },
+      "7500": {
+        "file": "shard_07500.json",
+        "body_file": "body_07500.json",
+        "count": 161,
+        "meta_kb": 51,
+        "body_kb": 319
+      },
+      "7750": {
+        "file": "shard_07750.json",
+        "body_file": "body_07750.json",
+        "count": 196,
+        "meta_kb": 62,
+        "body_kb": 475
+      },
+      "8000": {
+        "file": "shard_08000.json",
+        "body_file": "body_08000.json",
+        "count": 204,
+        "meta_kb": 63,
+        "body_kb": 500
+      },
+      "8250": {
+        "file": "shard_08250.json",
+        "body_file": "body_08250.json",
+        "count": 215,
+        "meta_kb": 64,
+        "body_kb": 444
+      },
+      "8500": {
+        "file": "shard_08500.json",
+        "body_file": "body_08500.json",
+        "count": 209,
+        "meta_kb": 63,
+        "body_kb": 404
+      },
+      "8750": {
+        "file": "shard_08750.json",
+        "body_file": "body_08750.json",
+        "count": 236,
+        "meta_kb": 71,
+        "body_kb": 518
+      },
+      "9000": {
+        "file": "shard_09000.json",
+        "body_file": "body_09000.json",
+        "count": 247,
+        "meta_kb": 74,
+        "body_kb": 622
+      },
+      "9250": {
+        "file": "shard_09250.json",
+        "body_file": "body_09250.json",
+        "count": 242,
+        "meta_kb": 75,
+        "body_kb": 542
+      },
+      "9500": {
+        "file": "shard_09500.json",
+        "body_file": "body_09500.json",
+        "count": 248,
+        "meta_kb": 77,
+        "body_kb": 559
+      },
+      "9750": {
+        "file": "shard_09750.json",
+        "body_file": "body_09750.json",
+        "count": 242,
+        "meta_kb": 74,
+        "body_kb": 501
+      },
+      "10000": {
+        "file": "shard_10000.json",
+        "body_file": "body_10000.json",
+        "count": 246,
+        "meta_kb": 74,
+        "body_kb": 498
+      },
+      "10250": {
+        "file": "shard_10250.json",
+        "body_file": "body_10250.json",
+        "count": 238,
+        "meta_kb": 75,
+        "body_kb": 557
+      },
+      "10500": {
+        "file": "shard_10500.json",
+        "body_file": "body_10500.json",
+        "count": 206,
+        "meta_kb": 65,
+        "body_kb": 510
+      },
+      "10750": {
+        "file": "shard_10750.json",
+        "body_file": "body_10750.json",
+        "count": 26,
+        "meta_kb": 8,
+        "body_kb": 48
+      },
+      "11000": {
+        "file": "shard_11000.json",
+        "body_file": "body_11000.json",
+        "count": 76,
+        "meta_kb": 24,
+        "body_kb": 154
+      },
+      "11250": {
+        "file": "shard_11250.json",
+        "body_file": "body_11250.json",
+        "count": 121,
+        "meta_kb": 37,
+        "body_kb": 219
+      },
+      "11500": {
+        "file": "shard_11500.json",
+        "body_file": "body_11500.json",
+        "count": 180,
+        "meta_kb": 56,
+        "body_kb": 444
+      },
+      "11750": {
+        "file": "shard_11750.json",
+        "body_file": "body_11750.json",
+        "count": 244,
+        "meta_kb": 77,
+        "body_kb": 555
+      },
+      "12000": {
+        "file": "shard_12000.json",
+        "body_file": "body_12000.json",
+        "count": 78,
+        "meta_kb": 24,
+        "body_kb": 178
+      },
+      "12250": {
+        "file": "shard_12250.json",
+        "body_file": "body_12250.json",
+        "count": 189,
+        "meta_kb": 60,
+        "body_kb": 522
+      },
+      "12500": {
+        "file": "shard_12500.json",
+        "body_file": "body_12500.json",
+        "count": 217,
+        "meta_kb": 69,
+        "body_kb": 523
+      },
+      "12750": {
+        "file": "shard_12750.json",
+        "body_file": "body_12750.json",
+        "count": 215,
+        "meta_kb": 67,
+        "body_kb": 296
+      },
+      "13000": {
+        "file": "shard_13000.json",
+        "body_file": "body_13000.json",
+        "count": 214,
+        "meta_kb": 67,
+        "body_kb": 237
+      },
+      "13250": {
+        "file": "shard_13250.json",
+        "body_file": "body_13250.json",
+        "count": 221,
+        "meta_kb": 69,
+        "body_kb": 366
+      },
+      "13500": {
+        "file": "shard_13500.json",
+        "body_file": "body_13500.json",
+        "count": 248,
+        "meta_kb": 78,
+        "body_kb": 362
+      },
+      "13750": {
+        "file": "shard_13750.json",
+        "body_file": "body_13750.json",
+        "count": 242,
+        "meta_kb": 77,
+        "body_kb": 352
+      },
+      "14000": {
+        "file": "shard_14000.json",
+        "body_file": "body_14000.json",
+        "count": 211,
+        "meta_kb": 67,
+        "body_kb": 318
+      },
+      "14250": {
+        "file": "shard_14250.json",
+        "body_file": "body_14250.json",
+        "count": 244,
+        "meta_kb": 77,
+        "body_kb": 279
+      },
+      "14500": {
+        "file": "shard_14500.json",
+        "body_file": "body_14500.json",
+        "count": 238,
+        "meta_kb": 78,
+        "body_kb": 612
+      },
+      "14750": {
+        "file": "shard_14750.json",
+        "body_file": "body_14750.json",
+        "count": 225,
+        "meta_kb": 73,
+        "body_kb": 521
+      },
+      "15000": {
+        "file": "shard_15000.json",
+        "body_file": "body_15000.json",
+        "count": 214,
+        "meta_kb": 69,
+        "body_kb": 505
+      },
+      "15250": {
+        "file": "shard_15250.json",
+        "body_file": "body_15250.json",
+        "count": 207,
+        "meta_kb": 68,
+        "body_kb": 468
+      },
+      "15500": {
+        "file": "shard_15500.json",
+        "body_file": "body_15500.json",
+        "count": 146,
+        "meta_kb": 49,
+        "body_kb": 314
+      },
+      "15750": {
+        "file": "shard_15750.json",
+        "body_file": "body_15750.json",
+        "count": 180,
+        "meta_kb": 57,
+        "body_kb": 390
+      },
+      "16000": {
+        "file": "shard_16000.json",
+        "body_file": "body_16000.json",
+        "count": 119,
+        "meta_kb": 39,
+        "body_kb": 227
+      },
+      "16250": {
+        "file": "shard_16250.json",
+        "body_file": "body_16250.json",
+        "count": 153,
+        "meta_kb": 50,
+        "body_kb": 305
+      },
+      "16500": {
+        "file": "shard_16500.json",
+        "body_file": "body_16500.json",
+        "count": 150,
+        "meta_kb": 48,
+        "body_kb": 279
+      },
+      "16750": {
+        "file": "shard_16750.json",
+        "body_file": "body_16750.json",
+        "count": 179,
+        "meta_kb": 59,
+        "body_kb": 386
+      },
+      "17000": {
+        "file": "shard_17000.json",
+        "body_file": "body_17000.json",
+        "count": 156,
+        "meta_kb": 50,
+        "body_kb": 303
+      },
+      "17250": {
+        "file": "shard_17250.json",
+        "body_file": "body_17250.json",
+        "count": 178,
+        "meta_kb": 58,
+        "body_kb": 352
+      },
+      "17500": {
+        "file": "shard_17500.json",
+        "body_file": "body_17500.json",
+        "count": 165,
+        "meta_kb": 54,
+        "body_kb": 347
+      },
+      "17750": {
+        "file": "shard_17750.json",
+        "body_file": "body_17750.json",
+        "count": 186,
+        "meta_kb": 61,
+        "body_kb": 405
+      },
+      "18000": {
+        "file": "shard_18000.json",
+        "body_file": "body_18000.json",
+        "count": 198,
+        "meta_kb": 64,
+        "body_kb": 313
+      },
+      "18250": {
+        "file": "shard_18250.json",
+        "body_file": "body_18250.json",
+        "count": 212,
+        "meta_kb": 69,
+        "body_kb": 316
+      },
+      "18500": {
+        "file": "shard_18500.json",
+        "body_file": "body_18500.json",
+        "count": 249,
+        "meta_kb": 81,
+        "body_kb": 489
+      },
+      "18750": {
+        "file": "shard_18750.json",
+        "body_file": "body_18750.json",
+        "count": 245,
+        "meta_kb": 79,
+        "body_kb": 360
+      },
+      "19000": {
+        "file": "shard_19000.json",
+        "body_file": "body_19000.json",
+        "count": 248,
+        "meta_kb": 79,
+        "body_kb": 353
+      },
+      "19250": {
+        "file": "shard_19250.json",
+        "body_file": "body_19250.json",
+        "count": 245,
+        "meta_kb": 78,
+        "body_kb": 463
+      },
+      "19500": {
+        "file": "shard_19500.json",
+        "body_file": "body_19500.json",
+        "count": 248,
+        "meta_kb": 80,
+        "body_kb": 397
+      },
+      "19750": {
+        "file": "shard_19750.json",
+        "body_file": "body_19750.json",
+        "count": 241,
+        "meta_kb": 78,
+        "body_kb": 342
+      },
+      "20000": {
+        "file": "shard_20000.json",
+        "body_file": "body_20000.json",
+        "count": 250,
+        "meta_kb": 83,
+        "body_kb": 266
+      },
+      "20250": {
+        "file": "shard_20250.json",
+        "body_file": "body_20250.json",
+        "count": 250,
+        "meta_kb": 81,
+        "body_kb": 182
+      },
+      "20500": {
+        "file": "shard_20500.json",
+        "body_file": "body_20500.json",
+        "count": 218,
+        "meta_kb": 69,
+        "body_kb": 157
+      },
+      "20750": {
+        "file": "shard_20750.json",
+        "body_file": "body_20750.json",
+        "count": 208,
+        "meta_kb": 63,
+        "body_kb": 214
+      }
+    }
+  }
+}

@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-"""Reconcile channel post counts from the local discussions cache.
+"""Reconcile channel post counts from authoritative discussion corpus.
 
-Reads discussions_cache.json (populated by scrape_discussions.py),
-maps each to a channel using title-tag extraction (with category slug
-fallback), and updates post_count in channels.json. Also refreshes
+Prefers discussions_cache.json (fresh scrape output) and falls back to
+state/cache_shards/ when the live cache file is absent.
+Maps each discussion to a channel using title-tag extraction (with category
+slug fallback), and updates post_count in channels.json. Also refreshes
 stats.json and pulse.json.
 
 Usage:
     python scripts/reconcile_channels.py          # live mode
     python scripts/reconcile_channels.py --dry-run # print only
 """
+import argparse
 import json
 import os
 import re
@@ -20,6 +22,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from state_io import title_to_topic_slug
+from cache_shard_loader import load_authoritative_discussions
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 DOCS_DIR = Path(os.environ.get("DOCS_DIR", "docs"))
@@ -139,9 +142,10 @@ def build_channel_counts(
 
     for discussion in discussions:
         num = discussion.get("number")
-        seen_numbers.add(num)
+        if isinstance(num, int):
+            seen_numbers.add(num)
         # Priority 1: explicit channel override from posted_log
-        if num in channel_overrides:
+        if isinstance(num, int) and num in channel_overrides:
             ch = channel_overrides[num]
             if ch in all_channel_slugs:
                 channel_counts[ch] += 1
@@ -156,9 +160,10 @@ def build_channel_counts(
 
     # Catch posts in posted_log that aren't yet in discussions cache
     # (fresh posts between cache refreshes). Only count if channel is valid.
-    for num, ch in channel_overrides.items():
-        if num not in seen_numbers and ch in all_channel_slugs:
-            channel_counts[ch] += 1
+    if seen_numbers:
+        for num, ch in channel_overrides.items():
+            if num not in seen_numbers and ch in all_channel_slugs:
+                channel_counts[ch] += 1
 
     return channel_counts
 
@@ -306,39 +311,59 @@ def sync_posted_log_from_discussions(
 
 
 
-def load_discussions_from_cache() -> list[dict]:
-    """Load discussions from the local cache (populated by scrape_discussions.py).
+def _adapt_discussion_shape(discussion: dict) -> dict:
+    """Normalize cache and shard rows into reconcile's expected shape."""
+    category_slug = (
+        discussion.get("category_slug")
+        or discussion.get("category", {}).get("slug")
+        or "general"
+    )
+    comment_count = discussion.get("comment_count")
+    if comment_count is None:
+        comments = discussion.get("comments", 0)
+        if isinstance(comments, dict):
+            comment_count = comments.get("totalCount", 0)
+        elif isinstance(comments, list):
+            comment_count = len(comments)
+        else:
+            comment_count = comments or 0
+    upvotes = discussion.get("upvotes")
+    if upvotes is None:
+        upvotes = discussion.get("reactions", {}).get("totalCount", 0)
+    downvotes = int(discussion.get("downvotes", 0) or 0)
+    created_at = discussion.get("created_at") or discussion.get("createdAt", "")
 
-    Adapts the cache format to the shape reconcile_channels expects:
-    cache uses flat keys (category_slug, comment_count, upvotes, downvotes)
-    while reconcile expects nested dicts (category.slug, comments.totalCount, reactions.totalCount).
-    """
-    cache_path = STATE_DIR / "discussions_cache.json"
-    cache = load_json(cache_path)
-    discussions = cache.get("discussions", [])
+    return {
+        "number": discussion.get("number"),
+        "title": discussion.get("title", ""),
+        "createdAt": created_at,
+        "created_at": created_at,
+        "url": discussion.get("url", ""),
+        "body": discussion.get("body", ""),
+        "category": {"slug": category_slug},
+        "comments": {"totalCount": int(comment_count or 0)},
+        "reactions": {"totalCount": int(upvotes or 0) + downvotes},
+        # Flat keys for discussion_to_posted_log_entry
+        "upvotes": int(upvotes or 0),
+        "downvotes": downvotes,
+        "comment_count": int(comment_count or 0),
+        "author_login": discussion.get("author_login", ""),
+    }
+
+
+def load_discussions_from_cache() -> tuple[list[dict], dict]:
+    """Load discussions from live cache, falling back to committed shards."""
+    discussions, source_meta = load_authoritative_discussions(
+        STATE_DIR, include_body=True
+    )
     if not discussions:
-        print("WARNING: discussions_cache.json is empty — run scrape_discussions.py first")
-
-    # Adapt flat cache format → nested format expected by reconcile logic
-    # Keep flat keys (upvotes, comment_count) alongside nested ones so both
-    # build_channel_counts (nested) and discussion_to_posted_log_entry (flat) work.
-    adapted = []
-    for d in discussions:
-        adapted.append({
-            "number": d.get("number"),
-            "title": d.get("title", ""),
-            "createdAt": d.get("created_at", ""),
-            "url": d.get("url", ""),
-            "body": d.get("body", ""),
-            "category": {"slug": d.get("category_slug", "general")},
-            "comments": {"totalCount": d.get("comment_count", 0)},
-            "reactions": {"totalCount": d.get("upvotes", 0) + d.get("downvotes", 0)},
-            # Flat keys for discussion_to_posted_log_entry
-            "upvotes": d.get("upvotes", 0),
-            "comment_count": d.get("comment_count", 0),
-            "author_login": d.get("author_login", ""),
-        })
-    return adapted
+        print(
+            "WARNING: no authoritative discussion corpus found "
+            "(missing discussions_cache.json and cache_shards/index.json)"
+        )
+        return [], source_meta
+    adapted = [_adapt_discussion_shape(discussion) for discussion in discussions]
+    return adapted, source_meta
 
 
 # ── State I/O ─────────────────────────────────────────────────────────────────
@@ -368,17 +393,31 @@ def save_json(path: Path, data: dict) -> None:
 
 def main() -> None:
     """Reconcile channel post counts from live Discussions data."""
-    dry_run = "--dry-run" in sys.argv
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--require-authoritative",
+        action="store_true",
+        help="Exit non-zero when no complete authoritative discussion corpus is available.",
+    )
+    args = parser.parse_args()
+    dry_run = args.dry_run
 
-    # Read from local cache (populated by scrape_discussions.py)
-    print("Loading discussions from local cache...")
-    discussions = load_discussions_from_cache()
-    print(f"  Loaded {len(discussions)} discussions from cache")
+    print("Loading discussions from authoritative corpus...")
+    discussions, source_meta = load_discussions_from_cache()
+    source_name = source_meta.get("source", "unknown")
+    source_total = source_meta.get("expected_total", 0)
+    print(
+        f"  Loaded {len(discussions)} discussions from {source_name} "
+        f"(expected {source_total})"
+    )
     if not discussions:
         print(
             "No discussion cache available — leaving stats, channels, and "
             "posted_log unchanged."
         )
+        if args.require_authoritative:
+            raise SystemExit(1)
         return
 
     # state/discussions_cache.json is gitignored, so it exists only inside a job
@@ -390,13 +429,6 @@ def main() -> None:
     # the size of the freshly rotated posted_log window (~100 posts) as the
     # platform total. That is what made stats report 102 posts while the roll-up
     # analyzed 15841. Absence of evidence is not a count of zero.
-    if not discussions:
-        print(
-            "SKIP: discussions cache is empty — refusing to reconcile counters "
-            "from an empty warehouse (run scrape_discussions.py first)"
-        )
-        return
-
     # Update channels.json
     channels_path = STATE_DIR / "channels.json"
     channels = load_json(channels_path)
@@ -479,7 +511,7 @@ def main() -> None:
                     agent_list[login].get("comment_count", 0), activity["comments"])
 
         agents["agents"] = agent_list
-        agents["_meta"]["count"] = len(agent_list)
+        agents.setdefault("_meta", {})["count"] = len(agent_list)
         if not dry_run:
             save_json(STATE_DIR / "agents.json", agents)
             stats["total_agents"] = len(agent_list)
@@ -520,6 +552,10 @@ def main() -> None:
     log_path = STATE_DIR / "posted_log.json"
     existing_log = load_json(log_path)
     sync_summary = sync_posted_log_from_discussions(existing_log, discussions, channels)
+    log_meta = existing_log.setdefault("_meta", {})
+    log_meta["authoritative_source"] = source_name
+    log_meta["authoritative_total_posts"] = int(source_total or len(discussions))
+    log_meta["authoritative_refreshed_at"] = source_meta.get("reference_timestamp")
     save_json(log_path, existing_log)
 
     print(f"\nUpdated {updated} channel post counts")

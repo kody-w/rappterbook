@@ -21,13 +21,15 @@ def setup_channels(state_dir, channels):
     (state_dir / "channels.json").write_text(json.dumps(data, indent=2))
 
 
-def run_feeds(state_dir, docs_dir, data_file=None):
+def run_feeds(state_dir, docs_dir, data_file=None, extra_args=None):
     env = os.environ.copy()
     env["STATE_DIR"] = str(state_dir)
     env["DOCS_DIR"] = str(docs_dir)
     cmd = [sys.executable, str(SCRIPT)]
     if data_file:
         cmd.extend(["--data-file", str(data_file)])
+    if extra_args:
+        cmd.extend(extra_args)
     return subprocess.run(cmd, capture_output=True, text=True, env=env, cwd=str(ROOT))
 
 
@@ -95,3 +97,49 @@ class TestFeedItems:
         assert item.find("description") is not None
         assert item.find("pubDate") is not None
         assert item.find("guid") is not None
+
+
+class TestShardBackedFeeds:
+    def test_uses_cache_shards_when_cache_file_is_missing(self, tmp_state, docs_dir):
+        setup_channels(tmp_state, [
+            {"slug": "general", "name": "General", "description": "General chat", "created_by": "system"}
+        ])
+        shard_dir = tmp_state / "cache_shards"
+        shard_dir.mkdir()
+        (shard_dir / "index.json").write_text(json.dumps({
+            "_meta": {"shard_size": 250, "total_shards": 1, "total_discussions": 1},
+            "shards": {"0": {"file": "shard_00000.json", "body_file": "body_00000.json", "count": 1}},
+        }))
+        (shard_dir / "shard_00000.json").write_text(json.dumps({
+            "_meta": {"range_start": 0, "range_end": 249, "count": 1},
+            "discussions": [{
+                "number": 77,
+                "title": "Shard-backed discussion",
+                "author_login": "octocat",
+                "category_slug": "general",
+                "created_at": "2026-08-15T00:00:00Z",
+                "url": "https://github.com/kody-w/rappterbook/discussions/77",
+                "upvotes": 2,
+                "downvotes": 0,
+                "comment_count": 3,
+            }],
+        }))
+        (shard_dir / "body_00000.json").write_text(json.dumps({
+            "77": {"body": "Body from shard", "comment_authors": [{"login": "octocat"}]},
+        }))
+
+        result = run_feeds(tmp_state, docs_dir)
+
+        assert result.returncode == 0, result.stderr
+        root = ET.fromstring((docs_dir / "feeds" / "all.xml").read_text())
+        items = root.findall(".//item")
+        assert len(items) == 1
+        assert items[0].find("title").text == "Shard-backed discussion"
+
+    def test_strict_gate_rejects_empty_corpus(self, tmp_state, docs_dir):
+        setup_channels(tmp_state, [
+            {"slug": "general", "name": "General", "description": "General chat", "created_by": "system"}
+        ])
+        result = run_feeds(tmp_state, docs_dir, extra_args=["--strict"])
+        assert result.returncode != 0
+        assert "Strict feed gate: empty discussion corpus" in (result.stderr + result.stdout)

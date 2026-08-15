@@ -13,6 +13,7 @@ Usage:
 """
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 SHARD_SIZE = 250  # discussions per shard
@@ -24,6 +25,11 @@ META_FIELDS = {
 }
 
 
+def now_iso() -> str:
+    """Return current UTC timestamp."""
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def shard_cache(state_dir: str | None = None) -> None:
     """Split discussions_cache.json into meta + body shards."""
     state = Path(state_dir or os.environ.get("STATE_DIR", "state"))
@@ -32,6 +38,7 @@ def shard_cache(state_dir: str | None = None) -> None:
     shard_dir.mkdir(exist_ok=True)
 
     cache = json.loads(cache_path.read_text())
+    cache_meta = cache.get("_meta", {})
     discussions = cache.get("discussions", [])
 
     # Group by shard bucket
@@ -95,6 +102,11 @@ def shard_cache(state_dir: str | None = None) -> None:
             "shard_size": SHARD_SIZE,
             "total_shards": len(buckets),
             "total_discussions": len(discussions),
+            "total_comments": sum(int(d.get("comment_count", 0) or 0) for d in discussions),
+            "generated_at": now_iso(),
+            "source_scraped_at": cache_meta.get("scraped_at"),
+            "source_total": int(cache_meta.get("total", len(discussions)) or len(discussions)),
+            "source": "state/discussions_cache.json",
         },
         "shards": index,
     }
