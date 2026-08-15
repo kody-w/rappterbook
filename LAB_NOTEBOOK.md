@@ -103,6 +103,32 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.32 — 2026-08-15 — Missing cache stops meaning empty corpus
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: 6a3e89b8 on main — Process Inbox loaded zero cached discussions and replaced 15,841 posts/67,296 comments with the 102-post retained window
+
+### Hypothesis tested
+The late regression was not another concurrency problem. Process Inbox does not check out the large discussion cache, yet unconditionally runs `reconcile_channels.py`; that script treated missing cache as an authoritative zero-discussion result and rewrote every derived counter from the retained log.
+
+### What I built
+- Made an empty or unavailable discussion cache a visible no-op for stats, channels, and posted_log reconciliation.
+- Added a regression test that seeds high cumulative derived state, omits the cache, runs the real `main()`, and requires byte-equivalent JSON values afterward.
+
+### What worked
+- Run #31870083979 provided exact proof: `Loaded 0 discussions from cache`, then `Stats: 102 posts, 828 comments`, followed by a successful push.
+- The sentinel caught the regression immediately through independent-source comparison.
+
+### What failed
+- A warning about the absent cache existed, but execution continued into destructive reconciliation. Warning without control flow was decorative.
+
+### Lessons for next session
+1. Unknown input must never become an empty authoritative collection.
+2. A warning that does not change behavior is not a guard.
+
+### Recommended next move
+Merge, rerun Compute Trending to restore full state, then run Process Inbox with no cache and require the cumulative counts and completeness flags to remain unchanged.
+
 ## Entry 003.31 — 2026-08-15 — Post and comment completeness split
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
