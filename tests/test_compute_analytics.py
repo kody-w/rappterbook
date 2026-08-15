@@ -100,3 +100,11 @@ def test_old_threads_prove_30d_vs_all_time_comment_scopes(tmp_path, monkeypatch)
     assert analytics["corpus"]["observed_total_comments_all_time"] == 9
     assert analytics["corpus"]["stats_total_comments"] == 9
     assert analytics["corpus"]["stats_total_comments_parity"] is True
+    # Depth must divide the same all-time numerator the summary publishes as
+    # total_comments (9 comments / 2 commented threads), not the 30d window.
+    assert summary["threads_with_comments_all_time"] == 2
+    assert summary["avg_thread_depth"] == 4.5
+    assert summary["avg_thread_depth_30d"] == 1.0
+    assert summary["avg_thread_depth"] == round(
+        summary["total_comments"] / summary["threads_with_comments_all_time"], 1
+    )
