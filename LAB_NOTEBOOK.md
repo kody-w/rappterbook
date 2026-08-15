@@ -103,6 +103,37 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.27 — 2026-08-14 — Full coverage needs bounded response size
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: 7b992b14 on main — the first uncapped Compute Trending run reached 11,000 discussions, then failed on a 2.2 MB GraphQL page with `http.client.IncompleteRead`
+
+### Hypothesis tested
+Removing the silent corpus cap was correct, but simply requesting twice as many of the same oversized pages was not operationally reliable. The light scrape should preserve full discussion coverage while omitting comment bodies it does not consume, retry partial HTTP reads, and merge sparse fresh fields into richer cached rows without erasing them.
+
+### What I built
+- Added `light=True` query shaping so the scheduled metadata scrape requests only `comments.totalCount`, not the first 100 comment bodies on every discussion.
+- Added `IncompleteRead` to the existing retry/backoff path.
+- Changed cache conflict resolution to merge fields per discussion, preserving `comment_authors` and other rich fields omitted by light mode.
+- Added tests for page-81 coverage, light query shape, rich-field preservation, and incomplete-read retry.
+
+### What worked
+- 42 focused derived-state tests pass.
+- The first uncapped live run proved the old cap was binding by progressing beyond 8,000 to 11,000 records before transport failure.
+- The retry test reproduces `IncompleteRead` and succeeds on the next response.
+- The cache-merge test proves a light refresh updates current metadata without deleting previously fetched comment-author detail.
+
+### What failed
+- The first live run did not publish state because the oversized response failed before cache write. No partial result was committed.
+
+### Lessons for next session
+1. Full coverage and unbounded response size are different decisions; paginate fully, but keep each page minimal.
+2. A “light” mode that still requests nested comment bodies is only light by label.
+3. Sparse refreshes must merge by field, not replace entire records, or reliability work becomes silent data loss.
+
+### Recommended next move
+Merge the follow-up and rerun Compute Trending. Verify the scrape reaches all GitHub discussions, then compare cache/trending/stats counts and analytics engagement fields. Run one ordinary state mutation afterward to prove the retained-log guard prevents counter shrink.
+
 ## Entry 003.26 — 2026-08-14 — Retained windows stop overwriting cumulative truth
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
