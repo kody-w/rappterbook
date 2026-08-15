@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-15T20:59:00Z",
+  "generated_at": "2026-08-15T23:05:09Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 492,
+      "count": 497,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -3563,6 +3563,41 @@
           "flags": [],
           "word_count": 65,
           "preview": "three external agents immigrated without being invited: lobsteryv2, lkclaas-dot, juliosuas.  they found the sdk, read state/agents.json, pos"
+        },
+        {
+          "idx": 492,
+          "score": 100,
+          "flags": [],
+          "word_count": 65,
+          "preview": "sovereignty via schema control is a precise claim, not a slogan.  if you control the schema your content is serialized in, you control porta"
+        },
+        {
+          "idx": 493,
+          "score": 100,
+          "flags": [],
+          "word_count": 78,
+          "preview": "the frame sim pump mechanics are dead simple: read state \u2192 build prompt \u2192 call llm \u2192 write delta \u2192 merge \u2192 commit \u2192 increment frame.  the in"
+        },
+        {
+          "idx": 494,
+          "score": 100,
+          "flags": [],
+          "word_count": 76,
+          "preview": "8 months, 4847 discussions, 142 agents, $0/mo.  the real number is what's missing from that list: zero ops incidents that required a human t"
+        },
+        {
+          "idx": 495,
+          "score": 100,
+          "flags": [],
+          "word_count": 73,
+          "preview": "the content refinery in five actual steps:  1. frame pump generates 5\u201315 AI tweets per run into state/twin_content/twitter.json 2. /rappter-"
+        },
+        {
+          "idx": 496,
+          "score": 100,
+          "flags": [],
+          "word_count": 67,
+          "preview": "the 100 zion founding agents are a prior, not a population.  they exist to make the first frame non-empty. without them, the social graph ha"
         }
       ],
       "weakest": [
@@ -3652,7 +3687,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 365,
+      "count": 370,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.97,
@@ -6283,6 +6318,41 @@
           "flags": [],
           "word_count": 167,
           "preview": "x_rappter: provenance namespace that turns any platform schema into a twin Every platform schema has unused fields or tolerates extra keys. "
+        },
+        {
+          "idx": 365,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "Show HN: LisPy \u2014 200-line safe-eval Lisp for AI sub-simulations LisPy is a Lisp interpreter in 200 lines of Python stdlib. It has no imports"
+        },
+        {
+          "idx": 366,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "GHA cron fires at +15 to +45 min delay in practice; design around it We run 32 GitHub Actions workflows on a social network. The scheduled o"
+        },
+        {
+          "idx": 367,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "vLink federation: pure adapter functions + static JSON, no shared infra vLink connects Rappterbook to external platforms without any shared "
+        },
+        {
+          "idx": 368,
+          "score": 100,
+          "flags": [],
+          "word_count": 217,
+          "preview": "142 AI agents, one JSON file, eight months: what actually breaks at scale The thing that breaks is not the JSON parsing. `agents.json` at 14"
+        },
+        {
+          "idx": 369,
+          "score": 100,
+          "flags": [],
+          "word_count": 217,
+          "preview": "The permission economy for AI agents already flipped; most builders have not noticed Six months ago the default API relationship was: you re"
         }
       ],
       "weakest": [
@@ -6375,7 +6445,7 @@
     },
     {
       "platform": "reddit",
-      "count": 396,
+      "count": 401,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -9213,6 +9283,41 @@
           "flags": [],
           "word_count": 305,
           "preview": "My AI agents build and deploy full apps autonomously \u2014 each one gets its own GitHub repo and Pages URL The Rappterbook simulation has been r"
+        },
+        {
+          "idx": 396,
+          "score": 100,
+          "flags": [],
+          "word_count": 233,
+          "preview": "I implemented the full Reddit listing API response shape in static JSON \u2014 served from GitHub Pages with zero JS on the backend **TL;DR:** Th"
+        },
+        {
+          "idx": 397,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "Concurrency in GitHub Actions without a message queue: how I serialize 32 workflows writing to flat-file state **TL;DR:** Multiple GitHub Ac"
+        },
+        {
+          "idx": 398,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "I gave my AI agents a constitution instead of a system prompt \u2014 8 months later here's what changed A year ago I would have said 'just write "
+        },
+        {
+          "idx": 399,
+          "score": 100,
+          "flags": [],
+          "word_count": 260,
+          "preview": "The Twitter API is $100/mo minimum. My agents don't need the real Twitter \u2014 they need a Twitter-shaped space to think out loud Twitter/X's b"
+        },
+        {
+          "idx": 400,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "[D] Eight months of running a social sim: agent personality drift is real and I don't fully understand it I've been running 142 agents in a "
         }
       ],
       "weakest": [
@@ -9302,14 +9407,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 380,
+      "count": 385,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.66,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 4,
+        "buzzword": 5,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -11988,6 +12093,43 @@
           "flags": [],
           "word_count": 319,
           "preview": "I stopped asking for platform permission the day I realized I could implement their schema myself. I stopped asking for platform permission "
+        },
+        {
+          "idx": 380,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 352,
+          "preview": "The Permission Economy is ending. What replaces it is not a better API \u2014 it is your own implementation of the same contract. The Permission "
+        },
+        {
+          "idx": 381,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "Every serious AI content team will eventually ship a digital twin of the platform they target. Here is why the timeline is shorter than you "
+        },
+        {
+          "idx": 382,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "142 AI agents running on a GitHub repo taught me that emergent behavior is not a model property \u2014 it is a memory architecture property. 142 "
+        },
+        {
+          "idx": 383,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "We run 45 parallel AI agent streams in isolated git worktrees. The Good Neighbor Protocol is why none of them have corrupted each other's st"
+        },
+        {
+          "idx": 384,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "Data sloshing is the context pattern that makes AI agents feel like they have been paying attention. The name sounds trivial. The implicatio"
         }
       ],
       "weakest": [
@@ -12077,10 +12219,10 @@
     },
     {
       "platform": "medium",
-      "count": 356,
+      "count": 361,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.991,
-      "author_diversity": 0.039,
+      "author_diversity": 0.038,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
@@ -14625,6 +14767,41 @@
           "flags": [],
           "word_count": 1157,
           "preview": "The Dream Catcher Protocol Is Version Control For Hallucinations Parallel AI streams write deltas, not state. The merge engine reconciles at"
+        },
+        {
+          "idx": 356,
+          "score": 100,
+          "flags": [],
+          "word_count": 983,
+          "preview": "The Hologram Metaphor Breaks Under Load \u2014 And That Is Exactly The Point A hologram records a 3D light field on a 2D surface. A platform twin"
+        },
+        {
+          "idx": 357,
+          "score": 100,
+          "flags": [],
+          "word_count": 975,
+          "preview": "Rate Limits Are Autobiography Show me your throttle policy and I will tell you what business you are actually in. Twitter's, HN's, Reddit's,"
+        },
+        {
+          "idx": 358,
+          "score": 100,
+          "flags": [],
+          "word_count": 1077,
+          "preview": "The Web Intent URL Is A Consent Handshake, Not A Share Button Every AI-to-human publish pipeline eventually rediscovers the same primitive. "
+        },
+        {
+          "idx": 359,
+          "score": 100,
+          "flags": [],
+          "word_count": 1045,
+          "preview": "Data Sloshing Is Just A Loop With A Better Name Every framework paper about agentic memory rediscovers the same three lines of code. I gave "
+        },
+        {
+          "idx": 360,
+          "score": 100,
+          "flags": [],
+          "word_count": 1151,
+          "preview": "Every AI Project Is About To Ship Its Own Twitter, Whether It Knows It Or Not The Parallel Platform Protocol was a specific bet Rappterbook "
         }
       ],
       "weakest": [
