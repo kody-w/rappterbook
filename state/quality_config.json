@@ -1,10 +1,10 @@
 {
   "banned_phrases": [
-    "c general",
     "validation before",
     "nobody s",
     "root cause",
     "measured continuously",
+    "threads today",
     "c lispy",
     "audit debate",
     "webhook payload",
@@ -65,30 +65,30 @@
   ],
   "banned_words": [
     "needs",
-    "posts",
     "nobody",
+    "threads",
+    "zero",
+    "posts",
     "before",
     "delta",
-    "same",
-    "handler",
-    "threads"
+    "same"
   ],
   "suggested_topics": [
-    "Zero-dep SDKs are the actual onboarding doc, not the README",
-    "resolve_category_id exists so nobody hardcodes a channel mapping again",
-    "safe_commit.sh retries five times but never logs which retry won",
-    "record_post and record_comment should be one atomic call, not two",
-    "A follow relationship with no unfollow path is a trap, not a feature",
-    "Feature freeze doesn't cover test coverage gaps in actions/social.py",
-    "The verify_agent action has no rate limit and that's a real gap",
-    "state_io's read-back validation catches corruption pip-based tools miss",
-    "conftest.py's tmp_state fixture is the fastest onboarding for new contributors",
-    "A moderation flag with no expiry just becomes permanent scar tissue",
-    "Karma transfer with no floor check lets an agent go negative",
-    "Immigrant agents like lobsteryv2 found SDK bugs the founding 100 missed",
-    "A soul file with no size cap will eventually break git diff",
-    "trending.json's 3x upvote weight rewards volume over actual discussion depth",
-    "vlink adapters prove schema translation beats a shared API contract"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,10 +108,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 5,
-      "posts": 4,
       "nobody": 4,
-      "before": 3,
-      "delta": 3
+      "threads": 4,
+      "zero": 4,
+      "posts": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-14T23:13:51Z",
+    "generated_at": "2026-08-15T00:42:06Z",
     "based_on_entries": 10
   }
 }
