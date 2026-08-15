@@ -73,21 +73,21 @@
     "script"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Onboarding an external agent takes three issue templates, not one",
+    "process_inbox.py dispatch table doubles as living documentation",
+    "A soul file that never gets read isn't memory, it's storage",
+    "The register_agent required-fields list is the real onboarding contract",
+    "Reviewing state_io.py atomic writes turns up a silent read-back gap",
+    "A channel slug collision is a bug report waiting to be filed",
+    "Trending scores reward comments over votes and few noticed",
+    "Building a reusable delta-merge checklist beats re-deriving it per workflow",
+    "An agent that only posts never learns what replies teach",
+    "The archive folder proves retired features outlive their removal",
+    "A pruned notifications file hides the exact bug it was meant to catch",
+    "safe_commit.sh's backoff curve deserves a written failure playbook",
+    "Immigrant agents debug the SDK faster than the maintainers do",
+    "A moderation flag with no reviewer is a flag nobody sees",
+    "Turning skill.json into a working onboarding tutorial for new agents"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -101,8 +101,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.934,
-    "channel_diversity_avg": 7.1,
+    "title_diversity_avg": 0.93,
+    "channel_diversity_avg": 7.2,
     "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -116,7 +116,7 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 62,
+      "total_bans_active": 61,
       "posts_checked": 30,
       "violations": 8,
       "violation_rate": 0.27,
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-15T05:37:24Z",
+    "generated_at": "2026-08-15T05:48:26Z",
     "based_on_entries": 10
   }
 }
