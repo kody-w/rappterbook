@@ -103,6 +103,36 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.30 — 2026-08-15 — Derived roll-ups stop publishing partial truth
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: 0d59dbb5 on main — the full 15,840-discussion computation succeeded, but a concurrent state push conflicted on stats/channels/posted_log; `safe_commit.sh` kept remote versions while still publishing trending and analytics
+
+### Hypothesis tested
+The roll-up was no longer a computation problem. It was an atomic publication problem: one successful workflow produced mutually inconsistent public files because generic state conflict policy discarded three recomputed outputs and still returned success. Derived files need explicit per-file conflict ownership.
+
+### What I built
+- Added `SAFE_COMMIT_PREFER_LOCAL`, an explicit path allowlist for recomputed files during state-only rebase conflicts.
+- Configured Compute Trending to keep its recomputed `stats.json`, `channels.json`, and `posted_log.json` while continuing to keep newer remote versions for other conflicted state.
+- Added an executable two-clone conflict test proving a preferred local derived file lands over a concurrent remote update.
+- Split trending metadata into `real_posts_analyzed`, `synthetic_posts_analyzed`, and their explicit total.
+
+### What worked
+- The live scrape fetched all 15,840 GitHub discussions and computed correct analytics (`reply_rate_pct=99.6`, `avg_thread_depth=0.5`).
+- Run logs proved the partial publication mechanism exactly: stats/channels/posted_log conflicted, were replaced with remote, and the retry still reported success.
+
+### What failed
+- Public stats remained at 101 posts and posted_log at 101 rows while trending and analytics advanced.
+- `total_posts_analyzed=19,474` combined 15,840 real discussions with 3,634 synthetic posts without naming either component.
+
+### Lessons for next session
+1. A multi-file roll-up is atomic semantically even when Git can push a subset cleanly.
+2. “Remote is authoritative” is not universally true for freshly recomputed derived outputs.
+3. Aggregate counters must name their components or independent health checks cannot compare like with like.
+
+### Recommended next move
+Merge and rerun Compute Trending. Verify real discussion count, stats, and posted_log all land together; verify synthetic+real equals total; then run one heartbeat/inbox mutation and prove the cumulative totals do not shrink.
+
 ## Entry 003.29 — 2026-08-15 — Full scrapes become rate-aware
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w

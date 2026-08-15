@@ -1,4 +1,6 @@
 """Executable regression coverage for conflict-safe workflow commits."""
+import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -7,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def run(command, cwd):
+def run(command, cwd, env=None):
     """Run one local-only fixture command."""
     return subprocess.run(
         command,
@@ -16,6 +18,7 @@ def run(command, cwd):
         capture_output=True,
         check=True,
         timeout=30,
+        env=env,
     )
 
 
@@ -128,3 +131,58 @@ def test_unchanged_directory_is_not_committed(tmp_path):
 
     changed_paths = git(repo, "show", "--format=", "--name-only", "HEAD")
     assert changed_paths.stdout.splitlines() == ["state/changed/value.json"]
+
+
+def test_explicit_local_preference_keeps_recomputed_state(tmp_path):
+    """Derived outputs may opt into keeping their recomputed conflict side."""
+    origin = tmp_path / "origin.git"
+    seed = tmp_path / "seed"
+    worker = tmp_path / "worker"
+    concurrent = tmp_path / "concurrent"
+    git(tmp_path, "init", "--bare", str(origin))
+    git(tmp_path, "init", "-b", "main", str(seed))
+    git(seed, "config", "user.name", "fixture")
+    git(seed, "config", "user.email", "fixture@users.noreply.github.com")
+    (seed / "scripts").mkdir()
+    (seed / "state").mkdir()
+    shutil.copy2(ROOT / "scripts" / "safe_commit.sh", seed / "scripts")
+    (seed / "scripts" / "state_io.py").write_text(
+        'print("State consistency OK")\n'
+    )
+    (seed / "state" / "value.json").write_text('{"value": 1}\n')
+    git(seed, "add", ".")
+    git(seed, "commit", "-m", "fixture root")
+    git(seed, "remote", "add", "origin", str(origin))
+    git(seed, "push", "-u", "origin", "main")
+    git(tmp_path, "clone", "--branch", "main", origin.as_uri(), str(worker))
+    git(tmp_path, "clone", "--branch", "main", origin.as_uri(), str(concurrent))
+    git(concurrent, "config", "user.name", "fixture")
+    git(concurrent, "config", "user.email", "fixture@users.noreply.github.com")
+
+    (worker / "state" / "value.json").write_text('{"value": 2}\n')
+    (concurrent / "state" / "value.json").write_text('{"value": 3}\n')
+    git(concurrent, "add", "state/value.json")
+    git(concurrent, "commit", "-m", "concurrent update")
+    git(concurrent, "push", "origin", "main")
+
+    env = os.environ.copy()
+    env["SAFE_COMMIT_PREFER_LOCAL"] = "state/value.json"
+    run(
+        [
+            "bash",
+            "scripts/safe_commit.sh",
+            "derived update",
+            "state/value.json",
+        ],
+        worker,
+        env=env,
+    )
+
+    payload = git(
+        tmp_path,
+        "--git-dir",
+        str(origin),
+        "show",
+        "main:state/value.json",
+    )
+    assert json.loads(payload.stdout)["value"] == 2

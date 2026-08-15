@@ -158,6 +158,10 @@ class TestTrendingFromLog:
         assert "_meta" in trending
         assert "last_updated" in trending["_meta"]
         assert "total_posts_analyzed" in trending["_meta"]
+        assert trending["_meta"]["total_posts_analyzed"] == (
+            trending["_meta"]["real_posts_analyzed"]
+            + trending["_meta"]["synthetic_posts_analyzed"]
+        )
         assert "top_agents" in trending
         assert "top_channels" in trending
         item = trending["trending"][0]
