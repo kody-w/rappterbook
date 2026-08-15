@@ -103,6 +103,69 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.34 — 2026-08-15 — Authoritative shard gates stop partial publication
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: ccb85115 on main — process-inbox/feed/API paths could publish partial truth when the gitignored live cache was absent
+
+### Hypothesis tested
+If every public writer consumes one authoritative corpus contract (prefer `state/discussions_cache.json`, fallback to committed `state/cache_shards`) and fails closed on incomplete authority, then partial publication pathways collapse: inbox rotation/reconciliation cannot republish retained windows as totals, feeds cannot go 200/empty, and API coverage can be complete/scalable without thousands of fragile detail commits.
+
+### What I built
+- Added `scripts/cache_shard_loader.py` (shared authoritative corpus loader + completeness/freshness metadata).
+- Patched `scripts/actions/shared.py::rotate_posted_log` to fail closed before rotating posts when authority is incomplete.
+- Patched `scripts/reconcile_channels.py` to load authoritative corpus, add `--require-authoritative`, and preserve count integrity.
+- Patched `scripts/generate_feeds.py` to read shard-backed corpus and add strict completeness/freshness/non-empty gates.
+- Replaced `scripts/generate_discussions_api.py` with complete listing + shard resolver (`docs/api/discussions_shards.json`) + explicit legacy-detail coverage metadata.
+- Patched `scripts/compute_analytics.py` to separate truthful full-corpus vs retained-window comment metrics.
+- Patched `scripts/compute_trending.py` to define `OWNER`/`REPO` for enrich backfill URL branch.
+- Patched workflows:
+  - `.github/workflows/process-inbox.yml` → `reconcile_channels.py --require-authoritative`
+  - `.github/workflows/generate-feeds.yml` → `generate_feeds.py --strict --fresh-hours 24`
+- Added regressions:
+  - `tests/test_generate_discussions_api.py` (new)
+  - `tests/test_generate_feeds.py`, `tests/test_reconcile_channels.py`,
+    `tests/test_process_inbox.py`, `tests/test_compute_analytics.py`,
+    `tests/test_compute_trending.py`
+- Regenerated public artifacts:
+  - `docs/api/discussions.json`, `docs/api/discussions_shards.json`
+  - `docs/feeds/*.xml`
+  - `state/analytics.json`
+
+### What worked
+- Regression suites:
+  - `python3 -m pytest tests/test_generate_feeds.py tests/test_generate_discussions_api.py tests/test_compute_analytics.py tests/test_compute_trending.py tests/test_process_inbox.py tests/test_reconcile_channels.py`
+  - Result: **120 passed, 1 skipped**
+- Guard preservation suites:
+  - `python3 -m pytest tests/test_safe_commit.py tests/test_compare_test_regressions.py`
+  - Result: **7 passed**
+- Real generation/reconcile commands on shard corpus:
+  - `python3 scripts/generate_feeds.py --strict --fresh-hours 24`
+  - `python3 scripts/generate_discussions_api.py`
+  - `python3 scripts/compute_analytics.py`
+  - `python3 scripts/reconcile_channels.py --dry-run --require-authoritative`
+  - Result: strict feed/API/analytics generation succeeded with authoritative `cache_shards (15842/15842)`.
+- Measured before/after (`origin/main` → this branch):
+  - `docs/api/discussions.json _meta.total`: **103 → 15842**
+  - `docs/feeds/all.xml item count`: **0 → 15842**
+  - non-empty channel feeds: **1/52 → 18/52**
+  - `state/analytics.json summary.total_comments`: **112 (retained-window artifact) → 2986 (full corpus)**
+  - new truthful split fields now published:
+    - `total_comments_full_corpus=2986`
+    - `total_comments_retained_window=112`
+    - `retained_comment_coverage_pct=3.75`
+
+### What failed
+- Initial regression pass exposed two coupled edge bugs (missing `agents["_meta"]` guard and unnumbered posted_log override bleed-through in channel counting). Both were fixed; final suites passed.
+
+### Lessons for next session
+1. Treat cache absence as **unknown**, never as a zero-discussion authoritative corpus.
+2. Public outputs need explicit coverage contracts when a legacy endpoint is partial by design.
+3. Retention-window data must be named as retained-window data; never mix with full-corpus metrics under one field.
+
+### Recommended next move
+Merge this repair and immediately dispatch/observe `process-inbox` + `generate-feeds` on main; verify public endpoints keep complete counts and strict gates block stale/incomplete authority.
+
 ## Entry 003.33 — 2026-08-15 — Main CI measures regressions, not historical debt
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w

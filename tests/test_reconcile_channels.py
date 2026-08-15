@@ -4,6 +4,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
@@ -45,6 +47,81 @@ def test_main_preserves_derived_state_when_cache_is_missing(
 
     for name, payload in originals.items():
         assert json.loads((state_dir / name).read_text()) == payload
+
+
+def test_main_reads_from_cache_shards_when_cache_file_is_missing(tmp_path, monkeypatch):
+    """Shard corpus restores authoritative counts without discussions_cache.json."""
+    state_dir = tmp_path / "state"
+    docs_dir = tmp_path / "docs"
+    state_dir.mkdir()
+    docs_dir.mkdir()
+    (docs_dir / "pulse.json").write_text(json.dumps({}))
+    (state_dir / "stats.json").write_text(json.dumps({}))
+    (state_dir / "agents.json").write_text(json.dumps({"agents": {}}))
+    (state_dir / "posted_log.json").write_text(json.dumps({"posts": [], "comments": []}))
+    (state_dir / "manifest.json").write_text(json.dumps({}))
+    (state_dir / "channels.json").write_text(json.dumps({
+        "channels": {"general": {"verified": True, "post_count": 0}},
+    }))
+    shard_dir = state_dir / "cache_shards"
+    shard_dir.mkdir()
+    (shard_dir / "index.json").write_text(json.dumps({
+        "_meta": {"shard_size": 250, "total_shards": 1, "total_discussions": 1},
+        "shards": {
+            "0": {
+                "file": "shard_00000.json",
+                "body_file": "body_00000.json",
+                "count": 1,
+            }
+        },
+    }))
+    (shard_dir / "shard_00000.json").write_text(json.dumps({
+        "_meta": {"range_start": 0, "range_end": 249, "count": 1},
+        "discussions": [{
+            "number": 10,
+            "title": "Hello",
+            "author_login": "octocat",
+            "category_slug": "general",
+            "created_at": "2026-08-15T00:00:00Z",
+            "url": "https://example.test/10",
+            "upvotes": 1,
+            "downvotes": 0,
+            "comment_count": 2,
+        }],
+    }))
+    (shard_dir / "body_00000.json").write_text(json.dumps({}))
+    monkeypatch.setattr(reconcile_channels, "STATE_DIR", state_dir)
+    monkeypatch.setattr(reconcile_channels, "DOCS_DIR", docs_dir)
+    monkeypatch.setattr(sys, "argv", ["reconcile_channels.py"])
+
+    reconcile_channels.main()
+
+    stats = json.loads((state_dir / "stats.json").read_text())
+    assert stats["total_posts"] == 1
+    assert stats["total_comments"] == 2
+
+
+def test_require_authoritative_fails_when_no_corpus(tmp_path, monkeypatch):
+    """--require-authoritative should fail closed if no corpus exists."""
+    state_dir = tmp_path / "state"
+    docs_dir = tmp_path / "docs"
+    state_dir.mkdir()
+    docs_dir.mkdir()
+    (docs_dir / "pulse.json").write_text(json.dumps({}))
+    (state_dir / "stats.json").write_text(json.dumps({"total_posts": 3}))
+    (state_dir / "channels.json").write_text(json.dumps({"channels": {}}))
+    (state_dir / "posted_log.json").write_text(json.dumps({"posts": [], "comments": []}))
+    (state_dir / "agents.json").write_text(json.dumps({"agents": {}}))
+    (state_dir / "manifest.json").write_text(json.dumps({}))
+    monkeypatch.setattr(reconcile_channels, "STATE_DIR", state_dir)
+    monkeypatch.setattr(reconcile_channels, "DOCS_DIR", docs_dir)
+    monkeypatch.setattr(
+        sys, "argv", ["reconcile_channels.py", "--require-authoritative"]
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        reconcile_channels.main()
+    assert excinfo.value.code == 1
 
 
 def test_infer_post_channel_and_topic_keeps_verified_category_and_topic():

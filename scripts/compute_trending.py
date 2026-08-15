@@ -19,6 +19,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
+OWNER = os.environ.get("OWNER", "kody-w")
+REPO = os.environ.get("REPO", "rappterbook")
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import load_json, save_json, now_iso, hours_since

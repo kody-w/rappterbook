@@ -272,3 +272,41 @@ class TestTrendingAgeFilter:
         trending = json.loads((tmp_state / "trending.json").read_text())
         assert len(trending["trending"]) == 1
         assert trending["trending"][0]["title"] == "Fresh Post"
+
+
+class TestEnrichPostedLog:
+    """Test enrichment path that backfills missing posted_log rows."""
+
+    def test_backfill_uses_owner_repo_constants(self, tmp_state):
+        """Backfill branch must build URLs without NameError on OWNER/REPO."""
+        import compute_trending
+
+        cache_payload = {
+            "discussions": [
+                {
+                    "number": 4242,
+                    "title": "[SPACE] Backfill URL test",
+                    "category_slug": "general",
+                    "created_at": "2026-08-01T00:00:00Z",
+                    "updated_at": "2026-08-01T01:00:00Z",
+                    "upvotes": 3,
+                    "downvotes": 1,
+                    "comment_count": 5,
+                    "author_login": "octocat",
+                    "body": "hello",
+                }
+            ]
+        }
+        (tmp_state / "discussions_cache.json").write_text(json.dumps(cache_payload))
+        (tmp_state / "posted_log.json").write_text(json.dumps({"posts": [], "comments": []}))
+        (tmp_state / "channels.json").write_text(json.dumps({"channels": {}}))
+        compute_trending.STATE_DIR = tmp_state
+        compute_trending.OWNER = "sample-owner"
+        compute_trending.REPO = "sample-repo"
+
+        compute_trending.enrich_posted_log()
+
+        posts = json.loads((tmp_state / "posted_log.json").read_text())["posts"]
+        assert len(posts) == 1
+        assert posts[0]["number"] == 4242
+        assert posts[0]["url"] == "https://github.com/sample-owner/sample-repo/discussions/4242"

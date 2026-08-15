@@ -1556,6 +1556,36 @@ class TestPruneOldChanges:
 # ---------------------------------------------------------------------------
 
 class TestPostedLogRotation:
+    def _seed_authoritative_shards(self, state_dir: Path, total: int = 2) -> None:
+        """Create a minimal complete shard corpus for rotation safeguards."""
+        shard_dir = state_dir / "cache_shards"
+        shard_dir.mkdir(exist_ok=True)
+        discussions = [
+            {
+                "number": i + 1,
+                "title": f"Discussion {i + 1}",
+                "author_login": "agent",
+                "category_slug": "general",
+                "created_at": "2026-08-15T00:00:00Z",
+                "url": f"https://example.test/{i + 1}",
+                "upvotes": 0,
+                "downvotes": 0,
+                "comment_count": 0,
+            }
+            for i in range(total)
+        ]
+        (shard_dir / "shard_00000.json").write_text(json.dumps({
+            "_meta": {"range_start": 0, "range_end": 249, "count": total},
+            "discussions": discussions,
+        }))
+        (shard_dir / "body_00000.json").write_text(json.dumps({}))
+        (shard_dir / "index.json").write_text(json.dumps({
+            "_meta": {"shard_size": 250, "total_shards": 1, "total_discussions": total},
+            "shards": {
+                "0": {"file": "shard_00000.json", "body_file": "body_00000.json", "count": total}
+            },
+        }))
+
     def test_no_rotation_when_under_1mb(self, tmp_state):
         """File under 1MB should not be rotated."""
         from actions.shared import rotate_posted_log
@@ -1571,6 +1601,7 @@ class TestPostedLogRotation:
     def test_rotation_moves_old_entries(self, tmp_state):
         """Entries older than 90 days should be archived when file > 1MB."""
         from actions.shared import rotate_posted_log, POSTED_LOG_MAX_BYTES
+        self._seed_authoritative_shards(tmp_state)
         old_ts = "2025-01-01T00:00:00Z"
         new_ts = datetime.now(timezone.utc).isoformat()
         # Build a posted_log > 1MB
@@ -1589,6 +1620,24 @@ class TestPostedLogRotation:
         assert archive_path.exists()
         archive = json.loads(archive_path.read_text())
         assert len(archive["posts"]) == 3000
+        assert posted_log["_meta"]["retained_post_count"] == 1
+        assert posted_log["_meta"]["authoritative_source"] == "cache_shards"
+
+    def test_rotation_fails_closed_without_authoritative_corpus(self, tmp_state):
+        """Post rotation must refuse to publish a partial corpus without authority."""
+        from actions.shared import rotate_posted_log, POSTED_LOG_MAX_BYTES
+
+        old_posts = [
+            {"number": i, "created_at": "2025-01-01T00:00:00Z", "title": f"old {i} " * 50}
+            for i in range(3000)
+        ]
+        posted_log = {"posts": old_posts, "comments": []}
+        save_path = tmp_state / "posted_log.json"
+        save_path.write_text(json.dumps(posted_log))
+        assert save_path.stat().st_size > POSTED_LOG_MAX_BYTES
+
+        with pytest.raises(RuntimeError):
+            rotate_posted_log(posted_log, tmp_state)
 
     def test_rotation_preserves_recent_comments(self, tmp_state):
         """Recent comments stay in active log."""

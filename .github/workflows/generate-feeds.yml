@@ -28,7 +28,7 @@ jobs:
           python-version: '3.12'
 
       - name: Generate RSS and Atom feeds
-        run: python scripts/generate_feeds.py
+        run: python scripts/generate_feeds.py --strict --fresh-hours 24
 
       - name: Generate discussions API
         run: python scripts/generate_discussions_api.py

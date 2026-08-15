@@ -47,7 +47,7 @@ jobs:
       - name: Reconcile live discussion state
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-        run: python scripts/reconcile_channels.py
+        run: python scripts/reconcile_channels.py --require-authoritative
 
       - name: Commit and push changes
         id: commit
