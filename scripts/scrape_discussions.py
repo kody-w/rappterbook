@@ -36,6 +36,7 @@ Usage:
 Requires: GITHUB_TOKEN env var.
 """
 import json
+import http.client
 import os
 import sys
 import time
@@ -71,7 +72,12 @@ def graphql(query: str, token: str, retries: int = 3) -> dict:
                     time.sleep(2 ** attempt * 5)
                     continue
                 return result
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as exc:
+        except (
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            http.client.IncompleteRead,
+            TimeoutError,
+        ) as exc:
             if attempt < retries - 1:
                 wait = min(2 ** attempt * 10, 120)
                 print(f"  [retry] Request failed ({exc}), waiting {wait}s...")
@@ -80,12 +86,29 @@ def graphql(query: str, token: str, retries: int = 3) -> dict:
                 raise
 
 
-def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
+def scrape_all_discussions(
+    token: str,
+    limit: int | None = None,
+    light: bool = False,
+) -> list[dict]:
     """Fetch all discussions with reactions, comment counts, and metadata."""
     discussions: list[dict] = []
     cursor = None
     max_pages = ((limit + 99) // 100) if limit else None
     page = 0
+    comments_selection = (
+        "comments { totalCount }"
+        if light else
+        """comments(first: 100) {
+                            totalCount
+                            nodes {
+                                id
+                                body
+                                author { login }
+                                createdAt
+                            }
+                        }"""
+    )
 
     while max_pages is None or page < max_pages:
         after = f', after: "{cursor}"' if cursor else ""
@@ -103,15 +126,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                         url
                         author {{ login }}
                         category {{ slug }}
-                        comments(first: 100) {{
-                            totalCount
-                            nodes {{
-                                id
-                                body
-                                author {{ login }}
-                                createdAt
-                            }}
-                        }}
+                        {comments_selection}
                         upvotes: reactions(content: THUMBS_UP) {{ totalCount }}
                         downvotes: reactions(content: THUMBS_DOWN) {{ totalCount }}
                     }}
@@ -136,7 +151,7 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                 }
                 for c in comment_data.get("nodes", [])
             ]
-            discussions.append({
+            discussion = {
                 "number": node["number"],
                 "node_id": node.get("id", ""),
                 "title": node["title"],
@@ -149,8 +164,10 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
                 "upvotes": node.get("upvotes", {}).get("totalCount", 0),
                 "downvotes": node.get("downvotes", {}).get("totalCount", 0),
                 "comment_count": comment_data.get("totalCount", 0),
-                "comment_authors": comment_authors,
-            })
+            }
+            if not light:
+                discussion["comment_authors"] = comment_authors
+            discussions.append(discussion)
 
         if limit and len(discussions) >= limit:
             discussions = discussions[:limit]
@@ -438,9 +455,14 @@ def save_cache(discussions: list[dict], merge: bool = True) -> None:
     else:
         existing_by_num = {}
 
-    # New data wins on conflict (keyed by discussion number)
+    # New fields win on conflict. Fields omitted by a light scrape retain the
+    # richer value already present in the cache.
     new_by_num = {d["number"]: d for d in discussions}
-    existing_by_num.update(new_by_num)
+    for number, new_data in new_by_num.items():
+        existing_by_num[number] = {
+            **existing_by_num.get(number, {}),
+            **new_data,
+        }
 
     merged = sorted(existing_by_num.values(), key=lambda d: d["number"], reverse=True)
 
@@ -531,7 +553,7 @@ def main() -> None:
     else:
         mode = "light" if light else f"recent {limit}" if limit else "full"
         print(f"Scraping discussions ({mode} mode)...")
-        discussions = scrape_all_discussions(token, limit=limit)
+        discussions = scrape_all_discussions(token, limit=limit, light=light)
         print(f"  Fetched {len(discussions)} discussions")
         if not light:
             scrape_comment_bodies(discussions, token)
