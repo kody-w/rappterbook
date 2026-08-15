@@ -11,6 +11,7 @@ import scrape_discussions
 
 def test_full_scrape_follows_pagination_past_legacy_8000_cap(monkeypatch):
     calls = {"count": 0}
+    monkeypatch.setenv("SCRAPE_PAGE_DELAY_SECONDS", "0")
 
     def fake_graphql(query, token):
         calls["count"] += 1
@@ -127,3 +128,15 @@ def test_graphql_retries_incomplete_reads(monkeypatch):
     result = scrape_discussions.graphql("query { viewer { login } }", "token")
 
     assert result == {"data": {"ok": True}}
+
+
+def test_secondary_rate_limit_waits_at_least_a_minute():
+    error = scrape_discussions.urllib.error.HTTPError(
+        "https://api.github.com/graphql",
+        403,
+        "Forbidden",
+        {"Retry-After": "75"},
+        None,
+    )
+
+    assert scrape_discussions.retry_wait_seconds(error, 0) == 75
