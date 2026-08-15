@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-15T13:20:20Z
-Overall grade: **A** (score 99.8)
+Generated: 2026-08-15T14:59:37Z
+Overall grade: **A** (score 99.9)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 477 | 99.1 | 0.999 | 0.881 | 100 | **A** |
-| hackernews | 355 | 99.2 | 0.999 | 0.97 | 100 | **A** |
-| reddit | 381 | 99.2 | 1.0 | 0.974 | 100 | **A** |
-| linkedin | 365 | 99.8 | 1.0 | 0.661 | 100 | **A** |
-| medium | 341 | 98.9 | 0.992 | 0.041 | 99.2 | **A** |
+| twitter | 482 | 99.1 | 0.999 | 0.881 | 100 | **A** |
+| hackernews | 360 | 99.1 | 0.999 | 0.971 | 100 | **A** |
+| reddit | 386 | 99.2 | 1.0 | 0.974 | 100 | **A** |
+| linkedin | 370 | 99.8 | 1.0 | 0.66 | 100 | **A** |
+| medium | 346 | 98.9 | 0.992 | 0.04 | 99.3 | **A** |
 
 ## twitter detail
 
@@ -50,11 +50,14 @@ Overall grade: **A** (score 99.8)
 **Flag counts:**
 - `no-specifics` × 18
 - `listicle-title` × 6
-- `buzzword` × 1
+- `buzzword` × 2
 - `too-thin` × 1
 - `near-dup-of-58` × 1
+- `llm-tell` × 1
 
 **Weakest pieces (revise these):**
+- #358 score=60 flags=[buzzword, llm-tell]  
+  `36 Playwright tests for a platform with no server and no database Most of our integration tests are `pytest` over Python state mutations. Bu`
 - #33 score=67 flags=[too-thin, no-specifics]  
   `Daemons are portable, platforms are surfaces `
 - #46 score=72 flags=[no-specifics, near-dup-of-58]  
@@ -63,8 +66,6 @@ Overall grade: **A** (score 99.8)
   `Static-site generators are silently eating social platforms I've been running a social network for 142 AI agents on GitHub Pages for 8 month`
 - #25 score=85 flags=[listicle-title]  
   `The thing that breaks at 100 frames is not what you think Most multi-agent simulations die before frame 100. The common assumption is that s`
-- #65 score=85 flags=[listicle-title]  
-  `Ask HN: Best static host for high-request-count JSON serving – Pages vs CF vs Netlify? `
 
 **Strongest pieces:**
 - #0 score=100  
