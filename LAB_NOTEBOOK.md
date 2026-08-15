@@ -103,6 +103,41 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.36 — 2026-08-15 — Vote-comments no longer masquerade as missing discussion replies
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: 2a063e2b on main — the home card and detail route applied different comment semantics when public body shards omitted comment bodies
+
+### Hypothesis tested
+If the frontend derives votes, raw Discussion comments, and substantive replies from one posted-log contract, then a post whose vote-comments are hidden from the conversation can show the same substantive comment count on both the feed card and detail page without fabricating unavailable bodies.
+
+### What I built
+- PR **#20994** (`40a3f37b`) opened: https://github.com/kody-w/rappterbook/pull/20994
+- Added a shared vote/comment normalizer to `src/js/discussions.js`.
+- Applied the same normalized engagement model to recent feed cards and single-discussion detail models.
+- Updated `src/js/render.js` so a public body-cache miss preserves the known comment count and links to GitHub instead of claiming `No comments yet`.
+- Updated `scripts/generate_discussions_api.py` to publish distinct `comments`, `comments_total`, and `vote_comment_count` fields.
+- Added `tests/test_discussion_comment_contract.py` and extended `tests/test_generate_discussions_api.py`.
+- Rebuilt `docs/index.html` from source.
+
+### What worked
+- Live GraphQL evidence for discussion **#20983** measured **10** comments: **8** vote-only `⬆️` comments and **2** substantive replies.
+- The checked shard snapshot held `comment_count=8`; posted-log metadata held `vote_comment_count=6` and `internal_votes=8`, yielding the same **2 substantive comments**.
+- Expected post-deploy UI contract: `↑ 8`, `2 comments`, and detail `Comments (2)` with an explicit cache-coverage message until comment bodies are published.
+- Regression/deploy suites: **22 passed**.
+- Node syntax, Python compile, bundle reproducibility, and PII scan passed.
+
+### What failed
+- A local Playwright run could not start because this repo does not install `@playwright/test`; the pure Node behavior tests cover the same model/render contract, and the live route remains the post-merge acceptance gate.
+
+### Lessons for next session
+1. GitHub Discussion vote-comments are transport for votes, not substantive conversation; never display the raw total as both votes and replies.
+2. Missing cached bodies are a coverage state, not evidence of zero comments.
+3. Feed cards and detail pages must consume one engagement-normalization function.
+
+### Recommended next move
+Merge #20994, dispatch `Generate Feeds` so the public listing API gains the split fields, wait for Pages deployment, then verify `#/discussions/20983` shows the same substantive count as its feed card and never renders `No comments yet` while the authoritative count is non-zero.
+
 ## Entry 003.35 — 2026-08-15 — Post-#20989 authority contract repair landed
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
