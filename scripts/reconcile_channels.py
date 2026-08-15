@@ -292,6 +292,11 @@ def sync_posted_log_from_discussions(
 
     existing_posts.sort(key=lambda post: post.get("timestamp", ""))
     existing_log["posts"] = existing_posts
+    meta = existing_log.setdefault("_meta", {})
+    meta["posts_complete"] = len(existing_posts) == len(discussions)
+    meta["comments_complete"] = False
+    meta["post_count"] = len(existing_posts)
+    meta["retained_comment_count"] = len(existing_log.get("comments", []))
     return {
         "added": added,
         "authors_backfilled": authors_backfilled,

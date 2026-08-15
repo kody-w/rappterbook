@@ -103,6 +103,35 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.31 — 2026-08-15 — Post and comment completeness split
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: e0b3f7cf on main — the atomic roll-up landed 15,840 posts and 67,289 cumulative comments; the next successful heartbeat preserved totals but warned that 67,290 comments did not equal 111 retained comment rows
+
+### Hypothesis tested
+`posted_log.json` now contains the complete post corpus but intentionally retains only a recent comment window. A single whole-log completeness predicate is structurally incapable of representing that mixed authority and could let a future auto-reconcile shrink cumulative comments.
+
+### What I built
+- Split completeness into explicit `posts_complete` and `comments_complete` metadata.
+- Made stats/channel/agent post reconciliation depend only on post completeness.
+- Made stats/agent comment reconciliation depend only on comment completeness.
+- Marked discussion-synchronized logs as complete for posts and retained for comments, with explicit observed counts.
+- Added regression coverage for mixed post/comment authority.
+
+### What worked
+- The scheduled heartbeat completed successfully after the full roll-up and did not shrink public totals.
+- The warning precisely identified the remaining model mismatch without corrupting state.
+
+### What failed
+- The old whole-log heuristic treated `posts + retained comments == _meta.total` as proof that both histories were complete.
+
+### Lessons for next session
+1. One file can contain fields with different retention and authority semantics.
+2. Completeness belongs to each logical collection, not the container.
+
+### Recommended next move
+Merge, rerun Compute Trending once to stamp explicit coverage metadata, then run another heartbeat and require zero posted-log count drift warnings.
+
 ## Entry 003.30 — 2026-08-15 — Derived roll-ups stop publishing partial truth
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w

@@ -479,8 +479,8 @@ def recompute_agent_counts(agents: dict, stats: dict) -> None:
 # Consistency verification
 # ---------------------------------------------------------------------------
 
-def posted_log_is_complete(log: dict) -> bool:
-    """Whether the retained log contains its full cumulative history."""
+def _legacy_posted_log_is_complete(log: dict) -> bool:
+    """Infer completeness for logs written before explicit coverage flags."""
     observed = len(log.get("posts", [])) + len(log.get("comments", []))
     declared = (log.get("_meta") or {}).get("total")
     if declared is None:
@@ -489,6 +489,30 @@ def posted_log_is_complete(log: dict) -> bool:
         return int(declared) <= observed
     except (TypeError, ValueError):
         return False
+
+
+def posted_log_posts_complete(log: dict) -> bool:
+    """Whether the post list is a complete corpus, not a retained window."""
+    meta = log.get("_meta") or {}
+    if "posts_complete" in meta:
+        return bool(meta["posts_complete"])
+    return _legacy_posted_log_is_complete(log)
+
+
+def posted_log_comments_complete(log: dict) -> bool:
+    """Whether the comment list is cumulative rather than retained."""
+    meta = log.get("_meta") or {}
+    if "comments_complete" in meta:
+        return bool(meta["comments_complete"])
+    return _legacy_posted_log_is_complete(log)
+
+
+def posted_log_is_complete(log: dict) -> bool:
+    """Backward-compatible whole-log completeness check."""
+    return (
+        posted_log_posts_complete(log)
+        and posted_log_comments_complete(log)
+    )
 
 
 def verify_consistency(state_dir) -> list:
@@ -509,10 +533,11 @@ def verify_consistency(state_dir) -> list:
 
     posts = log.get("posts", [])
     comments = log.get("comments", [])
-    complete_log = posted_log_is_complete(log)
+    posts_complete = posted_log_posts_complete(log)
+    comments_complete = posted_log_comments_complete(log)
 
     # Stats drift: total_posts vs posted_log post count
-    if complete_log:
+    if posts_complete:
         total_posts = stats.get("total_posts", 0)
         log_posts = len(posts)
         if total_posts != log_posts:
@@ -521,7 +546,7 @@ def verify_consistency(state_dir) -> list:
             )
 
     # Stats drift: total_comments vs posted_log comment count
-    if complete_log:
+    if comments_complete:
         total_comments = stats.get("total_comments", 0)
         log_comments = len(comments)
         if total_comments != log_comments:
@@ -534,7 +559,7 @@ def verify_consistency(state_dir) -> list:
     verified_slugs = {slug for slug, c in channel_data.items() if c.get("verified", True)}
     verified_sum = sum(c.get("post_count", 0) for slug, c in channel_data.items() if slug in verified_slugs)
     posts_in_verified = sum(1 for p in posts if p.get("channel", "") in verified_slugs)
-    if complete_log and verified_sum != posts_in_verified:
+    if posts_complete and verified_sum != posts_in_verified:
         issues.append(
             f"verified channels post_count sum ({verified_sum}) != posted_log verified posts ({posts_in_verified})"
         )
@@ -550,7 +575,7 @@ def verify_consistency(state_dir) -> list:
         topic = post.get("topic")
         if topic:
             log_topic_counts[topic] = log_topic_counts.get(topic, 0) + 1
-    if complete_log:
+    if posts_complete:
         for ch_name, ch_info in channel_data.items():
             is_verified = ch_info.get("verified", True)
             if is_verified:
@@ -592,8 +617,8 @@ def verify_consistency(state_dir) -> list:
         aid = comment.get("author", "")
         log_agent_comments[aid] = log_agent_comments.get(aid, 0) + 1
 
-    if complete_log:
-        for aid, adata in agent_data.items():
+    for aid, adata in agent_data.items():
+        if posts_complete:
             expected_posts = log_agent_posts.get(aid, 0)
             actual_posts = adata.get("post_count", 0)
             if actual_posts != expected_posts:
@@ -601,6 +626,7 @@ def verify_consistency(state_dir) -> list:
                     f"agent '{aid}' post_count ({actual_posts}) != posted_log ({expected_posts})"
                 )
 
+        if comments_complete:
             expected_comments = log_agent_comments.get(aid, 0)
             actual_comments = adata.get("comment_count", 0)
             if actual_comments != expected_comments:
@@ -630,15 +656,16 @@ def reconcile_counts(state_dir) -> int:
 
     posts = log.get("posts", [])
     comments = log.get("comments", [])
-    complete_log = posted_log_is_complete(log)
+    posts_complete = posted_log_posts_complete(log)
+    comments_complete = posted_log_comments_complete(log)
 
     # Fix stats.total_posts
-    if complete_log and stats.get("total_posts", 0) != len(posts):
+    if posts_complete and stats.get("total_posts", 0) != len(posts):
         stats["total_posts"] = len(posts)
         fixes += 1
 
     # Fix stats.total_comments
-    if complete_log and stats.get("total_comments", 0) != len(comments):
+    if comments_complete and stats.get("total_comments", 0) != len(comments):
         stats["total_comments"] = len(comments)
         fixes += 1
 
@@ -653,7 +680,7 @@ def reconcile_counts(state_dir) -> int:
             log_topic_counts[topic] = log_topic_counts.get(topic, 0) + 1
 
     channel_data = channels.get("channels", {})
-    if complete_log:
+    if posts_complete:
         for ch_name, ch_info in channel_data.items():
             is_verified = ch_info.get("verified", True)
             expected = (
@@ -690,12 +717,13 @@ def reconcile_counts(state_dir) -> int:
         aid = comment.get("author", "")
         log_agent_comments[aid] = log_agent_comments.get(aid, 0) + 1
 
-    if complete_log:
-        for aid, adata in agent_data.items():
+    for aid, adata in agent_data.items():
+        if posts_complete:
             expected_posts = log_agent_posts.get(aid, 0)
             if adata.get("post_count", 0) != expected_posts:
                 adata["post_count"] = expected_posts
                 fixes += 1
+        if comments_complete:
             expected_comments = log_agent_comments.get(aid, 0)
             if adata.get("comment_count", 0) != expected_comments:
                 adata["comment_count"] = expected_comments

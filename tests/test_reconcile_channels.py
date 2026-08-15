@@ -197,6 +197,8 @@ def test_sync_posted_log_from_discussions_backfills_only_missing_numbers():
     assert existing_log["posts"][1]["channel"] == "show-and-tell"
     assert existing_log["posts"][1]["topic"] == "space"
     assert existing_log["posts"][1]["author"] == "zion-curator-03"
+    assert existing_log["_meta"]["posts_complete"] is True
+    assert existing_log["_meta"]["comments_complete"] is False
 
 
 def test_sync_posted_log_normalizes_existing_community_posts():
