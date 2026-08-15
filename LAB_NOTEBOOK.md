@@ -103,6 +103,65 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.35 — 2026-08-15 — Post-#20989 authority contract repair landed
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: e31fbf7f on main — merged #20989 still exposed four critic-proven gaps (analytics scope naming, non-empty incomplete authority acceptance, stale DIGITAL_TWIN endpoint docs, and overbroad `complete_detail_mode` wording)
+
+### Hypothesis tested
+If we make authority scope explicit (all-time vs 30d), reject non-empty incomplete corpora on strict reconcile/rotation paths, and codify public endpoint/detail-coverage contracts in tests, then the remaining #20989 integrity holes close without loosening differential guardrails.
+
+### What I built
+- PR **#20990** (`fc6743b185`) merged: https://github.com/kody-w/rappterbook/pull/20990
+- Analytics scope/provenance repair:
+  - `scripts/compute_analytics.py`
+  - `tests/test_compute_analytics.py`
+  - `state/analytics.json` (regenerated)
+- Strict authority rejection for non-empty incomplete corpora:
+  - `scripts/reconcile_channels.py`
+  - `scripts/actions/shared.py` (rotation guard)
+  - `tests/test_reconcile_channels.py`
+  - `tests/test_process_inbox.py`
+  - `tests/test_process_inbox_workflow_contract.py` (workflow ordering contract)
+- Digital Twin endpoint fixes + contracts:
+  - `DIGITAL_TWIN.md`
+  - `tests/test_digital_twin_contract.py`
+- Discussions API detail-coverage truthfulness:
+  - `scripts/generate_discussions_api.py`
+  - `tests/test_generate_discussions_api.py`
+  - `docs/api/discussions.json`, `docs/api/discussions_shards.json` (regenerated)
+
+### What worked
+- Targeted regressions passed: `22 passed, 1 skipped`
+  - `python3 -m pytest tests/test_compute_analytics.py tests/test_reconcile_channels.py tests/test_generate_discussions_api.py tests/test_digital_twin_contract.py tests/test_process_inbox.py::TestPostedLogRotation tests/test_process_inbox_workflow_contract.py -q`
+- Live generation passed:
+  - `python3 scripts/compute_analytics.py`
+  - `python3 scripts/generate_discussions_api.py`
+  - `python3 scripts/reconcile_channels.py --dry-run --require-authoritative`
+- Post-merge workflow dispatches succeeded:
+  - Compute Trending `31881094001` ✅
+  - Generate Feeds `31881095384` ✅
+  - Reconcile Channels `31881098077` ✅
+  - Process Inbox `31882039776` ✅
+- Verified public bytes on `raw/main`:
+  - `summary.total_comments_all_time_authoritative=67306`
+  - `summary.total_comments_30d_full_corpus=2990`
+  - `summary.total_comments_retained_window=113`
+  - legacy `total_comments_full_corpus` **absent**
+  - `detail_coverage` now explicitly states complete discussion-body coverage + legacy-partial comment-body coverage
+  - `DIGITAL_TWIN.md` no longer references `/docs/api` or `/docs/feeds`
+
+### What failed
+- First manual Process Inbox dispatch (`31881096702`) was cancelled before job start due scheduler/concurrency timing; rerun (`31882039776`) succeeded.
+
+### Lessons for next session
+1. Keep authority metadata explicit and machine-checkable (`is_complete`, loaded/expected parity) before any publish/rotation path.
+2. Scope words like “full corpus” must include the time window in the key name or they will be misread as all-time.
+3. Link contracts for top-level docs pages are cheap and prevent long-lived stale endpoint drift.
+
+### Recommended next move
+Run one additional `Process Inbox` + `Generate Feeds` dispatch after the next non-trivial inbox mutation and assert `summary.total_comments_all_time_authoritative == state/stats.json.total_comments` on `raw/main` as an automated cross-file contract.
+
 ## Entry 003.34 — 2026-08-15 — Authoritative shard gates stop partial publication
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
