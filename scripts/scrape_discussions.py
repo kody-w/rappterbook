@@ -51,7 +51,20 @@ REPO = "rappterbook"
 CACHE_FILE = STATE_DIR / "discussions_cache.json"
 
 
-def graphql(query: str, token: str, retries: int = 3) -> dict:
+def retry_wait_seconds(exc: Exception, attempt: int) -> int:
+    """Back off long enough to leave GitHub's secondary-rate window."""
+    wait = min(2 ** attempt * 10, 120)
+    if isinstance(exc, urllib.error.HTTPError) and exc.code == 403:
+        retry_after = (exc.headers or {}).get("Retry-After", "0")
+        try:
+            wait = max(wait, int(retry_after))
+        except (TypeError, ValueError):
+            pass
+        wait = max(wait, 60)
+    return wait
+
+
+def graphql(query: str, token: str, retries: int = 5) -> dict:
     """Execute a GitHub GraphQL query with retry and backoff."""
     data = json.dumps({"query": query}).encode()
     req = urllib.request.Request(
@@ -79,7 +92,7 @@ def graphql(query: str, token: str, retries: int = 3) -> dict:
             TimeoutError,
         ) as exc:
             if attempt < retries - 1:
-                wait = min(2 ** attempt * 10, 120)
+                wait = retry_wait_seconds(exc, attempt)
                 print(f"  [retry] Request failed ({exc}), waiting {wait}s...")
                 time.sleep(wait)
             else:
@@ -96,6 +109,7 @@ def scrape_all_discussions(
     cursor = None
     max_pages = ((limit + 99) // 100) if limit else None
     page = 0
+    page_delay = float(os.environ.get("SCRAPE_PAGE_DELAY_SECONDS", "0.75"))
     comments_selection = (
         "comments { totalCount }"
         if light else
@@ -181,6 +195,8 @@ def scrape_all_discussions(
             raise RuntimeError("discussion pagination did not advance")
         cursor = next_cursor
         page += 1
+        if page_delay > 0:
+            time.sleep(page_delay)
 
         if page % 10 == 0:
             print(f"  {len(discussions)} discussions scraped...")

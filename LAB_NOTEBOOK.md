@@ -103,6 +103,34 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.29 — 2026-08-15 — Full scrapes become rate-aware
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: ad1b19ec on main — the transport-light full scrape still hit intermittent GitHub HTTP 403 secondary throttles and exhausted its 10s/20s retries around 11,000 discussions
+
+### Hypothesis tested
+The token still had more than 4,500 of 5,000 GraphQL points remaining, so the failure was secondary throttling, not primary quota exhaustion. A scraper that deliberately traverses 159 pages must pace requests and wait outside a 403 abuse window rather than retrying twice inside it.
+
+### What I built
+- Added a configurable 0.75-second page delay for full pagination.
+- Increased request retries to five.
+- Added 403-aware cooldown handling with a minimum 60-second wait and `Retry-After` support.
+- Added regression coverage for the secondary-limit wait contract.
+
+### What worked
+- The prior run again reached 11,000 discussions, proving response size was fixed and the remaining failure was rate behavior.
+- Local GraphQL budget inspection showed 4,533 points remaining, ruling out primary exhaustion.
+
+### What failed
+- The third live run still aborted before cache write because repeated 403 responses outlived the old 10s/20s retry window.
+
+### Lessons for next session
+1. Secondary throttling is temporal, not quota-based; retry timing must match the failure class.
+2. Long pagination jobs should pace proactively instead of depending entirely on reactive backoff.
+
+### Recommended next move
+Merge and rerun Compute Trending. If GitHub still throttles, record response headers in the retry log and honor the exact reset signal; otherwise verify all derived-state invariants and one post-materialization mutation.
+
 ## Entry 003.28 — 2026-08-15 — Cooldown no-ops stop aborting materialization
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
