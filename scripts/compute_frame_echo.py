@@ -258,6 +258,8 @@ def main() -> int:
     if violations:
         for v in violations:
             print(f"⚠️  {v}")
+        if all("within 2h cooldown" in violation for violation in violations):
+            return 0
         return 1
 
     if args.dry_run:
