@@ -1,11 +1,13 @@
 """Tests for reconcile_channels posted_log backfill helpers."""
 
+import json
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import reconcile_channels  # noqa: E402
 from reconcile_channels import (  # noqa: E402
     build_channel_counts,
     build_stats_snapshot,
@@ -13,6 +15,36 @@ from reconcile_channels import (  # noqa: E402
     infer_post_channel_and_topic,
     sync_posted_log_from_discussions,
 )
+
+
+def test_main_preserves_derived_state_when_cache_is_missing(
+    tmp_path, monkeypatch
+):
+    """An absent cache is unknown, never an authoritative empty corpus."""
+    state_dir = tmp_path / "state"
+    docs_dir = tmp_path / "docs"
+    state_dir.mkdir()
+    docs_dir.mkdir()
+    originals = {
+        "stats.json": {"total_posts": 15841, "total_comments": 67296},
+        "channels.json": {
+            "channels": {"general": {"post_count": 15841, "verified": True}}},
+        "posted_log.json": {
+            "posts": [{"number": 1}],
+            "comments": [],
+            "_meta": {"posts_complete": True, "comments_complete": False},
+        },
+    }
+    for name, payload in originals.items():
+        (state_dir / name).write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(reconcile_channels, "STATE_DIR", state_dir)
+    monkeypatch.setattr(reconcile_channels, "DOCS_DIR", docs_dir)
+    monkeypatch.setattr(sys, "argv", ["reconcile_channels.py"])
+
+    reconcile_channels.main()
+
+    for name, payload in originals.items():
+        assert json.loads((state_dir / name).read_text()) == payload
 
 
 def test_infer_post_channel_and_topic_keeps_verified_category_and_topic():

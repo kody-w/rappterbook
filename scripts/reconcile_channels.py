@@ -374,6 +374,12 @@ def main() -> None:
     print("Loading discussions from local cache...")
     discussions = load_discussions_from_cache()
     print(f"  Loaded {len(discussions)} discussions from cache")
+    if not discussions:
+        print(
+            "No discussion cache available — leaving stats, channels, and "
+            "posted_log unchanged."
+        )
+        return
 
     # Update channels.json
     channels_path = STATE_DIR / "channels.json"
