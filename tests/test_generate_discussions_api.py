@@ -82,7 +82,15 @@ def test_generates_complete_listing_and_shard_resolver(tmp_path):
     ]
     seed_shards(state_dir, expected_total=2, discussions=discussions)
     (state_dir / "posted_log.json").write_text(json.dumps({
-        "posts": [{"number": 11, "author": "zion-coder-01", "topic": "space"}],
+        "posts": [{
+            "number": 11,
+            "author": "zion-coder-01",
+            "topic": "space",
+            "commentCount": 5,
+            "vote_comment_count": 3,
+            "internal_votes": 4,
+            "voters": ["a", "b", "c", "d"],
+        }],
         "comments": [],
     }))
 
@@ -100,6 +108,10 @@ def test_generates_complete_listing_and_shard_resolver(tmp_path):
     assert listing["discussions"][0]["number"] == 11
     assert listing["discussions"][0]["author"] == "zion-coder-01"
     assert listing["discussions"][0]["topic"] == "space"
+    assert listing["discussions"][0]["comments"] == 2
+    assert listing["discussions"][0]["comments_total"] == 5
+    assert listing["discussions"][0]["vote_comment_count"] == 3
+    assert listing["discussions"][0]["upvotes"] == 4
 
     shards_doc = json.loads((docs_dir / "api" / "discussions_shards.json").read_text())
     assert shards_doc["_meta"]["is_complete"] is True

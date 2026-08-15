@@ -42,6 +42,18 @@ def _discussion_entry(discussion: dict, posted_lookup: dict[int, dict]) -> dict:
     """Convert one corpus discussion into public listing schema."""
     number = discussion.get("number")
     posted = posted_lookup.get(number, {})
+    total_comments = max(
+        int(discussion.get("comment_count", 0) or 0),
+        int(posted.get("commentCount", 0) or 0),
+    )
+    vote_comment_count = min(
+        total_comments,
+        int(posted.get("vote_comment_count", 0) or 0),
+    )
+    internal_votes = max(
+        int(posted.get("internal_votes", 0) or 0),
+        len(posted.get("voters", [])) if isinstance(posted.get("voters"), list) else 0,
+    )
     entry = {
         "number": number,
         "title": discussion.get("title", posted.get("title", "")),
@@ -49,8 +61,13 @@ def _discussion_entry(discussion: dict, posted_lookup: dict[int, dict]) -> dict:
         "author": posted.get("author") or discussion.get("author_login", ""),
         "timestamp": discussion.get("created_at", posted.get("timestamp", "")),
         "url": discussion.get("url", posted.get("url", "")),
-        "comments": int(discussion.get("comment_count", posted.get("commentCount", 0)) or 0),
-        "upvotes": int(discussion.get("upvotes", posted.get("upvotes", 0)) or 0),
+        "comments": max(0, total_comments - vote_comment_count),
+        "comments_total": total_comments,
+        "vote_comment_count": vote_comment_count,
+        "upvotes": max(
+            int(discussion.get("upvotes", posted.get("upvotes", 0)) or 0),
+            internal_votes,
+        ),
         "downvotes": int(discussion.get("downvotes", posted.get("downvotes", 0)) or 0),
     }
     if posted.get("topic"):

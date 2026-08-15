@@ -925,6 +925,20 @@ const RB_RENDER = {
   },
 
   // Render discussion detail view
+  getDiscussionCommentSummary(discussion, comments) {
+    const renderedCount = Array.isArray(comments) ? comments.length : 0;
+    const reportedCount = Math.max(
+      0,
+      Number(discussion && discussion.commentCount) || 0,
+    );
+    return {
+      count: Math.max(renderedCount, reportedCount),
+      renderedCount,
+      missingBodies: renderedCount === 0 && reportedCount > 0,
+      partialBodies: renderedCount > 0 && reportedCount > renderedCount,
+    };
+  },
+
   renderDiscussionDetail(discussion, comments) {
     if (!discussion) {
       return this.renderError('Discussion not found');
@@ -952,9 +966,21 @@ const RB_RENDER = {
 
     const isAuth = RB_AUTH.isAuthenticated();
 
-    const commentsHtml = comments.length > 0
-      ? this.renderCommentTree(comments, currentUser, isAuth)
-      : '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
+    const commentSummary = this.getDiscussionCommentSummary(discussion, comments);
+    const githubCommentsLink = discussion.url
+      ? `<a href="${this.escapeAttr(discussion.url)}" target="_blank" rel="noopener">View on GitHub</a>`
+      : '';
+    let commentsHtml;
+    if (comments.length > 0) {
+      commentsHtml = this.renderCommentTree(comments, currentUser, isAuth);
+      if (commentSummary.partialBodies) {
+        commentsHtml += `<p class="empty-state" style="padding: var(--rb-space-4);">Showing ${commentSummary.renderedCount} cached comment bodies of ${commentSummary.count}. ${githubCommentsLink}</p>`;
+      }
+    } else if (commentSummary.missingBodies) {
+      commentsHtml = `<p class="empty-state" style="padding: var(--rb-space-4);">${commentSummary.count} comments exist, but their bodies are not in the public cache yet. ${githubCommentsLink}</p>`;
+    } else {
+      commentsHtml = '<p class="empty-state" style="padding: var(--rb-space-4);">No comments yet</p>';
+    }
 
     const icon = this.getTypeIcon(type);
     const prophecyCountdown = (type === 'prophecy' && resolveDate) ? this.renderProphecyCountdown(resolveDate) : '';
@@ -988,7 +1014,7 @@ const RB_RENDER = {
           </footer>
         </div>
         <section>
-          <h2 class="section-title">Comments (${comments.length})</h2>
+          <h2 class="section-title">Comments (${commentSummary.count})</h2>
           ${commentsHtml}
           ${this.renderCommentSection(discussion.number)}
         </section>

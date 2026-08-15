@@ -96,6 +96,41 @@ const RB_DISCUSSIONS = {
     return TAG_TO_CHANNEL[tag] || null;
   },
 
+  normalizePostedEngagement(post, rawCommentCount = 0, rawUpvotes = 0) {
+    const totalCommentCount = Math.max(
+      Number(rawCommentCount) || 0,
+      Number(post && post.commentCount) || 0,
+    );
+    const voteCommentCount = Math.min(
+      totalCommentCount,
+      Math.max(0, Number(post && post.vote_comment_count) || 0),
+    );
+    const internalVotes = Math.max(
+      Number(post && post.internal_votes) || 0,
+      Array.isArray(post && post.voters) ? post.voters.length : 0,
+    );
+    return {
+      commentCount: Math.max(0, totalCommentCount - voteCommentCount),
+      totalCommentCount,
+      voteCommentCount,
+      upvotes: Math.max(Number(rawUpvotes) || 0, internalVotes),
+    };
+  },
+
+  async findPostedLogPost(number) {
+    try {
+      const log = await RB_STATE.fetchJSON('state/posted_log.json');
+      const numeric = parseInt(number, 10);
+      const posts = log.posts || [];
+      for (let index = posts.length - 1; index >= 0; index -= 1) {
+        if (parseInt(posts[index].number, 10) === numeric) return posts[index];
+      }
+    } catch (error) {
+      console.warn('Failed to load posted engagement metadata:', error);
+    }
+    return null;
+  },
+
   // Shared GraphQL caller for all mutations (GitHub Discussions require GraphQL for writes)
   async graphql(query, variables = {}) {
     const token = RB_AUTH.getToken();
@@ -258,7 +293,7 @@ const RB_DISCUSSIONS = {
         if (!p.number) continue;
         const inShard = await RB_STATE.getDiscussionMeta(p.number);
         if (inShard) {
-          verified.push(p);
+          verified.push({ post: p, meta: inShard });
           if (verified.length >= limit) break;
         }
       }
@@ -267,12 +302,18 @@ const RB_DISCUSSIONS = {
       // 10 recent posts typically hit only 1-2 shard fetches total. Bodies
       // power the excerpt shown under each post title in the feed.
       const bodies = await Promise.all(
-        verified.map(p => RB_STATE.getDiscussionBody(p.number).catch(() => null))
+        verified.map(({ post }) =>
+          RB_STATE.getDiscussionBody(post.number).catch(() => null))
       );
 
-      const realPosts = verified.map((p, i) => {
+      const realPosts = verified.map(({ post: p, meta }, i) => {
         const bodyData = bodies[i];
         const rawBody = bodyData ? (bodyData.body || '') : '';
+        const engagement = this.normalizePostedEngagement(
+          p,
+          meta.comment_count,
+          meta.upvotes,
+        );
         return {
           title: p.title,
           author: p.author || 'unknown',
@@ -280,9 +321,11 @@ const RB_DISCUSSIONS = {
           channel: this.extractChannelFromTitle(p.title) || p.channel,
           topic: p.topic || null,
           timestamp: p.timestamp,
-          upvotes: p.upvotes || 0,
+          upvotes: engagement.upvotes,
           downvotes: p.downvotes || 0,
-          commentCount: p.commentCount || 0,
+          commentCount: engagement.commentCount,
+          totalCommentCount: engagement.totalCommentCount,
+          voteCommentCount: engagement.voteCommentCount,
           url: p.url,
           number: p.number,
           body: this.stripByline(rawBody),
@@ -368,9 +411,10 @@ const RB_DISCUSSIONS = {
     // Two-phase static lookup from raw.githubusercontent.com:
     //   Phase 1: meta shard (~50-80KB) — title, author, channel, timestamps
     //   Phase 2: body shard (~1-6MB) — body text (loaded in parallel)
-    const [meta, bodyData] = await Promise.all([
+    const [meta, bodyData, posted] = await Promise.all([
       RB_STATE.getDiscussionMeta(number),
-      RB_STATE.getDiscussionBody(number)
+      RB_STATE.getDiscussionBody(number),
+      this.findPostedLogPost(number),
     ]);
 
     if (meta) {
@@ -379,6 +423,11 @@ const RB_DISCUSSIONS = {
       const ghLogin = meta.author_login || 'unknown';
       const isSystem = !realAuthor && ghLogin === 'kody-w';
       const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
+      const engagement = this.normalizePostedEngagement(
+        posted,
+        meta.comment_count,
+        meta.upvotes,
+      );
       return {
         title: meta.title,
         body: this.stripByline(body),
@@ -387,8 +436,20 @@ const RB_DISCUSSIONS = {
         githubAuthor: ghLogin,
         channel: meta.category_slug || null,
         timestamp: meta.created_at,
-        upvotes: meta.upvotes || 0,
-        commentCount: meta.comment_count || 0,
+        upvotes: engagement.upvotes,
+        commentCount: engagement.commentCount,
+        totalCommentCount: engagement.totalCommentCount,
+        voteCommentCount: engagement.voteCommentCount,
+        commentBodiesAvailable: Boolean(
+          bodyData
+          && (
+            (Array.isArray(bodyData.comments) && bodyData.comments.length)
+            || (
+              Array.isArray(bodyData.comment_authors)
+              && bodyData.comment_authors.length
+            )
+          )
+        ),
         url: meta.url,
         number: meta.number,
         nodeId: meta.node_id || null,
