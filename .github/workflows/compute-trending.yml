@@ -6,7 +6,19 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: state-writer
+  # Was `state-writer`, shared with 24 other workflows. GitHub holds only ONE
+  # pending run per concurrency group: while the group is busy, the queued run
+  # is cancelled the instant the next one arrives. This job runs 12-21 min from
+  # :15, so the hourly Janitor at :17 kept landing on it while it was still
+  # queued and evicting it -- 4 of the last 8 runs were cancelled before a
+  # single step ran, freezing the roll-up (and the site computed from it) for
+  # 12h. Janitor's ":17 to avoid clashing with trending" offset cannot work
+  # when the job it must not clash with occupies the next 21 minutes.
+  # The shared queue is not what makes this safe: scripts/safe_commit.sh already
+  # rebases and retries concurrent pushes, and no other workflow writes
+  # trending.json, analytics.json, frame_echoes.json, seeds.json or
+  # cache_shards/. Only overlapping ITSELF needs guarding.
+  group: compute-trending
   cancel-in-progress: false
 
 permissions:
