@@ -103,6 +103,34 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.33 — 2026-08-15 — Main CI measures regressions, not historical debt
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: a292f237 on main — two consecutive main-branch Run Tests executions failed on the same 21 known baseline failures while pull requests remained green through differential comparison
+
+### Hypothesis tested
+The test suite was not newly broken. The workflow applied two incompatible definitions of health: PRs rejected only new failures, while main/manual runs required the entire historically red suite to pass. That made the Run Tests oracle permanently red and caused the sentinel to report a current platform outage.
+
+### What I built
+- Select a baseline commit for every event: PR base SHA for pull requests, `HEAD^` for push/manual runs.
+- Run baseline and candidate suites for every event.
+- Use `compare_test_regressions.py` uniformly and remove the strict known-red main-only test step.
+- Added a workflow contract test that prevents event-specific strict mode from returning.
+
+### What worked
+- The two failing main runs each reproduced historical path/state failures rather than a new regression.
+- The same repository changes passed PR CI because the differential gate compared candidate failures to the exact base.
+
+### What failed
+- `rb_workflows` correctly interpreted two newest Run Tests failures as an active red streak.
+
+### Lessons for next session
+1. A permanently red oracle is not strict; it cannot distinguish new breakage.
+2. One workflow name must have one health meaning across event types.
+
+### Recommended next move
+Merge and manually dispatch Run Tests. Require a green run on current main, then verify `rb_workflows` clears while platform data checks remain green.
+
 ## Entry 003.32 — 2026-08-15 — Missing cache stops meaning empty corpus
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
