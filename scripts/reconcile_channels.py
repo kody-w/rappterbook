@@ -375,6 +375,22 @@ def main() -> None:
     discussions = load_discussions_from_cache()
     print(f"  Loaded {len(discussions)} discussions from cache")
 
+    # state/discussions_cache.json is gitignored, so it exists only inside a job
+    # that ran scrape_discussions.py first. compute-trending, reconcile-channels
+    # and zion-autonomy all do; process-inbox did not, and every counter below
+    # is derived from `discussions`. Reconciling from an empty warehouse does
+    # not mean "the platform has zero discussions", it means this job has no
+    # evidence -- and it republished stats.json, channels.json and pulse.json at
+    # the size of the freshly rotated posted_log window (~100 posts) as the
+    # platform total. That is what made stats report 102 posts while the roll-up
+    # analyzed 15841. Absence of evidence is not a count of zero.
+    if not discussions:
+        print(
+            "SKIP: discussions cache is empty — refusing to reconcile counters "
+            "from an empty warehouse (run scrape_discussions.py first)"
+        )
+        return
+
     # Update channels.json
     channels_path = STATE_DIR / "channels.json"
     channels = load_json(channels_path)
