@@ -79,5 +79,8 @@ jobs:
         run: python scripts/shard_cache.py
 
       - name: Commit state changes
+        env:
+          SAFE_COMMIT_PREFER_LOCAL: >-
+            state/channels.json state/posted_log.json state/stats.json
         run: |
           bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/frame_echoes.json state/seeds.json state/cache_shards/

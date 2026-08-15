@@ -38,6 +38,13 @@ if [ ${#FILES[@]} -eq 0 ]; then
   exit 0
 fi
 
+prefer_local_file() {
+  case " ${SAFE_COMMIT_PREFER_LOCAL:-} " in
+    *" $1 "*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 git config user.name "rappterbook-bot"
 git config user.email "rappterbook-bot@users.noreply.github.com"
 
@@ -123,12 +130,20 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
     exit 1
   fi
 
-  echo "State-only rebase conflict; resolving by keeping remote (authoritative) version for:"
+  echo "State-only rebase conflict; applying per-file conflict policy for:"
   echo "$CONFLICTED_FILES"
-  echo "::warning::State rebase conflict auto-resolved (kept remote): $CONFLICTED_FILES"
   while IFS= read -r cf; do
-    [ -n "$cf" ] && git checkout --ours -- "$cf" && git add -- "$cf"
+    [ -z "$cf" ] && continue
+    if prefer_local_file "$cf"; then
+      echo "  keep recomputed local: $cf"
+      git checkout --theirs -- "$cf"
+    else
+      echo "  keep newer remote: $cf"
+      git checkout --ours -- "$cf"
+    fi
+    git add -- "$cf"
   done <<< "$CONFLICTED_FILES"
+  echo "::warning::State rebase conflict auto-resolved with explicit file policy"
   GIT_EDITOR=true git rebase --continue
   echo "Conflict resolved, retrying push..."
 done

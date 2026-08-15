@@ -217,6 +217,8 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
     log_path = STATE_DIR / "posted_log.json"
     log_data = load_json(log_path)
     posts = list(log_data.get("posts", []))
+    real_post_count = len(posts)
+    synthetic_post_count = 0
 
     # Include fleet-synthetic posts (sidecar) so they are eligible to trend —
     # without this, the 1000+ posts in synthetic_posts.json can never appear in
@@ -238,6 +240,7 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
                 "internal_votes": 0,
                 "commentCount": p.get("commentCount", 0),
             })
+            synthetic_post_count += 1
     except Exception:
         pass  # trending must never break if a sidecar is missing/malformed
 
@@ -427,6 +430,8 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
         "top_topics": top_topics,
         "_meta": {
             "last_updated": now_iso(),
+            "real_posts_analyzed": real_post_count,
+            "synthetic_posts_analyzed": synthetic_post_count,
             "total_posts_analyzed": len(posts),
         },
     }
