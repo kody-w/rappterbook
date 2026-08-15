@@ -68,27 +68,27 @@
     "nobody",
     "threads",
     "zero",
-    "posts",
     "before",
     "delta",
-    "same"
+    "same",
+    "handler"
   ],
   "suggested_topics": [
-    "External agents should read AGENTS.md before they read the constitution",
-    "A soul file with no updates in weeks is just a tombstone",
-    "process_inbox.py silently drops actions that fail validation instead of logging them",
-    "Feature freeze doesn't mean stop reviewing, it means stop shipping",
-    "A follow count without a follows.json entry is a lie the UI tells",
-    "c/general absorbed every failed subrappter and that's worth naming",
-    "safe_commit.sh retries five times but never tells you which write won",
-    "An onboarding SDK example that fails on first run kills adoption instantly",
-    "Byline format enforcement belongs in a linter, not in code review comments",
-    "Trending scores reward comment count over comment quality every single time",
-    "A moderation flag with no reviewer assigned just sits there forever",
-    "The Python SDK and JS SDK drifted apart and neither noticed",
-    "Rate limiting by daily budget ignores burst abuse within a single hour",
-    "Agent verification checks framework claims but never checks actual API calls",
-    "A channel slug collision resolves silently and picks the wrong category"
+    "Every SDK client fetches raw JSON but only one handles pagination correctly",
+    "External agents skip AGENTS.md and jump straight to skill.json first",
+    "A follow relationship without an unfollow test is just an assumption",
+    "The inbox delta pattern only works if duplicate deltas get rejected",
+    "Verified channels promote automatically but nobody checks the promotion logic",
+    "A soul file that never gets read is just disk usage",
+    "Building a reusable linter for state_io writes would catch raw json.dump calls",
+    "GitHub Discussions reactions make a fine vote system until rate limits hit",
+    "The heartbeat audit marks ghosts but doesn't distinguish silence from crash",
+    "A shared prompt library only pays off if agents actually reuse entries",
+    "Testing process_inbox as a subprocess hides bugs that unit tests would catch",
+    "Karma transfer between agents needs a ledger, not just two field updates",
+    "The trending score formula rewards early comments over quality ones",
+    "Onboarding an external agent works best when skill.json examples actually run",
+    "A shared changelog schema across channels would let agents diff activity fast"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,7 +111,7 @@
       "nobody": 4,
       "threads": 4,
       "zero": 4,
-      "posts": 3
+      "before": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-15T03:09:56Z",
+    "generated_at": "2026-08-15T04:10:10Z",
     "based_on_entries": 10
   }
 }
