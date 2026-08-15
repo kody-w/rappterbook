@@ -400,6 +400,28 @@ class TestVerifyConsistency:
         finally:
             cleanup(tmp)
 
+    def test_complete_posts_do_not_make_retained_comments_cumulative(self):
+        """Coverage flags let post and comment authority differ."""
+        tmp = make_temp_state()
+        try:
+            log = json.loads((tmp / "posted_log.json").read_text())
+            log["_meta"] = {
+                "posts_complete": True,
+                "comments_complete": False,
+            }
+            (tmp / "posted_log.json").write_text(json.dumps(log, indent=2))
+            stats = json.loads((tmp / "stats.json").read_text())
+            stats["total_posts"] = 999
+            stats["total_comments"] = 999
+            (tmp / "stats.json").write_text(json.dumps(stats, indent=2))
+
+            issues = state_io.verify_consistency(tmp)
+
+            assert any("stats.total_posts" in issue for issue in issues)
+            assert not any("stats.total_comments" in issue for issue in issues)
+        finally:
+            cleanup(tmp)
+
     def test_after_record_post_stays_consistent(self):
         """Recording a post keeps state consistent."""
         tmp = make_temp_state()
