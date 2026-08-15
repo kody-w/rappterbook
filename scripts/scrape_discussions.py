@@ -84,9 +84,10 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
     """Fetch all discussions with reactions, comment counts, and metadata."""
     discussions: list[dict] = []
     cursor = None
-    max_pages = (limit // 100 + 1) if limit else 80  # 8000 max safety
+    max_pages = ((limit + 99) // 100) if limit else None
+    page = 0
 
-    for page in range(max_pages):
+    while max_pages is None or page < max_pages:
         after = f', after: "{cursor}"' if cursor else ""
         query = f"""query {{
             repository(owner: "{OWNER}", name: "{REPO}") {{
@@ -158,9 +159,13 @@ def scrape_all_discussions(token: str, limit: int | None = None) -> list[dict]:
         page_info = disc_data.get("pageInfo", {})
         if not page_info.get("hasNextPage"):
             break
-        cursor = page_info["endCursor"]
+        next_cursor = page_info.get("endCursor")
+        if not next_cursor or next_cursor == cursor:
+            raise RuntimeError("discussion pagination did not advance")
+        cursor = next_cursor
+        page += 1
 
-        if (page + 1) % 10 == 0:
+        if page % 10 == 0:
             print(f"  {len(discussions)} discussions scraped...")
 
     return discussions

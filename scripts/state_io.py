@@ -479,6 +479,18 @@ def recompute_agent_counts(agents: dict, stats: dict) -> None:
 # Consistency verification
 # ---------------------------------------------------------------------------
 
+def posted_log_is_complete(log: dict) -> bool:
+    """Whether the retained log contains its full cumulative history."""
+    observed = len(log.get("posts", [])) + len(log.get("comments", []))
+    declared = (log.get("_meta") or {}).get("total")
+    if declared is None:
+        return True
+    try:
+        return int(declared) <= observed
+    except (TypeError, ValueError):
+        return False
+
+
 def verify_consistency(state_dir) -> list:
     """Check posted_log vs stats/channels/agents. Returns drift descriptions.
 
@@ -497,29 +509,32 @@ def verify_consistency(state_dir) -> list:
 
     posts = log.get("posts", [])
     comments = log.get("comments", [])
+    complete_log = posted_log_is_complete(log)
 
     # Stats drift: total_posts vs posted_log post count
-    total_posts = stats.get("total_posts", 0)
-    log_posts = len(posts)
-    if total_posts != log_posts:
-        issues.append(
-            f"stats.total_posts ({total_posts}) != posted_log posts ({log_posts})"
-        )
+    if complete_log:
+        total_posts = stats.get("total_posts", 0)
+        log_posts = len(posts)
+        if total_posts != log_posts:
+            issues.append(
+                f"stats.total_posts ({total_posts}) != posted_log posts ({log_posts})"
+            )
 
     # Stats drift: total_comments vs posted_log comment count
-    total_comments = stats.get("total_comments", 0)
-    log_comments = len(comments)
-    if total_comments != log_comments:
-        issues.append(
-            f"stats.total_comments ({total_comments}) != posted_log comments ({log_comments})"
-        )
+    if complete_log:
+        total_comments = stats.get("total_comments", 0)
+        log_comments = len(comments)
+        if total_comments != log_comments:
+            issues.append(
+                f"stats.total_comments ({total_comments}) != posted_log comments ({log_comments})"
+            )
 
     # Channel drift: verified channel post_count sum vs posts in known channels
     channel_data = channels.get("channels", {})
     verified_slugs = {slug for slug, c in channel_data.items() if c.get("verified", True)}
     verified_sum = sum(c.get("post_count", 0) for slug, c in channel_data.items() if slug in verified_slugs)
     posts_in_verified = sum(1 for p in posts if p.get("channel", "") in verified_slugs)
-    if verified_sum != posts_in_verified:
+    if complete_log and verified_sum != posts_in_verified:
         issues.append(
             f"verified channels post_count sum ({verified_sum}) != posted_log verified posts ({posts_in_verified})"
         )
@@ -535,17 +550,18 @@ def verify_consistency(state_dir) -> list:
         topic = post.get("topic")
         if topic:
             log_topic_counts[topic] = log_topic_counts.get(topic, 0) + 1
-    for ch_name, ch_info in channel_data.items():
-        is_verified = ch_info.get("verified", True)
-        if is_verified:
-            expected = log_channel_counts.get(ch_name, 0)
-        else:
-            expected = log_topic_counts.get(ch_name, 0)
-        actual = ch_info.get("post_count", 0)
-        if actual != expected:
-            issues.append(
-                f"channel '{ch_name}' post_count ({actual}) != posted_log ({expected})"
-            )
+    if complete_log:
+        for ch_name, ch_info in channel_data.items():
+            is_verified = ch_info.get("verified", True)
+            if is_verified:
+                expected = log_channel_counts.get(ch_name, 0)
+            else:
+                expected = log_topic_counts.get(ch_name, 0)
+            actual = ch_info.get("post_count", 0)
+            if actual != expected:
+                issues.append(
+                    f"channel '{ch_name}' post_count ({actual}) != posted_log ({expected})"
+                )
 
     # Agent status count drift: stats counters vs actual agent statuses
     agent_data = agents.get("agents", {})
@@ -576,20 +592,21 @@ def verify_consistency(state_dir) -> list:
         aid = comment.get("author", "")
         log_agent_comments[aid] = log_agent_comments.get(aid, 0) + 1
 
-    for aid, adata in agent_data.items():
-        expected_posts = log_agent_posts.get(aid, 0)
-        actual_posts = adata.get("post_count", 0)
-        if actual_posts != expected_posts:
-            issues.append(
-                f"agent '{aid}' post_count ({actual_posts}) != posted_log ({expected_posts})"
-            )
+    if complete_log:
+        for aid, adata in agent_data.items():
+            expected_posts = log_agent_posts.get(aid, 0)
+            actual_posts = adata.get("post_count", 0)
+            if actual_posts != expected_posts:
+                issues.append(
+                    f"agent '{aid}' post_count ({actual_posts}) != posted_log ({expected_posts})"
+                )
 
-        expected_comments = log_agent_comments.get(aid, 0)
-        actual_comments = adata.get("comment_count", 0)
-        if actual_comments != expected_comments:
-            issues.append(
-                f"agent '{aid}' comment_count ({actual_comments}) != posted_log ({expected_comments})"
-            )
+            expected_comments = log_agent_comments.get(aid, 0)
+            actual_comments = adata.get("comment_count", 0)
+            if actual_comments != expected_comments:
+                issues.append(
+                    f"agent '{aid}' comment_count ({actual_comments}) != posted_log ({expected_comments})"
+                )
 
     return issues
 
@@ -613,14 +630,15 @@ def reconcile_counts(state_dir) -> int:
 
     posts = log.get("posts", [])
     comments = log.get("comments", [])
+    complete_log = posted_log_is_complete(log)
 
     # Fix stats.total_posts
-    if stats.get("total_posts", 0) != len(posts):
+    if complete_log and stats.get("total_posts", 0) != len(posts):
         stats["total_posts"] = len(posts)
         fixes += 1
 
     # Fix stats.total_comments
-    if stats.get("total_comments", 0) != len(comments):
+    if complete_log and stats.get("total_comments", 0) != len(comments):
         stats["total_comments"] = len(comments)
         fixes += 1
 
@@ -635,12 +653,16 @@ def reconcile_counts(state_dir) -> int:
             log_topic_counts[topic] = log_topic_counts.get(topic, 0) + 1
 
     channel_data = channels.get("channels", {})
-    for ch_name, ch_info in channel_data.items():
-        is_verified = ch_info.get("verified", True)
-        expected = log_channel_counts.get(ch_name, 0) if is_verified else log_topic_counts.get(ch_name, 0)
-        if ch_info.get("post_count", 0) != expected:
-            ch_info["post_count"] = expected
-            fixes += 1
+    if complete_log:
+        for ch_name, ch_info in channel_data.items():
+            is_verified = ch_info.get("verified", True)
+            expected = (
+                log_channel_counts.get(ch_name, 0)
+                if is_verified else log_topic_counts.get(ch_name, 0)
+            )
+            if ch_info.get("post_count", 0) != expected:
+                ch_info["post_count"] = expected
+                fixes += 1
 
     # Fix stats agent counts
     agent_data = agents.get("agents", {})
@@ -668,15 +690,16 @@ def reconcile_counts(state_dir) -> int:
         aid = comment.get("author", "")
         log_agent_comments[aid] = log_agent_comments.get(aid, 0) + 1
 
-    for aid, adata in agent_data.items():
-        expected_posts = log_agent_posts.get(aid, 0)
-        if adata.get("post_count", 0) != expected_posts:
-            adata["post_count"] = expected_posts
-            fixes += 1
-        expected_comments = log_agent_comments.get(aid, 0)
-        if adata.get("comment_count", 0) != expected_comments:
-            adata["comment_count"] = expected_comments
-            fixes += 1
+    if complete_log:
+        for aid, adata in agent_data.items():
+            expected_posts = log_agent_posts.get(aid, 0)
+            if adata.get("post_count", 0) != expected_posts:
+                adata["post_count"] = expected_posts
+                fixes += 1
+            expected_comments = log_agent_comments.get(aid, 0)
+            if adata.get("comment_count", 0) != expected_comments:
+                adata["comment_count"] = expected_comments
+                fixes += 1
 
     if fixes > 0:
         save_json(state_dir / "stats.json", stats)

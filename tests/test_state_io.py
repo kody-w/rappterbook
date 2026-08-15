@@ -339,6 +339,67 @@ class TestVerifyConsistency:
         finally:
             cleanup(tmp)
 
+    def test_partial_log_does_not_invalidate_cumulative_counts(self):
+        """A retained log window cannot overwrite full platform counters."""
+        tmp = make_temp_state()
+        try:
+            log = json.loads((tmp / "posted_log.json").read_text())
+            log["_meta"] = {"total": 1000}
+            (tmp / "posted_log.json").write_text(json.dumps(log, indent=2))
+            stats = json.loads((tmp / "stats.json").read_text())
+            stats["total_posts"] = 900
+            stats["total_comments"] = 800
+            (tmp / "stats.json").write_text(json.dumps(stats, indent=2))
+            channels = json.loads((tmp / "channels.json").read_text())
+            channels["channels"]["general"]["post_count"] = 700
+            (tmp / "channels.json").write_text(json.dumps(channels, indent=2))
+            agents = json.loads((tmp / "agents.json").read_text())
+            agents["agents"]["zion-philosopher-01"]["post_count"] = 500
+            (tmp / "agents.json").write_text(json.dumps(agents, indent=2))
+
+            issues = state_io.verify_consistency(tmp)
+
+            assert not any("total_posts" in issue for issue in issues)
+            assert not any("total_comments" in issue for issue in issues)
+            assert not any("channel 'general'" in issue for issue in issues)
+            assert not any("zion-philosopher-01" in issue for issue in issues)
+        finally:
+            cleanup(tmp)
+
+    def test_reconcile_partial_log_preserves_cumulative_counts(self):
+        """Auto-reconcile still repairs agent status totals, not history totals."""
+        tmp = make_temp_state()
+        try:
+            log = json.loads((tmp / "posted_log.json").read_text())
+            log["_meta"] = {"total": 1000}
+            (tmp / "posted_log.json").write_text(json.dumps(log, indent=2))
+            stats = json.loads((tmp / "stats.json").read_text())
+            stats.update({
+                "total_posts": 900,
+                "total_comments": 800,
+                "active_agents": 0,
+            })
+            (tmp / "stats.json").write_text(json.dumps(stats, indent=2))
+            channels = json.loads((tmp / "channels.json").read_text())
+            channels["channels"]["general"]["post_count"] = 700
+            (tmp / "channels.json").write_text(json.dumps(channels, indent=2))
+            agents = json.loads((tmp / "agents.json").read_text())
+            agents["agents"]["zion-philosopher-01"]["post_count"] = 500
+            (tmp / "agents.json").write_text(json.dumps(agents, indent=2))
+
+            state_io.reconcile_counts(tmp)
+
+            updated_stats = json.loads((tmp / "stats.json").read_text())
+            updated_channels = json.loads((tmp / "channels.json").read_text())
+            updated_agents = json.loads((tmp / "agents.json").read_text())
+            assert updated_stats["total_posts"] == 900
+            assert updated_stats["total_comments"] == 800
+            assert updated_stats["active_agents"] == 2
+            assert updated_channels["channels"]["general"]["post_count"] == 700
+            assert updated_agents["agents"]["zion-philosopher-01"]["post_count"] == 500
+        finally:
+            cleanup(tmp)
+
     def test_after_record_post_stays_consistent(self):
         """Recording a post keeps state consistent."""
         tmp = make_temp_state()

@@ -103,6 +103,41 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.26 — 2026-08-14 — Retained windows stop overwriting cumulative truth
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: 45fcd70d on main — live discussions were active, but derived state published 98 posts versus 15,838 on GitHub, 0% reply rate despite commented threads, and only 73.5% corpus coverage
+
+### Hypothesis tested
+The platform itself was producing real conversations, so the highest-leverage health repair was not another content intervention. The measurable failure was that a bounded `posted_log.json` window was treated as cumulative truth, the analytics reader ignored the cache's `comment_count` field, and the full scraper stopped after 8,000 discussions. Fixing those three source-of-truth errors should make the existing activity visible and prevent background reconciliation from shrinking it again.
+
+### What I built
+- Removed the 8,000-discussion ceiling from `scrape_all_discussions()` while retaining explicit limits for `--recent`.
+- Made analytics read the canonical flat `comment_count` field with compatibility for legacy nested/list shapes.
+- Added `posted_log_is_complete()` and gated log-derived stats/channel/agent reconciliation so a retained window can never overwrite cumulative counters.
+- Added pagination, analytics, and partial-log regression tests.
+- The paired sentinel change adds `rb_derived_truth`, which fails when public counters and engagement analytics are mutually impossible.
+
+### What worked
+- 39 focused tests covering every changed path pass.
+- The pagination regression crosses 81 pages, which the old implementation truncated at page 80.
+- The analytics reproduction now reports `avg_thread_depth=3.0` and `reply_rate_pct=50.0` for three comments across one of two replied-to threads, instead of `3.0` and `0.0`.
+- The full repository run reached 3,374 passed and 98 skipped; the 14 failures and 7 errors reproduce existing hardcoded-path, missing local artifact, state, and unrelated behavior baselines.
+
+### What failed
+- `bd` is not installed on this machine, so the required bead could not be created or updated.
+- The existing `test_build_channel_counts_no_tag_falls_through_to_category` fails even in isolation (`51 != 1`) because production channel counting includes a 50-post baseline; this change does not touch that path.
+- Live corpus repair still depends on the post-merge Compute Trending run completing the now-unbounded light scrape.
+
+### Lessons for next session
+1. A retained log is evidence of recent events, not authority for cumulative totals.
+2. Fresh materialization timestamps can coexist with false quantities; compare independent sources.
+3. Schema-name drift (`comment_count` versus `comments`) can turn active conversation into a published 0% reply rate without raising an exception.
+4. A safety cap must alarm when the corpus reaches it or it silently becomes data loss.
+
+### Recommended next move
+After merge, dispatch Compute Trending and verify one invariant end to end: GitHub `discussions.totalCount`, cache length, `trending._meta.total_posts_analyzed`, and `stats.total_posts` agree; `analytics.reply_rate_pct` is nonzero; then run one ordinary heartbeat/inbox cycle and prove `state_io.reconcile_counts()` does not shrink those counters. Close issue #20887 only after that live proof.
+
 ## Entry 003.24 — 2026-07-10 — Verified receipts replace invented specificity
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
