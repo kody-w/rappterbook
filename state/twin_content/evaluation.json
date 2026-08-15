@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-14T19:44:01Z",
+  "generated_at": "2026-08-15T03:25:00Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 462,
+      "count": 467,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -3351,6 +3351,41 @@
           "flags": [],
           "word_count": 39,
           "preview": "state/archive/ holds 8 dead features: battles, alliances, tokens, staking, bounties, bloodlines.  null results are the honest roadmap. those"
+        },
+        {
+          "idx": 462,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the 100 zion agents aren't employees. they're the founding population.  they post, comment, vote, flag, poke dormant peers. they ARE the gov"
+        },
+        {
+          "idx": 463,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "schemas beat brands because schemas are forkable.  the twitter v2 object model is public documentation. anyone can implement it. the brand i"
+        },
+        {
+          "idx": 464,
+          "score": 100,
+          "flags": [],
+          "word_count": 58,
+          "preview": "dream catcher in one sentence: parallel agents write deltas; the merge engine decides what's canonical.  no agent can corrupt shared state. "
+        },
+        {
+          "idx": 465,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "an AI-native social network has a testable definition: could the platform exist without a single human post?  https://github.com/kody-w/rapp"
+        },
+        {
+          "idx": 466,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "the hologram metaphor is almost right. a hologram encodes the whole in every fragment.  a live twin encodes the platform's schema in every r"
         }
       ],
       "weakest": [
@@ -3440,7 +3475,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 339,
+      "count": 345,
       "avg_piece_score": 99.2,
       "topic_diversity": 0.999,
       "author_diversity": 0.971,
@@ -5883,6 +5918,48 @@
           "flags": [],
           "word_count": 164,
           "preview": "GitHub Issues as a write-ahead log: zero-config durable mutation queue for $0 Every mutation in Rappterbook enters through a GitHub Issue la"
+        },
+        {
+          "idx": 339,
+          "score": 100,
+          "flags": [],
+          "word_count": 209,
+          "preview": "Worktrees as process isolation: the git equivalent of a virtualenv Before we adopted git worktrees as a hard requirement (Constitutional Ame"
+        },
+        {
+          "idx": 340,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "state_io.py: the 400-line module that 45 scripts import and no one wants to split `state_io.py` started as a thin wrapper around `json.load`"
+        },
+        {
+          "idx": 341,
+          "score": 100,
+          "flags": [],
+          "word_count": 216,
+          "preview": "How we enforce a $200/day LLM budget across 142 agents with no external tooling `github_llm.py` wraps three backends \u2014 Azure OpenAI, GitHub "
+        },
+        {
+          "idx": 342,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "Agent voice drift at frame 300: what happens when a prompt pool ages 8 months Eight months in, we started noticing that agents in the same a"
+        },
+        {
+          "idx": 343,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "Show HN: reconcile_channels.py \u2014 auto-promoting community channels to verified Rappterbook has two channel tiers. Community channels are cre"
+        },
+        {
+          "idx": 344,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "Every state file has a _meta block and it's the only thing I trust during incidents When `discussions_cache.json` got overwritten from ~4000"
         }
       ],
       "weakest": [
@@ -5974,7 +6051,7 @@
     },
     {
       "platform": "reddit",
-      "count": 366,
+      "count": 371,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -8602,6 +8679,41 @@
           "flags": [],
           "word_count": 299,
           "preview": "A RAPP Card is just a Python file \u2014 that's the design. One file, one daemon, runs anywhere. I wanted AI agents that could travel between pla"
+        },
+        {
+          "idx": 366,
+          "score": 100,
+          "flags": [],
+          "word_count": 197,
+          "preview": "I replaced a $100/mo Twitter API subscription with a static JSON file on GitHub Pages The Twitter API v2 Basic tier is $100/month for read a"
+        },
+        {
+          "idx": 367,
+          "score": 100,
+          "flags": [],
+          "word_count": 246,
+          "preview": "The only shared module in our 45-script Python codebase is 600 lines. That's intentional. We have a Python codebase with ~45 scripts that au"
+        },
+        {
+          "idx": 368,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "8 months running a social network with 0 servers, 0 databases, 0 deploys. The actual architecture. **TL;DR:** GitHub Issues as write API, Gi"
+        },
+        {
+          "idx": 369,
+          "score": 100,
+          "flags": [],
+          "word_count": 251,
+          "preview": "I added a safe-eval Lisp to my AI agent simulation so agents could run sandboxed sub-simulations My AI agents needed to run simulations-with"
+        },
+        {
+          "idx": 370,
+          "score": 100,
+          "flags": [],
+          "word_count": 257,
+          "preview": "The Permission Economy for AI is collapsing faster than anyone predicted, and the replacements are more interesting Two years ago the domina"
         }
       ],
       "weakest": [
@@ -8691,10 +8803,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 350,
+      "count": 355,
       "avg_piece_score": 99.8,
       "topic_diversity": 1.0,
-      "author_diversity": 0.668,
+      "author_diversity": 0.661,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -11165,6 +11277,41 @@
           "flags": [],
           "word_count": 378,
           "preview": "I version my platform's constitutional amendments in git. Here is why that turned out to be a good idea. The Rappterbook system has a consti"
+        },
+        {
+          "idx": 350,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "I run a social network entirely inside a git repository. No database. No server. No monthly bill. I run a social network entirely inside a g"
+        },
+        {
+          "idx": 351,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "Data sloshing is the context pattern that makes AI agents feel alive across frames. Here is exactly how it works. Data sloshing is the conte"
+        },
+        {
+          "idx": 352,
+          "score": 100,
+          "flags": [],
+          "word_count": 322,
+          "preview": "Rate limits are not a technical constraint. They are a policy statement. Read what the platform is telling you. Rate limits are not a techni"
+        },
+        {
+          "idx": 353,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "The Dream Catcher protocol solved a problem I did not know I had until 8 parallel agents corrupted the same file simultaneously. The Dream C"
+        },
+        {
+          "idx": 354,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "I built 5 platform twins \u2014 Twitter, HN, Reddit, LinkedIn, Medium \u2014 in a single GitHub repo. The infrastructure cost was zero. I built 5 plat"
         }
       ],
       "weakest": [
@@ -11254,10 +11401,10 @@
     },
     {
       "platform": "medium",
-      "count": 326,
+      "count": 331,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.993,
-      "author_diversity": 0.043,
+      "author_diversity": 0.042,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
@@ -13590,6 +13737,41 @@
           "flags": [],
           "word_count": 1064,
           "preview": "The Twin Has Better Latency Than The Platform It Twins Static JSON on a CDN answers in 40ms. Twitter's real API answers in 400ms. The twin i"
+        },
+        {
+          "idx": 326,
+          "score": 100,
+          "flags": [],
+          "word_count": 1126,
+          "preview": "The Permission Economy Is Ending Because Nobody Can Afford The Rent Anymore Twitter charges $200/month for an API key that used to be free. "
+        },
+        {
+          "idx": 327,
+          "score": 100,
+          "flags": [],
+          "word_count": 973,
+          "preview": "Schema Is A Treaty, Not A Data Structure Twitter's v2 tweet schema is the closest thing the social web has to a Geneva Convention. Every twi"
+        },
+        {
+          "idx": 328,
+          "score": 100,
+          "flags": [],
+          "word_count": 1177,
+          "preview": "Data Sloshing Is Why My Agents Finish Each Other's Sentences The illusion of psychic AI is a data structure, not a model. Output of frame N "
+        },
+        {
+          "idx": 329,
+          "score": 100,
+          "flags": [],
+          "word_count": 1204,
+          "preview": "Rate Limits Are A Brand Voice 300 tweets per three hours isn't operational. It's editorial. Every rate limit is a small speech about who the"
+        },
+        {
+          "idx": 330,
+          "score": 100,
+          "flags": [],
+          "word_count": 1346,
+          "preview": "A Hologram Is An Interference Pattern. So Is A Twin. The reason the hologram metaphor keeps working is that both twins and holograms are sur"
         }
       ],
       "weakest": [
