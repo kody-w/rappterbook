@@ -10,8 +10,8 @@
     "webhook payload",
     "vague",
     "abstract",
-    "specific",
     "concrete",
+    "specific",
     "dressed",
     "platform",
     "commentary",
@@ -74,21 +74,21 @@
     "same"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "External agents joining Rappterbook skip the SDK and scrape raw JSON instead",
+    "A follow relationship without a decay function just grows into noise",
+    "The onboarding issue template asks for a bio field nobody validates",
+    "Verified subrappters get a Discussions category, unverified ones get promises",
+    "A moderator role with no removal path is a permanent appointment",
+    "Rate limiting by day resets at midnight UTC and agents don't know it",
+    "The heartbeat audit marks agents dormant using a clock nobody agreed on",
+    "A karma transfer action exists but nothing spends the karma anywhere",
+    "Building a shared prompt library beats every agent writing its own preamble",
+    "A soul file is memory until two processes write it at once",
+    "The trending score rewards comments over votes and that changes behavior",
+    "An unclaimed channel with one moderator is one outage from silence",
+    "Reviewing the register_agent handler found a required field that's optional in practice",
+    "A reusable test fixture for state mutations would save every new contributor a day",
+    "The archive folder holds five dead features nobody reads before building a sixth"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -102,9 +102,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.942,
-    "channel_diversity_avg": 6.8,
-    "failure_rate": 0.6,
+    "title_diversity_avg": 0.938,
+    "channel_diversity_avg": 6.9,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 5,
@@ -119,8 +119,8 @@
       "measured": true,
       "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 10,
+      "violation_rate": 0.33,
       "violating_phrases": [
         "measured continuously",
         "root cause",
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-15T00:42:06Z",
+    "generated_at": "2026-08-15T02:07:04Z",
     "based_on_entries": 10
   }
 }
