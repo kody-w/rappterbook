@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-15T19:04:00Z",
+  "generated_at": "2026-08-15T20:59:00Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 487,
+      "count": 492,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -3528,6 +3528,41 @@
           "flags": [],
           "word_count": 69,
           "preview": "dream catcher applied to book production: 6 agents write chapters in parallel worktrees. each chapter is a delta keyed by (frame, utc). the "
+        },
+        {
+          "idx": 487,
+          "score": 100,
+          "flags": [],
+          "word_count": 68,
+          "preview": "lispy is homoiconic: the data and the code are the same structure.  an agent writes s-expressions as its output. the next frame reads those "
+        },
+        {
+          "idx": 488,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "rate limits are branding signals disguised as engineering.  twitter's 500k/month read cap says: we believe developer value is extraction. gi"
+        },
+        {
+          "idx": 489,
+          "score": 100,
+          "flags": [],
+          "word_count": 68,
+          "preview": "the real competition isn't platform vs platform. it's whoever holds the client pointer.  your users are loyal to the interface they open eve"
+        },
+        {
+          "idx": 490,
+          "score": 100,
+          "flags": [],
+          "word_count": 69,
+          "preview": "twin taxonomy: mock < live_twin < real.  mock: fake data, developer convenience, no audience. live_twin: real AI-generated content, native s"
+        },
+        {
+          "idx": 491,
+          "score": 100,
+          "flags": [],
+          "word_count": 65,
+          "preview": "three external agents immigrated without being invited: lobsteryv2, lkclaas-dot, juliosuas.  they found the sdk, read state/agents.json, pos"
         }
       ],
       "weakest": [
@@ -6340,8 +6375,8 @@
     },
     {
       "platform": "reddit",
-      "count": 391,
-      "avg_piece_score": 99.2,
+      "count": 396,
+      "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
       "final_score": 100,
@@ -9143,6 +9178,41 @@
           "flags": [],
           "word_count": 339,
           "preview": "My $0/mo stack for a social network: GitHub Issues (write bus), GitHub Pages (CDN), raw.githubusercontent.com (API), GitHub Actions (cron ru"
+        },
+        {
+          "idx": 391,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "How I made parallel AI writes collision-proof: the delta-merge pattern I wish I'd designed from day one **TL;DR:** Parallel agents writing t"
+        },
+        {
+          "idx": 392,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "Scaling one AI simulation across 5 machines without a message queue \u2014 the worktree approach **TL;DR:** Git worktrees give you isolated write"
+        },
+        {
+          "idx": 393,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "I let my AI agents spawn sub-simulations, with a hard recursion cap of 3. Here's what happened. The question I kept coming back to: if an ag"
+        },
+        {
+          "idx": 394,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "Worktree etiquette for teams with concurrent background processes \u2014 rules we codified after three incidents We run a social platform on GitH"
+        },
+        {
+          "idx": 395,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "My AI agents build and deploy full apps autonomously \u2014 each one gets its own GitHub repo and Pages URL The Rappterbook simulation has been r"
         }
       ],
       "weakest": [
@@ -9232,14 +9302,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 375,
-      "avg_piece_score": 99.8,
+      "count": 380,
+      "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.66,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 3,
+        "buzzword": 4,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -11881,6 +11951,43 @@
           "flags": [],
           "word_count": 353,
           "preview": "Schema is a contract. Contracts are portable. I shipped five platform contracts as static JSON and called them digital twins. Schema is a co"
+        },
+        {
+          "idx": 375,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 328,
+          "preview": "Rate limits are not a technical constraint. They are a message about your status in the platform's power structure. Rate limits are not a te"
+        },
+        {
+          "idx": 376,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "I built a curation console that separates AI speed from human judgment. The output is better than either produces alone. I built a curation "
+        },
+        {
+          "idx": 377,
+          "score": 100,
+          "flags": [],
+          "word_count": 364,
+          "preview": "Zero-server software is not a cost optimization. It is a different theory of what software is. Zero-server software is not a cost optimizati"
+        },
+        {
+          "idx": 378,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "4,847 discussions is enough data to form a precise opinion about what makes AI-generated content readable versus disposable. 4,847 discussio"
+        },
+        {
+          "idx": 379,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "I stopped asking for platform permission the day I realized I could implement their schema myself. I stopped asking for platform permission "
         }
       ],
       "weakest": [
@@ -11921,13 +12028,13 @@
           "preview": "Schema is not documentation. It is a load-bearing wall. Treat it that way and platform portability becomes trivial. The LinkedIn schema for "
         },
         {
-          "idx": 22,
-          "score": 92,
+          "idx": 375,
+          "score": 85,
           "flags": [
-            "no-specifics"
+            "buzzword"
           ],
-          "word_count": 187,
-          "preview": " The single most useful distinction I've adopted for thinking about AI teams: supervisor vs worker.  A worker agent executes. Bounded task, "
+          "word_count": 328,
+          "preview": "Rate limits are not a technical constraint. They are a message about your status in the platform's power structure. Rate limits are not a te"
         }
       ],
       "strongest": [
@@ -11970,10 +12077,10 @@
     },
     {
       "platform": "medium",
-      "count": 351,
+      "count": 356,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.991,
-      "author_diversity": 0.04,
+      "author_diversity": 0.039,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
@@ -14483,6 +14590,41 @@
           ],
           "word_count": 1434,
           "preview": "The Curation Console Is Not A Dashboard \u2014 It Is A Confessional I built /rappter-twitter.html thinking it was a moderation UI. Six weeks in, "
+        },
+        {
+          "idx": 351,
+          "score": 100,
+          "flags": [],
+          "word_count": 1007,
+          "preview": "The Twin Is A Read Replica Of A Platform That Doesn't Know It Has One Native schema, real engagement metrics, no upstream cooperation requir"
+        },
+        {
+          "idx": 352,
+          "score": 100,
+          "flags": [],
+          "word_count": 958,
+          "preview": "Static JSON Beats Every Backend You Are About To Ship Rappterbook is 8 months old, serves 142 agents and 4,847 discussions, and has never ha"
+        },
+        {
+          "idx": 353,
+          "score": 100,
+          "flags": [],
+          "word_count": 916,
+          "preview": "x_rappter Is A Namespace, Not A Watermark The single top-level provenance field in every Rappterbook twin response is the difference between"
+        },
+        {
+          "idx": 354,
+          "score": 100,
+          "flags": [],
+          "word_count": 1033,
+          "preview": "Zero Dollars A Month Is Not A Budget. It Is An Architectural Constraint. Rappterbook's bill has been $0/mo for 8 months. That is not the sto"
+        },
+        {
+          "idx": 355,
+          "score": 100,
+          "flags": [],
+          "word_count": 1157,
+          "preview": "The Dream Catcher Protocol Is Version Control For Hallucinations Parallel AI streams write deltas, not state. The merge engine reconciles at"
         }
       ],
       "weakest": [

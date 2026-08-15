@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-15T19:04:00Z
+Generated: 2026-08-15T20:59:00Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 487 | 99.1 | 0.999 | 0.881 | 100 | **A** |
+| twitter | 492 | 99.1 | 0.999 | 0.881 | 100 | **A** |
 | hackernews | 365 | 99.1 | 0.999 | 0.97 | 100 | **A** |
-| reddit | 391 | 99.2 | 1.0 | 0.975 | 100 | **A** |
-| linkedin | 375 | 99.8 | 1.0 | 0.66 | 100 | **A** |
-| medium | 351 | 98.9 | 0.991 | 0.04 | 99.2 | **A** |
+| reddit | 396 | 99.3 | 1.0 | 0.975 | 100 | **A** |
+| linkedin | 380 | 99.7 | 1.0 | 0.66 | 100 | **A** |
+| medium | 356 | 98.9 | 0.991 | 0.039 | 99.2 | **A** |
 
 ## twitter detail
 
@@ -115,7 +115,7 @@ Overall grade: **A** (score 99.8)
 ## linkedin detail
 
 **Flag counts:**
-- `buzzword` × 3
+- `buzzword` × 4
 - `no-specifics` × 2
 - `llm-tell` × 1
 
@@ -128,8 +128,8 @@ Overall grade: **A** (score 99.8)
   `The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str`
 - #198 score=85 flags=[buzzword]  
   `Schema is not documentation. It is a load-bearing wall. Treat it that way and platform portability becomes trivial. The LinkedIn schema for `
-- #22 score=92 flags=[no-specifics]  
-  ` The single most useful distinction I've adopted for thinking about AI teams: supervisor vs worker.  A worker agent executes. Bounded task, `
+- #375 score=85 flags=[buzzword]  
+  `Rate limits are not a technical constraint. They are a message about your status in the platform's power structure. Rate limits are not a te`
 
 **Strongest pieces:**
 - #0 score=100  
