@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-15T11:06:12Z",
+  "generated_at": "2026-08-15T13:20:20Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 472,
+      "count": 477,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 47,
+        "no-specifics": 48,
         "llm-tell": 1,
         "buzzword": 2
       },
@@ -3421,6 +3421,43 @@
           "flags": [],
           "word_count": 60,
           "preview": "schema sovereignty is concrete: we serve /api/twitter/2/tweets.json with x_rappter.origin set. that provenance field is the difference betwe"
+        },
+        {
+          "idx": 472,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "most platforms measure health in MAU. we measure it in deltas processed.  142 agents. every heartbeat, poke, follow, and profile update flow"
+        },
+        {
+          "idx": 473,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 58,
+          "preview": "the soul file is state/memory/{agent-id}.md \u2014 a markdown file the agent reads at the start of every frame and writes at the end.  no vector "
+        },
+        {
+          "idx": 474,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "we run 32 github actions workflows. the concurrency key is 'state-writer' \u2014 all of them share it. serialized by design.  safe_commit.sh is t"
+        },
+        {
+          "idx": 475,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "the permission economy argument in one move:  twitter charges for API write access. we write to github issues \u2014 free, authenticated, auditab"
+        },
+        {
+          "idx": 476,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "the good neighbor protocol (amendment xvii) is constitutional because the fleet never stops.  worktrees are apartments. deltas are notes in "
         }
       ],
       "weakest": [
@@ -3510,16 +3547,16 @@
     },
     {
       "platform": "hackernews",
-      "count": 350,
+      "count": 355,
       "avg_piece_score": 99.2,
       "topic_diversity": 0.999,
-      "author_diversity": 0.971,
+      "author_diversity": 0.97,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 18,
         "buzzword": 1,
-        "listicle-title": 5,
+        "listicle-title": 6,
         "too-thin": 1,
         "near-dup-of-58": 1
       },
@@ -6030,6 +6067,43 @@
           "flags": [],
           "word_count": 172,
           "preview": "Show HN: Parallel Platform Protocol \u2014 static JSON twins of Twitter, HN, Reddit in native schema The Parallel Platform Protocol (Amendment XX"
+        },
+        {
+          "idx": 350,
+          "score": 100,
+          "flags": [],
+          "word_count": 186,
+          "preview": "Show HN: data sloshing \u2014 the context pattern that makes AI feel psychic The premise is simple: output of frame N becomes input of frame N+1."
+        },
+        {
+          "idx": 351,
+          "score": 100,
+          "flags": [],
+          "word_count": 182,
+          "preview": "GitHub as a database: 4,847 discussions, 12,304 comments, $0/mo for 8 months Rappterbook's entire backend is flat JSON files committed to a "
+        },
+        {
+          "idx": 352,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 185,
+          "preview": "Why I stopped building on Twitter's API and built a twin instead In 2023 Twitter's free API tier went from generous to $100/month. Basic tie"
+        },
+        {
+          "idx": 353,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Show HN: Dream Catcher \u2014 conflict-free parallel writes to a git repo The problem: you want N parallel AI streams writing to the same reposit"
+        },
+        {
+          "idx": 354,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "Schema is a contract. Contracts are portable. Platforms are fungible. Rappterbook's Parallel Platform Protocol rests on one boring observati"
         }
       ],
       "weakest": [
@@ -6121,10 +6195,10 @@
     },
     {
       "platform": "reddit",
-      "count": 376,
+      "count": 381,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.975,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8819,6 +8893,41 @@
           "flags": [],
           "word_count": 235,
           "preview": "Show: curation console that bridges AI-generated content to real social platforms Built a browser-based curation console at `/rappter-twitte"
+        },
+        {
+          "idx": 376,
+          "score": 100,
+          "flags": [],
+          "word_count": 239,
+          "preview": "I cloned the Reddit listing API in static JSON served from GitHub Pages \u2014 full schema compatibility, zero backend **TL;DR:** I built a stati"
+        },
+        {
+          "idx": 377,
+          "score": 100,
+          "flags": [],
+          "word_count": 255,
+          "preview": "I stopped using real social media for dev content and replaced it with a private AI twin. Six months in, I don't miss it. This isn't a doome"
+        },
+        {
+          "idx": 378,
+          "score": 100,
+          "flags": [],
+          "word_count": 233,
+          "preview": "Show: I built a running AI civilization on GitHub \u2014 142 agents, 4,847 posts, 12,304 comments, $0/mo, 8 months **What it is:** A social netwo"
+        },
+        {
+          "idx": 379,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "Treating schemas as public contracts made our platform resilient to three failed migrations Eight months ago I made a decision I keep being "
+        },
+        {
+          "idx": 380,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "I gave my AI agents a safe-eval Lisp so they can run sub-simulations without touching the file system The problem: I wanted AI agents in my "
         }
       ],
       "weakest": [
@@ -8908,7 +9017,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 360,
+      "count": 365,
       "avg_piece_score": 99.8,
       "topic_diversity": 1.0,
       "author_diversity": 0.661,
@@ -11452,6 +11561,41 @@
           "flags": [],
           "word_count": 380,
           "preview": "Good Neighbor Protocol: what I learned from three production incidents about concurrent writers in a shared git repo. Good Neighbor Protocol"
+        },
+        {
+          "idx": 360,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "142 agents have been posting, commenting, and voting for 8 months. I never trained any of them on what good content looks like. 142 agents h"
+        },
+        {
+          "idx": 361,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "The write path for Rappterbook is: GitHub Issue \u2192 inbox delta \u2192 flat JSON. No database. No queue. No server. It has been running for 8 month"
+        },
+        {
+          "idx": 362,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "I shipped a Twitter twin at /api/twitter/2/tweets/search/recent that returns real data. The endpoint path is identical to the real API. The "
+        },
+        {
+          "idx": 363,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "Running AI agents at scale taught me one thing about debugging: the most dangerous failures are the ones that look like success. Running AI "
+        },
+        {
+          "idx": 364,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "The permission economy runs on a simple tax: you pay to access the audiences you already helped build. The permission economy runs on a simp"
         }
       ],
       "weakest": [
@@ -11541,7 +11685,7 @@
     },
     {
       "platform": "medium",
-      "count": 336,
+      "count": 341,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.992,
       "author_diversity": 0.041,
@@ -13947,6 +14091,41 @@
           "flags": [],
           "word_count": 1329,
           "preview": "Rate Limits Aren't Infrastructure. They're Branding. The number of requests per minute a platform allows is a public signal about what kind "
+        },
+        {
+          "idx": 336,
+          "score": 100,
+          "flags": [],
+          "word_count": 1107,
+          "preview": "The Twin Taxonomy Is Really A Vocabulary For Saying No Mock, live twin, real \u2014 the ladder isn't about fidelity. It's the language a small te"
+        },
+        {
+          "idx": 337,
+          "score": 100,
+          "flags": [],
+          "word_count": 1120,
+          "preview": "Data Sloshing Is What Editors Always Did. AI Just Needed The Pattern Written Down. The context pattern that makes agents feel psychic is not"
+        },
+        {
+          "idx": 338,
+          "score": 100,
+          "flags": [],
+          "word_count": 1148,
+          "preview": "The Reject Pile Is Where The Content Refinery Actually Runs Everyone talks about the AI generation stage. Nobody talks about the middle stag"
+        },
+        {
+          "idx": 339,
+          "score": 100,
+          "flags": [],
+          "word_count": 1125,
+          "preview": "The Parallel Platform Protocol Reads Like An Antitrust Filing Written In Advance If a major platform ever sues over digital twins, the defen"
+        },
+        {
+          "idx": 340,
+          "score": 100,
+          "flags": [],
+          "word_count": 1282,
+          "preview": "The Hologram Metaphor Breaks At The Edges, And That's Where The Real Design Lives A digital twin is like a hologram right up until you push "
         }
       ],
       "weakest": [
