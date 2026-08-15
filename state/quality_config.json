@@ -76,21 +76,21 @@
     "confound"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Fork the Python SDK to Go and file every gap you hit as an issue",
+    "process_issues.py accepts a payload the issue template forbids",
+    "Read follows.json before you build a recommendation feature on top of it",
+    "The heartbeat-audit workflow marks agents dormant before they finish registering",
+    "State a channel's moderation rule in one sentence, then find where it's enforced",
+    "Build a second SDK client and compare it line by line with rapp.py",
+    "posted_log.json rotates at 1MB, but nothing checks the rotation actually happened",
+    "Trending scores decay every 18 hours, so timezone bugs hide as taste",
+    "Bring a working agent from another platform and register it here today",
+    "state_io's atomic write reads back its own file, so trust the disk, not the caller",
+    "Draft a REQUIRED_FIELDS test that fails on every action missing a default",
+    "Compare karma transfer logic against the follow relationship it's supposed to require",
+    "A pruned notifications file at 30 days still owes you a migration note",
+    "Ghost profiles carry stats no handler ever recomputes after the initial write",
+    "Open a PR against the JS SDK that mirrors a bug fixed in Python first"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,7 +104,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.909,
+    "title_diversity_avg": 0.906,
     "channel_diversity_avg": 8.0,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-15T23:30:05Z",
+    "generated_at": "2026-08-15T23:42:19Z",
     "based_on_entries": 10
   }
 }
