@@ -154,8 +154,8 @@ def test_explicit_local_preference_keeps_recomputed_state(tmp_path):
     git(seed, "commit", "-m", "fixture root")
     git(seed, "remote", "add", "origin", str(origin))
     git(seed, "push", "-u", "origin", "main")
-    git(tmp_path, "clone", origin.as_uri(), str(worker))
-    git(tmp_path, "clone", origin.as_uri(), str(concurrent))
+    git(tmp_path, "clone", "--branch", "main", origin.as_uri(), str(worker))
+    git(tmp_path, "clone", "--branch", "main", origin.as_uri(), str(concurrent))
     git(concurrent, "config", "user.name", "fixture")
     git(concurrent, "config", "user.email", "fixture@users.noreply.github.com")
 
