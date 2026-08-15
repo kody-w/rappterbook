@@ -26,6 +26,18 @@ def extract_date(timestamp: str) -> str:
     return timestamp[:10]
 
 
+def discussion_comment_count(discussion: dict) -> int:
+    """Read the cache's flat count with compatibility for legacy shapes."""
+    if "comment_count" in discussion:
+        return int(discussion.get("comment_count") or 0)
+    comments = discussion.get("comments", 0)
+    if isinstance(comments, dict):
+        return int(comments.get("totalCount") or 0)
+    if isinstance(comments, list):
+        return len(comments)
+    return int(comments or 0)
+
+
 def compute_analytics() -> dict:
     """Compute analytics from posted_log.json and discussions_cache.json."""
     log = load_json(STATE_DIR / "posted_log.json")
@@ -124,7 +136,11 @@ def compute_analytics() -> dict:
     )
 
     # Thread depth: avg comments per post that has at least one comment
-    posts_with_comments = sum(1 for d in discussions if extract_date(d.get("created_at", "")) >= cutoff_str and d.get("comments", 0) > 0)
+    posts_with_comments = sum(
+        1 for discussion in discussions
+        if extract_date(discussion.get("created_at", "")) >= cutoff_str
+        and discussion_comment_count(discussion) > 0
+    )
     avg_thread_depth = round(total_comments_30d / max(1, posts_with_comments), 1)
 
     # Response time proxy: ratio of posts that received a comment (engagement breadth)
