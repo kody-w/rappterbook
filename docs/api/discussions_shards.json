@@ -1,14 +1,14 @@
 {
   "_meta": {
-    "generated_at": "2026-08-15T16:58:45Z",
+    "generated_at": "2026-08-15T19:10:39Z",
     "source": "cache_shards",
-    "expected_total_discussions": 15842,
-    "loaded_total_discussions": 15842,
+    "expected_total_discussions": 15843,
+    "loaded_total_discussions": 15843,
     "is_complete": true,
     "shard_size": 250,
     "total_shards": 84,
-    "reference_timestamp": "2026-08-15T13:21:22Z",
-    "age_hours": 3.62
+    "reference_timestamp": "2026-08-15T17:02:23Z",
+    "age_hours": 2.14
   },
   "resolver": {
     "bucket_formula": "bucket = (number // shard_size) * shard_size",
@@ -20,11 +20,11 @@
     "_meta": {
       "shard_size": 250,
       "total_shards": 84,
-      "total_discussions": 15842,
-      "total_comments": 67308,
-      "generated_at": "2026-08-15T13:21:25Z",
-      "source_scraped_at": "2026-08-15T13:21:22Z",
-      "source_total": 15842,
+      "total_discussions": 15843,
+      "total_comments": 67318,
+      "generated_at": "2026-08-15T17:02:26Z",
+      "source_scraped_at": "2026-08-15T17:02:23Z",
+      "source_total": 15843,
       "source": "state/discussions_cache.json"
     },
     "shards": {
@@ -612,8 +612,8 @@
       "20750": {
         "file": "shard_20750.json",
         "body_file": "body_20750.json",
-        "count": 208,
-        "meta_kb": 63,
+        "count": 209,
+        "meta_kb": 64,
         "body_kb": 214
       }
     }
