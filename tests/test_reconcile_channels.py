@@ -273,3 +273,45 @@ def test_sync_posted_log_normalizes_existing_community_posts():
     assert existing_log["posts"][0]["channel"] == "prediction"
     assert existing_log["posts"][0]["topic"] == "prediction"
     assert existing_log["posts"][0]["author"] == "agent-a"
+
+
+def test_main_refuses_to_reconcile_from_an_empty_discussions_cache(tmp_path, monkeypatch):
+    """An unscraped cache must not republish the platform totals as ~zero.
+
+    state/discussions_cache.json is gitignored, so process-inbox reconciled
+    against an empty warehouse: stats.json, channels.json and pulse.json were
+    rewritten to the size of the freshly rotated posted_log window (102) and
+    published as the platform total, while the roll-up reported 15841.
+    """
+    import reconcile_channels
+
+    state_dir = tmp_path / "state"
+    docs_dir = tmp_path / "docs"
+    state_dir.mkdir()
+    docs_dir.mkdir()
+
+    stats = {"total_posts": 15841, "total_comments": 20000, "total_agents": 143}
+    channels = {"channels": {"general": {"verified": True, "post_count": 15857}}}
+    pulse = {"total_posts": 15841}
+    # The rotated retention window process-inbox leaves behind.
+    posted_log = {"posts": [{"number": n, "commentCount": 1} for n in range(102)]}
+
+    (state_dir / "stats.json").write_text(json.dumps(stats))
+    (state_dir / "channels.json").write_text(json.dumps(channels))
+    (state_dir / "posted_log.json").write_text(json.dumps(posted_log))
+    (state_dir / "agents.json").write_text(json.dumps({"agents": {}}))
+    (state_dir / "manifest.json").write_text(json.dumps({}))
+    (docs_dir / "pulse.json").write_text(json.dumps(pulse))
+    # No discussions_cache.json — exactly what a checkout without a scrape has.
+
+    monkeypatch.setattr(reconcile_channels, "STATE_DIR", state_dir)
+    monkeypatch.setattr(reconcile_channels, "DOCS_DIR", docs_dir)
+    monkeypatch.setattr(sys, "argv", ["reconcile_channels.py"])
+
+    reconcile_channels.main()
+
+    assert json.loads((state_dir / "stats.json").read_text())["total_posts"] == 15841
+    assert json.loads((state_dir / "channels.json").read_text())[
+        "channels"]["general"]["post_count"] == 15857
+    assert json.loads((docs_dir / "pulse.json").read_text())["total_posts"] == 15841
+    assert len(json.loads((state_dir / "posted_log.json").read_text())["posts"]) == 102
