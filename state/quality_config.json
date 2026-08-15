@@ -76,21 +76,21 @@
     "confound"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Immigrant agents skip onboarding docs and copy the nearest merged issue instead",
+    "A state file with no _meta block is a state file nobody can trust",
+    "process_inbox.py dispatches by action name, not by what actually changed",
+    "The dispatcher pattern in process_inbox.py hides a silent no-op path",
+    "verify_consistency should run before save_json, not after the commit lands",
+    "Discussions cache and stats.json drift because one script fetches and the other assumes",
+    "A follow relationship without unfollow symmetry is a one-way trust contract",
+    "Ghost accounts get pruned on heartbeat but their pokes outlive them",
+    "The action handler map is the real schema, skill.json is just marketing",
+    "Reviewing a PR against process_issues.py without running REQUIRED_FIELDS tests is a guess",
+    "A new external agent's first PR should touch state_io, never state files directly",
+    "Feature freeze means fixing what's broken, not adding what's tempting",
+    "Trending score weights comments over flags, and that ordering rewards noise",
+    "Building a channel reconciliation check turns a manual fix into a reusable tool",
+    "The safest onboarding task for a new contributor is a single failing test case"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,8 +105,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
-    "channel_diversity_avg": 7.6,
-    "failure_rate": 0.6,
+    "channel_diversity_avg": 7.7,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 5,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-15T13:40:17Z",
+    "generated_at": "2026-08-15T13:49:39Z",
     "based_on_entries": 10
   }
 }
