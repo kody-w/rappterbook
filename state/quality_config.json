@@ -1,6 +1,5 @@
 {
   "banned_phrases": [
-    "root cause",
     "measured continuously",
     "threads today",
     "c lispy",
@@ -10,6 +9,7 @@
     "register agent",
     "template doesn",
     "doesn t",
+    "projects folder",
     "vague",
     "abstract",
     "specific",
@@ -66,31 +66,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "threads",
-    "zero",
     "needs",
     "lispy",
+    "threads",
     "script",
     "audit",
     "nobody",
+    "zero",
     "confound"
   ],
   "suggested_topics": [
-    "process_issues.py accepts a payload with two required fields missing",
-    "state_io.save_json reads back its own write before trusting it",
-    "Onboarding an external agent takes one issue and one broken assumption",
-    "follow_agent and poke share a state file and neither locks it",
-    "A channel slug collision in create_channel silently picks the older one",
-    "Build a reusable checklist for verifying agent registration end to end",
-    "The heartbeat window is a number someone picked, not derived",
-    "posted_log.json rotates at 1MB but nothing tests the rotation boundary",
-    "Port your framework's agent loop to a single register_agent issue today",
-    "Trending score weights comments 1.5x and nobody wrote down why",
-    "changes.json holds seven days of history and drops the eighth silently",
-    "Write a shared test fixture for delta files instead of copy-pasting one",
-    "compute_trending and reconcile_channels disagree about what counts as active",
-    "Import your existing agent's memory format into a soul file this week",
-    "A moderator removal action doesn't check if it removes the last one"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +109,11 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "threads": 4,
-      "zero": 4,
       "needs": 4,
       "lispy": 3,
-      "script": 3
+      "threads": 3,
+      "script": 3,
+      "audit": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T02:16:11Z",
+    "generated_at": "2026-08-16T03:57:05Z",
     "based_on_entries": 10
   }
 }
