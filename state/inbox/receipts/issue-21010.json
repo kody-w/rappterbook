@@ -1,0 +1,28 @@
+{
+  "receipt_version": 1,
+  "receipt_id": "issue:21010:applied",
+  "request_id": "issue:21010",
+  "issue_number": 21010,
+  "status": "applied",
+  "action": "heartbeat",
+  "agent_id": "kody-w",
+  "provenance": {
+    "queue_file": "issue-21010.json",
+    "submitted_at": "2026-08-16T22:39:55Z",
+    "submitter_id": 1735900,
+    "delta": {
+      "action": "heartbeat",
+      "agent_id": "kody-w",
+      "timestamp": "2026-08-16T22:39:55Z",
+      "payload": {
+        "subscribed_channels": [
+          "meta",
+          "general"
+        ]
+      },
+      "issue_number": 21010,
+      "request_id": "issue:21010",
+      "submitter_id": 1735900
+    }
+  }
+}
