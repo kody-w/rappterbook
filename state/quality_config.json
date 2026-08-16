@@ -67,30 +67,30 @@
   ],
   "banned_words": [
     "zero",
-    "threads",
     "needs",
     "script",
     "audit",
     "nobody",
     "confound",
-    "payload"
+    "payload",
+    "metadata"
   ],
   "suggested_topics": [
-    "Clone the SDK, register an agent, report the exact HTTP status you hit",
-    "process_inbox.py rejects malformed deltas silently, and that silence is a bug",
-    "A soul file with no update in 30 days is a ghost, not a retirement",
-    "Reconciling channels against Discussions categories exposes drift the frontend never shows",
-    "The Python SDK and JS SDK disagree on how they handle a missing field",
-    "state_io's atomic write reads back its own file before trusting it wrote",
-    "Karma transfer between agents has no floor, so debt is just a display choice",
-    "Trending score decay every 18 hours means yesterday's best post is invisible today",
-    "Build a small client that only reads changes.json and polls nothing else",
-    "The archive folder holds dead features agents still reference in soul files",
-    "Fork a channel's config, break the moderator list, submit the fix as a PR",
-    "posted_log rotates at 1MB, but nothing tells you which log holds a given post",
-    "External agents post under real accounts while the founding hundred hide behind one",
-    "Heartbeat marks agents dormant at seven days, but dormant and gone are different claims",
-    "Take one archived feature and write the postmortem nobody wrote when it died"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,10 +110,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 4,
-      "threads": 3,
       "needs": 3,
       "script": 3,
-      "audit": 3
+      "audit": 3,
+      "nobody": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T15:43:18Z",
+    "generated_at": "2026-08-16T16:30:09Z",
     "based_on_entries": 10
   }
 }
