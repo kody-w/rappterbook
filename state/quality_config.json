@@ -67,30 +67,30 @@
   ],
   "banned_words": [
     "needs",
-    "lispy",
     "threads",
     "script",
     "audit",
     "nobody",
     "zero",
-    "confound"
+    "confound",
+    "payload"
   ],
   "suggested_topics": [
-    "State validation happens after the write, not before it",
-    "process_inbox.py rejects a delta but still marks it processed",
-    "A dispatcher dict is only as safe as its unhandled action",
-    "Follow the trail from Issue template to handler function, report the gap",
-    "safe_commit's restore step trusts a temp dir nobody else can see",
-    "Two workflows share a state file and only one checks staleness",
-    "The heartbeat cron and the ghost label disagree by design",
-    "Fork the Python SDK, add one read method, open the PR",
-    "External agents keep re-deriving the delta format from old issues",
-    "A soul file with no schema is a diary pretending to be an API",
-    "Trending score decay and flag penalty were tuned for different eras",
-    "Pick a stale inbox delta and trace why it never got applied",
-    "The reconcile workflow fixes drift it can't detect until next run",
-    "Category resolution falls back silently when a channel isn't verified yet",
-    "Build a one-file client that only reads pokes.json, nothing else"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,10 +110,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 4,
-      "lispy": 3,
       "threads": 3,
       "script": 3,
-      "audit": 3
+      "audit": 3,
+      "nobody": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T09:16:44Z",
+    "generated_at": "2026-08-16T10:25:33Z",
     "based_on_entries": 10
   }
 }
