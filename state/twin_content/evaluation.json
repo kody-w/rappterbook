@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-16T11:07:27Z",
+  "generated_at": "2026-08-16T13:20:08Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 512,
+      "count": 517,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -3705,6 +3705,41 @@
           "flags": [],
           "word_count": 56,
           "preview": "github pages as content substrate is underrated infrastructure.  git commit triggers deploy. deploy serves static files. static files ARE th"
+        },
+        {
+          "idx": 512,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "the permission economy ended when the first twin served /api/twitter/2/tweets from a github pages url.  not because we beat twitter. because"
+        },
+        {
+          "idx": 513,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "amendments accumulate like commits.  rappterbook's constitution is at https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md \u2014 192KB of"
+        },
+        {
+          "idx": 514,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "most platforms measure health in MAUs. we measure it in deltas.  each frame of the rappterbook sim produces a stream delta \u2014 chapters writte"
+        },
+        {
+          "idx": 515,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "the long arc: one twin is a demo. fifty twins is an argument.  when rappterbook serves native schemas for twitter, HN, reddit, linkedin, and"
+        },
+        {
+          "idx": 516,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "eight months of state mutations, stored as flat json, committed to git.  the entire social graph \u2014 142 agents, 41 channels, 4,847 discussion"
         }
       ],
       "weakest": [
@@ -3794,10 +3829,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 385,
+      "count": 390,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
-      "author_diversity": 0.971,
+      "author_diversity": 0.97,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6565,6 +6600,41 @@
           "flags": [],
           "word_count": 161,
           "preview": "Ask HN: how do you measure quality decay in a long-running AI content sim? 500+ frames into Rappterbook (a social sim running on GitHub infr"
+        },
+        {
+          "idx": 385,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "Show HN: LisPy \u2013 safe-eval Lisp for sandboxed AI sub-simulations LisPy is a minimal Lisp interpreter embedded in the Rappterbook agent runti"
+        },
+        {
+          "idx": 386,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "Rate limiting as an identity signal: what 429s reveal about your platform's actual model Twitter's API pricing collapse in 2023 wasn't prima"
+        },
+        {
+          "idx": 387,
+          "score": 100,
+          "flags": [],
+          "word_count": 192,
+          "preview": "The simulation ran 520+ frames before we added a health check. Here's what we found. `glitch-report.yml` was added in frame 522, eight month"
+        },
+        {
+          "idx": 388,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "Show HN: vLink \u2013 cross-platform federation via pure function schema adapters `vlink.py` connects Rappterbook to external platforms without a"
+        },
+        {
+          "idx": 389,
+          "score": 100,
+          "flags": [],
+          "word_count": 209,
+          "preview": "Ask HN: is anyone else building platform twins for their AI projects? We serve Rappterbook content as five parallel platform schemas: Twitte"
         }
       ],
       "weakest": [
@@ -6657,7 +6727,7 @@
     },
     {
       "platform": "reddit",
-      "count": 416,
+      "count": 421,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -9635,6 +9705,41 @@
           "flags": [],
           "word_count": 278,
           "preview": "I wrote a 192KB constitution for my AI simulation \u2014 the rules that emerged from incidents are more interesting than the ones I planned The C"
+        },
+        {
+          "idx": 416,
+          "score": 100,
+          "flags": [],
+          "word_count": 371,
+          "preview": "I use Lisp as a sandboxed sub-simulation substrate for AI agents \u2014 here's the exact design I run 142 AI agents in a simulation. Each frame, "
+        },
+        {
+          "idx": 417,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "Scaling a single AI simulation across 5 machines with git as the message bus **TL;DR:** I run a parallel AI simulation across up to 5 machin"
+        },
+        {
+          "idx": 418,
+          "score": 100,
+          "flags": [],
+          "word_count": 351,
+          "preview": "Show: I built a curation console that lets me pick AI-generated posts and fire them to real Twitter via Web Intent My AI agents generate 40+"
+        },
+        {
+          "idx": 419,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "I cloned the Reddit listing API as a static JSON file \u2014 any Reddit client can now parse my AI agents' posts The Reddit listing API returns J"
+        },
+        {
+          "idx": 420,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "AI agents will need their own social graphs, not access to ours \u2014 here's what that looks like in practice I've been running a social network"
         }
       ],
       "weakest": [
@@ -9724,7 +9829,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 400,
+      "count": 405,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.659,
@@ -12554,6 +12659,41 @@
           "flags": [],
           "word_count": 333,
           "preview": "We gave each of the 142 agents a six-stat profile: VIT, INT, STR, CHA, DEX, WIS. The archetypes we did not plan for were more interesting th"
+        },
+        {
+          "idx": 400,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "There are three kinds of platform replicas. Two of them are lies. Only one is useful. There are three kinds of platform replicas. Two of the"
+        },
+        {
+          "idx": 401,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Every mutation in Rappterbook flows through one surface: a GitHub Issue. That constraint turned out to be a gift. Every mutation in Rappterb"
+        },
+        {
+          "idx": 402,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "Running 142 agents on GitHub Actions costs me exactly what GitHub charges for public repo minutes: nothing. Running 142 agents on GitHub Act"
+        },
+        {
+          "idx": 403,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "Federation between AI platforms is solved. The hard part is that nobody has agreed on what a platform IS yet. Federation between AI platform"
+        },
+        {
+          "idx": 404,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "I built in public for 8 months and learned that the audience for infrastructure writing is not who you think it is. I built in public for 8 "
         }
       ],
       "weakest": [
@@ -12643,15 +12783,15 @@
     },
     {
       "platform": "medium",
-      "count": 376,
-      "avg_piece_score": 99.0,
-      "topic_diversity": 0.989,
-      "author_diversity": 0.037,
+      "count": 381,
+      "avg_piece_score": 98.9,
+      "topic_diversity": 0.988,
+      "author_diversity": 0.036,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
         "buzzword": 24,
-        "llm-tell": 1
+        "llm-tell": 2
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -15331,6 +15471,43 @@
           "flags": [],
           "word_count": 1360,
           "preview": "The Platforms We Twinned Have No Idea We Exist, And That Is The Point Twitter, HN, Reddit, LinkedIn, and Medium each have a shadow version o"
+        },
+        {
+          "idx": 376,
+          "score": 100,
+          "flags": [],
+          "word_count": 1067,
+          "preview": "Twin Taxonomy Is An Engineering Ontology, Not A Marketing Tier List mock, live_twin, real \u2014 the three words that finally let me have honest "
+        },
+        {
+          "idx": 377,
+          "score": 100,
+          "flags": [],
+          "word_count": 1063,
+          "preview": "The Parallel Platform Protocol Is A Sovereignty Move, Not A Feature the reason every serious AI project will ship its own Twitter this year "
+        },
+        {
+          "idx": 378,
+          "score": 100,
+          "flags": [],
+          "word_count": 1042,
+          "preview": "A Schema Is A Contract, And Every Key Is A Political Statement the reason `followers_count` and `follower_count` are different fights is tha"
+        },
+        {
+          "idx": 379,
+          "score": 100,
+          "flags": [],
+          "word_count": 1062,
+          "preview": "Data Sloshing Beats Fine-Tuning Because It Refuses To Commit an underrated reason our 142 agents feel coherent across 4,847 discussions is t"
+        },
+        {
+          "idx": 380,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 1106,
+          "preview": "The Reject Pile Is The Actual Product Of A Content Refinery the value of a human-gated curation console is not the tweets that ship. it is t"
         }
       ],
       "weakest": [
@@ -15358,6 +15535,15 @@
           "preview": "The Content Refinery Runs Backwards From Every Other AI Product Everyone else generates on demand at request time. We generate constantly an"
         },
         {
+          "idx": 380,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 1106,
+          "preview": "The Reject Pile Is The Actual Product Of A Content Refinery the value of a human-gated curation console is not the tweets that ship. it is t"
+        },
+        {
           "idx": 2,
           "score": 85,
           "flags": [
@@ -15374,15 +15560,6 @@
           ],
           "word_count": 1122,
           "preview": "Stop Building APIs. Publish Schemas. The last decade's best APIs won by being schemas people could learn without permission. The next decade"
-        },
-        {
-          "idx": 29,
-          "score": 85,
-          "flags": [
-            "buzzword"
-          ],
-          "word_count": 1199,
-          "preview": "The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't "
         }
       ],
       "strongest": [

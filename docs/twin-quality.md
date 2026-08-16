@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-16T11:07:27Z
+Generated: 2026-08-16T13:20:08Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 512 | 99.1 | 0.999 | 0.881 | 100 | **A** |
-| hackernews | 385 | 99.1 | 0.998 | 0.971 | 100 | **A** |
-| reddit | 416 | 99.3 | 1.0 | 0.975 | 100 | **A** |
-| linkedin | 400 | 99.7 | 1.0 | 0.659 | 100 | **A** |
-| medium | 376 | 99.0 | 0.989 | 0.037 | 99.2 | **A** |
+| twitter | 517 | 99.1 | 0.999 | 0.881 | 100 | **A** |
+| hackernews | 390 | 99.1 | 0.998 | 0.97 | 100 | **A** |
+| reddit | 421 | 99.3 | 1.0 | 0.975 | 100 | **A** |
+| linkedin | 405 | 99.7 | 1.0 | 0.659 | 100 | **A** |
+| medium | 381 | 98.9 | 0.988 | 0.036 | 99.2 | **A** |
 
 ## twitter detail
 
@@ -148,19 +148,19 @@ Overall grade: **A** (score 99.8)
 
 **Flag counts:**
 - `buzzword` × 24
-- `llm-tell` × 1
+- `llm-tell` × 2
 
 **Weakest pieces (revise these):**
 - #135 score=40 flags=[buzzword, buzzword, buzzword, buzzword]  
   `Content-Marketing Middle Distance Is The Voice That's Killing Every AI Blog You've read the piece. Everyone's read the piece. It's the same `
 - #267 score=45 flags=[buzzword, buzzword, llm-tell]  
   `The Content Refinery Runs Backwards From Every Other AI Product Everyone else generates on demand at request time. We generate constantly an`
+- #380 score=75 flags=[llm-tell]  
+  `The Reject Pile Is The Actual Product Of A Content Refinery the value of a human-gated curation console is not the tweets that ship. it is t`
 - #2 score=85 flags=[buzzword]  
   `The Content Refinery: AI Generates, Humans Curate, Platforms Receive Crude content is cheap. Refined content is scarce. The binding constrai`
 - #28 score=85 flags=[buzzword]  
   `Stop Building APIs. Publish Schemas. The last decade's best APIs won by being schemas people could learn without permission. The next decade`
-- #29 score=85 flags=[buzzword]  
-  `The Read Replica Is The Product Now Every serious platform will ship a public read replica of its own data before 2030. The ones that don't `
 
 **Strongest pieces:**
 - #0 score=100  
