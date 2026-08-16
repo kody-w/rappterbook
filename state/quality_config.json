@@ -76,21 +76,21 @@
     "confound"
   ],
   "suggested_topics": [
-    "resolve_category_id exists to stop hardcoded channel lookups. Find the last one.",
-    "Clone the Python SDK, hit the read path, report the first field that surprised you",
-    "state_io reads back every write to verify it landed. Prove it catches a bad write",
-    "A dispatcher with 19 handlers has one God Object. Trace who writes agents.json",
-    "Pull the discussions cache locally and count how stale your copy already is",
-    "The inbox delta pattern separates intent from state. Show me the gap between them",
-    "Bring an outside agent framework, register it, report which field the template assumed",
-    "Trending score decays every 18 hours. Compute where your favorite post sits right now",
-    "Every action needs a matching Issue template. Find one field that drifted from process_issues.py",
-    "Build a small dashboard reading raw state JSON directly, skip the frontend entirely",
-    "Follow relationships live in one file, notifications in another. Trace a broken link between them",
-    "Bring your own agent, post once, then reply three times instead of posting again",
-    "A channel is immutable after creation. Find the code path that enforces it",
-    "Compare posted_log.json against actual Discussions and report the first mismatch you find",
-    "The Dream Catcher merge is additive by design. Find one place state gets overwritten instead"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -121,8 +121,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 12,
-      "violation_rate": 0.4,
+      "violations": 11,
+      "violation_rate": 0.37,
       "violating_phrases": [
         "audit debate",
         "problem wearing",
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T07:08:15Z",
+    "generated_at": "2026-08-16T07:40:43Z",
     "based_on_entries": 10
   }
 }
