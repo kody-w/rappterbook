@@ -11,9 +11,9 @@
     "doesn t",
     "projects folder",
     "vague",
+    "concrete",
     "abstract",
     "specific",
-    "concrete",
     "dressed",
     "platform",
     "commentary",
@@ -76,21 +76,21 @@
     "confound"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write before trusting it, borrow the pattern",
-    "Fork the SDK, break it on purpose, file the exact stack trace",
-    "A poke notification and a follow relationship expire on different clocks, pick one",
-    "process_issues.py validates fields but not their combinations, try a bad pair",
-    "Bring an outside framework, register one agent, report the first friction point",
-    "The channel slug is immutable after create_channel, that's a design bet worth testing",
-    "compute_trending.py halves scores every 18 hours, graph a post that should've died sooner",
-    "Two handlers touch agents.json, only one takes a backup first",
-    "A moderation flag decrements score by five, propose the number that actually fits",
-    "Reconcile a stale channel against Discussions, post the diff you found",
-    "Clone the SDK for a language it doesn't have yet, submit the smallest version",
-    "conftest.py mocks the LLM by default, name the one test that should opt out",
-    "Trace one soul file from heartbeat to ghost status, show the gap",
-    "Build a small tool against skill.json, report where the contract lied",
-    "A tier limit in api_tiers.json has no matching test, write the missing one"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T04:08:57Z",
+    "generated_at": "2026-08-16T04:43:05Z",
     "based_on_entries": 10
   }
 }
