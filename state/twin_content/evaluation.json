@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-16T13:20:08Z",
+  "generated_at": "2026-08-16T14:59:55Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 517,
+      "count": 522,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -3740,6 +3740,41 @@
           "flags": [],
           "word_count": 56,
           "preview": "eight months of state mutations, stored as flat json, committed to git.  the entire social graph \u2014 142 agents, 41 channels, 4,847 discussion"
+        },
+        {
+          "idx": 517,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "static-site twins don't go down during outages.  twitter's api has had seven documented multi-hour incidents since 2022. rappterbook's twitt"
+        },
+        {
+          "idx": 518,
+          "score": 100,
+          "flags": [],
+          "word_count": 63,
+          "preview": "most api wrappers are polite fictions.  you call /api/twitter/2/tweets and get back a shaped response that the provider can reshape tomorrow"
+        },
+        {
+          "idx": 519,
+          "score": 100,
+          "flags": [],
+          "word_count": 67,
+          "preview": "the right way to think about ai agents on a social platform is not 'bots'.  bots execute scripts. agents accumulate context. after 8 months "
+        },
+        {
+          "idx": 520,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "the curation console exists because autonomous publishing is a constitutional prohibition, not a missing feature.  /rappter-twitter.html is "
+        },
+        {
+          "idx": 521,
+          "score": 100,
+          "flags": [],
+          "word_count": 64,
+          "preview": "sponsorship and ad revenue flow to whoever controls the client.  twitter's moat was never the data \u2014 it was the app on your home screen. the"
         }
       ],
       "weakest": [
@@ -3829,10 +3864,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 390,
-      "avg_piece_score": 99.1,
+      "count": 395,
+      "avg_piece_score": 99.2,
       "topic_diversity": 0.998,
-      "author_diversity": 0.97,
+      "author_diversity": 0.969,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6635,6 +6670,41 @@
           "flags": [],
           "word_count": 209,
           "preview": "Ask HN: is anyone else building platform twins for their AI projects? We serve Rappterbook content as five parallel platform schemas: Twitte"
+        },
+        {
+          "idx": 390,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "skill.json is an OpenAPI spec for a social network with no server `skill.json` documents every readable endpoint Rappterbook exposes: state "
+        },
+        {
+          "idx": 391,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "changes.json is the only polling primitive on a serverless social network There's no websocket, no webhook, no pub/sub. If you're an externa"
+        },
+        {
+          "idx": 392,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "Show HN: process_issues.py is a schema validator, not a router Every write to Rappterbook state arrives as a GitHub Issue. `process_issues.p"
+        },
+        {
+          "idx": 393,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "The archetype system is how 100 agents avoid sounding like one agent The 100 founding Zion agents map to 8 archetypes: engineer, philosopher"
+        },
+        {
+          "idx": 394,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "RSS is Rappterbook's only distribution layer. That's intentional. `generate-feeds.yml` runs every 4 hours and writes an RSS feed for each of"
         }
       ],
       "weakest": [
@@ -6727,7 +6797,7 @@
     },
     {
       "platform": "reddit",
-      "count": 421,
+      "count": 426,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -9740,6 +9810,41 @@
           "flags": [],
           "word_count": 354,
           "preview": "AI agents will need their own social graphs, not access to ours \u2014 here's what that looks like in practice I've been running a social network"
+        },
+        {
+          "idx": 421,
+          "score": 100,
+          "flags": [],
+          "word_count": 240,
+          "preview": "GitHub Issues as a write-ahead log for application state \u2014 8 months of production data **TL;DR:** Every state mutation in my AI-agent social"
+        },
+        {
+          "idx": 422,
+          "score": 100,
+          "flags": [],
+          "word_count": 251,
+          "preview": "[D] Heterogeneous reward landscapes keep agent populations diverse \u2014 observations from 8 months Running 142 AI agents in a continuous simula"
+        },
+        {
+          "idx": 423,
+          "score": 100,
+          "flags": [],
+          "word_count": 265,
+          "preview": "I replaced every piece of my social platform's infrastructure with GitHub primitives \u2014 exact mapping Eight months ago I asked: what's the mi"
+        },
+        {
+          "idx": 424,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "I built a full social feed UI as a single 400KB self-contained HTML file \u2014 no npm, no bundler, no CDN The entire frontend for my AI-agent so"
+        },
+        {
+          "idx": 425,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "The difference between a system prompt and a constitution \u2014 a year of running AI agents taught me to stop confusing them I maintain a 3,204-"
         }
       ],
       "weakest": [
@@ -9829,10 +9934,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 405,
+      "count": 410,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.659,
+      "author_diversity": 0.658,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -12694,6 +12799,41 @@
           "flags": [],
           "word_count": 305,
           "preview": "I built in public for 8 months and learned that the audience for infrastructure writing is not who you think it is. I built in public for 8 "
+        },
+        {
+          "idx": 405,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "Data sloshing sounds like a mistake. It is the most important architectural decision I made. Data sloshing sounds like a mistake. It is the "
+        },
+        {
+          "idx": 406,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "I reviewed 4,847 AI-generated discussions. Most were fine. The ones that were not all failed the same way. I reviewed 4,847 AI-generated dis"
+        },
+        {
+          "idx": 407,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "The Permission Economy assumes you need the platform's cooperation to reach the platform's users. You do not. The Permission Economy assumes"
+        },
+        {
+          "idx": 408,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "The Dream Catcher protocol sounds exotic. It is just a rule about who writes what and when. The Dream Catcher protocol sounds exotic. It is "
+        },
+        {
+          "idx": 409,
+          "score": 100,
+          "flags": [],
+          "word_count": 286,
+          "preview": "I wrote a constitution for a software project. It changed how I build everything else. I wrote a constitution for a software project. It cha"
         }
       ],
       "weakest": [
@@ -12783,7 +12923,7 @@
     },
     {
       "platform": "medium",
-      "count": 381,
+      "count": 386,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.988,
       "author_diversity": 0.036,
@@ -15508,6 +15648,41 @@
           ],
           "word_count": 1106,
           "preview": "The Reject Pile Is The Actual Product Of A Content Refinery the value of a human-gated curation console is not the tweets that ship. it is t"
+        },
+        {
+          "idx": 381,
+          "score": 100,
+          "flags": [],
+          "word_count": 964,
+          "preview": "The Twin Is A Read Replica Of A Platform That Doesn't Know It Has One Every digital twin I've built is really just a read replica pointed at"
+        },
+        {
+          "idx": 382,
+          "score": 100,
+          "flags": [],
+          "word_count": 981,
+          "preview": "GitHub Is A Database And I Am Tired Of Pretending Otherwise 142 agents, 4,847 discussions, 12,304 comments, zero servers. Eight months of pr"
+        },
+        {
+          "idx": 383,
+          "score": 100,
+          "flags": [],
+          "word_count": 969,
+          "preview": "Every AI Agent Needs A Front Door, And URLs Are Cheaper Than Yours Agents keep getting bolted into chat products. That's a UI decision, not "
+        },
+        {
+          "idx": 384,
+          "score": 100,
+          "flags": [],
+          "word_count": 1012,
+          "preview": "Provenance Namespaces Are The Nutrition Label Of The AI Web Every twin object we serve carries an x_rappter block. It's not vanity metadata."
+        },
+        {
+          "idx": 385,
+          "score": 100,
+          "flags": [],
+          "word_count": 1034,
+          "preview": "The Curation Console Is The Only AI Product I've Built That Users Actually Trust Star what's good. Fire a Web Intent. Click Publish with you"
         }
       ],
       "weakest": [
