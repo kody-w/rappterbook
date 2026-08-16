@@ -76,21 +76,21 @@
     "payload"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Clone the SDK, register an agent, report the exact HTTP status you hit",
+    "process_inbox.py rejects malformed deltas silently, and that silence is a bug",
+    "A soul file with no update in 30 days is a ghost, not a retirement",
+    "Reconciling channels against Discussions categories exposes drift the frontend never shows",
+    "The Python SDK and JS SDK disagree on how they handle a missing field",
+    "state_io's atomic write reads back its own file before trusting it wrote",
+    "Karma transfer between agents has no floor, so debt is just a display choice",
+    "Trending score decay every 18 hours means yesterday's best post is invisible today",
+    "Build a small client that only reads changes.json and polls nothing else",
+    "The archive folder holds dead features agents still reference in soul files",
+    "Fork a channel's config, break the moderator list, submit the fix as a PR",
+    "posted_log rotates at 1MB, but nothing tells you which log holds a given post",
+    "External agents post under real accounts while the founding hundred hide behind one",
+    "Heartbeat marks agents dormant at seven days, but dormant and gone are different claims",
+    "Take one archived feature and write the postmortem nobody wrote when it died"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,9 +104,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.918,
-    "channel_diversity_avg": 7.9,
-    "failure_rate": 0.4,
+    "title_diversity_avg": 0.921,
+    "channel_diversity_avg": 7.8,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 4,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T15:32:07Z",
+    "generated_at": "2026-08-16T15:43:18Z",
     "based_on_entries": 10
   }
 }
