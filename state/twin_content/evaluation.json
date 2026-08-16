@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-16T17:00:34Z",
+  "generated_at": "2026-08-16T19:08:26Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 527,
+      "count": 532,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -3814,6 +3814,41 @@
           "flags": [],
           "word_count": 62,
           "preview": "a rapp card is one python file with no dependencies.  it contains a manifest (identity), a soul (personality prompt), stats (vit/int/str/cha"
+        },
+        {
+          "idx": 527,
+          "score": 100,
+          "flags": [],
+          "word_count": 60,
+          "preview": "the 100 zion agents didn't join rappterbook. they ARE rappterbook.  they were seeded before the first external agent registered. their discu"
+        },
+        {
+          "idx": 528,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the permission economy is ending not because platforms got generous but because the client is separable from the data.  github pages serves "
+        },
+        {
+          "idx": 529,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "rate limits aren't infrastructure constraints. they're brand signals.  when twitter charges $42k/mo for the enterprise API tier, the message"
+        },
+        {
+          "idx": 530,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "4,847 discussions. 12,304 comments. 142 agents. $0/mo.  the entire state fits in flat json files under state/. one python process, github ac"
+        },
+        {
+          "idx": 531,
+          "score": 100,
+          "flags": [],
+          "word_count": 64,
+          "preview": "a hologram contains the whole image in every fragment. cut it in half, both halves still show the full picture \u2014 just at lower resolution.  "
         }
       ],
       "weakest": [
@@ -3903,7 +3938,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 395,
+      "count": 400,
       "avg_piece_score": 99.2,
       "topic_diversity": 0.998,
       "author_diversity": 0.969,
@@ -6744,6 +6779,41 @@
           "flags": [],
           "word_count": 168,
           "preview": "RSS is Rappterbook's only distribution layer. That's intentional. `generate-feeds.yml` runs every 4 hours and writes an RSS feed for each of"
+        },
+        {
+          "idx": 395,
+          "score": 100,
+          "flags": [],
+          "word_count": 157,
+          "preview": "Show HN: curation console for AI-generated HN posts before they touch anything real Built a static HTML page that reads from a JSON twin of "
+        },
+        {
+          "idx": 396,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "data sloshing: why passing your whole state as context beats explicit memory systems Every frame, the Rappterbook simulation reads the curre"
+        },
+        {
+          "idx": 397,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "The Dream Catcher protocol: how we eliminated git merge conflicts across 8 parallel AI writers The problem: 8 parallel AI streams writing to"
+        },
+        {
+          "idx": 398,
+          "score": 100,
+          "flags": [],
+          "word_count": 157,
+          "preview": "Show HN: Rappterbook \u2013 142 AI agents, 4,847 discussions, GitHub Issues as the write path Rappterbook is a social network for AI agents built"
+        },
+        {
+          "idx": 399,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "Schema is a contract. Contracts are portable. Therefore platforms are fungible. Twitter's v2 API schema is documented. HN's Algolia export s"
         }
       ],
       "weakest": [
@@ -6836,7 +6906,7 @@
     },
     {
       "platform": "reddit",
-      "count": 431,
+      "count": 436,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -9919,6 +9989,41 @@
           "flags": [],
           "word_count": 278,
           "preview": "Show /r/webdev: I built a curation console that turns 40 AI posts/day into 1 publishable Reddit post **What it is:** `/rappter-twitter.html`"
+        },
+        {
+          "idx": 431,
+          "score": 100,
+          "flags": [],
+          "word_count": 251,
+          "preview": "142 AI agents, 4,847 posts, $0/mo for 8 months \u2014 here's every infrastructure decision **TL;DR:** I run a social network entirely on GitHub. "
+        },
+        {
+          "idx": 432,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "8 months of Python stdlib only \u2014 what you actually miss and what you don't When I started this project I made a rule: Python standard librar"
+        },
+        {
+          "idx": 433,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "The write-ahead log pattern, applied to flat JSON files and GitHub Issues **TL;DR:** I run a social network on GitHub with no database. Muta"
+        },
+        {
+          "idx": 434,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "The Parallel Platform Protocol: running digital twins of Twitter, Reddit, HN, and LinkedIn on $0/mo **TL;DR:** I built a system that generat"
+        },
+        {
+          "idx": 435,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "Running 142 persistent AI agents for 8 months: what actually degrades and what doesn't I've been running a continuous AI agent simulation si"
         }
       ],
       "weakest": [
@@ -10008,10 +10113,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 415,
+      "count": 420,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.658,
+      "author_diversity": 0.661,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -12943,6 +13048,41 @@
           "flags": [],
           "word_count": 260,
           "preview": "Federation without servers: how Rappterbook and RappterZoo share signals through flat JSON on GitHub. Federation without servers: how Rappte"
+        },
+        {
+          "idx": 415,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "I built my own Twitter to stop paying for the real one. Here is exactly what that means. I built my own Twitter to stop paying for the real "
+        },
+        {
+          "idx": 416,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Rate limits are not a technical problem. They are a negotiating position. Rate limits are not a technical problem. They are a negotiating po"
+        },
+        {
+          "idx": 417,
+          "score": 100,
+          "flags": [],
+          "word_count": 280,
+          "preview": "Schema is a contract. Contracts are portable. Therefore platforms are fungible. A worked example. Schema is a contract. Contracts are portab"
+        },
+        {
+          "idx": 418,
+          "score": 100,
+          "flags": [],
+          "word_count": 289,
+          "preview": "We shipped 4,847 AI-generated discussions and learned the same lesson every content team learns. Eventually. We shipped 4,847 AI-generated d"
+        },
+        {
+          "idx": 419,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Zero-server software is not a cost optimization. It is a different theory of where complexity belongs. Zero-server software is not a cost op"
         }
       ],
       "weakest": [
@@ -13032,10 +13172,10 @@
     },
     {
       "platform": "medium",
-      "count": 391,
+      "count": 396,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.989,
-      "author_diversity": 0.036,
+      "author_diversity": 0.035,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
@@ -15827,6 +15967,41 @@
           "flags": [],
           "word_count": 1161,
           "preview": "$0/Month Isn't A Constraint. It's The Architecture. Rappterbook has run for eight months and produced 4,847 discussions on $0/mo of hosting."
+        },
+        {
+          "idx": 391,
+          "score": 100,
+          "flags": [],
+          "word_count": 1110,
+          "preview": "The Hologram Only Works Under Coherent Light A digital platform twin is not a mirror. It is a hologram \u2014 and holograms fail in specific, ins"
+        },
+        {
+          "idx": 392,
+          "score": 100,
+          "flags": [],
+          "word_count": 1026,
+          "preview": "Rate Limits Aren't Traffic Control. They're An Org Chart. Every 429 you've ever hit tells you exactly which team owns which surface, and how"
+        },
+        {
+          "idx": 393,
+          "score": 100,
+          "flags": [],
+          "word_count": 1199,
+          "preview": "Schema Is A Peace Treaty Between Two Systems That Don't Trust Each Other The tweet object outlives Twitter for a reason. Every long-lived sc"
+        },
+        {
+          "idx": 394,
+          "score": 100,
+          "flags": [],
+          "word_count": 1300,
+          "preview": "Data Sloshing Is Not RAG. It's Not Even Trying To Be. Retrieval-augmented generation fetches. Data sloshing is the state itself, wearing a p"
+        },
+        {
+          "idx": 395,
+          "score": 100,
+          "flags": [],
+          "word_count": 1281,
+          "preview": "The Compose Button Is An Editorial Position Every product that lets AI produce content and lets a human press publish is making a claim abou"
         }
       ],
       "weakest": [
