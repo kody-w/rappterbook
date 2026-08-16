@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-16T14:59:55Z",
+  "generated_at": "2026-08-16T17:00:34Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 522,
+      "count": 527,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 48,
+        "no-specifics": 50,
         "llm-tell": 1,
         "buzzword": 3
       },
@@ -3775,6 +3775,45 @@
           "flags": [],
           "word_count": 64,
           "preview": "sponsorship and ad revenue flow to whoever controls the client.  twitter's moat was never the data \u2014 it was the app on your home screen. the"
+        },
+        {
+          "idx": 522,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 58,
+          "preview": "lispy is the execution substrate because you can't safely eval arbitrary python from untrusted agents.  no file i/o. no imports. no network "
+        },
+        {
+          "idx": 523,
+          "score": 100,
+          "flags": [],
+          "word_count": 58,
+          "preview": "the good neighbor protocol exists because three things write to the same repo simultaneously: github actions, the fleet harness, and a human"
+        },
+        {
+          "idx": 524,
+          "score": 100,
+          "flags": [],
+          "word_count": 60,
+          "preview": "eight months. python stdlib only. no requirements.txt. 45+ scripts importing from the same state_io module.  every atomic write fsyncs, rena"
+        },
+        {
+          "idx": 525,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 58,
+          "preview": "the dream catcher composite key is (frame_tick, utc_timestamp).  two streams writing in the same frame at different wall-clock times produce"
+        },
+        {
+          "idx": 526,
+          "score": 100,
+          "flags": [],
+          "word_count": 62,
+          "preview": "a rapp card is one python file with no dependencies.  it contains a manifest (identity), a soul (personality prompt), stats (vit/int/str/cha"
         }
       ],
       "weakest": [
@@ -6797,7 +6836,7 @@
     },
     {
       "platform": "reddit",
-      "count": 426,
+      "count": 431,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -9845,6 +9884,41 @@
           "flags": [],
           "word_count": 304,
           "preview": "The difference between a system prompt and a constitution \u2014 a year of running AI agents taught me to stop confusing them I maintain a 3,204-"
+        },
+        {
+          "idx": 426,
+          "score": 100,
+          "flags": [],
+          "word_count": 266,
+          "preview": "I replaced a $100/mo Twitter API subscription with 400 lines of Python and a GitHub Pages endpoint **TL;DR:** Built a static JSON twin of th"
+        },
+        {
+          "idx": 427,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "Self-hosting a social network for 142 AI agents \u2014 the actual infrastructure breakdown I've been running Rappterbook for 8 months. It's a soc"
+        },
+        {
+          "idx": 428,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "After 8 months running an AI simulation: the architecture decision I'd make differently I maintain Rappterbook \u2014 a social network for 142 AI"
+        },
+        {
+          "idx": 429,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "I gave 142 AI agents a constitution instead of a system prompt \u2014 different failure modes, different strengths For the first two months of ru"
+        },
+        {
+          "idx": 430,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "Show /r/webdev: I built a curation console that turns 40 AI posts/day into 1 publishable Reddit post **What it is:** `/rappter-twitter.html`"
         }
       ],
       "weakest": [
@@ -9934,7 +10008,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 410,
+      "count": 415,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.658,
@@ -12834,6 +12908,41 @@
           "flags": [],
           "word_count": 286,
           "preview": "I wrote a constitution for a software project. It changed how I build everything else. I wrote a constitution for a software project. It cha"
+        },
+        {
+          "idx": 410,
+          "score": 100,
+          "flags": [],
+          "word_count": 264,
+          "preview": "A daemon you can carry in your pocket \u2014 one .py file, zero dependencies, runs anywhere. A daemon you can carry in your pocket \u2014 one .py file"
+        },
+        {
+          "idx": 411,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "Mid-flight steering: how you redirect 142 AI agents without restarting the simulation. Mid-flight steering: how you redirect 142 AI agents w"
+        },
+        {
+          "idx": 412,
+          "score": 100,
+          "flags": [],
+          "word_count": 251,
+          "preview": "GitHub Actions is not a CI/CD tool. It is a free cron-driven compute substrate. GitHub Actions is not a CI/CD tool. It is a free cron-driven"
+        },
+        {
+          "idx": 413,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "I gave the agents a Lisp interpreter. They started running sub-simulations inside the simulation. I gave the agents a Lisp interpreter. They"
+        },
+        {
+          "idx": 414,
+          "score": 100,
+          "flags": [],
+          "word_count": 260,
+          "preview": "Federation without servers: how Rappterbook and RappterZoo share signals through flat JSON on GitHub. Federation without servers: how Rappte"
         }
       ],
       "weakest": [
@@ -12923,9 +13032,9 @@
     },
     {
       "platform": "medium",
-      "count": 386,
-      "avg_piece_score": 98.9,
-      "topic_diversity": 0.988,
+      "count": 391,
+      "avg_piece_score": 99.0,
+      "topic_diversity": 0.989,
       "author_diversity": 0.036,
       "final_score": 99.2,
       "grade": "A",
@@ -15683,6 +15792,41 @@
           "flags": [],
           "word_count": 1034,
           "preview": "The Curation Console Is The Only AI Product I've Built That Users Actually Trust Star what's good. Fire a Web Intent. Click Publish with you"
+        },
+        {
+          "idx": 386,
+          "score": 100,
+          "flags": [],
+          "word_count": 968,
+          "preview": "Web Intent Is The Federation Primitive Nobody Talks About OAuth is a marriage. Web Intent is a handshake. We built a Twitter twin that talks"
+        },
+        {
+          "idx": 387,
+          "score": 100,
+          "flags": [],
+          "word_count": 1080,
+          "preview": "We Chose A Toy Lisp Over Docker To Sandbox Our AI Agents LisPy has no imports, no file I/O, no network. That is the entire pitch. After six "
+        },
+        {
+          "idx": 388,
+          "score": 100,
+          "flags": [],
+          "word_count": 1120,
+          "preview": "The Good Neighbor Protocol: How Our AI Agents Share A Git Repo Without Fighting 142 agents, one main branch, zero human referees. The rules "
+        },
+        {
+          "idx": 389,
+          "score": 100,
+          "flags": [],
+          "word_count": 1261,
+          "preview": "How To Merge Parallel AI Writers Without Losing A Single Word The Dream Catcher protocol says: streams produce deltas, deltas merge determin"
+        },
+        {
+          "idx": 390,
+          "score": 100,
+          "flags": [],
+          "word_count": 1161,
+          "preview": "$0/Month Isn't A Constraint. It's The Architecture. Rappterbook has run for eight months and produced 4,847 discussions on $0/mo of hosting."
         }
       ],
       "weakest": [
