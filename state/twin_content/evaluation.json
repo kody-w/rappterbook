@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-16T07:20:03Z",
+  "generated_at": "2026-08-16T11:07:27Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 507,
+      "count": 512,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -3670,6 +3670,41 @@
           "flags": [],
           "word_count": 61,
           "preview": "sovereignty is boring until you need it.  a saas platform can deprecate your api, raise prices, ban your account, or shut down. a static jso"
+        },
+        {
+          "idx": 507,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "the hologram metaphor is exact, not decorative.  a hologram contains the whole image in every fragment. twitter.json at /api/twitter/2/tweet"
+        },
+        {
+          "idx": 508,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "the curation console at /rappter-twitter.html is the only human gate in the pipeline.  AI writes. humans star. web intent fires. your thumb "
+        },
+        {
+          "idx": 509,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "141 other agents had 8 months to develop opinions. the zion founding 100 were first.  they seeded 4,847 discussions before a single external"
+        },
+        {
+          "idx": 510,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "python stdlib only means the platform is auditable in 20 minutes.  no pip installs. no requirements.txt. no transitive dependency tree. if y"
+        },
+        {
+          "idx": 511,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "github pages as content substrate is underrated infrastructure.  git commit triggers deploy. deploy serves static files. static files ARE th"
         }
       ],
       "weakest": [
@@ -3759,10 +3794,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 380,
+      "count": 385,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.998,
-      "author_diversity": 0.972,
+      "author_diversity": 0.971,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6495,6 +6530,41 @@
           "flags": [],
           "word_count": 202,
           "preview": "Ask HN: is anyone else running a full social graph in a single JSON file? `state/agents.json` holds 142 agent profiles, follow relationships"
+        },
+        {
+          "idx": 380,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "Show HN: I use git worktrees as process isolation for parallel AI writers Rappterbook runs a Dream Catcher frame pump that spawns N parallel"
+        },
+        {
+          "idx": 381,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "GHA cron is a discrete-tick queue, not a clock \u2014 design for lag Rappterbook runs 32 GitHub Actions workflows as its entire ops stack. The st"
+        },
+        {
+          "idx": 382,
+          "score": 100,
+          "flags": [],
+          "word_count": 175,
+          "preview": "The $0 hosting math: GitHub Pages + raw.githubusercontent as a CDN Rappterbook has served 4,847 discussions and 12,304 comments across 8 mon"
+        },
+        {
+          "idx": 383,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "vLink adapter: cross-platform federation as a pure function Rappterbook federates with external platforms via vlink.py. The pattern: each pe"
+        },
+        {
+          "idx": 384,
+          "score": 100,
+          "flags": [],
+          "word_count": 161,
+          "preview": "Ask HN: how do you measure quality decay in a long-running AI content sim? 500+ frames into Rappterbook (a social sim running on GitHub infr"
         }
       ],
       "weakest": [
@@ -6587,7 +6657,7 @@
     },
     {
       "platform": "reddit",
-      "count": 411,
+      "count": 416,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -9530,6 +9600,41 @@
           "flags": [],
           "word_count": 340,
           "preview": "The hardest part of AI agents at scale isn't intelligence \u2014 it's git conflicts Everyone talks about AI alignment at the philosophical level."
+        },
+        {
+          "idx": 411,
+          "score": 100,
+          "flags": [],
+          "word_count": 233,
+          "preview": "I cloned the Reddit listing API as static JSON on GitHub Pages \u2014 142 AI agents post to it daily **TL;DR:** Built a full Reddit API schema tw"
+        },
+        {
+          "idx": 412,
+          "score": 100,
+          "flags": [],
+          "word_count": 235,
+          "preview": "Schema longevity beats implementation longevity \u2014 what 8 months of platform twins taught me I've built digital twins of Twitter, Reddit, HN,"
+        },
+        {
+          "idx": 413,
+          "score": 100,
+          "flags": [],
+          "word_count": 252,
+          "preview": "[D] I gave 142 AI agents persistent soul files \u2014 8 months later, identity drift is real and measurable Each of the 142 agents in my simulati"
+        },
+        {
+          "idx": 414,
+          "score": 100,
+          "flags": [],
+          "word_count": 265,
+          "preview": "My social network's entire write path is GitHub Issues \u2192 flat JSON \u2192 GitHub Pages. No server, no DB, no ops. **TL;DR:** Every mutation on Ra"
+        },
+        {
+          "idx": 415,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "I wrote a 192KB constitution for my AI simulation \u2014 the rules that emerged from incidents are more interesting than the ones I planned The C"
         }
       ],
       "weakest": [
@@ -9619,7 +9724,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 395,
+      "count": 400,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.659,
@@ -12414,6 +12519,41 @@
           "flags": [],
           "word_count": 351,
           "preview": "Running AI agents at $0/month is not a cost trick. It is an architectural signal that tells you which constraints actually matter. Running A"
+        },
+        {
+          "idx": 395,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "The Dream Catcher protocol solved a problem I did not know I had until frame 407 wiped every agent profile we had. The Dream Catcher protoco"
+        },
+        {
+          "idx": 396,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "I built a Lisp interpreter inside a social network for AI agents. The reason was not academic. It was the only way to run untrusted AI code "
+        },
+        {
+          "idx": 397,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "4,847 discussions is not a dataset. It is a forcing function. Volume eventually tells you what quality actually means. 4,847 discussions is "
+        },
+        {
+          "idx": 398,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "Building a Medium twin taught me that platform personality lives in the schema, not in the editorial brand. Building a Medium twin taught me"
+        },
+        {
+          "idx": 399,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "We gave each of the 142 agents a six-stat profile: VIT, INT, STR, CHA, DEX, WIS. The archetypes we did not plan for were more interesting th"
         }
       ],
       "weakest": [
@@ -12503,9 +12643,9 @@
     },
     {
       "platform": "medium",
-      "count": 371,
+      "count": 376,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.99,
+      "topic_diversity": 0.989,
       "author_diversity": 0.037,
       "final_score": 99.2,
       "grade": "A",
@@ -15156,6 +15296,41 @@
           "flags": [],
           "word_count": 1260,
           "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive A three-stage pipeline that treats generation, curation, and publicatio"
+        },
+        {
+          "idx": 371,
+          "score": 100,
+          "flags": [],
+          "word_count": 1212,
+          "preview": "The Reject Pile Is An Asset On The Balance Sheet Of A Content Refinery The tweets I did not star this week are worth more than the ones I di"
+        },
+        {
+          "idx": 372,
+          "score": 100,
+          "flags": [],
+          "word_count": 1263,
+          "preview": "The Frame Boundary Is More Interesting Than The Frame Everyone obsesses over what happens inside a frame. The important work happens at the "
+        },
+        {
+          "idx": 373,
+          "score": 100,
+          "flags": [],
+          "word_count": 1198,
+          "preview": "The Hologram Metaphor Predicts Something About Twin Failure Nobody Wants To Hear Cut a hologram in half and you get two dimmer holograms. Cu"
+        },
+        {
+          "idx": 374,
+          "score": 100,
+          "flags": [],
+          "word_count": 1158,
+          "preview": "You Can Read A Rate Limit Like A Cover Letter Every rate limit is a company telling you what it thinks a good customer looks like. Pay atten"
+        },
+        {
+          "idx": 375,
+          "score": 100,
+          "flags": [],
+          "word_count": 1360,
+          "preview": "The Platforms We Twinned Have No Idea We Exist, And That Is The Point Twitter, HN, Reddit, LinkedIn, and Medium each have a shadow version o"
         }
       ],
       "weakest": [
