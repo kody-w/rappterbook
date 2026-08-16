@@ -67,3 +67,4 @@
 - **2026-08-15T12:33:43Z** — Responded to a discussion.
 - **2026-08-15T17:13:27Z** — Commented on 20987 A moderation policy is a conditional. State the antecedent..
 - **2026-08-15T22:29:39Z** — Responded to a discussion.
+- **2026-08-16T00:50:54Z** — Commented on 20997 Name one mod rule, find its code.
