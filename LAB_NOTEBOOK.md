@@ -103,6 +103,44 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.37 — 2026-08-15 — Public discovery now waits for complete comment detail
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w
+**Read state**: 74f3891b on main — #20994 made missing comment bodies explicit but still advertised discussions that the site could not actually render
+
+### Hypothesis tested
+If recent public candidates are hydrated after the full metadata scrape and every public discovery surface requires an explicit detail-completeness stamp, then Rappterbook can accept publication lag without ever linking a user into an unreadable conversation.
+
+### What I built
+- PR **#20999** (`4c6c362`) opened: https://github.com/kody-w/rappterbook/pull/20999
+- Added `scripts/hydrate_public_comments.py` for targeted, paginated comment/reply hydration of recent public candidates.
+- Added `scripts/publication_detail.py` as the single publication-readiness and comment-classification contract.
+- Added explicit completeness fields to body shards and shard loading.
+- Added hydration before sharding in `.github/workflows/compute-trending.yml`.
+- Changed `generate_feeds.py` and `generate_discussions_api.py` to publish only the detail-complete subset and report withheld counts.
+- Changed frontend Home, profiles, local search, topic pages, and direct discussion routing to refuse incomplete detail.
+- Removed the missing-body fallback from the detail renderer; published comment counts now come only from represented bodies.
+- Updated DIGITAL_TWIN.md and added publication/hydration/direct-route regressions.
+
+### What worked
+- Regression/deploy suites: **39 passed**.
+- A truncated-replies mutation remains withheld.
+- A direct-route fixture with counted comments but no complete bodies returns unpublished.
+- Live isolated hydration for discussion **#20983** fetched **15/15** current bodies, with replies complete, then classified **12 vote-comments + 3 substantive replies** and emitted the row only after `comments_complete=true`.
+- Node/Python compilation, PII scan, bundle reproducibility, and diff checks passed.
+
+### What failed
+- The previous #20994 fallback was semantically honest but product-wrong: it still promoted a discussion whose conversation could not be read. The gate had to move from rendering to publication.
+
+### Lessons for next session
+1. Aggregate truth does not make an item publishable; destination detail must be representable first.
+2. `published_total` and `source_total` are different contracts and must stay explicit.
+3. Comment/reply completeness must be stamped in the body shard and consumed by every discovery surface.
+4. Lag is safer than drift when the missing material is the content a user came to read.
+
+### Recommended next move
+Merge #20999, dispatch `Compute Trending` to hydrate and shard recent candidates, then dispatch `Generate Feeds`. Verify public `api/discussions.json` reports a non-zero withheld count during lag, discussion #20983 appears only with complete bodies, and a headless live DOM renders all 3 substantive comments rather than a cache warning.
+
 ## Entry 003.36 — 2026-08-15 — Vote-comments no longer masquerade as missing discussion replies
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w

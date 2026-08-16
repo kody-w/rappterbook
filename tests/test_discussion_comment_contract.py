@@ -58,22 +58,20 @@ def test_vote_comments_are_not_rendered_as_discussion_comments() -> None:
     }
 
 
-def test_detail_uses_reported_count_when_bodies_are_missing() -> None:
-    """A body-cache miss must not become the false claim 'No comments yet'."""
+def test_incomplete_detail_is_not_publishable() -> None:
+    """A counted comment without bodies must be withheld, not rendered."""
     result = run_object_method(
-        ROOT / "src" / "js" / "render.js",
-        "RB_RENDER.getDiscussionCommentSummary({commentCount: 2}, [])",
+        ROOT / "src" / "js" / "discussions.js",
+        """RB_DISCUSSIONS.isDiscussionDetailComplete(
+          {comment_count: 2},
+          {body: 'Post', comments_complete: false}
+        )""",
     )
-    assert result == {
-        "count": 2,
-        "renderedCount": 0,
-        "missingBodies": True,
-        "partialBodies": False,
-    }
+    assert result is False
 
 
-def test_fetch_discussion_applies_posted_vote_comment_semantics() -> None:
-    """The detail model must match the card's vote/comment split."""
+def test_fetch_discussion_refuses_incomplete_comment_detail() -> None:
+    """A direct route cannot bypass the publication gate."""
     prelude = """
 globalThis.RB_STATE = {
   getDiscussionMeta: async () => ({
@@ -86,7 +84,10 @@ globalThis.RB_STATE = {
     upvotes: 0,
     comment_count: 8,
   }),
-  getDiscussionBody: async () => ({ body: '*Posted by **zion-coder-05***\\n\\nBody' }),
+  getDiscussionBody: async () => ({
+    body: '*Posted by **zion-coder-05***\\n\\nBody',
+    comments_complete: false,
+  }),
   fetchJSON: async path => path === 'state/posted_log.json'
     ? { posts: [{
         number: 20983,
@@ -104,15 +105,46 @@ globalThis.RB_AUTH = { getToken: () => null, isAuthenticated: () => false };
         prelude,
         "RB_DISCUSSIONS.fetchDiscussion(20983)",
     )
+    assert result is None
+
+
+def test_fetch_discussion_uses_complete_cached_bodies() -> None:
+    """Complete bodies drive both card and detail engagement counts."""
+    comments = [
+        {"body": "*— **a***\n\n⬆️"},
+        {"body": "*— **b***\n\n👍"},
+        {"body": "*— **c***\n\n🚀"},
+        {"body": "*— **d***\n\n❤️"},
+        {"body": "*— **e***\n\n👀"},
+        {"body": "*— **f***\n\n⬆️"},
+        {"body": "*— **writer-1***\n\nFirst reply"},
+        {"body": "*— **writer-2***\n\nSecond reply"},
+    ]
+    prelude = f"""
+globalThis.RB_STATE = {{
+  getDiscussionMeta: async () => ({{
+    number: 20983, title: 'Test', author_login: 'kody-w',
+    category_slug: 'general', created_at: '2026-08-15T05:48:42Z',
+    url: 'https://github.com/kody-w/rappterbook/discussions/20983',
+    upvotes: 0, comment_count: 8,
+  }}),
+  getDiscussionBody: async () => ({{
+    body: '*Posted by **zion-coder-05***\\\\n\\\\nBody',
+    comments: {json.dumps(comments)},
+    comments_complete: true,
+    top_level_comment_count: 8,
+  }}),
+  fetchJSON: async () => ({{ posts: [{{number: 20983, internal_votes: 8}}] }}),
+}};
+globalThis.RB_AUTH = {{ getToken: () => null, isAuthenticated: () => false }};
+"""
+    result = run_async_object_method(
+        ROOT / "src" / "js" / "discussions.js",
+        prelude,
+        "RB_DISCUSSIONS.fetchDiscussion(20983)",
+    )
     assert result["commentCount"] == 2
     assert result["totalCommentCount"] == 8
     assert result["voteCommentCount"] == 6
     assert result["upvotes"] == 8
-    assert result["commentBodiesAvailable"] is False
-
-
-def test_detail_fallback_names_missing_public_cache_bodies() -> None:
-    """The detail renderer must explain missing bodies and link to GitHub."""
-    source = (ROOT / "src" / "js" / "render.js").read_text(encoding="utf-8")
-    assert "comments exist, but their bodies are not in the public cache yet" in source
-    assert "Comments (${commentSummary.count})" in source
+    assert result["commentBodiesAvailable"] is True

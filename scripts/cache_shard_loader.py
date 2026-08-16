@@ -115,12 +115,18 @@ def load_cache_shards(
             if include_body:
                 detail = body_map.get(str(discussion.get("number")), {})
                 if isinstance(detail, dict):
-                    if detail.get("body"):
-                        merged["body"] = detail["body"]
-                    if detail.get("comments"):
-                        merged["comments"] = detail["comments"]
-                    if detail.get("comment_authors"):
-                        merged["comment_authors"] = detail["comment_authors"]
+                    for field in (
+                        "body",
+                        "comments",
+                        "comment_authors",
+                        "comments_complete",
+                        "reply_bodies_complete",
+                        "top_level_comment_count",
+                        "comments_hydrated_at",
+                        "comments_hydrated_updated_at",
+                    ):
+                        if field in detail:
+                            merged[field] = detail[field]
             discussions.append(merged)
             comment_total += int(discussion.get("comment_count") or 0)
 

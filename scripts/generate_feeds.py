@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import load_json
 from feed_algorithms import sort_posts, search_posts
 from cache_shard_loader import load_authoritative_discussions
+from publication_detail import comment_summary, partition_publishable
 
 
 def now_rfc822():
@@ -151,6 +152,13 @@ def main():
                 f"({age_hours:.2f}h > {args.fresh_hours:.2f}h)"
             )
 
+    discussions, withheld = partition_publishable(discussions)
+    print(
+        "Publication gate: "
+        f"{len(discussions)} detail-complete, "
+        f"{len(withheld)} withheld pending hydration"
+    )
+
     feeds_dir = DOCS_DIR / "feeds"
     feeds_dir.mkdir(parents=True, exist_ok=True)
 
@@ -160,6 +168,7 @@ def main():
     # Build items from discussions
     all_items = []
     for disc in discussions:
+        engagement = comment_summary(disc)
         # Extract unique comment author names from bylines
         comment_authors_raw = disc.get("comment_authors", [])
         author_names = []
@@ -186,9 +195,9 @@ def main():
             "guid": disc.get("url", f"discussion-{number}"),
             "author": author,
             "channel": channel_slug,
-            "upvotes": disc.get("upvotes", 0),
+            "upvotes": engagement["upvotes"],
             "downvotes": disc.get("downvotes", 0),
-            "commentCount": disc.get("comment_count", 0),
+            "commentCount": engagement["comments"],
             "commentAuthors": ",".join(author_names[:20]),
         }
         all_items.append((channel_slug, item))
@@ -203,11 +212,8 @@ def main():
     (feeds_dir / "all.xml").write_text(prettify(global_feed))
     if args.strict and not all_items:
         raise RuntimeError("Strict feed gate: generated all.xml has zero items")
-    if args.strict and expected_total > 0 and len(all_items) != expected_total:
-        raise RuntimeError(
-            "Strict feed gate: feed item count does not match corpus "
-            f"({len(all_items)} != {expected_total})"
-        )
+    if args.strict and len(all_items) != len(discussions):
+        raise RuntimeError("Strict feed gate: an incomplete detail escaped")
 
     # Per-channel feeds
     for slug, channel_info in channels.items():
