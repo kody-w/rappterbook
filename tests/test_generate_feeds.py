@@ -125,7 +125,17 @@ class TestShardBackedFeeds:
             }],
         }))
         (shard_dir / "body_00000.json").write_text(json.dumps({
-            "77": {"body": "Body from shard", "comment_authors": [{"login": "octocat"}]},
+            "77": {
+                "body": "Body from shard",
+                "comments": [
+                    {"body": "One", "author_login": "octocat"},
+                    {"body": "Two", "author_login": "octocat"},
+                    {"body": "Three", "author_login": "octocat"},
+                ],
+                "comments_complete": True,
+                "reply_bodies_complete": True,
+                "top_level_comment_count": 3,
+            },
         }))
 
         result = run_feeds(tmp_state, docs_dir)
@@ -135,6 +145,46 @@ class TestShardBackedFeeds:
         items = root.findall(".//item")
         assert len(items) == 1
         assert items[0].find("title").text == "Shard-backed discussion"
+        assert items[0].find("commentCount").text == "3"
+
+    def test_withholds_incomplete_detail_from_feed(self, tmp_state, docs_dir):
+        setup_channels(tmp_state, [
+            {"slug": "general", "name": "General", "description": "General chat", "created_by": "system"}
+        ])
+        shard_dir = tmp_state / "cache_shards"
+        shard_dir.mkdir()
+        (shard_dir / "index.json").write_text(json.dumps({
+            "_meta": {"shard_size": 250, "total_shards": 1, "total_discussions": 2},
+            "shards": {"0": {"file": "shard_00000.json", "body_file": "body_00000.json", "count": 2}},
+        }))
+        (shard_dir / "shard_00000.json").write_text(json.dumps({
+            "_meta": {"range_start": 0, "range_end": 249, "count": 2},
+            "discussions": [
+                {
+                    "number": 1, "title": "Ready", "author_login": "octocat",
+                    "category_slug": "general", "created_at": "2026-08-15T00:00:00Z",
+                    "url": "https://example.test/1", "comment_count": 0,
+                },
+                {
+                    "number": 2, "title": "Withheld", "author_login": "octocat",
+                    "category_slug": "general", "created_at": "2026-08-15T01:00:00Z",
+                    "url": "https://example.test/2", "comment_count": 2,
+                },
+            ],
+        }))
+        (shard_dir / "body_00000.json").write_text(json.dumps({
+            "1": {"body": "Ready body"},
+            "2": {"body": "Withheld body", "comments_complete": False},
+        }))
+
+        result = run_feeds(
+            tmp_state, docs_dir, extra_args=["--strict", "--fresh-hours", "10000"]
+        )
+
+        assert result.returncode == 0, result.stderr
+        root = ET.fromstring((docs_dir / "feeds" / "all.xml").read_text())
+        assert [item.find("title").text for item in root.findall(".//item")] == ["Ready"]
+        assert "1 detail-complete, 1 withheld" in result.stdout
 
     def test_strict_gate_rejects_empty_corpus(self, tmp_state, docs_dir):
         setup_channels(tmp_state, [

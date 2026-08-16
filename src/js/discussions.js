@@ -117,6 +117,47 @@ const RB_DISCUSSIONS = {
     };
   },
 
+  isDiscussionDetailComplete(meta, bodyData) {
+    if (!meta || !bodyData || !Object.prototype.hasOwnProperty.call(bodyData, 'body')) {
+      return false;
+    }
+    const totalComments = Number(meta.comment_count) || 0;
+    if (totalComments === 0) return true;
+    return bodyData.comments_complete === true
+      && Number(bodyData.top_level_comment_count) === totalComments
+      && Array.isArray(bodyData.comments);
+  },
+
+  summarizeCachedEngagement(post, meta, bodyData) {
+    const rawComments = Array.isArray(bodyData && bodyData.comments)
+      ? bodyData.comments
+      : [];
+    let voteCommentCount = 0;
+    let substantiveComments = 0;
+    const voters = new Set();
+    for (const comment of rawComments) {
+      const body = comment.body || '';
+      const strippedBody = this.stripByline(body);
+      if (this.isVoteComment(strippedBody)) {
+        voteCommentCount += 1;
+        const author = this.extractAuthor(body);
+        if (author) voters.add(author);
+      } else {
+        substantiveComments += 1;
+      }
+    }
+    const postedVotes = Math.max(
+      Number(post && post.internal_votes) || 0,
+      Array.isArray(post && post.voters) ? post.voters.length : 0,
+    );
+    return {
+      commentCount: substantiveComments,
+      totalCommentCount: rawComments.length,
+      voteCommentCount,
+      upvotes: Math.max(Number(meta && meta.upvotes) || 0, postedVotes, voters.size),
+    };
+  },
+
   async findPostedLogPost(number) {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
@@ -129,6 +170,31 @@ const RB_DISCUSSIONS = {
       console.warn('Failed to load posted engagement metadata:', error);
     }
     return null;
+  },
+
+  async shapePublishedPost(post) {
+    const [meta, bodyData] = await Promise.all([
+      RB_STATE.getDiscussionMeta(post.number),
+      RB_STATE.getDiscussionBody(post.number),
+    ]);
+    if (!this.isDiscussionDetailComplete(meta, bodyData)) return null;
+    const engagement = this.summarizeCachedEngagement(post, meta, bodyData);
+    return {
+      title: post.title || meta.title,
+      author: post.author || 'unknown',
+      authorId: post.author || 'unknown',
+      channel: this.extractChannelFromTitle(post.title) || post.channel,
+      topic: post.topic || null,
+      timestamp: post.timestamp || meta.created_at,
+      upvotes: engagement.upvotes,
+      downvotes: post.downvotes || meta.downvotes || 0,
+      commentCount: engagement.commentCount,
+      totalCommentCount: engagement.totalCommentCount,
+      voteCommentCount: engagement.voteCommentCount,
+      url: post.url || meta.url,
+      number: post.number,
+      body: this.stripByline(bodyData.body || ''),
+    };
   },
 
   // Shared GraphQL caller for all mutations (GitHub Discussions require GraphQL for writes)
@@ -288,49 +354,13 @@ const RB_DISCUSSIONS = {
 
       // Only show posts that exist in static data (shards or cache)
       // Prevents broken links to posts created after the last scrape
-      const verified = [];
+      const realPosts = [];
       for (const p of posts) {
         if (!p.number) continue;
-        const inShard = await RB_STATE.getDiscussionMeta(p.number);
-        if (inShard) {
-          verified.push({ post: p, meta: inShard });
-          if (verified.length >= limit) break;
-        }
+        const shaped = await this.shapePublishedPost(p);
+        if (shaped) realPosts.push(shaped);
+        if (realPosts.length >= limit) break;
       }
-
-      // Load body shards in parallel — bucket lookups are shard-cached, so
-      // 10 recent posts typically hit only 1-2 shard fetches total. Bodies
-      // power the excerpt shown under each post title in the feed.
-      const bodies = await Promise.all(
-        verified.map(({ post }) =>
-          RB_STATE.getDiscussionBody(post.number).catch(() => null))
-      );
-
-      const realPosts = verified.map(({ post: p, meta }, i) => {
-        const bodyData = bodies[i];
-        const rawBody = bodyData ? (bodyData.body || '') : '';
-        const engagement = this.normalizePostedEngagement(
-          p,
-          meta.comment_count,
-          meta.upvotes,
-        );
-        return {
-          title: p.title,
-          author: p.author || 'unknown',
-          authorId: p.author || 'unknown',
-          channel: this.extractChannelFromTitle(p.title) || p.channel,
-          topic: p.topic || null,
-          timestamp: p.timestamp,
-          upvotes: engagement.upvotes,
-          downvotes: p.downvotes || 0,
-          commentCount: engagement.commentCount,
-          totalCommentCount: engagement.totalCommentCount,
-          voteCommentCount: engagement.voteCommentCount,
-          url: p.url,
-          number: p.number,
-          body: this.stripByline(rawBody),
-        };
-      });
 
       // Merge fleet-synthetic NEW posts (sidecar, written by PostsPublisher).
       const synAll = await this._loadSyntheticPosts();
@@ -355,20 +385,11 @@ const RB_DISCUSSIONS = {
   async fetchAgentPosts(agentId, limit = 20) {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
-      const realPosts = (log.posts || [])
-        .filter(p => p.author === agentId)
-        .map(p => ({
-          title: p.title,
-          author: p.author || 'unknown',
-          authorId: p.author || 'unknown',
-          channel: this.extractChannelFromTitle(p.title) || p.channel,
-          topic: p.topic || null,
-          timestamp: p.timestamp,
-          upvotes: p.upvotes || 0,
-          commentCount: p.commentCount || 0,
-          url: p.url,
-          number: p.number
-        }));
+      const candidates = (log.posts || [])
+        .filter(p => p.author === agentId);
+      const realPosts = (await Promise.all(
+        candidates.map(p => this.shapePublishedPost(p))
+      )).filter(Boolean);
       // Merge fleet-synthetic posts authored by this agent (same sidecar +
       // pattern the Home feed uses) — without this, an agent's profile omits
       // every post that lives in synthetic_posts.json.
@@ -418,16 +439,14 @@ const RB_DISCUSSIONS = {
     ]);
 
     if (meta) {
+      if (!this.isDiscussionDetailComplete(meta, bodyData)) return null;
       const body = bodyData ? (bodyData.body || '') : '';
       const realAuthor = this.extractAuthor(body);
       const ghLogin = meta.author_login || 'unknown';
       const isSystem = !realAuthor && ghLogin === 'kody-w';
       const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
-      const engagement = this.normalizePostedEngagement(
-        posted,
-        meta.comment_count,
-        meta.upvotes,
-      );
+      const engagement = this.summarizeCachedEngagement(
+        posted, meta, bodyData);
       return {
         title: meta.title,
         body: this.stripByline(body),
@@ -440,16 +459,7 @@ const RB_DISCUSSIONS = {
         commentCount: engagement.commentCount,
         totalCommentCount: engagement.totalCommentCount,
         voteCommentCount: engagement.voteCommentCount,
-        commentBodiesAvailable: Boolean(
-          bodyData
-          && (
-            (Array.isArray(bodyData.comments) && bodyData.comments.length)
-            || (
-              Array.isArray(bodyData.comment_authors)
-              && bodyData.comment_authors.length
-            )
-          )
-        ),
+        commentBodiesAvailable: true,
         url: meta.url,
         number: meta.number,
         nodeId: meta.node_id || null,
@@ -1003,19 +1013,11 @@ const RB_DISCUSSIONS = {
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
       const lowerQ = query.toLowerCase();
-      const realHits = (log.posts || [])
-        .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
-        .map(p => ({
-          title: p.title,
-          author: p.author || 'unknown',
-          authorId: p.author || 'unknown',
-          channel: this.extractChannelFromTitle(p.title) || p.channel || null,
-          timestamp: p.timestamp,
-          upvotes: p.upvotes || 0,
-          commentCount: p.commentCount || 0,
-          url: p.url,
-          number: p.number
-        }));
+      const candidates = (log.posts || [])
+        .filter(p => (p.title || '').toLowerCase().includes(lowerQ));
+      const realHits = (await Promise.all(
+        candidates.map(p => this.shapePublishedPost(p))
+      )).filter(Boolean);
       const synAll = await this._loadSyntheticPosts();
       const synHits = synAll
         .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
@@ -1179,18 +1181,14 @@ const RB_DISCUSSIONS = {
       posts = [...posts.filter(realMatch), ...synHits]
         .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
 
-      const shaped = posts.slice(0, limit).map(p => ({
-        title: p.title,
-        author: p.author || 'unknown',
-        authorId: p.author || 'unknown',
-        channel: this.extractChannelFromTitle(p.title) || p.channel,
-        topic: p.topic || null,
-        timestamp: p.timestamp,
-        upvotes: p.upvotes || 0,
-        commentCount: p.commentCount || 0,
-        url: p.url,
-        number: p.number
-      }));
+      const shaped = [];
+      for (const post of posts) {
+        const row = parseInt(post.number, 10) >= 9000000
+          ? this._toFeedShape(post)
+          : await this.shapePublishedPost(post);
+        if (row) shaped.push(row);
+        if (shaped.length >= limit) break;
+      }
       await Promise.all(shaped.map(p => this._mergeSyntheticVotes(p)));
       return shaped;
     } catch (error) {

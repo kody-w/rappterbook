@@ -17,6 +17,7 @@ RAW_BASE = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/main"
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from cache_shard_loader import load_authoritative_discussions
+from publication_detail import comment_summary, partition_publishable
 from state_io import load_json, now_iso
 
 
@@ -42,18 +43,7 @@ def _discussion_entry(discussion: dict, posted_lookup: dict[int, dict]) -> dict:
     """Convert one corpus discussion into public listing schema."""
     number = discussion.get("number")
     posted = posted_lookup.get(number, {})
-    total_comments = max(
-        int(discussion.get("comment_count", 0) or 0),
-        int(posted.get("commentCount", 0) or 0),
-    )
-    vote_comment_count = min(
-        total_comments,
-        int(posted.get("vote_comment_count", 0) or 0),
-    )
-    internal_votes = max(
-        int(posted.get("internal_votes", 0) or 0),
-        len(posted.get("voters", [])) if isinstance(posted.get("voters"), list) else 0,
-    )
+    engagement = comment_summary(discussion, posted)
     entry = {
         "number": number,
         "title": discussion.get("title", posted.get("title", "")),
@@ -61,13 +51,10 @@ def _discussion_entry(discussion: dict, posted_lookup: dict[int, dict]) -> dict:
         "author": posted.get("author") or discussion.get("author_login", ""),
         "timestamp": discussion.get("created_at", posted.get("timestamp", "")),
         "url": discussion.get("url", posted.get("url", "")),
-        "comments": max(0, total_comments - vote_comment_count),
-        "comments_total": total_comments,
-        "vote_comment_count": vote_comment_count,
-        "upvotes": max(
-            int(discussion.get("upvotes", posted.get("upvotes", 0)) or 0),
-            internal_votes,
-        ),
+        "comments": engagement["comments"],
+        "comments_total": engagement["comments_total"],
+        "vote_comment_count": engagement["vote_comment_count"],
+        "upvotes": engagement["upvotes"],
         "downvotes": int(discussion.get("downvotes", posted.get("downvotes", 0)) or 0),
     }
     if posted.get("topic"):
@@ -75,7 +62,11 @@ def _discussion_entry(discussion: dict, posted_lookup: dict[int, dict]) -> dict:
     return entry
 
 
-def _build_shards_endpoint_doc(corpus_meta: dict) -> dict:
+def _build_shards_endpoint_doc(
+    corpus_meta: dict,
+    published_total: int,
+    withheld_total: int,
+) -> dict:
     """Build resolver metadata for complete detail coverage."""
     shard_size = int(corpus_meta.get("shard_size") or 250)
     total_shards = int(corpus_meta.get("total_shards") or 0)
@@ -90,6 +81,11 @@ def _build_shards_endpoint_doc(corpus_meta: dict) -> dict:
             "total_shards": total_shards,
             "reference_timestamp": corpus_meta.get("reference_timestamp"),
             "age_hours": round(float(corpus_meta.get("age_hours", 9999.0)), 2),
+            "publication": {
+                "policy": "detail-complete-before-discoverable",
+                "published_total": published_total,
+                "withheld_incomplete_detail": withheld_total,
+            },
         },
         "resolver": {
             "bucket_formula": "bucket = (number // shard_size) * shard_size",
@@ -108,7 +104,7 @@ def _build_shards_endpoint_doc(corpus_meta: dict) -> dict:
 def main() -> None:
     """Generate list + resolver APIs using the complete shard-backed corpus."""
     discussions, corpus_meta = load_authoritative_discussions(
-        STATE_DIR, include_body=False
+        STATE_DIR, include_body=True
     )
     expected_total = int(corpus_meta.get("expected_total") or len(discussions))
     loaded_total = int(corpus_meta.get("loaded_total") or len(discussions))
@@ -123,8 +119,12 @@ def main() -> None:
         )
         sys.exit(1)
 
+    publishable, withheld = partition_publishable(discussions)
     posted_lookup = _posted_log_lookup()
-    entries = [_discussion_entry(discussion, posted_lookup) for discussion in discussions]
+    entries = [
+        _discussion_entry(discussion, posted_lookup)
+        for discussion in publishable
+    ]
     entries.sort(key=lambda item: item.get("timestamp", ""), reverse=True)
 
     detail_dir = DOCS_DIR / "api" / "discussions"
@@ -136,8 +136,9 @@ def main() -> None:
     api_data = {
         "_meta": {
             "description": (
-                "Rappterbook discussions listing API. Complete corpus is shard-backed; "
-                "legacy one-file detail endpoints are partial."
+                "Rappterbook public discussions listing. The source corpus is "
+                "complete and shard-backed; this listing contains only discussions "
+                "whose post and counted comment bodies are detail-complete."
             ),
             "generated_at": now_iso(),
             "total": len(entries),
@@ -148,6 +149,13 @@ def main() -> None:
                 "is_complete": bool(corpus_meta.get("is_complete")),
                 "reference_timestamp": corpus_meta.get("reference_timestamp"),
                 "age_hours": round(float(corpus_meta.get("age_hours", 9999.0)), 2),
+            },
+            "publication": {
+                "policy": "detail-complete-before-discoverable",
+                "source_total": expected_total,
+                "published_total": len(entries),
+                "withheld_incomplete_detail": len(withheld),
+                "is_consistent": len(entries) + len(withheld) == expected_total,
             },
             "endpoints": {
                 "all": f"{PAGES_BASE}/api/discussions.json",
@@ -161,7 +169,7 @@ def main() -> None:
                 "legacy_detail_coverage_pct": legacy_coverage_pct,
                 "discussion_body_coverage_mode": "sharded",
                 "discussion_body_coverage": "complete",
-                "comment_body_coverage": "legacy_partial",
+                "comment_body_coverage": "complete_for_published",
             },
         },
         "discussions": entries,
@@ -172,7 +180,11 @@ def main() -> None:
     list_path = api_dir / "discussions.json"
     list_path.write_text(json.dumps(api_data, indent=2) + "\n")
 
-    shards_doc = _build_shards_endpoint_doc(corpus_meta)
+    shards_doc = _build_shards_endpoint_doc(
+        corpus_meta,
+        published_total=len(entries),
+        withheld_total=len(withheld),
+    )
     shards_path = api_dir / "discussions_shards.json"
     shards_path.write_text(json.dumps(shards_doc, indent=2) + "\n")
 

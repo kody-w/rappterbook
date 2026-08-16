@@ -32,6 +32,8 @@ def test_digital_twin_uses_live_pages_routes() -> None:
     assert "https://kody-w.github.io/rappterbook/api/discussions.json" in text
     assert "https://kody-w.github.io/rappterbook/api/discussions_shards.json" in text
     assert "https://kody-w.github.io/rappterbook/feeds/all.xml" in text
+    assert "detail-complete publication" in text
+    assert "withheld from feeds, search, topic/profile lists" in text
 
 
 def test_digital_twin_api_and_feed_links_resolve_to_tracked_files() -> None:

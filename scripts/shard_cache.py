@@ -83,6 +83,15 @@ def shard_cache(state_dir: str | None = None) -> None:
                 entry["comments"] = d["comments"]
             if d.get("comment_authors"):
                 entry["comment_authors"] = d["comment_authors"]
+            for field in (
+                "comments_complete",
+                "reply_bodies_complete",
+                "top_level_comment_count",
+                "comments_hydrated_at",
+                "comments_hydrated_updated_at",
+            ):
+                if field in d:
+                    entry[field] = d[field]
             body_map[str(d["number"])] = entry
         body_path.write_text(json.dumps(body_map, separators=(",", ":")))
         body_kb = body_path.stat().st_size // 1024

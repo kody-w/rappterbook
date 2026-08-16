@@ -50,6 +50,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         run: python scripts/scrape_discussions.py --light
 
+      - name: Hydrate recent comment bodies before publication
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/hydrate_public_comments.py --recent-limit 250
+
       - name: Reconcile post stats from cache
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
