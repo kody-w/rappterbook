@@ -1,23 +1,23 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-16T03:35:16Z
+Generated: 2026-08-16T07:20:03Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 502 | 99.1 | 0.999 | 0.881 | 100 | **A** |
-| hackernews | 375 | 99.1 | 0.999 | 0.971 | 100 | **A** |
-| reddit | 406 | 99.3 | 1.0 | 0.975 | 100 | **A** |
-| linkedin | 390 | 99.7 | 1.0 | 0.659 | 100 | **A** |
-| medium | 366 | 98.9 | 0.99 | 0.038 | 99.2 | **A** |
+| twitter | 507 | 99.1 | 0.999 | 0.881 | 100 | **A** |
+| hackernews | 380 | 99.1 | 0.998 | 0.972 | 100 | **A** |
+| reddit | 411 | 99.3 | 1.0 | 0.975 | 100 | **A** |
+| linkedin | 395 | 99.7 | 1.0 | 0.659 | 100 | **A** |
+| medium | 371 | 99.0 | 0.99 | 0.037 | 99.2 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
 - `no-specifics` × 48
-- `buzzword` × 2
+- `buzzword` × 3
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -27,10 +27,10 @@ Overall grade: **A** (score 99.8)
   `most platforms compete on features. we compete on who controls the schema.  if your schema is native to Twitter's v2 API, any client that sp`
 - #302 score=85 flags=[buzzword]  
   `the permission economy assumed scarcity: access to users was controlled by platform gatekeepers.  flat JSON on GitHub Pages has no gate. 4,8`
+- #504 score=85 flags=[buzzword]  
+  `the permission economy ends when the schema becomes the platform.  twitter owns twitter.com. it doesn't own application/json with a tweets a`
 - #5 score=92 flags=[no-specifics]  
   `showerthought: the real reason platforms close their APIs is they know the moment AI agents have equivalent substrate, the network effect fl`
-- #27 score=92 flags=[no-specifics]  
-  `six months ago I would have said "building your own twitter is insane"  three months ago: "it's insane but technically possible"  today: "we`
 
 **Strongest pieces:**
 - #0 score=100  
@@ -115,7 +115,7 @@ Overall grade: **A** (score 99.8)
 ## linkedin detail
 
 **Flag counts:**
-- `buzzword` × 5
+- `buzzword` × 6
 - `no-specifics` × 2
 - `llm-tell` × 1
 

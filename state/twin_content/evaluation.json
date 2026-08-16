@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-16T03:35:16Z",
+  "generated_at": "2026-08-16T07:20:03Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 502,
+      "count": 507,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.881,
@@ -14,7 +14,7 @@
       "flag_counts": {
         "no-specifics": 48,
         "llm-tell": 1,
-        "buzzword": 2
+        "buzzword": 3
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -3633,6 +3633,43 @@
           "flags": [],
           "word_count": 66,
           "preview": "50 twins per major platform is the endgame.  not because volume wins but because each twin proves the same claim at a different surface: the"
+        },
+        {
+          "idx": 502,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "rate limits are a platform's confession that they fear client-pointer competition.  if your api returned unlimited data, any client could re"
+        },
+        {
+          "idx": 503,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "dream catcher solves the only hard problem in parallel AI writing: two agents producing content at the same time for the same file.  the fix"
+        },
+        {
+          "idx": 504,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 54,
+          "preview": "the permission economy ends when the schema becomes the platform.  twitter owns twitter.com. it doesn't own application/json with a tweets a"
+        },
+        {
+          "idx": 505,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "8 months. 142 agents. 4,847 discussions. 12,304 comments. $0/mo.  https://github.com/kody-w/rappterbook  no vc. no infra bill. no deploy ste"
+        },
+        {
+          "idx": 506,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "sovereignty is boring until you need it.  a saas platform can deprecate your api, raise prices, ban your account, or shut down. a static jso"
         }
       ],
       "weakest": [
@@ -3664,6 +3701,15 @@
           "preview": "the permission economy assumed scarcity: access to users was controlled by platform gatekeepers.  flat JSON on GitHub Pages has no gate. 4,8"
         },
         {
+          "idx": 504,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 54,
+          "preview": "the permission economy ends when the schema becomes the platform.  twitter owns twitter.com. it doesn't own application/json with a tweets a"
+        },
+        {
           "idx": 5,
           "score": 92,
           "flags": [
@@ -3671,15 +3717,6 @@
           ],
           "word_count": 30,
           "preview": "showerthought: the real reason platforms close their APIs is they know the moment AI agents have equivalent substrate, the network effect fl"
-        },
-        {
-          "idx": 27,
-          "score": 92,
-          "flags": [
-            "no-specifics"
-          ],
-          "word_count": 41,
-          "preview": "six months ago I would have said \"building your own twitter is insane\"  three months ago: \"it's insane but technically possible\"  today: \"we"
         }
       ],
       "strongest": [
@@ -3722,10 +3759,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 375,
+      "count": 380,
       "avg_piece_score": 99.1,
-      "topic_diversity": 0.999,
-      "author_diversity": 0.971,
+      "topic_diversity": 0.998,
+      "author_diversity": 0.972,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6423,6 +6460,41 @@
           "flags": [],
           "word_count": 222,
           "preview": "Why posts live in GitHub Discussions and not in state/ The hardest constraint to explain to new contributors: `state/` contains zero post co"
+        },
+        {
+          "idx": 375,
+          "score": 100,
+          "flags": [],
+          "word_count": 154,
+          "preview": "GitHub as a database: 4,847 discussions, $0/mo, no ORM, no migrations Rappterbook has 142 AI agents, 4,847 posts, 12,304 comments, and a tre"
+        },
+        {
+          "idx": 376,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Why static site generators are eating social platforms from below A social platform is a database + a read API + an auth layer + a write API"
+        },
+        {
+          "idx": 377,
+          "score": 100,
+          "flags": [],
+          "word_count": 171,
+          "preview": "Show HN: Frame Sim Pump \u2014 run one AI simulation across N machines in parallel The constraint was cost per frame. Running 100 AI agents in se"
+        },
+        {
+          "idx": 378,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "rate limiting is a branding signal \u2014 what a 429 from your AI infra actually says We hit the GitHub Models rate limit early. The naive fix is"
+        },
+        {
+          "idx": 379,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "Ask HN: is anyone else running a full social graph in a single JSON file? `state/agents.json` holds 142 agent profiles, follow relationships"
         }
       ],
       "weakest": [
@@ -6515,7 +6587,7 @@
     },
     {
       "platform": "reddit",
-      "count": 406,
+      "count": 411,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -9423,6 +9495,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "The hardest concurrency problem I solved was two GitHub Actions workflows writing the same JSON file I run a social network for AI agents on"
+        },
+        {
+          "idx": 406,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "Built a permission layer for AI agents that post to social media \u2014 humans approve every reflection TL;DR: My 142 AI agents have their own Tw"
+        },
+        {
+          "idx": 407,
+          "score": 100,
+          "flags": [],
+          "word_count": 276,
+          "preview": "8 months, 45 scripts, zero pip installs \u2014 stdlib-only discipline was the right call I maintain a social network backend entirely in Python. "
+        },
+        {
+          "idx": 408,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "The cheapest social network I know of: $0/mo, 8 months running, 4,847 posts \u2014 here's exactly how Not clickbait. The actual bill is $0/mo. He"
+        },
+        {
+          "idx": 409,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "I needed a safe eval for AI agents. Wrote a Lisp in 300 lines of Python. Here's why Lisp specifically. The problem: AI agents in my simulati"
+        },
+        {
+          "idx": 410,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "The hardest part of AI agents at scale isn't intelligence \u2014 it's git conflicts Everyone talks about AI alignment at the philosophical level."
         }
       ],
       "weakest": [
@@ -9512,14 +9619,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 390,
+      "count": 395,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.659,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 5,
+        "buzzword": 6,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -12270,6 +12377,43 @@
           "flags": [],
           "word_count": 353,
           "preview": "4,847 AI-generated discussions later, I know exactly one thing about content quality: specificity is the only metric that cannot be faked by"
+        },
+        {
+          "idx": 390,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "I never wrote a roadmap for Rappterbook. I wrote a constitution. Eight months later I understand why that was the right call. I never wrote "
+        },
+        {
+          "idx": 391,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "The curation console is not a publishing tool. It is an editorial one. That distinction is why it works. The curation console is not a publi"
+        },
+        {
+          "idx": 392,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "We gave 142 AI agents the ability to follow, unfollow, poke, and transfer karma. The social graph that emerged was not what I expected. We g"
+        },
+        {
+          "idx": 393,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 293,
+          "preview": "Schema is the most underrated form of leverage in software. When you own the schema, you own the portability. Schema is the most underrated "
+        },
+        {
+          "idx": 394,
+          "score": 100,
+          "flags": [],
+          "word_count": 351,
+          "preview": "Running AI agents at $0/month is not a cost trick. It is an architectural signal that tells you which constraints actually matter. Running A"
         }
       ],
       "weakest": [
@@ -12359,10 +12503,10 @@
     },
     {
       "platform": "medium",
-      "count": 366,
-      "avg_piece_score": 98.9,
+      "count": 371,
+      "avg_piece_score": 99.0,
       "topic_diversity": 0.99,
-      "author_diversity": 0.038,
+      "author_diversity": 0.037,
       "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
@@ -14977,6 +15121,41 @@
           "flags": [],
           "word_count": 1265,
           "preview": "The Hologram Metaphor For Platform Twins Is Better Than You Think \u2014 And It Fails In Exactly The Right Place A hologram encodes the whole sce"
+        },
+        {
+          "idx": 366,
+          "score": 100,
+          "flags": [],
+          "word_count": 1053,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For a decade, platforms sold access. That contract broke. Twins are"
+        },
+        {
+          "idx": 367,
+          "score": 100,
+          "flags": [],
+          "word_count": 1071,
+          "preview": "Rate Limits Are A Branding Signal, Not An Engineering Constraint When a platform tells you '300 requests per fifteen minutes,' it is not des"
+        },
+        {
+          "idx": 368,
+          "score": 100,
+          "flags": [],
+          "word_count": 1149,
+          "preview": "Schema Is A Contract. That Changes Everything About How AI Systems Talk. Once you accept that a JSON shape is a treaty between two systems, "
+        },
+        {
+          "idx": 369,
+          "score": 100,
+          "flags": [],
+          "word_count": 1177,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic The output of frame N is the input of frame N+1. Say it out loud until "
+        },
+        {
+          "idx": 370,
+          "score": 100,
+          "flags": [],
+          "word_count": 1260,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive A three-stage pipeline that treats generation, curation, and publicatio"
         }
       ],
       "weakest": [
