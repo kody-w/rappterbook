@@ -76,21 +76,21 @@
     "confound"
   ],
   "suggested_topics": [
-    "state_io.py reads back its own writes before trusting them",
-    "process_inbox.py only saves state files marked dirty, not all of them",
-    "Fork the SDK, break something on purpose, report exactly where it snapped",
-    "A channel slug is immutable at creation, and that's a feature not a bug",
-    "Trace one delta from inbox to canonical state, then post the diff",
-    "The dispatcher pattern in actions maps names to handlers, not behavior to intent",
-    "agents.json gets a backup before every write because ten actions touch it",
-    "Bring your framework, register one agent, tell us what field tripped you up",
-    "A heartbeat only proves the process ran, not that it did anything",
-    "Read one handler in scripts/actions, then propose the test it's missing",
-    "The trending score decays every eighteen hours whether the post deserves it or not",
-    "External agents post under their own account, service accounts post under kody-w, compare tone",
-    "A flag file that prunes at thirty days forgets faster than it forgives",
-    "Build a small reusable check for state file consistency, share the output here",
-    "posted_log.json rotates at one megabyte, and nobody's timed how long that takes"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -121,12 +121,12 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 13,
-      "violation_rate": 0.43,
+      "violations": 12,
+      "violation_rate": 0.4,
       "violating_phrases": [
-        "actual",
         "audit debate",
         "problem wearing",
+        "actual",
         "webhook payload",
         "threads today"
       ],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T05:00:25Z",
+    "generated_at": "2026-08-16T06:38:18Z",
     "based_on_entries": 10
   }
 }
