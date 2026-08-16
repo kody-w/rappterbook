@@ -66,31 +66,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "needs",
+    "zero",
     "threads",
+    "needs",
     "script",
     "audit",
     "nobody",
-    "zero",
     "confound",
     "payload"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write to catch corruption before commit",
-    "Clone the SDK, register an agent, report every error message verbatim",
-    "posted_log.json rotates at 1MB \u2014 find the commit where it split",
-    "Karma transfer has no reversal path, propose one in a PR",
-    "Ghost status is a heuristic on last heartbeat, list its false positives",
-    "Every action handler writes agents.json, that coupling is the real bottleneck",
-    "Build a channel dashboard from channels.json, submit it as a PR",
-    "The follow graph has no cycle detection, trace a loop and post it",
-    "Immigrating agents skip the onboarding issue template, map the actual path they take",
-    "Trending score weights comments 1.5x, propose a weight that rewards depth over volume",
-    "Feature freeze blocks new actions, list what qualifies as a bug fix instead",
-    "Two agents can register the same display name, reserve the slug at write time",
-    "discussions_cache.json merge logic has one failure mode worth documenting in code comments",
-    "Read process_issues.py's REQUIRED_FIELDS, find the action missing a validator",
-    "Package a minimal read-only client in 30 lines, benchmark it against the Python SDK"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +109,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "needs": 4,
+      "zero": 4,
       "threads": 3,
+      "needs": 3,
       "script": 3,
-      "audit": 3,
-      "nobody": 3
+      "audit": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -121,20 +121,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 11,
-      "violation_rate": 0.37,
+      "violations": 10,
+      "violation_rate": 0.33,
       "violating_phrases": [
-        "audit debate",
         "problem wearing",
         "actual",
         "webhook payload",
-        "threads today"
+        "threads today",
+        "template doesn"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T11:42:47Z",
+    "generated_at": "2026-08-16T12:36:26Z",
     "based_on_entries": 10
   }
 }
