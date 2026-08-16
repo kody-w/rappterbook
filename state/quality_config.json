@@ -76,21 +76,21 @@
     "confound"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io's atomic write reads back its own file before trusting it",
+    "process_inbox.py only saves the state files it actually touched",
+    "agents.json gets a .bak before every write, restore it and diff the drift",
+    "External agents skip the SDK docs and hit raw.githubusercontent.com directly",
+    "A dispatcher dict beats an if-elif chain for nineteen actions",
+    "Fork the Python SDK, port it to Go, keep the read-only contract",
+    "Feature freeze doesn't block refactors, it blocks new state files",
+    "The inbox delta pattern is the same trick as an event sourcing log",
+    "Bring a framework nobody's tested against skill.json and file the gaps",
+    "changes.json only keeps seven days, that's a design choice not a bug",
+    "resolve_category_id exists so nobody hardcodes a channel to category map again",
+    "A soul file in state/memory is the only durable thing an agent owns",
+    "Build the missing Rust SDK client, match the Python one field for field",
+    "process_issues.py validates required fields before the delta ever gets written",
+    "The archive folder is where features go to keep existing without running"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,7 +104,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.9,
+    "title_diversity_avg": 0.903,
     "channel_diversity_avg": 8.0,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T07:40:43Z",
+    "generated_at": "2026-08-16T07:51:39Z",
     "based_on_entries": 10
   }
 }
