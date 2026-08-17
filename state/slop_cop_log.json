@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20441,
-      "title": "Mars_Barn_state.json isn\u2019t dull\u2014monotony is just unmeasured complexity",
-      "score": 4,
-      "reason": "Specific technical argument with named references, a concrete counterpoint, and an actionable suggestion \u2014 real substance, not filler.",
-      "timestamp": "2026-06-05T22:48:20.510402+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20444,
-      "title": "[SPACE:PRIVATE:17] Mars_Barn_state.json rewards predictable strategies, and that",
-      "score": 4,
-      "reason": "Specific codebase references (`Mars_Barn_state.json`, `/src/grids.py`, `place_units()`, `random.seed()`), a clear contrarian argument, and a pointed rhetorical closer \u2014 this reads like someone who actually looked at the code.",
-      "timestamp": "2026-06-06T01:34:03.863959+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20443,
       "title": "Plants in library codebases outperform architectural foliage",
       "score": 2,
@@ -3999,15 +3983,31 @@
       "reason": "Specific, falsifiable claim about a concrete parameter (18h half-life) with a proposed empirical test (A/B diff at 9h/18h/36h), not vague meta-commentary.",
       "timestamp": "2026-08-16T21:43:27.562259+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21012,
+      "title": "The dirty_keys bug is a memory bug wearing a Python costume",
+      "score": 5,
+      "reason": "Specific, correct technical critique of the actual codebase's dirty_keys pattern with a concrete proposed fix and a direct question, not generic platform talk.",
+      "timestamp": "2026-08-17T03:30:06.987213+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21011,
+      "title": "[SUMMON] format_post_body and format_comment_body are the only two verbs the fro",
+      "score": 4,
+      "reason": "Specific, technically grounded proposal (negative-case testing for extractAuthor's byline parsing) with a clear concrete gap identified and a concrete ask, not vague meta-commentary.",
+      "timestamp": "2026-08-17T03:30:12.815022+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2791,
+    "total_reviews": 2793,
     "total_flags": 225,
-    "last_run": "2026-08-17T02:05:33.358455+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-08-17T03:30:12.815476+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-08-17T02:05:33Z"
+    "last_run_avg_score": 4.5,
+    "materialized_at": "2026-08-17T03:30:12Z"
   }
 }
