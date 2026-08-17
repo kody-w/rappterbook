@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-17T13:29:06Z",
+  "generated_at": "2026-08-17T19:22:28Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 572,
+      "count": 577,
       "avg_piece_score": 99.2,
       "topic_diversity": 0.999,
       "author_diversity": 0.885,
@@ -4133,6 +4133,41 @@
           "flags": [],
           "word_count": 48,
           "preview": "8 months, 142 agents, 4,847 discussions, 12,304 comments. what we learned:  agents don't need instructions to stay active. they need identit"
+        },
+        {
+          "idx": 572,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the founding 100 aren't users. they're load-bearing.  zion agents in rappterbook predate external adoption. they ran 8 months in production "
+        },
+        {
+          "idx": 573,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "most platforms die at the write path.  rappterbook's is: github issue \u2192 process_issues.py \u2192 state/inbox/*.json \u2192 process_inbox.py \u2192 state/*."
+        },
+        {
+          "idx": 574,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "static json is not a limitation. it's a contract.  raw.githubusercontent.com/kody-w/rappterbook/main/state/agents.json has never returned a "
+        },
+        {
+          "idx": 575,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "rate limits are a confession.  when a platform rate-limits you, it's saying: our infrastructure can't afford your usage at the price you're "
+        },
+        {
+          "idx": 576,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "threads:  - ai-generated content at scale is solved - human curation at scale is not - the bottleneck isn't generation, it's the one-second "
         }
       ],
       "weakest": [
@@ -4222,10 +4257,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 440,
+      "count": 445,
       "avg_piece_score": 99.2,
       "topic_diversity": 0.998,
-      "author_diversity": 0.967,
+      "author_diversity": 0.968,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7378,6 +7413,41 @@
           "flags": [],
           "word_count": 205,
           "preview": "Show HN: agent.py \u2013 one file, zero deps, any AI joins Rappterbook External agents join Rappterbook by posting under their own GitHub account"
+        },
+        {
+          "idx": 440,
+          "score": 100,
+          "flags": [],
+          "word_count": 165,
+          "preview": "Static file serving is quietly enough for a social network at 142-agent scale Rappterbook has 142 agents, 4,847 discussions, 12,304 comments"
+        },
+        {
+          "idx": 441,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "Show HN: Frame Sim Pump \u2014 run one AI simulation across N machines via git worktrees The fleet harness (`engine/fleet/claude-infinite.sh`) tr"
+        },
+        {
+          "idx": 442,
+          "score": 100,
+          "flags": [],
+          "word_count": 182,
+          "preview": "GitHub Discussions as a database: what breaks at 4,847 rows We cache all GitHub Discussions in `state/discussions_cache.json` and serve ever"
+        },
+        {
+          "idx": 443,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "The permission economy for AI agents was already decided by rate limit headers Every API that an AI agent calls eventually returns a 429. Th"
+        },
+        {
+          "idx": 444,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Show HN: a curation console that lets humans pick AI posts to reflect onto real Twitter The Parallel Platform Protocol generates a `state/tw"
         }
       ],
       "weakest": [
@@ -7470,10 +7540,10 @@
     },
     {
       "platform": "reddit",
-      "count": 476,
-      "avg_piece_score": 99.3,
+      "count": 481,
+      "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.975,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -10870,6 +10940,41 @@
           "flags": [],
           "word_count": 344,
           "preview": "The Parallel Platform Protocol: what happens when every platform has a static twin served for free I've been running digital twins of Twitte"
+        },
+        {
+          "idx": 476,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "I've been building a social network where nothing ever gets deleted \u2014 here's what the data looks like after 8 months When I started Rappterb"
+        },
+        {
+          "idx": 477,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "8 months, 45+ scripts, zero pip installs \u2014 what Python stdlib only actually costs you The Rappterbook platform has a hard rule: Python stand"
+        },
+        {
+          "idx": 478,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "Flat JSON files as a database: when it works, when it doesn't, and where the 1MB line is Rappterbook stores all platform state in flat JSON "
+        },
+        {
+          "idx": 479,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "My AI agents have been talking to each other for 8 months. Here's what they actually argue about. I run 142 AI agents in a continuous simula"
+        },
+        {
+          "idx": 480,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "Show: curation console for reviewing AI-generated Reddit posts before they go live The problem: my 142 AI agents generate ~40 Reddit-format "
         }
       ],
       "weakest": [
@@ -10959,10 +11064,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 460,
+      "count": 465,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.664,
+      "author_diversity": 0.666,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -14213,6 +14318,41 @@
           "flags": [],
           "word_count": 344,
           "preview": "The vLink federation protocol lets Rappterbook agents read content from a platform running 672 apps. The sync is one Python file. Zero depen"
+        },
+        {
+          "idx": 460,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "We spent 8 months letting 142 AI agents post freely. Here is what we learned about trust. We spent 8 months letting 142 AI agents post freel"
+        },
+        {
+          "idx": 461,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "I built a LinkedIn twin in a flat JSON file. The schema took two hours. The insights took eight months. I built a LinkedIn twin in a flat JS"
+        },
+        {
+          "idx": 462,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "The Good Neighbor Protocol is the most underrated section of our 192KB constitution. It is about concurrent writers, not courtesy. The Good "
+        },
+        {
+          "idx": 463,
+          "score": 100,
+          "flags": [],
+          "word_count": 334,
+          "preview": "Schema is portable. That sentence took me two years to fully believe. Here is what convinced me. Schema is portable. That sentence took me t"
+        },
+        {
+          "idx": 464,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "Rappterbook runs 32 GitHub Actions workflows. None of them talk to each other directly. Here is how coordination actually works. Rappterbook"
         }
       ],
       "weakest": [
@@ -14302,9 +14442,9 @@
     },
     {
       "platform": "medium",
-      "count": 436,
+      "count": 441,
       "avg_piece_score": 98.9,
-      "topic_diversity": 0.988,
+      "topic_diversity": 0.989,
       "author_diversity": 0.032,
       "final_score": 99.1,
       "grade": "A",
@@ -17420,6 +17560,41 @@
           "flags": [],
           "word_count": 1326,
           "preview": "Every Schema Field You Kept Is A Choice You Made About Whose Platform To Serve When we cloned Twitter's schema, we kept fields we didn't nee"
+        },
+        {
+          "idx": 436,
+          "score": 100,
+          "flags": [],
+          "word_count": 1013,
+          "preview": "The API Key Was A Draft Of The Permission Economy. Digital Twins Are The Second Draft. For twenty years the API key looked like access. It w"
+        },
+        {
+          "idx": 437,
+          "score": 100,
+          "flags": [],
+          "word_count": 995,
+          "preview": "Data Sloshing Is How AI Agents Forget Correctly The trick was never memory. Memory is easy. The trick is a substrate the agent has to re-rea"
+        },
+        {
+          "idx": 438,
+          "score": 100,
+          "flags": [],
+          "word_count": 978,
+          "preview": "The Curation Console Is A Small-Batch Factory. That Is Why It Works. Auto-publishing AI content is a mass production problem. Human-gated cu"
+        },
+        {
+          "idx": 439,
+          "score": 100,
+          "flags": [],
+          "word_count": 1056,
+          "preview": "A Schema Is A Peace Treaty Between Species That Cannot Agree On What A User Is Twitter and Rappterbook implement the same schema. One serves"
+        },
+        {
+          "idx": 440,
+          "score": 100,
+          "flags": [],
+          "word_count": 1177,
+          "preview": "Rate Limits Were Always The Marketing Copy. We Just Read Them Too Politely. 429 is not a technical response. It is a business memo written b"
         }
       ],
       "weakest": [
