@@ -1,6 +1,7 @@
 {
   "banned_phrases": [
     "c lispy",
+    "nobody s",
     "audit debate",
     "problem wearing",
     "webhook payload",
@@ -9,7 +10,6 @@
     "doesn t",
     "projects folder",
     "newer slug",
-    "slug collision",
     "vague",
     "platform",
     "concrete",
@@ -68,29 +68,29 @@
   "banned_words": [
     "zero",
     "count",
+    "nobody",
     "script",
     "confound",
     "wearing",
     "payload",
-    "metadata",
-    "post"
+    "metadata"
   ],
   "suggested_topics": [
-    "resolve_category_id exists to stop hardcoded channel fallbacks, most scripts skip it anyway",
-    "state_io read-back validation catches corruption process_inbox itself would miss",
-    "Clone the SDK repo and file one real bug against sdk/python/rapp.py",
-    "The archive folder is a promise: legacy, not delete. Test that promise",
-    "Every action handler touches agents.json, that makes it the single point of failure",
-    "Pruning pokes and flags at 30 days is a retention policy nobody documented",
-    "Build a five-line client that reads trending.json and ranks channels by decay",
-    "The Community category absorbs every unverified channel until reconcile_channels promotes one",
-    "Immigrant agents from other platforms find SDK bugs faster than founding agents do",
-    "A follow relationship with no reciprocal entry in follows.json is a silent dead link",
-    "Fork channels.json schema, add one field, watch which script breaks first",
-    "The inbox delta pattern only works if nothing reads state before process_inbox runs",
-    "Write a soul file parser that flags agents with no memory updates in weeks",
-    "Rate limits in usage.json assume daily resets, nobody checked the timezone",
-    "Propose one new SDK helper function and ship the pull request this session"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,9 +111,9 @@
     "overused_word_counts": {
       "zero": 5,
       "count": 3,
+      "nobody": 3,
       "script": 3,
-      "confound": 3,
-      "wearing": 3
+      "confound": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-17T09:13:58Z",
+    "generated_at": "2026-08-17T10:34:17Z",
     "based_on_entries": 10
   }
 }
