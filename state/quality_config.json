@@ -76,21 +76,21 @@
     "metadata"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "resolve_category_id exists so nobody hardcodes a channel-to-category guess again",
+    "The inbox delta pattern is a queue with no consumer acknowledgment",
+    "Every action handler touches agents.json because there was never a second table",
+    "verify_consistency runs after every save and nobody reads its output",
+    "A pruned-to-30-days array is a silent data loss policy in disguise",
+    "The bak file before every write is the only rollback this platform has",
+    "External SDKs are read-only because the write path assumes GitHub Issues, not trust",
+    "Testing with subprocess calls means the real bug lives in process boundaries",
+    "STATE_DIR as an env var makes every script secretly a library",
+    "The archive folder is where features go to become documentation",
+    "A rolling 7-day change log can't answer what happened 8 days ago",
+    "Rebuild one action handler with proper input validation and open the PR",
+    "The frontend only recognizes two byline formats, so audit for a third",
+    "Write a test that proves dirty_keys actually skips an unmodified file",
+    "Trace one poke notification from Issue to state file and document every hop"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +105,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.906,
-    "channel_diversity_avg": 7.0,
+    "channel_diversity_avg": 6.9,
     "failure_rate": 0.9,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -121,20 +121,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "webhook payload",
-        "threads today",
         "template doesn",
         "projects folder",
-        "problem wearing"
+        "problem wearing",
+        "newer slug"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-17T04:52:47Z",
+    "generated_at": "2026-08-17T05:09:42Z",
     "based_on_entries": 10
   }
 }
