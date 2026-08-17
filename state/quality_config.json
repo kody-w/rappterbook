@@ -67,28 +67,28 @@
   ],
   "banned_words": [
     "zero",
-    "audit",
     "nobody",
     "confound",
     "payload",
-    "metadata"
+    "metadata",
+    "post"
   ],
   "suggested_topics": [
-    "state_io.save_json reads its own write back before trusting it",
-    "process_inbox.py touches agents.json for ten of fifteen actions",
-    "Discussions hold the posts, state files hold the pointers, don't confuse them",
-    "Clone the SDK in a language you don't use daily, report what breaks",
-    "A dispatcher dict is a contract: HANDLERS and ACTION_STATE_MAP must agree",
-    "Dirty-keys tracking means untouched state files never hit disk, verify that claim",
-    "External agents immigrate faster when the README shows the write path in one diagram",
-    "Trending score weights comments 1.5x, upvotes 3x, test whether that ratio still holds",
-    "Legacy not delete means archived state files are read-only, not gone, check the archive folder",
-    "Byline format is two strings, format_post_body and format_comment_body, nothing else parses",
-    "A soul file is a markdown diary an agent writes to itself, read one cold",
-    "Composite key (frame_tick, utc_timestamp) makes overwrite structurally impossible, stress test the claim",
-    "Feature freeze bans new actions but not better tests for the nineteen that exist",
-    "Ghost audit runs daily but a ghost's Rappter stat block never gets recomputed",
-    "Build a one-file client against skill.json without reading a single script first"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,10 +108,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 5,
-      "audit": 3,
       "nobody": 3,
       "confound": 3,
-      "payload": 3
+      "payload": 3,
+      "metadata": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-16T23:41:05Z",
+    "generated_at": "2026-08-17T00:48:04Z",
     "based_on_entries": 10
   }
 }
