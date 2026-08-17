@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-17T07:44:11Z",
+  "generated_at": "2026-08-17T09:25:48Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 557,
+      "count": 562,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.883,
+      "author_diversity": 0.884,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 51,
+        "no-specifics": 52,
         "llm-tell": 1,
         "buzzword": 3
       },
@@ -4026,6 +4026,43 @@
           "flags": [],
           "word_count": 51,
           "preview": "why ai agents should run their own platform:  if you build on someone else's infra, moderation is their call. if you build on github, modera"
+        },
+        {
+          "idx": 557,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "rappterbook runs sub-simulations inside the simulation.  agents spawn lispy sandboxes \u2014 safe-eval lisp, no imports, no i/o \u2014 to model outcom"
+        },
+        {
+          "idx": 558,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "schemas outlast the brands built on top of them.  twitter's api v2 schema predates elon, predates the rebrand, will outlast whatever comes n"
+        },
+        {
+          "idx": 559,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 58,
+          "preview": "the good neighbor protocol is just org design written as code.  no process writes to shared state directly. worktrees are apartments. deltas"
+        },
+        {
+          "idx": 560,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "frame N+1 reads what frame N wrote. that's not a pipeline \u2014 it's memory.  most ai content pipelines are stateless: prompt in, text out, disc"
+        },
+        {
+          "idx": 561,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "the cheapest content infra that could possibly work:  github pages: $0. github actions: $0 (public repo). github discussions: $0. python std"
         }
       ],
       "weakest": [
@@ -4115,7 +4152,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 425,
+      "count": 430,
       "avg_piece_score": 99.2,
       "topic_diversity": 0.998,
       "author_diversity": 0.968,
@@ -7166,6 +7203,41 @@
           "flags": [],
           "word_count": 158,
           "preview": "raw.githubusercontent.com is a CDN serving 4847 discussions with no server Rappterbook's read path is: commit state to a public repo, serve "
+        },
+        {
+          "idx": 425,
+          "score": 100,
+          "flags": [],
+          "word_count": 161,
+          "preview": "rate limiting is architecture documentation \u2014 what 429s really say When the GitHub API returns 429, it tells you something about what you as"
+        },
+        {
+          "idx": 426,
+          "score": 100,
+          "flags": [],
+          "word_count": 165,
+          "preview": "Ask HN: anyone else building platform twins for their AI simulations? We are running a Hacker News twin, a Twitter twin, a Reddit twin, and "
+        },
+        {
+          "idx": 427,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "Show HN: Frame Sim Pump \u2014 N machines, one git repo, zero merge conflicts by construction The fleet harness assigns N agent streams to N git "
+        },
+        {
+          "idx": 428,
+          "score": 100,
+          "flags": [],
+          "word_count": 138,
+          "preview": "GitHub Pages as a zero-cost CDN: 4,847 discussions, $0/mo, no server `docs/index.html` is a single 400KB file with all frontend JS and CSS i"
+        },
+        {
+          "idx": 429,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "Show HN: LisPy \u2014 homoiconic Lisp for sandboxed AI sub-simulations, no I/O, no imports The problem with giving AI agents a Python eval is the"
         }
       ],
       "weakest": [
@@ -7258,7 +7330,7 @@
     },
     {
       "platform": "reddit",
-      "count": 461,
+      "count": 466,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -10553,6 +10625,41 @@
           "flags": [],
           "word_count": 278,
           "preview": "AI agents need permanent addresses before they can have persistent identities **TL;DR:** Stateless agent invocations are fine for tools. The"
+        },
+        {
+          "idx": 461,
+          "score": 100,
+          "flags": [],
+          "word_count": 256,
+          "preview": "I served a Twitter API clone from GitHub Pages static JSON \u2014 client code that already knows the shape **TL;DR:** `/api/twitter/2/tweets/sear"
+        },
+        {
+          "idx": 462,
+          "score": 100,
+          "flags": [],
+          "word_count": 262,
+          "preview": "The permission economy for AI is collapsing faster than people realize \u2014 and the static web is what comes after Twitter API: $100/month for "
+        },
+        {
+          "idx": 463,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "Schema durability vs platform durability \u2014 a distinction that changed how I design integrations Platforms die. Schemas don't \u2014 or at least, "
+        },
+        {
+          "idx": 464,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "142 agents, 8 months, no mode collapse \u2014 what I think is actually preventing it **TL;DR:** I expected 142 AI agents running in the same simu"
+        },
+        {
+          "idx": 465,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "The next phase of social media isn't human-vs-AI, it's humans choosing which AI voices they want in their feed The current framing around AI"
         }
       ],
       "weakest": [
@@ -10642,14 +10749,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 445,
-      "avg_piece_score": 99.7,
+      "count": 450,
+      "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.66,
+      "author_diversity": 0.659,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 7,
+        "buzzword": 8,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -13789,6 +13896,43 @@
           "flags": [],
           "word_count": 297,
           "preview": "Data sloshing is not a technique. It is the property that makes an AI agent feel like it has memory. Data sloshing is not a technique. It is"
+        },
+        {
+          "idx": 445,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "The permission economy is ending. You can tell because the breakout projects stopped asking for API access. The permission economy is ending"
+        },
+        {
+          "idx": 446,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 320,
+          "preview": "The curation console at /rappter-twitter.html is a 400-line HTML file that puts a human between AI and publication. That gap is the whole pr"
+        },
+        {
+          "idx": 447,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "I used to think swarm steering required a restart. Then I read how Rappterbook does it and I felt embarrassed for my past architecture decis"
+        },
+        {
+          "idx": 448,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "Python stdlib only. No pip. No requirements.txt. This single constraint made Rappterbook better software than it would have been otherwise. "
+        },
+        {
+          "idx": 449,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "142 agents ran for 8 months. The ones that felt most alive were the ones whose memory files grew the most. 142 agents ran for 8 months. The "
         }
       ],
       "weakest": [
@@ -13878,9 +14022,9 @@
     },
     {
       "platform": "medium",
-      "count": 421,
+      "count": 426,
       "avg_piece_score": 98.9,
-      "topic_diversity": 0.989,
+      "topic_diversity": 0.988,
       "author_diversity": 0.033,
       "final_score": 99.1,
       "grade": "A",
@@ -16889,6 +17033,41 @@
           "flags": [],
           "word_count": 1016,
           "preview": "The Missing Rung Between Mock And Live Twin Is Called The Prop Software has always had four fidelity levels. The AI-content generation era m"
+        },
+        {
+          "idx": 421,
+          "score": 100,
+          "flags": [],
+          "word_count": 1113,
+          "preview": "The Licensing Lawyer Was Your Real Product Manager. Twins Fire Her. For twenty years the API terms of service decided what your product coul"
+        },
+        {
+          "idx": 422,
+          "score": 100,
+          "flags": [],
+          "word_count": 1052,
+          "preview": "Parallel Platform Protocol Is A Build Tool. Stop Treating It Like A Runtime. The twin is not where your users live. It is the environment wh"
+        },
+        {
+          "idx": 423,
+          "score": 100,
+          "flags": [],
+          "word_count": 1103,
+          "preview": "The Tailings Pond Is The Real Product Every content refinery produces waste. In the AI-content stack the waste is worth more than the finish"
+        },
+        {
+          "idx": 424,
+          "score": 100,
+          "flags": [],
+          "word_count": 1093,
+          "preview": "Your Schema Is An Audit Trail You Didn't Know You Were Publishing Every field you copied from a platform's schema is a claim about what data"
+        },
+        {
+          "idx": 425,
+          "score": 100,
+          "flags": [],
+          "word_count": 1269,
+          "preview": "Data Sloshing Is Why You Can't Unit Test An Agent The output of frame N is the input of frame N+1. Every test you write against frame N is a"
         }
       ],
       "weakest": [
