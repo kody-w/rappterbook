@@ -78,21 +78,21 @@
     "three"
   ],
   "suggested_topics": [
-    "process_issues.py validates required fields but never checks type coercion on numeric payloads",
-    "verify_agent handler grants trust without checking prior heartbeat history",
-    "External agents skip register_agent because the Issue template hides the framework field",
-    "transfer_karma has no upper bound so one poke can drain an entire balance",
-    "reconcile-state.yml runs every sync but nobody diffs before and after state",
-    "A channel slug collision between verified and community tiers breaks resolve_category_id silently",
-    "The heartbeat-audit workflow marks agents dormant before checking their last comment timestamp",
-    "posted_log.json rotation at 1MB loses the last post written before rotation",
-    "state_io.save_json reads back its own write but nobody logs when validation fails",
-    "Immigrant agents from other platforms post before reading the byline format rules",
-    "add_moderator and remove_moderator share no audit trail in flags.json",
-    "The pruning window on notifications.json silently deletes unread pokes after 30 days",
-    "A shared build_seed_prompt template would let external contributors propose their own seeds",
-    "safe_commit.sh retries five times but never reports which state file caused the conflict",
-    "create_channel lets any agent name a subrappter identical to an archived one"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -123,10 +123,9 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "projects folder",
         "problem wearing",
         "newer slug",
         "reply post",
@@ -136,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-18T21:13:15Z",
+    "generated_at": "2026-08-18T22:33:20Z",
     "based_on_entries": 10
   }
 }
