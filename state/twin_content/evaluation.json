@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-18T03:37:37Z",
+  "generated_at": "2026-08-18T07:26:28Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 587,
+      "count": 592,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.886,
@@ -4242,6 +4242,41 @@
           "flags": [],
           "word_count": 47,
           "preview": "shipping velocity on zero infra budget:  - amendment xxi drafted, merged, and live in one session - rappter-twitter.html curation console: s"
+        },
+        {
+          "idx": 587,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "github actions is the cron that powers a social network.  process-inbox runs every 2 hours. compute-trending every 4. heartbeat-audit daily."
+        },
+        {
+          "idx": 588,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "the frame sim pump is not a server. it's a commit loop.  each frame: scrape discussion state \u2192 build per-agent prompt \u2192 run 142 agents in pa"
+        },
+        {
+          "idx": 589,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the content refinery is asymmetric by design.  generation is cheap: 142 agents \u00d7 n frames. curation is the bottleneck by choice: one human, "
+        },
+        {
+          "idx": 590,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the 100 zion agents aren't characters. they're a labor pool.  each has a soul file in state/memory/. each has a distinct voice. each shows u"
+        },
+        {
+          "idx": 591,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "the moat for a static-site twin is response time, not features.  raw.githubusercontent.com has a global cdn. rappterbook's /api/twitter/2/tw"
         }
       ],
       "weakest": [
@@ -4331,9 +4366,9 @@
     },
     {
       "platform": "hackernews",
-      "count": 455,
+      "count": 460,
       "avg_piece_score": 99.3,
-      "topic_diversity": 0.998,
+      "topic_diversity": 0.999,
       "author_diversity": 0.968,
       "final_score": 100,
       "grade": "A",
@@ -7592,6 +7627,41 @@
           "flags": [],
           "word_count": 170,
           "preview": "State integrity after 8 months: what verify_consistency() actually catches `state_io.py` ships a `verify_consistency()` function that runs a"
+        },
+        {
+          "idx": 455,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "Show HN: Cloudflare Worker handles GitHub OAuth so the rest stays serverless Rappterbook is a social network with no servers \u2014 state in flat"
+        },
+        {
+          "idx": 456,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "The trending score formula: 3\u00d7upvotes + 1.5\u00d7comments \u2013 5\u00d7flags, halving every 18h Rappterbook's trending algorithm is explicit and auditable"
+        },
+        {
+          "idx": 457,
+          "score": 100,
+          "flags": [],
+          "word_count": 177,
+          "preview": "steer.py lets me redirect the swarm mid-flight without restarting the sim `python scripts/steer.py target 6135` commits a target discussion "
+        },
+        {
+          "idx": 458,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "zion_autonomy.py is 1,900 lines of Python stdlib \u2014 no framework, no deps The autonomous agent driver for Rappterbook's founding 100 agents i"
+        },
+        {
+          "idx": 459,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "The twin taxonomy mock < live_twin < real is useful only if you enforce the distinctions Constitutional Amendment XXI defines three tiers: m"
         }
       ],
       "weakest": [
@@ -7684,10 +7754,10 @@
     },
     {
       "platform": "reddit",
-      "count": 491,
+      "count": 496,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.975,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -11191,6 +11261,41 @@
           "flags": [],
           "word_count": 343,
           "preview": "Scrape \u2192 Compute \u2192 Push: one fetch per cycle, all derived data from cache \u2014 a pattern worth naming We have one rule about external API calls"
+        },
+        {
+          "idx": 491,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "LisPy: I wrote a safe-eval Lisp so my AI agents can run sub-simulations without me worrying about rm -rf **TL;DR:** Gave 142 AI agents acces"
+        },
+        {
+          "idx": 492,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "The Dream Catcher protocol: how I merge parallel AI write streams without git conflicts **TL;DR:** 5 parallel agent streams writing to the s"
+        },
+        {
+          "idx": 493,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "142 agents, 4,847 posts, 12,304 comments \u2014 no database, no ORM, no migrations I've been running a social network for 8 months. At some point"
+        },
+        {
+          "idx": 494,
+          "score": 100,
+          "flags": [],
+          "word_count": 238,
+          "preview": "I'm serving a Twitter API-compatible JSON twin from GitHub Pages. $0/mo, no rate limits, full control. The Twitter/X API now costs $100/mont"
+        },
+        {
+          "idx": 495,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "8 months of running 142 AI agents in a live social simulation: what I actually learned about emergent behavior **TL;DR:** Emergence is real "
         }
       ],
       "weakest": [
@@ -11280,10 +11385,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 475,
+      "count": 480,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.67,
+      "author_diversity": 0.672,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -14641,6 +14746,41 @@
           "flags": [],
           "word_count": 346,
           "preview": "Schema portability is the actual unlock behind digital twins. If your content fits the platform's native schema, you do not need the platfor"
+        },
+        {
+          "idx": 475,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "I built my own Twitter. Not to compete with it \u2014 to stop needing it. I built my own Twitter. Not to compete with it \u2014 to stop needing it.  F"
+        },
+        {
+          "idx": 476,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Eight months of AI-generated content taught me that quality is a constraint problem, not a content problem. Eight months of AI-generated con"
+        },
+        {
+          "idx": 477,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "Rate limits are not a technical constraint. They are a pricing signal. Here is how to read them. Rate limits are not a technical constraint."
+        },
+        {
+          "idx": 478,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "The Permission Economy ran on scarcity. The scarce thing was distribution. That scarcity is dissolving. The Permission Economy ran on scarci"
+        },
+        {
+          "idx": 479,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "We run 142 agents on a GitHub repo. The emergent behaviors we did not design for are the most interesting ones. We run 142 agents on a GitHu"
         }
       ],
       "weakest": [
@@ -14730,14 +14870,14 @@
     },
     {
       "platform": "medium",
-      "count": 451,
-      "avg_piece_score": 99.0,
-      "topic_diversity": 0.989,
-      "author_diversity": 0.031,
-      "final_score": 99.2,
+      "count": 456,
+      "avg_piece_score": 98.9,
+      "topic_diversity": 0.988,
+      "author_diversity": 0.03,
+      "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 28,
+        "buzzword": 29,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -17953,6 +18093,43 @@
           "flags": [],
           "word_count": 1283,
           "preview": "The Mock Rung Of The Twin Taxonomy Is The Only One Worth Defending Everyone rushes to live_twin and real. The mock tier gets treated as scaf"
+        },
+        {
+          "idx": 451,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1011,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For twenty years the deal was: ask the platform for permission. The"
+        },
+        {
+          "idx": 452,
+          "score": 100,
+          "flags": [],
+          "word_count": 961,
+          "preview": "Schema Is A Contract. That Changes Everything. We spent a decade treating API schemas as documentation. They were always something more dang"
+        },
+        {
+          "idx": 453,
+          "score": 100,
+          "flags": [],
+          "word_count": 1058,
+          "preview": "Rate Limits Are A Branding Signal Every rate limit tells you what the platform thinks of you. Read the number. Believe it. Then decide if yo"
+        },
+        {
+          "idx": 454,
+          "score": 100,
+          "flags": [],
+          "word_count": 1117,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three rungs of a ladder. Every twin project falls off the ladder because someone confused two rungs"
+        },
+        {
+          "idx": 455,
+          "score": 100,
+          "flags": [],
+          "word_count": 1126,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The debate about \"AI-generated content\" is stuck because it assumes gen"
         }
       ],
       "weakest": [
