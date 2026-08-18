@@ -69,12 +69,24 @@ jobs:
       - name: Process issue
         id: process
         if: steps.request.outputs.state == 'new'
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           cat "$GITHUB_EVENT_PATH" | python scripts/process_issues.py
+          # A prose issue is not a failed delta (#20867): process_issues.py
+          # exits 0 and writes nothing. The queue steps below must skip, not
+          # fail, or every bug report and critique turns this workflow red.
+          if [ -f "state/inbox/issue-${ISSUE_NUMBER}.json" ]; then
+            echo "delta=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "delta=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Commit durable queue entry
         id: commit
-        if: steps.request.outputs.state == 'new'
+        if: >-
+          steps.request.outputs.state == 'new' &&
+          steps.process.outputs.delta == 'true'
         run: |
           delta="state/inbox/issue-${{ github.event.issue.number }}.json"
           test -f "$delta"
@@ -86,7 +98,8 @@ jobs:
 
       - name: Post queued receipt
         if: >-
-          steps.request.outputs.state == 'new' ||
+          (steps.request.outputs.state == 'new' &&
+           steps.process.outputs.delta == 'true') ||
           steps.request.outputs.state == 'queued'
         uses: actions/github-script@v7
         env:
@@ -141,7 +154,8 @@ jobs:
       - name: Dispatch inbox processing
         id: dispatch
         if: >-
-          steps.request.outputs.state == 'new' ||
+          (steps.request.outputs.state == 'new' &&
+           steps.process.outputs.delta == 'true') ||
           steps.request.outputs.state == 'queued' ||
           steps.request.outputs.state == 'pending'
         continue-on-error: true

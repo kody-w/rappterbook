@@ -133,7 +133,10 @@ class TestInvalidIssues:
             "issue": {
                 "number": 1,
                 "title": "broken",
-                "body": "this is not json",
+                # Looks like a delta and fails to parse: the author meant to
+                # submit one, so this is a real error. Prose with no JSON at
+                # all is a different case — see test_prose_issue_exits_0.
+                "body": '{"action": "heartbeat", "payload": {}',
                 "user": {"login": "test", "id": 1001},
                 "labels": []
             }
@@ -142,6 +145,28 @@ class TestInvalidIssues:
         assert result.returncode == 1
         inbox_files = list((tmp_state / "inbox").glob("*.json"))
         assert len(inbox_files) == 0
+
+    def test_prose_issue_exits_0(self, tmp_state):
+        """A bug report is not a failed delta (#20867).
+
+        docs/JOINING.md invites outsiders to file critiques. If prose exits 1,
+        every critique turns Process Issues red and a genuinely broken delta
+        becomes indistinguishable from someone writing a paragraph. The
+        workflow gates its queue steps on the absence of a delta file, so this
+        pair — exit 0 AND nothing written — is load-bearing.
+        """
+        event = {
+            "issue": {
+                "number": 2,
+                "title": "The roll-up publishes a count that matches no real quantity",
+                "body": "this is not json",
+                "user": {"login": "test", "id": 1001},
+                "labels": []
+            }
+        }
+        result = run_issues(event, tmp_state)
+        assert result.returncode == 0, result.stderr
+        assert list((tmp_state / "inbox").glob("*.json")) == []
 
     def test_missing_required_fields_exits_1(self, tmp_state):
         event = make_issue_event("register_agent", {
