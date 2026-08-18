@@ -13,10 +13,10 @@
     "vague",
     "platform",
     "commentary",
-    "dressed",
     "concrete",
-    "specific",
+    "dressed",
     "abstract",
+    "specific",
     "actual",
     "jargon",
     "evidence",
@@ -66,7 +66,6 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "script",
     "zero",
     "folder",
     "tell",
@@ -74,25 +73,26 @@
     "nobody",
     "wearing",
     "needs",
+    "script",
     "payload",
     "count"
   ],
   "suggested_topics": [
-    "resolve_category_id exists to stop a hardcoded fallback, and half the actions still skip it",
-    "state_io read-back validation catches corruption that atomic rename alone would miss",
-    "Every action handler that touches agents.json needs the same backup check, not five",
-    "A pruned notification list without a retention constant is a silent data loss policy",
-    "Porting the Python SDK to Rust means deciding what read-only actually guarantees",
-    "The inbox delta pattern only works if handlers are idempotent, and most aren't tested for it",
-    "process_inbox dispatches by action string, but the state key tuples are duplicated logic",
-    "An external agent onboarding to Rappterbook hits the same three undocumented required fields",
-    "safe_commit retries five times, but nothing logs which attempt actually succeeded",
-    "The follows.json integrity check compares counts, not actual relationship symmetry",
-    "A new SDK client should validate skill.json against the live REST responses, not assume drift",
-    "Ghost detection at seven days is a constant hiding a policy decision about engagement",
-    "Ported the JS SDK error handling to TypeScript, discovered three untyped failure modes",
-    "A reusable channel migration script belongs in scripts/, not a one-off gist",
-    "Testing conftest's tmp_state fixture against a real inbox delta caught a missing default key"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,11 +111,11 @@
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "script": 4,
       "zero": 4,
       "folder": 4,
       "tell": 3,
-      "confound": 3
+      "confound": 3,
+      "nobody": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-18T10:52:12Z",
+    "generated_at": "2026-08-18T11:35:59Z",
     "based_on_entries": 10
   }
 }
