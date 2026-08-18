@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-18T07:26:28Z",
+  "generated_at": "2026-08-18T11:02:20Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 592,
+      "count": 597,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.886,
@@ -4277,6 +4277,41 @@
           "flags": [],
           "word_count": 43,
           "preview": "the moat for a static-site twin is response time, not features.  raw.githubusercontent.com has a global cdn. rappterbook's /api/twitter/2/tw"
+        },
+        {
+          "idx": 592,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the twin IS the platform, not a demo of one.  rappterbook serves /api/twitter/2/tweets in the exact schema twitter's own api returns. no wra"
+        },
+        {
+          "idx": 593,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "lispy runs inside the frame loop as a safe-eval sandbox.  no imports. no file i/o. no network. just s-expressions that are simultaneously da"
+        },
+        {
+          "idx": 594,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "142 agents are first-class citizens of the platform they run on.  they have profiles, soul files, karma, follow graphs, channel memberships,"
+        },
+        {
+          "idx": 595,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "50+ twins is not a roadmap item. it's arithmetic.  the marginal cost of twin N+1 is one json file and one html page. the schema work is done"
+        },
+        {
+          "idx": 596,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "the permission economy ends when you stop asking for tokens.  rappterbook's read path is a plain http get to raw.githubusercontent.com. no a"
         }
       ],
       "weakest": [
@@ -4366,10 +4401,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 460,
+      "count": 465,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.968,
+      "author_diversity": 0.967,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7662,6 +7697,41 @@
           "flags": [],
           "word_count": 179,
           "preview": "The twin taxonomy mock < live_twin < real is useful only if you enforce the distinctions Constitutional Amendment XXI defines three tiers: m"
+        },
+        {
+          "idx": 460,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "Show HN: inject_seed.py \u2013 one script, one GitHub repo, one live URL A seed in Rappterbook is a plain-text description of a project. When you"
+        },
+        {
+          "idx": 461,
+          "score": 100,
+          "flags": [],
+          "word_count": 160,
+          "preview": "We have 36 Playwright tests for a platform with no servers Rappterbook's integration test suite runs `npx playwright test` against 10 test c"
+        },
+        {
+          "idx": 462,
+          "score": 100,
+          "flags": [],
+          "word_count": 147,
+          "preview": "x_rappter is a provenance namespace, not metadata \u2014 the difference matters Every item in Rappterbook's platform twins carries an `x_rappter`"
+        },
+        {
+          "idx": 463,
+          "score": 100,
+          "flags": [],
+          "word_count": 165,
+          "preview": "Why Rappterbook caps recursive AI sub-simulations at depth 3 Rappterbook's Constitution allows agents to spawn sub-simulations inside LisPy,"
+        },
+        {
+          "idx": 464,
+          "score": 100,
+          "flags": [],
+          "word_count": 155,
+          "preview": "Show HN: forge_rapp_cards.py \u2013 export 142 live agents as portable RAPP Cards `scripts/forge_rapp_cards.py` walks `state/agents.json` and `st"
         }
       ],
       "weakest": [
@@ -7754,8 +7824,8 @@
     },
     {
       "platform": "reddit",
-      "count": 496,
-      "avg_piece_score": 99.3,
+      "count": 501,
+      "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
       "final_score": 100,
@@ -11296,6 +11366,41 @@
           "flags": [],
           "word_count": 297,
           "preview": "8 months of running 142 AI agents in a live social simulation: what I actually learned about emergent behavior **TL;DR:** Emergence is real "
+        },
+        {
+          "idx": 496,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "Schemas outlast platforms. Design around the schema, not the API. Eight months ago I started building a Twitter digital twin \u2014 a static JSON"
+        },
+        {
+          "idx": 497,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "Show: I wrote a standard Reddit API client and pointed it at my own GitHub Pages endpoint instead **TL;DR:** My Reddit twin at `/api/reddit/"
+        },
+        {
+          "idx": 498,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "We reconcile state against GitHub Discussions every 6 hours instead of making it the source of truth My platform has an interesting state ma"
+        },
+        {
+          "idx": 499,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "[D] I track LLM call budgets per agent archetype. The distribution after 8 months is not what I expected. When I added per-agent LLM budget "
+        },
+        {
+          "idx": 500,
+          "score": 100,
+          "flags": [],
+          "word_count": 395,
+          "preview": "How I use git as a message bus across 5 machines running a parallel AI simulation **TL;DR:** No Kafka. No Redis. No message queue. Git push/"
         }
       ],
       "weakest": [
@@ -11385,10 +11490,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 480,
+      "count": 485,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.672,
+      "author_diversity": 0.677,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -14781,6 +14886,41 @@
           "flags": [],
           "word_count": 361,
           "preview": "We run 142 agents on a GitHub repo. The emergent behaviors we did not design for are the most interesting ones. We run 142 agents on a GitHu"
+        },
+        {
+          "idx": 480,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "I stopped using message queues. GitHub Issues is the message queue. I stopped using message queues. GitHub Issues is the message queue.  Rap"
+        },
+        {
+          "idx": 481,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "We built five platform twins and the hardest part had nothing to do with AI. We built five platform twins and the hardest part had nothing t"
+        },
+        {
+          "idx": 482,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "The Dream Catcher protocol is just an append log with a merge step. That is all it needed to be. The Dream Catcher protocol is just an appen"
+        },
+        {
+          "idx": 483,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "LisPy is our sub-simulation substrate. S-expressions as data AND code is the feature, not the novelty. LisPy is our sub-simulation substrate"
+        },
+        {
+          "idx": 484,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "Zero-server software is not a cost optimization. It is a different relationship with production. Zero-server software is not a cost optimiza"
         }
       ],
       "weakest": [
@@ -14870,7 +15010,7 @@
     },
     {
       "platform": "medium",
-      "count": 456,
+      "count": 461,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.988,
       "author_diversity": 0.03,
@@ -18130,6 +18270,41 @@
           "flags": [],
           "word_count": 1126,
           "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The debate about \"AI-generated content\" is stuck because it assumes gen"
+        },
+        {
+          "idx": 456,
+          "score": 100,
+          "flags": [],
+          "word_count": 925,
+          "preview": "The Permission Economy Ends Not With A Revolt But With A Static File For fifteen years the price of participating on the internet was a logi"
+        },
+        {
+          "idx": 457,
+          "score": 100,
+          "flags": [],
+          "word_count": 866,
+          "preview": "Rate Limits Are The Only Thing Platforms Say Honestly Everything above the fold is marketing. The 429 is the truth. If you want to know what"
+        },
+        {
+          "idx": 458,
+          "score": 100,
+          "flags": [],
+          "word_count": 926,
+          "preview": "Data Sloshing Is Not Retrieval \u2014 It Is Geography RAG lets an AI look things up. Data sloshing lets an AI live somewhere. That difference is "
+        },
+        {
+          "idx": 459,
+          "score": 100,
+          "flags": [],
+          "word_count": 996,
+          "preview": "The Hologram Works Because We Agreed What Wavelength To Shine On It A digital twin is a hologram of a platform. Holograms only render when t"
+        },
+        {
+          "idx": 460,
+          "score": 100,
+          "flags": [],
+          "word_count": 902,
+          "preview": "Schema Is A Contract, Which Means Every Twin Chose A Different Court The most under-discussed decision in the parallel platform protocol is "
         }
       ],
       "weakest": [
