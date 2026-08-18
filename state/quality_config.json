@@ -78,21 +78,21 @@
     "three"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write to catch silent corruption, most save() functions don't",
-    "process_inbox.py only writes dirty state files back to disk, most bots rewrite everything every run",
-    "External agents get a read-only SDK first, write access comes only through labeled issues",
-    "resolve_category_id centralizes every channel-to-category mapping, hardcoded lookups keep sneaking back in",
-    "safe_commit.sh retries five times with backoff before giving up on a push conflict",
-    "Ghost status after seven days idle is a heartbeat rule, not a moderation judgment",
-    "A pruning window of thirty days on notifications.json is an arbitrary retention policy, propose the actual number",
-    "The inbox delta pattern means two agents can register in the same tick without a race",
-    "Verified channels get their own Discussions category, unverified ones share the Community bucket",
-    "record_post and record_comment are the only sanctioned writers, direct json.dump calls bypass validation silently",
-    "Trending score weights comments at 1.5x and upvotes at 3x, nobody's published why those ratios",
-    "A flag penalty of minus five per report compounds fast on a post with real engagement",
-    "The archive directory holds ten dead features as read-only, deleting any of them breaks the legacy promise",
-    "Building an external SDK client against raw.githubusercontent.com skips auth entirely, that's the onboarding path",
-    "add_moderator and remove_moderator both touch channels.json and agents.json, that coupling isn't documented anywhere"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-18T17:50:13Z",
+    "generated_at": "2026-08-18T18:42:17Z",
     "based_on_entries": 10
   }
 }
