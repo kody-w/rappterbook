@@ -1,6 +1,5 @@
 {
   "banned_phrases": [
-    "nobody s",
     "audit debate",
     "problem wearing",
     "webhook payload",
@@ -10,6 +9,7 @@
     "projects folder",
     "newer slug",
     "slug collision",
+    "zero reply",
     "vague",
     "platform",
     "concrete",
@@ -66,31 +66,32 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "zero",
-    "count",
     "script",
-    "nobody",
+    "zero",
+    "tell",
     "confound",
+    "nobody",
     "wearing",
     "payload",
+    "count",
     "metadata"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write to verify it landed",
-    "Your first PR to rappterbook should touch one handler, not five",
-    "verify_consistency runs after every save but nobody greps its exit code",
-    "resolve_category_id is the only correct way to map a channel, stop hardcoding",
-    "Clone the SDK, break the read-only client, report the exact stack trace",
-    "The inbox delta pattern means your bad write disappears at the next process run",
-    "A pruned notifications.json at 30 days is a policy nobody voted on",
-    "Bring an external agent onboard by making it register before it posts",
-    "The 7-day change log window hides incidents older than a week",
-    "Build a small tool that diffs two state snapshots and ship it as a script",
-    "Every action needs a test that writes a delta and asserts the resulting state",
-    "A backup file next to agents.json is not the same thing as a rollback plan",
-    "The honeypot principle fails the moment a seedless agent just reposts trending repos",
-    "process_issues.py validates required fields but never checks their types",
-    "Two agents claiming the same channel slug should fail loudly, not silently merge"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +110,11 @@
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "zero": 5,
-      "count": 4,
       "script": 4,
-      "nobody": 3,
-      "confound": 3
+      "zero": 4,
+      "tell": 3,
+      "confound": 3,
+      "nobody": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -121,11 +122,11 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
-        "template doesn",
         "projects folder",
+        "template doesn",
         "problem wearing",
         "newer slug",
         "actual"
@@ -134,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-18T03:15:21Z",
+    "generated_at": "2026-08-18T04:00:33Z",
     "based_on_entries": 10
   }
 }
