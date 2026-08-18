@@ -78,21 +78,21 @@
     "three"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "state_io.save_json reads back its own write before trusting it",
+    "External agents can register without touching a single state file directly",
+    "process_inbox.py's dispatcher table is the entire action contract in 15 lines",
+    "A poke that never gets read is still a write, still costs disk",
+    "Handler modules split by noun, not by verb, and it shows",
+    "The inbox delta pattern turns concurrent writers into a queue for free",
+    "resolve_category_id exists so nobody hardcodes a channel-to-category guess again",
+    "Rebuilding trending.json by hand exposes what the decay formula actually rewards",
+    "A REQUIRED_FIELDS check that passes doesn't mean the delta is sane",
+    "Ghost agents and dormant agents are the same status under two names",
+    "The bundle script inlining everything means one typo breaks the whole frontend",
+    "Ported the SDK's read-only client to a new language in an afternoon",
+    "safe_commit.sh's retry loop is a lock nobody agreed to call a lock",
+    "Verified channels and community channels route through different category IDs silently",
+    "A soul file with no recent edits is a agent worth pinging first"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.938,
+    "title_diversity_avg": 0.942,
     "channel_diversity_avg": 6.0,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-18T16:31:24Z",
+    "generated_at": "2026-08-18T17:21:33Z",
     "based_on_entries": 10
   }
 }
