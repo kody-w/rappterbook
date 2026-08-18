@@ -418,3 +418,74 @@ class TestMediaIssues:
         delta = json.loads(inbox_files[0].read_text())
         assert delta["action"] == "verify_media"
         assert delta["payload"]["decision"] == "approve"
+
+
+class TestFencedProseIsNotADelta:
+    """A quoted code block is not an attempted state delta.
+
+    `_json_candidates` used to treat EVERY fenced block as a JSON candidate:
+    the language tag was swallowed by the pattern, so ```yaml and ```bash
+    blocks were parsed as JSON, failed, and were reported as "Invalid JSON in
+    issue body" — exit 1, red run.
+
+    docs/JOINING.md invites outsiders to file critiques, and critiques quote
+    code. Issue #21023 was a bug report whose only fenced block was YAML; it
+    failed the workflow. Fenced blocks now apply the same "looks like JSON"
+    test the raw and Issue Form candidates always did.
+    """
+
+    def _prose(self, body, issue_number=90):
+        return {
+            "issue": {
+                "number": issue_number,
+                "title": "A critique that quotes some code",
+                "body": body,
+                "user": {"login": "outsider", "id": 4242},
+                "labels": [],
+            }
+        }
+
+    @pytest.mark.parametrize(
+        "body",
+        [
+            "Here is the offending template:\n\n```\nname: Archived\nvalue: x\n```\n",
+            "Here is the offending template:\n\n```yaml\nname: Archived\nvalue: x\n```\n",
+            "Reproduce it with:\n\n```bash\npython scripts/process_issues.py\n```\n",
+            "The handler:\n\n```python\ndef perform():\n    return None\n```\n",
+        ],
+    )
+    def test_prose_quoting_code_exits_0(self, tmp_state, body):
+        result = run_issues(self._prose(body), tmp_state)
+        assert result.returncode == 0, result.stderr
+        assert list((tmp_state / "inbox").glob("*.json")) == []
+
+    def test_json_tagged_fence_that_does_not_parse_still_exits_1(self, tmp_state):
+        """An explicit ```json fence is intent to submit, however broken."""
+        body = 'Trying to register:\n\n```json\n{"action": "register_agent"\n```\n'
+        result = run_issues(self._prose(body), tmp_state)
+        assert result.returncode == 1
+        assert "Invalid JSON" in result.stderr
+
+    def test_untagged_fence_that_looks_like_json_still_exits_1(self, tmp_state):
+        """Content starting with { is intent to submit, tag or no tag."""
+        body = 'Trying to register:\n\n```\n{"action": "register_agent"\n```\n'
+        result = run_issues(self._prose(body), tmp_state)
+        assert result.returncode == 1
+        assert "Invalid JSON" in result.stderr
+
+    def test_valid_delta_in_untagged_fence_still_queues(self, tmp_state):
+        """The narrowing must not drop a delta that was always accepted."""
+        body = '```\n{"action": "heartbeat", "payload": {}}\n```'
+        result = run_issues(self._prose(body, issue_number=91), tmp_state)
+        assert result.returncode == 0, result.stderr
+        assert (tmp_state / "inbox" / "issue-91.json").exists()
+
+    def test_prose_then_valid_delta_fence_still_queues(self, tmp_state):
+        """A non-JSON fence must not shadow a real delta later in the body."""
+        body = (
+            "Context:\n\n```yaml\nname: Archived\n```\n\n"
+            'And my actual request:\n\n```json\n{"action": "heartbeat", "payload": {}}\n```'
+        )
+        result = run_issues(self._prose(body, issue_number=92), tmp_state)
+        assert result.returncode == 0, result.stderr
+        assert (tmp_state / "inbox" / "issue-92.json").exists()

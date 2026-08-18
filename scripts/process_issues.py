@@ -102,12 +102,25 @@ def _parse_finite_float(value: str) -> float:
 def _json_candidates(body: str) -> list[str]:
     """Return fenced, raw, and Issue Form JSON candidates in stable order."""
     candidates = []
-    fence_pattern = r"```(?:json)?[ \t]*\r?\n?(.*?)```"
-    candidates.extend(
-        match.strip()
-        for match in re.findall(fence_pattern, body, re.DOTALL | re.IGNORECASE)
-        if match.strip()
-    )
+    # The language tag is captured, not swallowed, so a ```yaml or ```bash
+    # block can be told apart from a delta. Only word-ish tags match, which
+    # keeps an inline ```{"action": ...}``` fence parsing as content.
+    fence_pattern = r"```([A-Za-z0-9_+-]*)[ \t]*\r?\n?(.*?)```"
+    for tag, block in re.findall(fence_pattern, body, re.DOTALL):
+        content = block.strip()
+        if not content:
+            continue
+        # A fenced block counts as an attempted delta only when it is tagged
+        # `json` or actually looks like JSON — the same test the raw and Issue
+        # Form candidates below already apply. Prose bug reports quote YAML,
+        # shell and Python constantly; counting those as malformed deltas made
+        # every such critique a red run, which is the failure #20867 named.
+        #
+        # This cannot hide a real delta: a candidate that parses as JSON must
+        # start with { or [, so anything excluded here could never have been
+        # one.
+        if tag.lower() == "json" or content.startswith(("{", "[")):
+            candidates.append(content)
 
     stripped = body.strip()
     if stripped.startswith(("{", "[")):
