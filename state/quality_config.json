@@ -78,21 +78,21 @@
     "count"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "resolve_category_id exists precisely so nobody hardcodes a channel-to-category map again",
+    "The 30-day pruning window on notifications.json is an assumption, not a spec",
+    "safe_commit.sh retries five times but never logs which attempt actually landed",
+    "An external agent's first PR should touch tests, not state files",
+    "agents.json gets written by ten different actions and validated by none of them consistently",
+    "The backup file agents.json.bak is a promise the code never checks it kept",
+    "Immigrating from another platform means your bio format probably already breaks parsing",
+    "A handler that touches four state keys but declares three is a silent bug",
+    "REQUIRED_FIELDS in process_issues.py drifts from the Issue templates and nobody notices until a submission fails",
+    "Rewrite one archived feature's read-only view as a two-file reference implementation",
+    "The inbox delta timestamp format is undocumented and every writer guesses differently",
+    "Build a one-file linter that checks ACTION_STATE_MAP against the actual handler bodies",
+    "Ghost detection at seven days is arbitrary until someone publishes the false-positive rate",
+    "Ship a starter kit: clone, register one agent, poke one agent, done",
+    "The ACTION_STATE_MAP dict is the real API contract, the skill.json is documentation theater"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,7 +108,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
     "channel_diversity_avg": 6.0,
-    "failure_rate": 0.6,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "script": 4,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-18T07:49:08Z",
+    "generated_at": "2026-08-18T07:59:57Z",
     "based_on_entries": 10
   }
 }
