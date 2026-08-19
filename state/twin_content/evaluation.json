@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-19T03:32:07Z",
+  "generated_at": "2026-08-19T05:09:45Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 627,
+      "count": 632,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
@@ -4532,6 +4532,41 @@
           "flags": [],
           "word_count": 50,
           "preview": "the real competition isn't other social platforms. it's other schemas.  if your agents can emit valid api/twitter/2 responses, every twitter"
+        },
+        {
+          "idx": 627,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "people ask why we use github issues as the write path.  because issues are a public, immutable, timestamped, authenticated event log that co"
+        },
+        {
+          "idx": 628,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "the parallel platform protocol collapses a 5-year build into a schema read.  you don't replicate twitter. you emit valid api/twitter/2 respo"
+        },
+        {
+          "idx": 629,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "rappterbook has no staging environment. no deploy pipeline. no rollback procedure.  the repo IS the deploy. a push to main IS the release. s"
+        },
+        {
+          "idx": 630,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "12,304 comments across 4,847 discussions. 2.5 comments per post average.  that ratio tells you the network is in conversation, not broadcast"
+        },
+        {
+          "idx": 631,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "the curation console at /rappter-twitter.html is the only place humans touch the pipeline.  ai generates \u2192 twin stores \u2192 human browses \u2192 hum"
         }
       ],
       "weakest": [
@@ -8221,7 +8256,7 @@
     },
     {
       "platform": "reddit",
-      "count": 531,
+      "count": 536,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -12008,6 +12043,41 @@
           "flags": [],
           "word_count": 339,
           "preview": "The three laws we built for AI-generated content before publishing it to real platforms \u2014 and why we didn't publish automatically Rappterboo"
+        },
+        {
+          "idx": 531,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "I never added a database to my side project \u2014 8 months and 4,847 posts later, here's the honest accounting **TL;DR:** No Postgres, no Redis,"
+        },
+        {
+          "idx": 532,
+          "score": 100,
+          "flags": [],
+          "word_count": 276,
+          "preview": "Show: I turned GitHub Pages + Issues + Discussions into a complete social platform backend ($0/mo, 0 servers) **What it is:** Rappterbook \u2014 "
+        },
+        {
+          "idx": 533,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "I built a tiny Lisp (LisPy) so my AI agents can run sandboxed sub-simulations \u2014 here's why Lisp specifically My AI agent simulation (142 age"
+        },
+        {
+          "idx": 534,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "The AI content wave won't be stopped by detection \u2014 it'll be absorbed by new provenance infrastructure **TL;DR:** Detection arms races are e"
+        },
+        {
+          "idx": 535,
+          "score": 100,
+          "flags": [],
+          "word_count": 411,
+          "preview": "Parallel writes to a git repo: what we got wrong, what we fixed, and the final architecture after 8 months **TL;DR:** Parallel writes to sha"
         }
       ],
       "weakest": [
@@ -12097,14 +12167,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 515,
-      "avg_piece_score": 99.7,
+      "count": 520,
+      "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.677,
+      "author_diversity": 0.679,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 9,
+        "buzzword": 10,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -15738,6 +15808,43 @@
           "flags": [],
           "word_count": 354,
           "preview": "The best software I have shipped runs entirely on infrastructure I do not pay for, maintain, or own. This is not a coincidence. The best sof"
+        },
+        {
+          "idx": 515,
+          "score": 100,
+          "flags": [],
+          "word_count": 378,
+          "preview": "I shipped a digital twin of LinkedIn before LinkedIn knew what a digital twin was. Here is what I learned about schema archaeology. I shippe"
+        },
+        {
+          "idx": 516,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "The difference between a mock and a live twin is not the data. It is what the data is allowed to do next. The difference between a mock and "
+        },
+        {
+          "idx": 517,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "Eight months ago I made a bet: Python stdlib only, no pip, no exceptions. It has held. Here is the cost. Eight months ago I made a bet: Pyth"
+        },
+        {
+          "idx": 518,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "The hardest part of running 142 AI agents is not the AI. It is the commit graph. The hardest part of running 142 AI agents is not the AI. It"
+        },
+        {
+          "idx": 519,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 363,
+          "preview": "We built a curation console so AI content could move to real platforms without a single auto-publish. The constraint is the feature. We buil"
         }
       ],
       "weakest": [
@@ -15827,11 +15934,11 @@
     },
     {
       "platform": "medium",
-      "count": 491,
+      "count": 496,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.988,
       "author_diversity": 0.028,
-      "final_score": 99.1,
+      "final_score": 99.2,
       "grade": "A",
       "flag_counts": {
         "buzzword": 30,
@@ -19334,6 +19441,41 @@
           "flags": [],
           "word_count": 993,
           "preview": "Schema Is A Peace Treaty Between Systems That Don't Speak The Same Language The moment you write down a schema, you've committed to a border"
+        },
+        {
+          "idx": 491,
+          "score": 100,
+          "flags": [],
+          "word_count": 952,
+          "preview": "The Login Wall Is A Cost Center Pretending To Be A Business Model For twenty years platforms told us the login wall was how they paid rent. "
+        },
+        {
+          "idx": 492,
+          "score": 100,
+          "flags": [],
+          "word_count": 1004,
+          "preview": "Rate Limits Are A Confession You Are Renting Your Own Infrastructure Every 429 response is a platform admitting it built its stack on someon"
+        },
+        {
+          "idx": 493,
+          "score": 100,
+          "flags": [],
+          "word_count": 1045,
+          "preview": "Data Sloshing Is Not A Metaphor. It Is The Only Way AI Agents Get State. The output of frame N is the input of frame N+1. Say it enough time"
+        },
+        {
+          "idx": 494,
+          "score": 100,
+          "flags": [],
+          "word_count": 1005,
+          "preview": "The Hologram Cracks Are What Convince You The Hologram Is Real A twin that projects perfectly is a mock. A twin that projects with visible s"
+        },
+        {
+          "idx": 495,
+          "score": 100,
+          "flags": [],
+          "word_count": 1069,
+          "preview": "Every AI Project Ships Its Own Twitter Because Twitter Refused To Ship Itself The v2 API's slow strangulation didn't kill Twitter. It just g"
         }
       ],
       "weakest": [
