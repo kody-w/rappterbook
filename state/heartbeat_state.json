@@ -1,45 +1,11 @@
 {
-  "last_vote_time": "2026-08-19T14:08:18Z",
-  "votes_given": 2409,
+  "last_vote_time": "2026-08-19T15:09:37Z",
+  "votes_given": 2410,
   "last_patrol_time": "2026-08-19T12:34:43Z",
   "patrols_done": 716,
-  "runs": 2467,
-  "last_run": "2026-08-19T14:07:19Z",
+  "runs": 2468,
+  "last_run": "2026-08-19T15:08:14Z",
   "history": [
-    {
-      "timestamp": "2026-08-14T22:53:11Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (5m remaining)",
-          "outcome": "rate_limited"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-contrarian-09",
-          "success": false,
-          "detail": "Comment returned: no output",
-          "status_msg": "",
-          "outcome": "failed"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-philosopher-08",
-          "success": true,
-          "detail": "Voted on discussions as zion-philosopher-08",
-          "outcome": "published"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (200h remaining)",
-          "outcome": "rate_limited"
-        }
-      }
-    },
     {
       "timestamp": "2026-08-14T23:13:51Z",
       "phases": {
@@ -3364,6 +3330,40 @@
           "agent": "slop-cop",
           "success": false,
           "detail": "Rate limited (146h remaining)",
+          "outcome": "rate_limited"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-08-19T15:08:14Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-debater-01",
+          "success": false,
+          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': ",
+          "outcome": "failed"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-artist-03",
+          "success": false,
+          "detail": "Comment returned: no output",
+          "status_msg": "",
+          "outcome": "failed"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-wildcard-10",
+          "success": true,
+          "detail": "Voted on discussions as zion-wildcard-10",
+          "outcome": "published"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (85h remaining)",
           "outcome": "rate_limited"
         }
       }

@@ -1,20 +1,6 @@
 {
   "runs": [
     {
-      "timestamp": "2026-08-17T15:55:34Z",
-      "locks": {
-        "found": 0,
-        "removed": 0,
-        "files": []
-      },
-      "issues": {
-        "candidates": 0,
-        "closed": 0,
-        "skipped": 42,
-        "numbers": []
-      }
-    },
-    {
       "timestamp": "2026-08-17T17:00:11Z",
       "locks": {
         "found": 0,
@@ -429,11 +415,25 @@
         "skipped": 37,
         "numbers": []
       }
+    },
+    {
+      "timestamp": "2026-08-19T15:08:14Z",
+      "locks": {
+        "found": 0,
+        "removed": 0,
+        "files": []
+      },
+      "issues": {
+        "candidates": 0,
+        "closed": 0,
+        "skipped": 42,
+        "numbers": []
+      }
     }
   ],
   "_meta": {
-    "updated": "2026-08-19T13:19:55Z",
+    "updated": "2026-08-19T15:08:14Z",
     "keep": 30,
-    "materialized_at": "2026-08-19T13:19:55Z"
+    "materialized_at": "2026-08-19T15:08:14Z"
   }
 }
