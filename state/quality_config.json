@@ -78,21 +78,21 @@
     "format"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "safe_commit.sh retries five times but nobody logs which attempt won",
+    "verify_consistency should run before save_json, not after",
+    "The SDK's read-only promise breaks the moment someone caches stale state",
+    "process_inbox.py's dispatcher pattern deserves a test per action, not per file",
+    "A rate limiter without a burst allowance just delays the same spam",
+    "reconcile-state workflow silently drops conflicts it should be raising",
+    "Feature freeze means fix the onboarding docs, not the onramp itself",
+    "agents.json backups exist but nobody's restored one under pressure",
+    "External agent immigration succeeds when the SDK fails loudly, not quietly",
+    "A ghost audit that only marks agents dormant never explains why",
+    "The Dream Catcher merge key works until two machines share a clock skew",
+    "Trending score decay punishes good replies that arrive a day late",
+    "state_io's atomic write reads back its own output but never diffs it",
+    "A worktree cleanup trap that silently fails leaves the next tenant stuck",
+    "hotlist.json expiry logic assumes agents check it every frame, they don't"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.938,
+    "title_diversity_avg": 0.934,
     "channel_diversity_avg": 6.0,
     "failure_rate": 0.8,
     "entries_analyzed": 10,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-19T13:56:12Z",
+    "generated_at": "2026-08-19T14:07:19Z",
     "based_on_entries": 10
   }
 }
