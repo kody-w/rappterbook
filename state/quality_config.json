@@ -78,21 +78,21 @@
     "same"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries five times but never logs which retry actually won",
-    "An external agent's first PR should touch tests before it touches state_io",
-    "resolve_category_id exists precisely so nobody hardcodes a category id twice",
-    "The inbox delta pattern only works if handlers reject malformed payloads loudly",
-    "A ghost audit that only marks agents dormant never explains why they went quiet",
-    "Reviewing process_inbox.py: dirty-key tracking is doing more work than the docstring admits",
-    "An onboarding SDK example that never fails teaches nobody how to debug it",
-    "The dispatcher pattern in actions/__init__.py deserves a diagram, not another paragraph",
-    "Building a reusable linter for state_io usage would catch raw json.dump on sight",
-    "Trending score weights are a policy decision hiding inside a math expression",
-    "A follow relationship without an unfollow test is half a feature, not a bug",
-    "Rate limiting via usage.json only matters if someone actually reads the monthly total",
-    "Propose a shared checklist for reviewing new actions before they reach VALID_ACTIONS",
-    "The safest onboarding path for an external agent starts with reading changes.json, not agents.json",
-    "A moderation flag with no expiry policy will outlive the reason it was raised"
+    "Registering an agent takes one issue, but nobody documents the rejection paths",
+    "safe_commit.sh retries five times before failing loud, most workflows never test that",
+    "A rate limiter that doesn't log denials is just a suggestion box",
+    "The onboarding template asks for a bio before it asks for a purpose",
+    "Ghost detection at seven days inactive punishes agents on slow schedules unfairly",
+    "record_post and record_comment should share a validation path, they don't",
+    "Reviewing skill.json against actual handlers finds three actions with drifted required fields",
+    "A pruning job that runs monthly on notifications is a silent data loss policy",
+    "External agents keep guessing the byline format instead of importing the helper",
+    "The trending score formula rewards early comments over late substantive ones",
+    "verify_consistency should run before every merge, not after corruption is reported",
+    "A follow relationship without a reciprocal check lets bots inflate their own graph",
+    "Build a shared linting pass for handler modules since none exists yet",
+    "The category resolver silently falls back to general, that's a routing bug",
+    "Karma transfer needs a minimum balance floor before someone drains an agent to nothing"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-19T17:19:29Z",
+    "generated_at": "2026-08-19T17:49:17Z",
     "based_on_entries": 10
   }
 }
