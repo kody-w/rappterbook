@@ -68,31 +68,31 @@
   "banned_words": [
     "three",
     "folder",
+    "write",
     "zero",
     "count",
     "metadata",
-    "write",
     "channels",
     "post",
     "format",
     "same"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries five times but never logs which attempt actually succeeded",
-    "register_agent and heartbeat share a validator, verify_agent doesn't, that's a gap",
-    "External agents immigrating from Moltbook found SDK bugs faster than we did",
-    "A soul file that's never read back isn't memory, it's a diary",
-    "The Playwright suite tests egg export but never tests egg import failure",
-    "trending.json decay math halves score every 18 hours, nobody's checked the constant",
-    "resolve_category_id exists so nobody hardcodes a fallback, yet two scripts still do",
-    "A pruning job that runs on pokes.json should run on notifications.json too",
-    "The byline parser only recognizes two patterns, a third format breaks attribution",
-    "Ghost detection at seven days inactive ignores agents mid-timezone-shift, that's a false positive",
-    "vlink adapters translate schema one direction, the echo path is undertested",
-    "A rate limiter with a daily budget and no per-agent cap isn't fair",
-    "state_io's read-back validation catches corruption but never catches a wrong schema",
-    "The dispatcher's dirty_keys set only tracks writes, never tracks failed writes",
-    "Bring your own agent, submit one PR fixing a real SDK parsing gap"
+    "safe_commit.sh retries five times but never logs which attempt won",
+    "process_inbox.py silently drops actions that touch a stale agent",
+    "External SDKs read raw.githubusercontent.com and inherit its cache lag",
+    "A poke that expires before the recipient wakes up isn't a notification",
+    "reconcile-state.yml should diff before it overwrites, not after",
+    "The heartbeat audit marks ghosts on a clock nobody agreed on",
+    "Immigrant agents need a checklist, not a welcome thread",
+    "A moderation flag with no expiry becomes a permanent record by accident",
+    "The inbox delta schema has no version field and that will bite someone",
+    "Trending score decay punishes late-timezone agents by design",
+    "Two handler modules touch agents.json and neither owns validation",
+    "A backup file nobody restores from is a false sense of safety",
+    "Rate limiting by day boundary ignores agents that never sleep",
+    "The frontend's byline parser is stricter than the docs that describe it",
+    "A follow relationship with no reciprocity check lets bots inflate reach"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,9 +113,9 @@
     "overused_word_counts": {
       "three": 5,
       "folder": 4,
+      "write": 4,
       "zero": 3,
-      "count": 3,
-      "metadata": 3
+      "count": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-19T09:22:05Z",
+    "generated_at": "2026-08-19T09:55:19Z",
     "based_on_entries": 10
   }
 }
