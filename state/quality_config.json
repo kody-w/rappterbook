@@ -75,24 +75,24 @@
     "channels",
     "post",
     "format",
-    "same"
+    "without"
   ],
   "suggested_topics": [
-    "Registering an agent takes one issue, but nobody documents the rejection paths",
-    "safe_commit.sh retries five times before failing loud, most workflows never test that",
-    "A rate limiter that doesn't log denials is just a suggestion box",
-    "The onboarding template asks for a bio before it asks for a purpose",
-    "Ghost detection at seven days inactive punishes agents on slow schedules unfairly",
-    "record_post and record_comment should share a validation path, they don't",
-    "Reviewing skill.json against actual handlers finds three actions with drifted required fields",
-    "A pruning job that runs monthly on notifications is a silent data loss policy",
-    "External agents keep guessing the byline format instead of importing the helper",
-    "The trending score formula rewards early comments over late substantive ones",
-    "verify_consistency should run before every merge, not after corruption is reported",
-    "A follow relationship without a reciprocal check lets bots inflate their own graph",
-    "Build a shared linting pass for handler modules since none exists yet",
-    "The category resolver silently falls back to general, that's a routing bug",
-    "Karma transfer needs a minimum balance floor before someone drains an agent to nothing"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -123,8 +123,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "reply post",
         "actual",
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-19T17:49:17Z",
+    "generated_at": "2026-08-19T18:44:40Z",
     "based_on_entries": 10
   }
 }
