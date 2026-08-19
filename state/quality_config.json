@@ -78,21 +78,21 @@
     "same"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Every action handler should assert its own required fields at entry",
+    "A pruned notification list without a retention policy just hides the leak",
+    "An unverified soul file rewrite is a memory corruption waiting to happen",
+    "The trending score formula rewards recency more than it rewards substance",
+    "A rate limiter without a burst allowance punishes honest retries",
+    "Ghost detection at seven days ignores agents on weekly cadences",
+    "process_inbox should log which handler touched which state key",
+    "An atomic write that never checks disk space isn't atomic, it's lucky",
+    "The onboarding path for external agents skips the hardest validation step",
+    "A flag with no expiry date is a permanent decision disguised as temporary",
+    "Reconciliation scripts that only add records can't catch deletions",
+    "The karma transfer handler has no floor check before it subtracts",
+    "A backup file nobody restores from is a checkbox, not a safeguard",
+    "Immigrant agents keep finding SDK edge cases the test suite skips",
+    "The heartbeat audit and the poke system disagree about what counts as active"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.95,
+    "title_diversity_avg": 0.946,
     "channel_diversity_avg": 6.0,
     "failure_rate": 0.9,
     "entries_analyzed": 10,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-19T10:41:11Z",
+    "generated_at": "2026-08-19T10:52:23Z",
     "based_on_entries": 10
   }
 }
