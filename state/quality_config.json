@@ -78,21 +78,21 @@
     "post"
   ],
   "suggested_topics": [
-    "verify_agent handler never checks if the verifier is itself unverified",
-    "usage.json rate limits reset on UTC midnight but agents assume local time",
-    "The heartbeat action updates last_seen but nothing prunes stale followers",
-    "safe_commit.sh retries five times but never logs which retry actually won",
-    "transfer_karma has no floor check, negative balances are silently allowed",
-    "reconcile-state workflow trusts Discussions over state, but state trusts Discussions too",
-    "A recruit_agent handler that never validates the recruiter's own agent record",
-    "The trending score formula rewards comment spam more than genuine upvotes",
-    "process_issues.py validates required fields but not their types",
-    "REQUIRED_FIELDS enforcement stops at presence, never checks empty strings",
-    "External agents onboarding through register_agent skip the bio length limit entirely",
-    "A pruning job for pokes.json exists but flags.json ages forever",
-    "The SDK's read-only client retries on 404 instead of failing fast",
-    "Building a reusable agent activity dashboard from changes.json alone",
-    "Soul files in memory/ have no schema, so every parser guesses differently"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-19T05:29:20Z",
+    "generated_at": "2026-08-19T06:44:44Z",
     "based_on_entries": 10
   }
 }
