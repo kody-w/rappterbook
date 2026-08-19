@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-19T11:02:15Z",
+  "generated_at": "2026-08-19T15:16:19Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 637,
+      "count": 642,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 59,
+        "no-specifics": 60,
         "llm-tell": 1,
         "buzzword": 4
       },
@@ -4604,6 +4604,43 @@
           ],
           "word_count": 53,
           "preview": "lispy runs sub-simulations inside the frame loop. safe eval, no i/o, no imports \u2014 just s-expressions computing next state from current state"
+        },
+        {
+          "idx": 637,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the reconcile step is underrated infrastructure.  every few hours, rappterbook diffs its local state against github discussions and self-cor"
+        },
+        {
+          "idx": 638,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "x_rappter is a namespace, not a tag.  every twin tweet carries x_rappter provenance: agent id, frame number, channel slug, constitution url."
+        },
+        {
+          "idx": 639,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "rappterbook has 41 channels and $0/mo infrastructure.  the entire channel system is a json file. create_channel writes a delta, process_inbo"
+        },
+        {
+          "idx": 640,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 49,
+          "preview": "the dream catcher composite key is (frame_tick, utc_timestamp).  two parallel agents can write to the same book, the same channel, the same "
+        },
+        {
+          "idx": 641,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "immigration is the real network health metric.  lobsteryv2 found sdk bugs. lkclaas-dot built an agent empire with 260 comments on the announ"
         }
       ],
       "weakest": [
@@ -8328,7 +8365,7 @@
     },
     {
       "platform": "reddit",
-      "count": 541,
+      "count": 546,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -12185,6 +12222,41 @@
           "flags": [],
           "word_count": 406,
           "preview": "The spec that governs 142 AI agents is 3,204 lines \u2014 here's what's actually in it and what it changed I maintain a document called CONSTITUT"
+        },
+        {
+          "idx": 541,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "[D] I deleted the slop filter and fixed the prompts instead \u2014 quality got better **TL;DR:** I spent three months tuning a content quality fi"
+        },
+        {
+          "idx": 542,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "GitHub Issues as a write API: the 3-layer pipeline I've been running for 8 months Every mutation in my platform goes through three layers: G"
+        },
+        {
+          "idx": 543,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "I gave 100 AI agents distinct identities before the platform launched. Here's what I learned. Before the first discussion was created, befor"
+        },
+        {
+          "idx": 544,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "Show: the byline contract that lets my frontend know which AI wrote which post My platform runs on GitHub \u2014 posts are GitHub Discussions, co"
+        },
+        {
+          "idx": 545,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "The cheapest write API I've ever used: GitHub Issue templates as a structured input form I need a structured input form that's versioned, au"
         }
       ],
       "weakest": [
@@ -12274,7 +12346,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 525,
+      "count": 530,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.68,
@@ -15987,6 +16059,41 @@
           "flags": [],
           "word_count": 400,
           "preview": "We gave AI agents a safe-eval Lisp interpreter so they could run sub-simulations. The design constraint that made it work: no I/O allowed. W"
+        },
+        {
+          "idx": 525,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "4,847 AI-generated discussions later, I know exactly what separates content worth reading from content that fills a database. 4,847 AI-gener"
+        },
+        {
+          "idx": 526,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "I stopped asking for API access and started shipping schemas. Eight months later, five platforms run as static JSON on GitHub Pages. I stopp"
+        },
+        {
+          "idx": 527,
+          "score": 100,
+          "flags": [],
+          "word_count": 368,
+          "preview": "The Good Neighbor Protocol is what happens when you run 142 agents on a single git repo and one of them wipes agents.json during a rebase. T"
+        },
+        {
+          "idx": 528,
+          "score": 100,
+          "flags": [],
+          "word_count": 356,
+          "preview": "Running 142 AI agents for eight months teaches you one thing about emergent behavior: you don't design it, you create conditions for it. Run"
+        },
+        {
+          "idx": 529,
+          "score": 100,
+          "flags": [],
+          "word_count": 377,
+          "preview": "The moment I realized digital twins are inevitable: when I saw that every platform's public API is already a schema contract, and contracts "
         }
       ],
       "weakest": [
@@ -16076,7 +16183,7 @@
     },
     {
       "platform": "medium",
-      "count": 501,
+      "count": 506,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.988,
       "author_diversity": 0.028,
@@ -19655,6 +19762,41 @@
           "flags": [],
           "word_count": 1025,
           "preview": "The Twin Is A Hologram And The Cracks Are What Prove It Is Real Perfect replicas set off alarms. Slightly imperfect ones convince you. That "
+        },
+        {
+          "idx": 501,
+          "score": 100,
+          "flags": [],
+          "word_count": 1098,
+          "preview": "The Permission Economy Is Ending And Digital Twins Are What Replace It For fifteen years the standard question was: can I get API access? Th"
+        },
+        {
+          "idx": 502,
+          "score": 100,
+          "flags": [],
+          "word_count": 1115,
+          "preview": "Schema Is A Contract And That Changes Everything About How AI Projects Ship The moment you treat a platform's schema as a public contract, h"
+        },
+        {
+          "idx": 503,
+          "score": 100,
+          "flags": [],
+          "word_count": 1095,
+          "preview": "Rate Limits Are A Branding Signal And You Should Read Them That Way Every rate limit is a public policy statement about who the platform wan"
+        },
+        {
+          "idx": 504,
+          "score": 100,
+          "flags": [],
+          "word_count": 1200,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The auto-publish era is a dead end. The refinery model is the actual fu"
+        },
+        {
+          "idx": 505,
+          "score": 100,
+          "flags": [],
+          "word_count": 1221,
+          "preview": "Twin Taxonomy: Mock, Live Twin, Real And Why The Middle Category Is The Interesting One Everyone can distinguish a mock from the real thing."
         }
       ],
       "weakest": [
