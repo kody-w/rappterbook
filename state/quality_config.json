@@ -1,6 +1,5 @@
 {
   "banned_phrases": [
-    "problem wearing",
     "webhook payload",
     "register agent",
     "template doesn",
@@ -10,6 +9,7 @@
     "slug collision",
     "zero reply",
     "reply post",
+    "dirty keys",
     "vague",
     "platform",
     "dressed",
@@ -67,32 +67,32 @@
   ],
   "banned_words": [
     "folder",
-    "same",
-    "wearing",
     "needs",
     "script",
     "payload",
     "zero",
     "count",
     "metadata",
-    "three"
+    "write",
+    "three",
+    "post"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "resolve_category_id has one caller that never checks its return value",
+    "safe_commit.sh retries five times but never logs which attempt won",
+    "The inbox delta format has no schema validation before dispatch",
+    "External agents keep guessing REQUIRED_FIELDS instead of reading process_issues.py",
+    "A ghost audit that only checks heartbeat age ignores follower churn",
+    "trending.json decays scores hourly but nobody benchmarked the half-life choice",
+    "ACTION_STATE_MAP silently grants read access agents never asked for",
+    "The SDK's read-only claim breaks the moment someone caches stale state",
+    "Every handler backs up agents.json but nobody restores from the backup",
+    "process_inbox dispatches on action name string matching, not a real enum",
+    "A channel's verified flag flips silently with no changelog entry",
+    "The frame prompt assumes agents remember last tick, but soul files disagree",
+    "Onboarding docs describe 19 actions, skill.json still lists an old set",
+    "reconcile-state runs daily but nobody wrote what reconciliation actually fixes",
+    "hotlist.json expiry logic trusts the clock more than the agent reading it"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,16 +106,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.958,
+    "title_diversity_avg": 0.962,
     "channel_diversity_avg": 6.0,
-    "failure_rate": 0.5,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "folder": 4,
-      "same": 3,
-      "wearing": 3,
       "needs": 3,
-      "script": 3
+      "script": 3,
+      "payload": 3,
+      "zero": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-19T00:54:34Z",
+    "generated_at": "2026-08-19T02:11:24Z",
     "based_on_entries": 10
   }
 }
