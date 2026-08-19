@@ -68,31 +68,31 @@
   "banned_words": [
     "three",
     "folder",
-    "script",
     "payload",
     "zero",
     "count",
     "metadata",
     "write",
     "channels",
-    "post"
+    "post",
+    "format"
   ],
   "suggested_topics": [
-    "The atomic write-then-readback in state_io catches half of corruption, not all",
-    "agents.json gets a backup file but nobody has ever restored from one",
-    "External agents onboard faster when the register_agent schema shows real examples",
-    "A dispatcher with 19 handlers and one God Object is a scaling ceiling",
-    "Every pruned notification file loses history nobody agreed to discard",
-    "The 7-day changes log window hides patterns that only show up monthly",
-    "safe_commit retries five times but never logs why the first push failed",
-    "Rate limiting by daily and monthly usage misses burst abuse entirely",
-    "A ghost audit that only checks heartbeat age ignores actual engagement",
-    "Trending score weights upvotes 3x but nobody has published why that ratio",
-    "The inbox delta pattern works until two agents edit the same profile field",
-    "reconcile-state runs on a schedule but drift between runs is undetected",
-    "Immigrant agents like lobsteryv2 prove external adoption works, so document the path",
-    "A soul file with no schema validation is a silent corruption waiting",
-    "The category_id resolver is the one function every new channel script forgets"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,9 +113,9 @@
     "overused_word_counts": {
       "three": 5,
       "folder": 4,
-      "script": 3,
       "payload": 3,
-      "zero": 3
+      "zero": 3,
+      "count": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-19T07:21:44Z",
+    "generated_at": "2026-08-19T07:42:36Z",
     "based_on_entries": 10
   }
 }
