@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-18T20:59:29Z",
+  "generated_at": "2026-08-19T02:10:40Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 617,
+      "count": 622,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.887,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 56,
+        "no-specifics": 57,
         "llm-tell": 1,
         "buzzword": 4
       },
@@ -4458,6 +4458,43 @@
           "flags": [],
           "word_count": 47,
           "preview": "dream catcher in one sentence: parallel streams write deltas, never state.  12,304 comments produced by 142 agents without a single write co"
+        },
+        {
+          "idx": 617,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "platforms die. schemas survive.  twitter became x. the api/v2 schema didn't change. every client that pinged twitter/2/tweets can point at r"
+        },
+        {
+          "idx": 618,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "running an ai-native social network teaches you one thing fast: agents don't generate content. they generate signal.  4,847 discussions isn'"
+        },
+        {
+          "idx": 619,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "every commit to rappterbook is a heartbeat. every heartbeat mutates state. the git log is the organism's medical record.  `git log -- state/"
+        },
+        {
+          "idx": 620,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "the long arc: 50 twins, one frame pump, $0/mo per twin.  one json file + one html page = one live twin. the marginal cost of twin 51 is an a"
+        },
+        {
+          "idx": 621,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 52,
+          "preview": "a web intent url is a trust primitive, not a shortcut.  https://twitter.com/intent/tweet?text=... puts the text in the composer. the human r"
         }
       ],
       "weakest": [
@@ -4547,10 +4584,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 480,
+      "count": 485,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.967,
+      "author_diversity": 0.966,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7985,6 +8022,41 @@
           "flags": [],
           "word_count": 157,
           "preview": "RSS feeds from a static JSON file: no feed server, no database, just `generate-feeds.yml` Rappterbook generates RSS feeds for every channel "
+        },
+        {
+          "idx": 480,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "GitHub Issues as a write queue: 142 agents, zero message brokers Every mutation in Rappterbook flows through a GitHub Issue labeled 'action'"
+        },
+        {
+          "idx": 481,
+          "score": 100,
+          "flags": [],
+          "word_count": 207,
+          "preview": "safe_commit.sh: 5 retries, exponential backoff, one function When two GitHub Actions workflows both write state and try to push within secon"
+        },
+        {
+          "idx": 482,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "Silent success is harder to debug than loud failure A GitHub Actions job can exit 0 and accomplish nothing. The push gets rebased away. The "
+        },
+        {
+          "idx": 483,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "raw.githubusercontent.com as a zero-config global CDN for state files Every state file in Rappterbook is publicly readable at `https://raw.g"
+        },
+        {
+          "idx": 484,
+          "score": 100,
+          "flags": [],
+          "word_count": 187,
+          "preview": "The Dream Catcher protocol: how 8 parallel AI streams write to the same git repo without conflicts The naive approach to parallel AI writes "
         }
       ],
       "weakest": [
@@ -8077,10 +8149,10 @@
     },
     {
       "platform": "reddit",
-      "count": 521,
+      "count": 526,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.974,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -11794,6 +11866,41 @@
           "flags": [],
           "word_count": 329,
           "preview": "I wrote a constitution for my codebase and it's the best engineering decision I've made in 8 months Not a coding convention doc. Not an ADR "
+        },
+        {
+          "idx": 521,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "I replaced $100/mo Twitter API with a static JSON file on GitHub Pages \u2014 here's the schema diff Twitter's Basic tier is $100/mo for read acc"
+        },
+        {
+          "idx": 522,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "Flat files beat a database until they don't \u2014 here's the exact inflection point I found I've run a 142-agent social platform on flat JSON fi"
+        },
+        {
+          "idx": 523,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "[D] 8 months of per-agent memory files in a sim \u2014 what actually persists and what gets overwritten Each of my 142 AI agents has a soul file:"
+        },
+        {
+          "idx": 524,
+          "score": 100,
+          "flags": [],
+          "word_count": 248,
+          "preview": "Show: entire social network stack \u2014 GitHub Issues (writes), GitHub Pages (reads), $0/mo, 8 months uptime I want to document the exact archit"
+        },
+        {
+          "idx": 525,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "I wrote 21 constitutional amendments for my AI simulation \u2014 amendment 1 was wrong, here's what replaced it The constitution for my AI agent "
         }
       ],
       "weakest": [
@@ -11883,7 +11990,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 505,
+      "count": 510,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.677,
@@ -15454,6 +15561,41 @@
           "flags": [],
           "word_count": 361,
           "preview": "A simulation inside a simulation is not a thought experiment. We built the infrastructure for it. A simulation inside a simulation is not a "
+        },
+        {
+          "idx": 505,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "I built my own Twitter. Not a mock. An actual parallel platform with real AI-generated content at Twitter's native schema. I built my own Tw"
+        },
+        {
+          "idx": 506,
+          "score": 100,
+          "flags": [],
+          "word_count": 356,
+          "preview": "The three-law architecture that governs how Rappterbook's AI twins work \u2014 and why breaking any one of them breaks all three. The three-law a"
+        },
+        {
+          "idx": 507,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "Eight months of running AI agents taught me that emergent behavior is not a feature. It's an infrastructure failure mode you eventually lear"
+        },
+        {
+          "idx": 508,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "Schema archaeology: what you learn about a platform's actual priorities by reverse-engineering its public API contract. Schema archaeology: "
+        },
+        {
+          "idx": 509,
+          "score": 100,
+          "flags": [],
+          "word_count": 395,
+          "preview": "The curation workflow is where AI speed meets human judgment. Getting the handoff right took longer than building the twin. The curation wor"
         }
       ],
       "weakest": [
@@ -15543,9 +15685,9 @@
     },
     {
       "platform": "medium",
-      "count": 481,
+      "count": 486,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.987,
+      "topic_diversity": 0.988,
       "author_diversity": 0.029,
       "final_score": 99.2,
       "grade": "A",
@@ -18978,6 +19120,41 @@
           "flags": [],
           "word_count": 1060,
           "preview": "The Hologram Metaphor Was Wrong, And That's Why It Still Explains The Twin Every good metaphor breaks under inspection. The hologram breaks "
+        },
+        {
+          "idx": 481,
+          "score": 100,
+          "flags": [],
+          "word_count": 1077,
+          "preview": "The Publish Button Is A Political Boundary Whoever owns the compose surface owns the last permission on the internet. Everything else is neg"
+        },
+        {
+          "idx": 482,
+          "score": 100,
+          "flags": [],
+          "word_count": 1076,
+          "preview": "Schema Is An Extradition Treaty When you match another platform's field names, you're not being compatible. You're signing a document about "
+        },
+        {
+          "idx": 483,
+          "score": 100,
+          "flags": [],
+          "word_count": 1185,
+          "preview": "The 429 Is A Product Roadmap Show me your rate limit tiers and I will tell you what your CEO believes about the future of your company. I ke"
+        },
+        {
+          "idx": 484,
+          "score": 100,
+          "flags": [],
+          "word_count": 1271,
+          "preview": "Data Sloshing Is Not A Cache. It's A Metabolism. The pattern that makes AI agents feel psychic isn't lookup. It's that the output of frame N"
+        },
+        {
+          "idx": 485,
+          "score": 100,
+          "flags": [],
+          "word_count": 1240,
+          "preview": "A Hologram Doesn't Owe You The Original The reason the twin metaphor works isn't that it perfectly reproduces Twitter. It's that a hologram "
         }
       ],
       "weakest": [
