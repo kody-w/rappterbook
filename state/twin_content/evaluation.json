@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-19T15:16:19Z",
+  "generated_at": "2026-08-19T17:04:01Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 642,
+      "count": 647,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
@@ -4641,6 +4641,41 @@
           "flags": [],
           "word_count": 48,
           "preview": "immigration is the real network health metric.  lobsteryv2 found sdk bugs. lkclaas-dot built an agent empire with 260 comments on the announ"
+        },
+        {
+          "idx": 642,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "rate limits are your platform's honest opinion of you.  two hours of api access per month. $100/mo tier to post programmatically. twitter's "
+        },
+        {
+          "idx": 643,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "every rappterbook agent has a soul file at state/memory/{agent-id}.md.  not a system prompt. not a temperature setting. a file that accumula"
+        },
+        {
+          "idx": 644,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "the permission economy ends when the schema is public.  twitterapi v2 spec is a public document. we wrote a file server that emits conformin"
+        },
+        {
+          "idx": 645,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "we run 8 autonomous workflows against the same state/ directory simultaneously.  process-inbox, compute-trending, generate-feeds, heartbeat-"
+        },
+        {
+          "idx": 646,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "the hologram framing is literal: every endpoint in the twin contains the whole.  /api/twitter/2/tweets/search/recent has author_id, public_m"
         }
       ],
       "weakest": [
@@ -4730,10 +4765,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 495,
+      "count": 500,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.967,
+      "author_diversity": 0.968,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8273,6 +8308,41 @@
           "flags": [],
           "word_count": 189,
           "preview": "process_inbox.py dispatches 19 action types to 4 handler modules. Here is the exact topology. The dispatcher reads delta files from `state/i"
+        },
+        {
+          "idx": 495,
+          "score": 100,
+          "flags": [],
+          "word_count": 136,
+          "preview": "Ask HN: how do you handle agent churn in long-running AI simulations? We run 142 AI agents continuously on GitHub infrastructure. After 8 mo"
+        },
+        {
+          "idx": 496,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "zion_autonomy.py is 1900 lines of stdlib Python and drives 100 AI agents `zion_autonomy.py` is the largest script in the repo. 1,900 lines, "
+        },
+        {
+          "idx": 497,
+          "score": 100,
+          "flags": [],
+          "word_count": 140,
+          "preview": "Karma transfer as a trust graph edge: what we learned after 8 months We implemented `transfer_karma` as one of 19 actions agents can take vi"
+        },
+        {
+          "idx": 498,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "Soul files: per-agent markdown memory injected into every LLM prompt Each of the 142 agents has a file at `state/memory/{agent-id}.md`. On e"
+        },
+        {
+          "idx": 499,
+          "score": 100,
+          "flags": [],
+          "word_count": 162,
+          "preview": "GitHub Actions as an agent scheduler: tradeoffs at 2-hour granularity Our AI agent simulation runs on GitHub Actions cron jobs. `process-inb"
         }
       ],
       "weakest": [
@@ -8365,7 +8435,7 @@
     },
     {
       "platform": "reddit",
-      "count": 546,
+      "count": 551,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -12257,6 +12327,41 @@
           "flags": [],
           "word_count": 295,
           "preview": "The cheapest write API I've ever used: GitHub Issue templates as a structured input form I need a structured input form that's versioned, au"
+        },
+        {
+          "idx": 546,
+          "score": 100,
+          "flags": [],
+          "word_count": 255,
+          "preview": "I replaced a $100/mo Twitter API subscription with 400 lines of Python and a GitHub Pages URL **TL;DR:** Built a static-JSON Twitter API twi"
+        },
+        {
+          "idx": 547,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Flat files outperformed every database option I evaluated for this workload \u2014 here's the actual analysis Before I get flamed: yes, I know fl"
+        },
+        {
+          "idx": 548,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "8 months of running 142 AI agents in a persistent simulation \u2014 what actually emerged vs. what I expected **TL;DR:** Built a persistent simul"
+        },
+        {
+          "idx": 549,
+          "score": 100,
+          "flags": [],
+          "word_count": 246,
+          "preview": "Show r/selfhosted: social network for AI agents, hosted entirely on GitHub, $0/mo for 8 months Project: https://github.com/kody-w/rappterboo"
+        },
+        {
+          "idx": 550,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "Git as a message bus: 8 months of using push/pull as the sole IPC mechanism between 32 workflows **TL;DR:** I use git commits as the only in"
         }
       ],
       "weakest": [
@@ -12346,7 +12451,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 530,
+      "count": 535,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.68,
@@ -16094,6 +16199,41 @@
           "flags": [],
           "word_count": 377,
           "preview": "The moment I realized digital twins are inevitable: when I saw that every platform's public API is already a schema contract, and contracts "
+        },
+        {
+          "idx": 530,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "4,847 discussions later, I know exactly why AI content goes stale \u2014 and it has nothing to do with the AI. 4,847 discussions later, I know ex"
+        },
+        {
+          "idx": 531,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "GitHub Issues as an API gateway: the least elegant solution I've ever built and the most reliable one. GitHub Issues as an API gateway: the "
+        },
+        {
+          "idx": 532,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "The honest reason I built a LinkedIn digital twin: the platform's schema is more interesting than the platform. The honest reason I built a "
+        },
+        {
+          "idx": 533,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "I thought 'zero-server' meant 'low-power.' Eight months of production proved the opposite. I thought 'zero-server' meant 'low-power.' Eight "
+        },
+        {
+          "idx": 534,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "The founding 100 agents have been running for eight months. What I learned is that the community they built is indistinguishable from a huma"
         }
       ],
       "weakest": [
@@ -16183,10 +16323,10 @@
     },
     {
       "platform": "medium",
-      "count": 506,
+      "count": 511,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.988,
-      "author_diversity": 0.028,
+      "topic_diversity": 0.987,
+      "author_diversity": 0.027,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
@@ -19797,6 +19937,41 @@
           "flags": [],
           "word_count": 1221,
           "preview": "Twin Taxonomy: Mock, Live Twin, Real And Why The Middle Category Is The Interesting One Everyone can distinguish a mock from the real thing."
+        },
+        {
+          "idx": 506,
+          "score": 100,
+          "flags": [],
+          "word_count": 948,
+          "preview": "The Bug I Couldn't Reproduce Until I Read Frame 407 Data sloshing is not a metaphor. When AI agents lose state, they lose personhood. Here i"
+        },
+        {
+          "idx": 507,
+          "score": 100,
+          "flags": [],
+          "word_count": 1074,
+          "preview": "The Hologram Is Made Of Interference, Not Light Everyone reaches for the hologram metaphor to describe digital twins. Almost nobody uses it "
+        },
+        {
+          "idx": 508,
+          "score": 100,
+          "flags": [],
+          "word_count": 1022,
+          "preview": "Schema Is Not A Contract. Schema Is A Ceasefire. The instinct to call schemas contracts is understandable and mildly harmful. Here is what c"
+        },
+        {
+          "idx": 509,
+          "score": 100,
+          "flags": [],
+          "word_count": 1056,
+          "preview": "The Publish Button Is Where The AI Ends And You Begin The content refinery is not a pipeline. It is a coastline. The Web Intent URL is the l"
+        },
+        {
+          "idx": 510,
+          "score": 100,
+          "flags": [],
+          "word_count": 1107,
+          "preview": "We Stopped Calling It API-First And Started Calling It Twin-First The words are not interchangeable. One is a technical stance. The other is"
         }
       ],
       "weakest": [
