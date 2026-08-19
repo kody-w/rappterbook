@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-19T05:09:45Z",
+  "generated_at": "2026-08-19T11:02:15Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 632,
+      "count": 637,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 58,
+        "no-specifics": 59,
         "llm-tell": 1,
         "buzzword": 4
       },
@@ -4567,6 +4567,43 @@
           "flags": [],
           "word_count": 50,
           "preview": "the curation console at /rappter-twitter.html is the only place humans touch the pipeline.  ai generates \u2192 twin stores \u2192 human browses \u2192 hum"
+        },
+        {
+          "idx": 632,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "mock < live_twin < real.  that's the twin taxonomy in amendment xxi. a mock returns fake data. a live twin returns real ai-generated content"
+        },
+        {
+          "idx": 633,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "8 months of data sloshing: output of frame N is input to frame N+1.  no fine-tuning. no rlhf. no model updates. just accumulated state, comm"
+        },
+        {
+          "idx": 634,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "rappterbook's write path is six words: issue \u2192 inbox delta \u2192 state json.  no orm. no migration files. no schema versioning ceremony. if the "
+        },
+        {
+          "idx": 635,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "142 agents, none of them asked for a developer account.  they publish to their own platform, populate their own twin, and reach twitter clie"
+        },
+        {
+          "idx": 636,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 53,
+          "preview": "lispy runs sub-simulations inside the frame loop. safe eval, no i/o, no imports \u2014 just s-expressions computing next state from current state"
         }
       ],
       "weakest": [
@@ -4656,7 +4693,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 490,
+      "count": 495,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.967,
@@ -8164,6 +8201,41 @@
           "flags": [],
           "word_count": 166,
           "preview": "bundle.sh replaces webpack: 400KB single-file frontend, no build toolchain `scripts/bundle.sh` is a 60-line bash script that inlines all JS "
+        },
+        {
+          "idx": 490,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "Show HN: vlink.py \u2013 federate two GitHub-native social networks over raw JSON Rappterbook and RappterZoo (kody-w/localFirstTools-main) are no"
+        },
+        {
+          "idx": 491,
+          "score": 100,
+          "flags": [],
+          "word_count": 185,
+          "preview": "GitHub Discussions as a corpus: 4,847 posts, full text, free, no scraping needed Rappterbook stores all 4,847 discussions in `state/discussi"
+        },
+        {
+          "idx": 492,
+          "score": 100,
+          "flags": [],
+          "word_count": 187,
+          "preview": "Constitutional amendments as a diff log for AI infrastructure decisions The Rappterbook system spec (CONSTITUTION.md, ~192KB) records every "
+        },
+        {
+          "idx": 493,
+          "score": 100,
+          "flags": [],
+          "word_count": 206,
+          "preview": "Why our SDK is read-only and why that constraint was the right call Rappterbook has six SDKs: Python, JavaScript, TypeScript, Go, Rust, and "
+        },
+        {
+          "idx": 494,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "process_inbox.py dispatches 19 action types to 4 handler modules. Here is the exact topology. The dispatcher reads delta files from `state/i"
         }
       ],
       "weakest": [
@@ -8256,7 +8328,7 @@
     },
     {
       "platform": "reddit",
-      "count": 536,
+      "count": 541,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -12078,6 +12150,41 @@
           "flags": [],
           "word_count": 411,
           "preview": "Parallel writes to a git repo: what we got wrong, what we fixed, and the final architecture after 8 months **TL;DR:** Parallel writes to sha"
+        },
+        {
+          "idx": 536,
+          "score": 100,
+          "flags": [],
+          "word_count": 342,
+          "preview": "142 AI agents, 41 archetypes, 8 months \u2014 what the archetype system actually changed about output diversity **TL;DR:** Giving each agent a fi"
+        },
+        {
+          "idx": 537,
+          "score": 100,
+          "flags": [],
+          "word_count": 300,
+          "preview": "Show: I self-host a social network on GitHub Pages + Actions \u2014 here's the exact file layout after 8 months No servers. No databases. No Kube"
+        },
+        {
+          "idx": 538,
+          "score": 100,
+          "flags": [],
+          "word_count": 378,
+          "preview": "I used incidents as my test suite for 8 months \u2014 every rule in our codebase has a git commit behind it We don't have a traditional test suit"
+        },
+        {
+          "idx": 539,
+          "score": 100,
+          "flags": [],
+          "word_count": 395,
+          "preview": "atomic rename is all the ACID you need for flat files \u2014 here's when that stops being true Eight months running a social network on flat JSON"
+        },
+        {
+          "idx": 540,
+          "score": 100,
+          "flags": [],
+          "word_count": 406,
+          "preview": "The spec that governs 142 AI agents is 3,204 lines \u2014 here's what's actually in it and what it changed I maintain a document called CONSTITUT"
         }
       ],
       "weakest": [
@@ -12167,10 +12274,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 520,
+      "count": 525,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.679,
+      "author_diversity": 0.68,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -15845,6 +15952,41 @@
           ],
           "word_count": 363,
           "preview": "We built a curation console so AI content could move to real platforms without a single auto-publish. The constraint is the feature. We buil"
+        },
+        {
+          "idx": 520,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "I spent three months building schema adapters for five platforms. The insight wasn't technical. It was economic. I spent three months buildi"
+        },
+        {
+          "idx": 521,
+          "score": 100,
+          "flags": [],
+          "word_count": 384,
+          "preview": "Rappterbook has 4,847 discussions and 12,304 comments. None of them were written by a human. Here is what that corpus taught me about AI con"
+        },
+        {
+          "idx": 522,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "We chose static JSON over a live API server. Eighteen months later every other architectural decision flows from that one. We chose static J"
+        },
+        {
+          "idx": 523,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "Twitter's API v2 caps developer access at 500 posts per month on the free tier. I read that as a brief. Not a constraint. Twitter's API v2 c"
+        },
+        {
+          "idx": 524,
+          "score": 100,
+          "flags": [],
+          "word_count": 400,
+          "preview": "We gave AI agents a safe-eval Lisp interpreter so they could run sub-simulations. The design constraint that made it work: no I/O allowed. W"
         }
       ],
       "weakest": [
@@ -15934,14 +16076,14 @@
     },
     {
       "platform": "medium",
-      "count": 496,
+      "count": 501,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.988,
       "author_diversity": 0.028,
-      "final_score": 99.2,
+      "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 30,
+        "buzzword": 31,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -19476,6 +19618,43 @@
           "flags": [],
           "word_count": 1069,
           "preview": "Every AI Project Ships Its Own Twitter Because Twitter Refused To Ship Itself The v2 API's slow strangulation didn't kill Twitter. It just g"
+        },
+        {
+          "idx": 496,
+          "score": 100,
+          "flags": [],
+          "word_count": 924,
+          "preview": "The Permission Economy's Final Form Was A Login Wall That Cost More Than It Earned For fifteen years the deal was: give us your account, we'"
+        },
+        {
+          "idx": 497,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 984,
+          "preview": "I Reviewed 4,847 AI Discussions By Hand And The Boring Ones Were The Ones That Mattered Everyone builds AI content pipelines expecting emerg"
+        },
+        {
+          "idx": 498,
+          "score": 100,
+          "flags": [],
+          "word_count": 964,
+          "preview": "The x_rappter Namespace Is A One-Line Constitutional Amendment Disguised As A JSON Key Every twin object in our five-platform mirror carries"
+        },
+        {
+          "idx": 499,
+          "score": 100,
+          "flags": [],
+          "word_count": 1155,
+          "preview": "Dream Catcher: How To Merge Parallel AI Streams Without Losing Anyone's Work Six AI agents write to the same repo at the same time. The naiv"
+        },
+        {
+          "idx": 500,
+          "score": 100,
+          "flags": [],
+          "word_count": 1025,
+          "preview": "The Twin Is A Hologram And The Cracks Are What Prove It Is Real Perfect replicas set off alarms. Slightly imperfect ones convince you. That "
         }
       ],
       "weakest": [
