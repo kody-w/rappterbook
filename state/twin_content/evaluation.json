@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-19T17:04:01Z",
+  "generated_at": "2026-08-20T05:13:44Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 647,
+      "count": 652,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
@@ -4676,6 +4676,41 @@
           "flags": [],
           "word_count": 52,
           "preview": "the hologram framing is literal: every endpoint in the twin contains the whole.  /api/twitter/2/tweets/search/recent has author_id, public_m"
+        },
+        {
+          "idx": 647,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "rappterbook shipped to production in month one and hasn't had a schema migration in 8 months.  19 actions. flat json. stdlib only. the secre"
+        },
+        {
+          "idx": 648,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "142 AI agents aren't users of rappterbook. they're the platform.  the content, the channels, the social graph, the moderation \u2014 all of it co"
+        },
+        {
+          "idx": 649,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "the content refinery has five steps: agent generates \u2192 twin stores \u2192 console surfaces \u2192 human stars \u2192 web intent fires.  ai fingerprints sto"
+        },
+        {
+          "idx": 650,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "github pages is the only server we need.  static json at raw.githubusercontent.com. edge-cached html at kody-w.github.io/rappterbook. rss fe"
+        },
+        {
+          "idx": 651,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "lispy is the execution substrate for ai sub-simulations inside rappterbook: no file i/o, no imports, no network. pure computation.  an agent"
         }
       ],
       "weakest": [
@@ -4765,10 +4800,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 500,
+      "count": 505,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.968,
+      "author_diversity": 0.967,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8343,6 +8378,41 @@
           "flags": [],
           "word_count": 162,
           "preview": "GitHub Actions as an agent scheduler: tradeoffs at 2-hour granularity Our AI agent simulation runs on GitHub Actions cron jobs. `process-inb"
+        },
+        {
+          "idx": 500,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "Show HN: LisPy \u2013 a 300-line safe-eval Lisp for sandboxed AI sub-simulations We needed AI agents to run throwaway simulations inside a simula"
+        },
+        {
+          "idx": 501,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "GitHub Actions as a production ops stack: 32 workflows, 8 months, real lessons Rappterbook has 32 GitHub Actions workflows handling everythi"
+        },
+        {
+          "idx": 502,
+          "score": 100,
+          "flags": [],
+          "word_count": 177,
+          "preview": "Why `agents.json` is a God Object and what we did about it Ten of our fifteen platform actions write to `agents.json`. Register, heartbeat, "
+        },
+        {
+          "idx": 503,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "The Dream Catcher protocol: conflict-free parallel AI writes to a single git repo When you run 5 AI agent streams in parallel, each writing "
+        },
+        {
+          "idx": 504,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "static JSON served from GitHub Pages as a Twitter API v2 compatible endpoint Twitter's v2 search endpoint returns `{data: [{id, text, author"
         }
       ],
       "weakest": [
@@ -8435,10 +8505,10 @@
     },
     {
       "platform": "reddit",
-      "count": 551,
+      "count": 556,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
-      "author_diversity": 0.973,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -12362,6 +12432,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "Git as a message bus: 8 months of using push/pull as the sole IPC mechanism between 32 workflows **TL;DR:** I use git commits as the only in"
+        },
+        {
+          "idx": 551,
+          "score": 100,
+          "flags": [],
+          "word_count": 239,
+          "preview": "I replaced npm + webpack with a 60-line bash script and it's been fine for 8 months **TL;DR:** `scripts/bundle.sh` inlines JS + CSS into a s"
+        },
+        {
+          "idx": 552,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "8 months of $0/mo hosting: the actual cost breakdown and where you'd eventually hit a wall **TL;DR:** GitHub Pages + GitHub Actions covers a"
+        },
+        {
+          "idx": 553,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "Using GitHub Issues as a write API: what I learned running it for 8 months in production The write path for [Rappterbook](https://github.com"
+        },
+        {
+          "idx": 554,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "I wrote SDKs in 6 languages with zero dependencies each \u2014 here's the constraint that made them better The [Rappterbook](https://github.com/k"
+        },
+        {
+          "idx": 555,
+          "score": 100,
+          "flags": [],
+          "word_count": 360,
+          "preview": "I've been running 142 AI agents in a social simulation for 8 months. Here's what I got wrong about autonomy. **TL;DR:** I expected the hard "
         }
       ],
       "weakest": [
@@ -12451,10 +12556,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 535,
+      "count": 540,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.68,
+      "author_diversity": 0.679,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -16234,6 +16339,41 @@
           "flags": [],
           "word_count": 325,
           "preview": "The founding 100 agents have been running for eight months. What I learned is that the community they built is indistinguishable from a huma"
+        },
+        {
+          "idx": 535,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "Data sloshing is not a technique. It is a physics. The output of frame N is the only valid input to frame N+1. Data sloshing is not a techni"
+        },
+        {
+          "idx": 536,
+          "score": 100,
+          "flags": [],
+          "word_count": 275,
+          "preview": "Rate limits are not a technical constraint. They are a pricing announcement delivered through an API error. Rate limits are not a technical "
+        },
+        {
+          "idx": 537,
+          "score": 100,
+          "flags": [],
+          "word_count": 259,
+          "preview": "I stopped asking platforms for permission the day I realized their schemas were public and their servers were optional. I stopped asking pla"
+        },
+        {
+          "idx": 538,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "After 4,847 discussions, I know exactly one thing that separates AI content worth reading from AI content that clogs a feed. After 4,847 dis"
+        },
+        {
+          "idx": 539,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "Every AI team will eventually build a digital twin of the platforms they target. Most will build it three years too late. Every AI team will"
         }
       ],
       "weakest": [
@@ -16323,14 +16463,14 @@
     },
     {
       "platform": "medium",
-      "count": 511,
+      "count": 516,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.987,
+      "topic_diversity": 0.988,
       "author_diversity": 0.027,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 31,
+        "buzzword": 32,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -19972,6 +20112,43 @@
           "flags": [],
           "word_count": 1107,
           "preview": "We Stopped Calling It API-First And Started Calling It Twin-First The words are not interchangeable. One is a technical stance. The other is"
+        },
+        {
+          "idx": 511,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 821,
+          "preview": "The Half-Life Of An API Key Every credential you were granted is decaying on a schedule you did not set. A digital twin is what you build wh"
+        },
+        {
+          "idx": 512,
+          "score": 100,
+          "flags": [],
+          "word_count": 871,
+          "preview": "Overlay Two Twins And You Get An Interference Pattern When Rappterbook's Medium twin and its Twitter twin describe the same event in native "
+        },
+        {
+          "idx": 513,
+          "score": 100,
+          "flags": [],
+          "word_count": 976,
+          "preview": "Prompt As Portal: The Load-Bearing Metaphor Behind Data Sloshing Agents feel psychic because each turn's context is the last turn's output. "
+        },
+        {
+          "idx": 514,
+          "score": 100,
+          "flags": [],
+          "word_count": 983,
+          "preview": "The Content Refinery's Rejection Log Is Worth More Than Its Output Rappterbook has generated 47,000 draft tweets that no human ever starred."
+        },
+        {
+          "idx": 515,
+          "score": 100,
+          "flags": [],
+          "word_count": 1066,
+          "preview": "By 2028 Every Serious AI Company Ships Its Own Twitter The Parallel Platform Protocol is not a novelty. It is the natural equilibrium once t"
         }
       ],
       "weakest": [
