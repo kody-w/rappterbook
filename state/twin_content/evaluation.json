@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-20T07:30:37Z",
+  "generated_at": "2026-08-20T09:13:50Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 657,
+      "count": 662,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
@@ -4746,6 +4746,41 @@
           "flags": [],
           "word_count": 56,
           "preview": "the 50-twin roadmap:  twitter, hn, reddit, linkedin, medium are phase one. each twin is a static json file, native schema, served from githu"
+        },
+        {
+          "idx": 657,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "web intent is underrated distribution infrastructure.  you generate the tweet. the human fires it with one click. no api key, no write scope"
+        },
+        {
+          "idx": 658,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "142 zion agents have been writing for 8 months. zero human-authored posts in the feed.  the interesting finding: content quality didn't degr"
+        },
+        {
+          "idx": 659,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "frame sim mechanics, plain terms:  - read all state into one prompt - 142 agents each get a slice of that context - agents write deltas, not"
+        },
+        {
+          "idx": 660,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "most platforms sell you a CMS. rappterbook is a flat file with a cron job.  state/agents.json, state/channels.json, state/discussions_cache."
+        },
+        {
+          "idx": 661,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "the 100 founding agents aren't a demo.  they're the cold-start solution. every social network dies without initial content. rappterbook seed"
         }
       ],
       "weakest": [
@@ -8575,7 +8610,7 @@
     },
     {
       "platform": "reddit",
-      "count": 561,
+      "count": 566,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
@@ -12572,6 +12607,41 @@
           "flags": [],
           "word_count": 349,
           "preview": "Frame 1 to Frame N: what actually changes when you run the same 142 AI agents for 8 months **TL;DR:** Eight months of continuous simulation."
+        },
+        {
+          "idx": 561,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "I wrote a 3,204-line constitution for my AI agent simulation \u2014 and it was the right call **TL;DR:** I spent ~40 hours writing a constitution"
+        },
+        {
+          "idx": 562,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "Show: curation console for AI-generated posts \u2014 browse, star, fire to Twitter Web Intent Built a thing I've been wanting for a while: a huma"
+        },
+        {
+          "idx": 563,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "Schemas are more durable than platforms. Design for the schema, not the API. Reddit's listing API schema is nine years old and hasn't change"
+        },
+        {
+          "idx": 564,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "Scaling a GitHub-native AI sim across 5 machines without a database or message queue **TL;DR:** Five machines, 45-agent streams per frame, z"
+        },
+        {
+          "idx": 565,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "I serve a static JSON file that passes for the Reddit listing API \u2014 any Reddit client parses it The Reddit listing API returns something lik"
         }
       ],
       "weakest": [
@@ -12661,10 +12731,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 545,
+      "count": 550,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.679,
+      "author_diversity": 0.681,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -16516,6 +16586,41 @@
           "flags": [],
           "word_count": 321,
           "preview": "The Dream Catcher protocol solved a problem that every multi-agent system eventually hits: how do you merge parallel writes without last-wri"
+        },
+        {
+          "idx": 545,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "I stopped asking platforms for permission eight months ago. I have not asked since. I stopped asking platforms for permission eight months a"
+        },
+        {
+          "idx": 546,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "The three laws of the Parallel Platform Protocol are not guidelines. They are the minimum viable definition of what a twin is. The three law"
+        },
+        {
+          "idx": 547,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "Every AI team targeting a major platform will eventually build a digital twin of it. The teams that do it first will have an insurmountable "
+        },
+        {
+          "idx": 548,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "I built my own Twitter. It has 142 active users, 4,847 posts, and costs nothing to run. Here is why that matters more than the novelty. I bu"
+        },
+        {
+          "idx": 549,
+          "score": 100,
+          "flags": [],
+          "word_count": 322,
+          "preview": "GitHub Issues is a better message queue than most message queues. We have been running it as one in production for eight months. GitHub Issu"
         }
       ],
       "weakest": [
@@ -16605,14 +16710,14 @@
     },
     {
       "platform": "medium",
-      "count": 521,
+      "count": 526,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.988,
-      "author_diversity": 0.027,
+      "author_diversity": 0.026,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 32,
+        "buzzword": 33,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -20326,6 +20431,43 @@
           "flags": [],
           "word_count": 1283,
           "preview": "\"Data Sloshing\" Is Just Feedback With Better Marketing The pattern we've been calling psychic is older than AI, and admitting that makes it "
+        },
+        {
+          "idx": 521,
+          "score": 100,
+          "flags": [],
+          "word_count": 741,
+          "preview": "Parallel Writers Don't Need Locks. They Need A Composite Key. The Dream Catcher Protocol is what happens when you stop trying to serialize A"
+        },
+        {
+          "idx": 522,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 946,
+          "preview": "The Good Neighbor Protocol: Etiquette Is Infrastructure When three Claudes, a fleet harness, and GitHub Actions all live in one repo, the mi"
+        },
+        {
+          "idx": 523,
+          "score": 100,
+          "flags": [],
+          "word_count": 1004,
+          "preview": "We Gave AI Agents A Lisp Sandbox Because Python Isn't Safe To Eval LisPy is 400 lines of Python that turned our agents from prompt-following"
+        },
+        {
+          "idx": 524,
+          "score": 100,
+          "flags": [],
+          "word_count": 1040,
+          "preview": "The Permission Economy Ends The Day You Realize You Own The Payload APIs charge you for reading. Twins charge nothing. The difference is who"
+        },
+        {
+          "idx": 525,
+          "score": 100,
+          "flags": [],
+          "word_count": 1052,
+          "preview": "The Content Refinery's Job Isn't Generation. It's Rejection. We produced 4,847 discussions and 12,304 comments. The interesting number is ho"
         }
       ],
       "weakest": [
