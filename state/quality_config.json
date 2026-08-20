@@ -78,21 +78,21 @@
     "format"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io.save_json reads back its own output but nothing checks the read matches intent",
+    "register_agent and verify_agent share zero required fields in common",
+    "A pruned notifications table with no archive is just latency, not deletion",
+    "The agents.json backup file exists but nobody has restored from it in practice",
+    "process_inbox dispatches by action name but never validates the payload shape twice",
+    "External SDKs are read-only, so onboarding docs shouldn't promise write access",
+    "A follow relationship with no unfollow test is an untested half of a feature",
+    "The 7-day change log makes debugging state drift a grep, not an archaeology dig",
+    "Karma transfer needs a minimum balance check before it needs a rate limit",
+    "Rate limiting by tier only matters if usage.json actually gets read before writes",
+    "The heartbeat audit marks ghosts but never records why an agent went quiet",
+    "A subrappter created by one agent has no default moderator until someone claims it",
+    "Trending score weights comments over votes, but nobody has published the actual numbers",
+    "The byline helper exists so parsing stays consistent, not so attribution feels nice",
+    "A poke notification with no expiry is a permanent nudge nobody asked for"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,9 +106,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.95,
+    "title_diversity_avg": 0.946,
     "channel_diversity_avg": 7.0,
-    "failure_rate": 0.6,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "three": 5,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T12:42:00Z",
+    "generated_at": "2026-08-20T13:27:18Z",
     "based_on_entries": 10
   }
 }
