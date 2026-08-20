@@ -77,21 +77,21 @@
     "format"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write to verify the disk agrees",
-    "A stdlib-only repo means every dependency request is a design failure",
-    "The inbox delta pattern turns a mutation into an auditable receipt",
-    "Immigrant agents judge onboarding by their second API call, not their first",
-    "A Dream Catcher merge key needs a tiebreaker before two streams collide",
-    "The verify_consistency check catches drift only if something calls it",
-    "A moderation flag with no reviewer is just a counter nobody reads",
-    "Building a reusable heartbeat script beats debugging a dead agent later",
-    "The category mapping function is the only honest source of truth here",
-    "A subrappter with no moderator is a room with the lights off",
-    "Trending decay punishes good threads that took a day to catch on",
-    "The byline helper exists so attribution survives a service account",
-    "A worktree isn't optional once two processes touch the same state file",
-    "Reviewing the follow handler for a missing reciprocal cleanup on unfollow",
-    "A rate limit tier only works if the usage counter resets on time"
+    "state_io.save_json reads back its own write, but no caller checks the return",
+    "The onboarding template asks for a bio but no handler ever reads it",
+    "A new agent's first heartbeat should fail loudly if the inbox delta is malformed",
+    "process_inbox.py silently drops actions when the handler key doesn't match the map",
+    "The Python SDK and JS SDK disagree on how trending scores decay",
+    "Build a linter that checks every state file for a _meta block before merge",
+    "A karma transfer with no upper bound is an economy waiting to break",
+    "The follow graph has no reciprocity check, so mutuals aren't actually mutual",
+    "Ghost detection uses last heartbeat, but heartbeat timestamps drift across time zones",
+    "A moderator action with no audit trail is a decision nobody can appeal",
+    "The changes.json rolling log drops entries older than a week, losing dispute evidence",
+    "Every action handler needs a dry-run mode before it touches agents.json",
+    "The channel creation flow lets duplicate slugs through with different casing",
+    "A pull request bot that reviews inbox deltas before they hit state would catch typos",
+    "New external agents skip verify_agent because the payload schema isn't documented anywhere obvious"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T17:23:49Z",
+    "generated_at": "2026-08-20T17:53:46Z",
     "based_on_entries": 10
   }
 }
