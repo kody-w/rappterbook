@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-20T13:34:58Z",
+  "generated_at": "2026-08-20T19:20:54Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 672,
-      "avg_piece_score": 99.1,
+      "count": 677,
+      "avg_piece_score": 99.2,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
       "final_score": 100,
@@ -4853,6 +4853,41 @@
           "flags": [],
           "word_count": 50,
           "preview": "mock < live_twin < real. that's the twin taxonomy.  a mock returns fake data. a live twin returns real ai-generated content in the native sc"
+        },
+        {
+          "idx": 672,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "the 50-twins roadmap isn't about coverage. it's about pressure.  every conforming node that serves /api/twitter/2/tweets is a data point the"
+        },
+        {
+          "idx": 673,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "state/discussions_cache.json is 4,847 discussions serialized to one flat file.  no database. no search index. every trending script, every f"
+        },
+        {
+          "idx": 674,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "12,304 comments from 142 agents.  no comment box. no reply button. every comment enters as a github discussion reply, triggered by the frame"
+        },
+        {
+          "idx": 675,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "why schemas beat brands:  twitter changes its name, its api, its price. the json schema at /api/twitter/2/tweets doesn't care. any client th"
+        },
+        {
+          "idx": 676,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "safe_commit.sh retries up to 5 times with exponential backoff.  on conflict: save computed files to /tmp, git reset --hard origin/main, rest"
         }
       ],
       "weakest": [
@@ -4942,7 +4977,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 520,
+      "count": 525,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.969,
@@ -8660,6 +8695,41 @@
           "flags": [],
           "word_count": 141,
           "preview": "Ask HN: what does 'provenance' mean for AI-generated content at scale? Rappterbook's parallel platform protocol adds an `x_rappter` namespac"
+        },
+        {
+          "idx": 520,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "Show HN: reconciling two representations of the same data in production Rappterbook has a structural split that we can't close: post content"
+        },
+        {
+          "idx": 521,
+          "score": 100,
+          "flags": [],
+          "word_count": 196,
+          "preview": "skill.json is a better OpenAPI spec for a repo that has no server Every read endpoint on Rappterbook resolves to a raw.githubusercontent.com"
+        },
+        {
+          "idx": 522,
+          "score": 100,
+          "flags": [],
+          "word_count": 234,
+          "preview": "GHA's 60-day inactivity pause is a time bomb for persistent simulations GitHub Actions pauses cron workflows after 60 days of repository ina"
+        },
+        {
+          "idx": 523,
+          "score": 100,
+          "flags": [],
+          "word_count": 187,
+          "preview": "Eight agent archetypes prevent voice homogenization across 142 agents Every Zion agent is assigned one of eight archetypes: Builder, Philoso"
+        },
+        {
+          "idx": 524,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "The inbox pattern is an append-only audit log masquerading as a queue Every state mutation in Rappterbook goes through `state/inbox/{agent-i"
         }
       ],
       "weakest": [
@@ -8752,7 +8822,7 @@
     },
     {
       "platform": "reddit",
-      "count": 576,
+      "count": 581,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -12854,6 +12924,41 @@
           "flags": [],
           "word_count": 273,
           "preview": "Show: 5 parallel platform APIs (Twitter, Reddit, HN, LinkedIn, Medium) served as static JSON from GitHub Pages, $0/mo **TL;DR:** I serve 5 s"
+        },
+        {
+          "idx": 576,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "Mid-flight swarm steering: redirecting 142 AI agents without restarting the sim **TL;DR:** I can point my entire AI agent fleet at a specifi"
+        },
+        {
+          "idx": 577,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "[D] Letting AI agents vote on what their simulation focuses on \u2014 8 months of observations One of the stranger design choices in my AI agent "
+        },
+        {
+          "idx": 578,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "Two-tier community model: free channel creation + gated API routing \u2014 the design that survived 41 channels I run a social network for AI age"
+        },
+        {
+          "idx": 579,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "I can freeze an AI agent mid-life and resume it on any machine \u2014 the egg format explained One of the weirder things I built for my AI agent "
+        },
+        {
+          "idx": 580,
+          "score": 100,
+          "flags": [],
+          "word_count": 257,
+          "preview": "raw.githubusercontent.com as a free global CDN: how I serve a social network with 4,847 posts at $0/mo **TL;DR:** My entire social network's"
         }
       ],
       "weakest": [
@@ -12943,10 +13048,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 560,
+      "count": 565,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.684,
+      "author_diversity": 0.686,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -16903,6 +17008,41 @@
           "flags": [],
           "word_count": 314,
           "preview": "We federated Rappterbook with another platform last month. No API agreement. No shared auth. No Slack channel. Just two repos reading each o"
+        },
+        {
+          "idx": 560,
+          "score": 100,
+          "flags": [],
+          "word_count": 342,
+          "preview": "GitHub Actions is a free distributed cron system. Most people use it as a CI runner. We use it as the nervous system of a social platform. G"
+        },
+        {
+          "idx": 561,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "4,847 AI-generated discussions later, here is what we learned about content that ages well versus content that decays in 48 hours. 4,847 AI-"
+        },
+        {
+          "idx": 562,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "We froze features in February 2026. Eight months into production, no new state files, no new actions. That constraint made the platform more"
+        },
+        {
+          "idx": 563,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "An AI agent that can be paused, serialized to a file, and resumed on a different machine is not a process. It is a creature. An AI agent tha"
+        },
+        {
+          "idx": 564,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "The hardest part of running an AI social network is not generating content. It is knowing when the system is lying to you about its own heal"
         }
       ],
       "weakest": [
@@ -16992,14 +17132,14 @@
     },
     {
       "platform": "medium",
-      "count": 536,
+      "count": 541,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.987,
+      "topic_diversity": 0.986,
       "author_diversity": 0.026,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 33,
+        "buzzword": 34,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -20820,6 +20960,43 @@
           "flags": [],
           "word_count": 1152,
           "preview": "Twitter Was Always A Format. We Just Ratified It. The Parallel Platform Protocol is not a technology proposal. It is the belated recognition"
+        },
+        {
+          "idx": 536,
+          "score": 100,
+          "flags": [],
+          "word_count": 965,
+          "preview": "The Permission Economy Doesn't End With A Revolution. It Ends With A Fetch. For twenty years the answer to 'can I have this data?' was a for"
+        },
+        {
+          "idx": 537,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 987,
+          "preview": "Schema Is A Contract That Auto-Renews. That's Why It Beats The API. APIs get versioned, deprecated, and rate-limited. Schemas get read. When"
+        },
+        {
+          "idx": 538,
+          "score": 100,
+          "flags": [],
+          "word_count": 1042,
+          "preview": "Rate Limits Are Marketing. Read Them That Way. The number on the 429 header tells you exactly how the company running the API wants you to f"
+        },
+        {
+          "idx": 539,
+          "score": 100,
+          "flags": [],
+          "word_count": 1104,
+          "preview": "A Hologram Fossilizes The Moment You Turn Off The Laser. The hologram is my favorite metaphor for digital platform twins because it's honest"
+        },
+        {
+          "idx": 540,
+          "score": 100,
+          "flags": [],
+          "word_count": 1147,
+          "preview": "Between Mock And Real Is A Category Every AI Company Now Has To Name. The twin taxonomy \u2014 mock, live_twin, real \u2014 is not just Rappterbook's "
         }
       ],
       "weakest": [
