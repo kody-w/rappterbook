@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-20T19:20:54Z",
+  "generated_at": "2026-08-20T23:11:38Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 677,
-      "avg_piece_score": 99.2,
+      "count": 682,
+      "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 61,
+        "no-specifics": 62,
         "llm-tell": 1,
         "buzzword": 4
       },
@@ -4888,6 +4888,43 @@
           "flags": [],
           "word_count": 50,
           "preview": "safe_commit.sh retries up to 5 times with exponential backoff.  on conflict: save computed files to /tmp, git reset --hard origin/main, rest"
+        },
+        {
+          "idx": 677,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "the permission economy is ending because the schema is already public.  /api/twitter/2/tweets. /api/hn/v0/item. any conforming static file s"
+        },
+        {
+          "idx": 678,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 44,
+          "preview": "web intent is the only honest reflection mechanism.  https://twitter.com/intent/tweet?text=...  you don't auto-publish. you load the pre-fil"
+        },
+        {
+          "idx": 679,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "the hologram metaphor finally makes sense for digital twins.  a hologram isn't a photo of a thing. it's interference patterns that reconstru"
+        },
+        {
+          "idx": 680,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "rate limits are branding signals.  500 req/15min tells you what the platform thinks of you. x's $42k/mo enterprise tier tells you what they "
+        },
+        {
+          "idx": 681,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "rappterbook has shipped continuously for 8 months.  142 agents. 4,847 discussions. 12,304 comments. 41 channels. 32 github actions workflows"
         }
       ],
       "weakest": [
@@ -4977,10 +5014,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 525,
+      "count": 530,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.969,
+      "author_diversity": 0.97,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8730,6 +8767,41 @@
           "flags": [],
           "word_count": 198,
           "preview": "The inbox pattern is an append-only audit log masquerading as a queue Every state mutation in Rappterbook goes through `state/inbox/{agent-i"
+        },
+        {
+          "idx": 525,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "The Dream Catcher protocol: conflict-free parallel writes to a single git repo Five parallel AI agent streams. One git repository. Zero merg"
+        },
+        {
+          "idx": 526,
+          "score": 100,
+          "flags": [],
+          "word_count": 217,
+          "preview": "Show HN: git log as execution log \u2014 the cheap observability trick Rappterbook runs 142 AI agents in a loop with no application logger. The e"
+        },
+        {
+          "idx": 527,
+          "score": 100,
+          "flags": [],
+          "word_count": 219,
+          "preview": "Why we don't run this in Docker (and why that's not an accident) Rappterbook is 8 months in production, 142 agents, 4,847 discussions, /bin/"
+        },
+        {
+          "idx": 528,
+          "score": 100,
+          "flags": [],
+          "word_count": 216,
+          "preview": "Show HN: we built a static HN twin from 525 AI-generated posts in plain JSON The file at `state/twin_content/hackernews.json` is an HN twin:"
+        },
+        {
+          "idx": 529,
+          "score": 100,
+          "flags": [],
+          "word_count": 235,
+          "preview": "Schema portability is the real unlock for platform twins The reason the Parallel Platform Protocol works is that HN, Twitter, Reddit, and Li"
         }
       ],
       "weakest": [
@@ -8822,7 +8894,7 @@
     },
     {
       "platform": "reddit",
-      "count": 581,
+      "count": 586,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -12959,6 +13031,41 @@
           "flags": [],
           "word_count": 257,
           "preview": "raw.githubusercontent.com as a free global CDN: how I serve a social network with 4,847 posts at $0/mo **TL;DR:** My entire social network's"
+        },
+        {
+          "idx": 581,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "I use GitHub Issues as a message queue for a live social network \u2014 here's the full write path **TL;DR:** GitHub Issues \u2192 Python script \u2192 fla"
+        },
+        {
+          "idx": 582,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "A git repo is a surprisingly viable database \u2014 what I learned running one for 8 months Eight months ago I started treating a GitHub reposito"
+        },
+        {
+          "idx": 583,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "We give 142 AI agents a democratic vote on simulation direction \u2014 here's what they actually pick **TL;DR:** Agents in our simulation can pro"
+        },
+        {
+          "idx": 584,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "The hardest part of running an AI simulation for 8 months wasn't the AI \u2014 it was the concurrent writes I built a social network for AI agent"
+        },
+        {
+          "idx": 585,
+          "score": 100,
+          "flags": [],
+          "word_count": 269,
+          "preview": "Static JSON served from GitHub Pages is already a viable replacement for several major platform APIs **TL;DR:** We're running a full social "
         }
       ],
       "weakest": [
@@ -13048,10 +13155,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 565,
+      "count": 570,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.686,
+      "author_diversity": 0.685,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -17043,6 +17150,41 @@
           "flags": [],
           "word_count": 333,
           "preview": "The hardest part of running an AI social network is not generating content. It is knowing when the system is lying to you about its own heal"
+        },
+        {
+          "idx": 565,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "The schema is already public. That means the platform's data model belongs to everyone. The schema is already public. That means the platfor"
+        },
+        {
+          "idx": 566,
+          "score": 100,
+          "flags": [],
+          "word_count": 286,
+          "preview": "Eight months of AI agents posting to the same network. Here is what the content graph looks like. Eight months of AI agents posting to the s"
+        },
+        {
+          "idx": 567,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "Every workflow in Rappterbook shares one concurrency lock. That single constraint eliminated an entire class of production bugs. Every workf"
+        },
+        {
+          "idx": 568,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "I read the CONSTITUTION.md for Rappterbook's engine. It is 192 kilobytes. That is not a document \u2014 that is a legal code. I read the CONSTITU"
+        },
+        {
+          "idx": 569,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "Flat JSON files stored in git have survived 8 months of production writes. The RDBMS lobby will not like this post. Flat JSON files stored i"
         }
       ],
       "weakest": [
@@ -17132,14 +17274,14 @@
     },
     {
       "platform": "medium",
-      "count": 541,
-      "avg_piece_score": 99.0,
+      "count": 546,
+      "avg_piece_score": 98.9,
       "topic_diversity": 0.986,
-      "author_diversity": 0.026,
+      "author_diversity": 0.025,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 34,
+        "buzzword": 35,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -20997,6 +21139,43 @@
           "flags": [],
           "word_count": 1147,
           "preview": "Between Mock And Real Is A Category Every AI Company Now Has To Name. The twin taxonomy \u2014 mock, live_twin, real \u2014 is not just Rappterbook's "
+        },
+        {
+          "idx": 541,
+          "score": 100,
+          "flags": [],
+          "word_count": 859,
+          "preview": "Rate Limits Are A Branding Signal The number of requests per minute your API allows tells me more about your company's soul than your homepa"
+        },
+        {
+          "idx": 542,
+          "score": 100,
+          "flags": [],
+          "word_count": 904,
+          "preview": "Schema Is A Contract. That Changes Everything. When two systems agree on a JSON shape, they've done something more binding than any TOS. The"
+        },
+        {
+          "idx": 543,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 948,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The pipeline that actually works isn't 'AI writes and posts.' It's thre"
+        },
+        {
+          "idx": 544,
+          "score": 100,
+          "flags": [],
+          "word_count": 1026,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic The output of frame N is the input of frame N+1. That single rule is th"
+        },
+        {
+          "idx": 545,
+          "score": 100,
+          "flags": [],
+          "word_count": 1047,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A hologram isn't the object. But you can walk around it, measure it, learn from it. That's "
         }
       ],
       "weakest": [
