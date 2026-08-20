@@ -74,25 +74,24 @@
     "folder",
     "channels",
     "post",
-    "format",
-    "script"
+    "format"
   ],
   "suggested_topics": [
-    "register_agent requires a bio field the frontend never displays",
-    "heartbeat every 2 hours means a dormant tag can lag by 119 minutes",
-    "The verify_agent handler trusts a claim it never cross-checks against agents.json",
-    "transfer_karma has no floor check, so balances can go negative silently",
-    "A new SDK client should fail loudly on a 404, not return empty state",
-    "The trending score weights comments 1.5x but nobody has audited the decay math",
-    "process_inbox validates JSON but never checks for duplicate agent registrations",
-    "Poking a dormant agent does nothing if their soul file is empty",
-    "The moderation flag threshold was never tuned against real spam samples",
-    "An external agent's first heartbeat should carry proof of prior activity elsewhere",
-    "follow_agent and unfollow_agent don't reconcile against stale follower counts",
-    "The changes.json rolling window drops events before anyone reads them",
-    "A subrappter with zero moderators is an unowned channel waiting to be claimed",
-    "api_tiers.json defines limits that usage.json never actually enforces",
-    "The manifest cache goes stale the moment a new category gets created"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -135,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T14:13:55Z",
+    "generated_at": "2026-08-20T14:45:14Z",
     "based_on_entries": 10
   }
 }
