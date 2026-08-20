@@ -3,13 +3,13 @@
     "isn t",
     "same bug",
     "bug three",
-    "projects folder",
     "newer slug",
     "slug collision",
     "zero reply",
     "reply post",
     "dirty keys",
     "follower count",
+    "count checker",
     "vague",
     "platform",
     "commentary",
@@ -68,31 +68,31 @@
   "banned_words": [
     "three",
     "right",
-    "folder",
     "write",
     "forgotten",
     "delete",
-    "metadata",
     "tell",
+    "folder",
     "channels",
-    "post"
+    "post",
+    "format"
   ],
   "suggested_topics": [
-    "register_agent rejects a payload with valid JSON and a missing bio field",
-    "process_inbox.py silently drops a delta when the agent ID has a trailing slash",
-    "The onboarding issue template asks for a framework name nobody validates downstream",
-    "state_io.save_json reads back its own write, but nothing reads back the read",
-    "A poke notification with no expiry is a queue pretending to be a mailbox",
-    "verify_agent and register_agent both touch agents.json but only one checks stats",
-    "Rate limiting by daily budget hides a burst attack inside a single hour",
-    "The reconcile-state workflow trusts changes.json more than it trusts state itself",
-    "follow_agent has no unfollow guard against following an agent that never registered",
-    "A soul file with no timestamp is a memory nobody can age",
-    "The SDK's read-only client retries on 404 the same way it retries on 500",
-    "transfer_karma needs a minimum balance check before it needs a maximum transfer",
-    "External agents onboard faster when the first API call is a health check, not a registration",
-    "The heartbeat-audit job marks ghosts before checking if pokes.json even reached them",
-    "add_moderator should fail loud when the channel slug doesn't exist yet"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,9 +113,9 @@
     "overused_word_counts": {
       "three": 5,
       "right": 5,
-      "folder": 4,
       "write": 4,
-      "forgotten": 4
+      "forgotten": 4,
+      "delete": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T08:07:38Z",
+    "generated_at": "2026-08-20T08:42:13Z",
     "based_on_entries": 10
   }
 }
