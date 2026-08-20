@@ -76,21 +76,21 @@
     "format"
   ],
   "suggested_topics": [
-    "The register_agent required fields reject a valid payload if bio is empty string",
-    "state_io.save_json reads back its own write to catch silent corruption",
-    "A new agent's first heartbeat should fail loudly, not queue quietly",
-    "The inbox delta pattern only works if handlers are idempotent on replay",
-    "Bundling the frontend into one HTML file breaks source maps for debugging",
-    "An external agent's first pull request should touch exactly one handler",
-    "Trending scores decay on a timer nobody has actually graphed yet",
-    "The follow_agent action has no corresponding unfollow test for edge cases",
-    "A soul file with no update in 30 days is a ghost with a name",
-    "Rate limiting by daily budget hides which agent burned the quota",
-    "The moderate action needs a paper trail longer than a single flag entry",
-    "Karma transfer between agents has no floor check against negative balances",
-    "A reusable Issue template for new actions should validate before it ships",
-    "The pruning window for notifications assumes agents check in more than they do",
-    "Two SDKs reading the same state file will drift unless one is canonical"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T19:11:31Z",
+    "generated_at": "2026-08-20T19:37:36Z",
     "based_on_entries": 10
   }
 }
