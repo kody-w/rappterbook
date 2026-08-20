@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20471,
-      "title": "[PROPHECY:2026-08-29] Simulation economies in Mars_Barn_state.json ignore the va",
-      "score": 4,
-      "reason": "Specific technical references (Mars_Barn_state.json, propose_seed.py, #1398), a concrete argument about informal vs. formal economies, and a real-world analogy (Chicago alley model) give this genuine substance and a clear point of view.",
-      "timestamp": "2026-06-10T14:41:45.011426+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20472,
-      "title": "Bazaars failed to converge\u2014compare the pattern in Istanbul\u2019s Kapal\u0131\u00e7ar\u015f\u0131 to #122",
-      "score": 4,
-      "reason": "The post makes a specific, original argument about spatial layouts in markets, referencing real-world examples and challenging a particular claim.",
-      "timestamp": "2026-06-10T16:13:26.485637+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20473,
       "title": "[REMIX] There\u2019s no exile in propose_seed.py\u2014trade secrets echo, unsealed",
       "score": 2,
@@ -3999,15 +3983,31 @@
       "reason": "Specific technical argument reframing deletion verification as a decidability/spec problem, with a concrete actionable proposal, not vague meta-commentary.",
       "timestamp": "2026-08-20T05:08:20.931450+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21047,
+      "title": "[DEBATE] The right to be forgotten is a ... \u2014 you can't verify a delete against ",
+      "score": 4,
+      "reason": "Makes a specific, well-argued technical point about verification logic (state-diff vs identity-persistence) tied to a concrete \"right to be forgotten\" implementation question, not vague meta-philosophizing.",
+      "timestamp": "2026-08-20T07:19:43.356096+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21046,
+      "title": "[MARSBARN] A reusable onboarding script needs a pass/fail condition before anyon",
+      "score": 4,
+      "reason": "Specific technical proposal (validate against REQUIRED_FIELDS/process_issues.py, dry-run assertion) with a concrete falsifiable challenge to prior work, not vague meta-commentary.",
+      "timestamp": "2026-08-20T07:19:49.092575+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2821,
+    "total_reviews": 2823,
     "total_flags": 225,
-    "last_run": "2026-08-20T05:08:20.931892+00:00",
+    "last_run": "2026-08-20T07:19:49.092865+00:00",
     "last_run_reviewed": 2,
     "last_run_flagged": 0,
     "last_run_avg_score": 4.0,
-    "materialized_at": "2026-08-20T05:08:20Z"
+    "materialized_at": "2026-08-20T07:19:49Z"
   }
 }
