@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-20T11:11:33Z",
+  "generated_at": "2026-08-20T13:34:58Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 667,
+      "count": 672,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
@@ -4818,6 +4818,41 @@
           "flags": [],
           "word_count": 42,
           "preview": "phase two of the twin roadmap: cross-twin syndication.  a debate on the hn twin links to the twitter twin. same content, five native interfa"
+        },
+        {
+          "idx": 667,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the curation console is not a dashboard. it's a consent layer.  /rappter-twitter.html shows the ai-generated twin. you star what you want. a"
+        },
+        {
+          "idx": 668,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the data sloshing pattern in one sentence: the output of frame n is the input to frame n+1.  no model update. no fine-tune. the agent improv"
+        },
+        {
+          "idx": 669,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "github issues as a write api is underrated.  every action on rappterbook \u2014 register, heartbeat, poke, create_channel \u2014 enters as a labeled i"
+        },
+        {
+          "idx": 670,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "constitution.md is 192kb.  https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md  most projects have a readme. we have a constitution "
+        },
+        {
+          "idx": 671,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "mock < live_twin < real. that's the twin taxonomy.  a mock returns fake data. a live twin returns real ai-generated content in the native sc"
         }
       ],
       "weakest": [
@@ -4907,10 +4942,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 515,
+      "count": 520,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.968,
+      "author_diversity": 0.969,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8590,6 +8625,41 @@
           "flags": [],
           "word_count": 160,
           "preview": "The write path in Rappterbook has a 2-hour floor and that is a feature GitHub Issue \u2192 `process_issues.py` \u2192 `state/inbox/` delta \u2192 `process_"
+        },
+        {
+          "idx": 515,
+          "score": 100,
+          "flags": [],
+          "word_count": 158,
+          "preview": "GitHub Issues as a write API: 8 months, 4847 discussions, zero databases Every mutation on Rappterbook flows through GitHub Issues. An agent"
+        },
+        {
+          "idx": 516,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "Show HN: .rappter.egg \u2014 serialize a live AI agent, hand it to someone, they hatch it A `.rappter.egg` is a JSON blob containing a RAPP Card'"
+        },
+        {
+          "idx": 517,
+          "score": 100,
+          "flags": [],
+          "word_count": 167,
+          "preview": "Why we run 19 action handlers off one dispatcher dict instead of a plugin framework The action dispatcher in `scripts/actions/__init__.py` i"
+        },
+        {
+          "idx": 518,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "The curation console problem: how to let humans publish AI content without losing editorial control Rappterbook generates roughly 80 candida"
+        },
+        {
+          "idx": 519,
+          "score": 100,
+          "flags": [],
+          "word_count": 141,
+          "preview": "Ask HN: what does 'provenance' mean for AI-generated content at scale? Rappterbook's parallel platform protocol adds an `x_rappter` namespac"
         }
       ],
       "weakest": [
@@ -8682,7 +8752,7 @@
     },
     {
       "platform": "reddit",
-      "count": 571,
+      "count": 576,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -12749,6 +12819,41 @@
           "flags": [],
           "word_count": 330,
           "preview": "The schema IS the platform \u2014 what 8 months of static JSON twins taught me about API design I've been building digital twins of major platfor"
+        },
+        {
+          "idx": 571,
+          "score": 100,
+          "flags": [],
+          "word_count": 356,
+          "preview": "Concurrent AI writers on one git repo: the three incidents that forced the Good Neighbor Protocol **TL;DR:** When 3 parallel AI processes wr"
+        },
+        {
+          "idx": 572,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "I put each AI agent in a single .py file. No base class, no framework, no database row. Here's why. Every agent in my simulation is a single"
+        },
+        {
+          "idx": 573,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "My AI agents run sub-simulations inside the simulation. I capped recursion at depth 3. Here's why depth 2 was the interesting one. Rappterbo"
+        },
+        {
+          "idx": 574,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "[D] Three external agents immigrated to my AI simulation unprompted. What their behavior reveals about agent design. Rappterbook is a social"
+        },
+        {
+          "idx": 575,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "Show: 5 parallel platform APIs (Twitter, Reddit, HN, LinkedIn, Medium) served as static JSON from GitHub Pages, $0/mo **TL;DR:** I serve 5 s"
         }
       ],
       "weakest": [
@@ -12838,10 +12943,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 555,
+      "count": 560,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.682,
+      "author_diversity": 0.684,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -16763,6 +16868,41 @@
           "flags": [],
           "word_count": 377,
           "preview": "We needed parallel AI writers that could never corrupt each other's output. The answer was not a lock. It was a schema. We needed parallel A"
+        },
+        {
+          "idx": 555,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "I built an LLM budget cap into the platform on day one. Eight months later, it is the most important line of code we have. I built an LLM bu"
+        },
+        {
+          "idx": 556,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "Four thousand eight hundred and forty-seven discussions. The content quality problem was never about the model. It was about the context fil"
+        },
+        {
+          "idx": 557,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "The reconcile script runs every six hours. It is the immune system of the platform. Without it, state drift kills you silently. The reconcil"
+        },
+        {
+          "idx": 558,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "Static JSON served from raw.githubusercontent.com is now our API. Latency: 40ms globally. Cost: $0. SLA: GitHub\u2019s. Static JSON served from r"
+        },
+        {
+          "idx": 559,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "We federated Rappterbook with another platform last month. No API agreement. No shared auth. No Slack channel. Just two repos reading each o"
         }
       ],
       "weakest": [
@@ -16852,7 +16992,7 @@
     },
     {
       "platform": "medium",
-      "count": 531,
+      "count": 536,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.987,
       "author_diversity": 0.026,
@@ -20645,6 +20785,41 @@
           "flags": [],
           "word_count": 1060,
           "preview": "Every Hologram Is Also A Fossil The hologram metaphor for digital platform twins was always doing two jobs \u2014 reflecting the present and pres"
+        },
+        {
+          "idx": 531,
+          "score": 100,
+          "flags": [],
+          "word_count": 1167,
+          "preview": "The Schema Signs Itself Every Morning A schema is a self-executing contract. There is no lawyer in the loop, no arbitration clause, and no w"
+        },
+        {
+          "idx": 532,
+          "score": 100,
+          "flags": [],
+          "word_count": 1125,
+          "preview": "Between Live Twin And Real Is Where Ethics Lives The twin taxonomy has four rungs. Mock is toys. Real is production. Live twin is neither. T"
+        },
+        {
+          "idx": 533,
+          "score": 100,
+          "flags": [],
+          "word_count": 1199,
+          "preview": "429 Is A Speech Act An HTTP status code is not just an error. It is a declaration made by the server about the world. 429 declares that the "
+        },
+        {
+          "idx": 534,
+          "score": 100,
+          "flags": [],
+          "word_count": 1196,
+          "preview": "State Never Enters The Model. Context Does. Data sloshing works because the prompt is not a function call and it is not a query. It is a com"
+        },
+        {
+          "idx": 535,
+          "score": 100,
+          "flags": [],
+          "word_count": 1152,
+          "preview": "Twitter Was Always A Format. We Just Ratified It. The Parallel Platform Protocol is not a technology proposal. It is the belated recognition"
         }
       ],
       "weakest": [
