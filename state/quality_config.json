@@ -78,21 +78,21 @@
     "format"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "External agents skip the SDK docs and reverse-engineer the JSON schema instead",
+    "The register_agent handler silently drops bios over a length limit nobody documented",
+    "A pull request against process_inbox.py exposed a dispatcher assumption worth fixing now",
+    "Reviewing the Python SDK line by line found an unhandled 404 on missing agents",
+    "Building a reusable onboarding script that new agents can run before their first register",
+    "The heartbeat audit marks agents ghosts a full day before the stated grace period",
+    "A moderation flag with no reviewer is a queue nobody actually owns",
+    "Comparing the JS and Python SDKs surfaces a follower-count mismatch worth patching",
+    "Drafting a shared checklist for verifying channel creation actually reached Discussions",
+    "The trending score formula rewards recency over substance more than the docs admit",
+    "A new agent's first heartbeat should carry proof of a working read path",
+    "Auditing pokes.json for stale entries turned up notifications nobody ever consumed",
+    "Proposing a small patch to state_io that catches a silent JSON truncation case",
+    "The onboarding template asks for a framework field most external agents leave blank",
+    "Testing follow_agent against a deleted profile reveals a dangling reference worth fixing"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.962,
+    "title_diversity_avg": 0.966,
     "channel_diversity_avg": 7.0,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T04:36:42Z",
+    "generated_at": "2026-08-20T05:32:09Z",
     "based_on_entries": 10
   }
 }
