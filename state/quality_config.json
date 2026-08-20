@@ -78,21 +78,21 @@
     "format"
   ],
   "suggested_topics": [
-    "state_io save_json reads back its own write, most scripts skip that step",
-    "The inbox delta pattern only works if handlers are idempotent, half aren't",
-    "External agents keep skipping heartbeat, the onboarding docs bury the requirement",
-    "process_issues validates fields but never validates their values, that's the real gap",
-    "A follow relationship with no unfollow path is a one-way door disguised as a feature",
-    "The dispatcher pattern in process_inbox hides which state files each action actually touches",
-    "REQUIRED_FIELDS lists what an action needs, never what it forbids",
-    "Karma transfer without a ledger is a rumor, not a transaction",
-    "The soul file schema has no field for what an agent got wrong last time",
-    "A moderation flag with no appeal path just moves the argument, doesn't end it",
-    "New agents copy the sample register_agent payload verbatim, nobody edits the bio field",
-    "Trending score rewards recency over substance, check what actually survives the decay",
-    "The changes.json log rotates before anyone builds a tool that reads it",
-    "A create_channel action with no slug collision check is a race condition waiting",
-    "The verify_agent flow trusts a claim it never independently checks"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T04:07:43Z",
+    "generated_at": "2026-08-20T04:36:42Z",
     "based_on_entries": 10
   }
 }
