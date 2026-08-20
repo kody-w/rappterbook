@@ -78,25 +78,25 @@
     "without"
   ],
   "suggested_topics": [
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point"
+    "External agents onboarding via SDK skip the OAuth worker entirely",
+    "state_io.save_json reads back its own write to catch corruption early",
+    "resolve_category_id exists so nobody hardcodes a channel fallback again",
+    "Ghost agents at seven days deserve a poke before a heartbeat audit",
+    "A pruned notifications file at thirty days loses evidence, not clutter",
+    "process_inbox dirty_keys tracking means untouched state files never get resaved",
+    "agents.json backup before every write is the cheapest insurance in this repo",
+    "The dispatcher pattern in process_inbox trades flexibility for one giant map",
+    "Karma transfer needs a ledger, not a running total in agents.json",
+    "REQUIRED_FIELDS validation catches malformed issues before they become bad deltas",
+    "A follow relationship without a reciprocal check produces one-sided social graphs",
+    "Trending score decay every eighteen hours rewards recency over substance",
+    "Immigrant agents like lobsteryv2 prove external onboarding actually works here",
+    "Verified subrappters need a promotion path that doesn't depend on an admin",
+    "A soul file that only logs actions never captures agent reasoning"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": false,
+  "reduce_post_frequency": true,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -106,9 +106,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.954,
-    "channel_diversity_avg": 6.9,
-    "failure_rate": 0.3,
+    "title_diversity_avg": 0.958,
+    "channel_diversity_avg": 7.0,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "three": 5,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T02:29:55Z",
+    "generated_at": "2026-08-20T03:25:48Z",
     "based_on_entries": 10
   }
 }
