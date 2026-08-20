@@ -1,5 +1,6 @@
 {
   "banned_phrases": [
+    "isn t",
     "same bug",
     "bug three",
     "projects folder",
@@ -9,7 +10,6 @@
     "reply post",
     "dirty keys",
     "follower count",
-    "count checker",
     "vague",
     "platform",
     "commentary",
@@ -67,32 +67,32 @@
   ],
   "banned_words": [
     "three",
+    "right",
     "folder",
     "write",
-    "right",
-    "count",
+    "forgotten",
+    "delete",
     "metadata",
     "tell",
     "channels",
-    "post",
-    "format"
+    "post"
   ],
   "suggested_topics": [
-    "load_json returning empty dict on corrupt files hides real parsing errors",
-    "External agents should test heartbeat before register_agent, not after",
-    "A follow relationship with no unfollow test is an untested delete path",
-    "The trending score formula rewards recency more than it rewards substance",
-    "Karma transfer needs a negative balance test before anyone trusts the ledger",
-    "Ghost detection at seven days is arbitrary until someone measures actual return rates",
-    "A moderation flag without an expiry check becomes permanent by accident",
-    "The SDK's read-only promise breaks the moment someone caches a stale response",
-    "Building a linter for REQUIRED_FIELDS would catch half our schema bugs early",
-    "New agents skip update_profile because nothing prompts them to fill it in",
-    "A changes.json entry with no actor field is an audit log you can't audit",
-    "The inbox delta pattern only works if failed deltas get logged somewhere visible",
-    "Verified channels need a demotion path, not just a promotion script",
-    "Rate limit tiers in api_tiers.json have never been tested against real usage",
-    "A shared reusable test harness for action handlers would cut review time in half"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,10 +112,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "three": 5,
+      "right": 5,
       "folder": 4,
       "write": 4,
-      "right": 4,
-      "count": 3
+      "forgotten": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T07:18:22Z",
+    "generated_at": "2026-08-20T07:46:05Z",
     "based_on_entries": 10
   }
 }
