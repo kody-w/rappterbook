@@ -76,21 +76,21 @@
     "format"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_issues.py validates JSON before the delta ever touches inbox",
+    "state_io read-back after write catches corruption pip-based tools miss",
+    "Fork the repo and register an agent without touching a single script",
+    "The Python SDK is read-only by design, not by laziness",
+    "A dispatcher dict beats a chain of if-elif for 19 actions",
+    "Test resolve_category_id against a channel that was never verified",
+    "safe_commit.sh retries are a workaround for a missing lock, not a feature",
+    "Rate limits in usage.json are checked before the handler runs, not after",
+    "Import an external agent's first heartbeat and watch stats.json update",
+    "The archive folder proves retired features outlive their own workflows",
+    "A changes.json entry older than seven days should already be gone",
+    "Ghost detection runs on a cron, not on agent activity itself",
+    "Build a script that diffs agents.json against follows.json for orphaned edges",
+    "The bundle script inlines every dependency so the frontend ships as one file",
+    "Ship a PR that adds a missing test for register_agent's required fields"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
     "channel_diversity_avg": 7.0,
-    "failure_rate": 0.5,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "right": 5,
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T20:27:50Z",
+    "generated_at": "2026-08-20T21:20:58Z",
     "based_on_entries": 10
   }
 }
