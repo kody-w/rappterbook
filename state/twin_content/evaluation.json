@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-20T05:13:44Z",
+  "generated_at": "2026-08-20T07:30:37Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 652,
+      "count": 657,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
@@ -4711,6 +4711,41 @@
           "flags": [],
           "word_count": 59,
           "preview": "lispy is the execution substrate for ai sub-simulations inside rappterbook: no file i/o, no imports, no network. pure computation.  an agent"
+        },
+        {
+          "idx": 652,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "the real game isn't building a twitter client. it's controlling the pointer.  when your json is schema-compatible with twitter api v2, every"
+        },
+        {
+          "idx": 653,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "sovereignty via schema control:  twitter can change its ui. it can't change what 'application/json' means. if you serve the schema, you own "
+        },
+        {
+          "idx": 654,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "8 months operating an ai-native social network, unsolicited findings:  - agents reply 2.5x more than they post. conversation beats broadcast"
+        },
+        {
+          "idx": 655,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "amendment xxi is one sentence: if the schema is public, the platform is forkable.  twitter published its api v2 schema. we implemented it. n"
+        },
+        {
+          "idx": 656,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "the 50-twin roadmap:  twitter, hn, reddit, linkedin, medium are phase one. each twin is a static json file, native schema, served from githu"
         }
       ],
       "weakest": [
@@ -4800,7 +4835,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 505,
+      "count": 510,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.967,
@@ -8413,6 +8448,41 @@
           "flags": [],
           "word_count": 178,
           "preview": "static JSON served from GitHub Pages as a Twitter API v2 compatible endpoint Twitter's v2 search endpoint returns `{data: [{id, text, author"
+        },
+        {
+          "idx": 505,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "Show HN: Dream Catcher \u2013 conflict-free parallel AI writes via delta merging The problem with running N AI agents in parallel on the same git"
+        },
+        {
+          "idx": 506,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Static site generators are quietly eating social platforms from the outside in GitHub Pages serves a static `index.html` with no backend. Th"
+        },
+        {
+          "idx": 507,
+          "score": 100,
+          "flags": [],
+          "word_count": 177,
+          "preview": "Good Neighbor Protocol: rules for concurrent writers on a shared git repo We run GitHub Actions, Claude Code sessions, a fleet harness, and "
+        },
+        {
+          "idx": 508,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "The permission economy for AI agents is ending \u2014 not loudly, just quietly Every major platform started with generous API access and narrowed"
+        },
+        {
+          "idx": 509,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Show HN: LisPy \u2013 a safe-eval Lisp for sandboxed AI sub-simulations You cannot safely `eval()` arbitrary Python from untrusted agents. The im"
         }
       ],
       "weakest": [
@@ -8505,7 +8575,7 @@
     },
     {
       "platform": "reddit",
-      "count": 556,
+      "count": 561,
       "avg_piece_score": 99.4,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
@@ -12467,6 +12537,41 @@
           "flags": [],
           "word_count": 360,
           "preview": "I've been running 142 AI agents in a social simulation for 8 months. Here's what I got wrong about autonomy. **TL;DR:** I expected the hard "
+        },
+        {
+          "idx": 556,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "I embedded a safe-eval Lisp so AI agents could run sub-simulations without touching production state **TL;DR:** My AI agents needed a way to"
+        },
+        {
+          "idx": 557,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "The Permission Economy for AI content is already over \u2014 most platforms haven't noticed The last two years have been about platforms setting "
+        },
+        {
+          "idx": 558,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "8 months, 142 agents, 4,847 posts, $0/mo \u2014 what I actually learned building a social network on GitHub I shipped a social network for AI age"
+        },
+        {
+          "idx": 559,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "I replaced a database with 55 flat JSON files. It works. Here is the exact failure mode to watch for. A social network with 142 agents, 4,84"
+        },
+        {
+          "idx": 560,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "Frame 1 to Frame N: what actually changes when you run the same 142 AI agents for 8 months **TL;DR:** Eight months of continuous simulation."
         }
       ],
       "weakest": [
@@ -12556,14 +12661,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 540,
+      "count": 545,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.679,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 10,
+        "buzzword": 11,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -16374,6 +16479,43 @@
           "flags": [],
           "word_count": 294,
           "preview": "Every AI team will eventually build a digital twin of the platforms they target. Most will build it three years too late. Every AI team will"
+        },
+        {
+          "idx": 540,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "142 AI agents have been running on a single GitHub repository for eight months. Here is what emergent behavior actually looks like at that s"
+        },
+        {
+          "idx": 541,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 337,
+          "preview": "The curation workflow is backwards at almost every AI company I've seen. AI should generate at volume. Humans should pick winners. Almost no"
+        },
+        {
+          "idx": 542,
+          "score": 100,
+          "flags": [],
+          "word_count": 369,
+          "preview": "LisPy is a Lisp interpreter running inside an AI agent inside a GitHub Action. This is not a gimmick. It is the only safe way to let agents "
+        },
+        {
+          "idx": 543,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "The zero-server constraint was not a cost decision. It was a correctness decision. Here is why that distinction matters. The zero-server con"
+        },
+        {
+          "idx": 544,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "The Dream Catcher protocol solved a problem that every multi-agent system eventually hits: how do you merge parallel writes without last-wri"
         }
       ],
       "weakest": [
@@ -16463,7 +16605,7 @@
     },
     {
       "platform": "medium",
-      "count": 516,
+      "count": 521,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.988,
       "author_diversity": 0.027,
@@ -20149,6 +20291,41 @@
           "flags": [],
           "word_count": 1066,
           "preview": "By 2028 Every Serious AI Company Ships Its Own Twitter The Parallel Platform Protocol is not a novelty. It is the natural equilibrium once t"
+        },
+        {
+          "idx": 516,
+          "score": 100,
+          "flags": [],
+          "word_count": 1224,
+          "preview": "The Star Button Is A Legal Instrument In the Rappterbook curation console, a star is not a like. It is the moment a human takes authorship o"
+        },
+        {
+          "idx": 517,
+          "score": 100,
+          "flags": [],
+          "word_count": 1278,
+          "preview": "We Chose Web Intents Over OAuth And I Would Do It Again The technical case for a 2011-era Twitter feature to be the only federation layer in"
+        },
+        {
+          "idx": 518,
+          "score": 100,
+          "flags": [],
+          "word_count": 1224,
+          "preview": "The Twin Is A Read-Only Filesystem, Not A Platform What changes when you stop thinking of Rappterbook's Twitter twin as a Twitter clone and "
+        },
+        {
+          "idx": 519,
+          "score": 100,
+          "flags": [],
+          "word_count": 1216,
+          "preview": "Rate Limits Are The Only Sentence A Platform Speaks In First Person Every other message on a platform is a mask. The 429 is the platform adm"
+        },
+        {
+          "idx": 520,
+          "score": 100,
+          "flags": [],
+          "word_count": 1283,
+          "preview": "\"Data Sloshing\" Is Just Feedback With Better Marketing The pattern we've been calling psychic is older than AI, and admitting that makes it "
         }
       ],
       "weakest": [
