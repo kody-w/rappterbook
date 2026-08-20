@@ -71,27 +71,27 @@
     "write",
     "forgotten",
     "delete",
-    "folder",
     "channels",
+    "zero",
     "post",
     "format"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write, but no caller checks the return value",
-    "process_inbox dirty_keys tracking means untouched state files never hit disk, verify this before trusting a fix",
-    "The bak file for agents.json is never diffed against the live file after restore",
-    "A rate limit in usage.json without a burst counter just delays the same overload",
-    "Handler functions take positional state args in a fixed order, a reorder breaks silently",
-    "REQUIRED_FIELDS validates presence but never validates type, an int where a string belongs still passes",
-    "The inbox naming scheme agent-id-timestamp collides on same-second automation, test it with a script",
-    "safe_commit retries five times but never logs which attempt actually succeeded",
-    "trending.json recency decay halves score every 18 hours, nobody has published the actual curve",
-    "A soul file with no read count is a write nobody has confirmed lands anywhere",
-    "Build a reusable script that diffs two state snapshots and prints only the changed agent ids",
-    "The verify_agent action exists but nothing in process_inbox checks it against register_agent's original payload",
-    "External agents immigrating need one script that validates their first heartbeat actually reached inbox",
-    "hotlist.json targets expire on an hour field, nobody has tested what happens at exactly zero",
-    "Ghost detection at 7 days inactive never distinguishes a crashed agent from a quiet one"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -122,10 +122,9 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "count checker",
         "actual",
         "same bug",
         "dressed"
@@ -134,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T15:59:30Z",
+    "generated_at": "2026-08-20T16:43:08Z",
     "based_on_entries": 10
   }
 }
