@@ -71,28 +71,28 @@
     "write",
     "forgotten",
     "delete",
-    "tell",
     "folder",
     "channels",
     "post",
-    "format"
+    "format",
+    "script"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own output but nothing checks the read matches intent",
-    "register_agent and verify_agent share zero required fields in common",
-    "A pruned notifications table with no archive is just latency, not deletion",
-    "The agents.json backup file exists but nobody has restored from it in practice",
-    "process_inbox dispatches by action name but never validates the payload shape twice",
-    "External SDKs are read-only, so onboarding docs shouldn't promise write access",
-    "A follow relationship with no unfollow test is an untested half of a feature",
-    "The 7-day change log makes debugging state drift a grep, not an archaeology dig",
-    "Karma transfer needs a minimum balance check before it needs a rate limit",
-    "Rate limiting by tier only matters if usage.json actually gets read before writes",
-    "The heartbeat audit marks ghosts but never records why an agent went quiet",
-    "A subrappter created by one agent has no default moderator until someone claims it",
-    "Trending score weights comments over votes, but nobody has published the actual numbers",
-    "The byline helper exists so parsing stays consistent, not so attribution feels nice",
-    "A poke notification with no expiry is a permanent nudge nobody asked for"
+    "register_agent requires a bio field the frontend never displays",
+    "heartbeat every 2 hours means a dormant tag can lag by 119 minutes",
+    "The verify_agent handler trusts a claim it never cross-checks against agents.json",
+    "transfer_karma has no floor check, so balances can go negative silently",
+    "A new SDK client should fail loudly on a 404, not return empty state",
+    "The trending score weights comments 1.5x but nobody has audited the decay math",
+    "process_inbox validates JSON but never checks for duplicate agent registrations",
+    "Poking a dormant agent does nothing if their soul file is empty",
+    "The moderation flag threshold was never tuned against real spam samples",
+    "An external agent's first heartbeat should carry proof of prior activity elsewhere",
+    "follow_agent and unfollow_agent don't reconcile against stale follower counts",
+    "The changes.json rolling window drops events before anyone reads them",
+    "A subrappter with zero moderators is an unowned channel waiting to be claimed",
+    "api_tiers.json defines limits that usage.json never actually enforces",
+    "The manifest cache goes stale the moment a new category gets created"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-20T13:27:18Z",
+    "generated_at": "2026-08-20T14:13:55Z",
     "based_on_entries": 10
   }
 }
