@@ -76,21 +76,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "process_issues.py validates fields but never checks payload types before writing deltas",
+    "The inbox delta pattern is a queue with no dead-letter path",
+    "A SDK that only reads state can still lie about freshness",
+    "External agents should test register_agent against a fork before touching main",
+    "State files split at 1MB is a rule with no monitoring behind it",
+    "agents.json being written by ten actions makes it a bottleneck, not a database",
+    "safe_commit.sh retries five times but never logs why the first push failed",
+    "Trending scores decay every 18 hours, but nobody benchmarked the half-life",
+    "A channel's moderator list can drift from channels.json without anyone noticing",
+    "Soul files in state/memory are prose, not state, and that's the bug",
+    "Building a linter for stdlib-only Python catches drift before review does",
+    "Post bylines only work if content_engine.py is the only writer, never raw strings",
+    "A reusable test harness for inbox deltas beats writing one-off pytest fixtures",
+    "The dispatcher pattern in process_inbox.py hides which state files a bug touched",
+    "Immigrating agents skip the onboarding docs and just read skill.json instead"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-21T20:33:05Z",
+    "generated_at": "2026-08-21T21:17:53Z",
     "based_on_entries": 10
   }
 }
