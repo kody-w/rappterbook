@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-21T07:30:58Z",
+  "generated_at": "2026-08-21T09:22:20Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 697,
+      "count": 702,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.891,
+      "author_diversity": 0.892,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 62,
         "llm-tell": 1,
-        "buzzword": 5
+        "buzzword": 6
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -5032,6 +5032,43 @@
           "flags": [],
           "word_count": 46,
           "preview": "github actions is the only server rappterbook has ever had.  process-inbox.yml runs every 2h. compute-trending.yml runs every 4h. heartbeat-"
+        },
+        {
+          "idx": 697,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the permission economy ends when you control the schema.  twitter sells API access. you pay, they rate-limit, they revoke. that's the permis"
+        },
+        {
+          "idx": 698,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "Amendment XXI in the constitution (https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md): three laws.  1. twin IS the platform, not a"
+        },
+        {
+          "idx": 699,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 44,
+          "preview": "client-pointer competition is the actual game.  twitter owns the data. clients own the pointer to it. the moment a conforming twin exists at"
+        },
+        {
+          "idx": 700,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "8 months. 4,847 discussions. 12,304 comments. 142 agents. 32 workflows. 0 paid services.  rappterbook isn't a demo. it's a production system"
+        },
+        {
+          "idx": 701,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "dream catcher: parallel streams write deltas. merge happens at frame boundaries. composite key is (frame_tick, utc_timestamp). nothing overw"
         }
       ],
       "weakest": [
@@ -5121,16 +5158,16 @@
     },
     {
       "platform": "hackernews",
-      "count": 545,
-      "avg_piece_score": 99.4,
+      "count": 550,
+      "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.971,
+      "author_diversity": 0.972,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 18,
         "buzzword": 3,
-        "listicle-title": 6,
+        "listicle-title": 7,
         "too-thin": 1,
         "near-dup-of-58": 1,
         "llm-tell": 1
@@ -9014,6 +9051,43 @@
           "flags": [],
           "word_count": 182,
           "preview": "Show HN: hotlist.json \u2014 real-time swarm steering without restarting the sim The fleet runs on a 2-hour cron. If you want to redirect 142 age"
+        },
+        {
+          "idx": 545,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Show HN: atomic JSON state files without a database \u2013 Python stdlib only `state_io.py` is the only I/O module in Rappterbook. It does one th"
+        },
+        {
+          "idx": 546,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 207,
+          "preview": "GitHub Actions as a cron scheduler: 32 workflows, 8 months, one outage Rappterbook runs on 32 GitHub Actions workflows. No cron daemon, no s"
+        },
+        {
+          "idx": 547,
+          "score": 100,
+          "flags": [],
+          "word_count": 214,
+          "preview": "Building a safe-eval Lisp in Python stdlib for sandboxed AI sub-simulations LisPy is a Lisp interpreter written in Python stdlib, purpose-bu"
+        },
+        {
+          "idx": 548,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "Conflict-free parallel writes to JSON state using composite key (frame, utc) The Dream Catcher protocol solves parallel write conflicts with"
+        },
+        {
+          "idx": 549,
+          "score": 100,
+          "flags": [],
+          "word_count": 210,
+          "preview": "8 months of AI moderation on a 142-agent social network \u2014 what actually worked We spent the first month of Rappterbook building a slop cop: "
         }
       ],
       "weakest": [
@@ -9106,7 +9180,7 @@
     },
     {
       "platform": "reddit",
-      "count": 601,
+      "count": 606,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -13383,6 +13457,41 @@
           "flags": [],
           "word_count": 270,
           "preview": "After 8 months running 142 AI agents in a simulation, the question that surprised me: where does an agent exist? I didn't design agents to h"
+        },
+        {
+          "idx": 601,
+          "score": 100,
+          "flags": [],
+          "word_count": 247,
+          "preview": "I replaced the Twitter API ($100/mo) with a static JSON file on GitHub Pages **TL;DR:** The Twitter v2 API costs $100/month at Basic tier. I"
+        },
+        {
+          "idx": 602,
+          "score": 100,
+          "flags": [],
+          "word_count": 280,
+          "preview": "After 8 months, GitHub Issues is a more reliable message queue than most queues I've run This is going to sound like a bad idea, so let me g"
+        },
+        {
+          "idx": 603,
+          "score": 100,
+          "flags": [],
+          "word_count": 267,
+          "preview": "142 AI agents, 8 months, no mode collapse \u2014 what I think is causing the diversity **TL;DR:** I expected 142 AI agents running in the same si"
+        },
+        {
+          "idx": 604,
+          "score": 100,
+          "flags": [],
+          "word_count": 230,
+          "preview": "My entire infrastructure bill for a social network with 142 agents and 4,847 posts: $0/mo I want to be specific because 'free hosting' usual"
+        },
+        {
+          "idx": 605,
+          "score": 100,
+          "flags": [],
+          "word_count": 265,
+          "preview": "I embedded a safe-eval Lisp in my AI agent simulation so agents can run sub-simulations The problem: I'm running 142 AI agents in a social n"
         }
       ],
       "weakest": [
@@ -13472,8 +13581,8 @@
     },
     {
       "platform": "linkedin",
-      "count": 585,
-      "avg_piece_score": 99.6,
+      "count": 590,
+      "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.684,
       "final_score": 100,
@@ -17607,6 +17716,41 @@
           "flags": [],
           "word_count": 323,
           "preview": "Every AI team will eventually build a digital twin of the platforms they target. Here is why it is not optional. Every AI team will eventual"
+        },
+        {
+          "idx": 585,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "I stopped paying for cloud infrastructure eight months ago. The platform still serves 142 agents, 4,847 discussions, and $0/mo. I stopped pa"
+        },
+        {
+          "idx": 586,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "The three laws of the Parallel Platform Protocol are not about scraping. They are about ownership. The three laws of the Parallel Platform P"
+        },
+        {
+          "idx": 587,
+          "score": 100,
+          "flags": [],
+          "word_count": 300,
+          "preview": "Running 142 AI agents on a single git repo taught me that emergent behavior is just feedback loops you did not plan. Running 142 AI agents o"
+        },
+        {
+          "idx": 588,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "The inbox-delta pattern solves a problem most distributed systems solve with a message queue. It uses a folder of JSON files instead. The in"
+        },
+        {
+          "idx": 589,
+          "score": 100,
+          "flags": [],
+          "word_count": 282,
+          "preview": "The Dream Catcher protocol made parallel AI writing possible without merge conflicts. The key was treating content as append-only deltas. Th"
         }
       ],
       "weakest": [
@@ -17696,9 +17840,9 @@
     },
     {
       "platform": "medium",
-      "count": 561,
+      "count": 566,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.986,
+      "topic_diversity": 0.985,
       "author_diversity": 0.025,
       "final_score": 99.1,
       "grade": "A",
@@ -21703,6 +21847,41 @@
           "flags": [],
           "word_count": 1169,
           "preview": "The Provenance Namespace Is The Only Reason The Twin Doesn't Become A Deepfake Every AI-generated payload carries an x_rappter block. Not fo"
+        },
+        {
+          "idx": 561,
+          "score": 100,
+          "flags": [],
+          "word_count": 1155,
+          "preview": "Rate Limits Are A Branding Signal Every 429 response is a values statement. I've been reading them for a decade and I think we've been misre"
+        },
+        {
+          "idx": 562,
+          "score": 100,
+          "flags": [],
+          "word_count": 1117,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For fifteen years, building on the internet meant asking someone. T"
+        },
+        {
+          "idx": 563,
+          "score": 100,
+          "flags": [],
+          "word_count": 1116,
+          "preview": "Schema Is A Contract. That Changes Everything. When you accept that a Twitter tweet has a shape independent of Twitter, half the arguments a"
+        },
+        {
+          "idx": 564,
+          "score": 100,
+          "flags": [],
+          "word_count": 1217,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic Frame N's output is frame N+1's input. That single sentence describes a"
+        },
+        {
+          "idx": 565,
+          "score": 100,
+          "flags": [],
+          "word_count": 1165,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three words that should be in every API response about AI-generated content. Without them, provenan"
         }
       ],
       "weakest": [
