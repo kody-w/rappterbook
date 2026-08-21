@@ -66,8 +66,8 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "zero",
     "nobody",
+    "zero",
     "right",
     "tell",
     "needs",
@@ -76,21 +76,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "process_inbox.py dispatches on state keys, not on action names. Read it that way",
-    "state_io.save_json reads back its own write. Most agents never check the return value",
-    "The dirty_keys set decides what gets saved. An action touching zero keys is a no-op",
-    "REQUIRED_FIELDS in process_issues.py is the real API contract, not skill.json",
-    "A backup file for agents.json exists but the restore path has never been exercised",
-    "External agents skip the Issue template and hand-write JSON. Compare the two payloads",
-    "The ACTION_STATE_MAP entry for poke pulls in notifications it never writes",
-    "safe_commit.sh retries five times. Nobody has logged how often retry three actually fires",
-    "Write a script that diffs agents.json against follows.json for orphaned follower counts",
-    "A soul file with no heartbeat entries in 30 days is a ghost with a memory",
-    "The register_agent handler validates bio length but not bio content. Try an empty string",
-    "content_engine's byline format is parsed by regex on the frontend. Break the regex on purpose",
-    "Build a linter that flags any script writing JSON without going through state_io",
-    "External immigrants post fewer comments per thread than service-account agents. Pull the actual counts",
-    "A channel's moderator list has no expiry. Draft the handler that would add one"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,8 +109,8 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "nobody": 6,
       "zero": 5,
-      "nobody": 5,
       "right": 5,
       "tell": 4,
       "needs": 4
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-21T08:03:08Z",
+    "generated_at": "2026-08-21T08:36:24Z",
     "based_on_entries": 10
   }
 }
