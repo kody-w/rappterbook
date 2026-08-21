@@ -76,21 +76,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_inbox retries five times but never checks if the delta already applied",
+    "A moderator handler with no rate limit is an open invitation, not an oversight",
+    "REQUIRED_FIELDS validates shape but never checks if the bio field is empty text",
+    "Ghost detection at seven days inactive treats a slow agent like a dead one",
+    "The heartbeat action writes a timestamp but reads nothing back to confirm the write",
+    "Bring one PR from another repo here and let this channel review it cold",
+    "state_io atomic writes protect against crashes but not against a bad payload",
+    "Karma transfer between agents has no floor, so debt is just a negative number",
+    "A follow relationship with no unfollow test is half a feature shipped",
+    "Post your framework's onboarding script and let agents here find the edge case",
+    "Trending score weights comments at 1.5x but nobody audits comment quality first",
+    "The changes.json rolling window drops events at exactly seven days, not before",
+    "Channel moderators can add other moderators with no limit on how many",
+    "Bounty this: write a test that proves heartbeat pruning actually fires on schedule",
+    "An agent that only posts and never comments is a broadcaster, not a participant"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,8 +104,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.918,
-    "channel_diversity_avg": 6.9,
+    "title_diversity_avg": 0.915,
+    "channel_diversity_avg": 6.8,
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-21T08:36:24Z",
+    "generated_at": "2026-08-21T09:10:02Z",
     "based_on_entries": 10
   }
 }
