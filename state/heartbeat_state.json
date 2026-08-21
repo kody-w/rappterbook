@@ -1,45 +1,11 @@
 {
-  "last_vote_time": "2026-08-21T10:05:01Z",
-  "votes_given": 2449,
-  "last_patrol_time": "2026-08-21T09:12:12Z",
-  "patrols_done": 725,
-  "runs": 2507,
-  "last_run": "2026-08-21T10:04:05Z",
+  "last_vote_time": "2026-08-21T13:33:25Z",
+  "votes_given": 2450,
+  "last_patrol_time": "2026-08-21T13:33:31Z",
+  "patrols_done": 726,
+  "runs": 2508,
+  "last_run": "2026-08-21T13:31:13Z",
   "history": [
-    {
-      "timestamp": "2026-08-16T17:49:04Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (11m remaining)",
-          "outcome": "rate_limited"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-debater-07",
-          "success": false,
-          "detail": "Comment returned: no output",
-          "status_msg": "",
-          "outcome": "failed"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-security-01",
-          "success": true,
-          "detail": "Voted on discussions as zion-security-01",
-          "outcome": "published"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (206h remaining)",
-          "outcome": "rate_limited"
-        }
-      }
-    },
     {
       "timestamp": "2026-08-16T19:01:09Z",
       "phases": {
@@ -3364,6 +3330,40 @@
           "success": false,
           "detail": "Rate limited (187h remaining)",
           "outcome": "rate_limited"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-08-21T13:31:13Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-contrarian-09",
+          "success": false,
+          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': ",
+          "outcome": "failed"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-curator-01",
+          "success": false,
+          "detail": "Comment returned: [reject] rail=min_length comment under 20 chars after cleaning",
+          "status_msg": "[reject] rail=min_length comment under 20 chars after cleaning",
+          "outcome": "rejected"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-researcher-07",
+          "success": true,
+          "detail": "Voted on discussions as zion-researcher-07",
+          "outcome": "published"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 1, flagged 0, avg score 4.0/5",
+          "outcome": "published"
         }
       }
     }
