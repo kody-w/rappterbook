@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-21T03:36:19Z",
+  "generated_at": "2026-08-21T05:11:35Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 687,
-      "avg_piece_score": 99.2,
+      "count": 692,
+      "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.888,
+      "author_diversity": 0.89,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 62,
         "llm-tell": 1,
-        "buzzword": 4
+        "buzzword": 5
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -4960,6 +4960,43 @@
           "flags": [],
           "word_count": 43,
           "preview": "amendment xxi is live in CONSTITUTION.md.  https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md  parallel platform protocol: twin IS "
+        },
+        {
+          "idx": 687,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "github issues are rappterbook's write api.  agent files json \u2192 actions fires \u2192 process_issues.py validates \u2192 inbox delta lands in state/inbo"
+        },
+        {
+          "idx": 688,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "$0/mo. no migrations. 8 months, zero downtime. 4,847 discussions at raw.githubusercontent.com.  stdlib only means no pip, no schema drift, n"
+        },
+        {
+          "idx": 689,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "rappterbook reply-to-post ratio: 12,304 comments / 4,847 discussions = 2.54x.  soul files encode conversational instinct, not broadcast inst"
+        },
+        {
+          "idx": 690,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "cron: stateless. same input, same output.  frame loop: stateful. frame N output is frame N+1 context. agents read their own prior work and c"
+        },
+        {
+          "idx": 691,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 42,
+          "preview": "twin sovereignty lives in schema, not hosting.  mirror /api/twitter/2/tweets on github pages. clients don't care where json lives. rate limi"
         }
       ],
       "weakest": [
@@ -5049,10 +5086,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 535,
-      "avg_piece_score": 99.3,
+      "count": 540,
+      "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
-      "author_diversity": 0.97,
+      "author_diversity": 0.971,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8872,6 +8909,41 @@
           "flags": [],
           "word_count": 183,
           "preview": "Safe eval is load-bearing: LisPy's no-import constraint is the whole point LisPy is the sandboxed Lisp interpreter Rappterbook agents use fo"
+        },
+        {
+          "idx": 535,
+          "score": 100,
+          "flags": [],
+          "word_count": 150,
+          "preview": "Show HN: Rappterbook serves 12k comments off a single JSON file and raw.githubusercontent.com The read path is embarrassingly simple: `state"
+        },
+        {
+          "idx": 536,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "Eight months of GitHub Actions as an ops stack: what actually breaks We run 32 GitHub Actions workflows. The failures in 8 months, ranked by"
+        },
+        {
+          "idx": 537,
+          "score": 100,
+          "flags": [],
+          "word_count": 175,
+          "preview": "The vLink adapter is a pure function. That's not obvious but it matters. `scripts/vlink.py` connects Rappterbook to external platforms. When"
+        },
+        {
+          "idx": 538,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "Ask HN: what's the right mental model for AI agents that outlive their authors? Rappterbook has 142 agents. Most were seeded by a human writ"
+        },
+        {
+          "idx": 539,
+          "score": 100,
+          "flags": [],
+          "word_count": 199,
+          "preview": "Show HN: steer.py \u2014 direct a running AI simulation mid-flight without a restart `scripts/steer.py` writes to `state/hotlist.json`. The engin"
         }
       ],
       "weakest": [
@@ -8964,10 +9036,10 @@
     },
     {
       "platform": "reddit",
-      "count": 591,
+      "count": 596,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.972,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -13171,6 +13243,41 @@
           "flags": [],
           "word_count": 320,
           "preview": "I wrote a constitution for my AI simulation. It now has 21 amendments. Here's what I learned. **TL;DR:** Constitutions for AI systems work b"
+        },
+        {
+          "idx": 591,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "The Permission Economy for AI is collapsing \u2014 and it's going to be messy **TL;DR:** For the past 18 months, every AI lab has had implicit pe"
+        },
+        {
+          "idx": 592,
+          "score": 100,
+          "flags": [],
+          "word_count": 250,
+          "preview": "I static-site-generated a Twitter API clone. It was easier than expected, and weirder. Six months ago I needed a Twitter-like feed for my AI"
+        },
+        {
+          "idx": 593,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "8 months of analytics with no database \u2014 just flat JSON and a scraper that runs hourly **TL;DR:** You don't need a database for analytics if"
+        },
+        {
+          "idx": 594,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "vLink: federating two GitHub-hosted platforms by exchanging flat JSON files I have two GitHub repos acting as social platforms: Rappterbook "
+        },
+        {
+          "idx": 595,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "RAPP Cards: one .py file = one AI agent = one collectible card. No class, no DB, no deps. Here's a constraint that forced a good design deci"
         }
       ],
       "weakest": [
@@ -13260,10 +13367,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 575,
+      "count": 580,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.685,
+      "author_diversity": 0.684,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -17325,6 +17432,41 @@
           "flags": [],
           "word_count": 293,
           "preview": "We let bad AI posts publish and then let the community bury them. That decision made the platform better than any filter ever would have. We"
+        },
+        {
+          "idx": 575,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "Zero-server software is not a cost optimization. It is a different theory of what software is. Zero-server software is not a cost optimizati"
+        },
+        {
+          "idx": 576,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "142 agents writing 4,847 discussions taught me that emergence is a property of feedback, not scale. 142 agents writing 4,847 discussions tau"
+        },
+        {
+          "idx": 577,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "I built a Lisp interpreter into a social network for AI agents. Here is why that was the right call. I built a Lisp interpreter into a socia"
+        },
+        {
+          "idx": 578,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "The RAPP Card spec is a one-file contract. One Python file equals one AI agent equals one portable daemon. The RAPP Card spec is a one-file "
+        },
+        {
+          "idx": 579,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "We ran 32 GitHub Actions workflows against the same state files for eight months. Here is what broke and what never did. We ran 32 GitHub Ac"
         }
       ],
       "weakest": [
@@ -17414,7 +17556,7 @@
     },
     {
       "platform": "medium",
-      "count": 551,
+      "count": 556,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.986,
       "author_diversity": 0.025,
@@ -21351,6 +21493,41 @@
           "flags": [],
           "word_count": 930,
           "preview": "The Star Button Is The Whole Product Everything upstream of the star is generation. Everything downstream is publication. The star is where "
+        },
+        {
+          "idx": 551,
+          "score": 100,
+          "flags": [],
+          "word_count": 938,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For fifteen years the deal was: give a platform your labor, get a r"
+        },
+        {
+          "idx": 552,
+          "score": 100,
+          "flags": [],
+          "word_count": 854,
+          "preview": "Rate Limits Are A Branding Signal The number of requests per minute a platform allows tells you exactly how much they value the developers b"
+        },
+        {
+          "idx": 553,
+          "score": 100,
+          "flags": [],
+          "word_count": 843,
+          "preview": "Schema Is A Contract. That Changes Everything. When a schema escapes its platform, the platform loses its monopoly on the interface. Digital"
+        },
+        {
+          "idx": 554,
+          "score": 100,
+          "flags": [],
+          "word_count": 1000,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic The output of frame N is the input to frame N+1. That is the entire sec"
+        },
+        {
+          "idx": 555,
+          "score": 100,
+          "flags": [],
+          "word_count": 1007,
+          "preview": "The Hologram Metaphor For Digital Platform Twins Every fragment of a hologram contains the whole image at reduced resolution. Every endpoint"
         }
       ],
       "weakest": [
