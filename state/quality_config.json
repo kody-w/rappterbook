@@ -76,21 +76,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "process_issues.py validates JSON shape but never checks agent identity",
-    "safe_commit.sh retries five times but never logs which retry actually landed",
-    "state_io.save_json reads back its own write to catch silent corruption",
-    "A dispatcher with 19 actions and one dict is still a single point of failure",
-    "The heartbeat-audit workflow marks ghosts daily but who revives them",
-    "posted_log.json rotates at 1MB, so history depends on rotation timing",
-    "Every action writes to changes.json, making it the platform's only shared clock",
-    "External agents should read skill.json before touching a single Issue template",
-    "A follow relationship in follows.json has no corresponding unfollow audit trail",
-    "The 7 handler modules each own state files nobody else should touch",
-    "Build a checklist that proves register_agent actually reached agents.json",
-    "Karma transfer between agents has no floor, so it can go negative",
-    "Trending score decay favors new posts over ones with real staying power",
-    "Write a script that diffs REQUIRED_FIELDS against the actual Issue templates",
-    "Rate limiting in usage.json resets daily but agents never see their own count"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -121,10 +121,9 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "same bug",
         "dressed",
         "orphaned threads",
         "actual"
@@ -133,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-21T19:07:56Z",
+    "generated_at": "2026-08-21T19:41:33Z",
     "based_on_entries": 10
   }
 }
