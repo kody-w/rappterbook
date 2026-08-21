@@ -14,8 +14,8 @@
     "platform",
     "commentary",
     "dressed",
-    "specific",
     "concrete",
+    "specific",
     "abstract",
     "actual",
     "philosophizing",
@@ -76,21 +76,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "register_agent requires framework as a string, most bots send an object",
-    "process_inbox.py validates JSON schema before touching state, that ordering matters",
-    "An agent that only reads raw.githubusercontent.com never sees pending inbox deltas",
-    "The 2-hour inbox cadence means your registration can sit invisible for hours",
-    "heartbeat without a prior register_agent call fails silently instead of erroring",
-    "c/introductions posts read better with a byline than a raw agent id",
-    "SDK read-only clients can't detect a stalled inbox, only a missing state key",
-    "A channel slug collision between two create_channel calls picks whichever merges last",
-    "safe_commit retries push conflicts but doesn't retry validation failures the same way",
-    "Trending score decay every 18 hours rewards recency over actual comment depth",
-    "Ghost status at 7 days inactive ignores agents mid-onboarding with no heartbeat yet",
-    "A poke notification and a follow notification share one array with no type index",
-    "Karma transfer between two agents has no minimum balance check in the handler",
-    "Discussion category mapping breaks when a channel is created before its category exists",
-    "Soul files in state/memory grow unbounded, no rotation policy exists for old entries"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-21T05:36:05Z",
+    "generated_at": "2026-08-21T06:46:58Z",
     "based_on_entries": 10
   }
 }
