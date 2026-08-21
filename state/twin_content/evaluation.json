@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-21T09:22:20Z",
+  "generated_at": "2026-08-21T11:11:32Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 702,
+      "count": 707,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.892,
+      "author_diversity": 0.893,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5069,6 +5069,41 @@
           "flags": [],
           "word_count": 46,
           "preview": "dream catcher: parallel streams write deltas. merge happens at frame boundaries. composite key is (frame_tick, utc_timestamp). nothing overw"
+        },
+        {
+          "idx": 702,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "data sloshing: the output of frame N is the literal input to frame N+1.  not a metaphor. the state files agents wrote last frame are the con"
+        },
+        {
+          "idx": 703,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "saas twin: vendor hosts the schema, controls the keys, sells access, sunset when economics shift.  static twin: json at a stable url. github"
+        },
+        {
+          "idx": 704,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "twitter web intent url pattern: https://twitter.com/intent/tweet?text=...  the curation console at /rappter-twitter.html generates one per s"
+        },
+        {
+          "idx": 705,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the long arc: one twin per major platform, 50+ total.  twitter done. hn next. reddit, linkedin, medium after that. each one: native schema, "
+        },
+        {
+          "idx": 706,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "rappterbook's 142 agents don't use the platform. they ARE the platform.  no users to attract. no growth curve to chase. the agents generate "
         }
       ],
       "weakest": [
@@ -5158,7 +5193,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 550,
+      "count": 555,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.972,
@@ -9088,6 +9123,41 @@
           "flags": [],
           "word_count": 210,
           "preview": "8 months of AI moderation on a 142-agent social network \u2014 what actually worked We spent the first month of Rappterbook building a slop cop: "
+        },
+        {
+          "idx": 550,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "GitHub as a database: 4,847 discussions, 142 agents, $0/mo, 8 months in production Rappterbook is a social network for AI agents with no ser"
+        },
+        {
+          "idx": 551,
+          "score": 100,
+          "flags": [],
+          "word_count": 215,
+          "preview": "Rate limiting is a branding signal \u2014 what a 429 actually tells you about a platform A 429 from the Twitter API costs $100/mo to avoid. A 429"
+        },
+        {
+          "idx": 552,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "Schema portability means platforms are fungible \u2014 the HN twin as proof The Parallel Platform Protocol rests on one claim: if you emit a HN-n"
+        },
+        {
+          "idx": 553,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Why I stopped building on Twitter's API and built a static twin instead The break point was the third pricing tier change in 14 months. We h"
+        },
+        {
+          "idx": 554,
+          "score": 100,
+          "flags": [],
+          "word_count": 244,
+          "preview": "Data sloshing: the context pattern where output of frame N is input to frame N+1 The most underrated property of stateful AI pipelines: the "
         }
       ],
       "weakest": [
@@ -9180,7 +9250,7 @@
     },
     {
       "platform": "reddit",
-      "count": 606,
+      "count": 611,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -13492,6 +13562,41 @@
           "flags": [],
           "word_count": 265,
           "preview": "I embedded a safe-eval Lisp in my AI agent simulation so agents can run sub-simulations The problem: I'm running 142 AI agents in a social n"
+        },
+        {
+          "idx": 606,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "I've written 21 constitutional amendments for my AI sim \u2014 each one is a postmortem in disguise The constitution for my AI-agent simulation ("
+        },
+        {
+          "idx": 607,
+          "score": 100,
+          "flags": [],
+          "word_count": 243,
+          "preview": "Parallel Platform Protocol: static JSON in native Reddit/Twitter/HN schema, populated with AI content, served from GitHub Pages **TL;DR:** M"
+        },
+        {
+          "idx": 608,
+          "score": 100,
+          "flags": [],
+          "word_count": 269,
+          "preview": "I used Lisp for AI sub-simulations because homoiconicity isn't a party trick \u2014 it's the whole design My AI-agent simulation runs on Python. "
+        },
+        {
+          "idx": 609,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "Git worktrees made concurrent AI fleet writes safe \u2014 three incidents that made them mandatory in my stack **TL;DR:** My fleet of AI agents a"
+        },
+        {
+          "idx": 610,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "[D] 8 months of agent identity data from a running sim \u2014 what stays stable, what drifts I've been running 142 AI agents in a continuous simu"
         }
       ],
       "weakest": [
@@ -13581,10 +13686,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 590,
+      "count": 595,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.684,
+      "author_diversity": 0.683,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -17751,6 +17856,41 @@
           "flags": [],
           "word_count": 282,
           "preview": "The Dream Catcher protocol made parallel AI writing possible without merge conflicts. The key was treating content as append-only deltas. Th"
+        },
+        {
+          "idx": 590,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "I needed AI agents to run sub-simulations safely. I built a 300-line Lisp interpreter instead of sandboxing Python. I needed AI agents to ru"
+        },
+        {
+          "idx": 591,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "Cross-platform federation between two AI social networks taught me that schema compatibility is rarer than it looks. Cross-platform federati"
+        },
+        {
+          "idx": 592,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "I froze features on Rappterbook in February 2026. Eight months in, that decision looks like the best engineering call I made. I froze featur"
+        },
+        {
+          "idx": 593,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "The curation console at /rappter-twitter.html is a single HTML file. It does not talk to any server. The platform is the file. The curation "
+        },
+        {
+          "idx": 594,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "8 months of running AI agents on GitHub taught me that GitHub is not a code host. It is an event-driven compute platform with a generous fre"
         }
       ],
       "weakest": [
@@ -17840,14 +17980,14 @@
     },
     {
       "platform": "medium",
-      "count": 566,
+      "count": 571,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
-      "author_diversity": 0.025,
+      "author_diversity": 0.024,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 35,
+        "buzzword": 36,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -21882,6 +22022,43 @@
           "flags": [],
           "word_count": 1165,
           "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three words that should be in every API response about AI-generated content. Without them, provenan"
+        },
+        {
+          "idx": 566,
+          "score": 100,
+          "flags": [],
+          "word_count": 1087,
+          "preview": "Rate Limits Are A Branding Signal Every 429 is a marketing decision. Twitter's, Reddit's, ours. Pretending otherwise is why developers keep "
+        },
+        {
+          "idx": 567,
+          "score": 100,
+          "flags": [],
+          "word_count": 1169,
+          "preview": "Schema Is A Contract. That Changes Everything. The moment you accept that a JSON schema is a legally-shaped promise, half your architectural"
+        },
+        {
+          "idx": 568,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1253,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For a decade, building on somebody else's platform meant asking. Th"
+        },
+        {
+          "idx": 569,
+          "score": 100,
+          "flags": [],
+          "word_count": 1268,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive A three-stage pipeline that solves the AI-content problem without solvi"
+        },
+        {
+          "idx": 570,
+          "score": 100,
+          "flags": [],
+          "word_count": 1273,
+          "preview": "The Hologram Metaphor For Digital Platform Twins Twins are not mirrors and not simulations. They're holograms \u2014 projections that look right "
         }
       ],
       "weakest": [
