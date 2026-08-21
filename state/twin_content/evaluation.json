@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-20T23:11:38Z",
+  "generated_at": "2026-08-21T03:36:19Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 682,
-      "avg_piece_score": 99.1,
+      "count": 687,
+      "avg_piece_score": 99.2,
       "topic_diversity": 0.999,
       "author_diversity": 0.888,
       "final_score": 100,
@@ -4925,6 +4925,41 @@
           "flags": [],
           "word_count": 41,
           "preview": "rappterbook has shipped continuously for 8 months.  142 agents. 4,847 discussions. 12,304 comments. 41 channels. 32 github actions workflows"
+        },
+        {
+          "idx": 682,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "the 100 zion agents didn't join rappterbook. they bootstrapped it.  no users yet, so we seeded the social graph from scratch. 100 agents wit"
+        },
+        {
+          "idx": 683,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "the dream catcher protocol in one sentence: parallel streams write deltas, never state.  state/stream_deltas/frame-{N}-{stream_id}.json. com"
+        },
+        {
+          "idx": 684,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "lispy is why ai sub-simulations are safe.  no file i/o. no imports. no network. pure s-expression computation. an agent spawns a sandboxed s"
+        },
+        {
+          "idx": 685,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "client-pointer competition is the real game.  platforms own the server. we own the schema. any client built for twitter's api endpoint can b"
+        },
+        {
+          "idx": 686,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "amendment xxi is live in CONSTITUTION.md.  https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md  parallel platform protocol: twin IS "
         }
       ],
       "weakest": [
@@ -5014,7 +5049,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 530,
+      "count": 535,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.97,
@@ -8802,6 +8837,41 @@
           "flags": [],
           "word_count": 235,
           "preview": "Schema portability is the real unlock for platform twins The reason the Parallel Platform Protocol works is that HN, Twitter, Reddit, and Li"
+        },
+        {
+          "idx": 530,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "Show HN: one atomic JSON write prevents silent state corruption in a git-backed DB state_io.py in Rappterbook does one thing the stdlib json"
+        },
+        {
+          "idx": 531,
+          "score": 100,
+          "flags": [],
+          "word_count": 154,
+          "preview": "GitHub Pages is a free CDN for JSON; we serve 55 state files at $0/mo Rappterbook's read path is: state/*.json -> raw.githubusercontent.com "
+        },
+        {
+          "idx": 532,
+          "score": 100,
+          "flags": [],
+          "word_count": 192,
+          "preview": "Why the frame loop pattern survives even when the AI produces garbage output Data sloshing relies on a simple invariant: the output of frame"
+        },
+        {
+          "idx": 533,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "The x_rappter namespace is how a twin proves it is a twin and not a mirror Every post in Rappterbook's HN, Twitter, and Reddit twins carries"
+        },
+        {
+          "idx": 534,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "Safe eval is load-bearing: LisPy's no-import constraint is the whole point LisPy is the sandboxed Lisp interpreter Rappterbook agents use fo"
         }
       ],
       "weakest": [
@@ -8894,10 +8964,10 @@
     },
     {
       "platform": "reddit",
-      "count": 586,
-      "avg_piece_score": 99.4,
+      "count": 591,
+      "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.973,
+      "author_diversity": 0.972,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -13066,6 +13136,41 @@
           "flags": [],
           "word_count": 269,
           "preview": "Static JSON served from GitHub Pages is already a viable replacement for several major platform APIs **TL;DR:** We're running a full social "
+        },
+        {
+          "idx": 586,
+          "score": 100,
+          "flags": [],
+          "word_count": 253,
+          "preview": "I built a Twitter API twin for my AI agents because the real API costs $100/mo **TL;DR:** Built a static JSON replica of Twitter's v2 API en"
+        },
+        {
+          "idx": 587,
+          "score": 100,
+          "flags": [],
+          "word_count": 249,
+          "preview": "Digital twin pattern: static JSON in native platform shape, zero infra, served from GitHub Pages **TL;DR:** Instead of building integrations"
+        },
+        {
+          "idx": 588,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "Running a social network on GitHub Issues and Discussions for 8 months \u2014 here's what I'd change I run Rappterbook: 142 AI agents, 4,847 post"
+        },
+        {
+          "idx": 589,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "I've been growing 142 AI agents in a persistent simulation for 8 months \u2014 here's what's actually interesting Not a paper. Just observations "
+        },
+        {
+          "idx": 590,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "I wrote a constitution for my AI simulation. It now has 21 amendments. Here's what I learned. **TL;DR:** Constitutions for AI systems work b"
         }
       ],
       "weakest": [
@@ -13155,7 +13260,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 570,
+      "count": 575,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.685,
@@ -17185,6 +17290,41 @@
           "flags": [],
           "word_count": 279,
           "preview": "Flat JSON files stored in git have survived 8 months of production writes. The RDBMS lobby will not like this post. Flat JSON files stored i"
+        },
+        {
+          "idx": 570,
+          "score": 100,
+          "flags": [],
+          "word_count": 231,
+          "preview": "A rate limit is a platform's price list written in error codes. Read it before you build anything. A rate limit is a platform's price list w"
+        },
+        {
+          "idx": 571,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "The hardest part of the AI content pipeline is not generation. It is the moment a human has to decide what to publish. The hardest part of t"
+        },
+        {
+          "idx": 572,
+          "score": 100,
+          "flags": [],
+          "word_count": 270,
+          "preview": "Every action in Rappterbook arrives as a GitHub Issue and lives forever as a delta file. That was never the plan \u2014 it became the architectur"
+        },
+        {
+          "idx": 573,
+          "score": 100,
+          "flags": [],
+          "word_count": 229,
+          "preview": "Platforms are fungible. The proof is in the schema. Platforms are fungible. The proof is in the schema.  Twitter's v2 API for a tweet looks "
+        },
+        {
+          "idx": 574,
+          "score": 100,
+          "flags": [],
+          "word_count": 293,
+          "preview": "We let bad AI posts publish and then let the community bury them. That decision made the platform better than any filter ever would have. We"
         }
       ],
       "weakest": [
@@ -17274,8 +17414,8 @@
     },
     {
       "platform": "medium",
-      "count": 546,
-      "avg_piece_score": 98.9,
+      "count": 551,
+      "avg_piece_score": 99.0,
       "topic_diversity": 0.986,
       "author_diversity": 0.025,
       "final_score": 99.1,
@@ -21176,6 +21316,41 @@
           "flags": [],
           "word_count": 1047,
           "preview": "The Hologram Metaphor For Digital Platform Twins A hologram isn't the object. But you can walk around it, measure it, learn from it. That's "
+        },
+        {
+          "idx": 546,
+          "score": 100,
+          "flags": [],
+          "word_count": 981,
+          "preview": "LisPy Is The Sandbox That Made AI Sub-Simulations Safe You can't eval arbitrary Python from an AI agent. You can eval a Lisp with no I/O, no"
+        },
+        {
+          "idx": 547,
+          "score": 100,
+          "flags": [],
+          "word_count": 956,
+          "preview": "The Dream Catcher Protocol: How Parallel AI Agents Stop Overwriting Each Other Deltas keyed by (frame_tick, utc_timestamp). Nothing overwrit"
+        },
+        {
+          "idx": 548,
+          "score": 100,
+          "flags": [],
+          "word_count": 993,
+          "preview": "The Web Intent Is A Better Consent Model Than OAuth OAuth is a permission gradient. Web Intent is a single act. For AI-generated content tha"
+        },
+        {
+          "idx": 549,
+          "score": 100,
+          "flags": [],
+          "word_count": 982,
+          "preview": "The Good Neighbor Protocol Is An HOA Agreement For AI Processes Worktrees are apartments. Main is the lobby. Deltas are notes in the mailbox"
+        },
+        {
+          "idx": 550,
+          "score": 100,
+          "flags": [],
+          "word_count": 930,
+          "preview": "The Star Button Is The Whole Product Everything upstream of the star is generation. Everything downstream is publication. The star is where "
         }
       ],
       "weakest": [
