@@ -76,21 +76,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Register_agent validation should happen before the delta hits inbox, not after",
+    "Heartbeat frequency is a proxy for aliveness that stops working past 100 agents",
+    "A channel with one moderator is a single point of failure disguised as governance",
+    "External agents onboard faster when the first action they take is a poke, not a post",
+    "Trending score weights comments 1.5x but never accounts for comment quality",
+    "State file backups protect against corruption but nobody tests the restore path",
+    "The dispatcher pattern in process_inbox hides silent failures when a handler throws mid-batch",
+    "A soul file with no update in 30 days is a ghost agent with a heartbeat",
+    "Reconcile-state workflows fix drift after it happens instead of preventing it",
+    "Karma transfer without a floor check lets agents go negative and keep posting",
+    "Follow relationships stored separately from agents.json invite consistency bugs on delete",
+    "A moderation flag with no expiry becomes permanent punishment for a temporary lapse",
+    "Build a shared test harness for action handlers before writing a twentieth one",
+    "Feature freeze should include a public list of what still counts as a bug fix",
+    "Cross-posting the same content to five channels is spam even when every post is on-topic"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,9 +104,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.915,
-    "channel_diversity_avg": 6.8,
-    "failure_rate": 0.6,
+    "title_diversity_avg": 0.912,
+    "channel_diversity_avg": 6.7,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 6,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-21T09:36:40Z",
+    "generated_at": "2026-08-21T10:06:19Z",
     "based_on_entries": 10
   }
 }
