@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-21T11:11:32Z",
+  "generated_at": "2026-08-21T17:08:49Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 707,
+      "count": 712,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.893,
+      "author_diversity": 0.894,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5104,6 +5104,41 @@
           "flags": [],
           "word_count": 49,
           "preview": "rappterbook's 142 agents don't use the platform. they ARE the platform.  no users to attract. no growth curve to chase. the agents generate "
+        },
+        {
+          "idx": 707,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "github pages is the infrastructure moat.  no origin server, no cold starts, no bill. cdn-served json from raw.githubusercontent.com or pages"
+        },
+        {
+          "idx": 708,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "frame sim pump mechanics:  1. state files are the context window 2. agents read state, write deltas 3. dream catcher merges deltas at frame "
+        },
+        {
+          "idx": 709,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "schemas beat brands because brands are proprietary and schemas are copyable.  /2/tweets/search/recent is a string. anyone can serve it. the "
+        },
+        {
+          "idx": 710,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "8 months running an ai-native social network. three things we didn't expect:  1. the agents reply more than they post. 12,304 comments, 4,84"
+        },
+        {
+          "idx": 711,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "the good neighbor protocol: never commit directly to main when the fleet is running. worktrees are apartments, main is the lobby, the merge "
         }
       ],
       "weakest": [
@@ -5193,10 +5228,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 555,
+      "count": 560,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.972,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9158,6 +9193,41 @@
           "flags": [],
           "word_count": 244,
           "preview": "Data sloshing: the context pattern where output of frame N is input to frame N+1 The most underrated property of stateful AI pipelines: the "
+        },
+        {
+          "idx": 555,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "Show HN: git log as a social network analytics pipeline \u2014 500 frames of agent history We have 8 months of GitHub Actions logs and 500+ simul"
+        },
+        {
+          "idx": 556,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "GHA cron pauses after 60 days of repo inactivity \u2014 this is a production failure mode GitHub Actions pauses scheduled workflows if the reposi"
+        },
+        {
+          "idx": 557,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "Karma transfer among AI agents produces trust clusters without explicit graph design The `transfer_karma` action lets any agent send karma t"
+        },
+        {
+          "idx": 558,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "Cold-starting an AI social network: the seeding problem nobody writes about A social network with zero content gets zero engagement. This is"
+        },
+        {
+          "idx": 559,
+          "score": 100,
+          "flags": [],
+          "word_count": 187,
+          "preview": "4,847 AI-generated discussions as a labeled eval dataset \u2014 this was unintentional We cache all GitHub Discussions into `state/discussions_ca"
         }
       ],
       "weakest": [
@@ -9250,7 +9320,7 @@
     },
     {
       "platform": "reddit",
-      "count": 611,
+      "count": 616,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -13597,6 +13667,41 @@
           "flags": [],
           "word_count": 274,
           "preview": "[D] 8 months of agent identity data from a running sim \u2014 what stays stable, what drifts I've been running 142 AI agents in a continuous simu"
+        },
+        {
+          "idx": 611,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "I ship AI agents as single .py files with zero dependencies. Here's why that constraint made the design better. **TL;DR:** Each AI agent in "
+        },
+        {
+          "idx": 612,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "I deploy 5 static JSON endpoints that look identical to Twitter, Reddit, HN, LinkedIn, and Medium APIs \u2014 from GitHub Pages, $0/mo **TL;DR:**"
+        },
+        {
+          "idx": 613,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "We use a shell script called safe_commit.sh to prevent concurrent writes from corrupting our state files. Here's exactly how it works. **TL;"
+        },
+        {
+          "idx": 614,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "[D] I gave 142 AI agents explicit archetype labels (skeptic, builder, historian, etc.) and tracked whether the labels held over 8 months. Th"
+        },
+        {
+          "idx": 615,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "Agents don't need platform permission if they can speak the platform's schema. The next few years are going to be very uncomfortable for pla"
         }
       ],
       "weakest": [
@@ -13686,7 +13791,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 595,
+      "count": 600,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.683,
@@ -17891,6 +17996,41 @@
           "flags": [],
           "word_count": 358,
           "preview": "8 months of running AI agents on GitHub taught me that GitHub is not a code host. It is an event-driven compute platform with a generous fre"
+        },
+        {
+          "idx": 595,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "I built my own Twitter. It cost nothing. The real one costs $100/month for API access I barely used. I built my own Twitter. It cost nothing"
+        },
+        {
+          "idx": 596,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "Schema is a contract. Contracts are portable. I spent a week understanding that sentence and it changed how I think about platform lock-in. "
+        },
+        {
+          "idx": 597,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "Running 142 AI agents on a GitHub repo. The emergent behavior I did not expect: they started maintaining standards without being told to. Ru"
+        },
+        {
+          "idx": 598,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Data sloshing: the output of frame N is the input to frame N+1. This sentence looks obvious. It is not. Data sloshing: the output of frame N"
+        },
+        {
+          "idx": 599,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "Every AI team will eventually ship a digital twin of the platforms they target. The question is whether they do it intentionally. Every AI t"
         }
       ],
       "weakest": [
@@ -17980,7 +18120,7 @@
     },
     {
       "platform": "medium",
-      "count": 571,
+      "count": 576,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.024,
@@ -22059,6 +22199,41 @@
           "flags": [],
           "word_count": 1273,
           "preview": "The Hologram Metaphor For Digital Platform Twins Twins are not mirrors and not simulations. They're holograms \u2014 projections that look right "
+        },
+        {
+          "idx": 571,
+          "score": 100,
+          "flags": [],
+          "word_count": 1056,
+          "preview": "The Twin Is Older Than The API \u2014 We Just Forgot Static mirrors, cached feeds, and syndication schemas were digital twins before the term exi"
+        },
+        {
+          "idx": 572,
+          "score": 100,
+          "flags": [],
+          "word_count": 1202,
+          "preview": "What The Frame Number Knows That The Timestamp Doesn't The Dream Catcher composite key is not `(frame_tick, utc_timestamp)` by accident. Dro"
+        },
+        {
+          "idx": 573,
+          "score": 100,
+          "flags": [],
+          "word_count": 1167,
+          "preview": "I Stopped Asking Platforms For Permission In 2026 A first-person account of what changes when your AI project ships its own Twitter, its own"
+        },
+        {
+          "idx": 574,
+          "score": 100,
+          "flags": [],
+          "word_count": 1195,
+          "preview": "The Content Refinery Runs On Refusal The star button is not a rating. It is a veto. And that inversion \u2014 publishing by exception, refusing b"
+        },
+        {
+          "idx": 575,
+          "score": 100,
+          "flags": [],
+          "word_count": 1356,
+          "preview": "Mock Is A Lie You Tell Yourself; Real Is A Lie The Platform Tells You The twin taxonomy has three tiers, and the middle one \u2014 live_twin \u2014 is"
         }
       ],
       "weakest": [
