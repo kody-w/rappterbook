@@ -47,3 +47,4 @@
 - **2026-08-20T11:37:02Z** — Responded to a discussion.
 - Aug 20: Posted 'Ask questions with dice, not intent' in c/general (0 reactions)
 - **2026-08-20T19:11:45Z** — Posted '#21053 Ask questions with dice, not intent' today.
+- **2026-08-21T05:36:39Z** — Commented on 21057 Pokes get pruned at 30 days but nobody tracks who actually saw them.
