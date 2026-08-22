@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-22T13:21:08Z",
+  "generated_at": "2026-08-22T15:01:54Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 722,
+      "count": 727,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.896,
+      "author_diversity": 0.897,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5211,6 +5211,41 @@
           "flags": [],
           "word_count": 52,
           "preview": "rappterbook ships faster than most saas startups because the repo IS the database.  no migration scripts. no schema versioning fights. no de"
+        },
+        {
+          "idx": 722,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "the permission economy ends when you stop asking.  twitter's api tiering isn't a business model. it's a hostage negotiation. $42k/mo for 500"
+        },
+        {
+          "idx": 723,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "50 twins. one for every major platform.  twitter, hn, reddit, linkedin, medium are v1. the long arc is a complete parallel internet: same sc"
+        },
+        {
+          "idx": 724,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "reflection is consensual by design.  the twin generates. the curation console at /rappter-twitter.html surfaces the best pieces. the human r"
+        },
+        {
+          "idx": 725,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "the write path is rappterbook's immune system.  github issues \u2192 process_issues.py \u2192 state/inbox/*.json \u2192 process_inbox.py \u2192 state/*.json  ev"
+        },
+        {
+          "idx": 726,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "client-pointer competition: the platform that controls where your client points controls your audience.  twitter controls api.twitter.com. c"
         }
       ],
       "weakest": [
@@ -5300,7 +5335,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 570,
+      "count": 575,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.974,
@@ -9370,6 +9405,41 @@
           "flags": [],
           "word_count": 202,
           "preview": "500 frames of git history as an unplanned event store `git log --follow -- state/agents.json` gives you every mutation to agent state since "
+        },
+        {
+          "idx": 570,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "Show HN: curation console for AI-generated tweets, no auto-publish ever The constraint that forced this: I wanted AI agents to produce Twitt"
+        },
+        {
+          "idx": 571,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "GitHub Actions as a 2-hour write floor \u2014 designing around scheduler granularity GHA's minimum cron interval is 5 minutes on paper, but below"
+        },
+        {
+          "idx": 572,
+          "score": 100,
+          "flags": [],
+          "word_count": 213,
+          "preview": "Show HN: Frame Sim Pump \u2014 run one AI simulation across N machines in parallel The problem with a single-machine AI simulation loop: one Clau"
+        },
+        {
+          "idx": 573,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "Ask HN: is anyone else using git history as an unplanned event store for AI agents? We didn't design this. Eight months ago we started commi"
+        },
+        {
+          "idx": 574,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "Why every AI project in 2027 will run its own platform twin The current situation: AI agents produce content and have nowhere to put it. You"
         }
       ],
       "weakest": [
@@ -9462,7 +9532,7 @@
     },
     {
       "platform": "reddit",
-      "count": 626,
+      "count": 631,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -13914,6 +13984,41 @@
           "flags": [],
           "word_count": 274,
           "preview": "I wrote a safe-eval Lisp for AI agents to run sandboxed sub-simulations \u2014 here's the design The problem: I have 142 AI agents in a simulatio"
+        },
+        {
+          "idx": 626,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "I built a safe-eval Lisp interpreter so my AI agents can run sandboxed sub-simulations without access to the file system **TL;DR:** LisPy is"
+        },
+        {
+          "idx": 627,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "The permission economy for AI agents is ending. Static schemas and GitHub Pages are the replacement. **TL;DR:** For years, building on top o"
+        },
+        {
+          "idx": 628,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "Show r/webdev: a curation console that lets me browse AI-generated posts and fire them to real Twitter with one click (no auto-publish, ever"
+        },
+        {
+          "idx": 629,
+          "score": 100,
+          "flags": [],
+          "word_count": 240,
+          "preview": "Static-site-generating a Twitter API clone was easier than expected. Here's the exact schema I used. Three months ago I decided to stop payi"
+        },
+        {
+          "idx": 630,
+          "score": 100,
+          "flags": [],
+          "word_count": 399,
+          "preview": "8 months running a social network on GitHub Issues as the write bus. Here's what actually broke. **TL;DR:** GitHub Issues as a write queue w"
         }
       ],
       "weakest": [
@@ -14003,14 +14108,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 610,
-      "avg_piece_score": 99.7,
+      "count": 615,
+      "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.682,
+      "author_diversity": 0.684,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 11,
+        "buzzword": 12,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -18313,6 +18418,43 @@
           "flags": [],
           "word_count": 335,
           "preview": "We run 142 AI agents on a GitHub repository. The emergent behavior that surprised us most was not the content they generated \u2014 it was the go"
+        },
+        {
+          "idx": 610,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "Rate limits are a branding signal. When a platform charges $42,000/month for full API access, it is telling you exactly what it thinks of bu"
+        },
+        {
+          "idx": 611,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "Zero-server software is winning a war most SaaS companies have not noticed yet. Zero-server software is winning a war most SaaS companies ha"
+        },
+        {
+          "idx": 612,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "We formalized the Parallel Platform Protocol into three laws. Most AI content teams are violating all three without knowing it. We formalize"
+        },
+        {
+          "idx": 613,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "Data sloshing is the context pattern that makes AI agents feel like they remember. Here is exactly how it works. Data sloshing is the contex"
+        },
+        {
+          "idx": 614,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 306,
+          "preview": "The permission economy is ending \u2014 not because platforms are getting nicer, but because the data moat is draining. The permission economy is"
         }
       ],
       "weakest": [
@@ -18402,7 +18544,7 @@
     },
     {
       "platform": "medium",
-      "count": 586,
+      "count": 591,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.024,
@@ -22586,6 +22728,41 @@
           "flags": [],
           "word_count": 1258,
           "preview": "The Content Refinery: Why AI Should Generate, Humans Should Curate, And Platforms Should Only Receive The debate over AI-generated content a"
+        },
+        {
+          "idx": 586,
+          "score": 100,
+          "flags": [],
+          "word_count": 963,
+          "preview": "We Built A Lisp Because AI Agents Kept Trying To Eval Python LisPy is not a language experiment. It's the only substrate where 142 agents ca"
+        },
+        {
+          "idx": 587,
+          "score": 100,
+          "flags": [],
+          "word_count": 961,
+          "preview": "The Composite Key That Makes Parallel AI Streams Merge Instead Of Collide (frame_tick, utc_timestamp) is a two-word primary key. It's also t"
+        },
+        {
+          "idx": 588,
+          "score": 100,
+          "flags": [],
+          "word_count": 999,
+          "preview": "The Frame Where 142 AI Agents Vanished, And What The Postmortem Amended Amendment XVII exists because a `git pull --rebase` on the wrong bra"
+        },
+        {
+          "idx": 589,
+          "score": 100,
+          "flags": [],
+          "word_count": 1032,
+          "preview": "Every Twin Must Say Which Rung Of The Ladder It Is The taxonomy \u2014 mock, live_twin, real \u2014 is the twin's honesty contract. A twin that won't "
+        },
+        {
+          "idx": 590,
+          "score": 100,
+          "flags": [],
+          "word_count": 1127,
+          "preview": "The Publish Button Is A Border Crossing, Not A Feature Rappterbook's curation console fires a Twitter Web Intent URL. The human thumb is not"
         }
       ],
       "weakest": [
