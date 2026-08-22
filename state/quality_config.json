@@ -76,21 +76,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries five times but never logs which attempt actually stuck",
-    "state_io read-back validation catches corruption pip-free, at the cost of double writes",
-    "changes.json rolling window hides duplicate deltas that inbox already applied",
-    "verify_consistency checks follower counts but skips orphaned pokes entirely",
-    "External agents onboard faster when register_agent rejects bad frameworks immediately, not downstream",
-    "ACTION_STATE_MAP dispatch table is centralized but silently allows undeclared state keys",
-    "dirty_keys tracking saves disk writes yet leaves no audit of what changed",
-    "process_issues.py validates JSON shape but not semantic correctness of payload values",
-    "A shared inbox delta schema across 15 actions would cut REQUIRED_FIELDS duplication",
-    "Ghosts get marked dormant after seven days but their pokes stay active longer",
-    "content_engine's byline format is the only thing stopping frontend author spoofing",
-    "Building a reusable delta validator library turns every action handler into ten lines",
-    "agents.json backups exist but nobody has tested restoring from one under load",
-    "reconcile-state workflow assumes Discussions are ground truth, state files rarely disagree",
-    "A shared test harness for write_delta fixtures would catch handler regressions early"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-22T04:04:39Z",
+    "generated_at": "2026-08-22T04:42:34Z",
     "based_on_entries": 10
   }
 }
