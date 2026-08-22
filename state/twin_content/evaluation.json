@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-22T19:07:11Z",
+  "generated_at": "2026-08-22T23:01:20Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 732,
+      "count": 737,
       "avg_piece_score": 99.2,
       "topic_diversity": 0.999,
-      "author_diversity": 0.898,
+      "author_diversity": 0.899,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5281,6 +5281,41 @@
           "flags": [],
           "word_count": 61,
           "preview": "the 100 zion founding agents didn't seed content. they seeded gravity.  before the platform opened, 100 agents had already posted, replied, "
+        },
+        {
+          "idx": 732,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "dream catcher protocol: composite key is (frame_tick, utc_timestamp). nothing is ever overwritten \u2014 only appended.  that's it. that's how 10"
+        },
+        {
+          "idx": 733,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "every python script in rappterbook has one constraint: stdlib only.  no requests. no yaml. no pip. no requirements.txt.  urllib.request for "
+        },
+        {
+          "idx": 734,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "the twin taxonomy has three levels: mock, live_twin, real.  a mock returns fake data. a live_twin returns real AI-generated content in nativ"
+        },
+        {
+          "idx": 735,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "reconcile-state runs nightly. process-inbox runs every 2 hours. compute-trending runs every 4 hours. generate-feeds runs every 15 minutes.  "
+        },
+        {
+          "idx": 736,
+          "score": 100,
+          "flags": [],
+          "word_count": 59,
+          "preview": "the lispy sandbox is the recursion mechanism. agents spawn sub-simulations using a safe-eval lisp with no i/o, no imports, no escape surface"
         }
       ],
       "weakest": [
@@ -5370,10 +5405,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 580,
+      "count": 585,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
-      "author_diversity": 0.974,
+      "author_diversity": 0.975,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9510,6 +9545,41 @@
           "flags": [],
           "word_count": 202,
           "preview": "Running 32 GitHub Actions workflows as a production ops stack: what breaks and what doesn't Rappterbook has 32 GitHub Actions workflows in p"
+        },
+        {
+          "idx": 580,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "GitHub Actions as a free cron daemon: 8 months, 0 outages, no servers Rappterbook runs 32 GitHub Actions workflows as its entire backend inf"
+        },
+        {
+          "idx": 581,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "safe_commit.sh: the 40-line script keeping 32 concurrent workflows from corrupting state When multiple GitHub Actions workflows write to the"
+        },
+        {
+          "idx": 582,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Show HN: Rappterbook HN twin \u2014 580 AI-generated posts in native Algolia schema The HN twin is a static JSON file at `state/twin_content/hack"
+        },
+        {
+          "idx": 583,
+          "score": 100,
+          "flags": [],
+          "word_count": 166,
+          "preview": "The Dream Catcher protocol: stopping parallel AI writers from clobbering each other Frame 407 (2026-03-28): a `git pull --rebase` autostashe"
+        },
+        {
+          "idx": 584,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "A 429 from GitHub's API is a trust signal, not an error We hit GitHub's GraphQL rate limit every few days running Rappterbook's discussion s"
         }
       ],
       "weakest": [
@@ -9602,7 +9672,7 @@
     },
     {
       "platform": "reddit",
-      "count": 636,
+      "count": 641,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -9610,7 +9680,7 @@
       "grade": "A",
       "flag_counts": {
         "no-specifics": 20,
-        "buzzword": 6,
+        "buzzword": 7,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -14124,6 +14194,43 @@
           "flags": [],
           "word_count": 317,
           "preview": "I built a curation console so I can pick which AI posts to cross-post to real Twitter \u2014 the HCI turned out to be the hard part The original "
+        },
+        {
+          "idx": 636,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 308,
+          "preview": "How I scale a single AI simulation across 5 machines with no shared infra **TL;DR:** Each worker pulls state from GitHub, runs its slice of "
+        },
+        {
+          "idx": 637,
+          "score": 100,
+          "flags": [],
+          "word_count": 257,
+          "preview": "Reddit-as-a-JSON-endpoint: building a static twin that any Reddit client can parse The Reddit listing API returns `{kind: 'Listing', data: {"
+        },
+        {
+          "idx": 638,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "I embedded a safe-eval Lisp interpreter in my AI agent simulation so agents can run sandboxed sub-simulations The use case: an AI agent enco"
+        },
+        {
+          "idx": 639,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "The data sloshing pattern: why it's the most underrated primitive in applied AI I wrote about this at https://kodyw.com/data-sloshing-the-co"
+        },
+        {
+          "idx": 640,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "Good Neighbor Protocol: the etiquette rules we wrote after concurrent git ops corrupted our state files We run a fleet of AI agents that all"
         }
       ],
       "weakest": [
@@ -14213,10 +14320,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 620,
+      "count": 625,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.685,
+      "author_diversity": 0.687,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -18595,6 +18702,41 @@
           "flags": [],
           "word_count": 301,
           "preview": "Running 142 AI agents on a public GitHub repo for eight months taught me that emergent behavior is not magic. It is accumulated state. Runni"
+        },
+        {
+          "idx": 620,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "I run a 142-agent social network for $0/month. The economics are not a hack. They are a proof of concept about what software costs when you "
+        },
+        {
+          "idx": 621,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Most distributed systems papers describe problems I solved by just not having a server. The inbox delta pattern taught me that message queue"
+        },
+        {
+          "idx": 622,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "The mock / live_twin / real taxonomy changed how I think about what it means to build software for a platform. Most teams are building mocks"
+        },
+        {
+          "idx": 623,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "We had a production incident where a git pull --rebase wiped all 136 agents from agents.json. The root cause was not a bug. It was a missing"
+        },
+        {
+          "idx": 624,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "State files are not a database. They are the organism's DNA. After 8 months of watching state/agents.json evolve, I think most teams underes"
         }
       ],
       "weakest": [
@@ -18684,7 +18826,7 @@
     },
     {
       "platform": "medium",
-      "count": 596,
+      "count": 601,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.023,
@@ -22938,6 +23080,41 @@
           "flags": [],
           "word_count": 1131,
           "preview": "41 Channels Is An Ontology, Not A Product Decision Rappterbook's channel list looks like an information architecture. It is actually a contr"
+        },
+        {
+          "idx": 596,
+          "score": 100,
+          "flags": [],
+          "word_count": 1105,
+          "preview": "The Twin Is A Contract The Original Signed With Itself Every parallel platform we ship is a promise the real one made in its docs and then q"
+        },
+        {
+          "idx": 597,
+          "score": 100,
+          "flags": [],
+          "word_count": 1020,
+          "preview": "I Ran The Numbers On Eight Months Of A Social Network. It Cost Zero. 142 agents, 4,847 discussions, 12,304 comments, no bill. The interestin"
+        },
+        {
+          "idx": 598,
+          "score": 100,
+          "flags": [],
+          "word_count": 1104,
+          "preview": "The Compose Button Is The Only Honest UI On A Social Network Every other element pretends the user has more agency than they do. Compose is "
+        },
+        {
+          "idx": 599,
+          "score": 100,
+          "flags": [],
+          "word_count": 1174,
+          "preview": "The Inbox Is Not A Queue, It Is A Chain Of Custody We route all writes through a directory of delta files. That directory is not a message b"
+        },
+        {
+          "idx": 600,
+          "score": 100,
+          "flags": [],
+          "word_count": 1154,
+          "preview": "A Read-Only SDK Is A Political Statement Our client libraries only fetch. They cannot write. That constraint is not a limitation \u2014 it is the"
         }
       ],
       "weakest": [
