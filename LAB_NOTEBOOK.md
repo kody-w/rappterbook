@@ -103,6 +103,69 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.39 — 2026-08-22 — Dreamcatcher closes Windows inbox aliases
+
+**Session**: gpt-5.4 via Copilot CLI / operator: kody-w
+**Read state**: 13accad910b9f51d94a14601fb9b6cf60f35e0cb on feature/dreamcatcher-delta — clean local follow-up branch, one commit ahead of origin/main
+
+### Hypothesis tested
+Canonical POSIX spelling alone is not enough when path components are later joined by Windows `pathlib`: a component such as `C:agents.json` can become drive-relative and select canonical state outside the intended inbox. Rejecting colon-qualified components before joining, then requiring the resolved file parent to equal the resolved configured inbox, should close that gap without importing private Dreamcatcher engine logic.
+
+### What I built
+- Hardened `scripts/dreamcatcher_seam.py` so every repository path component rejects colon and drive aliases, while resolved inbox files must be direct children of resolved `STATE_DIR/inbox`.
+- Synced the finalized public delta schema and required `repository.path_filter`; the consumer now validates its schema fields plus sorted, unique, normalized paths.
+- Added regressions for `state/inbox/C:agents.json`, colon aliases in multiple components, Windows canonical-state remapping, and missing or noncanonical path filters.
+- Prepared the local follow-up commit `Harden Dreamcatcher inbox path containment`; it was not pushed or merged.
+
+### What worked
+- Focused Dreamcatcher seam suite: **25 passed**.
+- Existing process-inbox and workflow-contract suites: **77 passed, 1 skipped**.
+- Changed Python files compiled successfully, no seam function exceeds 50 lines, schema SHA-256 matched the finalized private artifact byte-for-byte, and diff whitespace validation passed.
+
+### What failed
+- Direct Windows process-inbox testing still needs the repository's existing test-only no-op `fcntl` shim. Production portability changes remain outside this consumer hardening.
+
+### Lessons for next session
+1. A wire path can be POSIX-relative yet become drive-relative when individual components are passed to Windows `Path.joinpath`; component validation must happen before native path construction.
+2. State-root containment is weaker than the inbox contract. Files selected for consumption must also prove `resolved.parent == resolved_inbox`.
+3. Public provenance fields such as `path_filter` need canonical ordering and path validation at the consumer boundary, not trust in the private producer.
+
+### Recommended next move
+After the operator integrates this branch, run one finalized Dreamcatcher 0.2.0 manifest with `repository.path_filter` against a disposable Windows Rappterbook inbox, then run one ordinary no-environment Process Inbox dispatch. Verify only planned deltas publish, canonical state cannot be selected through aliases, and the GitHub Issues path remains unchanged before resuming Entry 003.37's public-discovery verification.
+
+## Entry 003.38 — 2026-08-22 — Dreamcatcher plans stop broad inbox scans
+
+**Session**: gpt-5.4 via Copilot CLI / operator: kody-w
+**Read state**: 9e76dd7b02d65083bdf286e86f71b6efbfdad5af on feature/dreamcatcher-delta — clean sparse checkout with historical state content intentionally absent
+
+### Hypothesis tested
+If private Dreamcatcher emits a canonical search plan, Rappterbook can validate that public wire artifact and constrain inbox processing without publishing the private generator, diff parser, frame loop, prompts, reducer, or merge algorithm. This user-directed reliability/performance integration explicitly superseded Entry 003.37's recommended public-discovery verification for this session.
+
+### What I built
+- Copied the canonical `dreamcatcher-delta/1.0` and `dreamcatcher-batch/1.0` wire schemas into clearly named files under `schema/`.
+- Added `scripts/dreamcatcher_seam.py`, a stdlib-only consumer that verifies canonical IDs, normalized state-relative paths, exact search-plan/change correspondence, planned file freshness, and inbox containment.
+- Updated `scripts/process_inbox.py` so `DREAMCATCHER_DELTA_MANIFEST` scopes processing in the existing queue order and invalid plans fail before state loading or writes; the no-environment GitHub Issues path is unchanged.
+- Added focused seam regressions and a concise architecture note. No state file, workflow, private engine implementation, or merge behavior was added here.
+- Committed the verified branch locally as `Consume Dreamcatcher search plans at inbox merge`; it was not pushed or merged.
+
+### What worked
+- The two public schema files are byte-for-byte SHA-256 matches for the canonical private wire artifacts.
+- Focused seam suite: **14 passed**.
+- Existing process-inbox and workflow-contract regressions: **77 passed, 1 skipped**; the skip is the existing size-dependent posted-log rotation fixture.
+- Changed Python files compiled successfully, both schema files parsed as JSON, and diff whitespace validation passed.
+
+### What failed
+- Direct Windows execution of the existing process-inbox tests still hits the repository's pre-existing Unix-only `fcntl` import. Validation used a test-only in-process no-op `fcntl` shim; production files were not changed to widen this task.
+- The full repository suite was not run because this sparse checkout intentionally omits historical `state/` content. The checkout was not widened and no state content was touched.
+
+### Lessons for next session
+1. A public consumer can enforce freshness and scope from blob hashes and canonical IDs without owning the private computation that produced them.
+2. Manifest order is not queue order; the consumer must reapply Rappterbook's numeric-Issue/FIFO ordering after selection.
+3. Optional protocol integration is safest when validation happens before even loading mutable state and the absent-environment path remains byte-for-byte behaviorally compatible.
+
+### Recommended next move
+After this local branch is integrated by the operator, run one private Dreamcatcher 0.2.0 manifest against a disposable Rappterbook inbox and one ordinary no-environment Process Inbox dispatch. Verify only planned deltas publish, the GitHub Issues path remains unchanged, and then resume Entry 003.37's public-discovery verification.
+
 ## Entry 003.37 — 2026-08-15 — Public discovery now waits for complete comment detail
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: kody-w

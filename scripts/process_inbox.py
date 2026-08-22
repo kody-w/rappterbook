@@ -25,6 +25,10 @@ DOCS_DIR = Path(os.environ.get("DOCS_DIR", "docs"))
 DEPENDENCY_GRACE = timedelta(hours=2)
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from dreamcatcher_seam import (
+    DreamcatcherManifestError,
+    load_planned_inbox_paths,
+)
 from state_io import load_json, save_json, now_iso
 from actions import HANDLERS
 from actions.media import eligible_media_submission_ids, publish_verified_media
@@ -439,6 +443,21 @@ def _queue_sort_key(path: Path) -> tuple[int, object]:
     return (1, path.name)
 
 
+def _inbox_delta_files(inbox_dir: Path) -> list[Path]:
+    """Return all deltas or the validated Dreamcatcher-planned subset."""
+    manifest_variable = "DREAMCATCHER_DELTA_MANIFEST"
+    if manifest_variable not in os.environ:
+        paths = inbox_dir.glob("*.json") if inbox_dir.exists() else []
+        return sorted(paths, key=_queue_sort_key)
+    manifest_value = os.environ[manifest_variable].strip()
+    if not manifest_value:
+        raise DreamcatcherManifestError(
+            f"{manifest_variable} must name a manifest JSON file"
+        )
+    planned = load_planned_inbox_paths(Path(manifest_value), STATE_DIR)
+    return sorted(planned, key=_queue_sort_key)
+
+
 def _apply_delta(
     delta: dict,
     state: dict,
@@ -634,13 +653,13 @@ def _fire_webhooks(state: dict, processed: int) -> None:
 def main() -> int:
     """Process inbox deltas with retryable and terminal outcomes."""
     inbox_dir = STATE_DIR / "inbox"
+    try:
+        delta_files = _inbox_delta_files(inbox_dir)
+    except DreamcatcherManifestError as exc:
+        print(f"Invalid Dreamcatcher delta manifest: {exc}", file=sys.stderr)
+        return 2
     state = load_state(STATE_DIR)
     eligible_media_ids = eligible_media_submission_ids(state["flags"])
-    delta_files = (
-        sorted(inbox_dir.glob("*.json"), key=_queue_sort_key)
-        if inbox_dir.exists()
-        else []
-    )
     dirty_keys: Set[str] = set()
     agent_action_count: dict = {}
     terminal: list[tuple[Path, dict]] = []

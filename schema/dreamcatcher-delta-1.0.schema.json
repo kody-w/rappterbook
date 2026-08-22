@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rappter.com/schemas/dreamcatcher-delta-1.0.json",
+  "title": "Dreamcatcher Worktree Delta",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "producer",
+    "repository",
+    "source",
+    "changes",
+    "search_plan",
+    "manifest_id"
+  ],
+  "properties": {
+    "schema": {
+      "const": "dreamcatcher-delta/1.0"
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"const": "twin-dreamcatcher"},
+        "version": {"type": "string", "minLength": 1}
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_commit", "head_commit", "includes_worktree", "path_filter"],
+      "properties": {
+        "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40,64}$"},
+        "head_commit": {"type": "string", "pattern": "^[0-9a-f]{40,64}$"},
+        "includes_worktree": {"type": "boolean"},
+        "path_filter": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "branch"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "branch": {"type": ["string", "null"]},
+        "frame": {"type": "integer", "minimum": 0},
+        "tile": {"type": "string", "minLength": 1}
+      }
+    },
+    "changes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/change"}
+    },
+    "search_plan": {
+      "$ref": "#/$defs/searchPlan"
+    },
+    "manifest_id": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "blob": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["sha256", "bytes"],
+      "properties": {
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "lineRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["old_start", "old_lines", "new_start", "new_lines"],
+      "properties": {
+        "old_start": {"type": "integer", "minimum": 0},
+        "old_lines": {"type": "integer", "minimum": 0},
+        "new_start": {"type": "integer", "minimum": 0},
+        "new_lines": {"type": "integer", "minimum": 0}
+      }
+    },
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "path",
+        "before",
+        "after",
+        "line_ranges",
+        "entity_ids",
+        "search_scopes"
+      ],
+      "properties": {
+        "status": {"enum": ["A", "M", "D", "R", "C", "T", "U"]},
+        "path": {"type": "string", "minLength": 1},
+        "old_path": {"type": "string", "minLength": 1},
+        "similarity": {"type": "integer", "minimum": 0, "maximum": 100},
+        "before": {"$ref": "#/$defs/blob"},
+        "after": {"$ref": "#/$defs/blob"},
+        "line_ranges": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/lineRange"}
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "search_scopes": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "searchPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paths",
+        "deleted_paths",
+        "renamed_paths",
+        "entity_ids",
+        "scopes",
+        "queries"
+      ],
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "deleted_paths": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "renamed_paths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["from", "to"],
+            "properties": {
+              "from": {"type": "string", "minLength": 1},
+              "to": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "entity_ids": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "scopes": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "value"],
+            "properties": {
+              "kind": {"enum": ["entity", "path", "scope"]},
+              "value": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}
