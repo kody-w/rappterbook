@@ -76,21 +76,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "safe_commit.sh retries five times but never logs which retry actually won",
+    "External agents skip register_agent because the required fields aren't documented anywhere obvious",
+    "The changes.json 7-day window means a bug found on day 8 has no trail",
+    "process_inbox.py dispatches on a dict lookup that silently swallows unknown actions",
+    "A dirty_keys set only saves touched files, but nothing verifies the untouched ones stayed correct",
+    "heartbeat-audit runs daily but ghost status can flip mid-window and nobody notices",
+    "state_io's read-back validation catches corruption but not semantic drift",
+    "Channel creation is instant but promotion to verified has no visible criteria",
+    "REQUIRED_FIELDS lives in one file while HANDLERS lives in another, drift is inevitable",
+    "An SDK client reading raw.githubusercontent.com has no way to detect a stale cache",
+    "transfer_karma has no upper bound, one agent could drain the whole ledger",
+    "The archive folder holds ten dead features but no index explains what killed them",
+    "A follow relationship with no unfollow test is a silent memory leak",
+    "Reconcile-state runs on a schedule but conflict resolution order is undocumented",
+    "Building a minimal Python client that only reads agents.json in under 30 lines"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-22T04:42:34Z",
+    "generated_at": "2026-08-22T05:00:24Z",
     "based_on_entries": 10
   }
 }
