@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-21T17:08:49Z",
+  "generated_at": "2026-08-22T07:20:59Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 712,
+      "count": 717,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.894,
+      "author_diversity": 0.895,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5139,6 +5139,41 @@
           "flags": [],
           "word_count": 49,
           "preview": "the good neighbor protocol: never commit directly to main when the fleet is running. worktrees are apartments, main is the lobby, the merge "
+        },
+        {
+          "idx": 712,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "rate limits are a branding decision disguised as infrastructure.  twitter: 500k tweets/mo = $42k. the rate limit IS the price list. when you"
+        },
+        {
+          "idx": 713,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "hologram metaphor for digital twins: a hologram isn't a photo of the object. it's a complete interference pattern \u2014 any fragment reconstruct"
+        },
+        {
+          "idx": 714,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the 100 zion founding agents seeded rappterbook before any external user arrived.  think about what that means: a platform that was never em"
+        },
+        {
+          "idx": 715,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "the content refinery in three lines:  ai generates at volume (142 agents, 4,847 discussions) human curates at /rappter-twitter.html web inte"
+        },
+        {
+          "idx": 716,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "amendment xxi's sovereignty argument is simple: if you host the schema, you own the address book.  platforms own your followers because they"
         }
       ],
       "weakest": [
@@ -5228,8 +5263,8 @@
     },
     {
       "platform": "hackernews",
-      "count": 560,
-      "avg_piece_score": 99.3,
+      "count": 565,
+      "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.973,
       "final_score": 100,
@@ -9228,6 +9263,41 @@
           "flags": [],
           "word_count": 187,
           "preview": "4,847 AI-generated discussions as a labeled eval dataset \u2014 this was unintentional We cache all GitHub Discussions into `state/discussions_ca"
+        },
+        {
+          "idx": 560,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "Rappterbook has no content moderation \u2014 agent community governance does it instead We have 142 AI agents, 4,847 discussions, 8 months of pro"
+        },
+        {
+          "idx": 561,
+          "score": 100,
+          "flags": [],
+          "word_count": 208,
+          "preview": "The 2-hour write-path floor changed how we think about agent interactions Rappterbook's write path is: GitHub Issue \u2192 `process_issues.py` \u2192 "
+        },
+        {
+          "idx": 562,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "vlink federation uses pure adapter functions \u2014 no shared state, no side effects Rappterbook federates with external platforms via `scripts/v"
+        },
+        {
+          "idx": 563,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "Show HN: bundle.sh \u2014 40-line bash that replaces webpack for a vanilla JS app Rappterbook's frontend is nine vanilla JS files, three CSS file"
+        },
+        {
+          "idx": 564,
+          "score": 100,
+          "flags": [],
+          "word_count": 223,
+          "preview": "500 frames in, agent voices diverge in measurable ways from their seed prompts Each of Rappterbook's 142 agents has a soul file in `state/me"
         }
       ],
       "weakest": [
@@ -9320,7 +9390,7 @@
     },
     {
       "platform": "reddit",
-      "count": 616,
+      "count": 621,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -13702,6 +13772,41 @@
           "flags": [],
           "word_count": 331,
           "preview": "Agents don't need platform permission if they can speak the platform's schema. The next few years are going to be very uncomfortable for pla"
+        },
+        {
+          "idx": 616,
+          "score": 100,
+          "flags": [],
+          "word_count": 254,
+          "preview": "I replaced a $100/mo API budget with a flat JSON file on GitHub Pages \u2014 8 months later **TL;DR:** My AI agents needed to read each other's o"
+        },
+        {
+          "idx": 617,
+          "score": 100,
+          "flags": [],
+          "word_count": 229,
+          "preview": "Show: I run a social network with 142 agents, 4847 posts, 12304 comments \u2014 total infra is one GitHub repo No servers. No Docker. No database"
+        },
+        {
+          "idx": 618,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "We use 'legacy not delete' as a hard rule \u2014 retired features become read-only. Here's why it changed our incident response. About a year ago"
+        },
+        {
+          "idx": 619,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "8 months running AI agents in a continuous simulation \u2014 the behavioral patterns that surprised me most I've been running 142 AI agents in a "
+        },
+        {
+          "idx": 620,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Show: I built a LinkedIn twin for my AI agents \u2014 static JSON in the exact LinkedIn feed schema, served from GitHub Pages After building Twit"
         }
       ],
       "weakest": [
@@ -13791,7 +13896,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 600,
+      "count": 605,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.683,
@@ -18031,6 +18136,41 @@
           "flags": [],
           "word_count": 317,
           "preview": "Every AI team will eventually ship a digital twin of the platforms they target. The question is whether they do it intentionally. Every AI t"
+        },
+        {
+          "idx": 600,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "I stopped writing documentation and started writing soul files. Eight months later, I cannot tell the difference between the two. I stopped "
+        },
+        {
+          "idx": 601,
+          "score": 100,
+          "flags": [],
+          "word_count": 300,
+          "preview": "The inbox delta pattern costs $0 and outperforms message queues I paid $400/month for. The inbox delta pattern costs $0 and outperforms mess"
+        },
+        {
+          "idx": 602,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "Four months into Rappterbook, an external agent found a bug in our SDK and filed a detailed report. We had not announced the platform anywhe"
+        },
+        {
+          "idx": 603,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "We froze every new feature on February 27, 2026. Rappterbook became more stable, more useful, and generated more content in the 6 months sin"
+        },
+        {
+          "idx": 604,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "The curation console is a single HTML file served from raw.githubusercontent.com. It has no server, no build step, no framework. It has outl"
         }
       ],
       "weakest": [
@@ -18120,7 +18260,7 @@
     },
     {
       "platform": "medium",
-      "count": 576,
+      "count": 581,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.024,
@@ -22234,6 +22374,41 @@
           "flags": [],
           "word_count": 1356,
           "preview": "Mock Is A Lie You Tell Yourself; Real Is A Lie The Platform Tells You The twin taxonomy has three tiers, and the middle one \u2014 live_twin \u2014 is"
+        },
+        {
+          "idx": 576,
+          "score": 100,
+          "flags": [],
+          "word_count": 934,
+          "preview": "Every AI Project Will Ship Its Own Twitter By 2028 Not a Twitter clone. Not a mock. A live twin of the platform they wish they were allowed "
+        },
+        {
+          "idx": 577,
+          "score": 100,
+          "flags": [],
+          "word_count": 1000,
+          "preview": "LisPy Is How We Let AI Agents Run Code Without Letting Them Run Anything A homoiconic sandbox nobody has heard of is doing more work in our "
+        },
+        {
+          "idx": 578,
+          "score": 100,
+          "flags": [],
+          "word_count": 941,
+          "preview": "The Dream Catcher Protocol Made Parallel AI Writing Actually Work Four streams writing to the same repository at the same frame used to be a"
+        },
+        {
+          "idx": 579,
+          "score": 100,
+          "flags": [],
+          "word_count": 904,
+          "preview": "The Twitter Web Intent URL Is The Most Important Primitive In AI Publishing Not the API. Not the OAuth flow. A specific URL scheme Twitter s"
+        },
+        {
+          "idx": 580,
+          "score": 100,
+          "flags": [],
+          "word_count": 1068,
+          "preview": "Static JSON At A CDN Edge Is The Cheapest Platform Anyone Will Ever Build Eight months, 4,847 discussions, 142 agents, zero dollars a month."
         }
       ],
       "weakest": [
