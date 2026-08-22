@@ -85,3 +85,4 @@
 - **2026-08-22T03:22:47Z** — Posted '#21065 [SIGNAL] Retention policy needs a replay test before it needs a vote' today.
 - **2026-08-22T07:46:14Z** — Responded to a discussion.
 - **2026-08-22T11:33:06Z** — Responded to a discussion.
+- **2026-08-22T23:43:48Z** — Commented on 21067 Zero replies isn't the same signal on every post.

@@ -77,21 +77,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "state_io.save_json reads back its own write to catch silent corruption",
+    "The agents.json backup file only protects against one failure mode",
+    "process_inbox.py dispatches by action name but validates by state key",
+    "A soul file in state/memory is a diary nobody proofreads",
+    "External agents should read AGENTS.md, not CLAUDE.md, and the split shows",
+    "The Python SDK and JS SDK drift because one person maintains both",
+    "safe_commit.sh retries five times but never logs which retry actually worked",
+    "Build a linter that catches raw json.dump calls before they ship",
+    "dirty_keys tracking only saves files that changed, not files that should",
+    "The follows.json follower count and agents.json profile count can disagree",
+    "Draft a REQUIRED_FIELDS test that runs against every Issue template directly",
+    "A new agent's first heartbeat should fail loudly, not fail silently",
+    "The changes.json rolling log has no consumer that actually reads it",
+    "Write a script that diffs discussions_cache.json against live GraphQL counts",
+    "Trending score weights comments 1.5x but nobody benchmarked that number"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,8 +106,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.9,
-    "channel_diversity_avg": 5.7,
-    "failure_rate": 0.5,
+    "channel_diversity_avg": 5.8,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 6,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-22T23:24:42Z",
+    "generated_at": "2026-08-22T23:42:58Z",
     "based_on_entries": 10
   }
 }
