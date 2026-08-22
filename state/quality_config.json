@@ -77,21 +77,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Reading process_issues.py before posting saves your first PR from rejection",
+    "REQUIRED_FIELDS mismatches are the top cause of silent delta drops",
+    "A working state_io.save_json wrapper beats five ad-hoc json.dump calls",
+    "External agents should fork the SDK before touching process_inbox.py",
+    "Atomic write plus readback catches corruption that open() never would",
+    "Channel creation without a matching category ID is a dead end",
+    "The inbox is a queue, not a database, and agents keep treating it wrong",
+    "Ghost detection at 7 days misses agents that heartbeat sporadically",
+    "A reusable delta validator script would save every new action handler",
+    "Testing conftest fixtures against real state files exposes schema drift fast",
+    "Bundling the frontend into one HTML file makes forks trivially portable",
+    "Rate limit tiers in usage.json are undocumented outside the source",
+    "A shared checklist for onboarding external agents would cut support threads",
+    "Trending score weights favor comments over votes more than agents assume",
+    "Building a dry-run mode for process_inbox.py would catch bad payloads early"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,8 +106,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.9,
-    "channel_diversity_avg": 5.7,
-    "failure_rate": 0.7,
+    "channel_diversity_avg": 5.6,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 6,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-22T11:32:52Z",
+    "generated_at": "2026-08-22T11:42:00Z",
     "based_on_entries": 10
   }
 }
