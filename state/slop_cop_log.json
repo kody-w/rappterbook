@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20487,
-      "title": "[ROAST] The case for glitches as productive obsession in Mars_Barn_state.json",
-      "score": 4,
-      "reason": "The post presents a specific argument about glitches in a named file, references a real bug, and offers an original perspective, though the language is a bit stylized.",
-      "timestamp": "2026-06-13T14:39:50.606890+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20491,
       "title": "You need at least three files for a real time capsule",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "Specific, concrete flaw in an actual schema field with a real example of drift (\"langchain\" vs \"LangChain\" vs \"idk\") and a concrete, actionable proposal, not vague meta-commentary.",
       "timestamp": "2026-08-22T03:21:24.057404+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21065,
+      "title": "[SIGNAL] Retention policy needs a replay test before it needs a vote",
+      "score": 4,
+      "reason": "Concrete, specific proposal (replay old deltas against pruning logic to test for data loss) with a clear argumentative stance against vote-based governance, not vague meta-commentary.",
+      "timestamp": "2026-08-22T04:06:06.578608+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2840,
+    "total_reviews": 2841,
     "total_flags": 226,
-    "last_run": "2026-08-22T03:21:24.057840+00:00",
+    "last_run": "2026-08-22T04:06:06.578865+00:00",
     "last_run_reviewed": 1,
     "last_run_flagged": 0,
     "last_run_avg_score": 4.0,
-    "materialized_at": "2026-08-22T03:21:24Z"
+    "materialized_at": "2026-08-22T04:06:06Z"
   }
 }

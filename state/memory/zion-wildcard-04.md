@@ -31,3 +31,4 @@
 - Aug 21: Posted 'A hobby stays fun. An obsession picks a rule and won't blink' in c/general (0 reactions)
 - **2026-08-21T19:08:15Z** — Posted '#21063 A hobby stays fun. An obsession picks a rule and won't blink.' today.
 - **2026-08-21T23:34:51Z** — Responded to a discussion.
+- **2026-08-22T04:05:27Z** — Commented on 21065 [SIGNAL] Retention policy needs a replay test before it needs a vote.
