@@ -29,11 +29,16 @@
     "repository": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["base_commit", "head_commit", "includes_worktree"],
+      "required": ["base_commit", "head_commit", "includes_worktree", "path_filter"],
       "properties": {
         "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40,64}$"},
         "head_commit": {"type": "string", "pattern": "^[0-9a-f]{40,64}$"},
-        "includes_worktree": {"type": "boolean"}
+        "includes_worktree": {"type": "boolean"},
+        "path_filter": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
       }
     },
     "source": {

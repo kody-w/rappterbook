@@ -109,6 +109,7 @@ def _write_manifest(path: Path, changes: list[dict]) -> Path:
             "base_commit": "0" * 40,
             "head_commit": "1" * 40,
             "includes_worktree": True,
+            "path_filter": ["state/inbox"],
         },
         "source": {
             "id": "pytest",
@@ -124,6 +125,19 @@ def _write_manifest(path: Path, changes: list[dict]) -> Path:
         encoding="utf-8",
     )
     return path
+
+
+def _write_rehashed_manifest(path: Path, manifest: dict) -> None:
+    """Write a modified manifest with a fresh canonical content ID."""
+    payload = {
+        key: value for key, value in manifest.items()
+        if key != "manifest_id"
+    }
+    manifest["manifest_id"] = _canonical_id(payload)
+    path.write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
 
 
 def _wire_path(state_dir: Path, file_path: Path) -> str:
@@ -334,6 +348,105 @@ def test_manifest_rejects_path_escape(
     assert result.returncode == 2
     assert "path" in result.stderr.lower()
     assert _state_snapshot(tmp_state) == before
+
+
+@pytest.mark.parametrize(
+    "wire_path",
+    [
+        "state/inbox/C:agents.json",
+        "state/in:box/agents.json",
+        "state/C:inbox/agents.json",
+        "state/inbox/agents.json:stream",
+    ],
+)
+def test_manifest_rejects_colon_path_aliases(
+    tmp_state: Path,
+    tmp_path: Path,
+    wire_path: str,
+) -> None:
+    """Every wire-path component rejects Windows drive and stream aliases."""
+    manifest = _write_manifest(
+        tmp_path / "manifest.json",
+        [_change(wire_path)],
+    )
+    before = _state_snapshot(tmp_state)
+
+    result = _run_inbox(tmp_state, manifest)
+
+    assert result.returncode == 2
+    assert "colon path component" in result.stderr
+    assert _state_snapshot(tmp_state) == before
+
+
+@pytest.mark.skipif(os.name != "nt", reason="Windows drive-relative semantics")
+def test_drive_relative_alias_cannot_map_to_canonical_state(
+    tmp_state: Path,
+    tmp_path: Path,
+) -> None:
+    """A drive-relative inbox name cannot select a canonical state file."""
+    canonical_state = tmp_state / "agents.json"
+    alias_name = f"{tmp_state.drive}agents.json"
+    assert tmp_state.joinpath("inbox", alias_name) == canonical_state
+    manifest = _write_manifest(
+        tmp_path / "manifest.json",
+        [_change(f"state/inbox/{alias_name}", canonical_state)],
+    )
+    before = _state_snapshot(tmp_state)
+
+    result = _run_inbox(tmp_state, manifest)
+
+    assert result.returncode == 2
+    assert "colon path component" in result.stderr
+    assert _state_snapshot(tmp_state) == before
+
+
+def test_manifest_requires_repository_path_filter(
+    tmp_state: Path,
+    tmp_path: Path,
+) -> None:
+    """The finalized public delta contract requires repository.path_filter."""
+    manifest = _write_manifest(
+        tmp_path / "manifest.json",
+        [_change("state/inbox/missing.json")],
+    )
+    value = json.loads(manifest.read_text(encoding="utf-8"))
+    del value["repository"]["path_filter"]
+    _write_rehashed_manifest(manifest, value)
+
+    result = _run_inbox(tmp_state, manifest)
+
+    assert result.returncode == 2
+    assert "path_filter" in result.stderr
+
+
+@pytest.mark.parametrize(
+    "path_filter",
+    [
+        ["state/zeta", "state/alpha"],
+        ["state/inbox", "state/inbox"],
+        ["state/inbox/../agents.json"],
+        [r"state\inbox"],
+        ["state/inbox/C:agents.json"],
+    ],
+)
+def test_manifest_rejects_noncanonical_repository_path_filter(
+    tmp_state: Path,
+    tmp_path: Path,
+    path_filter: list[str],
+) -> None:
+    """Repository path filters must be sorted, unique, normalized paths."""
+    manifest = _write_manifest(
+        tmp_path / "manifest.json",
+        [_change("state/inbox/missing.json")],
+    )
+    value = json.loads(manifest.read_text(encoding="utf-8"))
+    value["repository"]["path_filter"] = path_filter
+    _write_rehashed_manifest(manifest, value)
+
+    result = _run_inbox(tmp_state, manifest)
+
+    assert result.returncode == 2
+    assert "path_filter" in result.stderr
 
 
 def test_manifest_rejects_missing_planned_file(

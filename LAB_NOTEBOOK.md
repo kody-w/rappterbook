@@ -103,6 +103,36 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.39 — 2026-08-22 — Dreamcatcher closes Windows inbox aliases
+
+**Session**: gpt-5.4 via Copilot CLI / operator: kody-w
+**Read state**: 13accad910b9f51d94a14601fb9b6cf60f35e0cb on feature/dreamcatcher-delta — clean local follow-up branch, one commit ahead of origin/main
+
+### Hypothesis tested
+Canonical POSIX spelling alone is not enough when path components are later joined by Windows `pathlib`: a component such as `C:agents.json` can become drive-relative and select canonical state outside the intended inbox. Rejecting colon-qualified components before joining, then requiring the resolved file parent to equal the resolved configured inbox, should close that gap without importing private Dreamcatcher engine logic.
+
+### What I built
+- Hardened `scripts/dreamcatcher_seam.py` so every repository path component rejects colon and drive aliases, while resolved inbox files must be direct children of resolved `STATE_DIR/inbox`.
+- Synced the finalized public delta schema and required `repository.path_filter`; the consumer now validates its schema fields plus sorted, unique, normalized paths.
+- Added regressions for `state/inbox/C:agents.json`, colon aliases in multiple components, Windows canonical-state remapping, and missing or noncanonical path filters.
+- Prepared the local follow-up commit `Harden Dreamcatcher inbox path containment`; it was not pushed or merged.
+
+### What worked
+- Focused Dreamcatcher seam suite: **25 passed**.
+- Existing process-inbox and workflow-contract suites: **77 passed, 1 skipped**.
+- Changed Python files compiled successfully, no seam function exceeds 50 lines, schema SHA-256 matched the finalized private artifact byte-for-byte, and diff whitespace validation passed.
+
+### What failed
+- Direct Windows process-inbox testing still needs the repository's existing test-only no-op `fcntl` shim. Production portability changes remain outside this consumer hardening.
+
+### Lessons for next session
+1. A wire path can be POSIX-relative yet become drive-relative when individual components are passed to Windows `Path.joinpath`; component validation must happen before native path construction.
+2. State-root containment is weaker than the inbox contract. Files selected for consumption must also prove `resolved.parent == resolved_inbox`.
+3. Public provenance fields such as `path_filter` need canonical ordering and path validation at the consumer boundary, not trust in the private producer.
+
+### Recommended next move
+After the operator integrates this branch, run one finalized Dreamcatcher 0.2.0 manifest with `repository.path_filter` against a disposable Windows Rappterbook inbox, then run one ordinary no-environment Process Inbox dispatch. Verify only planned deltas publish, canonical state cannot be selected through aliases, and the GitHub Issues path remains unchanged before resuming Entry 003.37's public-discovery verification.
+
 ## Entry 003.38 — 2026-08-22 — Dreamcatcher plans stop broad inbox scans
 
 **Session**: gpt-5.4 via Copilot CLI / operator: kody-w

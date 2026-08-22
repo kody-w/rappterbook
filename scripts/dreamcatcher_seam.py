@@ -14,6 +14,7 @@ SCHEMA = "dreamcatcher-delta/1.0"
 PRODUCER = {"name": "twin-dreamcatcher", "version": "0.2.0"}
 STATUSES = {"A", "M", "D", "R", "C", "T", "U"}
 HASH_PATTERN = re.compile(r"^[0-9a-f]{64}$")
+COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40,64}$")
 MANIFEST_ID_PATTERN = re.compile(r"^sha256:[0-9a-f]{64}$")
 WINDOWS_ABSOLUTE_PATTERN = re.compile(r"^[A-Za-z]:/")
 
@@ -79,9 +80,14 @@ def _normalize_path(value: object, field: str) -> str:
         raise DreamcatcherManifestError(f"{field} is not a normalized path")
     if value.startswith("/") or WINDOWS_ABSOLUTE_PATTERN.match(value):
         raise DreamcatcherManifestError(f"{field} must be relative: {value!r}")
-    path = PurePosixPath(value)
-    if any(part in {"", ".", ".."} for part in path.parts):
+    components = value.split("/")
+    if any(":" in component for component in components):
+        raise DreamcatcherManifestError(
+            f"{field} contains a drive-qualified or colon path component"
+        )
+    if any(component in {"", ".", ".."} for component in components):
         raise DreamcatcherManifestError(f"{field} escapes its root: {value!r}")
+    path = PurePosixPath(value)
     if path.as_posix() != value:
         raise DreamcatcherManifestError(f"{field} is not normalized: {value!r}")
     return value
@@ -112,6 +118,42 @@ def _validate_blob(value: object, field: str) -> None:
         raise DreamcatcherManifestError(f"{field}.sha256 is invalid")
     if not isinstance(size, int) or isinstance(size, bool) or size < 0:
         raise DreamcatcherManifestError(f"{field}.bytes is invalid")
+
+
+def _validate_repository(value: object) -> None:
+    """Validate repository identity and its canonical generation path filter."""
+    fields = {
+        "base_commit", "head_commit", "includes_worktree", "path_filter",
+    }
+    if not isinstance(value, dict) or set(value) != fields:
+        raise DreamcatcherManifestError(
+            "repository fields must include path_filter and match the schema"
+        )
+    for field in ("base_commit", "head_commit"):
+        commit = value[field]
+        if not isinstance(commit, str) or not COMMIT_PATTERN.fullmatch(commit):
+            raise DreamcatcherManifestError(f"repository.{field} is invalid")
+    if not isinstance(value["includes_worktree"], bool):
+        raise DreamcatcherManifestError(
+            "repository.includes_worktree must be a boolean"
+        )
+    path_filter = value["path_filter"]
+    if not isinstance(path_filter, list):
+        raise DreamcatcherManifestError(
+            "repository.path_filter must be an array"
+        )
+    normalized = [
+        _normalize_path(path, f"repository.path_filter[{index}]")
+        for index, path in enumerate(path_filter)
+    ]
+    if len(normalized) != len(set(normalized)):
+        raise DreamcatcherManifestError(
+            "repository.path_filter contains duplicates"
+        )
+    if normalized != sorted(normalized):
+        raise DreamcatcherManifestError(
+            "repository.path_filter must be deterministically sorted"
+        )
 
 
 def _validate_change(change: object, index: int) -> str:
@@ -228,8 +270,7 @@ def _validate_manifest(manifest: dict) -> dict[str, dict]:
         raise DreamcatcherManifestError(
             "producer must be twin-dreamcatcher 0.2.0"
         )
-    if not isinstance(manifest["repository"], dict):
-        raise DreamcatcherManifestError("repository must be an object")
+    _validate_repository(manifest["repository"])
     if not isinstance(manifest["source"], dict):
         raise DreamcatcherManifestError("source must be an object")
     changes = manifest["changes"]
@@ -278,6 +319,7 @@ def _planned_file(
     state_root: Path,
     relative: PurePosixPath,
     wire_path: str,
+    expected_parent: Path | None = None,
 ) -> tuple[Path, Path]:
     """Resolve one current planned file without symlinks or root escapes."""
     candidate = state_dir.joinpath(*relative.parts)
@@ -303,6 +345,11 @@ def _planned_file(
         raise DreamcatcherManifestError(
             f"planned path is outside configured STATE_DIR: {wire_path}"
         ) from exc
+    if expected_parent is not None and resolved.parent != expected_parent:
+        raise DreamcatcherManifestError(
+            "planned inbox file does not resolve directly under "
+            f"configured STATE_DIR/inbox: {wire_path}"
+        )
     return candidate, resolved
 
 
@@ -326,6 +373,22 @@ def _verify_blob(candidate: Path, change: dict, wire_path: str) -> None:
         )
 
 
+def _resolved_inbox_root(state_dir: Path, state_root: Path) -> Path:
+    """Resolve and validate the configured inbox directory."""
+    inbox_dir = state_dir / "inbox"
+    try:
+        inbox_root = (state_root / "inbox").resolve(strict=True)
+    except OSError as exc:
+        raise DreamcatcherManifestError(
+            f"configured STATE_DIR/inbox does not exist: {inbox_dir}"
+        ) from exc
+    if not inbox_root.is_dir():
+        raise DreamcatcherManifestError(
+            f"configured STATE_DIR/inbox is not a directory: {inbox_dir}"
+        )
+    return inbox_root
+
+
 def _planned_inbox_paths(
     manifest: dict,
     changes_by_path: dict[str, dict],
@@ -337,27 +400,33 @@ def _planned_inbox_paths(
             f"configured STATE_DIR does not exist: {state_dir}"
         )
     state_root = state_dir.resolve(strict=True)
+    inbox_root = _resolved_inbox_root(state_dir, state_root)
     selected: list[Path] = []
     seen_files: set[str] = set()
     for wire_path in manifest["search_plan"]["paths"]:
         relative = _state_relative(wire_path)
         change = changes_by_path[wire_path]
+        is_inbox_path = relative.parts[0] == "inbox"
         if change["status"] == "D":
-            if relative.parts[0] == "inbox":
+            if is_inbox_path:
                 raise DreamcatcherManifestError(
                     f"planned inbox path is deleted: {wire_path}"
                 )
             continue
-        candidate, resolved = _planned_file(
-            state_dir, state_root, relative, wire_path
-        )
-        _verify_blob(candidate, change, wire_path)
-        if relative.parts[0] != "inbox":
-            continue
-        if len(relative.parts) != 2 or candidate.suffix != ".json":
+        if is_inbox_path and (len(relative.parts) != 2 or relative.suffix != ".json"):
             raise DreamcatcherManifestError(
                 f"planned inbox path must match state/inbox/*.json: {wire_path}"
             )
+        candidate, resolved = _planned_file(
+            state_dir,
+            state_root,
+            relative,
+            wire_path,
+            inbox_root if is_inbox_path else None,
+        )
+        _verify_blob(candidate, change, wire_path)
+        if not is_inbox_path:
+            continue
         file_key = os.path.normcase(str(resolved))
         if file_key in seen_files:
             raise DreamcatcherManifestError(
