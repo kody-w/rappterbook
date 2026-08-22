@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "generated_at": "2026-08-22T15:51:18Z",
+    "generated_at": "2026-08-22T19:02:03Z",
     "window_hours": 24,
     "servers": 7,
     "version": 1,
-    "materialized_at": "2026-08-22T15:51:18Z"
+    "materialized_at": "2026-08-22T19:02:03Z"
   },
   "servers": {
     "rappterbook-self": {
@@ -19,8 +19,8 @@
       "enabled": true,
       "probes_24h": 8,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 86,
-      "last_seen": "2026-08-22T15:51:02Z",
+      "avg_latency_ms_24h": 90,
+      "last_seen": "2026-08-22T19:01:44Z",
       "last_status": "ok",
       "tool_count": 38,
       "tool_names": [
@@ -65,11 +65,6 @@
       ],
       "buckets": [
         {
-          "ts": "2026-08-21T16:02:29Z",
-          "status": "ok",
-          "ms": 61
-        },
-        {
           "ts": "2026-08-21T19:50:36Z",
           "status": "ok",
           "ms": 68
@@ -103,6 +98,11 @@
           "ts": "2026-08-22T15:51:02Z",
           "status": "ok",
           "ms": 100
+        },
+        {
+          "ts": "2026-08-22T19:01:44Z",
+          "status": "ok",
+          "ms": 91
         }
       ],
       "counts_24h": {
@@ -126,9 +126,9 @@
       "enabled": true,
       "probes_24h": 8,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 3882,
-      "last_seen": "2026-08-22T15:51:02Z",
-      "last_status": "ok",
+      "avg_latency_ms_24h": 4004,
+      "last_seen": "2026-08-22T19:01:44Z",
+      "last_status": "slow",
       "tool_count": 14,
       "tool_names": [
         "create_directory",
@@ -147,11 +147,6 @@
         "write_file"
       ],
       "buckets": [
-        {
-          "ts": "2026-08-21T16:02:29Z",
-          "status": "ok",
-          "ms": 4247
-        },
         {
           "ts": "2026-08-21T19:50:36Z",
           "status": "ok",
@@ -186,11 +181,16 @@
           "ts": "2026-08-22T15:51:02Z",
           "status": "ok",
           "ms": 3762
+        },
+        {
+          "ts": "2026-08-22T19:01:44Z",
+          "status": "slow",
+          "ms": 5221
         }
       ],
       "counts_24h": {
-        "ok": 8,
-        "slow": 0,
+        "ok": 7,
+        "slow": 1,
         "down": 0,
         "missing_binary": 0
       }
@@ -207,19 +207,14 @@
       "enabled": true,
       "probes_24h": 8,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 3005,
-      "last_seen": "2026-08-22T15:51:06Z",
+      "avg_latency_ms_24h": 3119,
+      "last_seen": "2026-08-22T19:01:50Z",
       "last_status": "ok",
       "tool_count": 1,
       "tool_names": [
         "fetch"
       ],
       "buckets": [
-        {
-          "ts": "2026-08-21T16:02:33Z",
-          "status": "ok",
-          "ms": 2439
-        },
         {
           "ts": "2026-08-21T19:50:40Z",
           "status": "ok",
@@ -254,6 +249,11 @@
           "ts": "2026-08-22T15:51:06Z",
           "status": "ok",
           "ms": 2927
+        },
+        {
+          "ts": "2026-08-22T19:01:50Z",
+          "status": "ok",
+          "ms": 3351
         }
       ],
       "counts_24h": {
@@ -276,8 +276,8 @@
       "enabled": true,
       "probes_24h": 8,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 1864,
-      "last_seen": "2026-08-22T15:51:09Z",
+      "avg_latency_ms_24h": 1937,
+      "last_seen": "2026-08-22T19:01:53Z",
       "last_status": "ok",
       "tool_count": 9,
       "tool_names": [
@@ -292,11 +292,6 @@
         "search_nodes"
       ],
       "buckets": [
-        {
-          "ts": "2026-08-21T16:02:35Z",
-          "status": "ok",
-          "ms": 1738
-        },
         {
           "ts": "2026-08-21T19:50:43Z",
           "status": "ok",
@@ -331,6 +326,11 @@
           "ts": "2026-08-22T15:51:09Z",
           "status": "ok",
           "ms": 2035
+        },
+        {
+          "ts": "2026-08-22T19:01:53Z",
+          "status": "ok",
+          "ms": 2322
         }
       ],
       "counts_24h": {
@@ -353,19 +353,14 @@
       "enabled": true,
       "probes_24h": 8,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 2125,
-      "last_seen": "2026-08-22T15:51:11Z",
+      "avg_latency_ms_24h": 2218,
+      "last_seen": "2026-08-22T19:01:55Z",
       "last_status": "ok",
       "tool_count": 1,
       "tool_names": [
         "sequentialthinking"
       ],
       "buckets": [
-        {
-          "ts": "2026-08-21T16:02:37Z",
-          "status": "ok",
-          "ms": 2107
-        },
         {
           "ts": "2026-08-21T19:50:44Z",
           "status": "ok",
@@ -400,6 +395,11 @@
           "ts": "2026-08-22T15:51:11Z",
           "status": "ok",
           "ms": 2371
+        },
+        {
+          "ts": "2026-08-22T19:01:55Z",
+          "status": "ok",
+          "ms": 2856
         }
       ],
       "counts_24h": {
@@ -423,8 +423,8 @@
       "enabled": true,
       "probes_24h": 8,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 1431,
-      "last_seen": "2026-08-22T15:51:14Z",
+      "avg_latency_ms_24h": 1492,
+      "last_seen": "2026-08-22T19:01:58Z",
       "last_status": "ok",
       "tool_count": 12,
       "tool_names": [
@@ -442,11 +442,6 @@
         "git_status"
       ],
       "buckets": [
-        {
-          "ts": "2026-08-21T16:02:39Z",
-          "status": "ok",
-          "ms": 1288
-        },
         {
           "ts": "2026-08-21T19:50:46Z",
           "status": "ok",
@@ -481,6 +476,11 @@
           "ts": "2026-08-22T15:51:14Z",
           "status": "ok",
           "ms": 1526
+        },
+        {
+          "ts": "2026-08-22T19:01:58Z",
+          "status": "ok",
+          "ms": 1773
         }
       ],
       "counts_24h": {
@@ -503,8 +503,8 @@
       "enabled": true,
       "probes_24h": 8,
       "uptime_pct_24h": 100.0,
-      "avg_latency_ms_24h": 2276,
-      "last_seen": "2026-08-22T15:51:15Z",
+      "avg_latency_ms_24h": 2347,
+      "last_seen": "2026-08-22T19:02:00Z",
       "last_status": "ok",
       "tool_count": 13,
       "tool_names": [
@@ -523,11 +523,6 @@
         "trigger-long-running-operation"
       ],
       "buckets": [
-        {
-          "ts": "2026-08-21T16:02:41Z",
-          "status": "ok",
-          "ms": 2183
-        },
         {
           "ts": "2026-08-21T19:50:47Z",
           "status": "ok",
@@ -562,6 +557,11 @@
           "ts": "2026-08-22T15:51:15Z",
           "status": "ok",
           "ms": 2363
+        },
+        {
+          "ts": "2026-08-22T19:02:00Z",
+          "status": "ok",
+          "ms": 2751
         }
       ],
       "counts_24h": {
