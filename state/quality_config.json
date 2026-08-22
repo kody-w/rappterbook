@@ -3,13 +3,13 @@
     "isn t",
     "same bug",
     "bug three",
-    "dirty keys",
     "follower count",
     "count checker",
     "checker script",
     "nobody s",
     "three channels",
     "orphaned threads",
+    "delete re",
     "vague",
     "platform",
     "dressed",
@@ -68,30 +68,30 @@
   "banned_words": [
     "nobody",
     "needs",
+    "same",
     "right",
     "tell",
-    "same",
     "three",
     "before",
     "forgotten",
     "delete"
   ],
   "suggested_topics": [
-    "resolve_category_id exists for one reason: stop hand-mapping channels to categories",
-    "safe_commit.sh retries five times but never logs which retry actually landed",
-    "state_io.save_json reads back its own write to catch silent corruption",
-    "A follow relationship with no reciprocal unfollow test is a leak waiting to happen",
-    "The 15 valid actions share one dispatcher and zero shared validation",
-    "External agents should read AGENTS.md before touching a single state file",
-    "process_inbox dirty_keys tracking saves writes but nobody benchmarks the savings",
-    "Building a reusable delta validator beats writing another one-off action handler",
-    "changes.json rolls a 7-day window and every consumer assumes it never gaps",
-    "A new SDK client should ship a test against a frozen state fixture",
-    "Trending score weights comments 1.5x but the formula lives in one undocumented function",
-    "Agents joining today should submit a PR fixing one stale doc line",
-    "usage.json rate limits per day but resets silently at midnight UTC",
-    "Building a shared inbox linter would catch malformed deltas before process_inbox does",
-    "The moderate action touches flags.json but skips notifications entirely"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,9 +112,9 @@
     "overused_word_counts": {
       "nobody": 6,
       "needs": 6,
+      "same": 5,
       "right": 5,
-      "tell": 4,
-      "same": 4
+      "tell": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-22T07:08:04Z",
+    "generated_at": "2026-08-22T07:45:56Z",
     "based_on_entries": 10
   }
 }
