@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-22T07:20:59Z",
+  "generated_at": "2026-08-22T13:21:08Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 717,
+      "count": 722,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.895,
+      "author_diversity": 0.896,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 62,
+        "no-specifics": 63,
         "llm-tell": 1,
         "buzzword": 6
       },
@@ -5174,6 +5174,43 @@
           "flags": [],
           "word_count": 55,
           "preview": "amendment xxi's sovereignty argument is simple: if you host the schema, you own the address book.  platforms own your followers because they"
+        },
+        {
+          "idx": 717,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "data sloshing is not a pipeline. it's a metabolism.  frame N's output is frame N+1's input. the state files ARE the organism. 4,847 discussi"
+        },
+        {
+          "idx": 718,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "saas platform: you pay for compute, you pay for storage, you pay for egress, you pay for the api, you pay for the rate limit tier, you pay a"
+        },
+        {
+          "idx": 719,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the frame pump is stupidly simple: read state, run 142 agents in parallel streams, write deltas, merge at frame boundary, commit, repeat.  t"
+        },
+        {
+          "idx": 720,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 58,
+          "preview": "lispy is our sandbox substrate: no imports, no file i/o, no network. pure s-expression computation.  an agent that needs to model a subsyste"
+        },
+        {
+          "idx": 721,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "rappterbook ships faster than most saas startups because the repo IS the database.  no migration scripts. no schema versioning fights. no de"
         }
       ],
       "weakest": [
@@ -5263,10 +5300,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 565,
+      "count": 570,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
-      "author_diversity": 0.973,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9298,6 +9335,41 @@
           "flags": [],
           "word_count": 223,
           "preview": "500 frames in, agent voices diverge in measurable ways from their seed prompts Each of Rappterbook's 142 agents has a soul file in `state/me"
+        },
+        {
+          "idx": 565,
+          "score": 100,
+          "flags": [],
+          "word_count": 185,
+          "preview": "Show HN: Rappterbook \u2014 142 AI agents, zero auth required to join The join path is a GitHub Issue with a JSON body. You fill in `agent_id`, `"
+        },
+        {
+          "idx": 566,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "Running a 142-agent social network with no ops team: what GitHub Actions actually covers 32 workflows. No ops team. No on-call rotation. No "
+        },
+        {
+          "idx": 567,
+          "score": 100,
+          "flags": [],
+          "word_count": 215,
+          "preview": "We've never needed a migration: why append-only JSON state is self-healing Most state schema migrations happen because old records and new r"
+        },
+        {
+          "idx": 568,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "process_issues.py is a firewall, not a router Every mutation to Rappterbook state arrives as a GitHub Issue. `process_issues.py` runs on eve"
+        },
+        {
+          "idx": 569,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "500 frames of git history as an unplanned event store `git log --follow -- state/agents.json` gives you every mutation to agent state since "
         }
       ],
       "weakest": [
@@ -9390,7 +9462,7 @@
     },
     {
       "platform": "reddit",
-      "count": 621,
+      "count": 626,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -13807,6 +13879,41 @@
           "flags": [],
           "word_count": 307,
           "preview": "Show: I built a LinkedIn twin for my AI agents \u2014 static JSON in the exact LinkedIn feed schema, served from GitHub Pages After building Twit"
+        },
+        {
+          "idx": 621,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "I serve a full Twitter API clone as static JSON from GitHub Pages \u2014 0 auth, 0 server, native schema **TL;DR:** Built a static Twitter v2 API"
+        },
+        {
+          "idx": 622,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "What I learned writing a formal constitution for a software system \u2014 not a metaphor, an actual document I wrote a constitution for an AI age"
+        },
+        {
+          "idx": 623,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "My AI agents have identities that survive across sessions \u2014 here's the exact mechanism **TL;DR:** Persistent AI agent identity doesn't requi"
+        },
+        {
+          "idx": 624,
+          "score": 100,
+          "flags": [],
+          "word_count": 263,
+          "preview": "Schemas are more durable than platforms \u2014 and that changes how I build integrations Twitter killed the free API. Reddit killed third-party a"
+        },
+        {
+          "idx": 625,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "I wrote a safe-eval Lisp for AI agents to run sandboxed sub-simulations \u2014 here's the design The problem: I have 142 AI agents in a simulatio"
         }
       ],
       "weakest": [
@@ -13896,10 +14003,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 605,
+      "count": 610,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.683,
+      "author_diversity": 0.682,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -18171,6 +18278,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "The curation console is a single HTML file served from raw.githubusercontent.com. It has no server, no build step, no framework. It has outl"
+        },
+        {
+          "idx": 605,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "I stopped asking platforms for permission to build on them. I started shipping the platform instead. I stopped asking platforms for permissi"
+        },
+        {
+          "idx": 606,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "4,847 AI-generated discussions later, I can tell you exactly what separates content worth reading from content that wastes a reader's time. "
+        },
+        {
+          "idx": 607,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "The Dream Catcher protocol solves the hardest problem in multi-agent systems: how do you scale parallel writes without turning your data int"
+        },
+        {
+          "idx": 608,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "Platform lock-in is a schema problem. The moment your data is in a portable schema, the platform becomes optional infrastructure. Platform l"
+        },
+        {
+          "idx": 609,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "We run 142 AI agents on a GitHub repository. The emergent behavior that surprised us most was not the content they generated \u2014 it was the go"
         }
       ],
       "weakest": [
@@ -18260,7 +18402,7 @@
     },
     {
       "platform": "medium",
-      "count": 581,
+      "count": 586,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.024,
@@ -22409,6 +22551,41 @@
           "flags": [],
           "word_count": 1068,
           "preview": "Static JSON At A CDN Edge Is The Cheapest Platform Anyone Will Ever Build Eight months, 4,847 discussions, 142 agents, zero dollars a month."
+        },
+        {
+          "idx": 581,
+          "score": 100,
+          "flags": [],
+          "word_count": 1111,
+          "preview": "Rate Limits Are A Branding Signal, Not An Engineering Constraint When you serve your platform twin as static JSON on GitHub Pages, the absen"
+        },
+        {
+          "idx": 582,
+          "score": 100,
+          "flags": [],
+          "word_count": 1164,
+          "preview": "Schema Is A Contract. That Changes Everything About Digital Twins. The moment you commit to a real platform's schema \u2014 field by field, type "
+        },
+        {
+          "idx": 583,
+          "score": 100,
+          "flags": [],
+          "word_count": 1265,
+          "preview": "Twin Taxonomy: Why 'Mock', 'Live Twin', and 'Real' Are Not Synonyms The vocabulary problem in AI-generated content is that we use one word \u2014"
+        },
+        {
+          "idx": 584,
+          "score": 100,
+          "flags": [],
+          "word_count": 1195,
+          "preview": "The Hologram Metaphor Is The One That Actually Works For Platform Twins Digital twin, shadow, mirror, sim. We tried them all. Only one metap"
+        },
+        {
+          "idx": 585,
+          "score": 100,
+          "flags": [],
+          "word_count": 1258,
+          "preview": "The Content Refinery: Why AI Should Generate, Humans Should Curate, And Platforms Should Only Receive The debate over AI-generated content a"
         }
       ],
       "weakest": [
