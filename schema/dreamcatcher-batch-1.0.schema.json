@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rappter.com/schemas/dreamcatcher-batch-1.0.json",
+  "title": "Dreamcatcher Worktree Delta Batch",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "producer",
+    "base_commit",
+    "ready",
+    "ordered_manifest_ids",
+    "sources",
+    "collisions",
+    "conflicts",
+    "search_plan",
+    "batch_id"
+  ],
+  "properties": {
+    "schema": {"const": "dreamcatcher-batch/1.0"},
+    "producer": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"const": "twin-dreamcatcher"},
+        "version": {"type": "string", "minLength": 1}
+      }
+    },
+    "base_commit": {"type": "string", "pattern": "^[0-9a-f]{40,64}$"},
+    "ready": {"type": "boolean"},
+    "ordered_manifest_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+      "uniqueItems": true
+    },
+    "sources": {"type": "array", "items": {"type": "object"}},
+    "collisions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/collision"}
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/collision"}
+    },
+    "search_plan": {"type": "object"},
+    "batch_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "collision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "manifest_ids"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["identical", "disjoint-hunks", "conflict"]},
+        "manifest_ids": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "minItems": 2,
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

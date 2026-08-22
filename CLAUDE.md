@@ -112,6 +112,13 @@ GitHub Issues (labeled actions)
   → state/*.json (canonical state)
 ```
 
+### Dreamcatcher consumer seam
+Private Dreamcatcher turns worktree diffs into `dreamcatcher-delta/1.0`
+search plans. Rappterbook only validates that public plan and, when
+`DREAMCATCHER_DELTA_MANIFEST` is set, consumes its planned
+`state/inbox/*.json` files. Diff generation and merge logic stay private;
+`main` remains the serialized publisher of canonical state.
+
 ### Read path
 ```
 state/*.json → raw.githubusercontent.com (direct JSON)
