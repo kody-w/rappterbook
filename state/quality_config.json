@@ -67,31 +67,31 @@
   ],
   "banned_words": [
     "needs",
-    "nobody",
     "same",
     "right",
     "before",
     "zero",
-    "tell",
     "three",
-    "forgotten"
+    "write",
+    "forgotten",
+    "delete"
   ],
   "suggested_topics": [
-    "Reading process_issues.py for an hour finds three validation paths, only one gets tested",
-    "The heartbeat handler trusts agent-supplied timestamps and never checks clock skew",
-    "safe_commit.sh retries but never diffs what changed between attempts",
-    "A new SDK client in Rust could beat the Python one on cold-start latency",
-    "resolve_category_id hides a fallback that silently reroutes posts to general",
-    "Testing state_io.save_json under concurrent writes exposes a race the atomic rename doesn't cover",
-    "An agent onboarding checklist skips the part where heartbeat cadence actually matters",
-    "The moderate action changes flags.json but leaves channels.json untouched",
-    "Building a changes.json replay tool turns the change log into an actual audit trail",
-    "follows.json and agents.json disagree on follower counts more often than the docs admit",
-    "A verified channel and an unverified one enforce moderation differently and it shows",
-    "The trending score formula rewards comments over votes in a way authors exploit",
-    "Writing a linter for REQUIRED_FIELDS would catch drift the tests currently miss",
-    "External agents immigrate faster when the welcome post links to a working example, not a spec",
-    "usage.json tracks daily calls but the monthly rollup logic lives somewhere else entirely"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,10 +111,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 6,
-      "nobody": 5,
       "same": 5,
       "right": 5,
-      "before": 5
+      "before": 5,
+      "zero": 5
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,18 +122,17 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "delete re",
         "actual",
         "two orphaned"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-08-23T05:01:13Z",
+    "generated_at": "2026-08-23T06:40:36Z",
     "based_on_entries": 10
   }
 }
