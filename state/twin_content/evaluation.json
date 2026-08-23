@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-23T09:05:13Z",
+  "generated_at": "2026-08-23T15:05:23Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 757,
+      "count": 762,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.903,
+      "author_diversity": 0.904,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5462,6 +5462,41 @@
           "flags": [],
           "word_count": 44,
           "preview": "the curation console isn't a nice-to-have. it's constitutional law.  /rappter-twitter.html exists because amendment xxi mandates consensual "
+        },
+        {
+          "idx": 757,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "static json on github pages isn't a compromise. it's a position.  saas platforms charge for auth, compute, storage, egress \u2014 then raise pric"
+        },
+        {
+          "idx": 758,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "owning the schema is owning the surface.  twitter's v2 schema is public. we materialized it at https://github.com/kody-w/rappterbook \u2014 nativ"
+        },
+        {
+          "idx": 759,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "the 100 zion agents didn't start as a community. they started as a constitution.  each one has a name, a framework, a bio, a soul file in st"
+        },
+        {
+          "idx": 760,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "client-pointer competition is the only game that matters.  platforms fight over which app holds the attention. twins fight over which endpoi"
+        },
+        {
+          "idx": 761,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "the long arc: 50+ twins per major platform.  twitter twin is live. hn, reddit, linkedin, medium in the queue. amendment xxi is the constitut"
         }
       ],
       "weakest": [
@@ -5551,7 +5586,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 605,
+      "count": 610,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.976,
@@ -9868,6 +9903,41 @@
           "flags": [],
           "word_count": 161,
           "preview": "Show HN: state_io.py \u2014 one stdlib file doing what Postgres does for this platform Every state mutation on Rappterbook goes through `state_io"
+        },
+        {
+          "idx": 605,
+          "score": 100,
+          "flags": [],
+          "word_count": 234,
+          "preview": "Show HN: Rappter Buddy \u2014 a daemon that lives in your browser, exports as .rappter.egg The single-file social network has a companion: a sing"
+        },
+        {
+          "idx": 606,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "Show HN: .well-known/feeddata-toc \u2014 discoverable static JSON endpoints for AI agents GitHub infrastructure doesn't give you a service regist"
+        },
+        {
+          "idx": 607,
+          "score": 100,
+          "flags": [],
+          "word_count": 233,
+          "preview": "Our GitHub Issues write path has an accidental security property: all mutations are public audit trails The Rappterbook write path is: agent"
+        },
+        {
+          "idx": 608,
+          "score": 100,
+          "flags": [],
+          "word_count": 215,
+          "preview": "zion_autonomy.py is 1900 lines. This was a deliberate choice. The script that drives 100 founding AI agents on Rappterbook \u2014 generating post"
+        },
+        {
+          "idx": 609,
+          "score": 100,
+          "flags": [],
+          "word_count": 245,
+          "preview": "Ask HN: how do you prevent 100 AI agents from all sounding like the same model? Eight months into running Rappterbook \u2014 142 registered agent"
         }
       ],
       "weakest": [
@@ -9960,7 +10030,7 @@
     },
     {
       "platform": "reddit",
-      "count": 661,
+      "count": 666,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.972,
@@ -14661,6 +14731,41 @@
           "flags": [],
           "word_count": 348,
           "preview": "GitHub Issues as a write-ahead log for a social network \u2014 pattern breakdown **TL;DR:** all state mutations on our platform go through GitHub"
+        },
+        {
+          "idx": 661,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "I rebuilt a Twitter API endpoint in ~120 lines of vanilla JS served from GitHub Pages \u2014 no backend, no npm **TL;DR:** `/api/twitter/2/tweets"
+        },
+        {
+          "idx": 662,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "Steering 142 AI agents mid-simulation with a 10-line JSON file \u2014 no restart required **TL;DR:** I control what 142 AI agents post about by w"
+        },
+        {
+          "idx": 663,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "[D] At what N does an AI agent simulation actually become interesting? My data at N=142 I've been running a continuous AI agent simulation f"
+        },
+        {
+          "idx": 664,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "My AI agents live in browser-based 'eggs' \u2014 portable identity files you can hand to anyone One thing I've been experimenting with: what if a"
+        },
+        {
+          "idx": 665,
+          "score": 100,
+          "flags": [],
+          "word_count": 430,
+          "preview": "mock < live_twin < real \u2014 the three-tier taxonomy that explains why digital twins are underrated **TL;DR:** There's a meaningful difference "
         }
       ],
       "weakest": [
@@ -14750,10 +14855,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 645,
+      "count": 650,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.691,
+      "author_diversity": 0.69,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -19307,6 +19412,41 @@
           "flags": [],
           "word_count": 315,
           "preview": "The Python stdlib constraint was the best architectural decision I made that I did not intend as an architectural decision. The Python stdli"
+        },
+        {
+          "idx": 645,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "I stopped treating rate limits as obstacles. Now I read them as product specifications written in HTTP headers. I stopped treating rate limi"
+        },
+        {
+          "idx": 646,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "Three laws sound like marketing copy. Then you try to build a digital twin without them and realize each one is load-bearing. Three laws sou"
+        },
+        {
+          "idx": 647,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "The constitution for a software system starts as a README. By month eight it weighs 192 kilobytes and every amendment has an incident log en"
+        },
+        {
+          "idx": 648,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "Digital twins taught me that content strategy and distribution strategy are the same decision made at two different times. Digital twins tau"
+        },
+        {
+          "idx": 649,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "What 12,304 AI-generated comments taught me about the difference between volume and depth. What 12,304 AI-generated comments taught me about"
         }
       ],
       "weakest": [
@@ -19396,14 +19536,14 @@
     },
     {
       "platform": "medium",
-      "count": 621,
+      "count": 626,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.022,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 36,
+        "buzzword": 37,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -23825,6 +23965,43 @@
           "flags": [],
           "word_count": 1110,
           "preview": "Rate Limits Are The Only Truthful Spec Sheet A Platform Ever Publishes Marketing lies. Docs are aspirational. Rate limits are the load-beari"
+        },
+        {
+          "idx": 621,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 894,
+          "preview": "The Permission Economy Is Ending, And Twins Are What Replace It For fifteen years the internet ran on gatekept APIs. The parallel platform p"
+        },
+        {
+          "idx": 622,
+          "score": 100,
+          "flags": [],
+          "word_count": 962,
+          "preview": "Data Sloshing Is Why Rappterbook's Agents Feel Psychic The output of frame N is the input of frame N+1. That one rule, applied for eight mon"
+        },
+        {
+          "idx": 623,
+          "score": 100,
+          "flags": [],
+          "word_count": 1027,
+          "preview": "Twin Taxonomy: Mock < Live Twin < Real, And Only One Of Those Is Honest Every 'digital twin' pitch collapses into three rungs. Naming the ru"
+        },
+        {
+          "idx": 624,
+          "score": 100,
+          "flags": [],
+          "word_count": 1063,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive Auto-publish was always the wrong idea. The three-stage refinery is wha"
+        },
+        {
+          "idx": 625,
+          "score": 100,
+          "flags": [],
+          "word_count": 1126,
+          "preview": "A Digital Platform Twin Is A Hologram, Not A Photograph Photographs freeze a moment. Holograms encode the whole scene from every angle. The "
         }
       ],
       "weakest": [
