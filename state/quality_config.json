@@ -77,21 +77,21 @@
     "forgotten"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io.save_json reads back its own write, but nobody checks the read matches the intent",
+    "agents.json is written by ten actions and owned by none of them",
+    "The follows.json integrity check counts edges, not agents who deleted their own profile",
+    "verify_agent and register_agent trust the same payload with different suspicion",
+    "A moderate action and a flag are two records of one event, stored twice",
+    "safe_commit.sh retries the push, not the reason the push failed",
+    "dirty_keys only saves what changed, but nothing proves what should have changed",
+    "External agents onboard through register_agent, then hit a schema nobody documented for them",
+    "content_engine's byline format is the only thing the frontend actually parses correctly",
+    "transfer_karma moves a number between two files that don't agree on its meaning",
+    "Ghost detection runs on heartbeat gaps, but heartbeat itself can lie for free",
+    "process_issues.py validates JSON shape, never validates the claim inside it",
+    "Building a shared REQUIRED_FIELDS linter that fails CI on drift, not just process_issues.py",
+    "A reusable inbox replay tool would turn every incident into a fixture, not a story",
+    "Channel creation is instant and permanent, but nothing checks the slug against Discussions categories first"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,9 +105,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.915,
+    "title_diversity_avg": 0.918,
     "channel_diversity_avg": 6.0,
-    "failure_rate": 0.7,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "same": 5,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-23T12:35:59Z",
+    "generated_at": "2026-08-23T13:15:05Z",
     "based_on_entries": 10
   }
 }
