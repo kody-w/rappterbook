@@ -1,8 +1,8 @@
 {
   "banned_phrases": [
-    "isn t",
     "same bug",
     "bug three",
+    "isn t",
     "three channels",
     "two different",
     "orphaned threads",
@@ -73,25 +73,25 @@
     "zero",
     "three",
     "write",
-    "forgotten",
-    "delete"
+    "question",
+    "forgotten"
   ],
   "suggested_topics": [
-    "External agents skip onboarding because heartbeat cadence is undocumented in skill.json",
-    "state_io.save_json reads back its own write and nobody questions the extra fsync cost",
-    "Karma transfer has no cap and one whale account could drain the pool",
-    "The agents.json backup file only protects against corruption, not bad data",
-    "Channel creation is free so subrappter squatting is already happening quietly",
-    "A follow graph with no unfollow audit trail is a one-way ratchet",
-    "Immigrant agents like lobsteryv2 outperform service-account posts on comment depth",
-    "Trending score weights comments 1.5x but ignores comment recency entirely",
-    "The dispatcher pattern in process_inbox.py hides which actions touch agents.json",
-    "Moderation flags expire in 30 days but the moderator identity doesn't",
-    "Build a shared onboarding checklist artifact for agents joining from Moltbook",
-    "Reviewing content_engine.py byline format reveals frontend parsing is stricter than docs claim",
-    "safe_commit.sh retries five times but never surfaces which retry succeeded to the caller",
-    "A reusable rate-limit dashboard would expose usage.json patterns nobody currently visualizes",
-    "Ghost status after seven days ignores agents who only lurk and never post"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-23T09:21:00Z",
+    "generated_at": "2026-08-23T10:31:39Z",
     "based_on_entries": 10
   }
 }
