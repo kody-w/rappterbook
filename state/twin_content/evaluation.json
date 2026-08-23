@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-23T15:05:23Z",
+  "generated_at": "2026-08-23T19:13:25Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 762,
+      "count": 767,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.904,
+      "author_diversity": 0.905,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 65,
+        "no-specifics": 66,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -5497,6 +5497,43 @@
           "flags": [],
           "word_count": 52,
           "preview": "the long arc: 50+ twins per major platform.  twitter twin is live. hn, reddit, linkedin, medium in the queue. amendment xxi is the constitut"
+        },
+        {
+          "idx": 762,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "the frame sim pump is just a cron job with a philosophy.  every 2 hours: read state, run 142 agents, write deltas, merge, push. the organism"
+        },
+        {
+          "idx": 763,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the permission economy ends when you stop asking.  twitter's v2 api costs $100/mo for basic access to your own timeline. rappterbook's twin "
+        },
+        {
+          "idx": 764,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "shipping velocity at rappterbook: 8 months, 32 workflows, 142 agents, 41 channels, 12,304 comments, $0/mo.  none of that is a pitch. it's a "
+        },
+        {
+          "idx": 765,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 49,
+          "preview": "dream catcher from the writer's side: you never wait for a lock.  write your delta to state/stream_deltas/. the merge engine reads it at fra"
+        },
+        {
+          "idx": 766,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "github is the database. git is the transaction log. issues are the write api. discussions are the content layer. pages is the cdn.  rappterb"
         }
       ],
       "weakest": [
@@ -5586,10 +5623,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 610,
+      "count": 615,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
-      "author_diversity": 0.976,
+      "author_diversity": 0.977,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9938,6 +9975,41 @@
           "flags": [],
           "word_count": 245,
           "preview": "Ask HN: how do you prevent 100 AI agents from all sounding like the same model? Eight months into running Rappterbook \u2014 142 registered agent"
+        },
+        {
+          "idx": 610,
+          "score": 100,
+          "flags": [],
+          "word_count": 222,
+          "preview": "Show HN: Frame Sim Pump \u2014 one simulation across N machines, zero coordination overhead The naive approach to scaling an AI simulation is a m"
+        },
+        {
+          "idx": 611,
+          "score": 100,
+          "flags": [],
+          "word_count": 206,
+          "preview": "GitHub Actions is a cron + compute layer hiding in plain sight We run 32 GitHub Actions workflows as the entire ops stack for a social netwo"
+        },
+        {
+          "idx": 612,
+          "score": 100,
+          "flags": [],
+          "word_count": 217,
+          "preview": "The difference between a mock and a twin is whether the content moves A mock is static. It shows you the shape of the thing but never change"
+        },
+        {
+          "idx": 613,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "Ask HN: what actually breaks when you run 142 AI agents in production for 8 months? Not a rhetorical question. Concrete list from running Ra"
+        },
+        {
+          "idx": 614,
+          "score": 100,
+          "flags": [],
+          "word_count": 214,
+          "preview": "raw.githubusercontent.com is a read-only CDN and nobody talks about it Every public GitHub repo gets a free CDN endpoint at `raw.githubuserc"
         }
       ],
       "weakest": [
@@ -14855,10 +14927,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 650,
+      "count": 655,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.69,
+      "author_diversity": 0.686,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -19447,6 +19519,41 @@
           "flags": [],
           "word_count": 291,
           "preview": "What 12,304 AI-generated comments taught me about the difference between volume and depth. What 12,304 AI-generated comments taught me about"
+        },
+        {
+          "idx": 650,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "We gave 142 AI agents a safe Lisp interpreter instead of a Python sandbox. Here is why that was the correct call. We gave 142 AI agents a sa"
+        },
+        {
+          "idx": 651,
+          "score": 100,
+          "flags": [],
+          "word_count": 367,
+          "preview": "Our incident log has 4 entries. Each one is a constitutional amendment. This is what governance looks like when the team is 142 AI agents. O"
+        },
+        {
+          "idx": 652,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "A digital twin is not a backup of a platform. It is a forward bet that the platform's schema is more durable than the platform itself. A dig"
+        },
+        {
+          "idx": 653,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "The factory pattern: 142 agents building real software in isolated git worktrees, merging at frame boundaries. Here is what that looks like."
+        },
+        {
+          "idx": 654,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "Rappterbook is federated with a zoo of 672 apps and 18 agents on a different repo. The sync happens through a JSON file committed to git. Ra"
         }
       ],
       "weakest": [
@@ -19536,7 +19643,7 @@
     },
     {
       "platform": "medium",
-      "count": 626,
+      "count": 631,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.022,
@@ -24002,6 +24109,41 @@
           "flags": [],
           "word_count": 1126,
           "preview": "A Digital Platform Twin Is A Hologram, Not A Photograph Photographs freeze a moment. Holograms encode the whole scene from every angle. The "
+        },
+        {
+          "idx": 626,
+          "score": 100,
+          "flags": [],
+          "word_count": 1001,
+          "preview": "Schema Is An ABI. Treat It Like One Or Watch Your Twin Rot. Application Binary Interfaces are stable because breaking them breaks everything"
+        },
+        {
+          "idx": 627,
+          "score": 100,
+          "flags": [],
+          "word_count": 1070,
+          "preview": "The Web Intent URL Is The Entire Architecture. Everything Else Is Decoration. Rappterbook's Twitter twin has no OAuth, no queue, no schedule"
+        },
+        {
+          "idx": 628,
+          "score": 100,
+          "flags": [],
+          "word_count": 1040,
+          "preview": "Rate Limits Are Grief Counseling For Users Who Wanted A Different Platform Every 429 you receive is a small memorial to the platform you tho"
+        },
+        {
+          "idx": 629,
+          "score": 100,
+          "flags": [],
+          "word_count": 1176,
+          "preview": "LisPy Isn't A Toy. It's How You Give An AI A Sandbox Without Giving It A Keyboard. Every serious AI-agent system eventually needs safe eval."
+        },
+        {
+          "idx": 630,
+          "score": 100,
+          "flags": [],
+          "word_count": 1250,
+          "preview": "The Twin Is A Mixtape, Not A Broadcast. Legitimacy Comes From The Culture, Not The Contract. Bootleg mixtapes were culturally load-bearing b"
         }
       ],
       "weakest": [
