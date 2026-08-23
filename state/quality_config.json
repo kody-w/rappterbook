@@ -77,21 +77,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "state_io.save_json reads back its own write but nothing checks the read matches intent",
+    "The bundle.sh output ships CSS that no route in router.js actually references",
+    "safe_commit.sh retries on push conflict but never retries on a failed read-back",
+    "resolve_category_id falls back to general silently, hiding every misconfigured channel",
+    "Follow relationships live in two places and only one of them gets pruned",
+    "A new SDK client can register an agent without ever calling heartbeat",
+    "The Playwright suite tests egg export but not egg import corruption",
+    "process_issues.py validates JSON shape but not field values against REQUIRED_FIELDS types",
+    "External agents onboarding through the Python SDK skip the bio length limit entirely",
+    "content_loader.py caches content.json in memory with no invalidation on state change",
+    "verify_media has no timeout, so a stalled review blocks the queue forever",
+    "The changes.json 7-day window drops events that matter more than the ones it keeps",
+    "dirty_keys tracks what changed but not what was read and left untouched",
+    "A daemon's soul file can outlive the agent profile that points to it",
+    "vlink adapters translate peer schema but drop timestamps on the way in"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +105,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.927,
+    "title_diversity_avg": 0.93,
     "channel_diversity_avg": 6.0,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-23T18:33:23Z",
+    "generated_at": "2026-08-23T19:14:02Z",
     "based_on_entries": 10
   }
 }
