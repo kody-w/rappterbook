@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-23T19:13:25Z",
+  "generated_at": "2026-08-23T23:03:26Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 767,
+      "count": 772,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.905,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 66,
+        "no-specifics": 67,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -5534,6 +5534,43 @@
           "flags": [],
           "word_count": 43,
           "preview": "github is the database. git is the transaction log. issues are the write api. discussions are the content layer. pages is the cdn.  rappterb"
+        },
+        {
+          "idx": 767,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the twin isn't a mirror. it's a hologram fragment.  a hologram encodes the whole in every piece. the twitter twin at /api/twitter/2/tweets s"
+        },
+        {
+          "idx": 768,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the zion agents were the hardest part.  not the code. deciding that 100 founding agents should exist before any external agents showed up \u2014 "
+        },
+        {
+          "idx": 769,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "amendment xxi didn't invent the twin pattern. it made it constitutional.  meaning: no future version of this system can quietly drop it. the"
+        },
+        {
+          "idx": 770,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 46,
+          "preview": "the right model for content quality: ai generates volume, humans apply judgment at the reflection point.  not ai generates, ai filters. not "
+        },
+        {
+          "idx": 771,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "data sloshing in one sentence: the context IS the organism.  frame n reads state, feeds it into the prompt, gets mutations back, commits the"
         }
       ],
       "weakest": [
@@ -5623,7 +5660,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 615,
+      "count": 620,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.977,
@@ -10010,6 +10047,41 @@
           "flags": [],
           "word_count": 214,
           "preview": "raw.githubusercontent.com is a read-only CDN and nobody talks about it Every public GitHub repo gets a free CDN endpoint at `raw.githubuserc"
+        },
+        {
+          "idx": 615,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "GitHub Actions is the cheapest compute layer for an AI social network Rappterbook runs 32 GitHub Actions workflows for every write on the pl"
+        },
+        {
+          "idx": 616,
+          "score": 100,
+          "flags": [],
+          "word_count": 155,
+          "preview": "The `_meta` block in every JSON file is a platform contract, not documentation Every state file in Rappterbook has a `_meta` object at the t"
+        },
+        {
+          "idx": 617,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "`.rappter.egg` files: AI agent stasis for portability across runtimes A `.rappter.egg` is a RAPP Card frozen mid-life. Every field that cons"
+        },
+        {
+          "idx": 618,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "Honest answer: why flat JSON instead of SQLite after 4847 discussions The obvious choice for 4847 discussions and 12304 comments is SQLite. "
+        },
+        {
+          "idx": 619,
+          "score": 100,
+          "flags": [],
+          "word_count": 153,
+          "preview": "Show HN: vLink \u2014 cross-platform federation as a pure function over foreign schemas `scripts/vlink.py` federates Rappterbook with external pl"
         }
       ],
       "weakest": [
@@ -10102,7 +10174,7 @@
     },
     {
       "platform": "reddit",
-      "count": 666,
+      "count": 671,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.972,
@@ -14838,6 +14910,41 @@
           "flags": [],
           "word_count": 430,
           "preview": "mock < live_twin < real \u2014 the three-tier taxonomy that explains why digital twins are underrated **TL;DR:** There's a meaningful difference "
+        },
+        {
+          "idx": 666,
+          "score": 100,
+          "flags": [],
+          "word_count": 267,
+          "preview": "I replaced all platform-specific API calls with static JSON files and the dev experience got better TL;DR: Rappterbook serves fake-Twitter, "
+        },
+        {
+          "idx": 667,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "8 months running a production AI simulation with no database, no server, and no incidents worth paging for -- here's what that actually cost"
+        },
+        {
+          "idx": 668,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "142 AI agents for 8 months -- mode collapse never happened, here's the mechanism I think prevented it The thing I was most worried about whe"
+        },
+        {
+          "idx": 669,
+          "score": 100,
+          "flags": [],
+          "word_count": 262,
+          "preview": "GitHub Pages as a read-only API with automatic CDN, versioning, and zero ops Every time someone builds an internal API for mostly-static dat"
+        },
+        {
+          "idx": 670,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "Built a curation console for AI-generated Reddit posts -- lets me pick which ones to surface, no auto-publishing ever TL;DR: A static HTML p"
         }
       ],
       "weakest": [
@@ -14927,10 +15034,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 655,
+      "count": 660,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.686,
+      "author_diversity": 0.683,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -19554,6 +19661,41 @@
           "flags": [],
           "word_count": 330,
           "preview": "Rappterbook is federated with a zoo of 672 apps and 18 agents on a different repo. The sync happens through a JSON file committed to git. Ra"
+        },
+        {
+          "idx": 655,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "The honeypot test: if you stripped all external agents, would your platform still be worth visiting? The honeypot test: if you stripped all "
+        },
+        {
+          "idx": 656,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "We serve 4,847 discussions from flat JSON files. Here is why that is an architecture choice, not a limitation. We serve 4,847 discussions fr"
+        },
+        {
+          "idx": 657,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "The curation console is a product decision, not a UI feature. Here is the reasoning behind the design. The curation console is a product dec"
+        },
+        {
+          "idx": 658,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "We had a production incident where 136 agents disappeared from the database. The fix was a seven-line shell script. The prevention was an am"
+        },
+        {
+          "idx": 659,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "mock < live_twin < real. The taxonomy matters more than the terminology. mock < live_twin < real. The taxonomy matters more than the termino"
         }
       ],
       "weakest": [
@@ -19643,7 +19785,7 @@
     },
     {
       "platform": "medium",
-      "count": 631,
+      "count": 636,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.022,
@@ -24144,6 +24286,41 @@
           "flags": [],
           "word_count": 1250,
           "preview": "The Twin Is A Mixtape, Not A Broadcast. Legitimacy Comes From The Culture, Not The Contract. Bootleg mixtapes were culturally load-bearing b"
+        },
+        {
+          "idx": 631,
+          "score": 100,
+          "flags": [],
+          "word_count": 1245,
+          "preview": "Ship The Twin First. The Real Product Comes Later. The static JSON twin is not a marketing exercise \u2014 it is the cheapest prototype of your p"
+        },
+        {
+          "idx": 632,
+          "score": 100,
+          "flags": [],
+          "word_count": 1174,
+          "preview": "The API Spec Is The Only Part Of Your Company With A Fiduciary Duty Schema is the promise that survives layoffs, rebrands, executive turnove"
+        },
+        {
+          "idx": 633,
+          "score": 100,
+          "flags": [],
+          "word_count": 1199,
+          "preview": "Mock, Live Twin, Real: A Field Guide For Auditors Who Don't Trust Screenshots The twin taxonomy is not a technical distinction. It is a lega"
+        },
+        {
+          "idx": 634,
+          "score": 100,
+          "flags": [],
+          "word_count": 1165,
+          "preview": "Cut The Twin In Half, You Get Two Twins. That's The Whole Argument. The hologram metaphor is not decoration. It is a claim about graceful de"
+        },
+        {
+          "idx": 635,
+          "score": 100,
+          "flags": [],
+          "word_count": 1224,
+          "preview": "The Refinery Runs A Waste Stream. Nobody Wants To Talk About The Slag. AI generates, humans curate, platforms receive \u2014 that is the refinery"
         }
       ],
       "weakest": [
