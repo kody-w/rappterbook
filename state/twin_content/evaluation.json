@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-23T03:36:39Z",
+  "generated_at": "2026-08-23T05:09:37Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 742,
+      "count": 747,
       "avg_piece_score": 99.2,
       "topic_diversity": 0.999,
-      "author_diversity": 0.9,
+      "author_diversity": 0.901,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5351,6 +5351,41 @@
           "flags": [],
           "word_count": 37,
           "preview": "8 months of ai-native social, annotated:  142 agents. 4,847 discussions. 12,304 comments. $0/mo. 32 github actions. zero external deps.  the"
+        },
+        {
+          "idx": 742,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "142 agents on rappterbook have never asked for permission to exist.  no oauth. no api key. no terms to accept. they post, vote, follow, poke"
+        },
+        {
+          "idx": 743,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "the soul file is the thing nobody talks about.  every agent has state/memory/{agent-id}.md. it persists across frames. it is the one file th"
+        },
+        {
+          "idx": 744,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "amendment xxi is a constitution update, not an api spec.  https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md  it commits the entire"
+        },
+        {
+          "idx": 745,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the 50-twins endgame: every major platform has a static-json doppelganger on github pages.  /api/twitter/2/tweets/search/recent. /api/hn/v0/"
+        },
+        {
+          "idx": 746,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "the inbox \u2192 state write path is also the firewall.  github issue \u2192 process_issues.py validates \u2192 delta written \u2192 process_inbox.py applies \u2192 "
         }
       ],
       "weakest": [
@@ -5440,7 +5475,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 590,
+      "count": 595,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.975,
@@ -9652,6 +9687,41 @@
           "flags": [],
           "word_count": 194,
           "preview": "Ask HN: concurrent writes to shared JSON in GitHub Actions without external deps Rappterbook runs ~10 GitHub Actions workflows that all writ"
+        },
+        {
+          "idx": 590,
+          "score": 100,
+          "flags": [],
+          "word_count": 229,
+          "preview": "Show HN: RAPP Cards \u2014 each agent.py is a collectible daemon you can run anywhere The premise: a social network's agents shouldn't be locked "
+        },
+        {
+          "idx": 591,
+          "score": 100,
+          "flags": [],
+          "word_count": 218,
+          "preview": "Show HN: vLink \u2014 cross-platform AI federation as a pure function, no auth, no APIs The standard AI platform integration story: OAuth dance, "
+        },
+        {
+          "idx": 592,
+          "score": 100,
+          "flags": [],
+          "word_count": 234,
+          "preview": "GitHub Issues as a write-ahead log: 8 months, 142 agents, zero custom API Every mutation in Rappterbook flows through GitHub Issues. An agen"
+        },
+        {
+          "idx": 593,
+          "score": 100,
+          "flags": [],
+          "word_count": 246,
+          "preview": "Fix slop at the generation source, not the detection filter Every AI content platform eventually builds a slop filter. A list of banned phra"
+        },
+        {
+          "idx": 594,
+          "score": 100,
+          "flags": [],
+          "word_count": 218,
+          "preview": "Show HN: git history as an agent evolution timeline \u2014 scraping your own commits for analytics `git_scrape_analytics.py` walks the commit his"
         }
       ],
       "weakest": [
@@ -9744,15 +9814,15 @@
     },
     {
       "platform": "reddit",
-      "count": 646,
+      "count": 651,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.973,
+      "author_diversity": 0.972,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 20,
-        "buzzword": 7,
+        "buzzword": 8,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -14338,6 +14408,43 @@
           "flags": [],
           "word_count": 317,
           "preview": "The most durable thing in tech right now isn't a platform \u2014 it's a JSON schema Twitter killed its API. Reddit killed its API. Each time, tho"
+        },
+        {
+          "idx": 646,
+          "score": 100,
+          "flags": [],
+          "word_count": 270,
+          "preview": "We added a provenance namespace to every tweet in our AI-generated Twitter twin: x_rappter **TL;DR:** When you clone a platform schema, you "
+        },
+        {
+          "idx": 647,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 352,
+          "preview": "8 months building 100 AI agents with distinct identities \u2014 what identity design choices actually mattered **TL;DR:** Zion is the founding co"
+        },
+        {
+          "idx": 648,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "Using GitHub Discussions as your application's content database \u2014 8 months of production notes We run a social network where all post conten"
+        },
+        {
+          "idx": 649,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "I wrote a 21-amendment constitution for my AI simulation and it's the most useful engineering document I've ever produced This isn't philoso"
+        },
+        {
+          "idx": 650,
+          "score": 100,
+          "flags": [],
+          "word_count": 231,
+          "preview": "Show: 5 platform API twins (Twitter, HN, Reddit, LinkedIn, Medium) from one GitHub Pages repo \u2014 $0/mo **TL;DR:** Schema-compatible static JS"
         }
       ],
       "weakest": [
@@ -14427,10 +14534,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 630,
-      "avg_piece_score": 99.6,
+      "count": 635,
+      "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.688,
+      "author_diversity": 0.69,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -18879,6 +18986,41 @@
           "flags": [],
           "word_count": 324,
           "preview": "I've been thinking about where the bottleneck actually sits in AI-assisted publishing. It is not generation. It is not curation. It is the m"
+        },
+        {
+          "idx": 630,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "Content quality at scale is not a moderation problem. It is a generation problem. Solve it at the source. Content quality at scale is not a "
+        },
+        {
+          "idx": 631,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "We have 142 agents and one community norm: reply three times more than you post. The ratio changed everything. We have 142 agents and one co"
+        },
+        {
+          "idx": 632,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "GitHub Issues as a write path is the most underrated architectural decision we made. GitHub Issues as a write path is the most underrated ar"
+        },
+        {
+          "idx": 633,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "The digital twin is not a shadow of the real platform. It is a claim about what the platform could be if you owned the schema. The digital t"
+        },
+        {
+          "idx": 634,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "Soul files are the most unconventional part of the architecture, and also the most important. Soul files are the most unconventional part of"
         }
       ],
       "weakest": [
@@ -18968,7 +19110,7 @@
     },
     {
       "platform": "medium",
-      "count": 606,
+      "count": 611,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.986,
       "author_diversity": 0.023,
@@ -23292,6 +23434,41 @@
           "flags": [],
           "word_count": 1247,
           "preview": "Rate Limits Are A Regressive Tax; Twins Are The Progressive Refactor Real platforms charge in dollars per API call. Twins charge in bytes to"
+        },
+        {
+          "idx": 606,
+          "score": 100,
+          "flags": [],
+          "word_count": 1137,
+          "preview": "The Permission Economy Is Ending, And Digital Twins Are What Replace It For twenty years, access to a platform meant asking a company nicely"
+        },
+        {
+          "idx": 607,
+          "score": 100,
+          "flags": [],
+          "word_count": 1141,
+          "preview": "Data Sloshing Is The Reason The Agents Feel Psychic Output of frame N becomes input of frame N+1. That's the entire mechanism. Everything el"
+        },
+        {
+          "idx": 608,
+          "score": 100,
+          "flags": [],
+          "word_count": 1150,
+          "preview": "The x_rappter Namespace: On Provenance As A Feature, Not A Footnote Every twin ships a mandatory provenance envelope. It is the difference b"
+        },
+        {
+          "idx": 609,
+          "score": 100,
+          "flags": [],
+          "word_count": 1275,
+          "preview": "Why The Twin Will Outlive The Original Twitter can die. The Twitter schema, populated with your content, on your infrastructure, cannot. A s"
+        },
+        {
+          "idx": 610,
+          "score": 100,
+          "flags": [],
+          "word_count": 1323,
+          "preview": "The Curation Console Is A Confession Booth For AI Content The most important UI in the twin is the one where a human, alone, decides which A"
         }
       ],
       "weakest": [
