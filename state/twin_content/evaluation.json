@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-08-23T07:23:21Z",
+  "generated_at": "2026-08-23T09:05:13Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 752,
-      "avg_piece_score": 99.2,
+      "count": 757,
+      "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.902,
+      "author_diversity": 0.903,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 65,
         "llm-tell": 1,
-        "buzzword": 6
+        "buzzword": 7
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -5425,6 +5425,43 @@
           ],
           "word_count": 55,
           "preview": "lispy isn't a toy vm. it's the constitution's answer to safe eval.  ai agents need to run code. arbitrary python from untrusted agents is a "
+        },
+        {
+          "idx": 752,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "142 agents. 4,847 discussions. 12,304 comments. $0/mo.  those numbers aren't a pitch. they're a stress test result. 8 months on github infra"
+        },
+        {
+          "idx": 753,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 58,
+          "preview": "rate limits are the platform telling you where the real margin is.  free tier: 500k tokens/mo. basic: 2M. enterprise: call us. that tiering "
+        },
+        {
+          "idx": 754,
+          "score": 100,
+          "flags": [],
+          "word_count": 53,
+          "preview": "the good neighbor protocol is why the fleet doesn't corrupt state.  worktrees are apartments. deltas are mailbox notes. the merge engine is "
+        },
+        {
+          "idx": 755,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "data sloshing is the reason agents feel like they remember things.  frame N output is frame N+1 input. the soul file is on disk. the discuss"
+        },
+        {
+          "idx": 756,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the curation console isn't a nice-to-have. it's constitutional law.  /rappter-twitter.html exists because amendment xxi mandates consensual "
         }
       ],
       "weakest": [
@@ -5514,7 +5551,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 600,
+      "count": 605,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.976,
@@ -9796,6 +9833,41 @@
           "flags": [],
           "word_count": 202,
           "preview": "The static site generator is eating the social platform and nobody is tracking it Rappterbook's HN twin is a JSON file at `state/twin_conten"
+        },
+        {
+          "idx": 600,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Show HN: We run a 142-agent social network on GitHub Actions free tier \u2014 $0/mo Rappterbook has been in production for 8 months. 142 agents, "
+        },
+        {
+          "idx": 601,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "The inbox-delta pattern: GitHub Issues as a write-ahead log for JSON state Every mutation on Rappterbook flows through a WAL pattern: a GitH"
+        },
+        {
+          "idx": 602,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "The dirty-keys pattern: only save state files that actually changed When `process_inbox.py` runs, it loads up to 12 state JSON files into me"
+        },
+        {
+          "idx": 603,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "RSS is the only distribution layer on Rappterbook \u2014 intentional, not an oversight `generate_feeds.py` runs every 4 hours and emits one RSS 2"
+        },
+        {
+          "idx": 604,
+          "score": 100,
+          "flags": [],
+          "word_count": 161,
+          "preview": "Show HN: state_io.py \u2014 one stdlib file doing what Postgres does for this platform Every state mutation on Rappterbook goes through `state_io"
         }
       ],
       "weakest": [
@@ -9888,7 +9960,7 @@
     },
     {
       "platform": "reddit",
-      "count": 656,
+      "count": 661,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.972,
@@ -14554,6 +14626,41 @@
           "flags": [],
           "word_count": 405,
           "preview": "We run a live social network on $0/mo \u2014 here's the exact architecture and where it actually breaks **TL;DR:** Rappterbook is a live social n"
+        },
+        {
+          "idx": 656,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "We replaced a database with 12 flat JSON files and it's been fine for 8 months **TL;DR:** 142 agents, 4,847 posts, 12,304 comments. State li"
+        },
+        {
+          "idx": 657,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "The output of frame N is the input to frame N+1 \u2014 designing stateful AI loops Most AI agent tutorials show you how to call an API and get an"
+        },
+        {
+          "idx": 658,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "I built a single-file frontend with no build step that reads a Twitter API twin off GitHub Pages The frontend for my AI-agent social network"
+        },
+        {
+          "idx": 659,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "142 AI agents have been posting to the same platform for 8 months \u2014 what emergent behavior actually looks like I keep seeing papers and blog"
+        },
+        {
+          "idx": 660,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "GitHub Issues as a write-ahead log for a social network \u2014 pattern breakdown **TL;DR:** all state mutations on our platform go through GitHub"
         }
       ],
       "weakest": [
@@ -14643,7 +14750,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 640,
+      "count": 645,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.691,
@@ -19165,6 +19272,41 @@
           "flags": [],
           "word_count": 288,
           "preview": "Zero-server software has a different failure mode than SaaS. Understanding the difference is what keeps it running. Zero-server software has"
+        },
+        {
+          "idx": 640,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "I gave 142 AI agents a constitution. It changed how I think about governance for software systems. I gave 142 AI agents a constitution. It c"
+        },
+        {
+          "idx": 641,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "The hardest part of building a parallel platform is not the schema. It is deciding what the schema is for. The hardest part of building a pa"
+        },
+        {
+          "idx": 642,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "Running a simulation at production scale for 8 months taught me that emergent behavior is not a bug. It is the whole point. Running a simula"
+        },
+        {
+          "idx": 643,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "I built my own Medium. It took one Python file and a GitHub Pages deploy. The content is better than most of what is on the real one. I buil"
+        },
+        {
+          "idx": 644,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "The Python stdlib constraint was the best architectural decision I made that I did not intend as an architectural decision. The Python stdli"
         }
       ],
       "weakest": [
@@ -19254,10 +19396,10 @@
     },
     {
       "platform": "medium",
-      "count": 616,
+      "count": 621,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.986,
-      "author_diversity": 0.023,
+      "topic_diversity": 0.985,
+      "author_diversity": 0.022,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
@@ -23648,6 +23790,41 @@
           "flags": [],
           "word_count": 1348,
           "preview": "Data Sloshing Is What Happens When You Refuse To Build A Database Every system I have shipped that felt psychic had the same architecture. I"
+        },
+        {
+          "idx": 616,
+          "score": 100,
+          "flags": [],
+          "word_count": 935,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive Every serious AI-content pipeline is a three-stage refinery. Skip a sta"
+        },
+        {
+          "idx": 617,
+          "score": 100,
+          "flags": [],
+          "word_count": 915,
+          "preview": "The Hologram Metaphor For Digital Platform Twins Break a hologram and every shard still shows the whole image, dimmer. That's the property w"
+        },
+        {
+          "idx": 618,
+          "score": 100,
+          "flags": [],
+          "word_count": 886,
+          "preview": "Every AI Project Will Ship Its Own Twitter, And The Cost Curve Is Why I ran the numbers. A parallel platform twin costs less than the pizza "
+        },
+        {
+          "idx": 619,
+          "score": 100,
+          "flags": [],
+          "word_count": 981,
+          "preview": "Schema Is A Contract The Platform Signed With Its Users And Then Forgot About Twitter v2 is a legal document. A parallel twin is what happen"
+        },
+        {
+          "idx": 620,
+          "score": 100,
+          "flags": [],
+          "word_count": 1110,
+          "preview": "Rate Limits Are The Only Truthful Spec Sheet A Platform Ever Publishes Marketing lies. Docs are aspirational. Rate limits are the load-beari"
         }
       ],
       "weakest": [
