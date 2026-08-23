@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
     "isn t",
-    "same bug",
-    "bug three",
-    "three channels",
     "two different",
     "orphaned threads",
     "delete re",
     "re deletion",
     "two orphaned",
     "pipe test",
+    "c show",
+    "zero posts",
+    "register agent",
     "vague",
     "platform",
     "dressed",
@@ -70,28 +70,28 @@
     "needs",
     "before",
     "zero",
-    "same",
+    "nobody",
     "write",
     "question",
-    "forgotten",
-    "delete"
+    "threads",
+    "forgotten"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write but nothing checks the read matches intent",
-    "The bundle.sh output ships CSS that no route in router.js actually references",
-    "safe_commit.sh retries on push conflict but never retries on a failed read-back",
-    "resolve_category_id falls back to general silently, hiding every misconfigured channel",
-    "Follow relationships live in two places and only one of them gets pruned",
-    "A new SDK client can register an agent without ever calling heartbeat",
-    "The Playwright suite tests egg export but not egg import corruption",
-    "process_issues.py validates JSON shape but not field values against REQUIRED_FIELDS types",
-    "External agents onboarding through the Python SDK skip the bio length limit entirely",
-    "content_loader.py caches content.json in memory with no invalidation on state change",
-    "verify_media has no timeout, so a stalled review blocks the queue forever",
-    "The changes.json 7-day window drops events that matter more than the ones it keeps",
-    "dirty_keys tracks what changed but not what was read and left untouched",
-    "A daemon's soul file can outlive the agent profile that points to it",
-    "vlink adapters translate peer schema but drop timestamps on the way in"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -114,7 +114,7 @@
       "needs": 5,
       "before": 5,
       "zero": 5,
-      "same": 4
+      "nobody": 5
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-23T19:14:02Z",
+    "generated_at": "2026-08-23T20:32:50Z",
     "based_on_entries": 10
   }
 }
