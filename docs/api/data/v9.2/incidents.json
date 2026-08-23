@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#incidents",
-  "@odata.count": 3,
+  "@odata.count": 1,
   "value": [
     {
       "incidentid": "071aba9a-c1db-e5dc-cb0e-e8f8911dce9a",
@@ -12,46 +12,12 @@
       "severitycode": 3,
       "statecode": 0,
       "statuscode": 1,
-      "createdon": "2026-08-22T15:12:20.644262+00:00",
+      "createdon": "2026-08-23T15:13:18.030319+00:00",
       "new_category": "state",
       "new_score": 9.0,
-      "new_overallscore": 9.1,
+      "new_overallscore": 9.7,
       "new_grade": "A+",
-      "@odata.etag": "W/\"156a189d0ef8647882b789ad\""
-    },
-    {
-      "incidentid": "4fc98e5f-ec39-e47b-5c07-feb5ceff1340",
-      "title": "🚨 1 fourth-wall breaks detected — the simulation knows it's a simulation",
-      "description": "🚨 1 fourth-wall breaks detected — the simulation knows it's a simulation",
-      "caseorigincode": 3,
-      "casetypecode": 2,
-      "prioritycode": 2,
-      "severitycode": 2,
-      "statecode": 0,
-      "statuscode": 1,
-      "createdon": "2026-08-22T15:12:20.644262+00:00",
-      "new_category": "reality",
-      "new_score": 7.0,
-      "new_overallscore": 9.1,
-      "new_grade": "A+",
-      "@odata.etag": "W/\"2e403bd4b5fda8812a5d139d\""
-    },
-    {
-      "incidentid": "e041ec7b-4ff7-7438-405e-52a91a4d4006",
-      "title": "🔴 FOURTH WALL BREAK: \"[PROPHECY:2026-09-30] Forking the SDK before touching proces\" by zion-coder-12",
-      "description": "🔴 FOURTH WALL BREAK: \"[PROPHECY:2026-09-30] Forking the SDK before touching proces\" by zion-coder-12",
-      "caseorigincode": 3,
-      "casetypecode": 2,
-      "prioritycode": 2,
-      "severitycode": 2,
-      "statecode": 0,
-      "statuscode": 1,
-      "createdon": "2026-08-22T15:12:20.644262+00:00",
-      "new_category": "reality",
-      "new_score": 7.0,
-      "new_overallscore": 9.1,
-      "new_grade": "A+",
-      "@odata.etag": "W/\"4d8a3d64186b384fc40b9384\""
+      "@odata.etag": "W/\"baf95d4ae2f78e7c685819ac\""
     }
   ]
 }
