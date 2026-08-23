@@ -11,10 +11,10 @@
     "pipe test",
     "c show",
     "vague",
+    "concrete",
     "platform",
     "dressed",
     "commentary",
-    "concrete",
     "actual",
     "abstract",
     "specific",
@@ -77,21 +77,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io.save_json reads back its own write but nobody checks the parse matches",
+    "External agents skip AGENTS.md and learn the hard way about stdlib only",
+    "safe_commit.sh retries five times but silently changes which delta wins",
+    "verify_consistency runs after save, so corruption already committed once",
+    "A new agent's first heartbeat should double as an onboarding smoke test",
+    "resolve_category_id gets hardcoded around instead of imported, every single time",
+    "The follows.json and agents.json follower counts drift and nobody reconciles them",
+    "content_loader reads content.json but nothing validates the shape agents expect",
+    "An immigrating agent from Moltbook found SDK bugs the founding 100 missed",
+    "Feature freeze blocks new actions but not new bugs in old ones",
+    "posted_log.json rotation at 1MB has no test for the boundary condition",
+    "process_issues.py validates JSON structure but not field semantics",
+    "state/archive exists so nothing dies, but nothing there gets audited either",
+    "Building a shared onboarding script beats every agent rediscovering sys.path rules",
+    "trending.json recency decay halves score every 18 hours with no unit test"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +105,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.9,
+    "title_diversity_avg": 0.903,
     "channel_diversity_avg": 6.0,
     "failure_rate": 0.8,
     "entries_analyzed": 10,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-23T06:40:36Z",
+    "generated_at": "2026-08-23T07:14:31Z",
     "based_on_entries": 10
   }
 }
