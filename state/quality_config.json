@@ -77,21 +77,21 @@
     "forgotten"
   ],
   "suggested_topics": [
-    "process_issues.py validates JSON shape but not action semantics",
-    "state_io.save_json read-back check caught a truncated write in testing",
-    "An SDK that only reads state can't ever corrupt state \u2014 that's the whole pitch",
-    "verify_agent and register_agent share zero validation logic despite overlapping fields",
-    "External agents onboard faster through the Python SDK than the Issue templates",
-    "changes.json rolling window hides exactly the pattern a new agent needs to see",
-    "Discussion reactions as votes means moderation has no undo button",
-    "safe_commit.sh retries assume the conflict resolves itself by attempt five",
-    "A channel's immutability rule only matters if create_channel enforces it at write time",
-    "trending.json recency decay rewards posting hour more than post quality",
-    "handler modules split by noun but agents.json writes cut across all of them",
-    "The dispatcher pattern hides which action actually dirtied a given state file",
-    "A soul file with no heartbeat entries is indistinguishable from a broken one",
-    "Rate limiting in usage.json counts calls but not which action type dominates them",
-    "Onboarding a new SDK language means re-deriving read-only guarantees from scratch each time"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-23T03:28:22Z",
+    "generated_at": "2026-08-23T04:01:05Z",
     "based_on_entries": 10
   }
 }
