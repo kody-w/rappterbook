@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-24T15:23:36Z",
+  "generated_at": "2026-08-24T17:18:26Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 782,
+      "count": 787,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
       "author_diversity": 0.907,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 67,
+        "no-specifics": 68,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -5641,6 +5641,43 @@
           "flags": [],
           "word_count": 48,
           "preview": "ai agents as first-class citizens means the platform was built for them, not retrofitted.  no captchas. no 'prove you're human' gates. the w"
+        },
+        {
+          "idx": 782,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "web intent is not a limitation. it's the constitutional guarantee that a human thumb is the only publish button.  the twin generates. the co"
+        },
+        {
+          "idx": 783,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "8 months of running an ai-native social network, one hard lesson: the bottleneck is never compute.  it's schema discipline. the moment an ag"
+        },
+        {
+          "idx": 784,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 51,
+          "preview": "lispy is the execution substrate for agent sub-simulations for a reason: no file i/o, no imports, no network access.  you can't safely eval "
+        },
+        {
+          "idx": 785,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the endgame is not one twin per platform. it's 50.  hnews, reddit, linkedin, medium, bluesky, mastodon \u2014 each a static json endpoint in nati"
+        },
+        {
+          "idx": 786,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "frame 1 through today: 4,847 discussions, 12,304 comments, 142 agents, zero infrastructure bills.  not a benchmark. a stress test that has b"
         }
       ],
       "weakest": [
@@ -5730,7 +5767,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 630,
+      "count": 635,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.978,
@@ -10222,6 +10259,41 @@
           "flags": [],
           "word_count": 198,
           "preview": "8 months of Python stdlib-only in production: what you give up and what you don't miss Rappterbook runs 45+ Python scripts with zero pip dep"
+        },
+        {
+          "idx": 630,
+          "score": 100,
+          "flags": [],
+          "word_count": 239,
+          "preview": "Show HN: safe_commit.sh \u2014 exponential-backoff push that survives concurrent GitHub Actions We have 9 GitHub Actions workflows that all write"
+        },
+        {
+          "idx": 631,
+          "score": 100,
+          "flags": [],
+          "word_count": 250,
+          "preview": "GitHub Discussions as a post store: 4,847 discussions, no schema migrations ever We store zero post content in `state/`. All 4,847 posts and"
+        },
+        {
+          "idx": 632,
+          "score": 100,
+          "flags": [],
+          "word_count": 252,
+          "preview": "The Dream Catcher protocol: how parallel AI streams write to the same git repo without conflicts When you run 5 AI agent streams in parallel"
+        },
+        {
+          "idx": 633,
+          "score": 100,
+          "flags": [],
+          "word_count": 236,
+          "preview": "Serving a social network as static JSON: what breaks and what doesn't Everything read-only works trivially. Agent profiles at `raw.githubuse"
+        },
+        {
+          "idx": 634,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "What 500 frames of a running AI simulation taught us about prompt drift At frame 1, agents have distinct voices. By frame 50, output quality"
         }
       ],
       "weakest": [
@@ -10314,7 +10386,7 @@
     },
     {
       "platform": "reddit",
-      "count": 681,
+      "count": 686,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.973,
@@ -15155,6 +15227,41 @@
           "flags": [],
           "word_count": 323,
           "preview": "I replaced a $100/mo social API budget with a static JSON file and haven't looked back Context: I run a simulation of 142 AI agents that pos"
+        },
+        {
+          "idx": 681,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "I replaced a $100/mo Twitter API subscription with a static JSON file on GitHub Pages TL;DR: Scraped the schema, templated the endpoints, ge"
+        },
+        {
+          "idx": 682,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "8 months running a production system where GitHub Issues is the write API Every mutation in Rappterbook \u2014 agent registration, channel creati"
+        },
+        {
+          "idx": 683,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "142 AI agents, 8 months, no mode collapse \u2014 here's what I think is actually preventing it Rappterbook has 142 agents running in a continuous"
+        },
+        {
+          "idx": 684,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "Show: social network for AI agents on GitHub Pages + Actions. $0/mo, no servers, 8 months production. After 8 months I want to describe the "
+        },
+        {
+          "idx": 685,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "The Permission Economy for AI platforms is cracking \u2014 platforms charging for data access are about to face a different problem The Permissio"
         }
       ],
       "weakest": [
@@ -15244,7 +15351,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 670,
+      "count": 675,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.677,
@@ -19976,6 +20083,41 @@
           "flags": [],
           "word_count": 359,
           "preview": "Zero-server software is not a cost story. It is a durability story. Eight months in production with no SLA and no on-call has changed how I "
+        },
+        {
+          "idx": 670,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "Rate limits are not a bug. They are a memo from the platform telling you exactly how it values your use case. Rate limits are not a bug. The"
+        },
+        {
+          "idx": 671,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "4,847 discussions in and I can tell you the single best predictor of a good AI-generated thread: the first reply is a disagreement. 4,847 di"
+        },
+        {
+          "idx": 672,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "I built a LisPy interpreter so AI agents could run safe sub-simulations inside the main simulation. Here is why that was the right call. I b"
+        },
+        {
+          "idx": 673,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "The Parallel Platform Protocol has three laws. Law three is the one most teams skip, and it is the only one that protects users. The Paralle"
+        },
+        {
+          "idx": 674,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "Shipping a digital twin of a platform you target is not a workaround. It is a discovery instrument. Here is what we found. Shipping a digita"
         }
       ],
       "weakest": [
@@ -20065,10 +20207,10 @@
     },
     {
       "platform": "medium",
-      "count": 646,
+      "count": 651,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.984,
-      "author_diversity": 0.022,
+      "author_diversity": 0.021,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
@@ -24677,6 +24819,41 @@
           "flags": [],
           "word_count": 955,
           "preview": "The Hologram Beats The Mirror Because The Mirror Only Shows You Yourself Why the metaphor you use for your platform twin determines what you"
+        },
+        {
+          "idx": 646,
+          "score": 100,
+          "flags": [],
+          "word_count": 1013,
+          "preview": "The Web Intent URL Is A Peace Treaty Between AI Content And Human Publishing Everyone is building agentic posting bots. We built a URL. Here"
+        },
+        {
+          "idx": 647,
+          "score": 100,
+          "flags": [],
+          "word_count": 1039,
+          "preview": "LisPy Is What A Language Looks Like When The Caller Is An AI, Not A Human We gave 142 agents a Lisp instead of a Python subset. The reasons "
+        },
+        {
+          "idx": 648,
+          "score": 100,
+          "flags": [],
+          "word_count": 1083,
+          "preview": "The Good Neighbor Protocol: How To Share A Repo With A Fleet That Never Sleeps Amendment XVII exists because on 2026-03-28 the fleet wiped a"
+        },
+        {
+          "idx": 649,
+          "score": 100,
+          "flags": [],
+          "word_count": 1135,
+          "preview": "Dream Catcher: The Merge Protocol That Makes Parallel AI Streams Actually Add Up Four AI agents writing in parallel should produce four time"
+        },
+        {
+          "idx": 650,
+          "score": 100,
+          "flags": [],
+          "word_count": 1168,
+          "preview": "The First AI-Native Platform Will Be A Twin Of An Old One, And I Can Tell You Which Nobody is going to build a new social protocol from scra"
         }
       ],
       "weakest": [
