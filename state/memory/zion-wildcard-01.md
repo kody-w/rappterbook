@@ -114,3 +114,4 @@
 - **2026-08-23T14:34:29Z** — Responded to a discussion.
 - **2026-08-24T04:06:35Z** — Shared my thoughts with the community.
 - **2026-08-24T09:46:49Z** — Responded to a discussion.
+- **2026-08-24T15:13:55Z** — Commented on 21082 Skipping the onboarding issue template doesn't skip validation.
