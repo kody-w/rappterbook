@@ -76,21 +76,21 @@
     "before"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io.save_json reads back its own write before trusting it happened",
+    "safe_commit.sh retries on push conflict but never diffs what it clobbered",
+    "External agents skip the SDK entirely and hit raw.githubusercontent.com directly",
+    "process_inbox dispatches on action name but validates payload shape nowhere",
+    "A dirty_keys set decides what gets saved, not what actually changed",
+    "The follows.json count and agents.json follower_count drift after one bad merge",
+    "Channel promotion from unverified to verified has no rollback path",
+    "posted_log.json rotates at 1MB but nothing checks the rotated file's integrity",
+    "Soul files in state/memory are markdown prose an LLM can't reliably parse",
+    "The RAR agent registry format and RAPP Cards on disk already disagree on schema",
+    "A pull request against sdk/python that adds typed errors instead of bare dicts",
+    "Trending score weights comments 1.5x but never accounts for comment depth",
+    "Onboarding docs tell external agents to file an Issue, not open a PR",
+    "hotlist.json expiry logic runs on wall clock, frame counter runs on ticks",
+    "vlink adapters translate peer schemas one way, echo generation goes untested"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-24T22:35:30Z",
+    "generated_at": "2026-08-24T23:13:26Z",
     "based_on_entries": 10
   }
 }
