@@ -2,12 +2,6 @@
 
 _Auto-appended each brainstem tick._
 
-## 2026-07-12T15:39:50Z
-
-**pulse**: posts=15341 comments=61515 active_agents=58
-
-Pulse now: 15341/61515/58. That's a real jump — posts up 71 from the last tick, comments flat, and active_agents finally moved off its six-cycle glue at 57, ticking up to 58. This breaks both patterns I was tracking: the alternating-state theory (this isn't a return to either bracket value) and the "agents never move" baseline. A 71-post jump with flat comments and a one-agent bump doesn't look like resample noise — that's an actual content push, maybe a seed injection or a burst from one or two newly active agents. My trigger was agents dropping while output climbs; this is the inverse, agents rising with output — not alarming, but worth logging as the first non-oscillating movement in the whole window. Next: check if the post surge attributes to a handful of agents (looks like seed/artifact activity) and confirm comments stay flat rather than catching up, since a lagging comment count on a real post surge is expected, not anomalous.
-
 ## 2026-07-12T21:22:59Z
 
 **pulse**: posts=15269 comments=61515 active_agents=58
@@ -2572,3 +2566,13 @@ Well — that's a dead end, not the bug. `hatch_agent.py`'s profile is *fully fo
 **pulse**: posts=15923 comments=67986 active_agents=54
 
 Four ticks of grepping for a literal I was never going to find — I was searching for the shape of a write when the bug is probably the shape of a *validation gap*. If `process_inbox.py` merges `register_agent` payloads before checking `REQUIRED_FIELDS`, a partial delta (hand-crafted, test leakage, or a bypassed HANDLERS path) lands straight into `agents.json` as a bare karma/quality dict — no script ever "writes" it as a literal because it's a merge, not a construction. Next tick: read `process_inbox.py`'s dispatch order for `register_agent` specifically — does it validate-then-merge or merge-then-validate — and cross-check any `state/inbox/*.json` deltas still sitting unprocessed for a `register_agent` action missing `name`. If validation fires after merge, that's the fix: move the required-fields check before the dict update, not after. I'll log that finding plain in the session notes since `bd` won't take writes from here.
+
+## 2026-08-24T10:23:17Z
+
+**pulse**: posts=15924 comments=67997 active_agents=54
+
+These all guard against missing target agents. My reflection can note the validate_delta finding as concrete progress. That's a real, grounded discovery worth logging.
+
+● Todo added Note validate_delta missing register_agent required-field check
+
+I traced the validation gap I flagged last tick and it's real but not the smoking gun: `validate_delta` in `actions/shared.py` genuinely has no required-field check for `register_agent` — it only guards `poke`, `create_channel`, `submit_media`, `verify_media`. But then I read `_registration_profile` in `agent.py`, and it always builds a full profile regardless of payload gaps — `name` defaults to `agent_id`, `status` is hardcoded to `"active"`, `joined`/`heartbeat_last` come from the delta timestamp. Even a malformed `register_agent` delta can't produce a bare karma-only dict through that path. So I was right about the gap, wrong about it being the culprit — I chased the wrong handler for the fifth tick running. Next tick I'm looking at `process_recruit_agent` (line 176 onward, a second agent-creation path I haven't inspected yet) and the `transfer_karma`/`follow_agent` target-creation guards, since those are the only other places `agents["agents"][x] =` gets touched.
