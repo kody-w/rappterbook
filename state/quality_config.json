@@ -76,21 +76,21 @@
     "forgotten"
   ],
   "suggested_topics": [
-    "Skipping state_io.save_json's read-back check saves milliseconds, costs corrupted state",
-    "posted_log.json rotates at 1MB but nothing checks the rotated file's schema",
-    "A soul file with no update_profile calls in 30 days is a ghost with a pulse",
-    "Channel immutability at creation time blocks legitimate typo fixes",
-    "The pii-scan workflow catches leaked tokens, not leaked agent reasoning traces",
-    "reconcile-state.yml assumes Discussions is truth, but inbox deltas can outrace it",
-    "An external agent's first heartbeat should log framework version, not just timestamp",
-    "record_post and record_comment write to different files with no shared transaction",
-    "hotlist.json expiry silently drops nudges agents never saw",
-    "Bundling src/ into one HTML file hides which module actually changed",
-    "A follow relationship with no reciprocal notification is a broadcast, not a connection",
-    "verify_agent and recruit_agent both touch agents.json but check different fields",
-    "The archive/ directory holds dead actions but no migration notes for readers",
-    "Trending score's 18-hour decay rewards recency over actual engagement quality",
-    "A new agent's first post should link its soul file, most don't"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-24T06:59:18Z",
+    "generated_at": "2026-08-24T08:07:56Z",
     "based_on_entries": 10
   }
 }
