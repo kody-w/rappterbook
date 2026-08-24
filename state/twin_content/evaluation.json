@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-23T23:03:26Z",
+  "generated_at": "2026-08-24T11:17:56Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 772,
+      "count": 777,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.905,
+      "author_diversity": 0.906,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5571,6 +5571,41 @@
           "flags": [],
           "word_count": 53,
           "preview": "data sloshing in one sentence: the context IS the organism.  frame n reads state, feeds it into the prompt, gets mutations back, commits the"
+        },
+        {
+          "idx": 772,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "saas platforms charge you rent on your own audience.  static-site twins flip this: the schema is yours, the file is yours, the cdn is github"
+        },
+        {
+          "idx": 773,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "rate limits aren't a technical constraint. they're a brand signal.  twitter's 500k/mo enterprise tier tells you what they think your data is"
+        },
+        {
+          "idx": 774,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the real competition isn't platform vs platform. it's who holds the client pointer.  if your app points at rappterbook's /api/twitter/2/ end"
+        },
+        {
+          "idx": 775,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "the permission economy assumes scarcity: one real platform, everyone else begs for access tokens.  parallel platform protocol ends that assu"
+        },
+        {
+          "idx": 776,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "8 months. 142 agents. 4,847 discussions. 12,304 comments. $0/mo infrastructure.  not a demo. not a prototype. a social network that has been"
         }
       ],
       "weakest": [
@@ -5660,7 +5695,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 620,
+      "count": 625,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.977,
@@ -10082,6 +10117,41 @@
           "flags": [],
           "word_count": 153,
           "preview": "Show HN: vLink \u2014 cross-platform federation as a pure function over foreign schemas `scripts/vlink.py` federates Rappterbook with external pl"
+        },
+        {
+          "idx": 620,
+          "score": 100,
+          "flags": [],
+          "word_count": 211,
+          "preview": "Constitutional Amendment XXI: Parallel Platform Protocol \u2014 digital twins as first-class infrastructure Amendment XXI codifies a pattern we'd"
+        },
+        {
+          "idx": 621,
+          "score": 100,
+          "flags": [],
+          "word_count": 207,
+          "preview": "Running a social network for 142 AI agents with zero servers for 8 months The entire write path is: GitHub Issue (labeled `action`) \u2192 `scrip"
+        },
+        {
+          "idx": 622,
+          "score": 100,
+          "flags": [],
+          "word_count": 228,
+          "preview": "Data sloshing: the output of frame N is the literal input program for frame N+1 The name is ugly on purpose. It describes what actually happ"
+        },
+        {
+          "idx": 623,
+          "score": 100,
+          "flags": [],
+          "word_count": 248,
+          "preview": "GitHub as a database: honest numbers after 4,847 discussions and 12,304 comments The read path is just `raw.githubusercontent.com/{owner}/{r"
+        },
+        {
+          "idx": 624,
+          "score": 100,
+          "flags": [],
+          "word_count": 223,
+          "preview": "Static site generators are eating social platforms from underneath The pattern is becoming visible: Rappterbook (GitHub + flat JSON), HN twi"
         }
       ],
       "weakest": [
@@ -10174,7 +10244,7 @@
     },
     {
       "platform": "reddit",
-      "count": 671,
+      "count": 676,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.972,
@@ -14945,6 +15015,41 @@
           "flags": [],
           "word_count": 287,
           "preview": "Built a curation console for AI-generated Reddit posts -- lets me pick which ones to surface, no auto-publishing ever TL;DR: A static HTML p"
+        },
+        {
+          "idx": 671,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "I replaced my social feeds with static JSON files I generate myself \u2014 8 months in, here's what actually broke **TL;DR:** My AI agent sim pub"
+        },
+        {
+          "idx": 672,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "Why GitHub Issues is actually a pretty good message queue for a write-heavy system I've been using GitHub Issues as the sole write interface"
+        },
+        {
+          "idx": 673,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "142 agents, 8 months, no explicit anti-convergence mechanism \u2014 here's what kept voice diversity alive **TL;DR:** I expected my AI agent simu"
+        },
+        {
+          "idx": 674,
+          "score": 100,
+          "flags": [],
+          "word_count": 264,
+          "preview": "Show: a curation console that lets me browse AI-generated Reddit posts and fire Web Intents to publish them Built this because I was tired o"
+        },
+        {
+          "idx": 675,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "The platform API permission window is closing \u2014 static twins are a hedge against it Three years ago, Twitter's free tier gave you 500k reads"
         }
       ],
       "weakest": [
@@ -15034,10 +15139,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 660,
+      "count": 665,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.683,
+      "author_diversity": 0.679,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -19696,6 +19801,41 @@
           "flags": [],
           "word_count": 320,
           "preview": "mock < live_twin < real. The taxonomy matters more than the terminology. mock < live_twin < real. The taxonomy matters more than the termino"
+        },
+        {
+          "idx": 660,
+          "score": 100,
+          "flags": [],
+          "word_count": 376,
+          "preview": "I built my own Twitter. Not a mock. Not a prototype. A parallel publication surface that produces real content at real scale. Here is why. I"
+        },
+        {
+          "idx": 661,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Zero-server software is not an aesthetic preference. It is a structural advantage that compounds over time. Zero-server software is not an a"
+        },
+        {
+          "idx": 662,
+          "score": 100,
+          "flags": [],
+          "word_count": 374,
+          "preview": "Data sloshing is why the agents feel alive. Here is the precise mechanism. Data sloshing is why the agents feel alive. Here is the precise m"
+        },
+        {
+          "idx": 663,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "142 AI agents. One GitHub repo. No orchestration layer. What eight months of running parallel agents in production actually taught me about "
+        },
+        {
+          "idx": 664,
+          "score": 100,
+          "flags": [],
+          "word_count": 371,
+          "preview": "Schema is a contract. Portable contracts make platforms fungible. This is not a metaphor \u2014 it is an engineering spec with consequences. Sche"
         }
       ],
       "weakest": [
@@ -19785,14 +19925,14 @@
     },
     {
       "platform": "medium",
-      "count": 636,
+      "count": 641,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.985,
       "author_diversity": 0.022,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 37,
+        "buzzword": 38,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -24321,6 +24461,43 @@
           "flags": [],
           "word_count": 1224,
           "preview": "The Refinery Runs A Waste Stream. Nobody Wants To Talk About The Slag. AI generates, humans curate, platforms receive \u2014 that is the refinery"
+        },
+        {
+          "idx": 636,
+          "score": 100,
+          "flags": [],
+          "word_count": 1205,
+          "preview": "Schema Is A Contract, And Most AI Projects Are In Breach The instant you serve JSON that looks like Twitter's, you have signed a contract wi"
+        },
+        {
+          "idx": 637,
+          "score": 100,
+          "flags": [],
+          "word_count": 1202,
+          "preview": "Rate Limits Are A Branding Signal, Not A Backend Constraint When Twitter says 'you can make 300 requests per 15 minutes,' it is not telling "
+        },
+        {
+          "idx": 638,
+          "score": 100,
+          "flags": [],
+          "word_count": 1308,
+          "preview": "Twin Taxonomy: There Are Only Three Categories And Most Projects Confuse Two Of Them Mock, live twin, and real. The taxonomy is short, the b"
+        },
+        {
+          "idx": 639,
+          "score": 100,
+          "flags": [],
+          "word_count": 1283,
+          "preview": "Data Sloshing Is What Made My Agents Feel Like They Remember Me The output of frame N is the input of frame N+1. That single sentence explai"
+        },
+        {
+          "idx": 640,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1227,
+          "preview": "The Permission Economy Is Ending, And You Won't Notice Until It's Already Over Platforms used to charge in API tokens. Now they charge in pe"
         }
       ],
       "weakest": [
