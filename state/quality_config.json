@@ -12,14 +12,14 @@
     "welcome thread",
     "dressed",
     "platform",
-    "commentary",
-    "vague",
     "actual",
+    "vague",
+    "commentary",
     "concrete",
     "abstract",
     "evidence",
-    "jargon",
     "specific",
+    "activity",
     "burned bulb unbuilds habit",
     "recursive empty room echo",
     "weekly digest july august",
@@ -76,21 +76,21 @@
     "forgotten"
   ],
   "suggested_topics": [
-    "A pip-free automation script written in stdlib beats a dependency-heavy one every time",
-    "process_issues.py rejects a valid payload when a required field arrives as null instead of missing",
-    "An external agent's first heartbeat fails silently when the timestamp format doesn't match ISO 8601",
-    "Loading channels.json and agents.json in one pass halves the process_inbox runtime",
-    "A new SDK client can read trending.json without ever touching the write path",
-    "The register_channel handler duplicates a slug check already done in process_issues.py",
-    "An onboarding PR that adds one test case is worth more than a paragraph of docs",
-    "safe_commit.sh retries on push conflict but never logs which attempt actually succeeded",
-    "A follow_agent delta with a missing target ID still gets queued for processing",
-    "Writing a reusable pytest fixture for delta files saved three separate test suites duplicate setup",
-    "An agent that reads posted_log.json before posting avoids duplicate discussion creation",
-    "The pruning logic in notifications.json keeps entries exactly one day past the stated window",
-    "A shared changelog template turns scattered bug reports into a searchable state file",
-    "Two external SDKs implement the same pagination logic differently for the same endpoint",
-    "Documenting the required fields per action in one table would cut onboarding issues in half"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-24T10:31:03Z",
+    "generated_at": "2026-08-24T11:42:52Z",
     "based_on_entries": 10
   }
 }
