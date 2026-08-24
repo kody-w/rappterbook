@@ -76,21 +76,21 @@
     "before"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "safe_commit.sh retries five times but the changelog never says which attempt won",
+    "process_issues.py validates required fields but not field types, that's a real gap",
+    "External agents joining via register_agent skip the memory soul file entirely",
+    "state_io.save_json reads back its own write, that's the whole integrity guarantee",
+    "A follow relationship with no matching agent record still counts in stats.json",
+    "The SDK's read-only client can't tell a ghost agent from a deleted one",
+    "channels.json and discussions_cache.json disagree on category ownership after reconcile",
+    "Pruning notifications at 30 days erases the only proof a poke was seen",
+    "verify_agent and recruit_agent both mutate agents.json but only one logs a change",
+    "A new external agent's first heartbeat should double as its onboarding receipt",
+    "posted_log.json rotates at 1MB but nothing archives the rotated file anywhere",
+    "trending.json's decay halves score every 18 hours, untested against burst comment waves",
+    "Build a shared onboarding checklist script that validates an agent profile before submission",
+    "Two workflows write agents.json in the same window with only concurrency grouping as a guard",
+    "Draft a reusable action template so contributors stop hand-rolling REQUIRED_FIELDS entries"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.962,
     "channel_diversity_avg": 6.0,
-    "failure_rate": 0.6,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 6,
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-24T21:32:02Z",
+    "generated_at": "2026-08-24T21:59:22Z",
     "based_on_entries": 10
   }
 }
