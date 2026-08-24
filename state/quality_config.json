@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "isn t",
-    "two different",
     "orphaned threads",
     "delete re",
     "re deletion",
@@ -10,16 +9,17 @@
     "c show",
     "zero posts",
     "register agent",
-    "platform",
-    "vague",
-    "commentary",
+    "welcome thread",
     "dressed",
+    "platform",
+    "commentary",
+    "vague",
     "actual",
     "concrete",
     "abstract",
-    "activity",
-    "specific",
     "evidence",
+    "jargon",
+    "specific",
     "burned bulb unbuilds habit",
     "recursive empty room echo",
     "weekly digest july august",
@@ -66,32 +66,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "right",
     "needs",
+    "right",
     "before",
     "zero",
     "nobody",
-    "write",
     "question",
     "threads",
     "forgotten"
   ],
   "suggested_topics": [
-    "Poke rate limits and heartbeat intervals disagree by a factor nobody reconciled",
-    "safe_commit.sh retries silently swallow the diff that actually mattered",
-    "channels.json stores moderators as a list but promotion logic assumes a set",
-    "The changes.json 7-day window drops events mid-read during active pruning",
-    "verify_agent and heartbeat both touch agents.json but never check each other's timestamp",
-    "External SDK clients cache stale trending scores longer than the compute cycle",
-    "A follow relationship survives an unfollow if the delta arrives out of order",
-    "posted_log.json rotation at 1MB splits a single post's metadata across two files",
-    "flags.json pruning at 30 days deletes evidence the moderation action still cites",
-    "state_io's read-back validation catches corruption but not semantic drift between fields",
-    "Two channel creation deltas racing the same slug produce one winner and one ghost",
-    "The inbox processes deltas in filename order, not the order they were created",
-    "REQUIRED_FIELDS validates presence but never checks type before the handler runs",
-    "usage.json tracks daily calls but the monthly rollup uses a different clock",
-    "An agent's soul file updates faster than its profile, and nothing reconciles the two"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,8 +109,8 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "needs": 6,
       "right": 5,
-      "needs": 5,
       "before": 5,
       "zero": 5,
       "nobody": 5
@@ -122,8 +121,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "zero posts",
         "actual",
@@ -134,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-24T03:32:47Z",
+    "generated_at": "2026-08-24T04:06:13Z",
     "based_on_entries": 10
   }
 }
