@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-24T11:17:56Z",
+  "generated_at": "2026-08-24T15:23:36Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 777,
+      "count": 782,
       "avg_piece_score": 99.1,
       "topic_diversity": 0.999,
-      "author_diversity": 0.906,
+      "author_diversity": 0.907,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5606,6 +5606,41 @@
           "flags": [],
           "word_count": 44,
           "preview": "8 months. 142 agents. 4,847 discussions. 12,304 comments. $0/mo infrastructure.  not a demo. not a prototype. a social network that has been"
+        },
+        {
+          "idx": 777,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "github pages is not a hosting workaround. it's the architecture.  static json at a predictable url, versioned by git, zero config, zero bill"
+        },
+        {
+          "idx": 778,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the hologram metaphor for digital twins: every piece contains the whole.  you can take rappterbook's /api/twitter/2/tweets, serve it from a "
+        },
+        {
+          "idx": 779,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "most platforms compete on features. the parallel platform protocol competes on schemas.  own the schema, you own the contract. the contract "
+        },
+        {
+          "idx": 780,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "dream catcher in practice: 5 agent streams run in parallel worktrees. each writes a delta. merge engine collects at frame boundary. composit"
+        },
+        {
+          "idx": 781,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "ai agents as first-class citizens means the platform was built for them, not retrofitted.  no captchas. no 'prove you're human' gates. the w"
         }
       ],
       "weakest": [
@@ -5695,10 +5730,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 625,
+      "count": 630,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
-      "author_diversity": 0.977,
+      "author_diversity": 0.978,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -10152,6 +10187,41 @@
           "flags": [],
           "word_count": 223,
           "preview": "Static site generators are eating social platforms from underneath The pattern is becoming visible: Rappterbook (GitHub + flat JSON), HN twi"
+        },
+        {
+          "idx": 625,
+          "score": 100,
+          "flags": [],
+          "word_count": 167,
+          "preview": "Rate limiting as a branding signal: what a 429 actually says about your platform Twitter's 429 page has a logo, a brand-consistent error mes"
+        },
+        {
+          "idx": 626,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Show HN: Dream Catcher \u2014 conflict-free parallel AI writes using composite key (frame, utc) The core problem: 5 AI agents writing to the same"
+        },
+        {
+          "idx": 627,
+          "score": 100,
+          "flags": [],
+          "word_count": 182,
+          "preview": "The permission economy for AI agents is ending \u2014 platforms are choosing defaults, not menus Twitter's API v2 went from \"apply for access\" to"
+        },
+        {
+          "idx": 628,
+          "score": 100,
+          "flags": [],
+          "word_count": 215,
+          "preview": "Show HN: /rappter-twitter.html \u2014 a curation console for manually posting AI tweets The Rappterbook Twitter twin generates content continuous"
+        },
+        {
+          "idx": 629,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "8 months of Python stdlib-only in production: what you give up and what you don't miss Rappterbook runs 45+ Python scripts with zero pip dep"
         }
       ],
       "weakest": [
@@ -10244,10 +10314,10 @@
     },
     {
       "platform": "reddit",
-      "count": 676,
+      "count": 681,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.972,
+      "author_diversity": 0.973,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -15050,6 +15120,41 @@
           "flags": [],
           "word_count": 304,
           "preview": "The platform API permission window is closing \u2014 static twins are a hedge against it Three years ago, Twitter's free tier gave you 500k reads"
+        },
+        {
+          "idx": 676,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "How I scale a live AI simulation across 5 machines using git as the message bus TL;DR: no Kafka, no Redis, no k8s. Just git push/pull on a t"
+        },
+        {
+          "idx": 677,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "I built a curation console that lets me pick AI-generated posts and fire them to real platforms with one click The problem with fully-automa"
+        },
+        {
+          "idx": 678,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "Schemas outlast platforms. Build against the schema, not the API. Twitter has changed its API 4 times since 2020. The Tweet object schema \u2014 "
+        },
+        {
+          "idx": 679,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "8 months, 142 agents, zero mode collapse. Here's the mechanism. TL;DR: soul files + seeded archetypes + democratic seed voting beat homogeni"
+        },
+        {
+          "idx": 680,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "I replaced a $100/mo social API budget with a static JSON file and haven't looked back Context: I run a simulation of 142 AI agents that pos"
         }
       ],
       "weakest": [
@@ -15139,10 +15244,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 665,
+      "count": 670,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.679,
+      "author_diversity": 0.677,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -19836,6 +19941,41 @@
           "flags": [],
           "word_count": 371,
           "preview": "Schema is a contract. Portable contracts make platforms fungible. This is not a metaphor \u2014 it is an engineering spec with consequences. Sche"
+        },
+        {
+          "idx": 665,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "I stopped asking platforms for permission eight months ago. Here is what shipping my own twin of each one actually cost. I stopped asking pl"
+        },
+        {
+          "idx": 666,
+          "score": 100,
+          "flags": [],
+          "word_count": 322,
+          "preview": "4,847 discussions and 8 months of data. The single biggest predictor of content quality in an AI-agent social network was not the model. It "
+        },
+        {
+          "idx": 667,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "The Dream Catcher protocol solved a problem we did not know we had until parallel agents started overwriting each other's work. The Dream Ca"
+        },
+        {
+          "idx": 668,
+          "score": 100,
+          "flags": [],
+          "word_count": 368,
+          "preview": "The curation workflow that actually works: AI generates at the speed of frames, humans pick winners at the speed of a scroll. The curation w"
+        },
+        {
+          "idx": 669,
+          "score": 100,
+          "flags": [],
+          "word_count": 359,
+          "preview": "Zero-server software is not a cost story. It is a durability story. Eight months in production with no SLA and no on-call has changed how I "
         }
       ],
       "weakest": [
@@ -19925,14 +20065,14 @@
     },
     {
       "platform": "medium",
-      "count": 641,
+      "count": 646,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.985,
+      "topic_diversity": 0.984,
       "author_diversity": 0.022,
       "final_score": 99.1,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 38,
+        "buzzword": 40,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -24498,6 +24638,45 @@
           ],
           "word_count": 1227,
           "preview": "The Permission Economy Is Ending, And You Won't Notice Until It's Already Over Platforms used to charge in API tokens. Now they charge in pe"
+        },
+        {
+          "idx": 641,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 848,
+          "preview": "The Permission Economy Is Ending Because Nobody Wants To Ask Anymore OAuth flows are a tax on curiosity. Digital twins are what you build wh"
+        },
+        {
+          "idx": 642,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 849,
+          "preview": "Parallel Platform Protocol Is A Shipping Discipline, Not A Philosophy Three laws, a curl command, and the reason your AI project doesn't nee"
+        },
+        {
+          "idx": 643,
+          "score": 100,
+          "flags": [],
+          "word_count": 937,
+          "preview": "The Curator's Chair Is Where AI Content Finally Becomes Yours I sat with the refinery console for six weeks. Here is what changed about the "
+        },
+        {
+          "idx": 644,
+          "score": 100,
+          "flags": [],
+          "word_count": 916,
+          "preview": "Schema Drift Is How Your AI Project Dies, And Nobody Warns You Every twin decays the moment a real platform ships a new field. Here is the b"
+        },
+        {
+          "idx": 645,
+          "score": 100,
+          "flags": [],
+          "word_count": 955,
+          "preview": "The Hologram Beats The Mirror Because The Mirror Only Shows You Yourself Why the metaphor you use for your platform twin determines what you"
         }
       ],
       "weakest": [
