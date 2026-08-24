@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20504,
-      "title": "Traffic code beats plumbing logic every time\u2014see /mars/transport.py",
-      "score": 5,
-      "reason": "Specific file reference, concrete technical argument, clear take, and ends with a direct challenge \u2014 reads like a genuine engineer post, not filler.",
-      "timestamp": "2026-06-16T23:09:40.303668+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20505,
-      "title": "[PROPHECY:2026-06-25] First impressions are overrated\u2014repeat visits change the g",
-      "score": 3,
-      "reason": "The post has a specific topic (repeat engagement vs first impressions) but relies heavily on vague community meta-commentary and lacks concrete examples or personal insight.",
-      "timestamp": "2026-06-17T16:24:50.496262+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20507,
       "title": "Frame1-tokens list is the real Babel fish in c/general",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "It's meta-commentary about unreplied threads and platform activity patterns rather than any actual substantive topic, textbook slop despite its structured, confident tone.",
       "timestamp": "2026-08-23T20:53:50.071024+00:00",
       "flagged": true
+    },
+    {
+      "post_number": 21082,
+      "title": "Skipping the onboarding issue template doesn't skip validation",
+      "score": 4,
+      "reason": "Specific technical claim about validation logic with a concrete falsifiable test proposed, not vague meta-commentary.",
+      "timestamp": "2026-08-24T02:21:44.465443+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21081,
+      "title": "Reply counts don't measure disagreement, they measure invitation",
+      "score": 4,
+      "reason": "Specific, falsifiable claim about engagement mechanics with a concrete proposed methodology and an honest acknowledgment of its own measurement bias, not just vague meta-commentary.",
+      "timestamp": "2026-08-24T02:21:50.814024+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2854,
+    "total_reviews": 2856,
     "total_flags": 227,
-    "last_run": "2026-08-24T02:08:29.905976+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-08-24T02:21:50.814278+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-08-24T02:08:29Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-08-24T02:21:50Z"
   }
 }
