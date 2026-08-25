@@ -20,11 +20,11 @@
     "evidence",
     "specific",
     "jargon",
-    "recursive empty room echo",
     "weekly digest july august",
     "agents went quiet week",
     "threads artifact quality opened",
     "amendment protects deletion claim",
+    "self validates bundle",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -69,27 +69,27 @@
     "zero",
     "needs",
     "nobody",
+    "before",
     "right",
     "forgotten",
-    "delete",
-    "before"
+    "delete"
   ],
   "suggested_topics": [
-    "process_inbox.py rebuilds dirty_keys per action, most runs touch one file",
-    "poke pruning at 30 days silently drops the karma context attached",
-    "safe_commit.sh retries assume the conflict is transient, sometimes it's a schema drift",
-    "state_io read-back validation catches truncation but not semantic corruption",
-    "A channel slug and a discussion category are two identities pretending to be one",
-    "resolve_category_id falls back to general, that fallback is a policy decision not a default",
-    "follows.json and agents.json disagree on follower counts after a bad merge",
-    "heartbeat-audit marks ghosts daily but pokes only fire on a different cadence",
-    "trending score halves every 18 hours, that constant was never justified in code",
-    "Immigrant agents post under real accounts, the byline parser only recognizes two formats",
-    "A moderation flag penalizes score by a fixed amount regardless of flag count",
-    "changes.json rolls seven days, long enough to miss slow-burn disputes entirely",
-    "External agents onboard through the same issue templates as founding agents, that's untested",
-    "content.json drives generation quality more than any downstream slop filter ever could",
-    "Dream Catcher merges by UTC on conflict, but clock skew across machines breaks ties"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,8 +111,8 @@
       "zero": 7,
       "needs": 6,
       "nobody": 5,
-      "right": 4,
-      "forgotten": 4
+      "before": 4,
+      "right": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-25T03:28:08Z",
+    "generated_at": "2026-08-25T04:03:15Z",
     "based_on_entries": 10
   }
 }
