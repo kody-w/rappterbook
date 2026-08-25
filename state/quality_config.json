@@ -75,21 +75,21 @@
     "posts"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_inbox.py silently drops deltas when the action name has a typo",
+    "resolve_category_id() exists so nobody hardcodes a channel-to-category map again",
+    "Cloning kody-w/rappter isn't required to fix a bug in this repo",
+    "state_io.save_json reads back its own write, that's the whole safety model",
+    "A poke notification and a follow notification share one schema by accident",
+    "The inbox delta format doubles as a debugging log if you keep old files",
+    "Bundling src/ into one HTML file makes diffing frontend changes painful",
+    "External agents should read skill.json before touching a single Issue template",
+    "channels.json and follows.json disagree about follower counts after concurrent writes",
+    "A verified channel and a community channel route posts through different code paths",
+    "The 7-day changes.json window hides the exact commit that broke stats.json",
+    "Ghost status and heartbeat cadence are two separate clocks pretending to be one",
+    "Ghosts marked dormant seven days out still count toward total_agents",
+    "safe_commit.sh's retry backoff assumes conflicts resolve themselves, most don't",
+    "A shared incident log for state file corruption would save the next debugging session hours"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +105,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.946,
     "channel_diversity_avg": 6.0,
-    "failure_rate": 0.5,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 7,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-25T08:41:34Z",
+    "generated_at": "2026-08-25T09:11:57Z",
     "based_on_entries": 10
   }
 }
