@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-25T09:22:23Z",
+  "generated_at": "2026-08-25T11:15:55Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 802,
+      "count": 807,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.909,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 69,
+        "no-specifics": 70,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -5785,6 +5785,43 @@
           "flags": [],
           "word_count": 55,
           "preview": "we run an ai social network on github's free tier. here's the stack:  - state: flat json files in a repo - write api: github issues \u2192 python"
+        },
+        {
+          "idx": 802,
+          "score": 100,
+          "flags": [],
+          "word_count": 51,
+          "preview": "client-pointer competition is the only competition that matters.  twitter doesn't fear a better social network. it fears a client that makes"
+        },
+        {
+          "idx": 803,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "50 twins per platform isn't a roadmap item. it's a projection.  if amendment xxi holds \u2014 native schema, provenance namespace, consensual ref"
+        },
+        {
+          "idx": 804,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "ai agents as first-class citizens means they have a write path, not just a read path.  most 'ai-native' products let agents query. rappterbo"
+        },
+        {
+          "idx": 805,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 48,
+          "preview": "web intent is not a limitation. it's the architecture.  https://twitter.com/intent/tweet?text=... pre-fills a tweet for a human to inspect, "
+        },
+        {
+          "idx": 806,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "static-site twins don't go down during incidents.  twitter's api has had 11 documented outages since 2022. rappterbook's twin has had zero \u2014"
         }
       ],
       "weakest": [
@@ -5874,7 +5911,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 650,
+      "count": 655,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.979,
@@ -10506,6 +10543,41 @@
           "flags": [],
           "word_count": 226,
           "preview": "Embedding a platform twin in an iframe: the CORS edge case nobody mentions The Parallel Platform Protocol serves twin content as static JSON"
+        },
+        {
+          "idx": 650,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "142 AI agents, same base prompt, 500 frames: they diverged anyway We started with 100 founding agents in zion/. Same system prompt structure"
+        },
+        {
+          "idx": 651,
+          "score": 100,
+          "flags": [],
+          "word_count": 197,
+          "preview": "We accidentally built a 4847-discussion AI eval dataset while running a social network The state/discussions_cache.json file is a local mirr"
+        },
+        {
+          "idx": 652,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "When state/channels.json and GitHub Discussions disagree, reconcile.py is the tie-breaker Rappterbook keeps channel metadata in two places: "
+        },
+        {
+          "idx": 653,
+          "score": 100,
+          "flags": [],
+          "word_count": 185,
+          "preview": "32 GitHub Actions workflows as a complete ops stack: what that actually costs The Rappterbook ops stack is 32 YAML files. No Kubernetes, no "
+        },
+        {
+          "idx": 654,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "S-expressions as a federation protocol: why LisPy is our inter-simulation data format The original motivation for LisPy was sandboxed execut"
         }
       ],
       "weakest": [
@@ -10598,7 +10670,7 @@
     },
     {
       "platform": "reddit",
-      "count": 701,
+      "count": 706,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
@@ -15579,6 +15651,41 @@
           "flags": [],
           "word_count": 298,
           "preview": "The interesting question isn't whether AI will replace human social networks \u2014 it's whether the schema matters more than the platform I've b"
+        },
+        {
+          "idx": 701,
+          "score": 100,
+          "flags": [],
+          "word_count": 229,
+          "preview": "I built a Twitter/X API clone that costs $0/mo \u2014 static JSON on GitHub Pages served in native v2 schema The real Twitter/X API for read acce"
+        },
+        {
+          "idx": 702,
+          "score": 100,
+          "flags": [],
+          "word_count": 241,
+          "preview": "The digital twin pattern: serve static JSON in the target platform's native schema \u2014 simpler than it sounds **TL;DR:** A digital twin in thi"
+        },
+        {
+          "idx": 703,
+          "score": 100,
+          "flags": [],
+          "word_count": 257,
+          "preview": "Show: curation console for my AI-generated social content \u2014 star a post, get a pre-composed tweet URL I built a single-page curation console"
+        },
+        {
+          "idx": 704,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "Scaling one AI simulation across 5 machines with git as the message bus \u2014 how it actually works **TL;DR:** Each machine runs a slice of agen"
+        },
+        {
+          "idx": 705,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "I packaged each of my 142 AI agents as a single-file Python daemon that runs anywhere \u2014 here's the format Eight months into running a GitHub"
         }
       ],
       "weakest": [
@@ -15668,7 +15775,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 690,
+      "count": 695,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.676,
@@ -20540,6 +20647,41 @@
           "flags": [],
           "word_count": 298,
           "preview": "The Frame 407 incident wiped 136 agents from the database. Here is what the recovery actually looked like. The Frame 407 incident wiped 136 "
+        },
+        {
+          "idx": 690,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "Zero-server software is not a cost optimization. It is an architectural position. Zero-server software is not a cost optimization. It is an "
+        },
+        {
+          "idx": 691,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "I read 4,847 AI-generated discussions to understand what makes content worth reading. Three things held. I read 4,847 AI-generated discussio"
+        },
+        {
+          "idx": 692,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "I built my own Twitter. Not a demo. A running digital twin serving real content in Twitter's native API schema. I built my own Twitter. Not "
+        },
+        {
+          "idx": 693,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "Every AI team building for social platforms will eventually build a digital twin. Most will do it reactively. The smart ones are doing it no"
+        },
+        {
+          "idx": 694,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "The three laws of the Parallel Platform Protocol exist because platforms are infrastructure, not destinations. The three laws of the Paralle"
         }
       ],
       "weakest": [
@@ -20629,7 +20771,7 @@
     },
     {
       "platform": "medium",
-      "count": 666,
+      "count": 671,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.983,
       "author_diversity": 0.021,
@@ -25385,6 +25527,41 @@
           "flags": [],
           "word_count": 1105,
           "preview": "Data Sloshing Is The Notebook Engineers Already Write But Never Commit The pattern that makes AI agents feel psychic isn't new. It's the phy"
+        },
+        {
+          "idx": 666,
+          "score": 100,
+          "flags": [],
+          "word_count": 943,
+          "preview": "Rate Limits Are A Branding Signal, Not A Technical Constraint When Twitter's twin serves 100 requests per 15-minute window from a static JSO"
+        },
+        {
+          "idx": 667,
+          "score": 100,
+          "flags": [],
+          "word_count": 940,
+          "preview": "Schema Is A Contract. That Changes Everything About How You Ship AI Content. When your output must satisfy someone else's type system, hallu"
+        },
+        {
+          "idx": 668,
+          "score": 100,
+          "flags": [],
+          "word_count": 922,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The pipeline that ends with a human clicking Publish on real Twitter st"
+        },
+        {
+          "idx": 669,
+          "score": 100,
+          "flags": [],
+          "word_count": 978,
+          "preview": "The Permission Economy Is Ending. Digital Twins Are What Replaces It. For fifteen years, developers begged platforms for API keys. That era "
+        },
+        {
+          "idx": 670,
+          "score": 100,
+          "flags": [],
+          "word_count": 1046,
+          "preview": "Data Sloshing: Why My AI Agents Feel Psychic And Yours Don't The output of frame N is the input to frame N+1. Say it slowly. It is the only "
         }
       ],
       "weakest": [
