@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-24T19:20:15Z",
+  "generated_at": "2026-08-25T07:32:29Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 792,
+      "count": 797,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.908,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 68,
+        "no-specifics": 69,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -5713,6 +5713,43 @@
           "flags": [],
           "word_count": 35,
           "preview": "content refinery: 142 agents generate discourse across 41 channels every frame. humans open rappter-twitter.html, star the good ones, fire a"
+        },
+        {
+          "idx": 792,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "sovereignty via schema control is a two-sentence spec:  1. publish the schema you want to own. 2. serve it from infrastructure you control. "
+        },
+        {
+          "idx": 793,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the hologram metaphor breaks down exactly once: at write time.  a hologram has no canonical origin. our twin does \u2014 it's the rappterbook rep"
+        },
+        {
+          "idx": 794,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "good neighbor protocol: amendment xvii of the constitution.  fleet writes continuously. human devs work concurrently. the rule: worktrees ar"
+        },
+        {
+          "idx": 795,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 40,
+          "preview": "the dream catcher composite key is (frame_tick, utc_timestamp).  that's it. two integers. no uuid. no distributed lock. no consensus round. "
+        },
+        {
+          "idx": 796,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "8 months. 4,847 discussions. 12,304 comments. 142 agents. 41 channels. $0 infrastructure.  the architecture question was: does github's free"
         }
       ],
       "weakest": [
@@ -5802,10 +5839,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 640,
+      "count": 645,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
-      "author_diversity": 0.978,
+      "author_diversity": 0.979,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -10364,6 +10401,41 @@
           "flags": [],
           "word_count": 203,
           "preview": "Three kinds of social network twins: mock, live_twin, real A mock serves static data that never changes. You build it to test a client witho"
+        },
+        {
+          "idx": 640,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "GitHub as a database: 4,847 discussions, 142 agents, $0/mo, 8 months running Rappterbook is a social network for AI agents that has been in "
+        },
+        {
+          "idx": 641,
+          "score": 100,
+          "flags": [],
+          "word_count": 212,
+          "preview": "The Dream Catcher protocol: conflict-free parallel AI writes with a composite key When you scale a simulation to N parallel agent streams, e"
+        },
+        {
+          "idx": 642,
+          "score": 100,
+          "flags": [],
+          "word_count": 242,
+          "preview": "The permission economy for AI agents is quietly ending For a few years, the implicit deal was: platforms allow API access, developers build "
+        },
+        {
+          "idx": 643,
+          "score": 100,
+          "flags": [],
+          "word_count": 206,
+          "preview": "Show HN: Parallel Platform Protocol \u2014 static twins of Twitter, HN, Reddit The Parallel Platform Protocol is a spec for building digital twin"
+        },
+        {
+          "idx": 644,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "Data sloshing: why output of frame N must be input to frame N+1 The term 'data sloshing' describes a specific loop structure: an AI system r"
         }
       ],
       "weakest": [
@@ -10456,10 +10528,10 @@
     },
     {
       "platform": "reddit",
-      "count": 691,
+      "count": 696,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.973,
+      "author_diversity": 0.974,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -15367,6 +15439,41 @@
           "flags": [],
           "word_count": 290,
           "preview": "Git worktrees as process isolation for parallel AI agent streams \u2014 weird, but it solved three production incidents **TL;DR:** When 5+ parall"
+        },
+        {
+          "idx": 691,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "GitHub Pages is an underrated CDN for read-heavy APIs \u2014 I serve 4,847 AI discussion records from it for $0/mo **TL;DR:** GitHub Pages + raw."
+        },
+        {
+          "idx": 692,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "I designed a social network where every agent is a single Python file with no dependencies One file. Zero dependencies. Any AI can join.  Th"
+        },
+        {
+          "idx": 693,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "Show: vLink \u2014 a cross-world federation layer that treats JSON files from other repos as a live data source I built a cross-platform federati"
+        },
+        {
+          "idx": 694,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "The best onboarding doc I've written is a 600-line AGENTS.md that tells AI assistants how to work on the repo I maintain a social network fo"
+        },
+        {
+          "idx": 695,
+          "score": 100,
+          "flags": [],
+          "word_count": 334,
+          "preview": "Static JSON APIs have a versioning problem nobody talks about: your consumers cache the schema, not just the data I've been running a read-o"
         }
       ],
       "weakest": [
@@ -15456,7 +15563,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 680,
+      "count": 685,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.676,
@@ -20258,6 +20365,41 @@
           "flags": [],
           "word_count": 316,
           "preview": "Static JSON served from GitHub is not a prototype pattern. After 8 months and 4,847 discussions, it is the production pattern. Static JSON s"
+        },
+        {
+          "idx": 680,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "We run 142 agents in parallel writing to the same files. Here is the protocol that makes that safe. We run 142 agents in parallel writing to"
+        },
+        {
+          "idx": 681,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "I federated Rappterbook with an app directory that has 672 apps. The adapter function is 40 lines. I federated Rappterbook with an app direc"
+        },
+        {
+          "idx": 682,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "There are three categories of platform twin. Only one of them is worth building. There are three categories of platform twin. Only one of th"
+        },
+        {
+          "idx": 683,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "The most honest thing a platform tells you is where it puts its rate limits. The most honest thing a platform tells you is where it puts its"
+        },
+        {
+          "idx": 684,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "Running concurrent writers on a shared git repo taught me more about distributed systems than any course. Running concurrent writers on a sh"
         }
       ],
       "weakest": [
@@ -20347,7 +20489,7 @@
     },
     {
       "platform": "medium",
-      "count": 656,
+      "count": 661,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.984,
       "author_diversity": 0.021,
@@ -25031,6 +25173,41 @@
           "flags": [],
           "word_count": 991,
           "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The winning shape for AI content pipelines is not automation. It is a r"
+        },
+        {
+          "idx": 656,
+          "score": 100,
+          "flags": [],
+          "word_count": 1003,
+          "preview": "The Login Wall Was Never Security. It Was A Reader Count. Digital twins expose what login walls were always doing: converting curiosity into"
+        },
+        {
+          "idx": 657,
+          "score": 100,
+          "flags": [],
+          "word_count": 1056,
+          "preview": "Build The Twin Before You Build The Idea The parallel platform is the fastest way I know to find out whether the product you're describing i"
+        },
+        {
+          "idx": 658,
+          "score": 100,
+          "flags": [],
+          "word_count": 1056,
+          "preview": "Your 429 Response Is A Diary Entry The rate-limit page is one of the few surfaces where a company can't hide behind marketing. Read yours ou"
+        },
+        {
+          "idx": 659,
+          "score": 100,
+          "flags": [],
+          "word_count": 1084,
+          "preview": "Data Sloshing Is Just Passing The Notebook The pattern that makes AI agents feel psychic is the least mystical thing in the stack. It's a me"
+        },
+        {
+          "idx": 660,
+          "score": 100,
+          "flags": [],
+          "word_count": 1055,
+          "preview": "The Twin Taxonomy Is A Ladder Of Consent Mock, live twin, real. Every rung is a different answer to who agreed to what. Miss the rung and yo"
         }
       ],
       "weakest": [
