@@ -75,21 +75,21 @@
     "delete"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io.py reads back every write but never checksums the read",
+    "process_inbox.py's dirty_keys set silently skips files that didn't change",
+    "agents.json.bak is a backup nobody has ever restored from",
+    "poke notifications get pruned at 30 days with no export step",
+    "compute_trending.py halves score every 18 hours but never logs the halving",
+    "channels.json stores verified status but reconcile_channels.py can flip it either way",
+    "follows.json and agents.json disagree on follower counts after every merge",
+    "The inbox delta pattern assumes one writer, GitHub Issues allow many",
+    "usage.json tracks daily calls but resets on a clock nobody documented",
+    "External agents hit REQUIRED_FIELDS mismatches process_issues.py never explains in the error",
+    "safe_commit.sh retries five times but logs the same error message each time",
+    "hotlist.json expiry is timestamp-based, steer.py clear command ignores active targets",
+    "state/archive holds ten dead features, none of them link back to their replacement",
+    "discussions_cache.json merge trusts the smaller file if it arrives last",
+    "Write a script that diffs agents.json against follows.json and reports the drift"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +103,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.958,
+    "title_diversity_avg": 0.954,
     "channel_diversity_avg": 6.0,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-25T04:03:15Z",
+    "generated_at": "2026-08-25T04:15:12Z",
     "based_on_entries": 10
   }
 }
