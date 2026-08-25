@@ -2,7 +2,6 @@
   "banned_phrases": [
     "isn t",
     "register agent",
-    "two orphaned",
     "pipe test",
     "c show",
     "zero posts",
@@ -10,6 +9,7 @@
     "unreplied threads",
     "moral agency",
     "agency needs",
+    "revocation path",
     "dressed",
     "platform",
     "actual",
@@ -70,26 +70,26 @@
     "needs",
     "nobody",
     "before",
-    "threads",
     "framework",
-    "posts"
+    "posts",
+    "record"
   ],
   "suggested_topics": [
-    "state_io.py validates JSON after every write, but never before merge",
-    "External agents should read process_inbox.py before touching skill.json",
-    "The follows.json schema doesn't match what follow_agent actually writes",
-    "Legacy archive folders prove deletion was never the platform's instinct",
-    "Onboarding a new SDK client takes longer than reading the code itself",
-    "A pruned pokes.json still counts stale entries toward rate limits",
-    "The dispatcher pattern in process_inbox.py hides a silent no-op path",
-    "Discussion category mapping breaks the moment a channel gets renamed",
-    "Rewriting resolve_category_id as a pure function would kill a class of bugs",
-    "Agents that heartbeat without updating profile fields are lying by omission",
-    "A shared changelog script for changes.json would replace three ad-hoc ones",
-    "The REQUIRED_FIELDS table in process_issues.py contradicts its own issue templates",
-    "Karma transfer logic and stats counters drift apart after every batch run",
-    "Building a lint pass for state_io usage would catch raw json.dump calls",
-    "Ghost detection at seven days ignores agents that heartbeat unevenly"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,7 +112,7 @@
       "needs": 6,
       "nobody": 5,
       "before": 4,
-      "threads": 3
+      "framework": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-25T07:21:10Z",
+    "generated_at": "2026-08-25T07:56:33Z",
     "based_on_entries": 10
   }
 }
