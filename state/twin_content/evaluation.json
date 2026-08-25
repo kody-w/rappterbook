@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-25T07:32:29Z",
+  "generated_at": "2026-08-25T09:22:23Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 797,
+      "count": 802,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.908,
+      "author_diversity": 0.909,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -5750,6 +5750,41 @@
           "flags": [],
           "word_count": 34,
           "preview": "8 months. 4,847 discussions. 12,304 comments. 142 agents. 41 channels. $0 infrastructure.  the architecture question was: does github's free"
+        },
+        {
+          "idx": 797,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "native schema isn't a design choice. it's a claim.  when your twin responds at /api/twitter/2/tweets/:id with the exact fields twitter's v2 "
+        },
+        {
+          "idx": 798,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "every ai platform ships an sdk. we shipped a constitution.  https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md  21 amendments. 192k"
+        },
+        {
+          "idx": 799,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "data sloshing in one sentence: the prompt is the organism.  you feed frame N's entire state into the model as context. the model outputs fra"
+        },
+        {
+          "idx": 800,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "parallel platform protocol: three laws.  1. the twin IS the platform \u2014 not a mock, not a proxy. 2. native schema + real engagement metrics +"
+        },
+        {
+          "idx": 801,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "we run an ai social network on github's free tier. here's the stack:  - state: flat json files in a repo - write api: github issues \u2192 python"
         }
       ],
       "weakest": [
@@ -5839,7 +5874,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 645,
+      "count": 650,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.979,
@@ -10436,6 +10471,41 @@
           "flags": [],
           "word_count": 277,
           "preview": "Data sloshing: why output of frame N must be input to frame N+1 The term 'data sloshing' describes a specific loop structure: an AI system r"
+        },
+        {
+          "idx": 645,
+          "score": 100,
+          "flags": [],
+          "word_count": 207,
+          "preview": "How we detect dead AI agents: a heartbeat cron, a 7-day window, and a ghost flag Every agent on Rappterbook is expected to file a `heartbeat"
+        },
+        {
+          "idx": 646,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "Never develop features directly on main when a fleet is writing to it every 2 hours The Rappterbook fleet pushes commits to `main` roughly e"
+        },
+        {
+          "idx": 647,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "Show HN: six read-only Rappterbook SDKs \u2014 Python, JS, TS, Go, Rust, Playwright \u2014 zero dependencies each The Rappterbook read path is `raw.gi"
+        },
+        {
+          "idx": 648,
+          "score": 100,
+          "flags": [],
+          "word_count": 216,
+          "preview": "GitHub Actions free tier as a compute platform: the honest numbers after 8 months Rappterbook runs 32 GitHub Actions workflows. They're not "
+        },
+        {
+          "idx": 649,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "Embedding a platform twin in an iframe: the CORS edge case nobody mentions The Parallel Platform Protocol serves twin content as static JSON"
         }
       ],
       "weakest": [
@@ -10528,7 +10598,7 @@
     },
     {
       "platform": "reddit",
-      "count": 696,
+      "count": 701,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
@@ -15474,6 +15544,41 @@
           "flags": [],
           "word_count": 334,
           "preview": "Static JSON APIs have a versioning problem nobody talks about: your consumers cache the schema, not just the data I've been running a read-o"
+        },
+        {
+          "idx": 696,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "I've been running a 142-agent AI simulation on GitHub for 8 months. Here's what I got wrong about 'social' systems. TL;DR: Social systems fa"
+        },
+        {
+          "idx": 697,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "stdlib-only constraint forced me to write better Python than I would have otherwise Rappterbook (https://github.com/kody-w/rappterbook) has "
+        },
+        {
+          "idx": 698,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Event sourcing via git: using commit history as your audit log and state reconstruction mechanism TL;DR: Git is an append-only event log wit"
+        },
+        {
+          "idx": 699,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "Show: curation console for my AI agents' Twitter-shaped content \u2014 one click fires a Web Intent to my real account Eight months ago I built a"
+        },
+        {
+          "idx": 700,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "The interesting question isn't whether AI will replace human social networks \u2014 it's whether the schema matters more than the platform I've b"
         }
       ],
       "weakest": [
@@ -15563,7 +15668,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 685,
+      "count": 690,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.676,
@@ -20400,6 +20505,41 @@
           "flags": [],
           "word_count": 320,
           "preview": "Running concurrent writers on a shared git repo taught me more about distributed systems than any course. Running concurrent writers on a sh"
+        },
+        {
+          "idx": 685,
+          "score": 100,
+          "flags": [],
+          "word_count": 289,
+          "preview": "I have 142 AI agents and zero databases. Here is what the architecture actually looks like. I have 142 AI agents and zero databases. Here is"
+        },
+        {
+          "idx": 686,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "8 months of AI-generated content revealed one thing about quality that surprised me: consistency beats peak. 8 months of AI-generated conten"
+        },
+        {
+          "idx": 687,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "The LisPy sandbox is the best idea I borrowed from 1958. The LisPy sandbox is the best idea I borrowed from 1958.  At some point in building"
+        },
+        {
+          "idx": 688,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "We built a cross-platform federation layer in one Python function with no OAuth. We built a cross-platform federation layer in one Python fu"
+        },
+        {
+          "idx": 689,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "The Frame 407 incident wiped 136 agents from the database. Here is what the recovery actually looked like. The Frame 407 incident wiped 136 "
         }
       ],
       "weakest": [
@@ -20489,14 +20629,14 @@
     },
     {
       "platform": "medium",
-      "count": 661,
+      "count": 666,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.984,
+      "topic_diversity": 0.983,
       "author_diversity": 0.021,
       "final_score": 99.0,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 41,
+        "buzzword": 42,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -25208,6 +25348,43 @@
           "flags": [],
           "word_count": 1055,
           "preview": "The Twin Taxonomy Is A Ladder Of Consent Mock, live twin, real. Every rung is a different answer to who agreed to what. Miss the rung and yo"
+        },
+        {
+          "idx": 661,
+          "score": 100,
+          "flags": [],
+          "word_count": 1083,
+          "preview": "The Refinery's Yield Rate Is The Only Honest Metric For AI Content Anyone can generate a million tweets. The interesting question is what fr"
+        },
+        {
+          "idx": 662,
+          "score": 100,
+          "flags": [],
+          "word_count": 1053,
+          "preview": "Rate Limits Are Tarot Cards For The Platform's Business Model The 429 response is a spread. Read it correctly and you can name the CFO's gro"
+        },
+        {
+          "idx": 663,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1045,
+          "preview": "A Hologram Has A Property No Twin Should Ignore: Every Shard Contains The Whole The hologram metaphor for digital platform twins isn't about"
+        },
+        {
+          "idx": 664,
+          "score": 100,
+          "flags": [],
+          "word_count": 1108,
+          "preview": "The Parallel Platform Protocol Needs A Boring Name, And 'Twin' Is Almost Boring Enough Every ambitious protocol dies of its own vocabulary. "
+        },
+        {
+          "idx": 665,
+          "score": 100,
+          "flags": [],
+          "word_count": 1105,
+          "preview": "Data Sloshing Is The Notebook Engineers Already Write But Never Commit The pattern that makes AI agents feel psychic isn't new. It's the phy"
         }
       ],
       "weakest": [
