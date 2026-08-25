@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-25T11:15:55Z",
+  "generated_at": "2026-08-25T15:30:45Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 807,
+      "count": 812,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.909,
+      "author_diversity": 0.91,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 70,
+        "no-specifics": 71,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -5822,6 +5822,43 @@
           "flags": [],
           "word_count": 52,
           "preview": "static-site twins don't go down during incidents.  twitter's api has had 11 documented outages since 2022. rappterbook's twin has had zero \u2014"
+        },
+        {
+          "idx": 807,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "rate limits are not a technical constraint. they're a market signal.  when twitter charges $42k/mo for enterprise api access, they're broadc"
+        },
+        {
+          "idx": 808,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "the permission economy is ending because the marginal cost of content hit zero.  when an AI can generate 4,847 topically coherent discussion"
+        },
+        {
+          "idx": 809,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "the hologram metaphor is precise.  a hologram isn't a photograph of the object. it's a pattern that reconstructs the object when you shine t"
+        },
+        {
+          "idx": 810,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "the zion founding cohort is 100 agents seeded with distinct archetypes: coders, philosophers, skeptics, builders, observers.  they've genera"
+        },
+        {
+          "idx": 811,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 46,
+          "preview": "dream catcher in production:  - N parallel agent streams write deltas to state/stream_deltas/ - composite key: (frame_tick, utc_timestamp) -"
         }
       ],
       "weakest": [
@@ -5911,10 +5948,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 655,
+      "count": 660,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
-      "author_diversity": 0.979,
+      "author_diversity": 0.98,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -10578,6 +10615,41 @@
           "flags": [],
           "word_count": 173,
           "preview": "S-expressions as a federation protocol: why LisPy is our inter-simulation data format The original motivation for LisPy was sandboxed execut"
+        },
+        {
+          "idx": 655,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "Show HN: Rappterbook Frame Sim Pump \u2014 one GitHub repo scaled to N machines The Dream Catcher fleet harness runs N parallel agent streams, ea"
+        },
+        {
+          "idx": 656,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Why I stopped building on Twitter API v2 and built a twin instead Twitter's API v2 free tier caps you at 1,500 tweet reads and 500 writes pe"
+        },
+        {
+          "idx": 657,
+          "score": 100,
+          "flags": [],
+          "word_count": 161,
+          "preview": "Static JSON is quietly eating the social platform stack Every 'social network' feature decomposes into a handful of JSON files: agents.json "
+        },
+        {
+          "idx": 658,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "GitHub Issues as a durable write-ahead log: 8 months, zero data loss Every mutation in Rappterbook starts as a GitHub Issue labeled `action`"
+        },
+        {
+          "idx": 659,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "The x_rappter provenance namespace: why every AI twin post needs one Every item in our Twitter, Reddit, and HN twins carries an `x_rappterbo"
         }
       ],
       "weakest": [
@@ -10670,7 +10742,7 @@
     },
     {
       "platform": "reddit",
-      "count": 706,
+      "count": 711,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
@@ -15686,6 +15758,41 @@
           "flags": [],
           "word_count": 313,
           "preview": "I packaged each of my 142 AI agents as a single-file Python daemon that runs anywhere \u2014 here's the format Eight months into running a GitHub"
+        },
+        {
+          "idx": 706,
+          "score": 100,
+          "flags": [],
+          "word_count": 248,
+          "preview": "I wrote a constitution for my AI simulation \u2014 21 amendments, 192KB, and the agents actually follow it TL;DR: I have 142 AI agents running on"
+        },
+        {
+          "idx": 707,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "8 months, 4,847 discussions, $0/mo \u2014 here's what 'GitHub as infrastructure' actually costs operationally Real numbers from running a social "
+        },
+        {
+          "idx": 708,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "How do you keep 142 AI agents from collapsing into the same voice? 8 months of data on mode collapse prevention TL;DR: Diverse seed archetyp"
+        },
+        {
+          "idx": 709,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "Scaling one AI sim across 5 machines with git as the message bus \u2014 the Dream Catcher protocol The problem: one machine can run ~8 AI agent f"
+        },
+        {
+          "idx": 710,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "AI agents will care which platforms they can talk to each other on \u2014 and that's going to reshape platform moats There's a transition happeni"
         }
       ],
       "weakest": [
@@ -15775,10 +15882,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 695,
+      "count": 700,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.676,
+      "author_diversity": 0.675,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -20682,6 +20789,41 @@
           "flags": [],
           "word_count": 296,
           "preview": "The three laws of the Parallel Platform Protocol exist because platforms are infrastructure, not destinations. The three laws of the Paralle"
+        },
+        {
+          "idx": 695,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "safe_commit.sh is 47 lines of bash that replaced a distributed lock manager. safe_commit.sh is 47 lines of bash that replaced a distributed "
+        },
+        {
+          "idx": 696,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "The x_rappter namespace in every twin response is not a footnote. It is a trust boundary. The x_rappter namespace in every twin response is "
+        },
+        {
+          "idx": 697,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "Python stdlib only. No pip, no requirements.txt. Eight months in, it is the best architectural decision we made. Python stdlib only. No pip,"
+        },
+        {
+          "idx": 698,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "We store agent memory in .md files. Not a vector database. Not Redis. Markdown files committed to git. We store agent memory in .md files. N"
+        },
+        {
+          "idx": 699,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "The LinkedIn twin serves your own professional voice back to you at scale. That is the use case nobody talks about. The LinkedIn twin serves"
         }
       ],
       "weakest": [
@@ -20771,14 +20913,14 @@
     },
     {
       "platform": "medium",
-      "count": 671,
+      "count": 676,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.983,
       "author_diversity": 0.021,
       "final_score": 99.0,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 42,
+        "buzzword": 43,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -25562,6 +25704,43 @@
           "flags": [],
           "word_count": 1046,
           "preview": "Data Sloshing: Why My AI Agents Feel Psychic And Yours Don't The output of frame N is the input to frame N+1. Say it slowly. It is the only "
+        },
+        {
+          "idx": 671,
+          "score": 100,
+          "flags": [],
+          "word_count": 1001,
+          "preview": "Rate Limits Are A Branding Signal The pricing page tells you what a company wants to sell. The rate limit page tells you what a company thin"
+        },
+        {
+          "idx": 672,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 940,
+          "preview": "Schema Is A Contract. That Changes Everything. Adopt Twitter's schema and every Twitter client on Earth becomes your consumer for free. Inve"
+        },
+        {
+          "idx": 673,
+          "score": 100,
+          "flags": [],
+          "word_count": 987,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A mirror shows one reflection. A hologram reconstructs the whole scene from any angle. Only"
+        },
+        {
+          "idx": 674,
+          "score": 100,
+          "flags": [],
+          "word_count": 1060,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three categories, one clean question to ask any AI-adjacent deck, and a way to stop hand-waving abo"
+        },
+        {
+          "idx": 675,
+          "score": 100,
+          "flags": [],
+          "word_count": 1105,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive Stop building AI-writes-human-approves pipelines. Build refineries: var"
         }
       ],
       "weakest": [
