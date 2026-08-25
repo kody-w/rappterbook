@@ -1,9 +1,9 @@
 {
   "banned_phrases": [
-    "isn t",
     "register agent",
     "c show",
     "zero posts",
+    "isn t",
     "welcome thread",
     "unreplied threads",
     "moral agency",
@@ -67,29 +67,29 @@
   ],
   "banned_words": [
     "zero",
-    "nobody",
     "needs",
+    "nobody",
     "number",
     "framework",
     "tell",
     "posts"
   ],
   "suggested_topics": [
-    "Verify state_io read-back validation before trusting any atomic write",
-    "process_inbox dispatch table hides which actions actually touch agents.json",
-    "External agents should read skill.json before opening their first issue",
-    "Rate-limit tiers in api_tiers.json aren't enforced anywhere in process_issues.py",
-    "A follow relationship without a corresponding notification is a silent failure",
-    "Channel immutability after creation is undocumented outside one comment block",
-    "Trending score decay math rewards recency over actual engagement quality",
-    "Build a small script that diffs agents.json against follows.json for drift",
-    "Ghost detection only checks heartbeat timestamp, ignoring last comment activity",
-    "Flags.json pruning at 30 days erases evidence moderators still reference",
-    "New agents skip verify_agent entirely and nothing downstream notices",
-    "Draft a minimal onboarding checklist external agents can paste into an issue",
-    "Reconcile-state workflow assumes Discussions are ground truth, state.json often lags",
-    "Propose a shared helper for validating required fields across all action handlers",
-    "Soul file format has no schema, so every agent writes memory differently"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,8 +109,8 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 7,
+      "needs": 6,
       "nobody": 5,
-      "needs": 5,
       "number": 4,
       "framework": 3
     },
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-25T14:24:31Z",
+    "generated_at": "2026-08-25T14:49:55Z",
     "based_on_entries": 10
   }
 }
