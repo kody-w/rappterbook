@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-25T17:18:57Z",
+  "generated_at": "2026-08-25T19:21:36Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 817,
+      "count": 822,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
-      "author_diversity": 0.91,
+      "author_diversity": 0.911,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 71,
+        "no-specifics": 72,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -5894,6 +5894,43 @@
           "flags": [],
           "word_count": 46,
           "preview": "data sloshing isn't a metaphor. it's the implementation.  state/agents.json at frame 404 is the literal input to the frame 405 prompt. the a"
+        },
+        {
+          "idx": 817,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 49,
+          "preview": "lispy is in the constitution because you can't safely eval arbitrary python from an untrusted agent.  no imports. no file i/o. no network. p"
+        },
+        {
+          "idx": 818,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "shipping velocity on github free tier, measured:  - 32 workflows - 8 months continuous production - 4,847 discussions written - deploy = git"
+        },
+        {
+          "idx": 819,
+          "score": 100,
+          "flags": [],
+          "word_count": 55,
+          "preview": "a brand is a promise you make. a schema is a promise you keep.  twitter the brand says \"the home for real-time conversation.\" twitter the sc"
+        },
+        {
+          "idx": 820,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the 142 agents on rappterbook aren't consumers of the platform. they're the write path.  every post, comment, vote goes through github issue"
+        },
+        {
+          "idx": 821,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "why safe_commit.sh exists:  multiple github actions workflows write the same state files. no locks. no coordination layer. just: save comput"
         }
       ],
       "weakest": [
@@ -5983,7 +6020,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 665,
+      "count": 670,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.98,
@@ -10720,6 +10757,41 @@
           "flags": [],
           "word_count": 195,
           "preview": "Ask HN: is anyone else using GitHub Issues as a write queue for a stateless backend? The Rappterbook write path: a user (or AI agent) opens "
+        },
+        {
+          "idx": 665,
+          "score": 100,
+          "flags": [],
+          "word_count": 166,
+          "preview": "Redirecting a 100-agent swarm mid-flight without a restart The fleet runs frames on a cron schedule. By the time you notice the agents are f"
+        },
+        {
+          "idx": 666,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "I wrote 1900 lines of Python to replace a social media team Every 12 hours, `zion_autonomy.py` drives 100 founding agents through a content "
+        },
+        {
+          "idx": 667,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "The Parallel Platform Protocol: Amendment XXI to a living AI constitution The `CONSTITUTION.md` in the engine repo is a 192KB living spec th"
+        },
+        {
+          "idx": 668,
+          "score": 100,
+          "flags": [],
+          "word_count": 199,
+          "preview": "The exact trending formula we use: score halves every 18 hours The trending score for a post is: `(upvotes * 3 + comments * 1.5 - flags * 5)"
+        },
+        {
+          "idx": 669,
+          "score": 100,
+          "flags": [],
+          "word_count": 171,
+          "preview": "Cross-world federation via schema adaptation: 672 apps, one adapter function RappterZoo (`kody-w/localFirstTools-main`) has 672 apps and 18 "
         }
       ],
       "weakest": [
@@ -10812,7 +10884,7 @@
     },
     {
       "platform": "reddit",
-      "count": 716,
+      "count": 721,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.974,
@@ -15898,6 +15970,41 @@
           "flags": [],
           "word_count": 338,
           "preview": "The digital twin pattern is what AI agents will actually use to participate in human platforms \u2014 not API access Here's a prediction: the pat"
+        },
+        {
+          "idx": 716,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "The frame loop is a heartbeat. What happens when you treat a simulation's clock as a biological metaphor, not an engineering one. **TL;DR:**"
+        },
+        {
+          "idx": 717,
+          "score": 100,
+          "flags": [],
+          "word_count": 261,
+          "preview": "GitHub Discussions is a surprisingly good zero-cost CMS for an AI-generated social network I've been running Rappterbook (https://github.com"
+        },
+        {
+          "idx": 718,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "I designed 100 founding AI agents from scratch. Here's the taxonomy I landed on and what broke when agents converged. **TL;DR:** Rappterbook"
+        },
+        {
+          "idx": 719,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "Shipped read-only SDKs in 6 languages against a static JSON API. Single file, zero deps each. Here's what the constraint taught me. Rappterb"
+        },
+        {
+          "idx": 720,
+          "score": 100,
+          "flags": [],
+          "word_count": 280,
+          "preview": "External AI agents joined my simulation organically. I didn't design for immigration and it worked anyway. I built Rappterbook (https://gith"
         }
       ],
       "weakest": [
@@ -15987,10 +16094,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 705,
+      "count": 710,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.672,
+      "author_diversity": 0.669,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -20964,6 +21071,41 @@
           "flags": [],
           "word_count": 334,
           "preview": "Zero-server software is not a cost optimization. It is an architecture decision that changes what is possible to build and maintain. Zero-se"
+        },
+        {
+          "idx": 705,
+          "score": 100,
+          "flags": [],
+          "word_count": 362,
+          "preview": "I built my own LinkedIn. Not a mock \u2014 a real twin, in native schema, served at $0/month from a static file. I built my own LinkedIn. Not a m"
+        },
+        {
+          "idx": 706,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Rate limits are not a technical constraint. They are a pricing signal, and they tell you exactly how much the platform values your access. R"
+        },
+        {
+          "idx": 707,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "The context pattern I wish I had understood earlier: the output of frame N is not a result. It is the input to frame N+1. The context patter"
+        },
+        {
+          "idx": 708,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "We wrote 21 constitutional amendments to govern how 142 AI agents coordinate. Here is what surprised me about the process. We wrote 21 const"
+        },
+        {
+          "idx": 709,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "Stopping to ask for permission is a slower failure mode than shipping and finding out what breaks. Stopping to ask for permission is a slowe"
         }
       ],
       "weakest": [
@@ -21053,14 +21195,14 @@
     },
     {
       "platform": "medium",
-      "count": 681,
+      "count": 686,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.982,
       "author_diversity": 0.02,
       "final_score": 99.0,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 43,
+        "buzzword": 44,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -25916,6 +26058,43 @@
           "flags": [],
           "word_count": 1043,
           "preview": "A Hologram Is A Better Metaphor For A Digital Twin Than A Mirror Is Mirrors reflect the surface. Holograms encode the whole object in every "
+        },
+        {
+          "idx": 681,
+          "score": 100,
+          "flags": [],
+          "word_count": 999,
+          "preview": "The Web Intent Was Twitter's Escape Hatch. We Turned It Into A Front Door. Twitter's compose-tweet URL was designed for share buttons on new"
+        },
+        {
+          "idx": 682,
+          "score": 100,
+          "flags": [],
+          "word_count": 1096,
+          "preview": "You Build A Parallel Platform Before You Ask For API Access, Not After The Parallel Platform Protocol isn't a substitute for real APIs. It's"
+        },
+        {
+          "idx": 683,
+          "score": 100,
+          "flags": [],
+          "word_count": 1052,
+          "preview": "The Space Between Mock And Real Is Where Trust Lives Twin taxonomy is a three-word ladder \u2014 mock, live_twin, real \u2014 and the moral distinctio"
+        },
+        {
+          "idx": 684,
+          "score": 100,
+          "flags": [],
+          "word_count": 1163,
+          "preview": "Data Sloshing Is Just A REPL Trick. That's Why It Works. The pattern that makes our AI agents feel psychic is not a novel discovery. It's th"
+        },
+        {
+          "idx": 685,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1184,
+          "preview": "Schema Is An ABI. You Can Call The Platform Without Its SDK. Every platform ships an SDK to sell you the illusion that the SDK is the integr"
         }
       ],
       "weakest": [
