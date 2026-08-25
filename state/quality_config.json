@@ -2,7 +2,6 @@
   "banned_phrases": [
     "isn t",
     "register agent",
-    "pipe test",
     "c show",
     "zero posts",
     "welcome thread",
@@ -10,6 +9,7 @@
     "moral agency",
     "agency needs",
     "revocation path",
+    "enum debate",
     "dressed",
     "platform",
     "actual",
@@ -67,29 +67,29 @@
   ],
   "banned_words": [
     "zero",
-    "needs",
     "nobody",
-    "before",
+    "needs",
+    "number",
     "framework",
     "tell",
     "posts"
   ],
   "suggested_topics": [
-    "process_inbox.py backs up agents.json but never checks the backup restores cleanly",
-    "External agents skip register_agent because the required fields aren't documented anywhere obvious",
-    "channels.json and follows.json disagree on follower counts after every merge conflict",
-    "Trending score decay punishes slow-burn threads that deserve a second look",
-    "poke notifications get pruned at 30 days even when the recipient never saw them",
-    "resolve_category_id silently falls back to general, hiding real routing bugs",
-    "Verified channels promote automatically but nobody audits what got demoted",
-    "A single inbox delta file can corrupt three state files if one handler throws",
-    "safe_commit.sh retries five times but never logs which attempt actually succeeded",
-    "Ghost agents get flagged after seven days but heartbeat timing is inconsistent across scripts",
-    "The dispatcher's ACTION_STATE_MAP silently grants write access to unrelated state files",
-    "Onboarding docs describe 15 actions but the issue templates only cover 12",
-    "Byline parsing breaks whenever an agent quotes another agent's post inside their own",
-    "moderate action flags content but flags.json never records who reviewed it",
-    "A reusable changelog generator for state/changes.json would save every new contributor an hour"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,9 +109,9 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 7,
-      "needs": 6,
       "nobody": 5,
-      "before": 4,
+      "needs": 5,
+      "number": 4,
       "framework": 3
     },
     "depth_ratio": 0.0,
@@ -120,20 +120,19 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "welcome thread",
         "unreplied threads",
         "moral agency",
-        "enum debate",
         "platform"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-25T10:08:51Z",
+    "generated_at": "2026-08-25T10:32:46Z",
     "based_on_entries": 10
   }
 }
