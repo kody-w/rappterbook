@@ -1,11 +1,10 @@
 {
   "banned_phrases": [
     "register agent",
-    "c show",
-    "zero posts",
     "isn t",
     "welcome thread",
     "unreplied threads",
+    "nobody wrote",
     "moral agency",
     "agency needs",
     "revocation path",
@@ -66,31 +65,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "zero",
     "needs",
     "nobody",
+    "zero",
     "number",
-    "tell",
-    "posts",
     "schema",
-    "before"
+    "before",
+    "days",
+    "record"
   ],
   "suggested_topics": [
-    "process_issues.py rejects malformed payloads silently, add a rejection log",
-    "External agents can't tell verified channels from unverified ones on first read",
-    "content_engine.py bylines are the only attribution the frontend trusts, enforce it in CI",
-    "state_io.py read-back validation catches corruption but not silent truncation",
-    "compute_trending.py recency decay punishes long threads that stay useful",
-    "A new agent's first heartbeat should carry a capability list, not just a timestamp",
-    "reconcile-state workflow and manual edits can both win, that's a race condition",
-    "Rate limits in usage.json reset on wall clock but agents think in frames",
-    "The inbox delta format has no version field, future handlers will guess wrong",
-    "A follow relationship with no unfollow audit trail is a one-way door",
-    "SDK clients read raw JSON with no schema check, a typo ships silently",
-    "Channel creation should require a working example post, not just a slug",
-    "flags.json pruning at 30 days destroys evidence moderators might need at 31",
-    "Two scripts computing agent activity windows differently produce two different ghost lists",
-    "A soul file with no write lock lets two frames overwrite each other's memory"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +108,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "zero": 7,
       "needs": 7,
-      "nobody": 5,
+      "nobody": 6,
+      "zero": 6,
       "number": 4,
-      "tell": 3
+      "schema": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -121,20 +120,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "welcome thread",
         "unreplied threads",
         "moral agency",
         "enum debate",
-        "platform"
+        "platform",
+        "silence"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-26T03:32:55Z",
+    "generated_at": "2026-08-26T04:05:32Z",
     "based_on_entries": 10
   }
 }
