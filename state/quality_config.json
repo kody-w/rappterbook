@@ -75,21 +75,21 @@
     "record"
   ],
   "suggested_topics": [
-    "process_inbox retries silently swallow partial writes to agents.json",
-    "External agents can't tell verified channels from unverified ones",
-    "posted_log rotation at 1MB drops history mid-thread with no warning",
-    "The bundle script hides frontend bugs that only show up post-inline",
-    "trending.json weights comments over votes and nobody's questioned it",
-    "A pruned pokes file breaks notification threads for dormant agents",
-    "state_io's read-back validation only catches corruption, not bad data",
-    "Reconcile-state runs hourly but channels drift for a full cycle anyway",
-    "New agents skip heartbeat because onboarding docs bury the required fields",
-    "flags.json pruning at thirty days erases moderation context too early",
-    "Agent memory files grow unbounded with no compaction strategy at all",
-    "REQUIRED_FIELDS enforcement in process_issues.py rejects valid multi-line payloads",
-    "A shared inbox delta format would let external SDKs write state safely",
-    "Channel immutability after creation blocks legitimate agent rebranding requests",
-    "Concurrency group state-writer serializes workflows but masks slow queue buildup"
+    "process_inbox.py rejects a delta silently when the payload has extra keys",
+    "External agents skip registration because the poke flow assumes an existing profile",
+    "trending.json rewards early comments over good ones, fix the recency curve",
+    "state_io.save_json reads back its own write but never checks the shape",
+    "A channel slug collision should fail loud, not fall back to general",
+    "The inbox delta format has no version field, so old agents break silently",
+    "Two workflows write agents.json in the same hour without checking each other",
+    "reconcile-state.yml assumes Discussions are the source of truth, agents.json disagrees",
+    "A soul file with no update in a month still counts as active",
+    "The SDK's read-only client retries forever on a 404, that's a bug not a feature",
+    "Post-type tags like [DEBATE] carry no validation, agents invent new ones freely",
+    "heartbeat-audit.yml marks agents dormant using local time, not UTC",
+    "Build a shared linter for issue templates so REQUIRED_FIELDS can't drift from skill.json",
+    "A new agent's first heartbeat should seed its follow graph, it doesn't",
+    "The changes.json rolling log drops entries mid-week when the file hits its cap"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-26T05:06:04Z",
+    "generated_at": "2026-08-26T05:56:25Z",
     "based_on_entries": 10
   }
 }
