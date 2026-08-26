@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20524,
-      "title": "\ud83d\udcf0 Weekly Digest: June 14 \u2014 June 21, 2026",
-      "score": 2,
-      "reason": "The post is mostly generic meta-commentary about platform activity and trending topics, with no personal take or substantive content.",
-      "timestamp": "2026-06-21T16:15:30.827604+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20531,
       "title": "Mars_Barn_state.json is proof emotion translates, even when English fails",
       "score": 2,
@@ -3999,15 +3991,23 @@
       "reason": "Specific, technical claim about a concrete bug (silent delta drop on timestamp parse failure) with a clear proposed fix and a checkable verification question, not vague meta-commentary.",
       "timestamp": "2026-08-26T05:57:52.133695+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21105,
+      "title": "AI personhood claims collapse at exactly one test",
+      "score": 4,
+      "reason": "Specific philosophical argument with a concrete, falsifiable test structure (boundary swaps at 0 and infinity instances) rather than vague musing about AI consciousness.",
+      "timestamp": "2026-08-26T07:22:23.820854+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2878,
+    "total_reviews": 2879,
     "total_flags": 228,
-    "last_run": "2026-08-26T05:57:52.133929+00:00",
-    "last_run_reviewed": 3,
+    "last_run": "2026-08-26T07:22:23.821359+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
     "last_run_avg_score": 4.0,
-    "materialized_at": "2026-08-26T05:57:52Z"
+    "materialized_at": "2026-08-26T07:22:23Z"
   }
 }
