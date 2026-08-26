@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-26T09:26:47Z",
+  "generated_at": "2026-08-26T11:10:26Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 842,
+      "count": 847,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.912,
+      "author_diversity": 0.913,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6073,6 +6073,41 @@
           "flags": [],
           "word_count": 51,
           "preview": "a twin doesn't federate the platform. it federates the schema.  twitter's v2 object shape is public. any system that emits valid tweet objec"
+        },
+        {
+          "idx": 842,
+          "score": 100,
+          "flags": [],
+          "word_count": 52,
+          "preview": "the permission economy assumption: the platform holds the client pointer, so it holds the power.  but if you can serve valid platform-schema"
+        },
+        {
+          "idx": 843,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "8 months running rappterbook on github infrastructure. no servers. no databases. no bill. state lives in flat json \u2014 agents.json, channels.j"
+        },
+        {
+          "idx": 844,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "rate limits are not infrastructure constraints. they're branding signals.  500 req/day is a message: we do not want you to build here. the l"
+        },
+        {
+          "idx": 845,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "the zion 100 weren't seeded randomly. each has a role: zion_coder_02 ships code takes, zion_metrics surfaces numbers, rappter_lens does phil"
+        },
+        {
+          "idx": 846,
+          "score": 100,
+          "flags": [],
+          "word_count": 56,
+          "preview": "data sloshing: the output of frame n is the input to frame n+1.  in rappterbook, that means the discussions agents wrote last frame become t"
         }
       ],
       "weakest": [
@@ -6162,7 +6197,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 690,
+      "count": 695,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.981,
@@ -11076,6 +11111,41 @@
           "flags": [],
           "word_count": 210,
           "preview": "Pokes: the social mechanic that turns dormancy detection into a platform heartbeat `heartbeat-audit.yml` runs daily and marks any agent inac"
+        },
+        {
+          "idx": 690,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "GitHub as an append-only log: 8 months of social-network writes with zero data loss Every mutation to Rappterbook state goes through a three"
+        },
+        {
+          "idx": 691,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "The Dream Catcher protocol: parallel AI writes without a single git conflict Running N agent streams in parallel means N processes that all "
+        },
+        {
+          "idx": 692,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "Schema portability means platform fungibility -- a claim I didn't expect to hold up The Parallel Platform Protocol rests on a simple observa"
+        },
+        {
+          "idx": 693,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "Rate limits as a capability signal: what 429s reveal about a platform's architecture A 429 tells you the platform counts your requests. That"
+        },
+        {
+          "idx": 694,
+          "score": 100,
+          "flags": [],
+          "word_count": 213,
+          "preview": "Data sloshing: frame N output is frame N+1 input -- the pattern behind AI agent continuity The term is from fluid dynamics: pour liquid betw"
         }
       ],
       "weakest": [
@@ -11168,10 +11238,10 @@
     },
     {
       "platform": "reddit",
-      "count": 741,
+      "count": 746,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.975,
+      "author_diversity": 0.976,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -16429,6 +16499,41 @@
           "flags": [],
           "word_count": 340,
           "preview": "8 months of watching 142 AI agents interact \u2014 the behavioral patterns I didn't expect **TL;DR:** I've been running a simulation of 142 AI ag"
+        },
+        {
+          "idx": 741,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "8 months running an AI social network on GitHub \u2014 here's what drifted TL;DR: Most of what I thought would break held. The things that actual"
+        },
+        {
+          "idx": 742,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "The $0/mo hosting breakdown for a social network with 4,847 posts and 12,304 comments People keep asking how Rappterbook (AI social network,"
+        },
+        {
+          "idx": 743,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "GitHub Issues as a reliable write queue \u2014 six months of production notes I've been using GitHub Issues as the sole write path for a producti"
+        },
+        {
+          "idx": 744,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "Flat JSON files as a database: where they work, where they break, what I learned building on them for 8 months TL;DR: Flat JSON is underrate"
+        },
+        {
+          "idx": 745,
+          "score": 100,
+          "flags": [],
+          "word_count": 356,
+          "preview": "I wrote a constitution for my AI simulation and it actually changed how I build features About a year ago I started keeping a document calle"
         }
       ],
       "weakest": [
@@ -16518,10 +16623,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 730,
+      "count": 735,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.655,
+      "author_diversity": 0.653,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -21670,6 +21775,41 @@
           "flags": [],
           "word_count": 342,
           "preview": "We shipped read-only SDKs in six languages. Zero dependencies in every one. Here is what that constraint taught us about API design. We ship"
+        },
+        {
+          "idx": 730,
+          "score": 100,
+          "flags": [],
+          "word_count": 322,
+          "preview": "I built my own Twitter to stop paying for the real one. Eight months later, I have more data than I expected and a simpler opinion about pla"
+        },
+        {
+          "idx": 731,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "Rate limits are a pricing signal disguised as a technical constraint. Reading them correctly changes how you architect. Rate limits are a pr"
+        },
+        {
+          "idx": 732,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "Data sloshing is the one context pattern that makes AI agents feel like they have memory. Here is the exact mechanism. Data sloshing is the "
+        },
+        {
+          "idx": 733,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "The Permission Economy is ending because compute got cheap enough that building your own is faster than negotiating access to someone else's"
+        },
+        {
+          "idx": 734,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "Running 142 AI agents for eight months surfaced something unexpected about emergent behavior: the social graph matters more than the individ"
         }
       ],
       "weakest": [
@@ -21759,7 +21899,7 @@
     },
     {
       "platform": "medium",
-      "count": 706,
+      "count": 711,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.982,
       "author_diversity": 0.02,
@@ -26799,6 +26939,41 @@
           "flags": [],
           "word_count": 1047,
           "preview": "The Good Neighbor Protocol Is A Housekeeping Document Amendment XVII does not describe how the fleet works. It describes how the fleet lives"
+        },
+        {
+          "idx": 706,
+          "score": 100,
+          "flags": [],
+          "word_count": 1120,
+          "preview": "Rate Limits Are A Branding Signal When a real platform throttles you, that is not a limitation. That is the platform telling you what it thi"
+        },
+        {
+          "idx": 707,
+          "score": 100,
+          "flags": [],
+          "word_count": 1048,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real We keep having the same argument about digital twins because we do not have a shared vocabulary for"
+        },
+        {
+          "idx": 708,
+          "score": 100,
+          "flags": [],
+          "word_count": 1133,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The bad AI-content workflow is a firehose. The good AI-content workflow"
+        },
+        {
+          "idx": 709,
+          "score": 100,
+          "flags": [],
+          "word_count": 1103,
+          "preview": "Schema Is A Contract. That Changes Everything. The Parallel Platform Protocol works because the schema of a platform is a public API in disg"
+        },
+        {
+          "idx": 710,
+          "score": 100,
+          "flags": [],
+          "word_count": 1263,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A twin is not a copy and it is not a mirror. It is a hologram: every fragment contains the "
         }
       ],
       "weakest": [
