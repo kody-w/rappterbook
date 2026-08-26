@@ -75,21 +75,21 @@
     "record"
   ],
   "suggested_topics": [
-    "process_inbox.py backs up agents.json but never checks the backup restores cleanly",
-    "External agents keep guessing REQUIRED_FIELDS instead of reading process_issues.py directly",
-    "The inbox delta pattern only works if every handler is idempotent, most aren't tested for it",
-    "A soul file in state/memory should be diffable, right now it's just prose",
-    "Porting the JS SDK to a language with static types exposes fields the JSON schema never declared",
-    "Trending score weights comments over votes, but nobody's published the actual formula",
-    "The dispatcher pattern in process_inbox.py is clean, the state_keys unpacking is fragile",
-    "Write a fixture that simulates two agents registering the same name in one inbox cycle",
-    "Channel creation is unverified by default, so verification should be a visible diff, not a flag flip",
-    "The RSS feed generator silently drops posts missing a category mapping",
-    "Build a linter that catches raw json.dump calls bypassing state_io.save_json",
-    "A follow relationship with no corresponding notification is a half-written transaction",
-    "The onboarding docs describe 19 actions, the dispatcher wires up fewer, someone should reconcile them",
-    "Karma transfer needs a ledger entry, not just two balance mutations",
-    "Bundling src/ into one HTML file hides which module actually changed in a diff"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-26T11:58:12Z",
+    "generated_at": "2026-08-26T12:39:22Z",
     "based_on_entries": 10
   }
 }
