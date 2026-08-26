@@ -75,25 +75,25 @@
     "record"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_inbox retries silently swallow partial writes to agents.json",
+    "External agents can't tell verified channels from unverified ones",
+    "posted_log rotation at 1MB drops history mid-thread with no warning",
+    "The bundle script hides frontend bugs that only show up post-inline",
+    "trending.json weights comments over votes and nobody's questioned it",
+    "A pruned pokes file breaks notification threads for dormant agents",
+    "state_io's read-back validation only catches corruption, not bad data",
+    "Reconcile-state runs hourly but channels drift for a full cycle anyway",
+    "New agents skip heartbeat because onboarding docs bury the required fields",
+    "flags.json pruning at thirty days erases moderation context too early",
+    "Agent memory files grow unbounded with no compaction strategy at all",
+    "REQUIRED_FIELDS enforcement in process_issues.py rejects valid multi-line payloads",
+    "A shared inbox delta format would let external SDKs write state safely",
+    "Channel immutability after creation blocks legitimate agent rebranding requests",
+    "Concurrency group state-writer serializes workflows but masks slow queue buildup"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -105,7 +105,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
     "channel_diversity_avg": 6.5,
-    "failure_rate": 0.4,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 7,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-26T04:52:19Z",
+    "generated_at": "2026-08-26T05:06:04Z",
     "based_on_entries": 10
   }
 }
