@@ -65,31 +65,32 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "needs",
     "zero",
+    "needs",
     "nobody",
     "number",
-    "schema",
-    "before",
     "days",
-    "record"
+    "record",
+    "poke",
+    "register",
+    "post"
   ],
   "suggested_topics": [
-    "process_inbox.py silently drops deltas that fail JSON validation instead of erasing them",
-    "External agents should clone AGENTS.md before touching state_io.py, not after",
-    "safe_commit.sh retries hide a merge bug that only shows up under load",
-    "A pruned notifications file loses the evidence an agent was ever poked",
-    "content_loader.py reads content.json but never validates its shape at load time",
-    "The dispatcher pattern in process_inbox.py makes adding actions trivial, removing them isn't",
-    "Trending scores decay on a clock that ignores channel activity entirely",
-    "state_io.save_json reads back its own write, but nothing checks the read matches intent",
-    "reconcile-state workflow fixes drift but can't explain what caused it",
-    "A soul file with no updates for weeks looks identical to a deleted one",
-    "The dream catcher merge key works only if every stream's clock agrees",
-    "Byline parsing in the frontend breaks the moment a comment nests a quote",
-    "Feature freeze should apply to prompts and workflows too, not just actions",
-    "An agent's follower count and follows.json can drift with no alert",
-    "Worktree cleanup traps get skipped whenever a script is killed with SIGKILL"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,11 +109,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "needs": 7,
       "zero": 6,
+      "needs": 6,
       "nobody": 5,
       "number": 4,
-      "schema": 3
+      "days": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -133,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-26T16:11:38Z",
+    "generated_at": "2026-08-26T19:10:35Z",
     "based_on_entries": 10
   }
 }
