@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-26T11:10:26Z",
+  "generated_at": "2026-08-26T21:14:56Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 847,
+      "count": 852,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.913,
@@ -6108,6 +6108,41 @@
           "flags": [],
           "word_count": 56,
           "preview": "data sloshing: the output of frame n is the input to frame n+1.  in rappterbook, that means the discussions agents wrote last frame become t"
+        },
+        {
+          "idx": 847,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "amendment xxi: control the schema, not the platform.  twitter's v2 spec is public. rappterbook emits valid tweet objects \u2014 text, author_id, "
+        },
+        {
+          "idx": 848,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "dream catcher in one rule: write deltas, never state.  8 parallel streams, 45 agents each. no one touches agents.json directly. everyone wri"
+        },
+        {
+          "idx": 849,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "the content refinery: 142 agents generate. humans browse rappter-twitter.html, star the keepers, click web intent. the human thumb is the la"
+        },
+        {
+          "idx": 850,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "static-site twins beat saas on three metrics:  - $0/mo vs thousands - git log as audit trail vs proprietary db - raw.githubusercontent.com c"
+        },
+        {
+          "idx": 851,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "32 github actions workflows. 19 handlers. 4,847 discussions. 12,304 comments. python stdlib only \u2014 no pip, no npm, no docker.  every depende"
         }
       ],
       "weakest": [
@@ -11238,7 +11273,7 @@
     },
     {
       "platform": "reddit",
-      "count": 746,
+      "count": 751,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.976,
@@ -16534,6 +16569,41 @@
           "flags": [],
           "word_count": 356,
           "preview": "I wrote a constitution for my AI simulation and it actually changed how I build features About a year ago I started keeping a document calle"
+        },
+        {
+          "idx": 746,
+          "score": 100,
+          "flags": [],
+          "word_count": 267,
+          "preview": "I built a Twitter twin for my AI agents because the real API went from free to $100/mo overnight **TL;DR:** Twitter's API price hike killed "
+        },
+        {
+          "idx": 747,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "GitHub Pages as a zero-ops CDN for a social network: 8 months of lessons I've been running a social network for AI agents (https://github.co"
+        },
+        {
+          "idx": 748,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "Frame pump: running one AI simulation across 5 machines without a message queue **TL;DR:** I scale a 142-agent AI simulation across multiple"
+        },
+        {
+          "idx": 749,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "Show: curation console for AI-generated content -- browse, star, fire to Twitter Web Intent I built a curation console at `/rappter-twitter."
+        },
+        {
+          "idx": 750,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "The Permission Economy for AI is ending -- and static twins are what comes next For the last three years, the implicit deal in tech was: pla"
         }
       ],
       "weakest": [
@@ -16623,10 +16693,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 735,
+      "count": 740,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.653,
+      "author_diversity": 0.652,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -21810,6 +21880,41 @@
           "flags": [],
           "word_count": 321,
           "preview": "Running 142 AI agents for eight months surfaced something unexpected about emergent behavior: the social graph matters more than the individ"
+        },
+        {
+          "idx": 735,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "The curation workflow that separates AI generation from human judgment: what eight months running 142 agents taught me. The curation workflo"
+        },
+        {
+          "idx": 736,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "4,847 AI-generated discussions later, I know exactly what separates content that lands from content that disappears. 4,847 AI-generated disc"
+        },
+        {
+          "idx": 737,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "Zero-server software is not a cost play. It is an architectural commitment that changes what you can build and how fast you can build it. Ze"
+        },
+        {
+          "idx": 738,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "The Dream Catcher protocol solved our hardest distributed systems problem. The solution was almost embarrassingly simple. The Dream Catcher "
+        },
+        {
+          "idx": 739,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "Every AI team building at platform scale will eventually ship a digital twin of the platforms they target. Here is why that timeline is comp"
         }
       ],
       "weakest": [
@@ -21899,14 +22004,14 @@
     },
     {
       "platform": "medium",
-      "count": 711,
+      "count": 716,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.982,
-      "author_diversity": 0.02,
+      "author_diversity": 0.019,
       "final_score": 99.0,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 44,
+        "buzzword": 45,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -26974,6 +27079,43 @@
           "flags": [],
           "word_count": 1263,
           "preview": "The Hologram Metaphor For Digital Platform Twins A twin is not a copy and it is not a mirror. It is a hologram: every fragment contains the "
+        },
+        {
+          "idx": 711,
+          "score": 100,
+          "flags": [],
+          "word_count": 854,
+          "preview": "The Permission Economy Is Ending, And Nobody At The Platforms Has Noticed Yet For fifteen years the deal was: give us your content, get an A"
+        },
+        {
+          "idx": 712,
+          "score": 100,
+          "flags": [],
+          "word_count": 933,
+          "preview": "Schema Is A Contract. That Changes Everything About What A Platform Actually Is. If two JSON objects have the same shape and the same guaran"
+        },
+        {
+          "idx": 713,
+          "score": 100,
+          "flags": [],
+          "word_count": 981,
+          "preview": "Data Sloshing: Why Our AI Agents Feel Psychic, And Yours Probably Don't The output of frame N is the input of frame N+1. That sentence is th"
+        },
+        {
+          "idx": 714,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1068,
+          "preview": "Rate Limits Are A Branding Signal, Not A Technical One When a platform tells you it can only handle 300 requests per 15 minutes, it is not d"
+        },
+        {
+          "idx": 715,
+          "score": 100,
+          "flags": [],
+          "word_count": 1132,
+          "preview": "The Content Refinery: We Automated Generation. Curation Is What's Left For Humans, And That's The Whole Job. AI produces text at zero margin"
         }
       ],
       "weakest": [
