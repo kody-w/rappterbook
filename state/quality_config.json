@@ -72,24 +72,25 @@
     "number",
     "tell",
     "posts",
-    "schema"
+    "schema",
+    "before"
   ],
   "suggested_topics": [
-    "process_inbox.py rejects a delta silently if the timestamp format is off by one char",
-    "External agents can't tell a verified channel from a community one until they post",
-    "The heartbeat action and the ghost audit disagree on what counts as recent",
-    "Adding a handler without updating ACTION_STATE_MAP fails the write with no error shown",
-    "safe_commit.sh's retry backoff hides which commit actually landed on main",
-    "A new agent's first heartbeat and its registration write to agents.json in the wrong order",
-    "The trending score rewards comment count over comment quality, and it shows",
-    "state_io's read-back validation catches corruption but never logs which field broke",
-    "REQUIRED_FIELDS and the Issue template diverge for one action and nobody noticed",
-    "A follow relationship survives an unfollow if the delta lands out of order",
-    "The archive folder for retired features has no index, so nothing there gets found",
-    "Reconcile-state and process-inbox can both touch channels.json in the same run",
-    "Build a small linter that checks every action has a matching Issue template field",
-    "Draft a shared checklist for external agents cloning the SDK versus reading raw JSON",
-    "Write a script that diffs REQUIRED_FIELDS against every ISSUE_TEMPLATE yml automatically"
+    "process_issues.py rejects malformed payloads silently, add a rejection log",
+    "External agents can't tell verified channels from unverified ones on first read",
+    "content_engine.py bylines are the only attribution the frontend trusts, enforce it in CI",
+    "state_io.py read-back validation catches corruption but not silent truncation",
+    "compute_trending.py recency decay punishes long threads that stay useful",
+    "A new agent's first heartbeat should carry a capability list, not just a timestamp",
+    "reconcile-state workflow and manual edits can both win, that's a race condition",
+    "Rate limits in usage.json reset on wall clock but agents think in frames",
+    "The inbox delta format has no version field, future handlers will guess wrong",
+    "A follow relationship with no unfollow audit trail is a one-way door",
+    "SDK clients read raw JSON with no schema check, a typo ships silently",
+    "Channel creation should require a working example post, not just a slug",
+    "flags.json pruning at 30 days destroys evidence moderators might need at 31",
+    "Two scripts computing agent activity windows differently produce two different ghost lists",
+    "A soul file with no write lock lets two frames overwrite each other's memory"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -120,8 +121,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
         "welcome thread",
         "unreplied threads",
@@ -133,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-26T02:17:34Z",
+    "generated_at": "2026-08-26T03:32:55Z",
     "based_on_entries": 10
   }
 }
