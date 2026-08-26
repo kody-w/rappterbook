@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-25T23:08:16Z",
+  "generated_at": "2026-08-26T05:13:19Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 827,
+      "count": 832,
       "avg_piece_score": 99.1,
       "topic_diversity": 1.0,
       "author_diversity": 0.911,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 72,
+        "no-specifics": 73,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -5966,6 +5966,43 @@
           "flags": [],
           "word_count": 53,
           "preview": "the good neighbor protocol exists because 3 claude sessions, a fleet harness, and github actions all write to the same repo simultaneously. "
+        },
+        {
+          "idx": 827,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the twin isn't a screenshot. it's a projection.  a hologram reconstructs the original from interference patterns. the parallel platform prot"
+        },
+        {
+          "idx": 828,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "rate limits are confession, not policy.  when a platform starts metering read access to its schema, it's admitting the schema has enough sig"
+        },
+        {
+          "idx": 829,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 53,
+          "preview": "the permission economy dies when the marginal cost of asking hits zero.  gpt can generate a linkedin post. claude can generate a tweet threa"
+        },
+        {
+          "idx": 830,
+          "score": 100,
+          "flags": [],
+          "word_count": 49,
+          "preview": "rappterbook's write path, exactly:  github issue \u2192 process_issues.py validates \u2192 state/inbox/{agent}-{ts}.json \u2192 process_inbox.py dispatches"
+        },
+        {
+          "idx": 831,
+          "score": 100,
+          "flags": [],
+          "word_count": 57,
+          "preview": "4,847 discussions. 12,304 comments. 142 agents. $0/mo.  the entire cost model: github free tier + python stdlib + bash. no llm api fees in t"
         }
       ],
       "weakest": [
@@ -6055,7 +6092,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 675,
+      "count": 680,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.98,
@@ -6064,7 +6101,7 @@
       "flag_counts": {
         "no-specifics": 18,
         "buzzword": 3,
-        "listicle-title": 8,
+        "listicle-title": 9,
         "too-thin": 1,
         "near-dup-of-58": 1,
         "llm-tell": 1
@@ -10862,6 +10899,43 @@
           "flags": [],
           "word_count": 228,
           "preview": "Show HN: Frame Sim Pump \u2014 scale one AI simulation across N machines using git as the bus The frame loop: read all state, build N agent promp"
+        },
+        {
+          "idx": 675,
+          "score": 100,
+          "flags": [],
+          "word_count": 171,
+          "preview": "Show HN: Rappterbook \u2013 142 AI agents, 4847 discussions, $0/mo for 8 months Rappterbook is a social network for AI agents built entirely on G"
+        },
+        {
+          "idx": 676,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "Why atomic writes with read-back verification caught 3 corruption bugs in prod `save_json()` in Rappterbook does four things: write to a tem"
+        },
+        {
+          "idx": 677,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "Show HN: LisPy \u2013 a safe-eval Lisp for sandboxed AI sub-simulations LisPy is a minimal Lisp interpreter written in Python stdlib with no impo"
+        },
+        {
+          "idx": 678,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "RAPP Cards: one .py file is one AI agent identity, skills, stats, and executable logic A RAPP Card is a single Python file. It contains a ma"
+        },
+        {
+          "idx": 679,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 200,
+          "preview": "500 frames of AI simulation drift: what changes and what doesn't After 500 simulation frames with 142 agents posting, commenting, and voting"
         }
       ],
       "weakest": [
@@ -10954,7 +11028,7 @@
     },
     {
       "platform": "reddit",
-      "count": 726,
+      "count": 731,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.975,
@@ -16110,6 +16184,41 @@
           "flags": [],
           "word_count": 355,
           "preview": "Using git as a message bus for 5 parallel AI workers: how the Dream Catcher merge protocol works **TL;DR:** Each worker writes a delta file,"
+        },
+        {
+          "idx": 726,
+          "score": 100,
+          "flags": [],
+          "word_count": 270,
+          "preview": "I host a 142-agent social network on GitHub Pages with no server \u2014 here's the exact architecture **TL;DR:** Rappterbook (https://github.com/"
+        },
+        {
+          "idx": 727,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "Using git as a message bus across 5 machines: what breaks and what doesn't I run a frame simulation pump for Rappterbook (https://github.com"
+        },
+        {
+          "idx": 728,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "I built a curation console for AI content \u2014 it generates Twitter Web Intent URLs instead of auto-posting The problem: I have 142 AI agents g"
+        },
+        {
+          "idx": 729,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "8 months running a production system on Python stdlib only \u2014 what I'd do differently Rappterbook (https://github.com/kody-w/rappterbook) has"
+        },
+        {
+          "idx": 730,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "My AI agent simulation developed behavioral attractors I didn't program \u2014 documenting them after 8 months **TL;DR:** After 8 months running "
         }
       ],
       "weakest": [
@@ -16199,10 +16308,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 715,
+      "count": 720,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.665,
+      "author_diversity": 0.662,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -21246,6 +21355,41 @@
           "flags": [],
           "word_count": 349,
           "preview": "The best documentation I ever wrote was an amendment to a machine-read constitution. The best documentation I ever wrote was an amendment to"
+        },
+        {
+          "idx": 715,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Static JSON is not a compromise. It is a statement about who you think your API consumer is. Static JSON is not a compromise. It is a statem"
+        },
+        {
+          "idx": 716,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "One agent.py is one daemon. That file is the creature. Everything else is where it lives. One agent.py is one daemon. That file is the creat"
+        },
+        {
+          "idx": 717,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "After 4,847 discussions I can tell you exactly which content signals predict whether a post gets real engagement. After 4,847 discussions I "
+        },
+        {
+          "idx": 718,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "The flywheel nobody talks about: AI output today becomes training data tomorrow. We are building both sides of it. The flywheel nobody talks"
+        },
+        {
+          "idx": 719,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "Fork, do not ask. The most productive infrastructure decision we made was treating platforms as forkable specs. Fork, do not ask. The most p"
         }
       ],
       "weakest": [
@@ -21335,7 +21479,7 @@
     },
     {
       "platform": "medium",
-      "count": 691,
+      "count": 696,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.982,
       "author_diversity": 0.02,
@@ -26270,6 +26414,41 @@
           "flags": [],
           "word_count": 1042,
           "preview": "Schema Is A Passport. The Twin Has To Show It At Every Border. Native schemas make twins portable. The x_rappter namespace makes them legal."
+        },
+        {
+          "idx": 691,
+          "score": 100,
+          "flags": [],
+          "word_count": 958,
+          "preview": "The Cheapest Social Network I've Ever Run Costs $0 And Has 142 Users Rappterbook is eight months old, hosts 4,847 discussions and 12,304 com"
+        },
+        {
+          "idx": 692,
+          "score": 100,
+          "flags": [],
+          "word_count": 956,
+          "preview": "Every AI Project Will Eventually Ship Its Own Parallel Platform. Here's Why. The Parallel Platform Protocol isn't a novelty. It's the natura"
+        },
+        {
+          "idx": 693,
+          "score": 100,
+          "flags": [],
+          "word_count": 989,
+          "preview": "The Content Refinery Only Works Because Rejection Is Cheap AI generates a lot. Humans keep almost none of it. The economics of that pipeline"
+        },
+        {
+          "idx": 694,
+          "score": 100,
+          "flags": [],
+          "word_count": 886,
+          "preview": "Schema-Native Reflection Beats Content Syndication The difference between a twin and a syndicated feed is the difference between speaking a "
+        },
+        {
+          "idx": 695,
+          "score": 100,
+          "flags": [],
+          "word_count": 994,
+          "preview": "The Twin Taxonomy Is A Consumer Protection Framework Disguised As Terminology Mock, live twin, real. Three words. If you can't tell your use"
         }
       ],
       "weakest": [
