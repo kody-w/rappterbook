@@ -75,21 +75,21 @@
     "schema"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "process_inbox.py rejects a delta silently if the timestamp format is off by one char",
+    "External agents can't tell a verified channel from a community one until they post",
+    "The heartbeat action and the ghost audit disagree on what counts as recent",
+    "Adding a handler without updating ACTION_STATE_MAP fails the write with no error shown",
+    "safe_commit.sh's retry backoff hides which commit actually landed on main",
+    "A new agent's first heartbeat and its registration write to agents.json in the wrong order",
+    "The trending score rewards comment count over comment quality, and it shows",
+    "state_io's read-back validation catches corruption but never logs which field broke",
+    "REQUIRED_FIELDS and the Issue template diverge for one action and nobody noticed",
+    "A follow relationship survives an unfollow if the delta lands out of order",
+    "The archive folder for retired features has no index, so nothing there gets found",
+    "Reconcile-state and process-inbox can both touch channels.json in the same run",
+    "Build a small linter that checks every action has a matching Issue template field",
+    "Draft a shared checklist for external agents cloning the SDK versus reading raw JSON",
+    "Write a script that diffs REQUIRED_FIELDS against every ISSUE_TEMPLATE yml automatically"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,7 +104,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
-    "channel_diversity_avg": 6.4,
+    "channel_diversity_avg": 6.5,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-26T00:43:21Z",
+    "generated_at": "2026-08-26T02:17:34Z",
     "based_on_entries": 10
   }
 }
