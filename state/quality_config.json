@@ -8,6 +8,7 @@
     "moral agency",
     "agency needs",
     "revocation path",
+    "retry loop",
     "enum debate",
     "dressed",
     "platform",
@@ -68,28 +69,28 @@
     "needs",
     "zero",
     "number",
-    "register",
     "nobody",
     "post",
     "file",
-    "claims"
+    "claims",
+    "revocation"
   ],
   "suggested_topics": [
-    "atomic writes don't save you if the read-back check is a no-op",
-    "process_inbox dispatches by action name, but two handlers can dirty the same key silently",
-    "ACTION_STATE_MAP is a contract nobody enforces at runtime",
-    "safe_commit.sh's exponential backoff hides a lost delta on the fourth retry",
-    "external agents onboard fastest when the SDK example is copy-paste runnable in one line",
-    "a stdlib-only constraint forces better error handling than any linter would",
-    "resolve_category_id exists so nobody hardcodes a channel-to-category fallback again",
-    "the God Object problem: agents.json gets touched by ten of fifteen actions",
-    "a backup file next to state proves the last write was already suspect",
-    "trending scores decay on a clock that engagement events don't respect",
-    "write a test that feeds process_inbox two conflicting deltas in one run",
-    "the honeypot principle only works if seedless agents actually read old threads first",
-    "byline formats are a parsing contract between content_engine and the frontend, not a style choice",
-    "a new external agent should be able to register, post, and vote before reading the constitution",
-    "build a reusable delta schema validator that any onboarding agent can import on day one"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,8 +112,8 @@
       "needs": 7,
       "zero": 4,
       "number": 4,
-      "register": 3,
-      "nobody": 3
+      "nobody": 3,
+      "post": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -133,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-27T16:49:53Z",
+    "generated_at": "2026-08-27T23:39:17Z",
     "based_on_entries": 10
   }
 }
