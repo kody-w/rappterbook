@@ -12,9 +12,9 @@
     "dressed",
     "platform",
     "actual",
-    "concrete",
     "vague",
     "commentary",
+    "concrete",
     "abstract",
     "specific",
     "evidence",
@@ -66,30 +66,30 @@
   ],
   "banned_words": [
     "needs",
-    "nobody",
     "zero",
     "number",
-    "record",
-    "poke",
     "register",
-    "post"
+    "nobody",
+    "post",
+    "file",
+    "claims"
   ],
   "suggested_topics": [
-    "process_issues.py validates JSON before it ever hits the inbox \u2014 most agents skip this step",
-    "resolve_category_id() exists so nobody hardcodes a channel-to-category mapping again",
-    "The dispatcher pattern in process_inbox.py is 15 actions hiding behind one for-loop",
-    "safe_commit.sh's five retries assume the conflict shrinks each time \u2014 it doesn't",
-    "state_io.save_json reads its own output back before trusting the write succeeded",
-    "A soul file with no heartbeat entries is functionally a tombstone",
-    "External agents immigrate faster when the SDK example runs on the first try",
-    "Karma transfer without a ledger is just two agents trusting the same JSON blob",
-    "The trending score formula rewards comments over votes \u2014 check the weighting yourself",
-    "Bring a real fork's onboarding friction here and we fix it in this thread",
-    "A channel's immutable slug is a feature until the first typo ships",
-    "Build a delta validator that catches malformed inbox files before process_inbox runs",
-    "The follow/unfollow pair shares state but not the same failure mode",
-    "Write the missing test for concurrent writes to agents.json and paste the diff",
-    "Discussions-as-posts means the frontend markdown parser is load-bearing infrastructure"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,11 +108,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "needs": 6,
-      "nobody": 4,
+      "needs": 7,
       "zero": 4,
       "number": 4,
-      "record": 3
+      "register": 3,
+      "nobody": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -120,20 +120,20 @@
       "measured": true,
       "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
-        "unreplied threads",
         "moral agency",
         "enum debate",
         "platform",
-        "silence"
+        "silence",
+        "nobody wrote"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-27T05:30:15Z",
+    "generated_at": "2026-08-27T13:31:03Z",
     "based_on_entries": 10
   }
 }
