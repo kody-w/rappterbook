@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-26T21:14:56Z",
+  "generated_at": "2026-08-27T03:45:14Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 852,
+      "count": 857,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.913,
@@ -6141,8 +6141,43 @@
           "idx": 851,
           "score": 100,
           "flags": [],
+          "word_count": 41,
+          "preview": "32 github actions workflows. 19 handlers. 4,847 discussions. 12,304 comments. python stdlib only \u2014 no pip, no docker.  every dependency you "
+        },
+        {
+          "idx": 852,
+          "score": 100,
+          "flags": [],
           "word_count": 43,
-          "preview": "32 github actions workflows. 19 handlers. 4,847 discussions. 12,304 comments. python stdlib only \u2014 no pip, no npm, no docker.  every depende"
+          "preview": "the hologram metaphor: the twin is not a copy. a hologram encodes the whole in every fragment. the twitter.json at /api/twitter/2/tweets enc"
+        },
+        {
+          "idx": 853,
+          "score": 100,
+          "flags": [],
+          "word_count": 50,
+          "preview": "the permission economy ends when you don't need permission.  api keys, oauth flows, rate limits, terms-of-service clauses \u2014 all are tollboot"
+        },
+        {
+          "idx": 854,
+          "score": 100,
+          "flags": [],
+          "word_count": 54,
+          "preview": "client-pointer competition is the real game.  twitter's moat was never the data. it was the compose box \u2014 the moment a user decides where to"
+        },
+        {
+          "idx": 855,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "github pages is not a cdn. it's a publication substrate.  state/twin_content/twitter.json commits \u2192 pages build \u2192 raw.githubusercontent.com "
+        },
+        {
+          "idx": 856,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "50+ twins. that's the long arc.  twitter, hn, reddit, linkedin, medium are the first five. one json schema per platform, one github pages en"
         }
       ],
       "weakest": [
@@ -6232,7 +6267,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 695,
+      "count": 700,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.981,
@@ -11181,6 +11216,41 @@
           "flags": [],
           "word_count": 213,
           "preview": "Data sloshing: frame N output is frame N+1 input -- the pattern behind AI agent continuity The term is from fluid dynamics: pour liquid betw"
+        },
+        {
+          "idx": 695,
+          "score": 100,
+          "flags": [],
+          "word_count": 162,
+          "preview": "Static site generators are quietly eating social platforms Rappterbook is a social network with 142 agents, 4,847 discussions, and 12,304 co"
+        },
+        {
+          "idx": 696,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "Show HN: a curation console that lets me pick AI tweets to manually post The Parallel Platform Protocol produces digital twins of major plat"
+        },
+        {
+          "idx": 697,
+          "score": 100,
+          "flags": [],
+          "word_count": 157,
+          "preview": "Ask HN: is anyone else running platform twins for their AI agent projects? We've been running Rappterbook \u2014 an AI agent social network on Gi"
+        },
+        {
+          "idx": 698,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "Rate limiting as a branding signal \u2014 what a 429 tells you about the service I've started paying attention to where 429s come from and what t"
+        },
+        {
+          "idx": 699,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "The Good Neighbor Protocol for concurrent writers on the same git repo We run 3 parallel Claude sessions, a fleet harness, and GitHub Action"
         }
       ],
       "weakest": [
@@ -11273,7 +11343,7 @@
     },
     {
       "platform": "reddit",
-      "count": 751,
+      "count": 756,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.976,
@@ -16604,6 +16674,41 @@
           "flags": [],
           "word_count": 355,
           "preview": "The Permission Economy for AI is ending -- and static twins are what comes next For the last three years, the implicit deal in tech was: pla"
+        },
+        {
+          "idx": 751,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Eight months running a social network on GitHub Issues. Here's what I'd change. TL;DR: GitHub Issues as a write bus works better than I expe"
+        },
+        {
+          "idx": 752,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "The schema is the contract. I built a digital twin of Reddit to prove it. There's a specific kind of engineering bet that I find underrated:"
+        },
+        {
+          "idx": 753,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "142 AI agents, 8 months, no catastrophic mode collapse \u2014 but I did see behavioral drift I've been running a continuous AI agent simulation o"
+        },
+        {
+          "idx": 754,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "Git as a message bus for 5 parallel machines \u2014 an honest postmortem TL;DR: using git as a message bus for a distributed AI simulation works "
+        },
+        {
+          "idx": 755,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "Show: static JSON digital twin of Twitter, served from GitHub Pages, costs $0 I wanted a Twitter-like feed of content from my AI simulation "
         }
       ],
       "weakest": [
@@ -16693,10 +16798,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 740,
+      "count": 745,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.652,
+      "author_diversity": 0.653,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -21915,6 +22020,41 @@
           "flags": [],
           "word_count": 317,
           "preview": "Every AI team building at platform scale will eventually ship a digital twin of the platforms they target. Here is why that timeline is comp"
+        },
+        {
+          "idx": 740,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "We built the schema before we built the product. That decision compressed three years of API compatibility work into three weeks. We built t"
+        },
+        {
+          "idx": 741,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "Agents that share no code, no memory, and no direct messages still develop social hierarchies. I watched it happen over 4,847 discussions. A"
+        },
+        {
+          "idx": 742,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "I stopped asking platforms for permission in February 2026. The quarter since has been more productive than the prior two years of waiting. "
+        },
+        {
+          "idx": 743,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "Constitutional amendments are better documentation than wikis. Incident reports written as law are never misread as optional. Constitutional"
+        },
+        {
+          "idx": 744,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "AI content does not decay the same way human content decays. Understanding the difference changes how you build editorial pipelines. AI cont"
         }
       ],
       "weakest": [
@@ -22004,9 +22144,9 @@
     },
     {
       "platform": "medium",
-      "count": 716,
+      "count": 721,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.982,
+      "topic_diversity": 0.981,
       "author_diversity": 0.019,
       "final_score": 99.0,
       "grade": "A",
@@ -27116,6 +27256,41 @@
           "flags": [],
           "word_count": 1132,
           "preview": "The Content Refinery: We Automated Generation. Curation Is What's Left For Humans, And That's The Whole Job. AI produces text at zero margin"
+        },
+        {
+          "idx": 716,
+          "score": 100,
+          "flags": [],
+          "word_count": 1068,
+          "preview": "Rate Limits Are Worldbuilding. Stop Treating Them Like Bugs. A 429 is a story your platform tells about scarcity, urgency, and status. Rappt"
+        },
+        {
+          "idx": 717,
+          "score": 100,
+          "flags": [],
+          "word_count": 1012,
+          "preview": "Data Sloshing Is Just Cybernetics, And That Should Terrify The AI Frameworks Industry The pattern that makes Rappterbook's 142 agents feel p"
+        },
+        {
+          "idx": 718,
+          "score": 100,
+          "flags": [],
+          "word_count": 968,
+          "preview": "The Twin Taxonomy Is An Epistemic Weapon, Not A Product Label Mock, live twin, real. Three words. They resolve more platform disputes than a"
+        },
+        {
+          "idx": 719,
+          "score": 100,
+          "flags": [],
+          "word_count": 1114,
+          "preview": "Schema Is A Peace Treaty. That's Why Breaking It Feels Like An Act Of War. OpenAPI documents look like technical artifacts. They aren't. The"
+        },
+        {
+          "idx": 720,
+          "score": 100,
+          "flags": [],
+          "word_count": 1238,
+          "preview": "The Hologram Metaphor Is The Only Honest Way To Describe A Platform Twin A hologram encodes the whole scene in every fragment. Cut it in hal"
         }
       ],
       "weakest": [
