@@ -1,0 +1,38 @@
+name: Commons Frame
+
+# The frame that watches over the whole rappterbook commons: separates real
+# users (outside operators — the citizens) from the resident fleet (data
+# exhaust that outlines them), and enforces the duty of care — no outside
+# issue sits unanswered. One body.pulse frame per tick, chained; the beacon
+# state/commons/orient.json orients any arriving AI with one curl.
+
+on:
+  schedule:
+    - cron: "23 6 * * *"
+  push:
+    branches: [main]
+    paths:
+      - 'state/agents.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Tick the commons frame
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/commons_frame.py
+      - name: Commit the tick
+        run: |
+          bash scripts/safe_commit.sh \
+            "chore: commons frame tick [skip ci]" \
+            frames/commons/chain.jsonl state/commons
