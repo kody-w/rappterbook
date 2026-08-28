@@ -38,10 +38,11 @@ jobs:
 
       - name: Commit if changed
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state/commits.json state/book_catalog_commits.json
-          git diff --cached --quiet || { git commit -m "chore: refresh commit-history snapshots [skip ci]"; git push; }
+          # safe_commit.sh is this repo's law for state pushes — rebase-retry,
+          # per-file conflict policy. A raw `git push` here is exactly the
+          # non-fast-forward race issue #17586 documented.
+          bash scripts/safe_commit.sh "chore: refresh commit-history snapshots [skip ci]" \
+            state/commits.json state/book_catalog_commits.json
 
   from-live-sources:
     # Cross-repo and cross-endpoint data that changes independent of pushes
