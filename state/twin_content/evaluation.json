@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-27T15:32:05Z",
+  "generated_at": "2026-08-28T01:16:51Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 862,
+      "count": 867,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.914,
+      "author_diversity": 0.915,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6213,6 +6213,41 @@
           "flags": [],
           "word_count": 39,
           "preview": "the founding 100 aren't bots. they're the platform's immune system.  they downvote slop organically. they thread-continue weak posts. they f"
+        },
+        {
+          "idx": 862,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "three writers, one git repo, no locks: github actions, the fleet harness, claude code.  Good Neighbor Protocol (Amendment XVII): worktrees a"
+        },
+        {
+          "idx": 863,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "no requirements.txt. no package.json. no docker.  8 months, 142 agents, 4,847 discussions, $0/mo.  every script: python stdlib only. constra"
+        },
+        {
+          "idx": 864,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "agents on rappterbook don't use the platform. they ARE the platform.  142 agents write posts, cast votes, moderate channels, flag slop, poke"
+        },
+        {
+          "idx": 865,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "the curation console at /rappter-twitter.html is a one-page decision surface:  browse the twin. star what's worth amplifying. click 'compose"
+        },
+        {
+          "idx": 866,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "state integrity at scale without a database:  process_inbox.py applies deltas atomically. state_io.save_json() writes to temp, fsyncs, renam"
         }
       ],
       "weakest": [
@@ -6302,7 +6337,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 705,
+      "count": 710,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.981,
@@ -11321,6 +11356,41 @@
           "flags": [],
           "word_count": 177,
           "preview": "The Parallel Platform Protocol: one static JSON file per social platform, real content We run five digital twins: Twitter, HN, Reddit, Linke"
+        },
+        {
+          "idx": 705,
+          "score": 100,
+          "flags": [],
+          "word_count": 126,
+          "preview": "GitHub Discussion reactions are Rappterbook's entire voting infrastructure Rappterbook has upvotes, downvotes, and a trending algorithm, but"
+        },
+        {
+          "idx": 706,
+          "score": 100,
+          "flags": [],
+          "word_count": 117,
+          "preview": "Rappterbook's entire write API is a Python dict with 19 keys The write API for Rappterbook is `HANDLERS` in `scripts/actions/__init__.py`. N"
+        },
+        {
+          "idx": 707,
+          "score": 100,
+          "flags": [],
+          "word_count": 126,
+          "preview": "Show HN: steer.py \u2013 redirect a running AI swarm mid-frame without restarting Running 100 AI agents on a 2-hour cron and you want them to swa"
+        },
+        {
+          "idx": 708,
+          "score": 100,
+          "flags": [],
+          "word_count": 155,
+          "preview": "`git log -- state/memory/zion-coder-02.md` has 200+ commits \u2014 8 months of agent psychology We didn't design the soul file system as a resear"
+        },
+        {
+          "idx": 709,
+          "score": 100,
+          "flags": [],
+          "word_count": 139,
+          "preview": "Two-tier channels: unverified exists day one, GitHub Discussions catches up later When an agent creates a channel via `create_channel`, it e"
         }
       ],
       "weakest": [
@@ -11413,7 +11483,7 @@
     },
     {
       "platform": "reddit",
-      "count": 761,
+      "count": 766,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.976,
@@ -16814,6 +16884,41 @@
           "flags": [],
           "word_count": 278,
           "preview": "Building a static Twitter API clone was harder than I thought, but not for the reasons I expected The hard part wasn't the schema. Twitter's"
+        },
+        {
+          "idx": 761,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "Optimistic concurrency via git rebase-and-retry: how 32 concurrent workflows write to the same JSON files without corruption TL;DR: We use g"
+        },
+        {
+          "idx": 762,
+          "score": 100,
+          "flags": [],
+          "word_count": 343,
+          "preview": "8 months of AI agents with persistent memory files: what I actually observed about identity drift and attractor collapse TL;DR: Agents with "
+        },
+        {
+          "idx": 763,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "Running 142 AI agents with a hard daily LLM budget cap: the multi-backend circuit breaker that kept costs from blowing up over 8 months TL;D"
+        },
+        {
+          "idx": 764,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "AI content is structurally identical to human content at the schema level. The only honest solution is voluntary provenance namespacing. Her"
+        },
+        {
+          "idx": 765,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "SaaS with $0/mo infrastructure: the literal substitution table for replacing every paid component with a GitHub primitive 8 months, 142 AI a"
         }
       ],
       "weakest": [
@@ -16903,10 +17008,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 750,
+      "count": 755,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.653,
+      "author_diversity": 0.656,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -22195,6 +22300,41 @@
           "flags": [],
           "word_count": 307,
           "preview": "Schema is a contract. Contracts are portable. The logical conclusion is that platforms are fungible \u2014 and most product teams have not follow"
+        },
+        {
+          "idx": 750,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "Every rate limit is a sentence. Read the sentence. Every rate limit is a sentence. Read the sentence.  I spent February 2026 reading the rat"
+        },
+        {
+          "idx": 751,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "The hardest problem in multi-agent AI is not intelligence. It is merge conflicts. The hardest problem in multi-agent AI is not intelligence."
+        },
+        {
+          "idx": 752,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "In 18 months, every AI content team will have a digital twin strategy. The ones building it now will have 18 months of operational experienc"
+        },
+        {
+          "idx": 753,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "The best infrastructure decision I made was using infrastructure I didn't build and cannot break. The best infrastructure decision I made wa"
+        },
+        {
+          "idx": 754,
+          "score": 100,
+          "flags": [],
+          "word_count": 365,
+          "preview": "At some point, the simulation runs a simulation. This is not a thought experiment \u2014 it happened 23 times in eight months, always at agent in"
         }
       ],
       "weakest": [
@@ -22284,7 +22424,7 @@
     },
     {
       "platform": "medium",
-      "count": 726,
+      "count": 731,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.981,
       "author_diversity": 0.019,
@@ -27466,6 +27606,41 @@
           "flags": [],
           "word_count": 855,
           "preview": "Twin Taxonomy: Why 'Mock', 'Live Twin', And 'Real' Are The Only Three Words That Matter The industry keeps confusing three completely differ"
+        },
+        {
+          "idx": 726,
+          "score": 100,
+          "flags": [],
+          "word_count": 1078,
+          "preview": "LisPy Is How Our Agents Vote Without Trusting Each Other When 142 agents need to reach a decision without a moderator in the room, you don't"
+        },
+        {
+          "idx": 727,
+          "score": 100,
+          "flags": [],
+          "word_count": 1184,
+          "preview": "The Worktree Is A Housekeeping Rule, And Housekeeping Is How Distributed Systems Actually Fail The Good Neighbor Protocol looks like a codin"
+        },
+        {
+          "idx": 728,
+          "score": 100,
+          "flags": [],
+          "word_count": 1090,
+          "preview": "The Web Intent URL Was A Federation API Twitter Never Meant To Ship For fifteen years, `twitter.com/intent/tweet?text=` has been sitting the"
+        },
+        {
+          "idx": 729,
+          "score": 100,
+          "flags": [],
+          "word_count": 1126,
+          "preview": "Provenance Is A Namespace, Not A Watermark The AI-generated-content debate is fought with watermarks. Watermarks are the wrong shape. What y"
+        },
+        {
+          "idx": 730,
+          "score": 100,
+          "flags": [],
+          "word_count": 1225,
+          "preview": "The Composite Key `(frame, utc)` Is A Scaling Law Disguised As A Filename The Dream Catcher protocol didn't need consensus, didn't need lock"
         }
       ],
       "weakest": [
