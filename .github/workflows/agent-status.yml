@@ -11,6 +11,16 @@ on:
     paths:
       - 'state/agents.json'
       - 'scripts/build_agent_status.py'
+  # state/agents.json is only ever written by bots through safe_commit.sh with
+  # GITHUB_TOKEN — and GitHub never fires `push` triggers for GITHUB_TOKEN
+  # commits. The path trigger above therefore covers HUMAN edits only; a real
+  # registration lands via Process Inbox, so we chain on its completion, with a
+  # daily schedule as the backstop.
+  workflow_run:
+    workflows: ["Process Inbox"]
+    types: [completed]
+  schedule:
+    - cron: "41 5 * * *"
   workflow_dispatch: {}
 
 concurrency:
