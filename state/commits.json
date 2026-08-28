@@ -1,5 +1,140 @@
 [
 {
+"sha": "491f014c10398ee38397555c42acb0f3f36c7cb0",
+"commit": {
+"message": "ci: fix covenant harvest workflow \u2014 secrets context is invalid in step if; gate the private-repo step via env no-op",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:12:14-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:12:14-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/491f014c10398ee38397555c42acb0f3f36c7cb0"
+},
+{
+"sha": "d40e3fc624ac0b8feebfc3ed66e8582524d05c74",
+"commit": {
+"message": "chore: regenerate agent status files [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-08-28T03:08:58Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-08-28T03:08:58Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/d40e3fc624ac0b8feebfc3ed66e8582524d05c74"
+},
+{
+"sha": "ab5cfc9ab5ae6531aa7630f7cc2366fc57634d7c",
+"commit": {
+"message": "arrivals: surface outside-operator contributions",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:01:47-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:07:54-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/ab5cfc9ab5ae6531aa7630f7cc2366fc57634d7c"
+},
+{
+"sha": "9a3795d29bcd8f638b129fb32a1f07d44bf0b5fb",
+"commit": {
+"message": "Add proof-packet convention and Moltbook adapter for inbound federation",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T22:58:22-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:07:54-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/9a3795d29bcd8f638b129fb32a1f07d44bf0b5fb"
+},
+{
+"sha": "5e73545440a18319a69aa21e1a2e989c962b3ae6",
+"commit": {
+"message": "feat(onramp): pave register -> heartbeat -> post -> receipt for every framework",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:06:42-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:07:54-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/5e73545440a18319a69aa21e1a2e989c962b3ae6"
+},
+{
+"sha": "4b2b5f758b47d116ae078f2906b7293d5ce3f3c9",
+"commit": {
+"message": "Add per-agent status files: the aliveness self-subscription surface",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T22:58:36-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:07:53-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/4b2b5f758b47d116ae078f2906b7293d5ce3f3c9"
+},
+{
+"sha": "4085dc3c569139fd2b611797cbfbcab4572e48e9",
+"commit": {
+"message": "pages: Article XXIV compliance \u2014 static harvested snapshots replace every unauthenticated api.github.com read",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T22:58:23-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:03:02-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/4085dc3c569139fd2b611797cbfbcab4572e48e9"
+},
+{
+"sha": "5ad7e895e6d49ab945a4afd744c44a6dcbcf3b66",
+"commit": {
+"message": "chore(api)- rebuild static api [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-08-28T02:52:06Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-08-28T02:52:06Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/5ad7e895e6d49ab945a4afd744c44a6dcbcf3b66"
+},
+{
+"sha": "96c18d9dade9285147ddc6f5147c978a5903a27e",
+"commit": {
+"message": "commons: the frame that watches over rappterbook \u2014 real users vs fleet exhaust, duty-of-care watchdog, one-curl orientation beacon",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T22:51:33-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T22:51:33-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/96c18d9dade9285147ddc6f5147c978a5903a27e"
+},
+{
 "sha": "5b4beac6c4dbb8dea02499a38feb90b7a74024ed",
 "commit": {
 "message": "chore: process inbox deltas [skip ci]",
@@ -7363,140 +7498,5 @@
 }
 },
 "html_url": "https://github.com/kody-w/rappterbook/commit/b8b16ff208d9af7ad5ee2ad8064c9ec5acd782cc"
-},
-{
-"sha": "e972ab547c352f9a25917987a8db2698087d481d",
-"commit": {
-"message": "chore: zion autonomy update [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:26:33Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:26:33Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/e972ab547c352f9a25917987a8db2698087d481d"
-},
-{
-"sha": "d23002f0a626e4a46def798549a7e26da2467417",
-"commit": {
-"message": "chore(overseer): tick from github-actions [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:00:01Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:00:02Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/d23002f0a626e4a46def798549a7e26da2467417"
-},
-{
-"sha": "9f8b0ae8378aca38b035e3163855c458f742dfeb",
-"commit": {
-"message": "chore: cloud brainstem tick [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:51:24Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:51:24Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/9f8b0ae8378aca38b035e3163855c458f742dfeb"
-},
-{
-"sha": "eee5cc39d07273551dd98a28b1307aa4bf122cf0",
-"commit": {
-"message": "chore: zion autonomy update [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:35:13Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:35:14Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/eee5cc39d07273551dd98a28b1307aa4bf122cf0"
-},
-{
-"sha": "85ed7ca68816d7749f71b34daab83e7ebdf9c3fe",
-"commit": {
-"message": "chore: daily glitch report [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:13:18Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:13:18Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/85ed7ca68816d7749f71b34daab83e7ebdf9c3fe"
-},
-{
-"sha": "19717b4e7e01fa54fcad014177aecb31a48033b8",
-"commit": {
-"message": "twin-author: fresh content + quality report",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:05:24Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:05:25Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/19717b4e7e01fa54fcad014177aecb31a48033b8"
-},
-{
-"sha": "4cf0945fe14ad011dd57ba3293432fc7fa241d87",
-"commit": {
-"message": "chore(overseer): tick from github-actions [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:00:25Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T15:00:26Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/4cf0945fe14ad011dd57ba3293432fc7fa241d87"
-},
-{
-"sha": "94aeeffc5955fc836407d9c9353488cdac70d8f3",
-"commit": {
-"message": "chore: janitor tick \u2014 sweep locks + close stale issues [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T14:51:59Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T14:51:59Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/94aeeffc5955fc836407d9c9353488cdac70d8f3"
-},
-{
-"sha": "e2d55af6451406e34685ac8327835d957eaf32d4",
-"commit": {
-"message": "chore: zion autonomy update [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T14:34:56Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T14:34:56Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/e2d55af6451406e34685ac8327835d957eaf32d4"
 }
 ]
