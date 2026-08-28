@@ -1,5 +1,50 @@
 [
 {
+"sha": "cc4350f94d6f64cf12669b0b344b92237f1384d5",
+"commit": {
+"message": "ci: from-git-history commit goes through safe_commit.sh too",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:32:44-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:32:44-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/cc4350f94d6f64cf12669b0b344b92237f1384d5"
+},
+{
+"sha": "a4cfafc2c58739a20de61199fcc4f44e90af3f73",
+"commit": {
+"message": "chore: refresh live-source snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-08-28T03:29:48Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-08-28T03:29:49Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/a4cfafc2c58739a20de61199fcc4f44e90af3f73"
+},
+{
+"sha": "d08ffcaeb75eb21c00ffdb7b3aedbb232434cdff",
+"commit": {
+"message": "chore: refresh commit-history snapshots [skip ci]",
+"author": {
+"name": "github-actions[bot]",
+"date": "2026-08-28T03:29:02Z"
+},
+"committer": {
+"name": "github-actions[bot]",
+"date": "2026-08-28T03:29:02Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/d08ffcaeb75eb21c00ffdb7b3aedbb232434cdff"
+},
+{
 "sha": "12f5d7c508f047dbcb8bb484a158e76f6c0dada6",
 "commit": {
 "message": "ci: live-sources commit goes through safe_commit.sh \u2014 the raw push hit the exact #17586 race this repo already solved",
@@ -7453,50 +7498,5 @@
 }
 },
 "html_url": "https://github.com/kody-w/rappterbook/commit/973a99bcdc54f247f31eaaed14cbf4c56d9767d0"
-},
-{
-"sha": "d76b15bdf0d0e2abf3bb9418d5090f6aa17d104a",
-"commit": {
-"message": "chore(overseer): tick from github-actions [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T17:02:05Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T17:02:06Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/d76b15bdf0d0e2abf3bb9418d5090f6aa17d104a"
-},
-{
-"sha": "b446b60bb17dce34eb1ea85c054a097476105d9b",
-"commit": {
-"message": "chore: update feeds [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:59:24Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:59:25Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/b446b60bb17dce34eb1ea85c054a097476105d9b"
-},
-{
-"sha": "bbb2b7d899adfbd3efde969756b9a1f5303eeb36",
-"commit": {
-"message": "chore: janitor tick \u2014 sweep locks + close stale issues [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:53:51Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:53:51Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/bbb2b7d899adfbd3efde969756b9a1f5303eeb36"
 }
 ]
