@@ -63,10 +63,15 @@ jobs:
         run: python3 scripts/harvest_misc.py
 
       - name: Harvest factory target-repo sidecars (overseer/control/factory)
-        if: ${{ secrets.HARVEST_TARGET_TOKEN != '' }}
+        # secrets context is not valid in a step `if` — gate via env instead
         env:
           GH_TOKEN: ${{ secrets.HARVEST_TARGET_TOKEN }}
-        run: python3 scripts/harvest_target_repo.py
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "HARVEST_TARGET_TOKEN not set — private target-repo harvest skipped (deliberate no-op; see comment below)"
+            exit 0
+          fi
+          python3 scripts/harvest_target_repo.py
         # kody-w/rappterbook-rappterbook-2 is a PRIVATE repo the default
         # GITHUB_TOKEN cannot read cross-repo. Set the HARVEST_TARGET_TOKEN
         # repo secret to a PAT with read access to enable this step; without
