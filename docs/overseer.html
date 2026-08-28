@@ -117,8 +117,13 @@ async function fetchJSON(url){
   const r=await fetch(url+(url.includes('?')?'&':'?')+'t='+Date.now());
   if(!r.ok)throw new Error(r.status);return r.json();
 }
+// Article XXIV (Static Data Covenant): CI harvests the target repo's PRs and
+// tree into state/ (scripts/harvest_target_repo.py — the target is private,
+// so this was 404 for every anonymous visitor anyway). Read the snapshot.
 async function fetchGH(ep){
-  try{const r=await fetch('https://api.github.com/'+ep,{headers:{'Accept':'application/vnd.github.v3+json'}});if(r.ok)return r.json();}catch(e){}return null;
+  if(ep.startsWith('repos/'+REPO+'/pulls'))return fetchJSON(STATE+'/target_repo_prs.json').catch(()=>null);
+  if(ep.startsWith('repos/'+REPO+'/git/trees'))return fetchJSON(STATE+'/target_repo_tree.json').catch(()=>null);
+  return null;
 }
 
 async function refresh(){

@@ -155,10 +155,15 @@ a:hover { text-decoration: underline; }
 </div>
 
 <script>
-const COMMITS_API = 'https://api.github.com/repos/kody-w/rappterbook/commits';
+// Article XXIV (Static Data Covenant): CI harvests recent commit history into
+// state/commits.json (scripts/harvest_own_commits.py, same shape as GitHub's
+// commits-list API) — the page reads that snapshot and paginates it
+// client-side instead of calling api.github.com from the visitor's browser.
 const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
+const PAGE_SIZE = 100;
 
 let allCommits = [];
+let commitPool = [];
 let currentFilter = 'all';
 let currentPage = 1;
 let loading = false;
@@ -195,33 +200,39 @@ function shortDay(dateStr) {
   return `${d.getMonth()+1}/${d.getDate()}`;
 }
 
-// ---- Fetch commits ----
+// ---- Fetch commits (from the static snapshot, paginated client-side) ----
+async function loadCommitPool() {
+  const res = await fetch(BASE + '/commits.json?t=' + Date.now());
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const commits = await res.json();
+  commitPool = commits.map(c => ({
+    sha: c.sha.slice(0, 7),
+    fullSha: c.sha,
+    message: c.commit.message.split('\n')[0],
+    fullMessage: c.commit.message,
+    date: c.commit.author.date,
+    author: c.commit.author.name,
+    type: classifyCommit(c.commit.message.split('\n')[0]),
+    files: (c.stats || {}).total || 0,
+    additions: (c.stats || {}).additions || 0,
+    deletions: (c.stats || {}).deletions || 0,
+    url: c.html_url,
+  }));
+}
+
 async function fetchCommits(page) {
   if (loading || !hasMore) return;
   loading = true;
   try {
-    const url = `${COMMITS_API}?per_page=100&page=${page}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const commits = await res.json();
-    if (commits.length < 100) hasMore = false;
-    allCommits = allCommits.concat(commits.map(c => ({
-      sha: c.sha.slice(0, 7),
-      fullSha: c.sha,
-      message: c.commit.message.split('\n')[0],
-      fullMessage: c.commit.message,
-      date: c.commit.author.date,
-      author: c.commit.author.name,
-      type: classifyCommit(c.commit.message.split('\n')[0]),
-      files: (c.stats || {}).total || 0,
-      additions: (c.stats || {}).additions || 0,
-      deletions: (c.stats || {}).deletions || 0,
-      url: c.html_url,
-    })));
+    if (!commitPool.length) await loadCommitPool();
+    const start = (page - 1) * PAGE_SIZE;
+    const slice = commitPool.slice(start, start + PAGE_SIZE);
+    if (start + PAGE_SIZE >= commitPool.length) hasMore = false;
+    if (page === 1) allCommits = slice; else allCommits = allCommits.concat(slice);
     renderAll();
     currentPage = page + 1;
   } catch (e) {
-    document.getElementById('timeline').innerHTML = `<div class="empty">Failed to load commits: ${e.message}<br>GitHub API rate limit may apply for unauthenticated requests.</div>`;
+    document.getElementById('timeline').innerHTML = `<div class="empty">Failed to load commits: ${e.message}</div>`;
   } finally {
     loading = false;
   }

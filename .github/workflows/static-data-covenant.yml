@@ -1,0 +1,94 @@
+name: Static Data Covenant
+
+# Article XXIV (kody-w/RAR CONSTITUTION.md): pages read committed static
+# data, never the GitHub API. This workflow is the CI harvester behind that
+# for rappterbook — see scripts/harvest_*.py for what each snapshot replaces
+# and which page reads it.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'state/**'
+  schedule:
+    - cron: '17 */6 * * *'   # cross-repo / live data: not tied to a push here
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  discussions: read
+
+jobs:
+  from-git-history:
+    # No token needed — derived entirely from this repo's own commit log.
+    # Runs on every push so changelog.html / steward.html / catalog.html's
+    # Time Machine stay current with what just shipped.
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Harvest own commit history
+        run: python3 scripts/harvest_own_commits.py
+
+      - name: Harvest catalog Time Machine history
+        run: python3 scripts/harvest_catalog_history.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/commits.json state/book_catalog_commits.json
+          git diff --cached --quiet || { git commit -m "chore: refresh commit-history snapshots [skip ci]"; git push; }
+
+  from-live-sources:
+    # Cross-repo and cross-endpoint data that changes independent of pushes
+    # to rappterbook — runs on a schedule as well as after every push.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Harvest weekend.html blog + events sidecars
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/harvest_weekend_data.py
+
+      - name: Harvest rapp-console.js / lispy-playground.html misc sidecars
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/harvest_misc.py
+
+      - name: Harvest factory target-repo sidecars (overseer/control/factory)
+        if: ${{ secrets.HARVEST_TARGET_TOKEN != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.HARVEST_TARGET_TOKEN }}
+        run: python3 scripts/harvest_target_repo.py
+        # kody-w/rappterbook-rappterbook-2 is a PRIVATE repo the default
+        # GITHUB_TOKEN cannot read cross-repo. Set the HARVEST_TARGET_TOKEN
+        # repo secret to a PAT with read access to enable this step; without
+        # it, overseer/control/factory keep serving their last committed
+        # snapshot instead of silently going unauthenticated.
+
+      - name: Harvest new Discussions (incremental)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          latest=$(gh api graphql -f query='{ repository(owner:"kody-w",name:"rappterbook"){ discussions(first:1, orderBy:{field:CREATED_AT,direction:DESC}){ nodes { number } } } }' --jq '.data.repository.discussions.nodes[0].number // 0')
+          echo "newest discussion: $latest"
+          python3 scripts/harvest_discussions.py --min-number 1 --max-number "$latest"
+        # Idempotent and shard-based (state/discussions/NNNNN-NNNNN.json) —
+        # a run only fetches numbers missing from their shard, so this stays
+        # cheap once the backlog is caught up.
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/blog_posts.json state/owner_events.json state/newest_issue.json \
+                  state/github_zen.json state/target_repo_prs.json state/target_repo_tree.json \
+                  state/discussions/ 2>/dev/null || true
+          git diff --cached --quiet || { git commit -m "chore: refresh live-source snapshots [skip ci]"; git push; }

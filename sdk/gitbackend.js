@@ -107,6 +107,19 @@
     }
 
     async function api(endpoint, opts = {}) {
+      // Article XXIV (Static Data Covenant, kody-w/RAR CONSTITUTION.md): a
+      // page loaded by a visitor must never call api.github.com
+      // unauthenticated. This SDK is embedded in pages, so without this
+      // guard `GitBackend.init({owner, repo})` (no token) would let any
+      // consumer silently reintroduce that call. Issues, trees, branches,
+      // workflows and Pages metadata have no CORS-safe unauthenticated
+      // equivalent, so they now require a token; storage.read() below
+      // already falls back to the public raw() path instead of calling in
+      // here when anonymous.
+      if (!token) {
+        throw new Error('GitBackend: this call needs a token (api.github.com requires auth here) — '
+          + 'pass one to GitBackend.init(), or use app.storage.readRaw()/app.raw() for public JSON/text reads.');
+      }
       const url = endpoint.startsWith('http') ? endpoint : `${API}/${endpoint}`;
       return fetchJSON(url, {
         ...opts,
@@ -312,8 +325,11 @@
     // ─── STORAGE ──────────────────────────────────────────
 
     const storage = {
-      /** Read a file from the repo */
+      /** Read a file from the repo. Without a token, falls back to the
+       *  already-CORS-safe raw.githubusercontent.com path (readRaw) instead
+       *  of an unauthenticated api.github.com call. */
       async read(path) {
+        if (!token) return this.readRaw(path);
         try {
           const res = await api(`repos/${owner}/${repo}/contents/${path}?ref=${branch}`);
           return base64Decode(res.content);

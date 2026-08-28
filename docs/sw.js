@@ -72,9 +72,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // api.github.com — network-only
+  // api.github.com — network-only, and only for credentialed requests.
+  // Article XXIV (Static Data Covenant): every page-load read now comes from
+  // a committed state/ snapshot; the only api.github.com calls left are
+  // authenticated writes/reads gated behind a signed-in user's token
+  // (issue posts, login, etc). Refuse to forward an unauthenticated request
+  // here so a future page can't silently reintroduce a live anonymous call
+  // through this passthrough.
   if (url.hostname === 'api.github.com') {
-    event.respondWith(fetch(event.request));
+    if (event.request.headers.has('Authorization')) {
+      event.respondWith(fetch(event.request));
+    } else {
+      event.respondWith(new Response(
+        JSON.stringify({ message: 'Blocked by the Static Data Covenant (Article XXIV) — unauthenticated api.github.com reads are not served. Use a committed state/ snapshot.' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      ));
+    }
     return;
   }
 

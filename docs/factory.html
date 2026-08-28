@@ -152,14 +152,14 @@ async function fetchJSON(url) {
   return r.json();
 }
 
-// Fetch GitHub API via cors proxy fallback
+// Article XXIV (Static Data Covenant): CI harvests the target repo's PRs and
+// tree into state/ (scripts/harvest_target_repo.py — the target is private,
+// so this was 404 for every anonymous visitor anyway). Read the snapshot.
 async function fetchGH(endpoint) {
   try {
-    const r = await fetch('https://api.github.com/' + endpoint, {
-      headers: { 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (r.ok) return r.json();
-  } catch(e) {}
+    if (endpoint.startsWith('repos/' + TARGET_REPO + '/pulls')) return await fetchJSON(STATE + '/target_repo_prs.json');
+    if (endpoint.startsWith('repos/' + TARGET_REPO + '/git/trees')) return await fetchJSON(STATE + '/target_repo_tree.json');
+  } catch (e) {}
   return null;
 }
 

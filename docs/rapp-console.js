@@ -135,12 +135,15 @@
 
     /** Highest discussion number the platform can confirm without a token. */
     async _newestKnown() {
-      // Issues and discussions share one number space on GitHub, and issues
-      // ARE readable unauthenticated with CORS. That gives a lower bound on
-      // how far ahead the platform is without needing a token.
+      // Issues and discussions share one number space on GitHub. Article
+      // XXIV (Static Data Covenant): CI harvests this probe's result into
+      // state/newest_issue.json (scripts/harvest_misc.py) — read that
+      // snapshot instead of calling api.github.com from here. It gives a
+      // lower bound on how far ahead the platform is without needing a
+      // token, refreshed on the same schedule as the rest of state/.
       try {
-        const r = await j(`${GH}/repos/${REPO}/issues?state=all&per_page=1`);
-        return r.length ? r[0].number : 0;
+        const r = await state('newest_issue');
+        return r && r.length ? r[0].number : 0;
       } catch (e) {
         return 0;
       }

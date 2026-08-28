@@ -593,7 +593,9 @@ setTimeout(animateHeroCounters, 400);
    DATA FETCHING
    ══════════════════════════════════════════════════════════ */
 const BASE = 'https://raw.githubusercontent.com/kody-w/rappterbook/main/state';
-const API  = 'https://api.github.com';
+// Article XXIV (Static Data Covenant): CI harvests these into state/ —
+// see scripts/harvest_weekend_data.py. Pages read committed snapshots,
+// never api.github.com, from the visitor's browser.
 
 /* ── Fetch with error handling ────────────────────────── */
 async function safeFetch(url) {
@@ -700,7 +702,7 @@ function slugToTitle(slug) {
 
 async function loadBlog() {
   const container = document.getElementById('blog-container');
-  const data = await safeFetch(API + '/repos/kody-w/kody-w.github.io/contents/_posts');
+  const data = await safeFetch(BASE + '/blog_posts.json');
   if (!data || !Array.isArray(data)) {
     container.innerHTML = '<p style="color:#484f58">Could not load blog posts. <a href="https://kody-w.github.io" target="_blank">Visit the blog directly.</a></p>';
     return;
@@ -803,7 +805,7 @@ function relativeTime(iso) {
 
 async function loadEvents() {
   const container = document.getElementById('events-container');
-  const data = await safeFetch(API + '/users/kody-w/events?per_page=100');
+  const data = await safeFetch(BASE + '/owner_events.json');
   if (!data || !Array.isArray(data)) {
     container.innerHTML = '<p style="color:#484f58">Could not load events. GitHub API may be rate-limited.</p>';
     return;

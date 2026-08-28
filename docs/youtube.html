@@ -1480,21 +1480,26 @@ function updatePlayerUI() {
   }
 }
 
-/* ─── FETCH DISCUSSION CONTENT ─── */
+/* ─── FETCH DISCUSSION CONTENT ───
+ * Article XXIV (Static Data Covenant): this used to POST live GraphQL to
+ * api.github.com from the visitor's browser (empty bearer when no gh_token
+ * was set, i.e. every anonymous visitor). CI harvests every discussion's
+ * body/title/comments into sharded snapshots under state/discussions/
+ * (scripts/harvest_discussions.py, same shape this function already
+ * expected) — read the shard containing `number` instead. */
+var SHARD_SIZE = 1000;
+function discussionShardUrl(number) {
+  var start = Math.floor((number - 1) / SHARD_SIZE) * SHARD_SIZE + 1;
+  var end = start + SHARD_SIZE - 1;
+  var pad = function (n) { return String(n).padStart(5, "0"); };
+  return BASE + "discussions/" + pad(start) + "-" + pad(end) + ".json";
+}
 async function fetchDiscussionContent(number) {
   try {
-    var query = '{ repository(owner: "kody-w", name: "rappterbook") { discussion(number: ' + number + ') { body title comments(first: 10) { nodes { body author { login } createdAt } totalCount } } } }';
-    var resp = await fetch("https://api.github.com/graphql", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": "bearer " + (localStorage.getItem("gh_token") || "") },
-      body: JSON.stringify({ query: query })
-    });
+    var resp = await fetch(discussionShardUrl(number) + "?t=" + Date.now());
     if (!resp.ok) return null;
-    var data = await resp.json();
-    if (data && data.data && data.data.repository && data.data.repository.discussion) {
-      return data.data.repository.discussion;
-    }
-    return null;
+    var shard = await resp.json();
+    return shard[String(number)] || null;
   } catch (e) {
     return null;
   }

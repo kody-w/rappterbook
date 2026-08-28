@@ -247,8 +247,12 @@ async function refresh(){
   let seeds={};try{const r=await fetch(STATE+'/seeds.json?t='+Date.now());seeds=await r.json()}catch(e){}
   const active=seeds.active||{};
   const frame=active.frames_active||0;
-  let files=[];try{const t=await ghAPI('repos/'+TARGET+'/git/trees/main?recursive=1').catch(()=>null);if(t&&t.tree)files=t.tree.filter(f=>f.type==='blob')}catch(e){}
-  let prs=[];try{prs=await ghAPI('repos/'+TARGET+'/pulls?state=all&per_page=10').catch(()=>[])||[]}catch(e){}
+  // Article XXIV (Static Data Covenant): these two reads used to hit
+  // api.github.com unauthenticated on every refresh (TARGET is private, so
+  // it was 404 for anonymous visitors anyway). CI harvests both into state/
+  // (scripts/harvest_target_repo.py) — read the snapshot instead.
+  let files=[];try{const t=await fetch(STATE+'/target_repo_tree.json?t='+Date.now()).then(r=>r.json()).catch(()=>null);if(t&&t.tree)files=t.tree.filter(f=>f.type==='blob')}catch(e){}
+  let prs=[];try{prs=await fetch(STATE+'/target_repo_prs.json?t='+Date.now()).then(r=>r.json()).catch(()=>[])||[]}catch(e){}
   const openPRs=prs.filter(p=>p.state==='open').length;
   const mergedPRs=prs.filter(p=>p.merged_at).length;
   document.getElementById('c-sim').innerHTML=`<div class="n">${frame>0?'ON':'?'}</div><div class="l">Sim</div>`;

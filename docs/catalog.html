@@ -411,14 +411,17 @@ function toggleTheme() {
 }
 
 // ── Time Machine (git = free Wayback Machine) ──
-const GH_API = 'https://api.github.com/repos/kody-w/rappterbook';
+// Article XXIV (Static Data Covenant): CI harvests this listing into
+// state/book_catalog_commits.json (scripts/harvest_catalog_history.py) —
+// read the snapshot instead of api.github.com. travelTo() below already
+// used raw.githubusercontent.com at a pinned sha, which is covenant-safe.
 let currentSHA = 'main';
 function openTimeMachine(){document.getElementById('tmPanel').classList.add('open');document.getElementById('tmOverlay').classList.add('open');loadGitHistory();}
 function closeTM(){document.getElementById('tmPanel').classList.remove('open');document.getElementById('tmOverlay').classList.remove('open');}
 async function loadGitHistory(){
   const el=document.getElementById('tmCommits');
   try{
-    const r=await fetch(`${GH_API}/commits?path=state/book_catalog.json&per_page=20`);
+    const r=await fetch(`${RAW}/state/book_catalog_commits.json?t=${Date.now()}`);
     if(!r.ok)throw new Error(r.status);const commits=await r.json();
     if(!commits.length){el.innerHTML='<div style="color:var(--text-light);font-size:.85em">No history</div>';return;}
     el.innerHTML=commits.map((c,i)=>{

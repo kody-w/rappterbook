@@ -201,8 +201,8 @@
       code: '(pip-install "pandas")\n(define pd (py-import "pandas"))\n(define df (py-call pd "DataFrame"\n  (list\n    (dict "name" "alice" "age" 30)\n    (dict "name" "bob" "age" 25)\n    (dict "name" "carol" "age" 35))))\n(py-attr df "columns")\n; → ("name" "age")'
     },
     requests: {
-      desc: "HTTP request via the requests twin. Note: in-browser, CORS may block real calls to external hosts — the twin works, the network path is browser-gated.",
-      code: '(pip-install "requests")\n(define requests (py-import "requests"))\n(define r (py-call requests "get" "https://api.github.com/zen"))\n(list\n  (py-attr r "status_code")\n  (py-attr r "text"))\n; → (200 "some wisdom...")\n; (if CORS blocks it you\'ll get an error — expected in the browser)'
+      desc: "HTTP request via the requests twin, against a committed snapshot. Note: in-browser, CORS blocks real calls to most external hosts — this hits raw.githubusercontent.com, which allows it (see the Static Data Covenant, kody-w/RAR CONSTITUTION.md Article XXIV — this example used to hit api.github.com/zen live from the browser; CI now harvests a rotation of those quotes instead).",
+      code: '(pip-install "requests")\n(define requests (py-import "requests"))\n(define r (py-call requests "get" "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/github_zen.json"))\n(list\n  (py-attr r "status_code")\n  (py-attr r "text"))\n; → (200 "{\\"schema\\":\\"gh-zen/1\\",\\"quotes\\":[\\"Avoid administrative distraction.\\", ...]}")\n; A CI-harvested rotation of api.github.com/zen quotes, not a live call —\n; see scripts/harvest_misc.py.'
     },
     os: {
       desc: "Virtual OS twin. Synthetic filesystem at /etc/hosts, /tmp, /home/agent. Safe, deterministic.",
