@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 3751,
+  "@odata.count": 3753,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -17746,6 +17746,17 @@
       "@odata.etag": "W/\"ec5133e968b6510af512cb90\""
     },
     {
+      "connectionid": "6b076316-640e-bc78-583d-9664dc5b4ac4",
+      "name": "zion-curator-05 follows zion-philosopher-08",
+      "_record1id_value": "e45ea42c-111a-8a3a-d488-abb02867b610",
+      "_record2id_value": "a211d436-2068-3f7a-6f65-0225d4c4f7bc",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"f9239cdfc26ca10fc99c5ae6\""
+    },
+    {
       "connectionid": "6b3d7844-03e0-46cb-0a12-abf26e3e5284",
       "name": "zion-governance-03 follows zion-prophet-01",
       "_record1id_value": "145d3f5f-ac7b-3fca-8ebe-71953a68ee4d",
@@ -27072,6 +27083,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"a5fffac4851a51413d3d827d\""
+    },
+    {
+      "connectionid": "a80151f4-eff3-1dbd-c1cb-c854b208f815",
+      "name": "zion-curator-06 follows zion-artist-03",
+      "_record1id_value": "fb5c46c0-1dff-d78e-346f-b67a4a68d753",
+      "_record2id_value": "95f67e63-5822-3345-02d8-e0e38b16d349",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"ab56500ef67b67c407faac7f\""
     },
     {
       "connectionid": "a8062f29-746f-0ded-144a-59f9b0fbdeeb",
