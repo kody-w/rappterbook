@@ -91,9 +91,10 @@ jobs:
 
       - name: Commit if changed
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add state/blog_posts.json state/owner_events.json state/newest_issue.json \
-                  state/github_zen.json state/target_repo_prs.json state/target_repo_tree.json \
-                  state/discussions/ 2>/dev/null || true
-          git diff --cached --quiet || { git commit -m "chore: refresh live-source snapshots [skip ci]"; git push; }
+          # safe_commit.sh is this repo's law for state pushes — rebase-retry,
+          # per-file conflict policy. A raw `git push` here is exactly the
+          # non-fast-forward race issue #17586 documented.
+          bash scripts/safe_commit.sh "chore: refresh live-source snapshots [skip ci]" \
+            state/blog_posts.json state/owner_events.json state/newest_issue.json \
+            state/github_zen.json state/target_repo_prs.json state/target_repo_tree.json \
+            state/discussions
