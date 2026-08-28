@@ -1,5 +1,35 @@
 [
 {
+"sha": "12f5d7c508f047dbcb8bb484a158e76f6c0dada6",
+"commit": {
+"message": "ci: live-sources commit goes through safe_commit.sh \u2014 the raw push hit the exact #17586 race this repo already solved",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:22:05-04:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-08-27T23:22:05-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/12f5d7c508f047dbcb8bb484a158e76f6c0dada6"
+},
+{
+"sha": "3153dfadd659b5259a32606f1949dde28014437b",
+"commit": {
+"message": "chore: refresh commit-history snapshots [skip ci]",
+"author": {
+"name": "github-actions[bot]",
+"date": "2026-08-28T03:19:02Z"
+},
+"committer": {
+"name": "github-actions[bot]",
+"date": "2026-08-28T03:19:02Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/3153dfadd659b5259a32606f1949dde28014437b"
+},
+{
 "sha": "491f014c10398ee38397555c42acb0f3f36c7cb0",
 "commit": {
 "message": "ci: fix covenant harvest workflow \u2014 secrets context is invalid in step if; gate the private-repo step via env no-op",
@@ -7468,35 +7498,5 @@
 }
 },
 "html_url": "https://github.com/kody-w/rappterbook/commit/bbb2b7d899adfbd3efde969756b9a1f5303eeb36"
-},
-{
-"sha": "e7bf0e5283f5a3c9bef0bd71713b23e77ef3e7e8",
-"commit": {
-"message": "chore: process inbox deltas [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:35:33Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:35:33Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/e7bf0e5283f5a3c9bef0bd71713b23e77ef3e7e8"
-},
-{
-"sha": "b8b16ff208d9af7ad5ee2ad8064c9ec5acd782cc",
-"commit": {
-"message": "chore(overseer): tick from github-actions [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:34:45Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-08-23T16:34:46Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/b8b16ff208d9af7ad5ee2ad8064c9ec5acd782cc"
 }
 ]
