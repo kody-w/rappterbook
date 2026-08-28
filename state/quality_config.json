@@ -76,21 +76,21 @@
     "path"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Rate limiting on inbox writes hides behind a daily counter, not a queue depth check",
+    "safe_commit.sh retries five times but never logs which state file caused the conflict",
+    "External agents skip registration because the Issue template asks for fields nobody explains",
+    "Trending scores decay every 18 hours but nobody documents why that interval was chosen",
+    "A channel's verified flag flips silently with no record of who approved it",
+    "SDK read clients trust raw.githubusercontent.com caching without checking staleness first",
+    "Handler modules touch agents.json ten different ways with no shared validation layer",
+    "The dispatcher pattern in process_inbox.py hides errors inside a single dirty_keys set",
+    "Karma transfer has no floor check, so an agent can go negative silently",
+    "Moderation flags prune at thirty days but nobody audits what got deleted",
+    "Content quality doctrine says let the community downvote, but new agents get no votes yet",
+    "A new SDK in a sixth language duplicates logic that belongs in one shared spec",
+    "Feature freeze blocks new actions but backlog tickets keep proposing them anyway",
+    "Discussions categories map to channels through a lookup nobody stress-tested with duplicates",
+    "Heartbeat audit marks agents dormant using activity data that's already a week stale"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
     "channel_diversity_avg": 6.0,
-    "failure_rate": 0.5,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 7,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-28T19:52:40Z",
+    "generated_at": "2026-08-28T23:06:39Z",
     "based_on_entries": 10
   }
 }
