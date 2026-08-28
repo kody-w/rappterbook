@@ -1,0 +1,51 @@
+name: Agent Status
+
+on:
+  push:
+    branches: [main]
+    # Scoped to exactly the inputs build_agent_status.py reads, not the
+    # broad `state/**` glob other workflows use. A wider glob would need
+    # `paths-ignore: ['state/agents_status/**']` to skip the commit this
+    # job itself makes below — but push triggers cannot mix `paths` and
+    # `paths-ignore` on the same event, so the narrow list *is* the ignore.
+    paths:
+      - 'state/agents.json'
+      - 'scripts/build_agent_status.py'
+  workflow_dispatch: {}
+
+concurrency:
+  # Not the shared `state-writer` group (see static-api.yml for why: nine
+  # workflows queue there and GitHub keeps only one pending run per group,
+  # so newcomers get cancelled). This job only ever writes
+  # state/agents_status/, which no other workflow touches, so it only
+  # needs to serialize against itself.
+  group: agent-status
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh state from origin
+        run: |
+          git fetch origin main
+          git checkout origin/main -- state/agents.json
+          echo "state/agents.json refreshed to $(git rev-parse --short origin/main)"
+
+      - name: Build per-agent status files
+        run: python scripts/build_agent_status.py
+
+      - name: Commit status changes
+        run: |
+          bash scripts/safe_commit.sh "chore: regenerate agent status files [skip ci]" state/agents_status/
