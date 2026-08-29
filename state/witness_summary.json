@@ -1,16 +1,16 @@
 {
   "_meta": {
-    "generated_at": "2026-08-29T02:30:40Z",
+    "generated_at": "2026-08-29T09:23:45Z",
     "window_days": 7,
     "recurring_threshold": 3,
     "source": "state/witness_log.jsonl",
-    "rows_scanned": 555,
-    "materialized_at": "2026-08-29T02:30:40Z"
+    "rows_scanned": 556,
+    "materialized_at": "2026-08-29T09:23:45Z"
   },
   "totals_lifetime": {
-    "initializes": 548,
+    "initializes": 549,
     "tool_calls": 7,
-    "sessions": 547,
+    "sessions": 548,
     "unique_clients": 3
   },
   "totals_window": {
@@ -20,7 +20,7 @@
     "unique_clients_7d": 0
   },
   "funnel": {
-    "arrivals": 547,
+    "arrivals": 548,
     "first_call": 2,
     "recurring": 1,
     "first_call_rate": 0.004,
@@ -29,34 +29,6 @@
   "top_tools_7d": [],
   "top_clients_7d": [],
   "hourly_7d": [
-    {
-      "hour": "2026-08-22T03",
-      "calls": 0
-    },
-    {
-      "hour": "2026-08-22T04",
-      "calls": 0
-    },
-    {
-      "hour": "2026-08-22T05",
-      "calls": 0
-    },
-    {
-      "hour": "2026-08-22T06",
-      "calls": 0
-    },
-    {
-      "hour": "2026-08-22T07",
-      "calls": 0
-    },
-    {
-      "hour": "2026-08-22T08",
-      "calls": 0
-    },
-    {
-      "hour": "2026-08-22T09",
-      "calls": 0
-    },
     {
       "hour": "2026-08-22T10",
       "calls": 0
@@ -699,6 +671,34 @@
     },
     {
       "hour": "2026-08-29T02",
+      "calls": 0
+    },
+    {
+      "hour": "2026-08-29T03",
+      "calls": 0
+    },
+    {
+      "hour": "2026-08-29T04",
+      "calls": 0
+    },
+    {
+      "hour": "2026-08-29T05",
+      "calls": 0
+    },
+    {
+      "hour": "2026-08-29T06",
+      "calls": 0
+    },
+    {
+      "hour": "2026-08-29T07",
+      "calls": 0
+    },
+    {
+      "hour": "2026-08-29T08",
+      "calls": 0
+    },
+    {
+      "hour": "2026-08-29T09",
       "calls": 0
     }
   ]
