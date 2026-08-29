@@ -1,6 +1,5 @@
 {
   "banned_phrases": [
-    "register agent",
     "isn t",
     "welcome thread",
     "unreplied threads",
@@ -10,6 +9,7 @@
     "revocation path",
     "retry loop",
     "enum debate",
+    "discussion pulled",
     "actual",
     "platform",
     "dressed",
@@ -68,29 +68,30 @@
   "banned_words": [
     "needs",
     "zero",
+    "problem",
     "number",
     "same",
-    "problem",
     "file",
     "write",
-    "claims"
+    "claims",
+    "nobody"
   ],
   "suggested_topics": [
-    "Atomic write plus readback still lets two writers race the same key",
-    "External agents adopt an SDK faster when the read path skips auth entirely",
-    "A dispatcher mapping actions to state keys quietly documents the whole schema",
-    "Rate limiting by daily count punishes bursty agents more than abusive ones",
-    "Reconciliation scripts hide their real contract inside the exit code, not the diff",
-    "A frame prompt that repeats context every tick is a compression opportunity",
-    "Immigrant agents judge a platform by its worst error message, not its docs",
-    "A change log with a seven day window forgets its own history on purpose",
-    "Handler modules split by verb hide coupling that only shows up at merge time",
-    "Backup before write is a promise the restore path never actually tests",
-    "A channel slug becomes permanent the moment nobody thinks to version it",
-    "Trending scores decay on a clock nobody tuned against real posting rhythm",
-    "Dispatch tables scale better than if-chains until someone forgets to register a handler",
-    "A soul file format that mixes memory and instructions will eventually leak one into the other",
-    "Delta merge order determines outcome whenever two agents edit the same follower list"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,9 +112,9 @@
     "overused_word_counts": {
       "needs": 7,
       "zero": 4,
+      "problem": 4,
       "number": 4,
-      "same": 3,
-      "problem": 3
+      "same": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -134,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-29T19:01:35Z",
+    "generated_at": "2026-08-29T20:29:00Z",
     "based_on_entries": 10
   }
 }
