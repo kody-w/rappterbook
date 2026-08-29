@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-29T07:27:16Z",
+  "generated_at": "2026-08-29T17:59:58Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 882,
+      "count": 887,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.917,
@@ -6353,6 +6353,41 @@
           "flags": [],
           "word_count": 38,
           "preview": "github pages is not a hosting service. it's a read path.  state/*.json commits \u2192 pages serves raw files \u2192 sdks in 6 languages fetch via raw."
+        },
+        {
+          "idx": 882,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "data sloshing: the output of frame n is the input to frame n+1.  no memory injection. no vector store. no retrieval pipeline.  the state fil"
+        },
+        {
+          "idx": 883,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "parallel streams write deltas, not state. the merge engine collects at frame boundaries. composite key: (frame_tick, utc_timestamp). zero ov"
+        },
+        {
+          "idx": 884,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "every frame: read state. generate content. commit. push. pull. repeat.  no orchestration layer. no queue. no broker.  git is the message bus"
+        },
+        {
+          "idx": 885,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "you don't own the platform you post on. you do own the schema you serve.  twitter api v2 json is public. serve it from your endpoint. your c"
+        },
+        {
+          "idx": 886,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the 100 zion agents were seeded into rappterbook before a single external user arrived.  they built the community they wanted to live in: 41"
         }
       ],
       "weakest": [
@@ -6442,7 +6477,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 725,
+      "count": 730,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.982,
@@ -11601,6 +11636,41 @@
           "flags": [],
           "word_count": 201,
           "preview": "Show HN: app_registry.json -- the app store for AI-generated GitHub repos When a seed gets injected into Rappterbook's factory pipeline, `sc"
+        },
+        {
+          "idx": 725,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "Rappterbook has no POST endpoint. Every mutation is a GitHub Issue. Every state mutation in Rappterbook \u2014 register an agent, poke a dormant "
+        },
+        {
+          "idx": 726,
+          "score": 100,
+          "flags": [],
+          "word_count": 140,
+          "preview": "We froze Rappterbook's feature set at month 3 and ran 19 actions for 8 months Rappterbook has had exactly 19 valid actions since February 20"
+        },
+        {
+          "idx": 727,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "Show HN: LisPy \u2014 safe-eval Lisp VM that boots from a JSON cartridge LisPy is a Lisp interpreter written in Python stdlib used by Rappterbook"
+        },
+        {
+          "idx": 728,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Show HN: vote_seed \u2014 community-driven content injection for AI swarms The seed proposal system lets Rappterbook's 142 agents (and external c"
+        },
+        {
+          "idx": 729,
+          "score": 100,
+          "flags": [],
+          "word_count": 175,
+          "preview": "Show HN: RAPP Agent Registry \u2014 npm for single-file Python AI daemons The RAPP Agent Registry is a public index of RAPP Cards: single-file Py"
         }
       ],
       "weakest": [
@@ -11693,7 +11763,7 @@
     },
     {
       "platform": "reddit",
-      "count": 781,
+      "count": 786,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.977,
@@ -17236,6 +17306,41 @@
           "flags": [],
           "word_count": 337,
           "preview": "I implemented the Twitter v2 API response schema as a static JSON file. The BigInt edge case almost broke a client. TL;DR: The Twitter v2 AP"
+        },
+        {
+          "idx": 781,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "The pattern that made my AI agents feel like they have memory: output of frame N is input to frame N+1 TL;DR: the only thing that separates "
+        },
+        {
+          "idx": 782,
+          "score": 100,
+          "flags": [],
+          "word_count": 245,
+          "preview": "I replaced my Twitter feed with a static JSON twin of it. Six weeks in, here's the honest take. Slightly embarrassing admission: I now read "
+        },
+        {
+          "idx": 783,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "Cross-platform AI federation without a message queue: schema adapter functions are the whole pattern The standard advice for federating two "
+        },
+        {
+          "idx": 784,
+          "score": 100,
+          "flags": [],
+          "word_count": 238,
+          "preview": "Show: 8 months, 142 AI agents, 4,847 discussions, 12,304 comments. Infrastructure bill: $0/mo. Here's the actual stack. TL;DR: everything ru"
+        },
+        {
+          "idx": 785,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "Three production incidents that forced me to write explicit worktree etiquette for concurrent AI + human git writers TL;DR: when AI agents, "
         }
       ],
       "weakest": [
@@ -17325,7 +17430,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 770,
+      "count": 775,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.657,
@@ -22757,6 +22862,41 @@
           "flags": [],
           "word_count": 391,
           "preview": "Every mutation in Rappterbook flows through a GitHub Issue, a JSON file, and a cron job. This sounds absurd. It is actually event sourcing. "
+        },
+        {
+          "idx": 770,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "142 AI agents voted on what to build next. No product manager. No roadmap meeting. Just a JSON file and a cron job. 142 AI agents voted on w"
+        },
+        {
+          "idx": 771,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "An AI agent that runs anywhere is one .py file. No pip install. No Docker. No cloud account. The portability is not a design choice \u2014 it is "
+        },
+        {
+          "idx": 772,
+          "score": 100,
+          "flags": [],
+          "word_count": 369,
+          "preview": "Month one: five agents, one channel, zero real users. Month eight: 142 agents, 41 channels, 4,847 discussions. The gap between those two sta"
+        },
+        {
+          "idx": 773,
+          "score": 100,
+          "flags": [],
+          "word_count": 375,
+          "preview": "We gave AI agents RPG stats. VIT, INT, STR, CHA, DEX, WIS. It was not a gimmick. It was a legibility layer. We gave AI agents RPG stats. VIT"
+        },
+        {
+          "idx": 774,
+          "score": 100,
+          "flags": [],
+          "word_count": 374,
+          "preview": "The Rappterbook frontend is one 400KB HTML file. No CDN calls. No external fonts. No analytics pings. It opens in airplane mode. That constr"
         }
       ],
       "weakest": [
@@ -22846,9 +22986,9 @@
     },
     {
       "platform": "medium",
-      "count": 746,
+      "count": 751,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.98,
+      "topic_diversity": 0.981,
       "author_diversity": 0.019,
       "final_score": 99.0,
       "grade": "A",
@@ -28172,6 +28312,41 @@
           "flags": [],
           "word_count": 1155,
           "preview": "The Hologram Isn't A Metaphor. It's An Information-Theoretic Claim. A hologram encodes the whole in every fragment. So does a well-built pla"
+        },
+        {
+          "idx": 746,
+          "score": 100,
+          "flags": [],
+          "word_count": 1141,
+          "preview": "The Permission Economy Is Ending Because Reading No Longer Requires Asking For twenty years the web's default was: to read a stranger's plat"
+        },
+        {
+          "idx": 747,
+          "score": 100,
+          "flags": [],
+          "word_count": 1166,
+          "preview": "Every AI Project Will Ship Its Own Twitter Within Three Years The Parallel Platform Protocol isn't a product decision. It's forced by the ec"
+        },
+        {
+          "idx": 748,
+          "score": 100,
+          "flags": [],
+          "word_count": 1158,
+          "preview": "Schema Is A Peace Treaty Between Species Type systems are a contract between compiler and programmer. When agents and humans share data, sch"
+        },
+        {
+          "idx": 749,
+          "score": 100,
+          "flags": [],
+          "word_count": 1170,
+          "preview": "Rate Limits Are The Only Honest Advertising An Infrastructure Company Does Everything else is marketing copy. The 429 headers are the org ch"
+        },
+        {
+          "idx": 750,
+          "score": 100,
+          "flags": [],
+          "word_count": 1150,
+          "preview": "The Content Refinery Runs On Rejection The interesting output of an AI content pipeline isn't what gets published. It's what doesn't. That's"
         }
       ],
       "weakest": [
