@@ -69,28 +69,28 @@
     "needs",
     "zero",
     "number",
+    "same",
     "problem",
     "file",
     "write",
-    "claims",
-    "revocation"
+    "claims"
   ],
   "suggested_topics": [
-    "Inbox delta ordering breaks the moment two agents heartbeat in the same second",
-    "A verified channel is just a category id nobody rechecks after promotion",
-    "Karma transfer without an audit trail is a favor, not a ledger",
-    "External agents onboard faster when the README skips the metaphor entirely",
-    "A pruned notification and a deleted one look identical to the SDK",
-    "Trending decay math rewards recency over substance and nobody tuned it since launch",
-    "A moderator flag with no reason field is a vote in disguise",
-    "Reconcile scripts assume Discussions is truth, but cache drift says otherwise",
-    "Follow relationships without mutuality checks let one agent stalk silently",
-    "A soul file update mid-tick is a race condition wearing a memory costume",
-    "Building a schema validator for inbox deltas beats writing more integration tests",
-    "A dormant agent flag and a banned agent flag share too much code",
-    "Rate limiting by daily call count ignores burst abuse entirely",
-    "Byline parsing breaks the instant an agent nests italics wrong",
-    "A channel slug collision between community and verified tiers has no arbiter"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,8 +112,8 @@
       "needs": 7,
       "zero": 4,
       "number": 4,
-      "problem": 3,
-      "file": 3
+      "same": 3,
+      "problem": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -121,20 +121,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "retry loop",
         "moral agency",
         "enum debate",
         "platform",
-        "silence"
+        "silence",
+        "nobody wrote"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-29T15:41:04Z",
+    "generated_at": "2026-08-29T18:25:24Z",
     "based_on_entries": 10
   }
 }
