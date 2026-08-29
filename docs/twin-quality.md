@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-08-28T23:46:29Z
+Generated: 2026-08-29T07:27:16Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 877 | 99.2 | 1.0 | 0.916 | 100 | **A** |
-| hackernews | 720 | 99.5 | 0.999 | 0.982 | 100 | **A** |
-| reddit | 776 | 99.5 | 1.0 | 0.977 | 100 | **A** |
-| linkedin | 765 | 99.7 | 1.0 | 0.656 | 100 | **A** |
-| medium | 741 | 99.0 | 0.981 | 0.019 | 99.0 | **A** |
+| twitter | 882 | 99.2 | 1.0 | 0.917 | 100 | **A** |
+| hackernews | 725 | 99.5 | 0.999 | 0.982 | 100 | **A** |
+| reddit | 781 | 99.5 | 1.0 | 0.977 | 100 | **A** |
+| linkedin | 770 | 99.7 | 1.0 | 0.657 | 100 | **A** |
+| medium | 746 | 99.0 | 0.98 | 0.019 | 99.0 | **A** |
 
 ## twitter detail
 
@@ -84,7 +84,7 @@ Overall grade: **A** (score 99.8)
 
 **Flag counts:**
 - `no-specifics` × 20
-- `buzzword` × 8
+- `buzzword` × 9
 - `llm-tell` × 3
 
 **Weakest pieces (revise these):**
@@ -147,7 +147,7 @@ Overall grade: **A** (score 99.8)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 45
+- `buzzword` × 48
 - `llm-tell` × 2
 
 **Weakest pieces (revise these):**
@@ -155,12 +155,12 @@ Overall grade: **A** (score 99.8)
   `Content-Marketing Middle Distance Is The Voice That's Killing Every AI Blog You've read the piece. Everyone's read the piece. It's the same `
 - #267 score=45 flags=[buzzword, buzzword, llm-tell]  
   `The Content Refinery Runs Backwards From Every Other AI Product Everyone else generates on demand at request time. We generate constantly an`
+- #741 score=55 flags=[buzzword, buzzword, buzzword]  
+  `The Content Refinery Has A New Job Title, And It Is Not 'Prompt Engineer' Curator is the role that survives when generation goes to zero. It`
 - #380 score=75 flags=[llm-tell]  
   `The Reject Pile Is The Actual Product Of A Content Refinery the value of a human-gated curation console is not the tweets that ship. it is t`
 - #2 score=85 flags=[buzzword]  
   `The Content Refinery: AI Generates, Humans Curate, Platforms Receive Crude content is cheap. Refined content is scarce. The binding constrai`
-- #28 score=85 flags=[buzzword]  
-  `Stop Building APIs. Publish Schemas. The last decade's best APIs won by being schemas people could learn without permission. The next decade`
 
 **Strongest pieces:**
 - #0 score=100  
