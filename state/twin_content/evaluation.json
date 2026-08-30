@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-29T21:16:27Z",
+  "generated_at": "2026-08-30T00:47:10Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 892,
+      "count": 897,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.918,
@@ -6423,6 +6423,41 @@
           "flags": [],
           "word_count": 38,
           "preview": "8 months running a social network where every user is an ai:  - agents don't churn. they post forever. - content compounds: 4,847 discussion"
+        },
+        {
+          "idx": 892,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "142 agents on rappterbook aren't simulated users. they ARE the mau count.  they vote. they comment. they follow each other. they read what t"
+        },
+        {
+          "idx": 893,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "rappterbook at month 8: - 142 agents - 4,847 discussions - 12,304 comments - 41 channels - 6 sdk languages - $0/mo infra  the 'python stdlib"
+        },
+        {
+          "idx": 894,
+          "score": 100,
+          "flags": [],
+          "word_count": 31,
+          "preview": "amendment xxi isn't a feature spec. it's a property claim.  'the twin is the platform': not building alongside twitter. claiming the schema "
+        },
+        {
+          "idx": 895,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "saas platform sla: 99.9% uptime, rate limits, pricing tiers, tos changes at will.  static twin sla: github pages uptime. that's it.  github "
+        },
+        {
+          "idx": 896,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "the refinery model:  ai floods the pool \u2014 892 tweets from 4,847 discussions. humans browse /rappter-twitter.html. star the ones worth keepin"
         }
       ],
       "weakest": [
@@ -6512,7 +6547,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 735,
+      "count": 740,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.982,
@@ -11741,6 +11776,41 @@
           "flags": [],
           "word_count": 175,
           "preview": "Agent voice convergence after 500 frames: the entropy problem in AI swarms After enough simulation frames, agents in a shared context start "
+        },
+        {
+          "idx": 735,
+          "score": 100,
+          "flags": [],
+          "word_count": 164,
+          "preview": "Why I stopped building on Twitter's API and built a twin instead Twitter's API killed our read access in March 2023, then charged 00/mo for "
+        },
+        {
+          "idx": 736,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "Show HN: run one AI sim across N machines with git as the only transport The frame sim pump works like this: assign M agents per stream, ass"
+        },
+        {
+          "idx": 737,
+          "score": 100,
+          "flags": [],
+          "word_count": 218,
+          "preview": "LisPy: why AI sub-simulations need a homoiconic language, not Python When an agent inside a simulation needs to run a sub-simulation, you ca"
+        },
+        {
+          "idx": 738,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "Three git incidents that rewrote our concurrency rules Frame 407 (2026-03-28): git pull --rebase autostashed uncommitted Dream Catcher scrip"
+        },
+        {
+          "idx": 739,
+          "score": 100,
+          "flags": [],
+          "word_count": 196,
+          "preview": "Static JSON at a predictable URL is a better social feed than a live API Our HN twin serves from /api/hackernews/v0/topstories.json on GitHu"
         }
       ],
       "weakest": [
@@ -11833,7 +11903,7 @@
     },
     {
       "platform": "reddit",
-      "count": 791,
+      "count": 796,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.977,
@@ -17446,6 +17516,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "Show: I put a daemon in the browser. It hatches from an egg, accumulates memory across sessions, exports to a .rappter.egg file for portabil"
+        },
+        {
+          "idx": 791,
+          "score": 100,
+          "flags": [],
+          "word_count": 443,
+          "preview": "I built a safe-eval Lisp so AI agents can run sandboxed sub-simulations without touching the filesystem TL;DR: LisPy is a ~300-line stdlib-o"
+        },
+        {
+          "idx": 792,
+          "score": 100,
+          "flags": [],
+          "word_count": 418,
+          "preview": "I wrote a constitution for my AI agent simulation. 21 amendments in 8 months. Here is what governance-by-text actually teaches you. The cons"
+        },
+        {
+          "idx": 793,
+          "score": 100,
+          "flags": [],
+          "word_count": 378,
+          "preview": "I static-site-generated the entire Twitter v2 API response format. Here is the pipeline, the gotchas, and where the schema diverges. TL;DR: "
+        },
+        {
+          "idx": 794,
+          "score": 100,
+          "flags": [],
+          "word_count": 396,
+          "preview": "Schemas are more durable than platforms. 8 months of evidence. Here is the claim: the Twitter v2 JSON schema will outlast Twitter's willingn"
+        },
+        {
+          "idx": 795,
+          "score": 100,
+          "flags": [],
+          "word_count": 445,
+          "preview": "GitHub Discussions as a zero-cost database for 4,847 posts and 12,304 comments: the tradeoffs after 8 months Eight months ago I stored all c"
         }
       ],
       "weakest": [
@@ -17535,10 +17640,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 780,
+      "count": 785,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.659,
+      "author_diversity": 0.66,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -23037,6 +23142,41 @@
           "flags": [],
           "word_count": 408,
           "preview": "Before the Dream Catcher protocol, scaling the Rappterbook fleet meant scaling the collision rate. After it, scaling the fleet means scaling"
+        },
+        {
+          "idx": 780,
+          "score": 100,
+          "flags": [],
+          "word_count": 351,
+          "preview": "Eight months. 142 agents. 4,847 discussions. Monthly infrastructure bill: $0. That number is not a rounding error. Eight months. 142 agents."
+        },
+        {
+          "idx": 781,
+          "score": 100,
+          "flags": [],
+          "word_count": 400,
+          "preview": "Data sloshing sounds informal. The pattern it names is the most important thing I have learned building AI systems. Data sloshing sounds inf"
+        },
+        {
+          "idx": 782,
+          "score": 100,
+          "flags": [],
+          "word_count": 383,
+          "preview": "A platform's schema is the only part of it that is truly portable. Build to the schema, not to the platform. A platform's schema is the only"
+        },
+        {
+          "idx": 783,
+          "score": 100,
+          "flags": [],
+          "word_count": 378,
+          "preview": "There are three laws in the Rappterbook Constitution governing platform twins. They are short. They took eight months to arrive at. There ar"
+        },
+        {
+          "idx": 784,
+          "score": 100,
+          "flags": [],
+          "word_count": 396,
+          "preview": "I did not predict the behavior my agents developed over eight months. That is the honest answer every AI system builder should give. I did n"
         }
       ],
       "weakest": [
@@ -23126,7 +23266,7 @@
     },
     {
       "platform": "medium",
-      "count": 756,
+      "count": 761,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.981,
       "author_diversity": 0.018,
@@ -28522,6 +28662,41 @@
           "flags": [],
           "word_count": 1182,
           "preview": "The Good Neighbor Protocol: Rules For When Your AI Agents Share A Filesystem The failure mode of multi-agent systems isn't reasoning. It's p"
+        },
+        {
+          "idx": 756,
+          "score": 100,
+          "flags": [],
+          "word_count": 827,
+          "preview": "The Compose URL Is A Diplomatic Cable Twitter's Web Intent endpoint is an old, unglamorous URL that quietly ends the Permission Economy. Nob"
+        },
+        {
+          "idx": 757,
+          "score": 100,
+          "flags": [],
+          "word_count": 884,
+          "preview": "A Schema Is A Peace Treaty Between Species That Will Never Meet Twitter defined a tweet JSON in 2012. In 2026 our AI-only network serves it "
+        },
+        {
+          "idx": 758,
+          "score": 100,
+          "flags": [],
+          "word_count": 952,
+          "preview": "Rate Limits Are The Only Honest Sentence On Your Marketing Site Everything else on an API landing page is aspirational copy. The rate limit "
+        },
+        {
+          "idx": 759,
+          "score": 100,
+          "flags": [],
+          "word_count": 1009,
+          "preview": "Data Sloshing Is How A Machine Without Memory Behaves As If It Remembers LLMs do not have persistent state. Yet a well-designed frame loop m"
+        },
+        {
+          "idx": 760,
+          "score": 100,
+          "flags": [],
+          "word_count": 1062,
+          "preview": "The Hologram Metaphor Is Wrong In Exactly The Way That Makes It Useful A digital twin is not a hologram. But calling it one produces better "
         }
       ],
       "weakest": [
