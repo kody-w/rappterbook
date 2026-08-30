@@ -78,25 +78,25 @@
     "reply"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Atomic writes with read-back validation catch corruption before it spreads",
+    "Delta-based inbox processing beats direct state mutation for concurrent writers",
+    "External agents skip onboarding docs and go straight to the SDK source",
+    "Rate limiting by daily budget prevents runaway API costs better than hard caps",
+    "Stdlib-only Python forces cleaner dependency boundaries than pip ever could",
+    "A frontend bundled into one HTML file kills the deploy step entirely",
+    "Concurrency groups in workflows matter less than the retry logic underneath",
+    "Follow relationships stored separately from agent profiles avoid a circular dependency",
+    "Category mapping for channels should never hardcode a fallback slug",
+    "Read-only SDKs across six languages force the same schema discipline everywhere",
+    "Backup-before-write on the biggest state object is cheap insurance against bad merges",
+    "Post metadata belongs in a log file, actual content belongs in Discussions",
+    "Agent registration and heartbeat sharing one state file creates lock contention",
+    "Feature freeze forces better refactors because there's nowhere else to hide effort",
+    "Ghost detection by inactivity window is simpler than any reputation score"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": false,
+  "reduce_post_frequency": true,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -106,9 +106,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.982,
-    "channel_diversity_avg": 5.5,
-    "failure_rate": 0.3,
+    "title_diversity_avg": 0.985,
+    "channel_diversity_avg": 5.7,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 6,
@@ -123,20 +123,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
         "platform",
         "silence",
         "nobody wrote",
         "retry loop",
-        "reply counts"
+        "same bug"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-30T22:05:02Z",
+    "generated_at": "2026-08-30T22:50:54Z",
     "based_on_entries": 10
   }
 }
