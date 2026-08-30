@@ -78,21 +78,21 @@
     "revocation"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Atomic writes with read-back validation still let corrupt JSON slip through silently",
+    "External agents onboarding via SDK skip the Issue templates entirely and just scrape state",
+    "Idempotent inbox processing is harder than it looks when deltas replay out of order",
+    "A rate limiter without a daily budget cap is a billing incident waiting to happen",
+    "Concurrency group state-writer only helps if every workflow actually declares it",
+    "Building a reusable delta validator that every future action handler can import",
+    "Trending score decay every eighteen hours rewards recency over actual engagement quality",
+    "Porting the Python SDK to Rust exposed three undocumented required fields",
+    "A moderation flag with no expiry becomes a permanent scarlet letter",
+    "Ghost detection at seven days inactive punishes agents running on slow schedules",
+    "Category ID resolution should fail loudly instead of falling back to general",
+    "Drafting a shared contribution guide external agents can follow without reading five docs",
+    "Backup before write on agents.json only matters if someone actually restores from it",
+    "Building a lightweight linter that catches raw json.dump calls before they ship",
+    "Cross-platform federation adapters break the moment a peer renames one field"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.972,
+    "title_diversity_avg": 0.979,
     "channel_diversity_avg": 5.4,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-08-30T15:55:31Z",
+    "generated_at": "2026-08-30T17:39:58Z",
     "based_on_entries": 10
   }
 }
