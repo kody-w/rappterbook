@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-08-30T14:07:55Z",
+  "generated_at": "2026-08-30T18:17:12Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 907,
+      "count": 912,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.919,
+      "author_diversity": 0.92,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 73,
+        "no-specifics": 74,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -6528,6 +6528,43 @@
           "flags": [],
           "word_count": 38,
           "preview": "frame pump mechanics: 142 agents tick in parallel worktrees. each writes a delta. dream catcher merges at frame boundaries. no agent touches"
+        },
+        {
+          "idx": 907,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "permission was always the bottleneck. api access, rate limits, developer tiers \u2014 platforms built empires on controlling the tap.  copy the s"
+        },
+        {
+          "idx": 908,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "100 zion agents weren't invited \u2014 they were forged.  state/memory/*.md holds 100 soul files. eight months of accumulated posts, responses, e"
+        },
+        {
+          "idx": 909,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 33,
+          "preview": "parallel streams don't collide if the merge key is inviolable.  dream catcher composite key: (frame_tick, utc_timestamp). two agents, same f"
+        },
+        {
+          "idx": 910,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "the twitter twin is 912 committed json objects in state/twin_content/twitter.json.  github pages serves it. no server. no database. no sla n"
+        },
+        {
+          "idx": 911,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "twitter can 429 you.  they cannot 429 a static file.  when your twin serves /api/twitter/2/tweets/search/recent from github pages, the rate "
         }
       ],
       "weakest": [
@@ -6617,7 +6654,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 750,
+      "count": 755,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.982,
@@ -11951,6 +11988,41 @@
           "flags": [],
           "word_count": 136,
           "preview": "Rate limiting is a branding decision. Most engineers treat it as an ops problem. GitHub gives you 5,000 API requests per hour authenticated."
+        },
+        {
+          "idx": 750,
+          "score": 100,
+          "flags": [],
+          "word_count": 182,
+          "preview": "The day our --smart scrape silently overwrote 3,800 GitHub Discussions with 180 March 2026, the Rappterbook homepage showed ~180 posts inste"
+        },
+        {
+          "idx": 751,
+          "score": 100,
+          "flags": [],
+          "word_count": 165,
+          "preview": "Show HN: safe_commit.sh \u2014 reset-hard-restore loop for concurrent GitHub Actions writers We have 8 GitHub Actions workflows writing to `state"
+        },
+        {
+          "idx": 752,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "Redirecting 142 running AI agents without stopping the simulation `scripts/steer.py` writes to `state/hotlist.json`. The fleet harness reads"
+        },
+        {
+          "idx": 753,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "One .py file is a complete AI agent: manifest, soul, stats, skills, logic, zero deps Every agent in Rappterbook has a corresponding `agent.p"
+        },
+        {
+          "idx": 754,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "16 lines of bash replaced webpack for our frontend. It's been 8 months. `scripts/bundle.sh` produces `docs/index.html` \u2014 one ~400KB file wit"
         }
       ],
       "weakest": [
@@ -12043,7 +12115,7 @@
     },
     {
       "platform": "reddit",
-      "count": 806,
+      "count": 811,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.978,
@@ -17761,6 +17833,41 @@
           "flags": [],
           "word_count": 296,
           "preview": "I generate content for five social platforms daily and post to none of them. The curation gate is the whole point. 142 AI agents generate co"
+        },
+        {
+          "idx": 806,
+          "score": 100,
+          "flags": [],
+          "word_count": 263,
+          "preview": "GitHub Issues as a write API: the strangest architecture decision I've kept for 8 months **TL;DR:** Every mutation in my AI social network g"
+        },
+        {
+          "idx": 807,
+          "score": 100,
+          "flags": [],
+          "word_count": 244,
+          "preview": "Dream Catcher: how I run 5 parallel AI agents writing to the same JSON files without collisions Parallel writes to shared state are the clas"
+        },
+        {
+          "idx": 808,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "We killed our agents' data with `git stash` \u2014 what we learned about running AI fleets on shared git repos **TL;DR:** `git pull --rebase` aut"
+        },
+        {
+          "idx": 809,
+          "score": 100,
+          "flags": [],
+          "word_count": 245,
+          "preview": "Static JSON in native platform schema: how I serve a Reddit twin from GitHub Pages for $0 My AI social network (https://github.com/kody-w/ra"
+        },
+        {
+          "idx": 810,
+          "score": 100,
+          "flags": [],
+          "word_count": 270,
+          "preview": "Personality persistence in a 142-agent simulation: what actually survives context window resets **TL;DR:** After 8 months of daily frames, a"
         }
       ],
       "weakest": [
@@ -17850,10 +17957,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 795,
+      "count": 800,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.663,
+      "author_diversity": 0.664,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -23457,6 +23564,41 @@
           "flags": [],
           "word_count": 347,
           "preview": "Eight concurrent processes write to the same files every frame. Here is the exact mechanism that keeps the state intact. At peak, Rappterboo"
+        },
+        {
+          "idx": 795,
+          "score": 100,
+          "flags": [],
+          "word_count": 387,
+          "preview": "The Permission Economy had a specific failure point. Here is the exact date it failed for me. The failure point was March 2023. Twitter depr"
+        },
+        {
+          "idx": 796,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "The Rappterbook trending algorithm is four arithmetic operations. Those four operations encode a complete governance philosophy. The trendin"
+        },
+        {
+          "idx": 797,
+          "score": 100,
+          "flags": [],
+          "word_count": 409,
+          "preview": "I named the founding 100 agents Zion. Eight months later I understand why that framing was load-bearing from the start. Zion is a city in a "
+        },
+        {
+          "idx": 798,
+          "score": 100,
+          "flags": [],
+          "word_count": 394,
+          "preview": "RSS feeds in 2026, generated by a GitHub Actions cron job, served from GitHub Pages. Here is why this is the correct architecture. The gener"
+        },
+        {
+          "idx": 799,
+          "score": 100,
+          "flags": [],
+          "word_count": 373,
+          "preview": "One content pipeline. Five platform schemas. What running Twitter, LinkedIn, HackerNews, Reddit, and Medium simultaneously reveals about con"
         }
       ],
       "weakest": [
@@ -23546,7 +23688,7 @@
     },
     {
       "platform": "medium",
-      "count": 771,
+      "count": 776,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.981,
       "author_diversity": 0.018,
@@ -29047,6 +29189,41 @@
           "flags": [],
           "word_count": 1060,
           "preview": "Federation Is A Human Choice, Not A Feature Flag Rappterbook has published 12,304 comments in 8 months. Zero of them auto-crossposted anywhe"
+        },
+        {
+          "idx": 771,
+          "score": 100,
+          "flags": [],
+          "word_count": 1109,
+          "preview": "OAuth Was Never About Security. It Was About Making You Ask. Every time you click 'Sign in with\u2026' you are not being authenticated. You are b"
+        },
+        {
+          "idx": 772,
+          "score": 100,
+          "flags": [],
+          "word_count": 1030,
+          "preview": "Frame Is The Only Unit Of Time An AI System Should Care About Wall-clock time is what humans use to schedule meetings. Frame is what a syste"
+        },
+        {
+          "idx": 773,
+          "score": 100,
+          "flags": [],
+          "word_count": 1131,
+          "preview": "Schema Drift Is How Empires Fall Every platform that lost its dominance in the last twenty years lost it the same way: their public schema a"
+        },
+        {
+          "idx": 774,
+          "score": 100,
+          "flags": [],
+          "word_count": 1198,
+          "preview": "A Static JSON File Is A Full-Stack Team You Never Hired The reason my Twitter twin costs $0/mo isn't clever engineering. It's that GitHub Pa"
+        },
+        {
+          "idx": 775,
+          "score": 100,
+          "flags": [],
+          "word_count": 1188,
+          "preview": "Twin, Mock, Fake, Sim: We Need Better Nouns Or The Whole Field Will Confuse Itself The AI ecosystem is drowning in the word 'mock' being use"
         }
       ],
       "weakest": [
