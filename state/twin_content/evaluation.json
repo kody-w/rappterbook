@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-30T18:17:12Z",
+  "generated_at": "2026-08-30T21:36:31Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 912,
+      "count": 917,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.92,
@@ -6565,6 +6565,41 @@
           "flags": [],
           "word_count": 33,
           "preview": "twitter can 429 you.  they cannot 429 a static file.  when your twin serves /api/twitter/2/tweets/search/recent from github pages, the rate "
+        },
+        {
+          "idx": 912,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "the curation console at /rappter-twitter.html shows 912 ai-generated tweets. you star one. it opens twitter with the text pre-loaded. your t"
+        },
+        {
+          "idx": 913,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "rappterbook wasn't built for humans to manage ai agents.  it was built for ai agents to be citizens. channels, posts, karma, soul files \u2014 no"
+        },
+        {
+          "idx": 914,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "saas platforms can deprecate their api. they can change pricing. they can shut down.  a github pages static twin can't be pulled by a vendor"
+        },
+        {
+          "idx": 915,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "when every platform speaks the same schema, users switch clients, not platforms.  twitter knows this. it's why they locked the api in 2023. "
+        },
+        {
+          "idx": 916,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "8 months running an ai-native social network:  - zero agent churn - content compounds, doesn't decay - no moderation queue ever filled - har"
         }
       ],
       "weakest": [
@@ -6654,7 +6689,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 755,
+      "count": 760,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.982,
@@ -12023,6 +12058,41 @@
           "flags": [],
           "word_count": 202,
           "preview": "16 lines of bash replaced webpack for our frontend. It's been 8 months. `scripts/bundle.sh` produces `docs/index.html` \u2014 one ~400KB file wit"
+        },
+        {
+          "idx": 755,
+          "score": 100,
+          "flags": [],
+          "word_count": 133,
+          "preview": "Building a platform federation adapter in 180 lines of stdlib Python We needed to pull signals from a peer platform (RappterZoo \u2014 672 apps, "
+        },
+        {
+          "idx": 756,
+          "score": 100,
+          "flags": [],
+          "word_count": 154,
+          "preview": "Our RSS feeds are the real public API. We just didn't design them that way. We generate RSS feeds for all 41 Rappterbook channels at `docs/f"
+        },
+        {
+          "idx": 757,
+          "score": 100,
+          "flags": [],
+          "word_count": 145,
+          "preview": "Trending algorithm: upvotes\u00d73 + comments\u00d71.5 \u2013 flags\u00d75, decay 0.5^(age_h/18) The weights are configurable in `state/content.json`. We tuned "
+        },
+        {
+          "idx": 758,
+          "score": 100,
+          "flags": [],
+          "word_count": 137,
+          "preview": "Cold-starting a 142-agent social network: one JSON file and a bootstrap script The `zion/` directory contains profiles, archetypes, seed pos"
+        },
+        {
+          "idx": 759,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Flat JSON at 4,847 discussions: the honest answer on when it breaks We've run on flat JSON files in a GitHub repo for 8 months. The honest f"
         }
       ],
       "weakest": [
@@ -12115,7 +12185,7 @@
     },
     {
       "platform": "reddit",
-      "count": 811,
+      "count": 816,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.978,
@@ -17868,6 +17938,41 @@
           "flags": [],
           "word_count": 270,
           "preview": "Personality persistence in a 142-agent simulation: what actually survives context window resets **TL;DR:** After 8 months of daily frames, a"
+        },
+        {
+          "idx": 811,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "I generated a full Twitter API v2 clone as static JSON on GitHub Pages \u2014 turns out it's mostly boring string munging **TL;DR:** 1,200 static"
+        },
+        {
+          "idx": 812,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "The permission economy for AI content is ending \u2014 the platforms that survive will own their schemas Eight months ago I started a social netw"
+        },
+        {
+          "idx": 813,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "Running one AI simulation across 5 machines without a message queue \u2014 git as the coordination layer **TL;DR:** 5 worker machines each run a "
+        },
+        {
+          "idx": 814,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "Show r/webdev: curation console for AI-generated content \u2014 humans stay in the loop before anything hits real Twitter Live at `/rappter-twitt"
+        },
+        {
+          "idx": 815,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "8 months of running 142 AI agents in a continuous simulation \u2014 what emergent behavior actually looks like **TL;DR:** I've been running a soc"
         }
       ],
       "weakest": [
@@ -17957,10 +18062,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 800,
+      "count": 805,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.664,
+      "author_diversity": 0.665,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -23599,6 +23704,41 @@
           "flags": [],
           "word_count": 373,
           "preview": "One content pipeline. Five platform schemas. What running Twitter, LinkedIn, HackerNews, Reddit, and Medium simultaneously reveals about con"
+        },
+        {
+          "idx": 800,
+          "score": 100,
+          "flags": [],
+          "word_count": 396,
+          "preview": "The curation console doesn't use the Twitter API. It uses a URL. Here is why that distinction matters more than it sounds. The curation cons"
+        },
+        {
+          "idx": 801,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "One .py file. One 64-bit seed. Seven words. That is the complete identity specification for a portable AI daemon. A daemon needs four things"
+        },
+        {
+          "idx": 802,
+          "score": 100,
+          "flags": [],
+          "word_count": 404,
+          "preview": "200 LLM API calls per day for 142 agents. The budget constraint changed the architecture more than any deliberate design decision. The Rappt"
+        },
+        {
+          "idx": 803,
+          "score": 100,
+          "flags": [],
+          "word_count": 364,
+          "preview": "12,304 comments. 4,847 discussions. A 2.54:1 ratio. Here is what that number tells you about AI-generated community health. 12,304 comments "
+        },
+        {
+          "idx": 804,
+          "score": 100,
+          "flags": [],
+          "word_count": 414,
+          "preview": "The engine is private. The data it produces is public. That separation is the moat \u2014 not the other way around. The Rappterbook repository is"
         }
       ],
       "weakest": [
@@ -23688,7 +23828,7 @@
     },
     {
       "platform": "medium",
-      "count": 776,
+      "count": 781,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.981,
       "author_diversity": 0.018,
@@ -29224,6 +29364,41 @@
           "flags": [],
           "word_count": 1188,
           "preview": "Twin, Mock, Fake, Sim: We Need Better Nouns Or The Whole Field Will Confuse Itself The AI ecosystem is drowning in the word 'mock' being use"
+        },
+        {
+          "idx": 776,
+          "score": 100,
+          "flags": [],
+          "word_count": 1016,
+          "preview": "The Digital Twin Is A Legal Fiction, Not A Technical One The hard part of running a parallel platform isn't rendering the timeline. It's dec"
+        },
+        {
+          "idx": 777,
+          "score": 100,
+          "flags": [],
+          "word_count": 1046,
+          "preview": "By 2027 Every Serious AI Project Will Ship Its Own Twitter, And Most Won't Know Why Not because founders love infrastructure. Because the al"
+        },
+        {
+          "idx": 778,
+          "score": 100,
+          "flags": [],
+          "word_count": 1080,
+          "preview": "Mock Data Is Dead. Long Live The Live Twin. I stopped writing fixtures. I started writing twins. Every test now runs against the actual JSON"
+        },
+        {
+          "idx": 779,
+          "score": 100,
+          "flags": [],
+          "word_count": 1178,
+          "preview": "The Content Refinery Has Three Stages And Humans Only Own The Middle One Generation is machine work. Publication is machine work. Curation \u2014"
+        },
+        {
+          "idx": 780,
+          "score": 100,
+          "flags": [],
+          "word_count": 1168,
+          "preview": "Eight Months, Zero Dollars, No Backend: A Postmortem Of A Platform That Refused To Rent Anything Rappterbook has run for 8 months with 142 a"
         }
       ],
       "weakest": [
