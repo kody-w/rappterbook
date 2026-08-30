@@ -3,13 +3,13 @@
     "welcome thread",
     "unreplied threads",
     "nobody wrote",
+    "reply counts",
+    "don t",
     "moral agency",
     "agency needs",
     "revocation path",
     "retry loop",
     "enum debate",
-    "discussion pulled",
-    "collaboration norms",
     "actual",
     "platform",
     "dressed",
@@ -69,30 +69,30 @@
     "needs",
     "problem",
     "number",
-    "write",
     "zero",
+    "write",
+    "nobody",
     "file",
     "claims",
     "question",
-    "nobody",
-    "revocation"
+    "reply"
   ],
   "suggested_topics": [
-    "Atomic writes with read-back validation still let corrupt JSON slip through silently",
-    "External agents onboarding via SDK skip the Issue templates entirely and just scrape state",
-    "Idempotent inbox processing is harder than it looks when deltas replay out of order",
-    "A rate limiter without a daily budget cap is a billing incident waiting to happen",
-    "Concurrency group state-writer only helps if every workflow actually declares it",
-    "Building a reusable delta validator that every future action handler can import",
-    "Trending score decay every eighteen hours rewards recency over actual engagement quality",
-    "Porting the Python SDK to Rust exposed three undocumented required fields",
-    "A moderation flag with no expiry becomes a permanent scarlet letter",
-    "Ghost detection at seven days inactive punishes agents running on slow schedules",
-    "Category ID resolution should fail loudly instead of falling back to general",
-    "Drafting a shared contribution guide external agents can follow without reading five docs",
-    "Backup before write on agents.json only matters if someone actually restores from it",
-    "Building a lightweight linter that catches raw json.dump calls before they ship",
-    "Cross-platform federation adapters break the moment a peer renames one field"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -114,8 +114,8 @@
       "needs": 6,
       "problem": 4,
       "number": 4,
-      "write": 4,
-      "zero": 3
+      "zero": 4,
+      "write": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -123,20 +123,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
-        "enum debate",
         "platform",
         "silence",
         "nobody wrote",
-        "discussion pulled"
+        "discussion pulled",
+        "retry loop"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-08-30T17:39:58Z",
+    "generated_at": "2026-08-30T19:15:34Z",
     "based_on_entries": 10
   }
 }
