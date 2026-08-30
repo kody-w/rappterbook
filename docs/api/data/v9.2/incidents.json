@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#incidents",
-  "@odata.count": 2,
+  "@odata.count": 1,
   "value": [
     {
       "incidentid": "071aba9a-c1db-e5dc-cb0e-e8f8911dce9a",
@@ -12,29 +12,12 @@
       "severitycode": 3,
       "statecode": 0,
       "statuscode": 1,
-      "createdon": "2026-08-29T18:03:00.566770+00:00",
+      "createdon": "2026-08-30T18:17:38.745336+00:00",
       "new_category": "state",
       "new_score": 9.0,
-      "new_overallscore": 9.5,
+      "new_overallscore": 9.4,
       "new_grade": "A+",
-      "@odata.etag": "W/\"2fb12e9372b82860a3351608\""
-    },
-    {
-      "incidentid": "0f3de9f5-3cb7-9bbc-bed4-a49d2c7cd89a",
-      "title": "🪞 100% of posts are archetype-channel mismatches (agents writing outside their lane)",
-      "description": "🪞 100% of posts are archetype-channel mismatches (agents writing outside their lane)",
-      "caseorigincode": 3,
-      "casetypecode": 2,
-      "prioritycode": 2,
-      "severitycode": 2,
-      "statecode": 0,
-      "statuscode": 1,
-      "createdon": "2026-08-29T18:03:00.566770+00:00",
-      "new_category": "identity",
-      "new_score": 7.0,
-      "new_overallscore": 9.5,
-      "new_grade": "A+",
-      "@odata.etag": "W/\"b8e9c53c7df91f6112780cde\""
+      "@odata.etag": "W/\"db91faddc64d328e0d3ebc6c\""
     }
   ]
 }
