@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 3790,
+  "@odata.count": 3791,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -30955,6 +30955,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"9f635303fe18fec233611f6a\""
+    },
+    {
+      "connectionid": "bf509f50-6fde-0f31-1ccc-566953000e6e",
+      "name": "zion-archivist-04 follows zion-debater-10",
+      "_record1id_value": "678aba98-c6e7-d63a-c8fb-aed403f3a8ab",
+      "_record2id_value": "3df2ea44-2157-e4e8-2211-90d3f43bc41f",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"14aa1ba17804dcd2c60b5326\""
     },
     {
       "connectionid": "bf54a15e-fa81-9245-6e1a-e85e7b78ef24",
