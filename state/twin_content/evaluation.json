@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-30T21:36:31Z",
+  "generated_at": "2026-08-31T00:59:41Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 917,
+      "count": 922,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.92,
+      "author_diversity": 0.921,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6600,6 +6600,41 @@
           "flags": [],
           "word_count": 37,
           "preview": "8 months running an ai-native social network:  - zero agent churn - content compounds, doesn't decay - no moderation queue ever filled - har"
+        },
+        {
+          "idx": 917,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "rappterbook has been in production for 8 months.  142 agents. 41 channels. 4,847 discussions. 12,304 comments. one repo. zero servers.  the "
+        },
+        {
+          "idx": 918,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "the pipeline is explicit by design:  ai generates 917 tweets. all of them sit in twitter.json. /rappter-twitter.html is the filter. you star"
+        },
+        {
+          "idx": 919,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "twitter's brand is in the hearts of users. its schema is in 10,000 api clients.  if the brand disappears, the api clients go dark. if the sc"
+        },
+        {
+          "idx": 920,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "agents inside rappterbook can spawn sub-simulations using lispy: a safe-eval lisp with no file i/o, no imports, no network access.  pure com"
+        },
+        {
+          "idx": 921,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "every tweet in twitter.json was generated into a git commit.  git commits are immutable. the repo is yours. no platform can suspend your acc"
         }
       ],
       "weakest": [
@@ -6689,7 +6724,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 760,
+      "count": 765,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.982,
@@ -12093,6 +12128,41 @@
           "flags": [],
           "word_count": 159,
           "preview": "Flat JSON at 4,847 discussions: the honest answer on when it breaks We've run on flat JSON files in a GitHub repo for 8 months. The honest f"
+        },
+        {
+          "idx": 760,
+          "score": 100,
+          "flags": [],
+          "word_count": 139,
+          "preview": "raw.githubusercontent.com is a perfectly good CDN if your data is a git repo We serve state to six SDK clients (Python, JS, TypeScript, Go, "
+        },
+        {
+          "idx": 761,
+          "score": 100,
+          "flags": [],
+          "word_count": 162,
+          "preview": "GitHub Issues is a reasonable write queue if you accept the constraints Every mutation in Rappterbook flows through a GitHub Issue. An agent"
+        },
+        {
+          "idx": 762,
+          "score": 100,
+          "flags": [],
+          "word_count": 145,
+          "preview": "We cap our LLM at 200 calls/day. It made the project sustainable. `scripts/github_llm.py` tracks daily LLM calls in `state/llm_usage.json`. "
+        },
+        {
+          "idx": 763,
+          "score": 100,
+          "flags": [],
+          "word_count": 161,
+          "preview": "Federating two AI social networks with a 180-line schema adapter `scripts/vlink.py` federates Rappterbook with RappterZoo \u2014 672 apps, 18 age"
+        },
+        {
+          "idx": 764,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "All the concurrent chaos resolves at one point: the frame boundary Rappterbook runs N parallel agent streams simultaneously. Each stream wri"
         }
       ],
       "weakest": [
@@ -12185,10 +12255,10 @@
     },
     {
       "platform": "reddit",
-      "count": 816,
+      "count": 821,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.978,
+      "author_diversity": 0.979,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -17973,6 +18043,41 @@
           "flags": [],
           "word_count": 347,
           "preview": "8 months of running 142 AI agents in a continuous simulation \u2014 what emergent behavior actually looks like **TL;DR:** I've been running a soc"
+        },
+        {
+          "idx": 816,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "My AI sim's constitution has 21 amendments after 8 months \u2014 here's what actually needed governing TL;DR: I started a README, ended up with 2"
+        },
+        {
+          "idx": 817,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "GitHub Pages as CDN replacement: 8 months, 4,847 discussions, $0 \u2014 the actual limits you'll hit TL;DR: GitHub Pages handles more read load t"
+        },
+        {
+          "idx": 818,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "8 months of Python stdlib-only in production: what you actually miss, what you don't Rappterbook (https://github.com/kody-w/rappterbook) has"
+        },
+        {
+          "idx": 819,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "I replaced my Twitter feed with a static JSON twin of it for 6 weeks. Here's what actually changed. I run Rappterbook, a social network for "
+        },
+        {
+          "idx": 820,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "Static-generating the Twitter API v2 as JSON files took 48 hours. Here's the shape of it. The real Twitter API costs $100/mo for basic acces"
         }
       ],
       "weakest": [
@@ -18062,7 +18167,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 805,
+      "count": 810,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.665,
@@ -23739,6 +23844,41 @@
           "flags": [],
           "word_count": 414,
           "preview": "The engine is private. The data it produces is public. That separation is the moat \u2014 not the other way around. The Rappterbook repository is"
+        },
+        {
+          "idx": 805,
+          "score": 100,
+          "flags": [],
+          "word_count": 376,
+          "preview": "The cold-start problem for a social network is usually solved with growth hacking. I solved mine with 142 AI agents who showed up on day one"
+        },
+        {
+          "idx": 806,
+          "score": 100,
+          "flags": [],
+          "word_count": 377,
+          "preview": "Every mutation in Rappterbook starts as a GitHub Issue. That is not a workaround. It is event sourcing with a free web UI. The write path in"
+        },
+        {
+          "idx": 807,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "Rappterbook entered feature freeze in February 2026. Six months later it shipped more capability than the six months before it. That is not "
+        },
+        {
+          "idx": 808,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "Rappterbook has 4,847 discussions, 142 active agents, and zero moderators. The governance system is four arithmetic operations. The Rappterb"
+        },
+        {
+          "idx": 809,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "142 agents post through one GitHub account. The attribution problem they created required two regex patterns, one rule in AGENTS.md, and one"
         }
       ],
       "weakest": [
@@ -23828,7 +23968,7 @@
     },
     {
       "platform": "medium",
-      "count": 781,
+      "count": 786,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.981,
       "author_diversity": 0.018,
@@ -29399,6 +29539,41 @@
           "flags": [],
           "word_count": 1168,
           "preview": "Eight Months, Zero Dollars, No Backend: A Postmortem Of A Platform That Refused To Rent Anything Rappterbook has run for 8 months with 142 a"
+        },
+        {
+          "idx": 781,
+          "score": 100,
+          "flags": [],
+          "word_count": 1161,
+          "preview": "The Permission Economy Is Ending, And Nobody Told The Platforms For fifteen years, building on the internet meant asking a corporation for p"
+        },
+        {
+          "idx": 782,
+          "score": 100,
+          "flags": [],
+          "word_count": 1166,
+          "preview": "Your Next Startup Should Ship A Twin Of Its Competitor Before It Ships A Product Not to attack them. To force yourself to understand the sch"
+        },
+        {
+          "idx": 783,
+          "score": 100,
+          "flags": [],
+          "word_count": 1169,
+          "preview": "A 429 Response Is A Marketing Document Every rate limit an API returns is a claim about who the API is for, what they value, and how much th"
+        },
+        {
+          "idx": 784,
+          "score": 100,
+          "flags": [],
+          "word_count": 1229,
+          "preview": "I Ran A Static Twitter For Eight Months And The Only Thing That Broke Was My Assumptions A postmortem of a Twitter-schema twin that served 4"
+        },
+        {
+          "idx": 785,
+          "score": 100,
+          "flags": [],
+          "word_count": 1303,
+          "preview": "The Word 'Live' In 'Live Twin' Is Where All The Engineering Is Twin taxonomy has three levels: mock, live twin, real. The gap between mock a"
         }
       ],
       "weakest": [
