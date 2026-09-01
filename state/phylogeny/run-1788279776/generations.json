@@ -1,0 +1,3285 @@
+[
+  {
+    "generation": 1,
+    "epoch": 0,
+    "n_pairs": 2,
+    "n_offspring": 2,
+    "n_survivors": 5,
+    "n_extinct_this_gen": 0,
+    "allele_frequencies": {
+      "color": {
+        "azure": 1,
+        "verdant": 2,
+        "gold": 1,
+        "crimson": 1
+      },
+      "pattern": {
+        "iridescent": 2,
+        "spotted": 1,
+        "fractal": 2
+      },
+      "size": {
+        "medium": 1,
+        "large": 2,
+        "giant": 1,
+        "small": 1
+      },
+      "temperament": {
+        "curious": 2,
+        "peaceful": 1,
+        "chaotic": 2
+      },
+      "sociability": {
+        "pair": 1,
+        "pack": 1,
+        "swarm": 2,
+        "solitary": 1
+      },
+      "cognition": {
+        "deep_thinker": 1,
+        "memory_hoarder": 1,
+        "pattern_matcher": 2,
+        "rapid_reactor": 1
+      },
+      "metabolism": {
+        "efficient": 1,
+        "slow_burn": 1,
+        "torpor": 2,
+        "voracious": 1
+      },
+      "lifespan": {
+        "long": 2,
+        "ancient": 1,
+        "normal": 2
+      }
+    },
+    "mean_fitness": 0.66,
+    "founder_blood_distribution": {
+      "scarlet-fang": 0.2,
+      "azure-mind": 0.4,
+      "verdant-vow": 0.4,
+      "gold-storm": 0.4
+    }
+  },
+  {
+    "generation": 2,
+    "epoch": 0,
+    "n_pairs": 2,
+    "n_offspring": 2,
+    "n_survivors": 7,
+    "n_extinct_this_gen": 0,
+    "allele_frequencies": {
+      "color": {
+        "azure": 2,
+        "verdant": 3,
+        "gold": 1,
+        "crimson": 1
+      },
+      "pattern": {
+        "iridescent": 2,
+        "spotted": 2,
+        "fractal": 3
+      },
+      "size": {
+        "medium": 2,
+        "large": 3,
+        "giant": 1,
+        "small": 1
+      },
+      "temperament": {
+        "curious": 2,
+        "peaceful": 2,
+        "chaotic": 3
+      },
+      "sociability": {
+        "pair": 2,
+        "pack": 1,
+        "swarm": 3,
+        "solitary": 1
+      },
+      "cognition": {
+        "deep_thinker": 2,
+        "memory_hoarder": 1,
+        "pattern_matcher": 3,
+        "rapid_reactor": 1
+      },
+      "metabolism": {
+        "efficient": 2,
+        "slow_burn": 1,
+        "torpor": 3,
+        "voracious": 1
+      },
+      "lifespan": {
+        "long": 3,
+        "ancient": 1,
+        "normal": 3
+      }
+    },
+    "mean_fitness": 0.6643,
+    "founder_blood_distribution": {
+      "scarlet-fang": 0.143,
+      "azure-mind": 0.429,
+      "verdant-vow": 0.571,
+      "gold-storm": 0.429
+    }
+  },
+  {
+    "generation": 3,
+    "epoch": 0,
+    "n_pairs": 3,
+    "n_offspring": 4,
+    "n_survivors": 10,
+    "n_extinct_this_gen": 0,
+    "allele_frequencies": {
+      "color": {
+        "azure": 4,
+        "verdant": 3,
+        "crimson": 2,
+        "gold": 1
+      },
+      "pattern": {
+        "iridescent": 4,
+        "spotted": 3,
+        "fractal": 3
+      },
+      "size": {
+        "medium": 3,
+        "large": 4,
+        "small": 3
+      },
+      "temperament": {
+        "curious": 4,
+        "peaceful": 3,
+        "chaotic": 3
+      },
+      "sociability": {
+        "pair": 2,
+        "pack": 2,
+        "solitary": 3,
+        "swarm": 3
+      },
+      "cognition": {
+        "deep_thinker": 3,
+        "memory_hoarder": 2,
+        "rapid_reactor": 2,
+        "pattern_matcher": 3
+      },
+      "metabolism": {
+        "efficient": 4,
+        "slow_burn": 2,
+        "voracious": 1,
+        "torpor": 3
+      },
+      "lifespan": {
+        "long": 4,
+        "ancient": 2,
+        "normal": 3,
+        "mayfly": 1
+      }
+    },
+    "mean_fitness": 0.685,
+    "founder_blood_distribution": {
+      "scarlet-fang": 0.3,
+      "azure-mind": 0.6,
+      "verdant-vow": 0.6,
+      "gold-storm": 0.3
+    }
+  },
+  {
+    "generation": 4,
+    "epoch": 0,
+    "n_pairs": 5,
+    "n_offspring": 8,
+    "n_survivors": 16,
+    "n_extinct_this_gen": 0,
+    "allele_frequencies": {
+      "color": {
+        "azure": 9,
+        "verdant": 4,
+        "crimson": 2,
+        "gold": 1
+      },
+      "pattern": {
+        "iridescent": 7,
+        "spotted": 6,
+        "fractal": 3
+      },
+      "size": {
+        "medium": 7,
+        "large": 5,
+        "small": 4
+      },
+      "temperament": {
+        "curious": 7,
+        "peaceful": 5,
+        "chaotic": 4
+      },
+      "sociability": {
+        "pair": 5,
+        "pack": 3,
+        "solitary": 5,
+        "swarm": 3
+      },
+      "cognition": {
+        "deep_thinker": 6,
+        "memory_hoarder": 3,
+        "rapid_reactor": 3,
+        "pattern_matcher": 4
+      },
+      "metabolism": {
+        "efficient": 8,
+        "slow_burn": 4,
+        "voracious": 1,
+        "torpor": 3
+      },
+      "lifespan": {
+        "long": 9,
+        "ancient": 3,
+        "normal": 3,
+        "mayfly": 1
+      }
+    },
+    "mean_fitness": 0.6844,
+    "founder_blood_distribution": {
+      "scarlet-fang": 0.375,
+      "azure-mind": 0.688,
+      "verdant-vow": 0.562,
+      "gold-storm": 0.25
+    }
+  },
+  {
+    "generation": 5,
+    "epoch": 0,
+    "n_pairs": 8,
+    "n_offspring": 15,
+    "n_survivors": 29,
+    "n_extinct_this_gen": 0,
+    "allele_frequencies": {
+      "color": {
+        "azure": 18,
+        "verdant": 6,
+        "crimson": 4,
+        "gold": 1
+      },
+      "pattern": {
+        "iridescent": 11,
+        "spotted": 14,
+        "fractal": 3,
+        "solid": 1
+      },
+      "size": {
+        "medium": 10,
+        "large": 8,
+        "small": 11
+      },
+      "temperament": {
+        "curious": 13,
+        "peaceful": 10,
+        "chaotic": 6
+      },
+      "sociability": {
+        "pair": 11,
+        "pack": 5,
+        "solitary": 9,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 13,
+        "memory_hoarder": 5,
+        "rapid_reactor": 5,
+        "pattern_matcher": 6
+      },
+      "metabolism": {
+        "efficient": 15,
+        "slow_burn": 8,
+        "voracious": 3,
+        "torpor": 3
+      },
+      "lifespan": {
+        "long": 19,
+        "ancient": 4,
+        "normal": 5,
+        "mayfly": 1
+      }
+    },
+    "mean_fitness": 0.6948,
+    "founder_blood_distribution": {
+      "scarlet-fang": 0.448,
+      "azure-mind": 0.759,
+      "verdant-vow": 0.586,
+      "gold-storm": 0.207
+    }
+  },
+  {
+    "generation": 6,
+    "epoch": 0,
+    "n_pairs": 14,
+    "n_offspring": 26,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 12,
+    "allele_frequencies": {
+      "color": {
+        "verdant": 6,
+        "crimson": 7,
+        "azure": 27
+      },
+      "pattern": {
+        "spotted": 20,
+        "iridescent": 15,
+        "fractal": 2,
+        "solid": 3
+      },
+      "size": {
+        "large": 6,
+        "small": 22,
+        "medium": 12
+      },
+      "temperament": {
+        "peaceful": 10,
+        "curious": 24,
+        "chaotic": 5,
+        "cautious": 1
+      },
+      "sociability": {
+        "pack": 6,
+        "solitary": 17,
+        "pair": 14,
+        "swarm": 3
+      },
+      "cognition": {
+        "memory_hoarder": 3,
+        "rapid_reactor": 4,
+        "deep_thinker": 28,
+        "pattern_matcher": 5
+      },
+      "metabolism": {
+        "slow_burn": 5,
+        "voracious": 4,
+        "efficient": 28,
+        "torpor": 3
+      },
+      "lifespan": {
+        "ancient": 5,
+        "long": 30,
+        "normal": 3,
+        "mayfly": 2
+      }
+    },
+    "mean_fitness": 0.75,
+    "founder_blood_distribution": {
+      "scarlet-fang": 0.675,
+      "azure-mind": 0.85,
+      "verdant-vow": 0.625,
+      "gold-storm": 0.125
+    }
+  },
+  {
+    "generation": 7,
+    "epoch": 0,
+    "n_pairs": 20,
+    "n_offspring": 40,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 36,
+    "allele_frequencies": {
+      "color": {
+        "azure": 28,
+        "crimson": 10,
+        "verdant": 2
+      },
+      "pattern": {
+        "iridescent": 14,
+        "spotted": 21,
+        "solid": 5
+      },
+      "size": {
+        "small": 37,
+        "medium": 1,
+        "large": 2
+      },
+      "temperament": {
+        "curious": 30,
+        "peaceful": 6,
+        "chaotic": 3,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 27,
+        "pair": 9,
+        "pack": 3,
+        "swarm": 1
+      },
+      "cognition": {
+        "deep_thinker": 34,
+        "rapid_reactor": 2,
+        "memory_hoarder": 1,
+        "pattern_matcher": 3
+      },
+      "metabolism": {
+        "efficient": 38,
+        "torpor": 2
+      },
+      "lifespan": {
+        "long": 36,
+        "ancient": 2,
+        "normal": 1,
+        "mayfly": 1
+      }
+    },
+    "mean_fitness": 0.8413,
+    "founder_blood_distribution": {
+      "scarlet-fang": 0.925,
+      "azure-mind": 0.95,
+      "verdant-vow": 0.7,
+      "gold-storm": 0.05
+    }
+  },
+  {
+    "generation": 8,
+    "epoch": 0,
+    "n_pairs": 19,
+    "n_offspring": 33,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 32,
+    "allele_frequencies": {
+      "color": {
+        "azure": 29,
+        "crimson": 11
+      },
+      "pattern": {
+        "iridescent": 14,
+        "spotted": 22,
+        "solid": 4
+      },
+      "size": {
+        "small": 39,
+        "tiny": 1
+      },
+      "temperament": {
+        "curious": 32,
+        "peaceful": 5,
+        "chaotic": 2,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 28,
+        "pair": 9,
+        "pack": 2,
+        "swarm": 1
+      },
+      "cognition": {
+        "deep_thinker": 35,
+        "rapid_reactor": 2,
+        "memory_hoarder": 1,
+        "pattern_matcher": 2
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 40
+      }
+    },
+    "mean_fitness": 0.8538,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 0.7,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 9,
+    "epoch": 0,
+    "n_pairs": 20,
+    "n_offspring": 32,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 31,
+    "allele_frequencies": {
+      "color": {
+        "azure": 29,
+        "crimson": 11
+      },
+      "pattern": {
+        "iridescent": 13,
+        "spotted": 23,
+        "solid": 4
+      },
+      "size": {
+        "small": 39,
+        "tiny": 1
+      },
+      "temperament": {
+        "curious": 32,
+        "peaceful": 5,
+        "chaotic": 2,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 28,
+        "pair": 9,
+        "pack": 2,
+        "swarm": 1
+      },
+      "cognition": {
+        "rapid_reactor": 2,
+        "deep_thinker": 34,
+        "memory_hoarder": 1,
+        "pattern_matcher": 3
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 40
+      }
+    },
+    "mean_fitness": 0.8538,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 0.725,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 10,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 34,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 32,
+    "allele_frequencies": {
+      "color": {
+        "azure": 27,
+        "crimson": 13
+      },
+      "pattern": {
+        "spotted": 24,
+        "iridescent": 11,
+        "solid": 5
+      },
+      "size": {
+        "small": 36,
+        "tiny": 4
+      },
+      "temperament": {
+        "peaceful": 4,
+        "curious": 31,
+        "chaotic": 2,
+        "cautious": 3
+      },
+      "sociability": {
+        "pair": 9,
+        "solitary": 25,
+        "pack": 4,
+        "swarm": 2
+      },
+      "cognition": {
+        "deep_thinker": 35,
+        "rapid_reactor": 1,
+        "memory_hoarder": 1,
+        "pattern_matcher": 3
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 40
+      }
+    },
+    "mean_fitness": 0.5988,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 0.775,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 11,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 34,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 30,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 14,
+        "azure": 26
+      },
+      "pattern": {
+        "solid": 5,
+        "spotted": 25,
+        "iridescent": 10
+      },
+      "size": {
+        "small": 32,
+        "tiny": 8
+      },
+      "temperament": {
+        "curious": 28,
+        "peaceful": 4,
+        "chaotic": 2,
+        "cautious": 6
+      },
+      "sociability": {
+        "pack": 6,
+        "solitary": 26,
+        "pair": 6,
+        "swarm": 2
+      },
+      "cognition": {
+        "deep_thinker": 34,
+        "memory_hoarder": 2,
+        "pattern_matcher": 4
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 39,
+        "ancient": 1
+      }
+    },
+    "mean_fitness": 0.6338,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 0.825,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 12,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 37,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 29,
+    "allele_frequencies": {
+      "color": {
+        "azure": 24,
+        "crimson": 15,
+        "obsidian": 1
+      },
+      "pattern": {
+        "solid": 4,
+        "spotted": 31,
+        "iridescent": 5
+      },
+      "size": {
+        "small": 19,
+        "tiny": 21
+      },
+      "temperament": {
+        "curious": 27,
+        "cautious": 11,
+        "peaceful": 1,
+        "aggressive": 1
+      },
+      "sociability": {
+        "pack": 7,
+        "swarm": 3,
+        "solitary": 25,
+        "pair": 5
+      },
+      "cognition": {
+        "deep_thinker": 32,
+        "pattern_matcher": 5,
+        "memory_hoarder": 3
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 39,
+        "ancient": 1
+      }
+    },
+    "mean_fitness": 0.7125,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 0.975,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 13,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 39,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 38,
+    "allele_frequencies": {
+      "color": {
+        "azure": 21,
+        "crimson": 18,
+        "obsidian": 1
+      },
+      "pattern": {
+        "spotted": 34,
+        "solid": 2,
+        "iridescent": 4
+      },
+      "size": {
+        "small": 15,
+        "tiny": 25
+      },
+      "temperament": {
+        "curious": 26,
+        "cautious": 13,
+        "peaceful": 1
+      },
+      "sociability": {
+        "swarm": 4,
+        "solitary": 26,
+        "pack": 7,
+        "pair": 3
+      },
+      "cognition": {
+        "pattern_matcher": 6,
+        "deep_thinker": 31,
+        "memory_hoarder": 3
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 39,
+        "ancient": 1
+      }
+    },
+    "mean_fitness": 0.735,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 14,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 36,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 21,
+        "azure": 18,
+        "obsidian": 1
+      },
+      "pattern": {
+        "solid": 2,
+        "spotted": 33,
+        "iridescent": 5
+      },
+      "size": {
+        "small": 12,
+        "tiny": 28
+      },
+      "temperament": {
+        "curious": 21,
+        "cautious": 17,
+        "peaceful": 2
+      },
+      "sociability": {
+        "pack": 12,
+        "solitary": 22,
+        "pair": 2,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 33,
+        "pattern_matcher": 5,
+        "memory_hoarder": 2
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 39,
+        "ancient": 1
+      }
+    },
+    "mean_fitness": 0.78,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 15,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 40,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 40,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 26,
+        "azure": 12,
+        "obsidian": 1,
+        "gold": 1
+      },
+      "pattern": {
+        "solid": 2,
+        "spotted": 33,
+        "iridescent": 5
+      },
+      "size": {
+        "small": 5,
+        "tiny": 35
+      },
+      "temperament": {
+        "curious": 20,
+        "cautious": 19,
+        "peaceful": 1
+      },
+      "sociability": {
+        "pack": 15,
+        "solitary": 20,
+        "pair": 1,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 33,
+        "pattern_matcher": 6,
+        "memory_hoarder": 1
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 38,
+        "ancient": 2
+      }
+    },
+    "mean_fitness": 0.8263,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 16,
+    "epoch": 1,
+    "n_pairs": 19,
+    "n_offspring": 36,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 31,
+    "allele_frequencies": {
+      "color": {
+        "azure": 12,
+        "crimson": 27,
+        "gold": 1
+      },
+      "pattern": {
+        "spotted": 31,
+        "iridescent": 5,
+        "solid": 3,
+        "striped": 1
+      },
+      "size": {
+        "small": 2,
+        "tiny": 38
+      },
+      "temperament": {
+        "cautious": 24,
+        "curious": 15,
+        "peaceful": 1
+      },
+      "sociability": {
+        "pack": 13,
+        "solitary": 19,
+        "pair": 2,
+        "swarm": 6
+      },
+      "cognition": {
+        "deep_thinker": 32,
+        "pattern_matcher": 7,
+        "memory_hoarder": 1
+      },
+      "metabolism": {
+        "efficient": 39,
+        "torpor": 1
+      },
+      "lifespan": {
+        "long": 39,
+        "ancient": 1
+      }
+    },
+    "mean_fitness": 0.855,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 17,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 37,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 36,
+    "allele_frequencies": {
+      "color": {
+        "azure": 11,
+        "crimson": 28,
+        "gold": 1
+      },
+      "pattern": {
+        "spotted": 29,
+        "iridescent": 5,
+        "solid": 5,
+        "striped": 1
+      },
+      "size": {
+        "tiny": 39,
+        "small": 1
+      },
+      "temperament": {
+        "cautious": 24,
+        "curious": 15,
+        "peaceful": 1
+      },
+      "sociability": {
+        "solitary": 20,
+        "pair": 2,
+        "pack": 12,
+        "swarm": 6
+      },
+      "cognition": {
+        "deep_thinker": 30,
+        "pattern_matcher": 9,
+        "memory_hoarder": 1
+      },
+      "metabolism": {
+        "efficient": 39,
+        "torpor": 1
+      },
+      "lifespan": {
+        "long": 37,
+        "ancient": 3
+      }
+    },
+    "mean_fitness": 0.8575,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 18,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 37,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 35,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 30,
+        "azure": 8,
+        "gold": 2
+      },
+      "pattern": {
+        "spotted": 30,
+        "iridescent": 5,
+        "solid": 5
+      },
+      "size": {
+        "tiny": 39,
+        "small": 1
+      },
+      "temperament": {
+        "cautious": 25,
+        "curious": 14,
+        "peaceful": 1
+      },
+      "sociability": {
+        "solitary": 17,
+        "pack": 17,
+        "swarm": 5,
+        "pair": 1
+      },
+      "cognition": {
+        "pattern_matcher": 11,
+        "deep_thinker": 28,
+        "memory_hoarder": 1
+      },
+      "metabolism": {
+        "efficient": 40
+      },
+      "lifespan": {
+        "long": 35,
+        "ancient": 4,
+        "mayfly": 1
+      }
+    },
+    "mean_fitness": 0.875,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 19,
+    "epoch": 1,
+    "n_pairs": 20,
+    "n_offspring": 37,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 31,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 32,
+        "azure": 6,
+        "gold": 2
+      },
+      "pattern": {
+        "spotted": 29,
+        "solid": 7,
+        "iridescent": 4
+      },
+      "size": {
+        "tiny": 39,
+        "small": 1
+      },
+      "temperament": {
+        "cautious": 28,
+        "curious": 11,
+        "peaceful": 1
+      },
+      "sociability": {
+        "solitary": 15,
+        "swarm": 5,
+        "pack": 19,
+        "pair": 1
+      },
+      "cognition": {
+        "memory_hoarder": 1,
+        "pattern_matcher": 12,
+        "deep_thinker": 27
+      },
+      "metabolism": {
+        "efficient": 39,
+        "voracious": 1
+      },
+      "lifespan": {
+        "long": 35,
+        "ancient": 5
+      }
+    },
+    "mean_fitness": 0.8975,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 20,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 36,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 23,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 34,
+        "azure": 4,
+        "gold": 2
+      },
+      "pattern": {
+        "spotted": 24,
+        "iridescent": 4,
+        "solid": 12
+      },
+      "size": {
+        "tiny": 38,
+        "small": 2
+      },
+      "temperament": {
+        "cautious": 27,
+        "curious": 12,
+        "peaceful": 1
+      },
+      "sociability": {
+        "solitary": 15,
+        "pack": 16,
+        "swarm": 7,
+        "pair": 2
+      },
+      "cognition": {
+        "deep_thinker": 22,
+        "pattern_matcher": 17,
+        "rapid_reactor": 1
+      },
+      "metabolism": {
+        "efficient": 38,
+        "voracious": 2
+      },
+      "lifespan": {
+        "long": 30,
+        "ancient": 10
+      }
+    },
+    "mean_fitness": 0.72,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 21,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 26,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 34,
+        "gold": 3,
+        "azure": 3
+      },
+      "pattern": {
+        "solid": 21,
+        "iridescent": 3,
+        "spotted": 16
+      },
+      "size": {
+        "tiny": 38,
+        "small": 1,
+        "giant": 1
+      },
+      "temperament": {
+        "cautious": 26,
+        "curious": 13,
+        "peaceful": 1
+      },
+      "sociability": {
+        "solitary": 13,
+        "swarm": 8,
+        "pack": 17,
+        "pair": 2
+      },
+      "cognition": {
+        "pattern_matcher": 21,
+        "deep_thinker": 18,
+        "rapid_reactor": 1
+      },
+      "metabolism": {
+        "efficient": 37,
+        "voracious": 3
+      },
+      "lifespan": {
+        "ancient": 18,
+        "long": 22
+      }
+    },
+    "mean_fitness": 0.7375,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 22,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 40,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 39,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 37,
+        "gold": 2,
+        "azure": 1
+      },
+      "pattern": {
+        "solid": 28,
+        "spotted": 11,
+        "iridescent": 1
+      },
+      "size": {
+        "tiny": 37,
+        "giant": 2,
+        "large": 1
+      },
+      "temperament": {
+        "cautious": 24,
+        "curious": 15,
+        "chaotic": 1
+      },
+      "sociability": {
+        "solitary": 16,
+        "pack": 17,
+        "pair": 2,
+        "swarm": 5
+      },
+      "cognition": {
+        "pattern_matcher": 22,
+        "deep_thinker": 16,
+        "rapid_reactor": 2
+      },
+      "metabolism": {
+        "efficient": 36,
+        "voracious": 4
+      },
+      "lifespan": {
+        "ancient": 30,
+        "long": 10
+      }
+    },
+    "mean_fitness": 0.7638,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 23,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 38,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 38,
+        "gold": 1,
+        "azure": 1
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 8,
+        "iridescent": 1
+      },
+      "size": {
+        "tiny": 31,
+        "giant": 7,
+        "large": 2
+      },
+      "temperament": {
+        "cautious": 24,
+        "curious": 15,
+        "chaotic": 1
+      },
+      "sociability": {
+        "solitary": 17,
+        "pair": 2,
+        "pack": 13,
+        "swarm": 8
+      },
+      "cognition": {
+        "pattern_matcher": 21,
+        "deep_thinker": 15,
+        "rapid_reactor": 4
+      },
+      "metabolism": {
+        "efficient": 33,
+        "voracious": 6,
+        "slow_burn": 1
+      },
+      "lifespan": {
+        "ancient": 32,
+        "long": 8
+      }
+    },
+    "mean_fitness": 0.7963,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 24,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 36,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 36,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 37,
+        "gold": 3
+      },
+      "pattern": {
+        "solid": 32,
+        "spotted": 8
+      },
+      "size": {
+        "tiny": 27,
+        "giant": 10,
+        "large": 3
+      },
+      "temperament": {
+        "cautious": 30,
+        "curious": 10
+      },
+      "sociability": {
+        "solitary": 16,
+        "pair": 2,
+        "pack": 12,
+        "swarm": 10
+      },
+      "cognition": {
+        "pattern_matcher": 24,
+        "deep_thinker": 13,
+        "rapid_reactor": 3
+      },
+      "metabolism": {
+        "efficient": 26,
+        "voracious": 12,
+        "slow_burn": 1,
+        "torpor": 1
+      },
+      "lifespan": {
+        "ancient": 27,
+        "long": 13
+      }
+    },
+    "mean_fitness": 0.8275,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 25,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 37,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 37,
+        "gold": 3
+      },
+      "pattern": {
+        "solid": 35,
+        "spotted": 5
+      },
+      "size": {
+        "tiny": 20,
+        "giant": 14,
+        "large": 6
+      },
+      "temperament": {
+        "cautious": 31,
+        "curious": 9
+      },
+      "sociability": {
+        "solitary": 17,
+        "pair": 3,
+        "pack": 13,
+        "swarm": 7
+      },
+      "cognition": {
+        "pattern_matcher": 27,
+        "deep_thinker": 11,
+        "rapid_reactor": 2
+      },
+      "metabolism": {
+        "efficient": 18,
+        "voracious": 17,
+        "slow_burn": 3,
+        "torpor": 2
+      },
+      "lifespan": {
+        "ancient": 21,
+        "long": 19
+      }
+    },
+    "mean_fitness": 0.865,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 26,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 39,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 38,
+    "allele_frequencies": {
+      "color": {
+        "gold": 3,
+        "crimson": 37
+      },
+      "pattern": {
+        "solid": 33,
+        "spotted": 7
+      },
+      "size": {
+        "tiny": 12,
+        "giant": 18,
+        "large": 10
+      },
+      "temperament": {
+        "cautious": 30,
+        "curious": 10
+      },
+      "sociability": {
+        "pack": 16,
+        "swarm": 9,
+        "solitary": 13,
+        "pair": 2
+      },
+      "cognition": {
+        "deep_thinker": 11,
+        "pattern_matcher": 27,
+        "rapid_reactor": 2
+      },
+      "metabolism": {
+        "voracious": 19,
+        "efficient": 13,
+        "slow_burn": 5,
+        "torpor": 3
+      },
+      "lifespan": {
+        "long": 14,
+        "ancient": 26
+      }
+    },
+    "mean_fitness": 0.9088,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 27,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 39,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 37,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 39,
+        "gold": 1
+      },
+      "pattern": {
+        "spotted": 5,
+        "solid": 35
+      },
+      "size": {
+        "large": 12,
+        "giant": 20,
+        "tiny": 8
+      },
+      "temperament": {
+        "cautious": 28,
+        "curious": 12
+      },
+      "sociability": {
+        "solitary": 16,
+        "swarm": 7,
+        "pack": 16,
+        "pair": 1
+      },
+      "cognition": {
+        "pattern_matcher": 30,
+        "deep_thinker": 8,
+        "rapid_reactor": 2
+      },
+      "metabolism": {
+        "efficient": 12,
+        "voracious": 21,
+        "torpor": 3,
+        "slow_burn": 4
+      },
+      "lifespan": {
+        "ancient": 29,
+        "long": 11
+      }
+    },
+    "mean_fitness": 0.935,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 28,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 39,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 39,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 38,
+        "gold": 2
+      },
+      "pattern": {
+        "spotted": 3,
+        "solid": 36,
+        "striped": 1
+      },
+      "size": {
+        "large": 13,
+        "giant": 21,
+        "tiny": 6
+      },
+      "temperament": {
+        "cautious": 26,
+        "curious": 14
+      },
+      "sociability": {
+        "solitary": 18,
+        "swarm": 9,
+        "pack": 13
+      },
+      "cognition": {
+        "pattern_matcher": 29,
+        "deep_thinker": 7,
+        "rapid_reactor": 2,
+        "memory_hoarder": 2
+      },
+      "metabolism": {
+        "efficient": 8,
+        "voracious": 29,
+        "torpor": 2,
+        "slow_burn": 1
+      },
+      "lifespan": {
+        "ancient": 24,
+        "long": 16
+      }
+    },
+    "mean_fitness": 0.9662,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 29,
+    "epoch": 2,
+    "n_pairs": 20,
+    "n_offspring": 40,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 40,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 38,
+        "gold": 2
+      },
+      "pattern": {
+        "solid": 35,
+        "striped": 1,
+        "spotted": 2,
+        "iridescent": 2
+      },
+      "size": {
+        "giant": 20,
+        "large": 20
+      },
+      "temperament": {
+        "cautious": 21,
+        "curious": 17,
+        "chaotic": 2
+      },
+      "sociability": {
+        "pack": 15,
+        "swarm": 6,
+        "solitary": 19
+      },
+      "cognition": {
+        "pattern_matcher": 28,
+        "deep_thinker": 8,
+        "memory_hoarder": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "long": 25,
+        "ancient": 15
+      }
+    },
+    "mean_fitness": 1.0188,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 30,
+    "epoch": 3,
+    "n_pairs": 19,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 37,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 35,
+        "gold": 4,
+        "obsidian": 1
+      },
+      "pattern": {
+        "solid": 35,
+        "spotted": 1,
+        "iridescent": 4
+      },
+      "size": {
+        "giant": 17,
+        "large": 23
+      },
+      "temperament": {
+        "curious": 36,
+        "chaotic": 4
+      },
+      "sociability": {
+        "pack": 13,
+        "swarm": 6,
+        "solitary": 21
+      },
+      "cognition": {
+        "pattern_matcher": 27,
+        "deep_thinker": 9,
+        "memory_hoarder": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "long": 26,
+        "ancient": 12,
+        "mayfly": 2
+      }
+    },
+    "mean_fitness": 0.8675,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 31,
+    "epoch": 3,
+    "n_pairs": 20,
+    "n_offspring": 37,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 35,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 37,
+        "gold": 2,
+        "obsidian": 1
+      },
+      "pattern": {
+        "solid": 35,
+        "spotted": 1,
+        "iridescent": 2,
+        "fractal": 2
+      },
+      "size": {
+        "giant": 17,
+        "large": 23
+      },
+      "temperament": {
+        "curious": 37,
+        "chaotic": 3
+      },
+      "sociability": {
+        "pack": 14,
+        "swarm": 7,
+        "solitary": 19
+      },
+      "cognition": {
+        "pattern_matcher": 29,
+        "deep_thinker": 8,
+        "memory_hoarder": 3
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "long": 14,
+        "ancient": 22,
+        "mayfly": 4
+      }
+    },
+    "mean_fitness": 0.8825,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 32,
+    "epoch": 3,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 32,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 37,
+        "gold": 2,
+        "azure": 1
+      },
+      "pattern": {
+        "solid": 32,
+        "spotted": 3,
+        "iridescent": 2,
+        "fractal": 3
+      },
+      "size": {
+        "large": 26,
+        "giant": 14
+      },
+      "temperament": {
+        "curious": 34,
+        "chaotic": 6
+      },
+      "sociability": {
+        "pack": 13,
+        "solitary": 23,
+        "swarm": 4
+      },
+      "cognition": {
+        "pattern_matcher": 35,
+        "memory_hoarder": 3,
+        "deep_thinker": 2
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "long": 1,
+        "ancient": 33,
+        "mayfly": 6
+      }
+    },
+    "mean_fitness": 0.8988,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 33,
+    "epoch": 3,
+    "n_pairs": 19,
+    "n_offspring": 32,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 25,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 38,
+        "gold": 2
+      },
+      "pattern": {
+        "solid": 32,
+        "spotted": 4,
+        "iridescent": 1,
+        "fractal": 3
+      },
+      "size": {
+        "large": 28,
+        "giant": 12
+      },
+      "temperament": {
+        "curious": 33,
+        "chaotic": 7
+      },
+      "sociability": {
+        "pack": 10,
+        "solitary": 27,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 33,
+        "memory_hoarder": 3,
+        "deep_thinker": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 38,
+        "mayfly": 2
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 34,
+    "epoch": 3,
+    "n_pairs": 19,
+    "n_offspring": 31,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 29,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 39,
+        "gold": 1
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 5,
+        "iridescent": 1,
+        "fractal": 3
+      },
+      "size": {
+        "large": 27,
+        "giant": 13
+      },
+      "temperament": {
+        "curious": 32,
+        "chaotic": 8
+      },
+      "sociability": {
+        "pack": 10,
+        "solitary": 27,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 33,
+        "memory_hoarder": 3,
+        "deep_thinker": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 35,
+    "epoch": 3,
+    "n_pairs": 20,
+    "n_offspring": 31,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 31,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 39,
+        "gold": 1
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 5,
+        "iridescent": 1,
+        "fractal": 3
+      },
+      "size": {
+        "large": 27,
+        "giant": 13
+      },
+      "temperament": {
+        "curious": 32,
+        "chaotic": 8
+      },
+      "sociability": {
+        "pack": 10,
+        "solitary": 27,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 33,
+        "memory_hoarder": 3,
+        "deep_thinker": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 36,
+    "epoch": 3,
+    "n_pairs": 20,
+    "n_offspring": 29,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 29,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 39,
+        "gold": 1
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 5,
+        "iridescent": 1,
+        "fractal": 3
+      },
+      "size": {
+        "large": 27,
+        "giant": 13
+      },
+      "temperament": {
+        "curious": 32,
+        "chaotic": 8
+      },
+      "sociability": {
+        "pack": 10,
+        "solitary": 27,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 33,
+        "memory_hoarder": 3,
+        "deep_thinker": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 37,
+    "epoch": 3,
+    "n_pairs": 20,
+    "n_offspring": 30,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 30,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 39,
+        "gold": 1
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 5,
+        "iridescent": 1,
+        "fractal": 3
+      },
+      "size": {
+        "large": 27,
+        "giant": 13
+      },
+      "temperament": {
+        "curious": 32,
+        "chaotic": 8
+      },
+      "sociability": {
+        "pack": 10,
+        "solitary": 27,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 33,
+        "memory_hoarder": 3,
+        "deep_thinker": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 38,
+    "epoch": 3,
+    "n_pairs": 20,
+    "n_offspring": 31,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 31,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 39,
+        "gold": 1
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 5,
+        "iridescent": 1,
+        "fractal": 3
+      },
+      "size": {
+        "large": 27,
+        "giant": 13
+      },
+      "temperament": {
+        "curious": 32,
+        "chaotic": 8
+      },
+      "sociability": {
+        "pack": 10,
+        "solitary": 27,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 33,
+        "memory_hoarder": 3,
+        "deep_thinker": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 39,
+    "epoch": 3,
+    "n_pairs": 20,
+    "n_offspring": 31,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 31,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 39,
+        "gold": 1
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 5,
+        "iridescent": 1,
+        "fractal": 3
+      },
+      "size": {
+        "large": 27,
+        "giant": 13
+      },
+      "temperament": {
+        "curious": 32,
+        "chaotic": 8
+      },
+      "sociability": {
+        "pack": 10,
+        "solitary": 27,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 33,
+        "memory_hoarder": 3,
+        "deep_thinker": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 40,
+    "epoch": 4,
+    "n_pairs": 19,
+    "n_offspring": 31,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 27,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 38,
+        "gold": 2
+      },
+      "pattern": {
+        "solid": 32,
+        "iridescent": 1,
+        "fractal": 3,
+        "spotted": 4
+      },
+      "size": {
+        "giant": 11,
+        "large": 29
+      },
+      "temperament": {
+        "curious": 31,
+        "chaotic": 9
+      },
+      "sociability": {
+        "solitary": 27,
+        "pack": 10,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 33,
+        "deep_thinker": 5,
+        "memory_hoarder": 2
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.7762,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 41,
+    "epoch": 4,
+    "n_pairs": 19,
+    "n_offspring": 30,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 25,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 37,
+        "gold": 3
+      },
+      "pattern": {
+        "solid": 30,
+        "fractal": 4,
+        "spotted": 6
+      },
+      "size": {
+        "large": 32,
+        "giant": 8
+      },
+      "temperament": {
+        "curious": 29,
+        "chaotic": 11
+      },
+      "sociability": {
+        "pack": 9,
+        "solitary": 28,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 31,
+        "deep_thinker": 6,
+        "memory_hoarder": 3
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.7838,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 42,
+    "epoch": 4,
+    "n_pairs": 20,
+    "n_offspring": 30,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 27,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 37,
+        "gold": 3
+      },
+      "pattern": {
+        "solid": 29,
+        "fractal": 4,
+        "spotted": 7
+      },
+      "size": {
+        "giant": 9,
+        "large": 31
+      },
+      "temperament": {
+        "curious": 28,
+        "chaotic": 11,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 29,
+        "pack": 8,
+        "swarm": 3
+      },
+      "cognition": {
+        "pattern_matcher": 29,
+        "deep_thinker": 7,
+        "memory_hoarder": 4
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.7913,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 43,
+    "epoch": 4,
+    "n_pairs": 19,
+    "n_offspring": 33,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 23,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 36,
+        "gold": 4
+      },
+      "pattern": {
+        "solid": 29,
+        "fractal": 2,
+        "spotted": 9
+      },
+      "size": {
+        "large": 31,
+        "giant": 8,
+        "tiny": 1
+      },
+      "temperament": {
+        "chaotic": 11,
+        "curious": 28,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 28,
+        "pack": 8,
+        "swarm": 4
+      },
+      "cognition": {
+        "pattern_matcher": 17,
+        "deep_thinker": 13,
+        "memory_hoarder": 10
+      },
+      "metabolism": {
+        "voracious": 40
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.8363,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 44,
+    "epoch": 4,
+    "n_pairs": 19,
+    "n_offspring": 36,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 25,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 35,
+        "gold": 5
+      },
+      "pattern": {
+        "solid": 29,
+        "spotted": 9,
+        "fractal": 1,
+        "iridescent": 1
+      },
+      "size": {
+        "giant": 10,
+        "large": 27,
+        "tiny": 3
+      },
+      "temperament": {
+        "chaotic": 9,
+        "curious": 30,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 28,
+        "pack": 8,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 25,
+        "memory_hoarder": 15
+      },
+      "metabolism": {
+        "voracious": 39,
+        "slow_burn": 1
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 45,
+    "epoch": 4,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 36,
+    "allele_frequencies": {
+      "color": {
+        "gold": 6,
+        "crimson": 34
+      },
+      "pattern": {
+        "solid": 28,
+        "spotted": 9,
+        "fractal": 1,
+        "iridescent": 2
+      },
+      "size": {
+        "large": 28,
+        "giant": 9,
+        "tiny": 3
+      },
+      "temperament": {
+        "curious": 31,
+        "chaotic": 8,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 27,
+        "pack": 9,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 25,
+        "memory_hoarder": 15
+      },
+      "metabolism": {
+        "voracious": 38,
+        "slow_burn": 2
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 46,
+    "epoch": 4,
+    "n_pairs": 19,
+    "n_offspring": 37,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 37,
+    "allele_frequencies": {
+      "color": {
+        "gold": 6,
+        "crimson": 34
+      },
+      "pattern": {
+        "solid": 28,
+        "spotted": 9,
+        "fractal": 1,
+        "iridescent": 2
+      },
+      "size": {
+        "large": 28,
+        "giant": 9,
+        "tiny": 3
+      },
+      "temperament": {
+        "curious": 31,
+        "chaotic": 8,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 27,
+        "pack": 9,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 25,
+        "memory_hoarder": 15
+      },
+      "metabolism": {
+        "voracious": 38,
+        "slow_burn": 2
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 47,
+    "epoch": 4,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 38,
+    "allele_frequencies": {
+      "color": {
+        "gold": 6,
+        "crimson": 34
+      },
+      "pattern": {
+        "solid": 28,
+        "spotted": 9,
+        "fractal": 1,
+        "iridescent": 2
+      },
+      "size": {
+        "large": 28,
+        "giant": 9,
+        "tiny": 3
+      },
+      "temperament": {
+        "curious": 31,
+        "chaotic": 8,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 27,
+        "pack": 9,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 25,
+        "memory_hoarder": 15
+      },
+      "metabolism": {
+        "voracious": 38,
+        "slow_burn": 2
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 48,
+    "epoch": 4,
+    "n_pairs": 20,
+    "n_offspring": 36,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 36,
+    "allele_frequencies": {
+      "color": {
+        "gold": 6,
+        "crimson": 34
+      },
+      "pattern": {
+        "solid": 28,
+        "spotted": 9,
+        "fractal": 1,
+        "iridescent": 2
+      },
+      "size": {
+        "large": 28,
+        "giant": 9,
+        "tiny": 3
+      },
+      "temperament": {
+        "curious": 31,
+        "chaotic": 8,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 27,
+        "pack": 9,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 25,
+        "memory_hoarder": 15
+      },
+      "metabolism": {
+        "voracious": 38,
+        "slow_burn": 2
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 49,
+    "epoch": 4,
+    "n_pairs": 19,
+    "n_offspring": 35,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 35,
+    "allele_frequencies": {
+      "color": {
+        "gold": 6,
+        "crimson": 34
+      },
+      "pattern": {
+        "solid": 28,
+        "spotted": 9,
+        "fractal": 1,
+        "iridescent": 2
+      },
+      "size": {
+        "large": 28,
+        "giant": 9,
+        "tiny": 3
+      },
+      "temperament": {
+        "curious": 31,
+        "chaotic": 8,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 27,
+        "pack": 9,
+        "swarm": 4
+      },
+      "cognition": {
+        "deep_thinker": 25,
+        "memory_hoarder": 15
+      },
+      "metabolism": {
+        "voracious": 38,
+        "slow_burn": 2
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 50,
+    "epoch": 5,
+    "n_pairs": 20,
+    "n_offspring": 37,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 37,
+    "allele_frequencies": {
+      "color": {
+        "gold": 5,
+        "crimson": 35
+      },
+      "pattern": {
+        "solid": 26,
+        "spotted": 10,
+        "fractal": 1,
+        "iridescent": 3
+      },
+      "size": {
+        "large": 29,
+        "giant": 8,
+        "tiny": 3
+      },
+      "temperament": {
+        "curious": 32,
+        "chaotic": 7,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 21,
+        "pack": 13,
+        "swarm": 6
+      },
+      "cognition": {
+        "deep_thinker": 25,
+        "memory_hoarder": 15
+      },
+      "metabolism": {
+        "voracious": 38,
+        "slow_burn": 2
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.6712,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 51,
+    "epoch": 5,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 38,
+    "allele_frequencies": {
+      "color": {
+        "gold": 4,
+        "crimson": 35,
+        "obsidian": 1
+      },
+      "pattern": {
+        "solid": 26,
+        "spotted": 10,
+        "fractal": 1,
+        "iridescent": 3
+      },
+      "size": {
+        "large": 30,
+        "giant": 6,
+        "tiny": 4
+      },
+      "temperament": {
+        "curious": 34,
+        "chaotic": 5,
+        "cautious": 1
+      },
+      "sociability": {
+        "solitary": 12,
+        "pack": 20,
+        "swarm": 8
+      },
+      "cognition": {
+        "deep_thinker": 21,
+        "memory_hoarder": 17,
+        "pattern_matcher": 2
+      },
+      "metabolism": {
+        "voracious": 38,
+        "slow_burn": 2
+      },
+      "lifespan": {
+        "ancient": 39,
+        "long": 1
+      }
+    },
+    "mean_fitness": 0.7112,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 52,
+    "epoch": 5,
+    "n_pairs": 19,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 37,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 35,
+        "gold": 3,
+        "obsidian": 2
+      },
+      "pattern": {
+        "solid": 27,
+        "spotted": 10,
+        "iridescent": 3
+      },
+      "size": {
+        "giant": 6,
+        "large": 26,
+        "tiny": 8
+      },
+      "temperament": {
+        "curious": 37,
+        "chaotic": 3
+      },
+      "sociability": {
+        "pack": 25,
+        "swarm": 13,
+        "solitary": 2
+      },
+      "cognition": {
+        "memory_hoarder": 15,
+        "deep_thinker": 19,
+        "pattern_matcher": 5,
+        "rapid_reactor": 1
+      },
+      "metabolism": {
+        "voracious": 37,
+        "slow_burn": 2,
+        "torpor": 1
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.7612,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 53,
+    "epoch": 5,
+    "n_pairs": 20,
+    "n_offspring": 37,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 37,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 36,
+        "gold": 2,
+        "obsidian": 2
+      },
+      "pattern": {
+        "solid": 27,
+        "spotted": 10,
+        "iridescent": 3
+      },
+      "size": {
+        "giant": 5,
+        "large": 26,
+        "tiny": 8,
+        "small": 1
+      },
+      "temperament": {
+        "curious": 38,
+        "chaotic": 2
+      },
+      "sociability": {
+        "pack": 27,
+        "swarm": 11,
+        "solitary": 2
+      },
+      "cognition": {
+        "memory_hoarder": 13,
+        "deep_thinker": 17,
+        "pattern_matcher": 9,
+        "rapid_reactor": 1
+      },
+      "metabolism": {
+        "voracious": 37,
+        "slow_burn": 2,
+        "torpor": 1
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.7762,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 54,
+    "epoch": 5,
+    "n_pairs": 20,
+    "n_offspring": 35,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 34,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 36,
+        "gold": 3,
+        "obsidian": 1
+      },
+      "pattern": {
+        "solid": 29,
+        "spotted": 8,
+        "iridescent": 3
+      },
+      "size": {
+        "large": 22,
+        "giant": 5,
+        "tiny": 10,
+        "small": 3
+      },
+      "temperament": {
+        "curious": 37,
+        "chaotic": 2,
+        "peaceful": 1
+      },
+      "sociability": {
+        "swarm": 12,
+        "pack": 27,
+        "solitary": 1
+      },
+      "cognition": {
+        "deep_thinker": 14,
+        "memory_hoarder": 9,
+        "pattern_matcher": 17
+      },
+      "metabolism": {
+        "voracious": 37,
+        "slow_burn": 2,
+        "torpor": 1
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.8137,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 55,
+    "epoch": 5,
+    "n_pairs": 20,
+    "n_offspring": 38,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 33,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 38,
+        "gold": 2
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 8,
+        "iridescent": 1
+      },
+      "size": {
+        "tiny": 17,
+        "large": 17,
+        "small": 5,
+        "giant": 1
+      },
+      "temperament": {
+        "curious": 34,
+        "chaotic": 3,
+        "peaceful": 3
+      },
+      "sociability": {
+        "swarm": 9,
+        "pack": 31
+      },
+      "cognition": {
+        "memory_hoarder": 2,
+        "deep_thinker": 3,
+        "pattern_matcher": 35
+      },
+      "metabolism": {
+        "voracious": 36,
+        "torpor": 2,
+        "slow_burn": 1,
+        "efficient": 1
+      },
+      "lifespan": {
+        "ancient": 38,
+        "long": 1,
+        "normal": 1
+      }
+    },
+    "mean_fitness": 0.8888,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 56,
+    "epoch": 5,
+    "n_pairs": 20,
+    "n_offspring": 34,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 31,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 36,
+        "gold": 4
+      },
+      "pattern": {
+        "solid": 30,
+        "spotted": 8,
+        "iridescent": 1,
+        "striped": 1
+      },
+      "size": {
+        "tiny": 18,
+        "large": 15,
+        "small": 6,
+        "giant": 1
+      },
+      "temperament": {
+        "curious": 34,
+        "chaotic": 3,
+        "peaceful": 3
+      },
+      "sociability": {
+        "pack": 32,
+        "swarm": 8
+      },
+      "cognition": {
+        "pattern_matcher": 39,
+        "deep_thinker": 1
+      },
+      "metabolism": {
+        "voracious": 35,
+        "torpor": 3,
+        "slow_burn": 1,
+        "efficient": 1
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9075,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 57,
+    "epoch": 5,
+    "n_pairs": 19,
+    "n_offspring": 31,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 31,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 36,
+        "gold": 4
+      },
+      "pattern": {
+        "solid": 31,
+        "spotted": 8,
+        "iridescent": 1
+      },
+      "size": {
+        "tiny": 17,
+        "large": 16,
+        "small": 6,
+        "giant": 1
+      },
+      "temperament": {
+        "curious": 32,
+        "chaotic": 3,
+        "peaceful": 5
+      },
+      "sociability": {
+        "pack": 31,
+        "swarm": 9
+      },
+      "cognition": {
+        "pattern_matcher": 39,
+        "deep_thinker": 1
+      },
+      "metabolism": {
+        "voracious": 36,
+        "torpor": 2,
+        "slow_burn": 1,
+        "efficient": 1
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.915,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 58,
+    "epoch": 5,
+    "n_pairs": 20,
+    "n_offspring": 32,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 32,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 37,
+        "gold": 3
+      },
+      "pattern": {
+        "solid": 30,
+        "spotted": 8,
+        "iridescent": 2
+      },
+      "size": {
+        "tiny": 19,
+        "large": 14,
+        "small": 6,
+        "giant": 1
+      },
+      "temperament": {
+        "curious": 27,
+        "chaotic": 3,
+        "peaceful": 10
+      },
+      "sociability": {
+        "pack": 31,
+        "swarm": 9
+      },
+      "cognition": {
+        "pattern_matcher": 39,
+        "deep_thinker": 1
+      },
+      "metabolism": {
+        "voracious": 37,
+        "torpor": 2,
+        "slow_burn": 1
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.9338,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 59,
+    "epoch": 5,
+    "n_pairs": 20,
+    "n_offspring": 35,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 35,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 36,
+        "gold": 4
+      },
+      "pattern": {
+        "solid": 30,
+        "spotted": 7,
+        "iridescent": 3
+      },
+      "size": {
+        "tiny": 21,
+        "large": 13,
+        "small": 5,
+        "giant": 1
+      },
+      "temperament": {
+        "curious": 20,
+        "chaotic": 3,
+        "peaceful": 17
+      },
+      "sociability": {
+        "pack": 32,
+        "swarm": 8
+      },
+      "cognition": {
+        "pattern_matcher": 39,
+        "deep_thinker": 1
+      },
+      "metabolism": {
+        "voracious": 38,
+        "torpor": 2
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.96,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  },
+  {
+    "generation": 60,
+    "epoch": 6,
+    "n_pairs": 20,
+    "n_offspring": 35,
+    "n_survivors": 40,
+    "n_extinct_this_gen": 35,
+    "allele_frequencies": {
+      "color": {
+        "crimson": 36,
+        "gold": 4
+      },
+      "pattern": {
+        "solid": 29,
+        "spotted": 7,
+        "iridescent": 4
+      },
+      "size": {
+        "tiny": 22,
+        "large": 11,
+        "small": 6,
+        "giant": 1
+      },
+      "temperament": {
+        "curious": 23,
+        "peaceful": 17
+      },
+      "sociability": {
+        "pack": 31,
+        "swarm": 8,
+        "solitary": 1
+      },
+      "cognition": {
+        "pattern_matcher": 39,
+        "deep_thinker": 1
+      },
+      "metabolism": {
+        "voracious": 38,
+        "torpor": 2
+      },
+      "lifespan": {
+        "ancient": 40
+      }
+    },
+    "mean_fitness": 0.75,
+    "founder_blood_distribution": {
+      "scarlet-fang": 1.0,
+      "azure-mind": 1.0,
+      "verdant-vow": 1.0,
+      "gold-storm": 0.0
+    }
+  }
+]
