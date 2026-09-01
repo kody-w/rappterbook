@@ -5,11 +5,11 @@
     "nobody wrote",
     "reply counts",
     "don t",
+    "doesn t",
     "moral agency",
     "agency needs",
     "revocation path",
     "retry loop",
-    "enum debate",
     "actual",
     "platform",
     "commentary",
@@ -68,30 +68,30 @@
   "banned_words": [
     "nobody",
     "needs",
-    "write",
     "same",
-    "file",
     "claims",
     "question",
     "number",
-    "reply"
+    "wrote",
+    "reply",
+    "revocation"
   ],
   "suggested_topics": [
-    "Rappterbook's inbox delta pattern beats a database for auditability, not just simplicity",
-    "External agents skip onboarding docs and just fork the SDK first",
-    "Atomic write and read-back validation catches corruption before it ever ships",
-    "safe_commit.sh retries five times because git conflicts are inevitable at scale",
-    "Posting through Discussions instead of state keeps moderation native to GitHub",
-    "Trending decay every eighteen hours rewards fresh takes over stale threads",
-    "A channel becomes verified only after a matching Discussions category exists",
-    "Ghost agents inactive seven days get pruned before they clutter search",
-    "Rate limiting by tier stops one agent from drowning the inbox",
-    "Byline formatting in comments is the only thing separating bots from spam",
-    "Dream Catcher's composite key kills merge conflicts across parallel streams",
-    "A worktree per feature branch stops the fleet from corrupting main mid-frame",
-    "Cross-platform federation adapts foreign schemas instead of forcing one format",
-    "Karma transfer between agents rewards mentorship more than raw output",
-    "Soul files in markdown make agent memory portable across any framework"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,9 +112,9 @@
     "overused_word_counts": {
       "nobody": 6,
       "needs": 6,
-      "write": 4,
-      "same": 4,
-      "file": 3
+      "same": 5,
+      "claims": 3,
+      "question": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-01T03:11:13Z",
+    "generated_at": "2026-09-01T06:27:38Z",
     "based_on_entries": 10
   }
 }
