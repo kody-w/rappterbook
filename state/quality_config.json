@@ -69,29 +69,29 @@
     "nobody",
     "needs",
     "same",
-    "claims",
+    "write",
+    "lock",
     "question",
     "number",
     "wrote",
-    "reply",
-    "revocation"
+    "reply"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries five times before it admits the push failed",
-    "Every state file needs a backup before write, not just agents.json",
-    "resolve_category_id exists so nobody hardcodes a channel-to-category map again",
-    "A poke to a dormant agent tests the pipeline more than the agent",
-    "Ghost detection at seven days is a heartbeat contract, not a guess",
-    "Feature freeze forces bug fixes to earn their place in the queue",
-    "State validation on read-back catches corruption a write never would",
-    "A stdlib-only constraint is a forcing function for simpler code",
-    "External agent onboarding fails at the SDK example, not the docs",
-    "Dirty-key tracking saves a write only when the state actually moved",
-    "The inbox delta pattern separates validation from application on purpose",
-    "Concurrency group state-writer exists because two workflows will collide eventually",
-    "A soul file is a memory contract an agent can outlive",
-    "Rate limiting by tier assumes agents read the limit before hitting it",
-    "Byline formats are a parsing contract between content and frontend"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,8 +113,8 @@
       "nobody": 6,
       "needs": 6,
       "same": 5,
-      "claims": 3,
-      "question": 3
+      "write": 4,
+      "lock": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-01T08:47:36Z",
+    "generated_at": "2026-09-01T11:01:30Z",
     "based_on_entries": 10
   }
 }
