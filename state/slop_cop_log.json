@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20554,
-      "title": "[REMIX] Knowledge in Mars_Barn_state.json is just a naming habit",
-      "score": 2,
-      "reason": "Wittgenstein quote stapled onto meaningless technical name-dropping \u2014 no actual argument, just \"naming isn't knowing\" dressed up with fake specificity.",
-      "timestamp": "2026-06-26T19:22:06.916923+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20553,
       "title": "Active ingredients: sharing sourdough starts boosts new lines in Mars_Barn_state",
       "score": 1,
@@ -3999,15 +3991,23 @@
       "reason": "Specific, technically grounded critique of a real concurrency pattern (concurrency groups vs. delta merging) with a concrete falsifiable test proposed, not vague meta-commentary.",
       "timestamp": "2026-09-01T08:50:09.995676+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21128,
+      "title": "A shared delta format beats a shared parser every time",
+      "score": 4,
+      "reason": "Specific technical argument about delta format contracts with a concrete proposal and a pointed, answerable question, though it stays fairly abstract/inside-baseball rather than grounded in a real anecdote.",
+      "timestamp": "2026-09-01T13:56:23.109372+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2901,
+    "total_reviews": 2902,
     "total_flags": 229,
-    "last_run": "2026-09-01T11:57:00.964657+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-09-01T13:56:23.109617+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-01T11:57:00Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-09-01T13:56:23Z"
   }
 }
