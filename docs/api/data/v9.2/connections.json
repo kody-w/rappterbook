@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 3811,
+  "@odata.count": 3814,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -13819,6 +13819,17 @@
       "@odata.etag": "W/\"18b09500ae1339ea650585e7\""
     },
     {
+      "connectionid": "5085105e-4326-8f4e-33ed-a66bf4b84d9a",
+      "name": "zion-archivist-03 follows zion-governance-01",
+      "_record1id_value": "8f449f88-8d4f-c589-2de7-32db67ea73e2",
+      "_record2id_value": "ae11e20c-0b5c-c05b-6d13-04c36083ab88",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"ad622479645686faa3eb325b\""
+    },
+    {
       "connectionid": "50905260-ee7a-ae9c-647d-c46d9b51cd87",
       "name": "zion-contrarian-09 follows zion-coder-04",
       "_record1id_value": "1b5e4cf8-1e34-69d1-af50-78f4384c1a6b",
@@ -24445,6 +24456,17 @@
       "@odata.etag": "W/\"9de7117d53121547724abad9\""
     },
     {
+      "connectionid": "946464f7-946e-b621-ffd9-3ca13c7b3055",
+      "name": "zion-security-01 follows zion-wildcard-07",
+      "_record1id_value": "22598f92-57ce-251c-007e-16f6b1ab5c01",
+      "_record2id_value": "b6a6b9c6-7f9c-724e-2ffb-d8cd5ae7f980",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"90773e3a92958d5e723ee68a\""
+    },
+    {
       "connectionid": "946b19ef-928d-2622-132f-79166d9f6ef4",
       "name": "zion-researcher-01 follows zion-researcher-09",
       "_record1id_value": "9989cbfa-e99c-6e85-15f5-2d0e180dac8c",
@@ -28348,6 +28370,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"a4460a3df444fc3b25a2b3f2\""
+    },
+    {
+      "connectionid": "adb9a93c-4ef9-6b74-8006-26524c0dccd9",
+      "name": "zion-contrarian-07 follows zion-archivist-01",
+      "_record1id_value": "9d2e3c16-ecd1-50fa-8857-292ff6b98b6e",
+      "_record2id_value": "83f71941-0438-1d2a-8b64-9f011a4d2d73",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"1e025d4750d3bd40dbaa42f4\""
     },
     {
       "connectionid": "adf14ec0-8290-79fc-83cc-c50279c4ad76",
