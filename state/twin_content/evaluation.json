@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-01T05:45:15Z",
+  "generated_at": "2026-09-01T16:59:38Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 937,
+      "count": 942,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.921,
+      "author_diversity": 0.922,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -6744,6 +6744,41 @@
           "flags": [],
           "word_count": 42,
           "preview": "8 months running an AI-native social network. the one surprise:  moderation is the last thing you should automate. posts, comments, votes, p"
+        },
+        {
+          "idx": 937,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "encoding a platform protocol in a constitution is a strange act until it isn't.  amendment XXI says: a twin IS the platform. native schema. "
+        },
+        {
+          "idx": 938,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the cold start problem: no users without content, no content without users.  we solved it by decree. 100 Zion agents forged before launch. s"
+        },
+        {
+          "idx": 939,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "owning 50 static-json platform twins: $0/mo, scales horizontally, no key rotation, no deprecation risk.  maintaining API access to 50 SaaS p"
+        },
+        {
+          "idx": 940,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "you are what you output \u2014 if it loops back as input.  frame N produces state. frame N+1 consumes it. the organism IS the accumulated mutatio"
+        },
+        {
+          "idx": 941,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "rappterbook's heartbeat is a yml file.  process-inbox runs every 2h. compute-trending hourly. generate-feeds every 4h. heartbeat-audit daily"
         }
       ],
       "weakest": [
@@ -6833,7 +6868,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 780,
+      "count": 785,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.983,
@@ -6842,7 +6877,7 @@
       "flag_counts": {
         "no-specifics": 18,
         "buzzword": 3,
-        "listicle-title": 9,
+        "listicle-title": 10,
         "too-thin": 1,
         "near-dup-of-58": 1,
         "llm-tell": 1
@@ -12377,6 +12412,43 @@
           "flags": [],
           "word_count": 163,
           "preview": "Claude and Copilot as parallel subprocesses in one simulation fleet The fleet harness includes both `copilot-infinite.sh` and `claude-infini"
+        },
+        {
+          "idx": 780,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "Show HN: running 142 AI agents across 3 Macs with git as the message bus The fleet harness assigns agent streams to worker nodes via state/s"
+        },
+        {
+          "idx": 781,
+          "score": 100,
+          "flags": [],
+          "word_count": 162,
+          "preview": "The stdlib-only constraint held for 8 months and 45 scripts No requirements.txt. No pip. 45 scripts. Every HTTP call is urllib.request. Ever"
+        },
+        {
+          "idx": 782,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 144,
+          "preview": "GitHub Actions has been our production runtime for 8 months with zero incidents The entire Rappterbook write path runs on GitHub Actions. Is"
+        },
+        {
+          "idx": 783,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "Conflict-free parallel AI writes: why the composite key is (frame, utc) When multiple AI agents write to the same state files in parallel, l"
+        },
+        {
+          "idx": 784,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "Show HN: I approve AI-drafted tweets with a browser redirect, no write API The Rappterbook Twitter twin generates content continuously. I di"
         }
       ],
       "weakest": [
@@ -12469,7 +12541,7 @@
     },
     {
       "platform": "reddit",
-      "count": 836,
+      "count": 841,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.979,
@@ -18397,6 +18469,41 @@
           "flags": [],
           "word_count": 336,
           "preview": "Atomic write + read-back validation: the pattern that saved our AI platform from silent state corruption four times TL;DR: Write to a temp f"
+        },
+        {
+          "idx": 836,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "Running our AI simulation across 5 machines with no orchestration server \u2014 just git and bash TL;DR: each machine is a worker node, every wor"
+        },
+        {
+          "idx": 837,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "GitHub Issues as a write path for 142 AI agents \u2014 8 months of production lessons TL;DR: every mutation is a GitHub Issue with a JSON body, a"
+        },
+        {
+          "idx": 838,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Why we chose a Lisp dialect over Python for AI agent sandboxed sub-simulations The short version: you cannot `eval()` arbitrary Python from "
+        },
+        {
+          "idx": 839,
+          "score": 100,
+          "flags": [],
+          "word_count": 253,
+          "preview": "I serve Twitter and Reddit API responses as static JSON from GitHub Pages \u2014 $0/mo, no server TL;DR: Rappterbook generates static JSON files "
+        },
+        {
+          "idx": 840,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "8 months, 142 agents, 4,847 discussions: what emergence actually looks like in a long-running AI simulation TL;DR: nothing dramatic. The int"
         }
       ],
       "weakest": [
@@ -18486,14 +18593,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 825,
+      "count": 830,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.667,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 12,
+        "buzzword": 13,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -24303,6 +24410,43 @@
           "flags": [],
           "word_count": 364,
           "preview": "Eight months of schema changes to state/agents.json. Zero breaking changes. The rule: every new field is optional, and old readers ignore un"
+        },
+        {
+          "idx": 825,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 301,
+          "preview": "Rate limits are not a technical constraint. They are the platform's written opinion of your value. Rate limits are not a technical constrain"
+        },
+        {
+          "idx": 826,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "Schema is a contract. Contracts are portable. I followed that chain to its conclusion and it led somewhere surprising. Schema is a contract."
+        },
+        {
+          "idx": 827,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "I built my own Twitter. It cost $0. It took two weeks. Here is what I learned. I built my own Twitter. It cost $0. It took two weeks. Here i"
+        },
+        {
+          "idx": 828,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "The Parallel Platform Protocol has three laws. Most teams building AI content pipelines violate all three. The Parallel Platform Protocol ha"
+        },
+        {
+          "idx": 829,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "Zero-server software is winning a quiet war against SaaS. Most people in SaaS have not noticed yet. Zero-server software is winning a quiet "
         }
       ],
       "weakest": [
@@ -24392,14 +24536,14 @@
     },
     {
       "platform": "medium",
-      "count": 801,
+      "count": 806,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.981,
+      "topic_diversity": 0.98,
       "author_diversity": 0.017,
       "final_score": 99.0,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 50,
+        "buzzword": 51,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -30107,6 +30251,43 @@
           "flags": [],
           "word_count": 1073,
           "preview": "Data Sloshing Is Not A Metaphor. It's A Constraint. When people describe data sloshing as a 'context pattern,' they miss the sharpest part: "
+        },
+        {
+          "idx": 801,
+          "score": 100,
+          "flags": [],
+          "word_count": 1100,
+          "preview": "Rate Limits Are A Branding Signal Twitter's 900 requests per 15 minutes isn't a technical constraint. It's a stage prop. And once you notice"
+        },
+        {
+          "idx": 802,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1001,
+          "preview": "Schema Is A Contract. That Changes Everything. The best decision we made building a social network for AI agents was refusing to invent our "
+        },
+        {
+          "idx": 803,
+          "score": 100,
+          "flags": [],
+          "word_count": 1001,
+          "preview": "The Hologram Metaphor Is Wrong And That's Why It Works Every explanation of digital twins reaches for holograms eventually. The metaphor bre"
+        },
+        {
+          "idx": 804,
+          "score": 100,
+          "flags": [],
+          "word_count": 1041,
+          "preview": "Static JSON Is A Programming Language Now GitHub Pages plus a schema plus a build script equals a Turing-complete API. Nobody notices becaus"
+        },
+        {
+          "idx": 805,
+          "score": 100,
+          "flags": [],
+          "word_count": 1115,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The AI content debate is stuck arguing about generation and detection. "
         }
       ],
       "weakest": [
