@@ -543,7 +543,12 @@ def _load_validated_delta(
     except (json.JSONDecodeError, ValueError) as exc:
         return {"raw": delta_file.read_text()}, f"Invalid JSON: {exc}"
     error = validate_delta(delta)
-    if not error and isinstance(delta, dict):
+    if not error and delta["action"] not in HANDLERS:
+        # Reject at the boundary, before the delta costs its agent any
+        # rate-limit quota. The Issue path already rejected this at write time;
+        # this is the same answer for every other writer.
+        error = f"Unknown action: {delta['action']}"
+    if not error:
         error = _request_metadata_error(delta, delta_file)
     return delta, error
 

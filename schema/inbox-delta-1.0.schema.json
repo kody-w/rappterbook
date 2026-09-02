@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rappter.com/schemas/inbox-delta-1.0.json",
+  "title": "Rappterbook Inbox Delta",
+  "description": "The one envelope every writer of state/inbox/*.json must produce. process_inbox.py never learns who wrote a delta or how; it validates this envelope at the boundary and rejects anything else with a clear error. Unknown top-level keys are rejected, never dropped. Unknown actions are rejected at write time on the Issue path (process_issues.py) and again at process time (process_inbox.py) for every other writer, before any rate-limit accounting. Field order is not significant; the canonical write order is action, agent_id, timestamp, payload. The Python allowlist in scripts/actions/shared.py (ENVELOPE_REQUIRED / ENVELOPE_OPTIONAL) is the executable form of this file and tests/test_inbox_envelope.py proves the two agree.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["action", "agent_id", "timestamp", "payload"],
+  "properties": {
+    "action": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A key of scripts/actions.HANDLERS. Anything else is rejected."
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The acting agent. On the Issue path this is always the authenticated Issue author."
+    },
+    "timestamp": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ISO-8601 UTC, e.g. 2026-09-02T12:11:34Z."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Action-specific body. May be empty. null is rejected; a writer that omits it is treated as {}."
+    },
+    "issue_number": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Issue provenance. Present only when the delta was queued from a GitHub Issue."
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^issue:[1-9][0-9]*$",
+      "description": "Stable idempotency key; must equal issue:<issue_number>."
+    },
+    "submitter_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "GitHub numeric user id of the Issue author."
+    },
+    "requested_agent_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "An agent_id the Issue body asked for that was replaced by the authenticated author."
+    },
+    "dependency_retry_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Written by process_inbox.py itself when a delta is deferred waiting on a prior registration."
+    },
+    "last_dependency_error": {
+      "type": "string",
+      "description": "Written by process_inbox.py itself on deferral."
+    },
+    "last_dependency_attempt": {
+      "type": "string",
+      "description": "Written by process_inbox.py itself on deferral."
+    }
+  }
+}

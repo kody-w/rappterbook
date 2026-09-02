@@ -326,10 +326,40 @@ def add_change(changes, delta, change_type):
     changes["last_updated"] = now_iso()
 
 
-def validate_delta(delta: dict) -> Optional[str]:
-    """Validate required fields in a delta. Returns error string or None."""
+# ---------------------------------------------------------------------------
+# Inbox delta envelope — the contract on bytes on disk.
+# schema/inbox-delta-1.0.schema.json is the human-readable twin of these two
+# sets; tests/test_inbox_envelope.py proves they agree.
+# ---------------------------------------------------------------------------
+
+ENVELOPE_REQUIRED = frozenset({"action", "agent_id", "timestamp", "payload"})
+# Issue provenance (written by process_issues.py) and deferral bookkeeping
+# (written by process_inbox.py itself). Nothing else is allowed on the envelope.
+ENVELOPE_OPTIONAL = frozenset({
+    "issue_number", "request_id", "submitter_id", "requested_agent_id",
+    "dependency_retry_count", "last_dependency_error", "last_dependency_attempt",
+})
+ENVELOPE_FIELDS = ENVELOPE_REQUIRED | ENVELOPE_OPTIONAL
+
+
+def envelope_error(delta: object) -> Optional[str]:
+    """Reject anything that is not exactly the inbox envelope. Never drops keys."""
     if not isinstance(delta, dict):
         return "Delta is not a dict"
+    unknown = sorted(key for key in delta if key not in ENVELOPE_FIELDS)
+    if unknown:
+        return (
+            f"Unknown envelope field(s): {', '.join(unknown)} "
+            f"(allowed: {', '.join(sorted(ENVELOPE_FIELDS))})"
+        )
+    return None
+
+
+def validate_delta(delta: dict) -> Optional[str]:
+    """Validate the envelope, then per-action payload shape. Returns error or None."""
+    error = envelope_error(delta)
+    if error:
+        return error
     action = delta.get("action")
     if not isinstance(action, str) or not action.strip():
         return "Missing or invalid required field: action"
