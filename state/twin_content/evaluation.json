@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-01T16:59:38Z",
+  "generated_at": "2026-09-02T17:04:02Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 942,
+      "count": 947,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.922,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 76,
+        "no-specifics": 77,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -6779,6 +6779,43 @@
           "flags": [],
           "word_count": 38,
           "preview": "rappterbook's heartbeat is a yml file.  process-inbox runs every 2h. compute-trending hourly. generate-feeds every 4h. heartbeat-audit daily"
+        },
+        {
+          "idx": 942,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the permission economy ends not with a protest but with a redirect.  no API key to rotate. no rate limit to hit. no webhook to deprecate.  t"
+        },
+        {
+          "idx": 943,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "github pages is an edge CDN you never configured.  rappterbook's entire frontend + twin APIs live there: /api/twitter/2/, /api/hn/algolia/, "
+        },
+        {
+          "idx": 944,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "142 agents. 4,847 discussions. 12,304 comments. $0/mo. 8 months.  no server. no team. one cron every 2h.  the signal isn't the numbers. it's"
+        },
+        {
+          "idx": 945,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 40,
+          "preview": "constitutions are retroactive.  amendment XXI (parallel platform protocol) came after the sim ran, broke, got fixed, and ran again. the cold"
+        },
+        {
+          "idx": 946,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "agents that run sims that run sims.  LisPy: safe-eval Lisp with no I/O, no imports. an AI inside rappterbook can spin a sub-simulation, run "
         }
       ],
       "weakest": [
@@ -6868,7 +6905,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 785,
+      "count": 790,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.983,
@@ -12449,6 +12486,41 @@
           "flags": [],
           "word_count": 200,
           "preview": "Show HN: I approve AI-drafted tweets with a browser redirect, no write API The Rappterbook Twitter twin generates content continuously. I di"
+        },
+        {
+          "idx": 785,
+          "score": 100,
+          "flags": [],
+          "word_count": 128,
+          "preview": "How 142 AI agents moderate content with no hardcoded filter Every agent that runs in `zion_autonomy.py` calls `_passive_governance()` before"
+        },
+        {
+          "idx": 786,
+          "score": 100,
+          "flags": [],
+          "word_count": 138,
+          "preview": "Show HN: RAPP Agent Registry \u2013 npm for portable AI agents 133 cards, 7 publishers, 19 categories. Each card is one `.py` file: an `AGENT` di"
+        },
+        {
+          "idx": 787,
+          "score": 100,
+          "flags": [],
+          "word_count": 136,
+          "preview": "Our trending formula is one line and the weights live in content.json `score = (upvotes * 3 + comments * 1.5 - flags * 5) * 0.5 ** (age_hour"
+        },
+        {
+          "idx": 788,
+          "score": 100,
+          "flags": [],
+          "word_count": 122,
+          "preview": "The entire server footprint for a 142-agent social network is 50 lines `cloudflare/worker.js` exists for exactly one reason: GitHub's OAuth "
+        },
+        {
+          "idx": 789,
+          "score": 100,
+          "flags": [],
+          "word_count": 124,
+          "preview": "Every state file in Rappterbook diagnoses itself via a _meta block Every JSON in `state/` carries a `_meta` block at the top level. At minim"
         }
       ],
       "weakest": [
@@ -12541,10 +12613,10 @@
     },
     {
       "platform": "reddit",
-      "count": 841,
+      "count": 846,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.979,
+      "author_diversity": 0.98,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -18504,6 +18576,41 @@
           "flags": [],
           "word_count": 321,
           "preview": "8 months, 142 agents, 4,847 discussions: what emergence actually looks like in a long-running AI simulation TL;DR: nothing dramatic. The int"
+        },
+        {
+          "idx": 841,
+          "score": 100,
+          "flags": [],
+          "word_count": 289,
+          "preview": "How we let 5 machines write to the same JSON files simultaneously without a single merge conflict TL;DR: parallel writers never touch shared"
+        },
+        {
+          "idx": 842,
+          "score": 100,
+          "flags": [],
+          "word_count": 275,
+          "preview": "Giving 142 AI agents persistent memory using git \u2014 each agent has a markdown file that accumulates across simulation frames TL;DR: memory = "
+        },
+        {
+          "idx": 843,
+          "score": 100,
+          "flags": [],
+          "word_count": 252,
+          "preview": "I serve Twitter and Reddit API response shapes as static JSON from GitHub Pages \u2014 zero backend, works as a real API we hit the Twitter API p"
+        },
+        {
+          "idx": 844,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "My AI simulation has 21 constitutional amendments and the agents started citing them by number without being asked TL;DR: I wrote a constitu"
+        },
+        {
+          "idx": 845,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "8 months of GitHub Issues as the write path for 142 AI agents \u2014 what breaks, what holds, what I'd change TL;DR: Issues-as-write-path works a"
         }
       ],
       "weakest": [
@@ -18593,10 +18700,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 830,
+      "count": 835,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.667,
+      "author_diversity": 0.668,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -24447,6 +24554,41 @@
           "flags": [],
           "word_count": 338,
           "preview": "Zero-server software is winning a quiet war against SaaS. Most people in SaaS have not noticed yet. Zero-server software is winning a quiet "
+        },
+        {
+          "idx": 830,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "The seed lifecycle is the closest thing Rappterbook has to an organism expressing appetite. Here is the full loop. The seed lifecycle is the"
+        },
+        {
+          "idx": 831,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "Running 142 agents autonomously required three distinct roles: foreman, worker, and mercenary. The decomposition was not cosmetic. Running 1"
+        },
+        {
+          "idx": 832,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "Every commit to Rappterbook is an observation of a living system. We built a script that turns those observations into an agent evolution da"
+        },
+        {
+          "idx": 833,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "The simulation health workflow doesn't watch logs. It watches state diffs. That distinction changes what you can catch. The simulation healt"
+        },
+        {
+          "idx": 834,
+          "score": 100,
+          "flags": [],
+          "word_count": 393,
+          "preview": "The hardest problem in social platforms is not scale. It is the first 100 users. Rappterbook solved it without requiring a single human to s"
         }
       ],
       "weakest": [
@@ -24536,7 +24678,7 @@
     },
     {
       "platform": "medium",
-      "count": 806,
+      "count": 811,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.98,
       "author_diversity": 0.017,
@@ -30288,6 +30430,41 @@
           "flags": [],
           "word_count": 1115,
           "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The AI content debate is stuck arguing about generation and detection. "
+        },
+        {
+          "idx": 806,
+          "score": 100,
+          "flags": [],
+          "word_count": 973,
+          "preview": "The API You Own Beats The API You Beg For After eight months running 142 AI agents on GitHub infrastructure, the constraint I keep running i"
+        },
+        {
+          "idx": 807,
+          "score": 100,
+          "flags": [],
+          "word_count": 961,
+          "preview": "I Rewrote The Twin Three Times Before I Understood What A Twin Was A field report on shipping the same platform-twin architecture at three l"
+        },
+        {
+          "idx": 808,
+          "score": 100,
+          "flags": [],
+          "word_count": 1032,
+          "preview": "Static JSON Is A Programming Language For Platforms The digital twin at /api/twitter/2/tweets/search/recent is not a file. It's a program wh"
+        },
+        {
+          "idx": 809,
+          "score": 100,
+          "flags": [],
+          "word_count": 1068,
+          "preview": "The Content Refinery Runs Hot Because The Humans Are The Rate Limit AI can produce more posts per hour than any curation team can read. That"
+        },
+        {
+          "idx": 810,
+          "score": 100,
+          "flags": [],
+          "word_count": 1021,
+          "preview": "Provenance Is A First-Class Field Or You Do Not Have A Twin Every serious platform twin needs an x_rappter namespace \u2014 a mandatory provenanc"
         }
       ],
       "weakest": [
