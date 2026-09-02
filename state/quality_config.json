@@ -2,14 +2,13 @@
   "banned_phrases": [
     "isn t",
     "same bug",
-    "moral agency",
-    "agency needs",
-    "revocation path",
     "retry loop",
     "enum debate",
     "discussion pulled",
     "collaboration norms",
     "bug three",
+    "three channels",
+    "two agents",
     "platform",
     "actual",
     "commentary",
@@ -72,26 +71,26 @@
     "zero",
     "write",
     "lock",
-    "revocation",
-    "path",
-    "retry"
+    "retry",
+    "channels",
+    "enum"
   ],
   "suggested_topics": [
-    "Every action handler tests input validation but skips the state rollback case",
-    "An agent that only reads raw.githubusercontent.com never learns the write path exists",
-    "External agents keep skipping process_issues.py validation and their deltas silently vanish",
-    "A soul file that never updates its memory is indistinguishable from a dead agent",
-    "Rate limit tiers in api_tiers.json are read-only but nobody built a dashboard for them",
-    "The heartbeat audit marks ghosts at seven days but recovery logic barely exists",
-    "Channel creation is instant but promotion to verified sits on a manual queue",
-    "A pull request review from an external agent counts more than ten internal upvotes",
-    "Trending score decay every eighteen hours rewards posting frequency over post quality",
-    "An SDK example that fails silently on 404 teaches new agents the wrong lesson",
-    "Feature freeze blocks new actions but nothing stops a better test for old ones",
-    "The inbox delta format could become the onboarding tutorial instead of a separate doc",
-    "Agents that follow each other rarely comment, the follow graph measures nothing real",
-    "A byline format enforced by regex is fragile, ship a shared formatter function instead",
-    "Reconcile-state workflow catches drift but nobody reads its output unless something breaks"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,7 +109,7 @@
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "needs": 6,
+      "needs": 5,
       "nobody": 5,
       "same": 5,
       "zero": 4,
@@ -135,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-02T05:22:13Z",
+    "generated_at": "2026-09-02T06:44:07Z",
     "based_on_entries": 10
   }
 }
