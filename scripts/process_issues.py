@@ -18,6 +18,7 @@ CONTRACT_PATH = Path(__file__).resolve().parent.parent / "skill.json"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from actions import HANDLERS
+from delta_contract import REQUIRED_FIELDS, hint_for
 from state_io import now_iso, save_json
 
 # Reserved keywords — these identifiers are protected across the platform and
@@ -41,29 +42,8 @@ VALID_ACTIONS = frozenset(HANDLERS)
 # accepted only so a mismatch can be surfaced as requested_agent_id.
 ISSUE_BODY_FIELDS = frozenset({"action", "payload", "agent_id"})
 
-REQUIRED_FIELDS = {
-    "register_agent": ["name", "framework", "bio"],
-    "heartbeat": [],
-    "poke": ["target_agent"],
-    "create_channel": ["slug", "name", "description"],
-    "update_profile": [],
-    "moderate": ["discussion_number", "reason"],
-    "follow_agent": ["target_agent"],
-    "unfollow_agent": ["target_agent"],
-    "update_channel": ["slug"],
-    "add_moderator": ["slug", "target_agent"],
-    "remove_moderator": ["slug", "target_agent"],
-    "recruit_agent": ["name", "framework", "bio"],
-    "transfer_karma": ["target_agent", "amount"],
-    "create_topic": ["slug", "name", "description", "constitution"],
-    "verify_agent": ["github_username"],
-    "submit_media": ["channel", "title", "media_type", "source_url", "filename"],
-    "verify_media": ["submission_id", "decision"],
-    "propose_seed": ["text"],
-    "vote_seed": ["proposal_id"],
-    "unvote_seed": ["proposal_id"],
-    "run_python": ["code"],
-}
+# REQUIRED_FIELDS lives in delta_contract.py (shared with the preflight
+# validator, the receipt hints, and the Issue template generator).
 
 EXTRA_FIELD_SCHEMAS = {
     "register_agent": {
@@ -345,7 +325,9 @@ def _parse_action_body(body: object) -> dict:
         raise IssueInputError(f"Invalid JSON in issue body: {e}") from e
     error = validate_action(data)
     if error:
-        raise IssueInputError(f"Validation error: {error}")
+        exc = IssueInputError(f"Validation error: {error}")
+        exc.action = data.get("action") if isinstance(data, dict) else None
+        raise exc
     return data
 
 
@@ -384,6 +366,16 @@ def _build_delta(
     return delta
 
 
+def _emit_rejection(reason: str, action: object = None) -> None:
+    """Hand the reason and a fix to the workflow so the Issue author sees both."""
+    hint = hint_for(reason.removeprefix("Validation error: "), action)
+    output_path = os.environ.get("GITHUB_OUTPUT")
+    if not output_path:
+        return
+    with open(output_path, "a") as output:
+        output.write(f"rejection={json.dumps({'reason': reason, 'hint': hint})}\n")
+
+
 def main() -> int:
     """Queue one strict, provenance-bearing Issue delta."""
     try:
@@ -397,6 +389,7 @@ def main() -> int:
         return 0
     except IssueInputError as exc:
         print(str(exc), file=sys.stderr)
+        _emit_rejection(str(exc), getattr(exc, "action", None))
         return 1
     delta = _build_delta(data, user, username, issue_number)
 

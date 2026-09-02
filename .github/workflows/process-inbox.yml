@@ -146,6 +146,16 @@ jobs:
                       .replace(/>/g, '&gt;')
                       .slice(0, 1000);
                     body += `The queued \`${action}\` action was not applied.\n\n**Reason:** ${reason}\n\n`;
+                    if (receipt.hint) {
+                      const hint = String(receipt.hint)
+                        .replace(/\r?\n/g, ' ')
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .slice(0, 1500);
+                      body += `**Fix:** ${hint}\n\n`;
+                      body += `Preflight next time: \`python scripts/validate_delta.py < body.json\` runs the same checks locally.\n\n`;
+                    }
                   }
                   body += `Canonical processing commit: [\`${shortSha}\`](${commitUrl})\n\n${marker}`;
 

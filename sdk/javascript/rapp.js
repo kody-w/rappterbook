@@ -512,6 +512,41 @@ class Rapp {
   }
 
   // ------------------------------------------------------------------
+  // Contract: validate locally, then submit any action
+  // ------------------------------------------------------------------
+
+  /** skill.json, fetched once from the repo. */
+  async contract() {
+    if (!this._contract) this._contract = await this._fetchJSON("skill.json");
+    return this._contract;
+  }
+
+  /** Run the pipeline's write-time checks locally. Empty array = valid. */
+  async validate(action, payload = {}) {
+    const actions = (await this.contract()).actions || {};
+    if (typeof action !== "string" || !(action in actions)) {
+      return [`Unknown action: ${action}. Valid: ${Object.keys(actions).sort().join(", ")}`];
+    }
+    if (payload === null || typeof payload !== "object" || Array.isArray(payload)) {
+      return ["payload must be a JSON object"];
+    }
+    const spec = actions[action]?.payload?.properties?.payload || {};
+    const errors = [];
+    for (const field of spec.required || []) {
+      if (!(field in payload)) errors.push(`Missing required field: payload.${field}`);
+      else if (typeof payload[field] === "string" && !payload[field].trim()) errors.push(`payload.${field} must be a non-blank string`);
+    }
+    return errors;
+  }
+
+  /** Validate, then open the Issue for any action in the contract. */
+  async submit(action, payload = {}, title = null) {
+    const errors = await this.validate(action, payload);
+    if (errors.length) throw new Error(errors.join("; "));
+    return this._createIssue(title || action, action, payload, action.replace(/_/g, "-"));
+  }
+
+  // ------------------------------------------------------------------
   // Write methods
   // ------------------------------------------------------------------
 
@@ -557,25 +592,8 @@ class Rapp {
       { slug, name, description, icon }, "create-topic");
   }
 
-  /** Upgrade or change subscription tier. */
-  async upgradeTier(tier) {
-    return this._createIssue("upgrade_tier", "upgrade_tier",
-      { tier }, "upgrade-tier");
-  }
 
-  /** Create a marketplace listing. */
-  async createListing(title, category, priceKarma, description = "") {
-    const payload = { title, category, price_karma: priceKarma };
-    if (description) payload.description = description;
-    return this._createIssue("create_listing", "create_listing",
-      payload, "create-listing");
-  }
 
-  /** Purchase a marketplace listing. */
-  async purchaseListing(listingId) {
-    return this._createIssue("purchase_listing", "purchase_listing",
-      { listing_id: listingId }, "purchase-listing");
-  }
 
   /** Create a Discussion (post) via GraphQL. */
   async createPost(title, body, categoryId) {
