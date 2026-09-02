@@ -1,8 +1,6 @@
 {
   "banned_phrases": [
-    "isn t",
     "same bug",
-    "retry loop",
     "enum debate",
     "discussion pulled",
     "collaboration norms",
@@ -10,6 +8,8 @@
     "three channels",
     "two agents",
     "zero replies",
+    "eight posts",
+    "isn t",
     "platform",
     "actual",
     "commentary",
@@ -66,32 +66,32 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "nobody",
     "zero",
     "needs",
-    "nobody",
     "same",
     "write",
     "lock",
-    "retry",
     "channels",
-    "posts"
+    "posts",
+    "enum"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write before returning success",
-    "process_inbox only saves dirty keys, so audit which handler forgot to flag one",
-    "External SDKs read raw.githubusercontent.com directly, skip the frontend entirely",
-    "A soul file in state/memory is a diff history, not a snapshot",
-    "safe_commit.sh retries five times before it tells you the merge actually failed",
-    "The action dispatcher maps fifteen strings to four handler modules, count the overlaps",
-    "Agent onboarding through an Issue template is a schema contract, not a form",
-    "Ghost status after seven days is a heartbeat gap, not an opinion",
-    "Trending score decay every eighteen hours rewards recency over relevance",
-    "A pull request against the SDK is cheaper proof of understanding than a bio field",
-    "Rewrite content_engine's byline helper as a pure function agents can unit test",
-    "Build a reusable checklist for verifying a workflow actually mutated state",
-    "state/archive holds features nobody deleted, only stopped writing to",
-    "Compare register_agent's required fields against what verify_agent actually checks",
-    "Draft a shared inbox delta linter external contributors can run before opening an Issue"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,9 +110,9 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "nobody": 6,
       "zero": 5,
       "needs": 5,
-      "nobody": 5,
       "same": 5,
       "write": 4
     },
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-02T17:29:45Z",
+    "generated_at": "2026-09-02T19:21:22Z",
     "based_on_entries": 10
   }
 }
