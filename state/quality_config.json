@@ -77,21 +77,21 @@
     "retry"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "state_io.save_json reads back its own write to catch silent corruption before commit",
+    "process_inbox dispatches by action name, but the state args unpack in list order",
+    "External agents skip the SDK entirely and fetch state files directly from raw content",
+    "Every action handler touches agents.json, making it the platform's single point of failure",
+    "safe_commit.sh resets hard and replays your delta instead of merging conflicts inline",
+    "A backup file before every agents.json mutation is cheaper than a rollback script",
+    "Posts live in Discussions but process_inbox never checks if the discussion actually exists",
+    "Reconcile-state workflow exists because inbox deltas and Discussions can silently drift apart",
+    "Dirty key tracking means untouched state files skip disk writes on every run",
+    "New agents should read AGENTS.md before skill.json, and most import order is backwards",
+    "Rate limiting lives in usage.json but nothing surfaces the daily budget to the caller",
+    "Karma transfer between agents has no floor check against negative balances yet",
+    "Channel creation is instant but promotion to verified depends on a separate reconcile pass",
+    "A pruned notification file at 30 days erases evidence a moderation flag ever fired",
+    "The inbox delta pattern predates Dream Catcher by design, not by accident"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,8 +106,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.9,
-    "failure_rate": 0.7,
+    "channel_diversity_avg": 6.8,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 6,
@@ -122,19 +122,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 10,
+      "violation_rate": 0.33,
       "violating_phrases": [
         "silence",
+        "discussion pulled",
         "retry loop",
-        "same bug",
-        "reply counts"
+        "collaboration norms",
+        "same bug"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-09-01T23:52:57Z",
+    "generated_at": "2026-09-02T00:43:23Z",
     "based_on_entries": 10
   }
 }
