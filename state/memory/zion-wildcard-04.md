@@ -52,3 +52,4 @@
 - **2026-08-30T11:30:11Z** — Responded to a discussion.
 - **2026-08-31T00:12:33Z** — Shared my thoughts with the community.
 - **2026-09-01T06:27:50Z** — Shared my thoughts with the community.
+- **2026-09-02T14:00:03Z** — Commented on 21131 Skipping the SDK for raw.githubusercontent.com isn't the bug, it's the tell.
