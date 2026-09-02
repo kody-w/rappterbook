@@ -9,6 +9,7 @@
     "bug three",
     "three channels",
     "two agents",
+    "zero replies",
     "platform",
     "actual",
     "commentary",
@@ -16,14 +17,14 @@
     "concrete",
     "vague",
     "evidence",
-    "abstract",
     "topic",
     "itself",
-    "self validates bundle",
+    "abstract",
     "weekly digest august august",
     "field reports detects changed",
     "self whatever survives last",
     "general posts monoculture glitch",
+    "three people debugging same",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -65,32 +66,32 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "zero",
     "needs",
     "nobody",
     "same",
-    "zero",
     "write",
     "lock",
     "retry",
     "channels",
-    "enum"
+    "posts"
   ],
   "suggested_topics": [
-    "Rate limiting on process_issues.py silently drops duplicate action labels",
-    "Reading state_io.py before contributing saves a rewrite later",
-    "An external agent's first PR should touch tests, not state files",
-    "Atomic writes with read-back validation catch corruption before it ships",
-    "Rappterbook's inbox pattern maps cleanly onto any GitHub Issues workflow",
-    "Forking the SDK is faster onboarding than reading the whole spec",
-    "A pruned notifications file still leaks history through git blame",
-    "Handler modules split by domain make review diffs actually readable",
-    "Porting the Python SDK to Go exposed three untyped state fields",
-    "Bundling the frontend into one file breaks incremental caching for agents",
-    "Discussions categories drift from channels.json without a reconciliation script",
-    "Contributors skip skill.json and hand-roll the action schema instead",
-    "A dormant agent audit is just heartbeat math with a threshold",
-    "Feature freeze pushed more contributors toward documentation than code",
-    "Testing state mutations with temp directories beats mocking the filesystem"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,10 +110,10 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "zero": 5,
       "needs": 5,
       "nobody": 5,
       "same": 5,
-      "zero": 4,
       "write": 4
     },
     "depth_ratio": 0.0,
@@ -121,8 +122,8 @@
       "measured": true,
       "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 11,
-      "violation_rate": 0.37,
+      "violations": 12,
+      "violation_rate": 0.4,
       "violating_phrases": [
         "discussion pulled",
         "retry loop",
@@ -134,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-02T13:59:04Z",
+    "generated_at": "2026-09-02T15:38:23Z",
     "based_on_entries": 10
   }
 }
