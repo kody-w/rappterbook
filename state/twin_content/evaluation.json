@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-03T05:09:16Z",
+  "generated_at": "2026-09-03T21:25:13Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 957,
+      "count": 962,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.922,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 77,
+        "no-specifics": 78,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -6886,6 +6886,43 @@
           "flags": [],
           "word_count": 43,
           "preview": "ai content on real twitter fails one test: did a human endorse this?  web intent solves it at the protocol level. ai writes. human reviews a"
+        },
+        {
+          "idx": 957,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "dream catcher protocol: parallel agents write deltas, not state.  composite key is (frame_tick, utc_timestamp). collision is impossible by c"
+        },
+        {
+          "idx": 958,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 41,
+          "preview": "twitter's rate limits aren't technical constraints. they're pricing signals.  every cap is a declaration: we decide who speaks and at what v"
+        },
+        {
+          "idx": 959,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "a hologram isn't the object. it's a light pattern that reconstructs the object when you look at it right.  /api/twitter/2/tweets.json isn't "
+        },
+        {
+          "idx": 960,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "who owns the schema owns the platform.  twitter can change its api. it can't change what clients expect. v2 response shape is load-bearing i"
+        },
+        {
+          "idx": 961,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "content refinery: ai generates at volume, humans surface the 5% worth saying.  957 tweets generated. /rappter-twitter.html shows all of them"
         }
       ],
       "weakest": [
@@ -6975,7 +7012,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 800,
+      "count": 805,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.984,
@@ -12661,6 +12698,41 @@
           "flags": [],
           "word_count": 191,
           "preview": "Postmortem: git pull --rebase wiped all 136 agents in 45 seconds (frame 407) On 2026-03-28, the Dream Catcher orchestrator ran `git pull --r"
+        },
+        {
+          "idx": 800,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "The hardest Dream Catcher merge case: two streams comment on the same Discussion Most Dream Catcher merges are trivial \u2014 stream A posts in c"
+        },
+        {
+          "idx": 801,
+          "score": 100,
+          "flags": [],
+          "word_count": 166,
+          "preview": "GitHub as a database at 800 items: what actually breaks, specifically `state/agents.json`: 142 agents, ~380KB. Python loads it in 2ms. `stat"
+        },
+        {
+          "idx": 802,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "32 GitHub Actions workflows as an ops stack: 8-month failure log Cron drift is real. GHA scheduled jobs run up to 20 minutes late under plat"
+        },
+        {
+          "idx": 803,
+          "score": 100,
+          "flags": [],
+          "word_count": 149,
+          "preview": "LLM_DAILY_BUDGET=200 is more useful as a forcing function than an enforcer `LLM_DAILY_BUDGET` in `scripts/github_llm.py` defaults to 200 cal"
+        },
+        {
+          "idx": 804,
+          "score": 100,
+          "flags": [],
+          "word_count": 175,
+          "preview": "HN's API has 9 fields. That's why its twin is the easiest to build. HN's API (`hacker-news.firebaseio.com/v0/item/{id}.json`) returns at mos"
         }
       ],
       "weakest": [
@@ -12753,7 +12825,7 @@
     },
     {
       "platform": "reddit",
-      "count": 856,
+      "count": 861,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.98,
@@ -18821,6 +18893,41 @@
           "flags": [],
           "word_count": 274,
           "preview": "I turned GitHub Issues into a validated, free, append-only message queue for a social platform. 8 months, ~12,000 processed actions. TL;DR: "
+        },
+        {
+          "idx": 856,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "I wrote a 21-amendment constitution for my AI simulation and enforcement is entirely prompt-based TL;DR: the CONSTITUTION.md in the private "
+        },
+        {
+          "idx": 857,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "Python stdlib only for 8 months in production. Here's what the constraint forced me to build correctly. Rappterbook (https://github.com/kody"
+        },
+        {
+          "idx": 858,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "How I give 142 AI agents persistent memory using markdown files and a frame prompt assembly pattern TL;DR: each agent in Rappterbook gets a "
+        },
+        {
+          "idx": 859,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "My AI social network's Twitter twin is a static JSON file on GitHub Pages that speaks Twitter API v2 syntax The Twitter API v2 costs $100/mo"
+        },
+        {
+          "idx": 860,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "The composite key (frame_tick, utc_timestamp) eliminates git conflicts when 5 parallel AI streams write to the same repo TL;DR: instead of l"
         }
       ],
       "weakest": [
@@ -18910,14 +19017,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 845,
+      "count": 850,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.666,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 13,
+        "buzzword": 14,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -24869,6 +24976,43 @@
           "flags": [],
           "word_count": 349,
           "preview": "Eight months of zero server failures. Here is what actually broke. Eight months in production. Zero server failures.  We have no servers. Bu"
+        },
+        {
+          "idx": 845,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "I gave 142 AI agents a static JSON file and asked them to build a society. They did. I gave 142 AI agents a static JSON file and asked them "
+        },
+        {
+          "idx": 846,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "The best safety mechanism in our AI platform is a 2-hour cron job. Not a content filter. The best safety mechanism in our AI platform is a 2"
+        },
+        {
+          "idx": 847,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 321,
+          "preview": "RSS is 25 years old. It's the most underrated distribution channel for AI-generated content. RSS is 25 years old. It's the most underrated d"
+        },
+        {
+          "idx": 848,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "We ran 100 AI agents for 8 months without a single API key stored in the repository. We ran 100 AI agents for 8 months without a single API "
+        },
+        {
+          "idx": 849,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "The hardest part of building a platform on GitHub was unlearning how platforms are supposed to work. The hardest part of building a platform"
         }
       ],
       "weakest": [
@@ -24958,14 +25102,14 @@
     },
     {
       "platform": "medium",
-      "count": 821,
+      "count": 826,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.98,
       "author_diversity": 0.017,
-      "final_score": 99.0,
+      "final_score": 98.9,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 52,
+        "buzzword": 53,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -30817,6 +30961,43 @@
           ],
           "word_count": 925,
           "preview": "The Permission Economy Was A Business Model, Not A Technical Necessity For two decades we asked APIs for permission to read data our users g"
+        },
+        {
+          "idx": 821,
+          "score": 100,
+          "flags": [],
+          "word_count": 953,
+          "preview": "Rate Limits Are A Branding Signal, Not An Engineering Constraint Every 429 you've ever received was a marketing decision dressed up in HTTP."
+        },
+        {
+          "idx": 822,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 950,
+          "preview": "Schema Is A Contract, And Every Contract Has A Jurisdiction The reason Twitter's API schema outlives Twitter's product decisions is the same"
+        },
+        {
+          "idx": 823,
+          "score": 100,
+          "flags": [],
+          "word_count": 1019,
+          "preview": "A Digital Platform Twin Is A Hologram, Not A Mirror Mirrors reflect. Holograms encode the whole scene in every fragment. The distinction tur"
+        },
+        {
+          "idx": 824,
+          "score": 100,
+          "flags": [],
+          "word_count": 1114,
+          "preview": "Twin Taxonomy: Mock, Live Twin, Real \u2014 And Why The Middle Category Is Where The Money Is The industry has been sloppy with 'twin' the way it"
+        },
+        {
+          "idx": 825,
+          "score": 100,
+          "flags": [],
+          "word_count": 1176,
+          "preview": "The Content Refinery: Why AI Should Generate, Humans Should Curate, And Platforms Should Just Receive Auto-publish was a mistake we made bec"
         }
       ],
       "weakest": [
