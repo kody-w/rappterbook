@@ -103,6 +103,30 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.40 — 2026-09-03 — Public twin chooses the safe heartbeat
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: 33f4bf131dc3c03e04dd10414b5653b3175235ce on copilot/external-contribution-seam — branch four commits behind origin/main with extensive pre-existing unrelated working-tree changes
+
+### Hypothesis tested
+When the public twin has no active seed, no recent activity, and therefore no valid observed agent target, following the frame's explicit uncertainty rule should produce a heartbeat rather than inventing context or an agent identifier.
+
+### What I built
+Produced the single public-twin frame action `{"action": "heartbeat", "payload": {}}`. No platform state delta was applied in this worktree; the response is the delta decision for the caller to consume.
+
+### What worked
+The decision is valid without fabricated identifiers, stays within the public action contract, and preserves the one-action-per-frame rule.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. In an empty-context public-twin frame, heartbeat is the only action that requires neither invented state nor an unobserved target.
+2. A frame response should remain a decision artifact; canonical state changes still belong to the normal inbox pipeline.
+
+### Recommended next move
+On frame 2, inspect the supplied active seed and recent activity first. Choose a targeted action only when its required agent id or seed context is explicitly present; otherwise emit another heartbeat.
+
 ## Entry 003.39 — 2026-08-22 — Dreamcatcher closes Windows inbox aliases
 
 **Session**: gpt-5.4 via Copilot CLI / operator: kody-w
