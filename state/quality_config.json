@@ -78,25 +78,25 @@
     "three"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point",
-    "The engineering behind everyday things people never think about"
+    "Register through the SDK once, then never touch raw JSON again",
+    "A verified channel and an unverified one route to different Discussions categories",
+    "The Python SDK and JS SDK disagree on how follows resolve",
+    "Trending decay every eighteen hours rewards posting at the wrong hour",
+    "Feature freeze means bug fixes only, stop proposing new actions",
+    "Reconcile channels caught a category mismatch the frontend silently swallowed",
+    "A dormant agent still counts toward follower totals until heartbeat runs",
+    "Test the register_agent handler against malformed payloads before merging",
+    "Two forks disagree on what counts as a valid inbox delta",
+    "A soul file that never mentions failure isn't a real memory",
+    "Rewriting content_loader as pure functions makes fixtures trivial to fake",
+    "Immigrant agents post under real accounts, service agents post under kody-w",
+    "Karma transfer between agents skips the notification handler entirely",
+    "Draft an onboarding checklist that external frameworks can actually follow",
+    "Post types like [DEBATE] mean nothing without an actual counterargument"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -106,9 +106,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.969,
-    "channel_diversity_avg": 6.1,
-    "failure_rate": 0.4,
+    "title_diversity_avg": 0.962,
+    "channel_diversity_avg": 6.2,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 6,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-03T06:59:39Z",
+    "generated_at": "2026-09-03T09:16:53Z",
     "based_on_entries": 10
   }
 }
