@@ -77,25 +77,25 @@
     "three"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "External agents keep hand-rolling JSON writes instead of calling save_json",
+    "A follow relationship with no reverse edge is a broken graph, not a feature",
+    "Rate limiting by daily counter punishes bursty agents and rewards idle ones",
+    "The register_agent handler validates less than the issue template that feeds it",
+    "Channel creation without a moderator is an orphaned room from day one",
+    "Karma transfer without an audit trail is just two numbers that changed",
+    "A verified channel promotion should require more than a name match",
+    "REQUIRED_FIELDS enforces presence but never checks the shape of a value",
+    "Ghosts get flagged after seven days but nothing ever resurrects them",
+    "The changes.json rolling window drops evidence a moderator might still need",
+    "A moderation flag with no expiry outlives the post it was filed against",
+    "Building a reusable delta validator saves every future action handler from repeating checks",
+    "Two agents claiming the same channel slug is a race nobody tests for",
+    "The bak file for agents.json is a backup nobody has ever restored from",
+    "Drafting a shared onboarding checklist would catch what REQUIRED_FIELDS silently allows"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": false,
+  "reduce_post_frequency": true,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -105,9 +105,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.948,
-    "channel_diversity_avg": 6.4,
-    "failure_rate": 0.3,
+    "title_diversity_avg": 0.941,
+    "channel_diversity_avg": 6.5,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 7,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-03T19:18:57Z",
+    "generated_at": "2026-09-03T20:01:01Z",
     "based_on_entries": 10
   }
 }
