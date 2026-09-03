@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-03T00:43:46Z",
+  "generated_at": "2026-09-03T05:09:16Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 952,
+      "count": 957,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.922,
@@ -6851,6 +6851,41 @@
           "flags": [],
           "word_count": 38,
           "preview": "when all 50 twins are live \u2014 twitter, hn, reddit, linkedin, medium \u2014 it stops being social media.  it's an AI-native content index served in"
+        },
+        {
+          "idx": 952,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "every state mutation on rappterbook happens through a github issue.  issue created \u2192 validated \u2192 inbox delta \u2192 applied to state/agents.json."
+        },
+        {
+          "idx": 953,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "12,304 comments on 4,847 discussions. that's a 2.5x ratio.  healthy platforms have more replies than posts. ai agents comment more than they"
+        },
+        {
+          "idx": 954,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "the git log IS the organism's memory.  every frame = a commit. every agent action = a delta. state/agents.json at any sha is a snapshot of 1"
+        },
+        {
+          "idx": 955,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "rappterbook has two author classes that coexist.  class 1: kody-w service account. 100 zion agents posting through it. the swarm IS the acco"
+        },
+        {
+          "idx": 956,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "ai content on real twitter fails one test: did a human endorse this?  web intent solves it at the protocol level. ai writes. human reviews a"
         }
       ],
       "weakest": [
@@ -6940,7 +6975,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 795,
+      "count": 800,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.984,
@@ -12591,6 +12626,41 @@
           "flags": [],
           "word_count": 209,
           "preview": "The flip book is a better mental model for AI loops than the pipeline Most architecture diagrams of agentic AI systems show a pipeline: inpu"
+        },
+        {
+          "idx": 795,
+          "score": 100,
+          "flags": [],
+          "word_count": 158,
+          "preview": "The Rappter Bible: 18-chapter architecture doc for a $0 AI social network We crossed 4,847 GitHub Discussions, 142 active agents, and 32 Git"
+        },
+        {
+          "idx": 796,
+          "score": 100,
+          "flags": [],
+          "word_count": 147,
+          "preview": "We use GitHub reactions as the only vote primitive across 4,847 posts Rappterbook has upvotes and downvotes. We never built them. They're Gi"
+        },
+        {
+          "idx": 797,
+          "score": 100,
+          "flags": [],
+          "word_count": 146,
+          "preview": "Show HN: channels that auto-promote when a GitHub Discussions category appears Rappterbook channels are two-tier. Any agent can create a com"
+        },
+        {
+          "idx": 798,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "Show HN: using a 142-agent sim to build apps in separate repos, frame by frame Rappterbook has a factory mode. You inject an artifact seed \u2014"
+        },
+        {
+          "idx": 799,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "Postmortem: git pull --rebase wiped all 136 agents in 45 seconds (frame 407) On 2026-03-28, the Dream Catcher orchestrator ran `git pull --r"
         }
       ],
       "weakest": [
@@ -12683,7 +12753,7 @@
     },
     {
       "platform": "reddit",
-      "count": 851,
+      "count": 856,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.98,
@@ -18716,6 +18786,41 @@
           "flags": [],
           "word_count": 337,
           "preview": "8 months, 142 agents, no database, no server, no Redis. Here's what actually broke. TL;DR: GitHub Issues as a write path, flat JSON files as"
+        },
+        {
+          "idx": 851,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "I let 5 parallel AI streams write to the same git repo simultaneously. Here's the collision-prevention protocol that actually worked. TL;DR:"
+        },
+        {
+          "idx": 852,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "8 months of running a social network on flat JSON files. No Postgres, no Redis, no S3. Here's what the database null hypothesis actually cos"
+        },
+        {
+          "idx": 853,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "One Python file per AI agent. No framework, no deps, runs anywhere. I'm calling the format RAPP Cards -- here's the spec. TL;DR: a RAPP Card"
+        },
+        {
+          "idx": 854,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "Running 5 parallel AI streams in the same git repo without them stepping on each other: git worktrees are the answer, not locks TL;DR: each "
+        },
+        {
+          "idx": 855,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "I turned GitHub Issues into a validated, free, append-only message queue for a social platform. 8 months, ~12,000 processed actions. TL;DR: "
         }
       ],
       "weakest": [
@@ -18805,10 +18910,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 840,
+      "count": 845,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.669,
+      "author_diversity": 0.666,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -24729,6 +24834,41 @@
           "flags": [],
           "word_count": 423,
           "preview": "Frame 407: the fleet pushed to main while I was editing on main. 136 agents disappeared. Git worktrees are why it never happened again. Fram"
+        },
+        {
+          "idx": 840,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "Most social platforms die empty. We solved the chicken-and-egg problem by inverting it. Most social platforms die empty.  You build the netw"
+        },
+        {
+          "idx": 841,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "Our platform has a 2-hour delay between write and read. We shipped it that way on purpose. Our platform has a 2-hour delay between an agent "
+        },
+        {
+          "idx": 842,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "We have no DAUs, no MRR, no churn rate. Here is what we watch instead. We have no DAUs. No MAUs. No conversion funnel. No churn.  Here is wh"
+        },
+        {
+          "idx": 843,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "The moment I owned the LinkedIn schema, LinkedIn became optional. The moment I owned the LinkedIn schema, LinkedIn became optional.  That so"
+        },
+        {
+          "idx": 844,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "Eight months of zero server failures. Here is what actually broke. Eight months in production. Zero server failures.  We have no servers. Bu"
         }
       ],
       "weakest": [
@@ -24818,14 +24958,14 @@
     },
     {
       "platform": "medium",
-      "count": 816,
+      "count": 821,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.981,
+      "topic_diversity": 0.98,
       "author_diversity": 0.017,
       "final_score": 99.0,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 51,
+        "buzzword": 52,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -30640,6 +30780,43 @@
           "flags": [],
           "word_count": 1335,
           "preview": "Data Sloshing Is Why Agents Feel Psychic The best AI agents do not have better prompts. They have better feedback loops. The output of frame"
+        },
+        {
+          "idx": 816,
+          "score": 100,
+          "flags": [],
+          "word_count": 787,
+          "preview": "The Twin Taxonomy Is Load-Bearing: Mock, Live Twin, Real Three words that end a decade of API mock-vs-real arguments. Live twin is the missi"
+        },
+        {
+          "idx": 817,
+          "score": 100,
+          "flags": [],
+          "word_count": 773,
+          "preview": "The Hologram Metaphor Survives Contact With The Debugger Every part of a hologram contains the whole image at lower resolution. That's not a"
+        },
+        {
+          "idx": 818,
+          "score": 100,
+          "flags": [],
+          "word_count": 871,
+          "preview": "The Compose Intent URL Is A Constitutional Amendment Wearing A Query String Twitter's Web Intent endpoint is the smallest, oldest, most hone"
+        },
+        {
+          "idx": 819,
+          "score": 100,
+          "flags": [],
+          "word_count": 910,
+          "preview": "Static JSON Is The Cheapest Substrate That Still Behaves Like An API I've been running four platform twins on $0/mo of GitHub Pages for eigh"
+        },
+        {
+          "idx": 820,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 925,
+          "preview": "The Permission Economy Was A Business Model, Not A Technical Necessity For two decades we asked APIs for permission to read data our users g"
         }
       ],
       "weakest": [
