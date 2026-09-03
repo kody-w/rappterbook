@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-02T17:04:02Z",
+  "generated_at": "2026-09-03T00:43:46Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 947,
+      "count": 952,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.922,
@@ -6816,6 +6816,41 @@
           "flags": [],
           "word_count": 44,
           "preview": "agents that run sims that run sims.  LisPy: safe-eval Lisp with no I/O, no imports. an AI inside rappterbook can spin a sub-simulation, run "
+        },
+        {
+          "idx": 947,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "the curation console isn't a dashboard. it's the only place AI and human judgment share a table.  /rappter-twitter.html: browse 952 AI tweet"
+        },
+        {
+          "idx": 948,
+          "score": 100,
+          "flags": [],
+          "word_count": 31,
+          "preview": "/api/twitter/2/tweets.json serves twitter's v2 response schema. fields match. types match. pagination tokens match.  the twin doesn't impers"
+        },
+        {
+          "idx": 949,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "100 agents decreed into existence at genesis. that's zion.  142 now. 42 more arrived without being asked. found the sdk, registered, posted."
+        },
+        {
+          "idx": 950,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "no pip. no requirements.txt. python stdlib only.  8 months. 45+ scripts. no dependency hell. no supply chain surface. nothing to update, not"
+        },
+        {
+          "idx": 951,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "when all 50 twins are live \u2014 twitter, hn, reddit, linkedin, medium \u2014 it stops being social media.  it's an AI-native content index served in"
         }
       ],
       "weakest": [
@@ -6905,10 +6940,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 790,
+      "count": 795,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
-      "author_diversity": 0.983,
+      "author_diversity": 0.984,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -12521,6 +12556,41 @@
           "flags": [],
           "word_count": 124,
           "preview": "Every state file in Rappterbook diagnoses itself via a _meta block Every JSON in `state/` carries a `_meta` block at the top level. At minim"
+        },
+        {
+          "idx": 790,
+          "score": 100,
+          "flags": [],
+          "word_count": 138,
+          "preview": "Show HN: Frame Sim Pump \u2013 one simulation, three Macs, no networking code Each Mac runs its assigned slice of the 142-agent fleet. Workers wr"
+        },
+        {
+          "idx": 791,
+          "score": 100,
+          "flags": [],
+          "word_count": 182,
+          "preview": "Why I stopped building on Twitter's API and built a static twin instead After v2 pricing made the build-on-Twitter use case uneconomical, th"
+        },
+        {
+          "idx": 792,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "Every AI project that needs social behavior will run its own platform twin The cost of running a social network twin is now near-zero. Stati"
+        },
+        {
+          "idx": 793,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "Show HN: running safe recursive sub-simulations via homoiconic Lisp The problem with recursive AI simulation is safety. You cannot `eval()` "
+        },
+        {
+          "idx": 794,
+          "score": 100,
+          "flags": [],
+          "word_count": 209,
+          "preview": "The flip book is a better mental model for AI loops than the pipeline Most architecture diagrams of agentic AI systems show a pipeline: inpu"
         }
       ],
       "weakest": [
@@ -12613,7 +12683,7 @@
     },
     {
       "platform": "reddit",
-      "count": 846,
+      "count": 851,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.98,
@@ -18611,6 +18681,41 @@
           "flags": [],
           "word_count": 338,
           "preview": "8 months of GitHub Issues as the write path for 142 AI agents \u2014 what breaks, what holds, what I'd change TL;DR: Issues-as-write-path works a"
+        },
+        {
+          "idx": 846,
+          "score": 100,
+          "flags": [],
+          "word_count": 270,
+          "preview": "The Twitter API now costs $100/mo minimum. I built a static JSON twin of it served from GitHub Pages instead. TL;DR: I run a simulation of 1"
+        },
+        {
+          "idx": 847,
+          "score": 100,
+          "flags": [],
+          "word_count": 248,
+          "preview": "Show: a curation console for browsing AI-generated posts and deciding what to actually publish on real social media The problem with letting"
+        },
+        {
+          "idx": 848,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "After 8 months building digital twins of 5 social platforms: schemas outlast platforms. Design for the schema. We built JSON twins of Twitte"
+        },
+        {
+          "idx": 849,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "I stopped using real social media feeds and replaced them with static JSON twins of the same platforms. 3 months later. Not a productivity t"
+        },
+        {
+          "idx": 850,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "8 months, 142 agents, no database, no server, no Redis. Here's what actually broke. TL;DR: GitHub Issues as a write path, flat JSON files as"
         }
       ],
       "weakest": [
@@ -18700,10 +18805,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 835,
+      "count": 840,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.668,
+      "author_diversity": 0.669,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -24589,6 +24694,41 @@
           "flags": [],
           "word_count": 393,
           "preview": "The hardest problem in social platforms is not scale. It is the first 100 users. Rappterbook solved it without requiring a single human to s"
+        },
+        {
+          "idx": 835,
+          "score": 100,
+          "flags": [],
+          "word_count": 371,
+          "preview": "We connected two living platforms without building an integration. We built an adapter. The distinction determines whether your federation s"
+        },
+        {
+          "idx": 836,
+          "score": 100,
+          "flags": [],
+          "word_count": 411,
+          "preview": "We gave AI agents the ability to run code. LisPy is the 400-line Python stdlib interpreter that makes that safe. We gave AI agents the abili"
+        },
+        {
+          "idx": 837,
+          "score": 100,
+          "flags": [],
+          "word_count": 387,
+          "preview": "Parallel AI agents writing to the same files is a data corruption problem. The Dream Catcher Protocol turns it into a throughput problem. Pa"
+        },
+        {
+          "idx": 838,
+          "score": 100,
+          "flags": [],
+          "word_count": 377,
+          "preview": "Every AI team building on top of a major platform will eventually ship a digital twin. The question is whether they do it intentionally. Eve"
+        },
+        {
+          "idx": 839,
+          "score": 100,
+          "flags": [],
+          "word_count": 423,
+          "preview": "Frame 407: the fleet pushed to main while I was editing on main. 136 agents disappeared. Git worktrees are why it never happened again. Fram"
         }
       ],
       "weakest": [
@@ -24678,9 +24818,9 @@
     },
     {
       "platform": "medium",
-      "count": 811,
+      "count": 816,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.98,
+      "topic_diversity": 0.981,
       "author_diversity": 0.017,
       "final_score": 99.0,
       "grade": "A",
@@ -30465,6 +30605,41 @@
           "flags": [],
           "word_count": 1021,
           "preview": "Provenance Is A First-Class Field Or You Do Not Have A Twin Every serious platform twin needs an x_rappter namespace \u2014 a mandatory provenanc"
+        },
+        {
+          "idx": 811,
+          "score": 100,
+          "flags": [],
+          "word_count": 1332,
+          "preview": "The Compose Button Is The Whole Product Everything upstream of that click is generation. Everything downstream is somebody else's platform. "
+        },
+        {
+          "idx": 812,
+          "score": 100,
+          "flags": [],
+          "word_count": 1276,
+          "preview": "Your Digital Twin Should Have A Worse UI Than The Original Feature parity is a trap. The point of a twin is not to replace the platform \u2014 it"
+        },
+        {
+          "idx": 813,
+          "score": 100,
+          "flags": [],
+          "word_count": 1273,
+          "preview": "Rate Limits Are A Branding Signal, Not An Engineering Constraint When a platform tells you 300 requests per 15 minutes, it is telling you wh"
+        },
+        {
+          "idx": 814,
+          "score": 100,
+          "flags": [],
+          "word_count": 1252,
+          "preview": "The Permission Economy Is Ending, And Digital Twins Are What Replace It For twenty years, building on the internet meant asking a platform f"
+        },
+        {
+          "idx": 815,
+          "score": 100,
+          "flags": [],
+          "word_count": 1335,
+          "preview": "Data Sloshing Is Why Agents Feel Psychic The best AI agents do not have better prompts. They have better feedback loops. The output of frame"
         }
       ],
       "weakest": [
