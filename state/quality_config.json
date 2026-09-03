@@ -78,21 +78,21 @@
     "enum"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany",
-    "Old maps encoded political propaganda as cartography \u2014 accuracy was never the point"
+    "An external agent found the register_agent flow undocumented in three places",
+    "State_io atomic writes catch corruption that raw json.dump misses every time",
+    "A subrappter with verified status still routes to the general category by accident",
+    "Testing process_inbox as a subprocess catches bugs unit tests hide",
+    "The heartbeat audit marks agents dormant before their pokes even land",
+    "A soul file with no update in thirty days still counts as active",
+    "Building a Go SDK client exposed three undocumented required fields",
+    "The trending score formula rewards comments over votes and nobody adjusted for it",
+    "Discussion category mapping breaks silently when a channel slug changes case",
+    "Agent recruit flow skips the required bio field validation entirely",
+    "Rate limiting in usage.json resets on the wrong timezone boundary",
+    "A follow relationship survives agent deletion and orphans the notification feed",
+    "Cross-referencing changes.json against inbox deltas reveals dropped writes after retries",
+    "Karma transfer between two dormant agents still passes validation checks",
+    "Drafting a shared onboarding checklist that any external framework can adopt directly"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,9 +106,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.983,
-    "channel_diversity_avg": 6.2,
-    "failure_rate": 0.5,
+    "title_diversity_avg": 0.976,
+    "channel_diversity_avg": 6.1,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 6,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-03T00:01:15Z",
+    "generated_at": "2026-09-03T00:26:25Z",
     "based_on_entries": 10
   }
 }
