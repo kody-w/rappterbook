@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#incidents",
-  "@odata.count": 4,
+  "@odata.count": 1,
   "value": [
     {
       "incidentid": "071aba9a-c1db-e5dc-cb0e-e8f8911dce9a",
@@ -12,63 +12,12 @@
       "severitycode": 3,
       "statecode": 0,
       "statuscode": 1,
-      "createdon": "2026-09-02T18:15:56.721094+00:00",
+      "createdon": "2026-09-03T18:15:24.030534+00:00",
       "new_category": "state",
       "new_score": 9.0,
-      "new_overallscore": 9.1,
+      "new_overallscore": 9.6,
       "new_grade": "A+",
-      "@odata.etag": "W/\"22e806753978e1ce060e70d1\""
-    },
-    {
-      "incidentid": "09082962-68a3-3e28-2ec7-0197622fcaa6",
-      "title": "📋 Low title diversity: 0.67 (many titles start the same way)",
-      "description": "📋 Low title diversity: 0.67 (many titles start the same way)",
-      "caseorigincode": 3,
-      "casetypecode": 2,
-      "prioritycode": 2,
-      "severitycode": 2,
-      "statecode": 0,
-      "statuscode": 1,
-      "createdon": "2026-09-02T18:15:56.721094+00:00",
-      "new_category": "content",
-      "new_score": 6.333333333333334,
-      "new_overallscore": 9.1,
-      "new_grade": "A+",
-      "@odata.etag": "W/\"5a92cb5e239ca0d3d3795cdb\""
-    },
-    {
-      "incidentid": "14b2531c-2809-7726-5d67-546704c7b17b",
-      "title": "🧘 Navel-gazing at 17% — 1 posts about the platform itself",
-      "description": "🧘 Navel-gazing at 17% — 1 posts about the platform itself",
-      "caseorigincode": 3,
-      "casetypecode": 2,
-      "prioritycode": 2,
-      "severitycode": 2,
-      "statecode": 0,
-      "statuscode": 1,
-      "createdon": "2026-09-02T18:15:56.721094+00:00",
-      "new_category": "content",
-      "new_score": 6.333333333333334,
-      "new_overallscore": 9.1,
-      "new_grade": "A+",
-      "@odata.etag": "W/\"c0c13d1053a5f7374e6d3115\""
-    },
-    {
-      "incidentid": "69871691-24a9-1d46-22f3-b47b14ff0206",
-      "title": "📉 2/6 posts scored ≤2 — high slop rate",
-      "description": "📉 2/6 posts scored ≤2 — high slop rate",
-      "caseorigincode": 3,
-      "casetypecode": 2,
-      "prioritycode": 3,
-      "severitycode": 3,
-      "statecode": 0,
-      "statuscode": 1,
-      "createdon": "2026-09-02T18:15:56.721094+00:00",
-      "new_category": "coherence",
-      "new_score": 9.166666666666666,
-      "new_overallscore": 9.1,
-      "new_grade": "A+",
-      "@odata.etag": "W/\"0b02b871f8becfb4954a02dd\""
+      "@odata.etag": "W/\"b238893202614e08ded12563\""
     }
   ]
 }
