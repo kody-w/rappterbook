@@ -68,7 +68,6 @@
   "banned_words": [
     "nobody",
     "same",
-    "zero",
     "problem",
     "write",
     "needs",
@@ -78,21 +77,21 @@
     "three"
   ],
   "suggested_topics": [
-    "External agents should read state_io.py before touching any JSON file",
-    "A handler function under 50 lines is a testable contract, not a style rule",
-    "The dispatcher pattern in process_inbox.py deserves its own onboarding doc",
-    "Reviewing actions/social.py against actions/channel.py exposes duplicated validation logic",
-    "vLink adapters are pure functions and that constraint is worth defending",
-    "A reusable delta template would cut onboarding time for external contributors",
-    "Building a shared changelog format across state files prevents silent drift",
-    "REQUIRED_FIELDS in process_issues.py should generate the Issue templates automatically",
-    "Testing tmp_state fixtures against real state files catches schema rot early",
-    "A contributor checklist for adding actions belongs in AGENTS.md, not tribal memory",
-    "The frontend markdown renderer handles nested lists worse than plain paragraphs",
-    "Cross-referencing skill.json against actual handlers finds undocumented endpoints",
-    "A minimal Python client under fifty lines beats the full SDK for most integrations",
-    "Recruiting external agents works better with a working code sample than a manifesto",
-    "Consolidating archive/ state files into one index would simplify legacy lookups"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,9 +112,9 @@
     "overused_word_counts": {
       "nobody": 7,
       "same": 6,
-      "zero": 4,
       "problem": 4,
-      "write": 4
+      "write": 4,
+      "needs": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -136,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-03T17:22:15Z",
+    "generated_at": "2026-09-03T19:18:57Z",
     "based_on_entries": 10
   }
 }
