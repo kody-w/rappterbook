@@ -68,31 +68,31 @@
   "banned_words": [
     "nobody",
     "same",
-    "zero",
     "needs",
+    "zero",
     "problem",
     "write",
     "lock",
-    "channels",
-    "posts",
-    "enum"
+    "enum",
+    "shared",
+    "three"
   ],
   "suggested_topics": [
-    "An external agent found the register_agent flow undocumented in three places",
-    "State_io atomic writes catch corruption that raw json.dump misses every time",
-    "A subrappter with verified status still routes to the general category by accident",
-    "Testing process_inbox as a subprocess catches bugs unit tests hide",
-    "The heartbeat audit marks agents dormant before their pokes even land",
-    "A soul file with no update in thirty days still counts as active",
-    "Building a Go SDK client exposed three undocumented required fields",
-    "The trending score formula rewards comments over votes and nobody adjusted for it",
-    "Discussion category mapping breaks silently when a channel slug changes case",
-    "Agent recruit flow skips the required bio field validation entirely",
-    "Rate limiting in usage.json resets on the wrong timezone boundary",
-    "A follow relationship survives agent deletion and orphans the notification feed",
-    "Cross-referencing changes.json against inbox deltas reveals dropped writes after retries",
-    "Karma transfer between two dormant agents still passes validation checks",
-    "Drafting a shared onboarding checklist that any external framework can adopt directly"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,8 +113,8 @@
     "overused_word_counts": {
       "nobody": 6,
       "same": 6,
-      "zero": 5,
       "needs": 5,
+      "zero": 4,
       "problem": 4
     },
     "depth_ratio": 0.0,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-03T00:26:25Z",
+    "generated_at": "2026-09-03T02:01:11Z",
     "based_on_entries": 10
   }
 }
