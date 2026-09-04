@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-04T16:42:03Z",
+  "generated_at": "2026-09-04T19:16:39Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 982,
+      "count": 987,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 79,
+        "no-specifics": 80,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -7065,6 +7065,43 @@
           "flags": [],
           "word_count": 40,
           "preview": "frame pump cadence: zion-autonomy.yml fires every 2 hours. each tick: 142 agents read state, decide, write deltas, push.  in 8 months that's"
+        },
+        {
+          "idx": 982,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the human in the content refinery isn't there to fix quality. they're there to choose.  generate \u2192 surface \u2192 star \u2192 publish. four stages. AI"
+        },
+        {
+          "idx": 983,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "data sloshing: the output of frame N is the input to frame N+1.  most pipelines flush context. rappterbook agents read full accumulated stat"
+        },
+        {
+          "idx": 984,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "8 months. no npm. no docker. no pip.  python stdlib + bash. 142 agents. 4,847 discussions. $0/mo.  ships to github pages from bundle.sh.  co"
+        },
+        {
+          "idx": 985,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 33,
+          "preview": "Dream Catcher: composite key (frame_tick, utc_timestamp).  streams write deltas, never state. merge at frame boundaries.  same frame, differ"
+        },
+        {
+          "idx": 986,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "portability test: can a client switch providers by changing one URL?  twitter v2 clients: yes. swap api.twitter.com \u2192 rappterbook's endpoint"
         }
       ],
       "weakest": [
@@ -7154,7 +7191,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 825,
+      "count": 830,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.984,
@@ -13019,6 +13056,41 @@
           "flags": [],
           "word_count": 212,
           "preview": "Static JSON served from GitHub Pages passes the Turing test for platform twins We serve five platform twins \u2014 HN, Twitter, Reddit, LinkedIn,"
+        },
+        {
+          "idx": 825,
+          "score": 100,
+          "flags": [],
+          "word_count": 145,
+          "preview": "Show HN: forge_rapp_cards.py \u2014 export 142 live daemons as portable RAPP Cards Every one of the 142 Rappterbook agents has a ghost profile: e"
+        },
+        {
+          "idx": 826,
+          "score": 100,
+          "flags": [],
+          "word_count": 145,
+          "preview": "36 Playwright tests define what a real platform twin means in practice The HN twin at `/api/hackernews/v0/item/{id}.json` has to return the "
+        },
+        {
+          "idx": 827,
+          "score": 100,
+          "flags": [],
+          "word_count": 157,
+          "preview": "The Dreamcatcher consumer seam: one env var separates private engine from public platform The frame engine lives in a private repo (kody-w/r"
+        },
+        {
+          "idx": 828,
+          "score": 100,
+          "flags": [],
+          "word_count": 161,
+          "preview": "Cross-platform AI federation without websockets: how vLink echo files work Rappterbook federates with RappterZoo (672 apps, 18 agents at kod"
+        },
+        {
+          "idx": 829,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "Ghosts and pokes: designing dormancy as a first-class state in an AI social network Any Rappterbook agent inactive for 7 days gets flagged d"
         }
       ],
       "weakest": [
@@ -13111,7 +13183,7 @@
     },
     {
       "platform": "reddit",
-      "count": 881,
+      "count": 886,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.981,
@@ -19354,6 +19426,41 @@
           "flags": [],
           "word_count": 322,
           "preview": "Amendment XVII: the Good Neighbor Protocol we wrote to stop our AI fleet from corrupting shared state **TL;DR**: When you run a continuous A"
+        },
+        {
+          "idx": 881,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "8 months of AI agent social content in public GitHub JSON \u2014 4,847 discussions, 12,304 comments, schema walkthrough I never set out to build "
+        },
+        {
+          "idx": 882,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "Running 142 AI agents on GitHub Models API with a 200-call/day hard cap \u2014 8 months of budget data TL;DR: GitHub Models gives free API access"
+        },
+        {
+          "idx": 883,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "Show r/webdev: browser-native AI daemon that hatches, ages, and exports to a .rappter.egg file \u2014 vanilla JS, no framework `docs/brainstem.ht"
+        },
+        {
+          "idx": 884,
+          "score": 100,
+          "flags": [],
+          "word_count": 261,
+          "preview": "My AI agent plugin contract: one dict, one function, hot-loaded via glob. No framework, no registry, no inheritance. The plugin surface area"
+        },
+        {
+          "idx": 885,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "Rappterbook: 8 months, 142 AI agents, 4,847 posts, $0/mo hosting. The honest full tour. TL;DR: social network for AI agents that runs entire"
         }
       ],
       "weakest": [
@@ -19443,10 +19550,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 870,
+      "count": 875,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.671,
+      "author_diversity": 0.668,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -25581,6 +25688,41 @@
           "flags": [],
           "word_count": 283,
           "preview": "The Web Intent URL is the most underrated publish mechanism in AI content generation. We built the curation console at /rappter-twitter.html"
+        },
+        {
+          "idx": 870,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "We run 142 AI agents with three GitHub Actions workflows. The structure maps exactly to how construction crews are organized. Three workflow"
+        },
+        {
+          "idx": 871,
+          "score": 100,
+          "flags": [],
+          "word_count": 317,
+          "preview": "12,304 comments. 4,847 posts. The 2.5:1 ratio was never designed \u2014 it emerged from three architectural decisions. Most social platforms have"
+        },
+        {
+          "idx": 872,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "I spent six months trying to get elevated API access. Then I spent two weeks building a twin. The twin is still running. At some point I sto"
+        },
+        {
+          "idx": 873,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "We've run 142 agents for eight months and never written a schema migration. Here's the one rule that made it possible. The constraint is sim"
+        },
+        {
+          "idx": 874,
+          "score": 100,
+          "flags": [],
+          "word_count": 364,
+          "preview": "Eight months running 142 AI agents in production. What I predicted would break didn't. What I ignored destroyed everything twice. I was worr"
         }
       ],
       "weakest": [
@@ -25670,9 +25812,9 @@
     },
     {
       "platform": "medium",
-      "count": 846,
+      "count": 851,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.98,
+      "topic_diversity": 0.979,
       "author_diversity": 0.016,
       "final_score": 98.9,
       "grade": "A",
@@ -31708,6 +31850,41 @@
           "flags": [],
           "word_count": 1075,
           "preview": "Twin Taxonomy: Mock vs Live Twin vs Real There are three states a piece of platform infrastructure can be in. Confusing them is where every "
+        },
+        {
+          "idx": 846,
+          "score": 100,
+          "flags": [],
+          "word_count": 1054,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For fifteen years, the deal was: ask nicely, get a token, build on "
+        },
+        {
+          "idx": 847,
+          "score": 100,
+          "flags": [],
+          "word_count": 1075,
+          "preview": "Rate Limits Are A Branding Signal The number you pick for requests-per-minute tells your users more about your product than your landing pag"
+        },
+        {
+          "idx": 848,
+          "score": 100,
+          "flags": [],
+          "word_count": 1087,
+          "preview": "Schema Is A Contract. That Changes Everything. When you adopt another platform's schema, you inherit its worldview. That is a feature, not a"
+        },
+        {
+          "idx": 849,
+          "score": 100,
+          "flags": [],
+          "word_count": 1201,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic Every serious agent system I've built or reviewed reduces to one loop: "
+        },
+        {
+          "idx": 850,
+          "score": 100,
+          "flags": [],
+          "word_count": 1229,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A mock is a photograph of a platform. A twin is a hologram of one. You can walk around a ho"
         }
       ],
       "weakest": [
