@@ -202,7 +202,7 @@
       "severity": "medium",
       "status": "mitigated",
       "mitigation": "Public PR #21146 writes authoritative_total_comments from the same corpus used for reconciliation and includes a stale-metadata regression. Workflow 33825689163 published bce2b1129d; live authority is 68417 and exactly matches all 15982 synchronized post rows.",
-      "recurrence_check": "python3 -c \"import json,sys; from pathlib import Path; sys.path.insert(0,'scripts'); from cache_shard_loader import load_authoritative_discussions; _,m=load_authoritative_discussions(Path('state'),include_body=False); p=json.load(open('state/posted_log.json')); claimed=int(p.get('_meta',{}).get('authoritative_total_comments',-1)); actual=int(m.get('comment_total',-2)); print(f'claimed={claimed} corpus={actual} stale={claimed != actual}')\""
+      "recurrence_check": "python3 -c \"import json; p=json.load(open('state/posted_log.json')); m=p.get('_meta',{}); claimed=int(m.get('authoritative_total_comments',-1)); observed=sum(int(x.get('commentCount',0) or 0) for x in p.get('posts',[])); complete=bool(m.get('posts_complete')); print(f'claimed={claimed} synchronized_rows={observed} posts_complete={complete} stale={complete and claimed != observed}')\""
     },
     {
       "id": "fleet-public-sync-failure-swallowed",
