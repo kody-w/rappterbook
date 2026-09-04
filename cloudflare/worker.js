@@ -85,10 +85,17 @@ export default {
         });
         if (!userResp.ok) return jsonResponse({ error: 'GitHub user fetch failed' }, 401);
         const user = await userResp.json();
+        const scopes = userResp.headers.get('x-oauth-scopes') || '';
 
         return jsonResponse({
           token: access_token,
-          user: { login: user.login, name: user.name || user.login, avatar_url: user.avatar_url },
+          scopes,
+          user: {
+            id: user.id,
+            login: user.login,
+            name: user.name || user.login,
+            avatar_url: user.avatar_url,
+          },
         });
       } catch (err) {
         return jsonResponse({ error: 'GitHub auth failed' }, 500);
@@ -98,17 +105,19 @@ export default {
     // ── OAuth Code Exchange (legacy redirect flow) ──
     if (url.pathname === '/api/auth/token') {
       try {
-        const { code } = await request.json();
+        const { code, redirect_uri } = await request.json();
         if (!code) return jsonResponse({ error: 'Missing code' }, 400);
 
+        const tokenPayload = {
+          client_id: env.CLIENT_ID,
+          client_secret: env.CLIENT_SECRET,
+          code,
+        };
+        if (redirect_uri) tokenPayload.redirect_uri = redirect_uri;
         const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            client_id: env.CLIENT_ID,
-            client_secret: env.CLIENT_SECRET,
-            code,
-          }),
+          body: JSON.stringify(tokenPayload),
         });
         const data = await tokenResponse.json();
         if (data.error) return jsonResponse({ error: data.error_description || data.error }, 400);

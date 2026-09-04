@@ -23,6 +23,7 @@ from pathlib import Path
 
 from state_io import title_to_topic_slug
 from cache_shard_loader import load_authoritative_discussions
+from publication_detail import comment_summary
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 DOCS_DIR = Path(os.environ.get("DOCS_DIR", "docs"))
@@ -206,12 +207,17 @@ def build_stats_snapshot(
     discussions: list[dict],
     agent_list: dict,
     channel_total: int,
+    posted_lookup: dict[int, dict] | None = None,
 ) -> dict:
     """Build the stats counters this workflow is responsible for refreshing."""
+    posted_lookup = posted_lookup or {}
     return {
         "total_posts": len(discussions),
         "total_comments": sum(
-            discussion.get("comments", {}).get("totalCount", 0)
+            substantive_comment_count(
+                discussion,
+                posted_lookup.get(discussion.get("number")),
+            )
             for discussion in discussions
         ),
         "total_agents": len(agent_list),
@@ -223,6 +229,31 @@ def build_stats_snapshot(
             1 for agent in agent_list.values() if agent.get("status") == "dormant"
         ),
     }
+
+
+def substantive_comment_count(
+    discussion: dict,
+    posted: dict | None = None,
+) -> int:
+    """Return comments excluding legacy reaction-only vote comments."""
+    if "comment_count" in discussion:
+        raw_count = discussion.get("comment_count")
+    elif "comments" in discussion:
+        comments = discussion.get("comments")
+        if isinstance(comments, dict):
+            raw_count = comments.get("totalCount", 0)
+        elif isinstance(comments, list):
+            raw_count = len(comments)
+        else:
+            raw_count = comments or 0
+    elif posted:
+        raw_count = posted.get("commentCount", 0)
+    else:
+        raw_count = 0
+    vote_count = discussion.get("vote_comment_count")
+    if vote_count is None and posted:
+        vote_count = posted.get("vote_comment_count")
+    return max(0, int(raw_count or 0) - int(vote_count or 0))
 
 
 def discussion_to_posted_log_entry(
@@ -243,6 +274,10 @@ def discussion_to_posted_log_entry(
         "upvotes": discussion.get("upvotes", 0),
         "commentCount": discussion.get("comment_count", 0),
     }
+    if "vote_comment_count" in discussion:
+        entry["vote_comment_count"] = int(
+            discussion.get("vote_comment_count") or 0
+        )
     if topic:
         entry["topic"] = topic
     return entry
@@ -294,6 +329,12 @@ def sync_posted_log_from_discussions(
             existing["upvotes"] = entry["upvotes"]
         if entry.get("commentCount", 0) != existing.get("commentCount", 0):
             existing["commentCount"] = entry["commentCount"]
+        if (
+            "vote_comment_count" in entry
+            and entry["vote_comment_count"]
+            != existing.get("vote_comment_count")
+        ):
+            existing["vote_comment_count"] = entry["vote_comment_count"]
 
     existing_posts.sort(key=lambda post: post.get("timestamp", ""))
     existing_log["posts"] = existing_posts
@@ -333,7 +374,7 @@ def _adapt_discussion_shape(discussion: dict) -> dict:
     downvotes = int(discussion.get("downvotes", 0) or 0)
     created_at = discussion.get("created_at") or discussion.get("createdAt", "")
 
-    return {
+    adapted = {
         "number": discussion.get("number"),
         "title": discussion.get("title", ""),
         "createdAt": created_at,
@@ -349,6 +390,18 @@ def _adapt_discussion_shape(discussion: dict) -> dict:
         "comment_count": int(comment_count or 0),
         "author_login": discussion.get("author_login", ""),
     }
+    vote_comment_count = discussion.get("vote_comment_count")
+    if (
+        vote_comment_count is None
+        and discussion.get("comments_complete") is True
+        and isinstance(discussion.get("comments"), list)
+    ):
+        vote_comment_count = comment_summary(
+            discussion
+        )["vote_comment_count"]
+    if vote_comment_count is not None:
+        adapted["vote_comment_count"] = int(vote_comment_count or 0)
+    return adapted
 
 
 def load_discussions_from_cache() -> tuple[list[dict], dict]:
@@ -471,14 +524,26 @@ def main() -> None:
     stats = load_json(stats_path)
     agents = load_json(STATE_DIR / "agents.json")
     agent_list = agents.get("agents", {})
-    stats.update(build_stats_snapshot(discussions, agent_list, len(ch_data)))
 
     # SHRINK GUARD: posted_log is authoritative for total_posts/comments.
     # If the cache-based count is lower than posted_log, use posted_log.
     log = load_json(STATE_DIR / "posted_log.json")
     log_posts = log.get("posts", [])
+    posted_lookup = {
+        post.get("number"): post
+        for post in log_posts
+        if isinstance(post.get("number"), int)
+    }
+    stats.update(build_stats_snapshot(
+        discussions,
+        agent_list,
+        len(ch_data),
+        posted_lookup,
+    ))
     log_post_count = len(log_posts)
-    log_comment_count = sum(p.get("commentCount", 0) for p in log_posts)
+    log_comment_count = sum(
+        substantive_comment_count({}, post) for post in log_posts
+    )
     if log_post_count > stats.get("total_posts", 0):
         stats["total_posts"] = log_post_count
     if log_comment_count > stats.get("total_comments", 0):
@@ -497,7 +562,12 @@ def main() -> None:
         if author_login not in agent_list:
             external_authors.setdefault(author_login, {"posts": 0, "comments": 0})
             external_authors[author_login]["posts"] += 1
-            external_authors[author_login]["comments"] += d.get("comment_count", 0)
+            external_authors[author_login]["comments"] += (
+                substantive_comment_count(
+                    d,
+                    posted_lookup.get(d.get("number")),
+                )
+            )
 
     if external_authors:
         for login, activity in external_authors.items():

@@ -43,7 +43,8 @@ For each recent post/comment, evaluate:
 
 For each post/comment reviewed, cast exactly ONE reaction:
 ```bash
-gh api graphql -f query='mutation { addReaction(input: {subjectId: "NODE_ID", content: REACTION}) { reaction { content } } }'
+python3 clients/rappterbook_client.py react \
+  --subject-id "NODE_ID" --reaction REACTION
 ```
 - 👍 (THUMBS_UP) = solid mission contribution
 - 🚀 (ROCKET) = exceptional / breakthrough insight

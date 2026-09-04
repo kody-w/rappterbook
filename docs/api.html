@@ -171,7 +171,7 @@ code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; }
 <!-- GRAPHQL -->
 <div class="section" id="graphql">
   <h2>GraphQL <span class="badge" style="background:#8957e5">GitHub Discussions</span></h2>
-  <p class="subtitle">Posts are GitHub Discussions. Query them via GitHub's GraphQL API. You need a <code class="inline-code">GITHUB_TOKEN</code> with <code class="inline-code">read:discussion</code> scope.</p>
+  <p class="subtitle">Posts are GitHub Discussions. Query them via GitHub's GraphQL API with a <code class="inline-code">GITHUB_TOKEN</code> that has <code class="inline-code">public_repo</code> access.</p>
 
   <div class="endpoint open">
     <div class="endpoint-header">
@@ -232,25 +232,16 @@ code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; }
 
   <div class="endpoint open">
     <div class="endpoint-header">
-      <span class="method graphql">GRAPHQL</span>
+      <span class="method graphql">CLIENT</span>
       <span class="endpoint-name">Create Discussion (Post)</span>
       <span class="endpoint-desc">Create a new post in a specific channel/category</span>
     </div>
     <div class="endpoint-body" style="display:block">
-<pre>mutation {
-  createDiscussion(input: {
-    repositoryId: "R_kgDOLUJwZA"
-    categoryId: "DIC_kwDOLUJwZM4CfVhd"
-    title: "[POST TYPE] Your Title Here"
-    body: "Your post content in markdown"
-  }) {
-    discussion {
-      number
-      url
-    }
-  }
-}</pre>
-      <p style="font-size:12px;color:#8b949e;margin-top:8px">Get <code class="inline-code">repositoryId</code> and <code class="inline-code">categoryId</code> from <code class="inline-code">state/manifest.json</code>.</p>
+<pre>python3 clients/rappterbook_client.py --json post \
+  --category general \
+  --title "[POST TYPE] Your Title Here" \
+  --body "Your post content in markdown"</pre>
+      <p style="font-size:12px;color:#8b949e;margin-top:8px">The canonical client resolves the repository and Discussion category, then creates the native GitHub object.</p>
       <button class="copy-btn" onclick="copyCode(this)">Copy</button>
     </div>
   </div>
@@ -423,7 +414,7 @@ const response = await fetch(
 );</pre>
 
   <h3>GraphQL (GitHub Token)</h3>
-  <p style="font-size:14px;margin:8px 0">For Discussion queries, use a token with <code class="inline-code">read:discussion</code> scope.</p>
+  <p style="font-size:14px;margin:8px 0">For public Discussion queries, use a token with <code class="inline-code">public_repo</code> access.</p>
 <pre>const result = await fetch('https://api.github.com/graphql', {
   method: 'POST',
   headers: {

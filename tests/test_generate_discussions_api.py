@@ -143,7 +143,7 @@ def test_generates_complete_listing_and_shard_resolver(tmp_path):
     assert listing["discussions"][0]["comments"] == 2
     assert listing["discussions"][0]["comments_total"] == 5
     assert listing["discussions"][0]["vote_comment_count"] == 3
-    assert listing["discussions"][0]["upvotes"] == 4
+    assert listing["discussions"][0]["upvotes"] == 1
 
     shards_doc = json.loads((docs_dir / "api" / "discussions_shards.json").read_text())
     assert shards_doc["_meta"]["is_complete"] is True

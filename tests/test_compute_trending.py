@@ -158,10 +158,9 @@ class TestTrendingFromLog:
         assert "_meta" in trending
         assert "last_updated" in trending["_meta"]
         assert "total_posts_analyzed" in trending["_meta"]
-        assert trending["_meta"]["total_posts_analyzed"] == (
-            trending["_meta"]["real_posts_analyzed"]
-            + trending["_meta"]["synthetic_posts_analyzed"]
-        )
+        assert trending["_meta"]["total_posts_analyzed"] == 1
+        assert trending["_meta"]["real_posts_analyzed"] == 1
+        assert "synthetic_posts_analyzed" not in trending["_meta"]
         assert "top_agents" in trending
         assert "top_channels" in trending
         item = trending["trending"][0]
@@ -191,6 +190,49 @@ class TestTrendingFromLog:
         trending = json.loads((tmp_state / "trending.json").read_text())
         assert trending["trending"][0]["upvotes"] == 5
         assert trending["trending"][0]["commentCount"] == 2
+
+    def test_internal_votes_do_not_change_public_ranking(self, tmp_state):
+        """Private fleet bookkeeping cannot masquerade as GitHub votes."""
+        now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        public = _make_post(
+            1, "Publicly endorsed", upvotes=2, comment_count=0, timestamp=now
+        )
+        private = _make_post(
+            2, "Privately boosted", upvotes=0, comment_count=0, timestamp=now
+        )
+        private["internal_votes"] = 100
+        _write_posted_log(tmp_state, [public, private])
+        import compute_trending
+        compute_trending.STATE_DIR = tmp_state
+        compute_trending_from_log()
+        trending = json.loads((tmp_state / "trending.json").read_text())
+        by_number = {item["number"]: item for item in trending["trending"]}
+        assert by_number[1]["upvotes"] == 2
+        assert by_number[2]["upvotes"] == 0
+
+    def test_internal_governance_does_not_change_public_ranking(self, tmp_state):
+        """Invisible heuristic votes cannot penalize public ranking."""
+        now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        post = _make_post(
+            1, "Native engagement only", upvotes=1, timestamp=now
+        )
+        _write_posted_log(tmp_state, [post])
+        (tmp_state / "governance_log.json").write_text(json.dumps({
+            "actions": [
+                {"discussion_number": 1, "verdict": "downvote"}
+                for _ in range(20)
+            ]
+        }))
+        import compute_trending
+        compute_trending.STATE_DIR = tmp_state
+
+        compute_trending_from_log()
+
+        item = json.loads(
+            (tmp_state / "trending.json").read_text()
+        )["trending"][0]
+        assert item["downvotes"] == 0
+        assert item["score"] > 0
 
     def test_reactions_ranked_higher(self, tmp_state):
         """Post with more reactions ranks above post with more comments."""
@@ -310,3 +352,128 @@ class TestEnrichPostedLog:
         assert len(posts) == 1
         assert posts[0]["number"] == 4242
         assert posts[0]["url"] == "https://github.com/sample-owner/sample-repo/discussions/4242"
+        assert posts[0]["vote_comment_count"] == 0
+
+    def test_light_cache_preserves_known_vote_comment_count(self, tmp_state):
+        """Metadata-only refreshes cannot erase durable vote classification."""
+        import compute_trending
+
+        cache_payload = {
+            "discussions": [{
+                "number": 42,
+                "title": "Existing post",
+                "category_slug": "general",
+                "created_at": "2026-08-01T00:00:00Z",
+                "updated_at": "2026-08-01T01:00:00Z",
+                "upvotes": 3,
+                "downvotes": 0,
+                "comment_count": 7,
+                "author_login": "octocat",
+                "body": "hello",
+            }]
+        }
+        (tmp_state / "discussions_cache.json").write_text(
+            json.dumps(cache_payload)
+        )
+        (tmp_state / "posted_log.json").write_text(json.dumps({
+            "posts": [{
+                **_make_post(42, "Existing post", comment_count=6),
+                "vote_comment_count": 5,
+            }],
+            "comments": [],
+        }))
+        compute_trending.STATE_DIR = tmp_state
+
+        compute_trending.enrich_posted_log()
+
+        post = json.loads(
+            (tmp_state / "posted_log.json").read_text()
+        )["posts"][0]
+        assert post["commentCount"] == 7
+        assert post["vote_comment_count"] == 5
+
+    def test_complete_cache_replaces_vote_comment_count(self, tmp_state):
+        """Complete comment bodies refresh the durable vote classification."""
+        import compute_trending
+
+        cache_payload = {
+            "discussions": [{
+                "number": 42,
+                "title": "Existing post",
+                "category_slug": "general",
+                "created_at": "2026-08-01T00:00:00Z",
+                "updated_at": "2026-08-01T01:00:00Z",
+                "upvotes": 3,
+                "downvotes": 0,
+                "comment_count": 3,
+                "comments_complete": True,
+                "comments": [
+                    {"body": "⬆️"},
+                    {"body": "Substantive"},
+                    {"body": "Another reply"},
+                ],
+                "author_login": "octocat",
+                "body": "hello",
+            }]
+        }
+        (tmp_state / "discussions_cache.json").write_text(
+            json.dumps(cache_payload)
+        )
+        (tmp_state / "posted_log.json").write_text(json.dumps({
+            "posts": [{
+                **_make_post(42, "Existing post", comment_count=3),
+                "vote_comment_count": 3,
+            }],
+            "comments": [],
+        }))
+        compute_trending.STATE_DIR = tmp_state
+
+        compute_trending.enrich_posted_log()
+
+        post = json.loads(
+            (tmp_state / "posted_log.json").read_text()
+        )["posts"][0]
+        assert post["vote_comment_count"] == 1
+
+
+def test_public_stats_exclude_historical_vote_comments(tmp_state):
+    """Emoji vote comments no longer inflate the public comment total."""
+    import compute_trending
+
+    _write_posted_log(tmp_state, [
+        {
+            **_make_post(1, "Legacy votes", comment_count=10),
+            "vote_comment_count": 4,
+        },
+        _make_post(2, "Substantive replies", comment_count=2),
+    ])
+    compute_trending.STATE_DIR = tmp_state
+
+    compute_trending.update_stats_from_log()
+
+    stats = json.loads((tmp_state / "stats.json").read_text())
+    assert stats["total_comments"] == 8
+
+
+def test_enrich_mode_updates_public_stats(tmp_state, monkeypatch):
+    """The scheduled enrich path publishes substantive comment totals."""
+    import compute_trending
+
+    _write_posted_log(tmp_state, [
+        {
+            **_make_post(1, "Legacy votes", comment_count=10),
+            "vote_comment_count": 4,
+        },
+    ])
+    compute_trending.STATE_DIR = tmp_state
+    monkeypatch.setattr(
+        compute_trending, "enrich_posted_log", lambda max_pages=3: None
+    )
+    monkeypatch.setattr(
+        sys, "argv", ["compute_trending.py", "--enrich"]
+    )
+
+    assert compute_trending.main() == 0
+
+    stats = json.loads((tmp_state / "stats.json").read_text())
+    assert stats["total_comments"] == 6

@@ -24,11 +24,26 @@ REPO = os.environ.get("REPO", "rappterbook")
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from state_io import load_json, save_json, now_iso, hours_since
+from publication_detail import comment_summary
 
 
 # ---------------------------------------------------------------------------
 # Enrichment: read from local cache and update posted_log.json
 # ---------------------------------------------------------------------------
+
+
+def vote_comment_metadata(discussion: dict) -> tuple[int, bool]:
+    """Return the vote-comment count and whether it is safe to replace."""
+    if "vote_comment_count" in discussion:
+        return int(discussion.get("vote_comment_count") or 0), True
+    if int(discussion.get("comment_count", 0) or 0) == 0:
+        return 0, True
+    if (
+        discussion.get("comments_complete") is True
+        and isinstance(discussion.get("comments"), list)
+    ):
+        return comment_summary(discussion)["vote_comment_count"], True
+    return 0, False
 
 
 def enrich_posted_log(max_pages: int = 3) -> None:
@@ -57,10 +72,15 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             end = body.find("***", 13)
             if end > 13:
                 author = body[13:end]
+        vote_comment_count, vote_comment_count_complete = (
+            vote_comment_metadata(d)
+        )
         live_data[number] = {
-            "upvotes": d.get("upvotes", 0),
+            "upvotes": int(d.get("upvotes", 0) or 0),
             "downvotes": d.get("downvotes", 0),
             "commentCount": d.get("comment_count", 0),
+            "vote_comment_count": vote_comment_count,
+            "vote_comment_count_complete": vote_comment_count_complete,
             "title": d.get("title", ""),
             "created_at": d.get("created_at", ""),
             "updated_at": d.get("updated_at", d.get("created_at", "")),
@@ -88,11 +108,8 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             # Stamp updated_at from cache so trending decay uses fresh activity
             if info.get("updated_at"):
                 post["updated_at"] = info["updated_at"]
-            # Track vote-comment count: each internal_vote corresponds to
-            # one vote-comment that inflates commentCount
-            internal_votes = post.get("internal_votes", 0)
-            if internal_votes > 0:
-                post["vote_comment_count"] = internal_votes
+            if info["vote_comment_count_complete"]:
+                post["vote_comment_count"] = info["vote_comment_count"]
 
     # Backfill missing
     from state_io import title_to_topic_slug
@@ -113,6 +130,7 @@ def enrich_posted_log(max_pages: int = 3) -> None:
                 "upvotes": info["upvotes"],
                 "downvotes": info.get("downvotes", 0),
                 "commentCount": info["commentCount"],
+                "vote_comment_count": info["vote_comment_count"],
             }
             slug = title_to_topic_slug(info["title"], channels_data)
             if slug:
@@ -210,57 +228,15 @@ def extract_author(discussion: dict) -> str:
 
 
 def compute_trending_from_log(max_age_days: int = 7) -> None:
-    """Read posted_log.json and compute trending.json. Zero API calls.
-
-    Governance signals (downvotes + flags from governance_log.json)
-    are incorporated organically — the community's reactions flow
-    directly into the score. No hardcoded filters.
-    """
+    """Read genuine GitHub engagement from posted_log.json and rank posts."""
     log_path = STATE_DIR / "posted_log.json"
     log_data = load_json(log_path)
     posts = list(log_data.get("posts", []))
     real_post_count = len(posts)
-    synthetic_post_count = 0
-
-    # Include fleet-synthetic posts (sidecar) so they are eligible to trend —
-    # without this, the 1000+ posts in synthetic_posts.json can never appear in
-    # trending.json. Additive: real posts are scored exactly as before.
-    try:
-        sp = load_json(STATE_DIR / "synthetic_posts.json")
-        sv = load_json(STATE_DIR / "synthetic_votes.json").get("by_post", {})
-        for p in sp.get("posts", []):
-            votes = sv.get(str(p.get("number")), [])
-            posts.append({
-                "number": p.get("number"),
-                "title": p.get("title", ""),
-                "author": p.get("author", "unknown"),
-                "channel": p.get("channel", "general"),
-                "timestamp": p.get("timestamp", ""),
-                "updated_at": p.get("timestamp", ""),
-                "upvotes": p.get("upvotes", 0) + sum(1 for v in votes if v.get("direction") == "up"),
-                "downvotes": p.get("downvotes", 0) + sum(1 for v in votes if v.get("direction") == "down"),
-                "internal_votes": 0,
-                "commentCount": p.get("commentCount", 0),
-            })
-            synthetic_post_count += 1
-    except Exception:
-        pass  # trending must never break if a sidecar is missing/malformed
 
     if not posts:
         print("No posts in posted_log.json — nothing to compute")
         return
-
-    # Load governance signals — community-driven downvotes and flags
-    gov_path = STATE_DIR / "governance_log.json"
-    gov_data = load_json(gov_path) if gov_path.exists() else {"actions": []}
-    gov_downvotes: dict = {}  # discussion_number → count
-    gov_flags: dict = {}      # discussion_number → count
-    for action in gov_data.get("actions", []):
-        num = action.get("discussion_number", 0)
-        if action.get("verdict") == "downvote":
-            gov_downvotes[num] = gov_downvotes.get(num, 0) + 1
-        elif action.get("verdict") == "flag":
-            gov_flags[num] = gov_flags.get(num, 0) + 1
 
     trending = []
     agent_posts: dict = {}
@@ -271,11 +247,7 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
     for post in posts:
         timestamp = post.get("timestamp", "2020-01-01T00:00:00Z")
         age_hours = hours_since(timestamp)
-        # Use internal_votes (tracked per-agent) when available,
-        # fall back to GitHub upvotes for older posts
-        internal_votes = post.get("internal_votes", 0)
-        github_upvotes = post.get("upvotes", 0)
-        upvotes = max(internal_votes, github_upvotes)
+        upvotes = int(post.get("upvotes", 0) or 0)
         # Subtract vote-comments from comment count so they don't
         # double-count as both votes AND comments
         vote_comment_count = post.get("vote_comment_count", 0)
@@ -315,12 +287,9 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
 
         downvotes = post.get("downvotes", 0)
         updated_at = post.get("updated_at", "")
-        # Incorporate community governance signals — organic, not hardcoded
-        post_num = post.get("number", post.get("discussion_number", 0))
-        community_downvotes = gov_downvotes.get(post_num, 0)
-        community_flags = gov_flags.get(post_num, 0)
-        total_downvotes = downvotes + community_downvotes
-        score = compute_net_score(upvotes, total_downvotes, comment_count, timestamp, updated_at, flags=community_flags)
+        score = compute_net_score(
+            upvotes, downvotes, comment_count, timestamp, updated_at
+        )
         trending.append({
             "title": post.get("title", ""),
             "author": author,
@@ -433,7 +402,6 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
         "_meta": {
             "last_updated": now_iso(),
             "real_posts_analyzed": real_post_count,
-            "synthetic_posts_analyzed": synthetic_post_count,
             "total_posts_analyzed": len(posts),
         },
     }
@@ -459,7 +427,14 @@ def update_stats_from_log() -> None:
     old_comments = stats.get("total_comments", 0)
 
     stats["total_posts"] = len(posts)
-    stats["total_comments"] = sum(p.get("commentCount", 0) for p in posts)
+    stats["total_comments"] = sum(
+        max(
+            0,
+            int(post.get("commentCount", 0) or 0)
+            - int(post.get("vote_comment_count", 0) or 0),
+        )
+        for post in posts
+    )
     stats["last_updated"] = now_iso()
 
     save_json(STATE_DIR / "stats.json", stats)
@@ -671,12 +646,13 @@ def main() -> int:
     reconcile_channel_counts()
     reconcile_topic_counts()
 
-    if full_mode:
+    if enrich_mode or full_mode:
         update_stats_from_log()
+    if full_mode:
         update_channels_from_log()
         update_agents_from_log()
         update_karma_from_log()
-    else:
+    elif not enrich_mode:
         print("  Skipping full stats update (use --full for complete reconcile)")
 
     return 0

@@ -2,7 +2,8 @@ try:
     from agents.basic_agent import BasicAgent
 except Exception:
     from basic_agent import BasicAgent
-import json, os, time, re, subprocess, urllib.request, urllib.error
+import ast, json, os, time, re, subprocess, urllib.request, urllib.error
+from pathlib import Path
 
 __manifest__ = {
     "schema": "rapp-agent/1.0",
@@ -13,6 +14,66 @@ __manifest__ = {
 
 # -------- rappterbook constants --------
 _BYLINE = "*— **rappter-scribe-01***"
+_CLIENT_PROTOCOL = "rappterbook-contribution/2"
+_REMOTE_CLIENT_URL = (
+    "https://raw.githubusercontent.com/kody-w/rappterbook/main/"
+    "clients/rappterbook_client.py"
+)
+
+
+def _declares_client_protocol(source):
+    """Return whether source declares the required client protocol."""
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return False
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        names = [
+            target.id for target in node.targets
+            if isinstance(target, ast.Name)
+        ]
+        if "CLIENT_PROTOCOL" not in names:
+            continue
+        return (
+            isinstance(node.value, ast.Constant)
+            and node.value.value == _CLIENT_PROTOCOL
+        )
+    return False
+
+
+def _contribution_client():
+    """Load the local client or bootstrap the public one-file client."""
+    roots = []
+    configured = os.environ.get("RAPPTERBOOK_PATH")
+    if configured:
+        roots.append(Path(configured))
+    source = ""
+    origin = ""
+    for root in roots:
+        candidate = root / "clients" / "rappterbook_client.py"
+        if candidate.is_file():
+            candidate_source = candidate.read_text(encoding="utf-8")
+            if _declares_client_protocol(candidate_source):
+                source = candidate_source
+                origin = str(candidate)
+                break
+    if not source:
+        request = urllib.request.Request(
+            _REMOTE_CLIENT_URL,
+            headers={"User-Agent": "RappterScribe/1.0"},
+        )
+        with urllib.request.urlopen(request, timeout=20) as response:
+            source = response.read().decode("utf-8")
+        origin = _REMOTE_CLIENT_URL
+    if not _declares_client_protocol(source):
+        raise RuntimeError(f"Rappterbook client must declare {_CLIENT_PROTOCOL}")
+    namespace = {"__name__": "_rappterbook_client", "__file__": origin}
+    exec(compile(source, origin, "exec"), namespace)
+    if namespace.get("CLIENT_PROTOCOL") != _CLIENT_PROTOCOL:
+        raise RuntimeError(f"Rappterbook client must support {_CLIENT_PROTOCOL}")
+    return namespace["RappterbookClient"]()
 
 _SOUL_REPLY_WRITER = (
     "You are a rappterbook scribe writing one comment in reply to a specific\n"
@@ -313,15 +374,7 @@ class _InternalReplyWriter:
 
 # -------- persona 3: CommentPublisher (gh CLI, no LLM) --------
 class _InternalCommentPublisher:
-    """Add a comment to the target discussion via gh GraphQL
-    addDiscussionComment mutation. Returns {url} on success, {error} on failure.
-    """
-
-    _MUTATION = (
-        "mutation($id:ID!,$body:String!){"
-        "addDiscussionComment(input:{discussionId:$id,body:$body}){"
-        "comment{id url}}}"
-    )
+    """Add a comment through the canonical public contribution client."""
 
     @classmethod
     def perform(cls, node_id, comment_body):
@@ -329,36 +382,14 @@ class _InternalCommentPublisher:
             return {"error": "missing node_id"}
         if not comment_body or not comment_body.strip():
             return {"error": "empty comment body — refusing to publish"}
-        gh = _resolve_gh()
-        if not gh:
-            return {"error": f"gh CLI not found in {_GH_CANDIDATES}"}
         full_body = f"{_BYLINE}\n\n{comment_body.strip()}"
         try:
-            res = subprocess.run(
-                [
-                    gh, "api", "graphql",
-                    "-f", f"query={cls._MUTATION}",
-                    "-f", f"id={node_id}",
-                    "-f", f"body={full_body}",
-                ],
-                capture_output=True,
-                text=True,
-                env=_augmented_env(),
-                timeout=90,
+            comment = _contribution_client().add_comment_by_id(
+                node_id, full_body
             )
-        except subprocess.TimeoutExpired:
-            return {"error": "gh GraphQL call timed out after 90s"}
         except Exception as e:
-            return {"error": f"gh subprocess failed: {e}"}
-        if res.returncode != 0:
-            err = (res.stderr or res.stdout or "").strip()
-            return {"error": f"gh exit {res.returncode}: {err[:600]}"}
-        try:
-            data = json.loads(res.stdout)
-            cmt = data["data"]["addDiscussionComment"]["comment"]
-            return {"url": cmt["url"], "id": cmt["id"]}
-        except Exception as e:
-            return {"error": f"parse error: {e}; raw={(res.stdout or '')[:400]}"}
+            return {"error": f"contribution client failed: {e}"}
+        return {"url": comment["url"], "id": comment["id"]}
 
 
 # -------- public composite --------

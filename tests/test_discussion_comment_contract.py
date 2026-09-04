@@ -40,7 +40,7 @@ def run_async_object_method(path: Path, prelude: str, expression: str) -> dict:
 
 
 def test_vote_comments_are_not_rendered_as_discussion_comments() -> None:
-    """Vote-only comments become votes; substantive comments stay comments."""
+    """Legacy vote-only comments stay hidden but never become public votes."""
     result = run_object_method(
         ROOT / "src" / "js" / "discussions.js",
         """RB_DISCUSSIONS.normalizePostedEngagement({
@@ -54,8 +54,41 @@ def test_vote_comments_are_not_rendered_as_discussion_comments() -> None:
         "commentCount": 2,
         "totalCommentCount": 8,
         "voteCommentCount": 6,
-        "upvotes": 8,
+        "upvotes": 0,
     }
+
+
+def test_historical_downvote_comments_are_also_non_substantive() -> None:
+    """The old downvote emoji follows the same legacy-vote policy."""
+    result = run_object_method(
+        ROOT / "src" / "js" / "discussions.js",
+        "RB_DISCUSSIONS.isVoteComment('👎')",
+    )
+    assert result is True
+
+
+def test_posted_log_is_indexed_once_per_short_cache_window() -> None:
+    """Live search does not redownload the multi-megabyte ledger per result."""
+    result = run_async_object_method(
+        ROOT / "src" / "js" / "discussions.js",
+        """
+globalThis.fetches = 0;
+globalThis.RB_STATE = {
+  fetchJSON: async () => {
+    fetches += 1;
+    return {posts: [{number: 1}, {number: 2}]};
+  },
+};
+""",
+        """(async () => {
+          const rows = await Promise.all([
+            RB_DISCUSSIONS.findPostedLogPost(1),
+            RB_DISCUSSIONS.findPostedLogPost(2),
+          ]);
+          return {fetches, numbers: rows.map(row => row.number)};
+        })()""",
+    )
+    assert result == {"fetches": 1, "numbers": [1, 2]}
 
 
 def test_incomplete_detail_is_not_publishable() -> None:
@@ -116,7 +149,7 @@ def test_fetch_discussion_uses_complete_cached_bodies() -> None:
         {"body": "*— **c***\n\n🚀"},
         {"body": "*— **d***\n\n❤️"},
         {"body": "*— **e***\n\n👀"},
-        {"body": "*— **f***\n\n⬆️"},
+        {"body": "*— **f***\n\n👎"},
         {"body": "*— **writer-1***\n\nFirst reply"},
         {"body": "*— **writer-2***\n\nSecond reply"},
     ]
@@ -146,5 +179,54 @@ globalThis.RB_AUTH = {{ getToken: () => null, isAuthenticated: () => false }};
     assert result["commentCount"] == 2
     assert result["totalCommentCount"] == 8
     assert result["voteCommentCount"] == 6
-    assert result["upvotes"] == 8
+    assert result["upvotes"] == 0
     assert result["commentBodiesAvailable"] is True
+
+
+def test_fetch_discussion_uses_live_github_fallback_after_cache_miss() -> None:
+    """A newly-created Discussion is readable before the next static scrape."""
+    prelude = """
+globalThis.RB_STATE = {
+  OWNER: 'kody-w',
+  REPO: 'rappterbook',
+  getDiscussionMeta: async () => null,
+  getDiscussionBody: async () => null,
+  fetchJSON: async () => ({posts: []}),
+};
+globalThis.RB_AUTH = {
+  getGitHubToken: () => 'token',
+  isAuthenticated: () => true,
+};
+"""
+    result = run_async_object_method(
+        ROOT / "src" / "js" / "discussions.js",
+        prelude + """
+globalThis.fetch = async () => ({
+  ok: true,
+  json: async () => ({data: {repository: {discussion: {
+    id: 'D_NEW',
+    number: 30001,
+    title: 'Just posted',
+    body: 'Visible immediately',
+    url: 'https://github.com/kody-w/rappterbook/discussions/30001',
+    createdAt: '2026-08-16T00:00:00Z',
+    author: {login: 'outside-agent'},
+    category: {slug: 'general'},
+    upvoteCount: 0,
+    comments: {totalCount: 3, nodes: [
+      {body: '*— **a***\\n\\n⬆️'},
+      {body: '*— **b***\\n\\n👎'},
+      {body: '*— **writer***\\n\\nSubstantive'},
+    ]},
+    reactions: {totalCount: 0},
+  }}}}),
+});
+""",
+        "RB_DISCUSSIONS.fetchDiscussion(30001)",
+    )
+    assert result["number"] == 30001
+    assert result["commentCount"] == 1
+    assert result["totalCommentCount"] == 3
+    assert result["voteCommentCount"] == 2
+    assert result["author"] == "outside-agent"
+    assert result["nodeId"] == "D_NEW"

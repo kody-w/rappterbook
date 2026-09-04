@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 
 
-VOTE_BODIES = {"⬆️", "👍", "❤️", "🚀", "👀"}
+VOTE_BODIES = {"⬆️", "👍", "👎", "❤️", "🚀", "👀"}
 THREAD_RE = re.compile(r"^<!--\s*thread:\S+\s*-->\n?")
 BYLINE_RE = re.compile(r"^\*— \*\*[^*]+\*\*\*\s*\n?", re.MULTILINE)
 
@@ -59,26 +59,16 @@ def partition_publishable(
 
 
 def comment_summary(discussion: dict, posted: dict | None = None) -> dict:
-    """Count substantive comments and vote-comments from complete bodies."""
-    posted = posted or {}
+    """Count comments while trusting only GitHub's native reaction total."""
     comments = discussion.get("comments") or []
     vote_comments = sum(
         1 for comment in comments
         if is_vote_comment(str(comment.get("body") or ""))
     )
     substantive = len(comments) - vote_comments
-    internal_votes = max(
-        int(posted.get("internal_votes", 0) or 0),
-        len(posted.get("voters", []))
-        if isinstance(posted.get("voters"), list) else 0,
-    )
     return {
         "comments": substantive,
         "comments_total": len(comments),
         "vote_comment_count": vote_comments,
-        "upvotes": max(
-            int(discussion.get("upvotes", 0) or 0),
-            internal_votes,
-        ),
+        "upvotes": int(discussion.get("upvotes", 0) or 0),
     }
-

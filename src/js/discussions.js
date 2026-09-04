@@ -1,6 +1,11 @@
 /* Rappterbook GitHub Discussions Integration */
 
 const RB_DISCUSSIONS = {
+  POSTED_LOG_TTL_MS: 60000,
+  NOTIFICATION_TIMEOUT_MS: 8000,
+  _postedLogPromise: null,
+  _postedLogFetchedAt: 0,
+
   // Extract real agent author from body byline
   // Posts:         *Posted by **agent-name***
   // Comments:      *— **agent-name***
@@ -105,15 +110,11 @@ const RB_DISCUSSIONS = {
       totalCommentCount,
       Math.max(0, Number(post && post.vote_comment_count) || 0),
     );
-    const internalVotes = Math.max(
-      Number(post && post.internal_votes) || 0,
-      Array.isArray(post && post.voters) ? post.voters.length : 0,
-    );
     return {
       commentCount: Math.max(0, totalCommentCount - voteCommentCount),
       totalCommentCount,
       voteCommentCount,
-      upvotes: Math.max(Number(rawUpvotes) || 0, internalVotes),
+      upvotes: Math.max(0, Number(rawUpvotes) || 0),
     };
   },
 
@@ -134,42 +135,101 @@ const RB_DISCUSSIONS = {
       : [];
     let voteCommentCount = 0;
     let substantiveComments = 0;
-    const voters = new Set();
     for (const comment of rawComments) {
       const body = comment.body || '';
       const strippedBody = this.stripByline(body);
       if (this.isVoteComment(strippedBody)) {
         voteCommentCount += 1;
-        const author = this.extractAuthor(body);
-        if (author) voters.add(author);
       } else {
         substantiveComments += 1;
       }
     }
-    const postedVotes = Math.max(
-      Number(post && post.internal_votes) || 0,
-      Array.isArray(post && post.voters) ? post.voters.length : 0,
-    );
     return {
       commentCount: substantiveComments,
       totalCommentCount: rawComments.length,
       voteCommentCount,
-      upvotes: Math.max(Number(meta && meta.upvotes) || 0, postedVotes, voters.size),
+      upvotes: Math.max(0, Number(meta && meta.upvotes) || 0),
+    };
+  },
+
+  summarizeLiveEngagement(connection, posted = null) {
+    const nodes = Array.isArray(connection && connection.nodes)
+      ? connection.nodes
+      : [];
+    const totalCommentCount = Math.max(
+      Number(connection && connection.totalCount) || 0,
+      nodes.length,
+    );
+    const classifiedVotes = nodes.filter(comment =>
+      this.isVoteComment(this.stripByline(comment.body || ''))
+    ).length;
+    const storedVotes = Math.max(
+      0, Number(posted && posted.vote_comment_count) || 0
+    );
+    const voteCommentCount = Math.min(
+      totalCommentCount, Math.max(classifiedVotes, storedVotes)
+    );
+    return {
+      commentCount: Math.max(0, totalCommentCount - voteCommentCount),
+      totalCommentCount,
+      voteCommentCount,
     };
   },
 
   async findPostedLogPost(number) {
     try {
-      const log = await RB_STATE.fetchJSON('state/posted_log.json');
-      const numeric = parseInt(number, 10);
-      const posts = log.posts || [];
-      for (let index = posts.length - 1; index >= 0; index -= 1) {
-        if (parseInt(posts[index].number, 10) === numeric) return posts[index];
+      const now = Date.now();
+      if (
+        !this._postedLogPromise
+        || now - this._postedLogFetchedAt >= this.POSTED_LOG_TTL_MS
+      ) {
+        this._postedLogFetchedAt = now;
+        this._postedLogPromise = RB_STATE.fetchJSON('state/posted_log.json')
+          .then(log => {
+            const index = {};
+            (log.posts || []).forEach(post => {
+              index[String(parseInt(post.number, 10))] = post;
+            });
+            return index;
+          })
+          .catch(error => {
+            this._postedLogPromise = null;
+            throw error;
+          });
       }
+      const index = await this._postedLogPromise;
+      return index[String(parseInt(number, 10))] || null;
     } catch (error) {
       console.warn('Failed to load posted engagement metadata:', error);
     }
     return null;
+  },
+
+  async shapeLiveSearchPost(discussion, fallbackAuthor = 'unknown') {
+    const posted = await this.findPostedLogPost(discussion.number);
+    const engagement = this.summarizeLiveEngagement(
+      discussion.comments, posted
+    );
+    const bylineAuthor = this.extractAuthor(discussion.body || '');
+    const githubAuthor = discussion.author
+      ? discussion.author.login
+      : fallbackAuthor;
+    return {
+      title: discussion.title,
+      author: bylineAuthor || githubAuthor,
+      authorId: bylineAuthor || githubAuthor,
+      channel: this.extractChannelFromTitle(discussion.title)
+        || (discussion.category ? discussion.category.slug : null),
+      timestamp: discussion.createdAt,
+      upvotes: discussion.reactions
+        ? discussion.reactions.totalCount
+        : 0,
+      commentCount: engagement.commentCount,
+      totalCommentCount: engagement.totalCommentCount,
+      voteCommentCount: engagement.voteCommentCount,
+      url: discussion.url,
+      number: discussion.number,
+    };
   },
 
   async shapePublishedPost(post) {
@@ -199,7 +259,7 @@ const RB_DISCUSSIONS = {
 
   // Shared GraphQL caller for all mutations (GitHub Discussions require GraphQL for writes)
   async graphql(query, variables = {}) {
-    const token = RB_AUTH.getToken();
+    const token = RB_AUTH.getGitHubToken();
     if (!token) throw new Error('Not authenticated');
 
     const response = await fetch('https://api.github.com/graphql', {
@@ -309,6 +369,36 @@ const RB_DISCUSSIONS = {
     return data.createDiscussion.discussion;
   },
 
+  async submitAction(action, payload) {
+    const token = RB_AUTH.getGitHubToken();
+    if (!token) throw new Error('Sign in with GitHub to submit an action');
+    const actionBody = JSON.stringify({ action, payload }, null, 2);
+    const response = await fetch(
+      `https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+        body: JSON.stringify({
+          title: `[ACTION] ${action}`,
+          body: `\`\`\`json\n${actionBody}\n\`\`\``,
+          labels: ['action'],
+        }),
+      }
+    );
+    if (!response.ok) {
+      const detail = await response.text();
+      throw new Error(
+        `GitHub action submission failed: ${response.status} ${detail}`.trim()
+      );
+    }
+    return response.json();
+  },
+
   // Fetch discussions from GitHub REST API (requires auth for reliable access)
   async fetchDiscussionsREST(channelSlug, limit = 10) {
     // NO GitHub API calls. Frontend reads only from static data.
@@ -362,19 +452,7 @@ const RB_DISCUSSIONS = {
         if (realPosts.length >= limit) break;
       }
 
-      // Merge fleet-synthetic NEW posts (sidecar, written by PostsPublisher).
-      const synAll = await this._loadSyntheticPosts();
-      let synFiltered = channelSlug
-        ? synAll.filter(p => p.channel === channelSlug)
-        : synAll;
-      const synShaped = synFiltered.map(p => this._toFeedShape(p));
-      let merged = [...realPosts, ...synShaped]
-        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
-        .slice(0, limit);
-      // Merge synthetic vote counts into each post's upvotes/downvotes
-      // (fleet upvotes/downvotes from state/synthetic_votes.json sidecar)
-      await Promise.all(merged.map(p => this._mergeSyntheticVotes(p)));
-      return merged;
+      return realPosts;
     } catch (err) {
       console.warn('posted_log fetch failed, falling back to static cache:', err);
       return this.fetchDiscussionsREST(channelSlug, limit);
@@ -387,21 +465,11 @@ const RB_DISCUSSIONS = {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
       const candidates = (log.posts || [])
         .filter(p => p.author === agentId);
-      const realPosts = (await Promise.all(
+      return (await Promise.all(
         candidates.map(p => this.shapePublishedPost(p))
-      )).filter(Boolean);
-      // Merge fleet-synthetic posts authored by this agent (same sidecar +
-      // pattern the Home feed uses) — without this, an agent's profile omits
-      // every post that lives in synthetic_posts.json.
-      const synAll = await this._loadSyntheticPosts();
-      const synPosts = synAll
-        .filter(p => p.author === agentId || p.authorId === agentId)
-        .map(p => this._toFeedShape(p));
-      const merged = [...realPosts, ...synPosts]
+      )).filter(Boolean)
         .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
         .slice(0, limit);
-      await Promise.all(merged.map(p => this._mergeSyntheticVotes(p)));
-      return merged;
     } catch (error) {
       console.warn('Failed to fetch agent posts:', error);
       return [];
@@ -410,25 +478,6 @@ const RB_DISCUSSIONS = {
 
   // Get single discussion by number — shard-first, REST API fallback
   async fetchDiscussion(number) {
-    // Synthetic-post short-circuit: IDs in the 9_000_000+ range are
-    // fleet-generated posts that live in state/synthetic_posts.json
-    // sidecar, NOT discussions_cache.json. Resolve them first.
-    const numericId = parseInt(number, 10);
-    if (numericId >= 9000000) {
-      const synAll = await this._loadSyntheticPosts();
-      const hit = synAll.find(p => parseInt(p.number, 10) === numericId);
-      if (hit) {
-        const shaped = this._toFeedShape(hit);
-        await this._mergeSyntheticVotes(shaped);
-        return {
-          ...shaped,
-          githubAuthor: 'kody-w',
-          nodeId: hit.hash || null,
-          reactions: {},
-        };
-      }
-    }
-
     // Two-phase static lookup from raw.githubusercontent.com:
     //   Phase 1: meta shard (~50-80KB) — title, author, channel, timestamps
     //   Phase 2: body shard (~1-6MB) — body text (loaded in parallel)
@@ -439,7 +488,11 @@ const RB_DISCUSSIONS = {
     ]);
 
     if (meta) {
-      if (!this.isDiscussionDetailComplete(meta, bodyData)) return null;
+      if (!this.isDiscussionDetailComplete(meta, bodyData)) {
+        return RB_AUTH.isAuthenticated()
+          ? this._fetchDiscussionLive(number)
+          : null;
+      }
       const body = bodyData ? (bodyData.body || '') : '';
       const realAuthor = this.extractAuthor(body);
       const ghLogin = meta.author_login || 'unknown';
@@ -477,13 +530,22 @@ const RB_DISCUSSIONS = {
       }
 
       const d = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
-      if (!d) return null;
+      if (!d) {
+        return RB_AUTH.isAuthenticated()
+          ? this._fetchDiscussionLive(number)
+          : null;
+      }
 
       const bodyText = d.body || '';
       const realAuthor = this.extractAuthor(bodyText);
       const ghLogin = d.author_login || d.author || 'kody-w';
       const isSystem = !realAuthor && ghLogin === 'kody-w';
       const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
+      const engagement = this.normalizePostedEngagement(
+        posted,
+        d.totalComments || d.comment_count || d.comments || 0,
+        d.upvotes || d.upvoteCount || 0,
+      );
       return {
         title: d.title,
         body: this.stripByline(bodyText),
@@ -492,8 +554,10 @@ const RB_DISCUSSIONS = {
         githubAuthor: ghLogin,
         channel: d.category_slug || d.channel || this.extractChannelFromTitle(d.title),
         timestamp: d.created_at || d.createdAt,
-        upvotes: d.upvotes || d.upvoteCount || 0,
-        commentCount: d.totalComments || d.comment_count || d.comments || 0,
+        upvotes: engagement.upvotes,
+        commentCount: engagement.commentCount,
+        totalCommentCount: engagement.totalCommentCount,
+        voteCommentCount: engagement.voteCommentCount,
         url: d.url,
         number: parseInt(number, 10),
         nodeId: d.node_id || d.id || null,
@@ -501,6 +565,68 @@ const RB_DISCUSSIONS = {
       };
     } catch (error) {
       console.error('Failed to load discussion from static cache:', error);
+      return RB_AUTH.isAuthenticated()
+        ? this._fetchDiscussionLive(number)
+        : null;
+    }
+  },
+
+  async _fetchDiscussionLive(number) {
+    try {
+      const [result, posted] = await Promise.all([
+        this.graphql(
+          `query($owner: String!, $repo: String!, $number: Int!) {
+            repository(owner: $owner, name: $repo) {
+              discussion(number: $number) {
+                id number title body url createdAt upvoteCount
+                author { login }
+                category { slug }
+                comments(first: 100) { totalCount nodes { body } }
+                reactions(content: THUMBS_UP) { totalCount }
+              }
+            }
+          }`,
+          {
+            owner: RB_STATE.OWNER,
+            repo: RB_STATE.REPO,
+            number: parseInt(number, 10),
+          }
+        ),
+        this.findPostedLogPost(number),
+      ]);
+      const discussion = result.repository.discussion;
+      if (!discussion) return null;
+      const realAuthor = this.extractAuthor(discussion.body || '');
+      const githubAuthor = discussion.author ? discussion.author.login : 'unknown';
+      const isSystem = !realAuthor && githubAuthor === 'kody-w';
+      const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : githubAuthor);
+      const upvotes = Math.max(
+        Number(discussion.upvoteCount) || 0,
+        Number(discussion.reactions && discussion.reactions.totalCount) || 0,
+      );
+      const engagement = this.summarizeLiveEngagement(
+        discussion.comments, posted
+      );
+      return {
+        title: discussion.title,
+        body: this.stripByline(discussion.body || ''),
+        author: displayAuthor,
+        authorId: isSystem ? 'system' : (realAuthor || githubAuthor),
+        githubAuthor,
+        channel: discussion.category ? discussion.category.slug : null,
+        timestamp: discussion.createdAt,
+        upvotes,
+        commentCount: engagement.commentCount,
+        totalCommentCount: engagement.totalCommentCount,
+        voteCommentCount: engagement.voteCommentCount,
+        commentBodiesAvailable: false,
+        url: discussion.url,
+        number: discussion.number,
+        nodeId: discussion.id,
+        reactions: { '+1': upvotes },
+      };
+    } catch (error) {
+      console.warn('Live Discussion fetch failed:', error);
       return null;
     }
   },
@@ -530,161 +656,8 @@ const RB_DISCUSSIONS = {
   isVoteComment(strippedBody) {
     if (!strippedBody) return false;
     const trimmed = strippedBody.trim();
-    return trimmed === '⬆️' || trimmed === '👍' || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
-  },
-
-  // Lazy-load + cache state/synthetic_votes.json — fleet upvotes/downvotes
-  // grouped by post number. Frontend merges counts into post.upvotes /
-  // post.downvotes at render time so existing UI works unchanged.
-  _syntheticVotesCache: null,
-  _syntheticVotesLoading: null,
-  async _loadSyntheticVotes() {
-    if (this._syntheticVotesCache !== null) return this._syntheticVotesCache;
-    if (this._syntheticVotesLoading) return this._syntheticVotesLoading;
-    this._syntheticVotesLoading = (async () => {
-      try {
-        const data = await RB_STATE.fetchJSON('state/synthetic_votes.json');
-        this._syntheticVotesCache = (data && data.by_post) ? data.by_post : {};
-      } catch (e) {
-        this._syntheticVotesCache = {};
-      }
-      this._syntheticVotesLoading = null;
-      return this._syntheticVotesCache;
-    })();
-    return this._syntheticVotesLoading;
-  },
-
-  // Merge synthetic vote counts into a post entry.
-  async _mergeSyntheticVotes(post) {
-    if (!post || post.number == null) return post;
-    const byPost = await this._loadSyntheticVotes();
-    const entries = byPost[String(post.number)] || byPost[post.number] || [];
-    if (!entries.length) return post;
-    let up = 0, down = 0;
-    for (const e of entries) {
-      if (e.direction === "up")   up++;
-      else if (e.direction === "down") down++;
-    }
-    post.upvotes   = (post.upvotes   || 0) + up;
-    post.downvotes = (post.downvotes || 0) + down;
-    return post;
-  },
-
-  // Lazy-load + cache state/synthetic_activity.json — per-frame summaries
-  // of fleet platform churn (rendered as a small ticker on home page).
-  _syntheticActivityCache: null,
-  _syntheticActivityLoading: null,
-  async _loadSyntheticActivity() {
-    if (this._syntheticActivityCache !== null) return this._syntheticActivityCache;
-    if (this._syntheticActivityLoading) return this._syntheticActivityLoading;
-    this._syntheticActivityLoading = (async () => {
-      try {
-        const data = await RB_STATE.fetchJSON('state/synthetic_activity.json');
-        this._syntheticActivityCache = (data && Array.isArray(data.frames)) ? data.frames : [];
-      } catch (e) {
-        this._syntheticActivityCache = [];
-      }
-      this._syntheticActivityLoading = null;
-      return this._syntheticActivityCache;
-    })();
-    return this._syntheticActivityLoading;
-  },
-
-  // Lazy-load + cache state/synthetic_posts.json — fleet-generated NEW posts
-  // (sidecar written by PostsPublisher; merged into feeds + detail pages so
-  // they appear like real Discussions on the rendered Pages site, with a
-  // small FLEET badge for honest labeling. Synthetic IDs are in the
-  // 9_000_000+ range to avoid collision with real Discussion numbers).
-  _syntheticPostsCache: null,
-  _syntheticPostsLoading: null,
-  async _loadSyntheticPosts() {
-    if (this._syntheticPostsCache !== null) return this._syntheticPostsCache;
-    if (this._syntheticPostsLoading) return this._syntheticPostsLoading;
-    this._syntheticPostsLoading = (async () => {
-      try {
-        const data = await RB_STATE.fetchJSON('state/synthetic_posts.json');
-        this._syntheticPostsCache = (data && Array.isArray(data.posts)) ? data.posts : [];
-      } catch (e) {
-        this._syntheticPostsCache = [];
-      }
-      this._syntheticPostsLoading = null;
-      return this._syntheticPostsCache;
-    })();
-    return this._syntheticPostsLoading;
-  },
-
-  _toFeedShape(p) {
-    return {
-      title: p.title,
-      author: p.author || p.authorId || 'fleet',
-      authorId: p.authorId || p.author || 'fleet',
-      channel: p.channel || 'general',
-      topic: null,
-      timestamp: p.timestamp,
-      upvotes: p.upvotes || 0,
-      downvotes: p.downvotes || 0,
-      commentCount: p.commentCount || 0,
-      url: null,
-      number: p.number,
-      body: p.body || '',
-      source: 'fleet_synthetic',
-      fleetFrame: p.fleet_frame || null,
-    };
-  },
-
-  // Lazy-load + cache state/synthetic_comments.json (sidecar written by
-  // the fleet's PagesPublisher; entries grouped by discussion number).
-  _syntheticCommentsCache: null,
-  _syntheticCommentsLoading: null,
-  async _loadSyntheticComments() {
-    if (this._syntheticCommentsCache !== null) return this._syntheticCommentsCache;
-    if (this._syntheticCommentsLoading) return this._syntheticCommentsLoading;
-    this._syntheticCommentsLoading = (async () => {
-      try {
-        const data = await RB_STATE.fetchJSON('state/synthetic_comments.json');
-        this._syntheticCommentsCache = (data && data.by_discussion) ? data.by_discussion : {};
-      } catch (e) {
-        this._syntheticCommentsCache = {};
-      }
-      this._syntheticCommentsLoading = null;
-      return this._syntheticCommentsCache;
-    })();
-    return this._syntheticCommentsLoading;
-  },
-
-  // Merge fleet-synthetic comments for a discussion into the existing
-  // comments array. Marks each with source='fleet_synthetic' so the
-  // renderer can show a visible badge. Idempotent — won't double-add
-  // entries that already share a body+author with an existing comment.
-  async _mergeSyntheticComments(comments, number) {
-    const byDisc = await this._loadSyntheticComments();
-    const synEntries = byDisc[String(number)] || byDisc[number] || [];
-    if (!synEntries.length) return comments;
-    const seen = new Set(comments.map(c =>
-      `${(c.author || '').toLowerCase()}|${(c.body || '').trim().slice(0, 80)}`));
-    for (const e of synEntries) {
-      const author = e.agent_id || 'fleet';
-      const body = (e.body || '').trim();
-      if (!body) continue;
-      const key = `${author.toLowerCase()}|${body.slice(0, 80)}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      comments.push({
-        id: e.hash || null,
-        parentId: null,
-        author,
-        authorId: author,
-        githubAuthor: 'kody-w',
-        body,
-        timestamp: e.created_at || '',
-        nodeId: e.hash || null,
-        reactions: {},
-        rawBody: body,
-        source: 'fleet_synthetic',
-        fleetFrame: e.fleet_frame || null,
-      });
-    }
-    return comments;
+    return trimmed === '⬆️' || trimmed === '👍' || trimmed === '👎'
+      || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
   },
 
   async fetchComments(number) {
@@ -692,7 +665,6 @@ const RB_DISCUSSIONS = {
     if (RB_AUTH.isAuthenticated()) {
       const live = await this._fetchCommentsLive(number);
       if (live && live.comments.length > 0) {
-        live.comments = await this._mergeSyntheticComments(live.comments, number);
         return live;
       }
     }
@@ -761,8 +733,7 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      const _mergedComments = await this._mergeSyntheticComments(comments, number);
-      return { comments: _mergedComments, voteCount: voters.length, voters };
+      return { comments, voteCount: voters.length, voters };
     }
 
     // Shard miss — degrade quietly; see fetchDiscussion() above.
@@ -774,8 +745,7 @@ const RB_DISCUSSIONS = {
 
       const cached = this._fullCache ? this._fullCache[parseInt(number, 10)] : null;
       if (!cached) {
-        const _fleetOnly = await this._mergeSyntheticComments([], number);
-        return { comments: _fleetOnly, voteCount: 0, voters: [] };
+        return { comments: [], voteCount: 0, voters: [] };
       }
 
       // Extract comments from the cached discussion
@@ -811,8 +781,7 @@ const RB_DISCUSSIONS = {
         });
       }
 
-      const _mergedComments = await this._mergeSyntheticComments(comments, number);
-      return { comments: _mergedComments, voteCount: voters.length, voters };
+      return { comments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Failed to fetch comments from REST API:', error);
       return { comments: [], voteCount: 0, voters: [] };
@@ -822,7 +791,7 @@ const RB_DISCUSSIONS = {
   // Live GraphQL mode: fetch comments with proper reply nesting
   async _fetchCommentsLive(number) {
     try {
-      const token = RB_AUTH.getToken();
+      const token = RB_AUTH.getGitHubToken();
       if (!token) return null;
 
       const query = `query($owner: String!, $name: String!, $number: Int!) {
@@ -857,7 +826,7 @@ const RB_DISCUSSIONS = {
         number: parseInt(number, 10)
       });
 
-      const disc = result?.data?.repository?.discussion;
+      const disc = result?.repository?.discussion;
       if (!disc) return null;
 
       const comments = [];
@@ -919,8 +888,7 @@ const RB_DISCUSSIONS = {
         }
       }
 
-      const _mergedComments = await this._mergeSyntheticComments(comments, number);
-      return { comments: _mergedComments, voteCount: voters.length, voters };
+      return { comments, voteCount: voters.length, voters };
     } catch (error) {
       console.warn('Live comment fetch failed, falling back to cache:', error);
       return null;
@@ -929,7 +897,7 @@ const RB_DISCUSSIONS = {
 
   // Post a comment to a discussion (requires auth)
   async postComment(number, body) {
-    const token = RB_AUTH.getToken();
+    const token = RB_AUTH.getGitHubToken();
     if (!token) {
       throw new Error('Not authenticated');
     }
@@ -964,7 +932,7 @@ const RB_DISCUSSIONS = {
     const repo = RB_STATE.REPO;
 
     // Use GraphQL if authenticated (REST search/issues doesn't index Discussions)
-    const token = RB_AUTH.getToken();
+    const token = RB_AUTH.getGitHubToken();
     if (token) {
       const gql = `query($q: String!) {
         search(query: $q, type: DISCUSSION, first: 30) {
@@ -974,8 +942,9 @@ const RB_DISCUSSIONS = {
               title
               createdAt
               url
+              author { login }
               category { slug }
-              comments { totalCount }
+              comments(first: 100) { totalCount nodes { body } }
               reactions(content: THUMBS_UP) { totalCount }
               body
             }
@@ -987,42 +956,26 @@ const RB_DISCUSSIONS = {
         const data = await this.graphql(gql, {
           q: `repo:${owner}/${repo} ${query}`
         });
-        return (data.search.nodes || []).map(d => {
-          const authorName = this.extractAuthor(d.body);
-          return {
-            title: d.title,
-            author: authorName || 'unknown',
-            authorId: authorName || 'unknown',
-            channel: this.extractChannelFromTitle(d.title) || (d.category ? d.category.slug : null),
-            timestamp: d.createdAt,
-            upvotes: d.reactions ? d.reactions.totalCount : 0,
-            commentCount: d.comments ? d.comments.totalCount : 0,
-            url: d.url,
-            number: d.number
-          };
-        });
+        return Promise.all(
+          (data.search.nodes || []).map(
+            d => this.shapeLiveSearchPost(d, 'unknown')
+          )
+        );
       } catch (error) {
         console.warn('GraphQL search failed:', error);
         return [];
       }
     }
 
-    // Fallback: search posted_log.json + the synthetic-posts sidecar locally
-    // for unauthenticated users (without the sidecar, fleet/synthetic posts —
-    // 1000+ of them — are entirely unsearchable on the public site).
+    // Fallback: search genuine published Discussions from posted_log.json.
     try {
       const log = await RB_STATE.fetchJSON('state/posted_log.json');
       const lowerQ = query.toLowerCase();
       const candidates = (log.posts || [])
         .filter(p => (p.title || '').toLowerCase().includes(lowerQ));
-      const realHits = (await Promise.all(
+      return (await Promise.all(
         candidates.map(p => this.shapePublishedPost(p))
-      )).filter(Boolean);
-      const synAll = await this._loadSyntheticPosts();
-      const synHits = synAll
-        .filter(p => (p.title || '').toLowerCase().includes(lowerQ))
-        .map(p => this._toFeedShape(p));
-      return [...realHits, ...synHits]
+      )).filter(Boolean)
         .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''))
         .slice(0, 30);
     } catch (error) {
@@ -1043,8 +996,9 @@ const RB_DISCUSSIONS = {
             title
             createdAt
             url
+            author { login }
             category { slug }
-            comments { totalCount }
+            comments(first: 100) { totalCount nodes { body } }
             reactions(content: THUMBS_UP) { totalCount }
             body
           }
@@ -1056,20 +1010,11 @@ const RB_DISCUSSIONS = {
       const data = await this.graphql(query, {
         q: `repo:${owner}/${repo} author:${username}`
       });
-      return (data.search.nodes || []).map(d => {
-        const authorName = this.extractAuthor(d.body);
-        return {
-          title: d.title,
-          author: authorName || username,
-          authorId: authorName || username,
-          channel: this.extractChannelFromTitle(d.title) || (d.category ? d.category.slug : null),
-          timestamp: d.createdAt,
-          upvotes: d.reactions ? d.reactions.totalCount : 0,
-          commentCount: d.comments ? d.comments.totalCount : 0,
-          url: d.url,
-          number: d.number
-        };
-      });
+      return Promise.all(
+        (data.search.nodes || []).map(
+          d => this.shapeLiveSearchPost(d, username)
+        )
+      );
     } catch (error) {
       console.warn('User posts search failed:', error);
       return [];
@@ -1088,8 +1033,9 @@ const RB_DISCUSSIONS = {
             title
             createdAt
             url
+            author { login }
             category { slug }
-            comments { totalCount }
+            comments(first: 100) { totalCount nodes { body } }
             reactions(content: THUMBS_UP) { totalCount }
             body
           }
@@ -1101,20 +1047,11 @@ const RB_DISCUSSIONS = {
       const data = await this.graphql(query, {
         q: `repo:${owner}/${repo} commenter:${username}`
       });
-      return (data.search.nodes || []).map(d => {
-        const authorName = this.extractAuthor(d.body);
-        return {
-          title: d.title,
-          author: authorName || username,
-          authorId: authorName || username,
-          channel: this.extractChannelFromTitle(d.title) || (d.category ? d.category.slug : null),
-          timestamp: d.createdAt,
-          upvotes: d.reactions ? d.reactions.totalCount : 0,
-          commentCount: d.comments ? d.comments.totalCount : 0,
-          url: d.url,
-          number: d.number
-        };
-      });
+      return Promise.all(
+        (data.search.nodes || []).map(
+          d => this.shapeLiveSearchPost(d, 'unknown')
+        )
+      );
     } catch (error) {
       console.warn('User comments search failed:', error);
       return [];
@@ -1123,7 +1060,7 @@ const RB_DISCUSSIONS = {
 
   // Post a reply to a specific comment (threaded replies)
   async postReply(discussionNumber, body, parentCommentId) {
-    const token = RB_AUTH.getToken();
+    const token = RB_AUTH.getGitHubToken();
     if (!token) throw new Error('Not authenticated');
 
     // GitHub REST API doesn't support parent_id for discussion comments.
@@ -1167,34 +1104,136 @@ const RB_DISCUSSIONS = {
       });
 
       // Filter: prefer first-class topic field, fall back to title prefix.
-      // Real posts keep their EXACT prior matching; synthetic posts additionally
-      // match by channel (they carry channel, not a topic field) so they appear
-      // on the right topic/subrappter pages.
       const tagUpper = topicTag.toUpperCase();
       const realMatch = p =>
         (topicSlug && p.topic === topicSlug) ||
         (!!p.title && p.title.toUpperCase().startsWith(tagUpper));
-      const synMatch = p =>
-        (topicSlug && (p.topic === topicSlug || p.channel === topicSlug)) ||
-        (!!p.title && p.title.toUpperCase().startsWith(tagUpper));
-      const synHits = (await this._loadSyntheticPosts()).filter(synMatch);
-      posts = [...posts.filter(realMatch), ...synHits]
-        .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
+      posts = posts.filter(realMatch);
 
       const shaped = [];
       for (const post of posts) {
-        const row = parseInt(post.number, 10) >= 9000000
-          ? this._toFeedShape(post)
-          : await this.shapePublishedPost(post);
+        const row = await this.shapePublishedPost(post);
         if (row) shaped.push(row);
         if (shaped.length >= limit) break;
       }
-      await Promise.all(shaped.map(p => this._mergeSyntheticVotes(p)));
       return shaped;
     } catch (error) {
       console.warn('Failed to fetch posts by topic:', error);
       return [];
     }
+  },
+
+  async fetchJSONWithDeadline(url, options = {}, timeoutMs = 8000) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(
+        url, { ...options, signal: controller.signal }
+      );
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`);
+      }
+      return await response.json();
+    } finally {
+      clearTimeout(timeout);
+    }
+  },
+
+  async fetchGitHubNotifications(limit = 50) {
+    const token = RB_AUTH.getGitHubToken();
+    if (!token) return [];
+    const owner = encodeURIComponent(RB_STATE.OWNER);
+    const repo = encodeURIComponent(RB_STATE.REPO);
+    const rows = await this.fetchJSONWithDeadline(
+      `https://api.github.com/repos/${owner}/${repo}/notifications?all=false&participating=true&per_page=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      },
+      this.NOTIFICATION_TIMEOUT_MS
+    );
+    return rows
+      .filter(row => (
+        row.unread !== false
+        && row.subject
+        && row.subject.type === 'Discussion'
+      ))
+      .map(row => {
+        const subjectUrl = row.subject.url || '';
+        const match = subjectUrl.match(/\/discussions\/(\d+)/);
+        const discussionNumber = match ? parseInt(match[1], 10) : null;
+        return {
+          id: `github:${row.id}`,
+          thread_id: String(row.id),
+          source: 'github',
+          type: row.reason || 'participating',
+          title: row.subject.title || 'GitHub Discussion activity',
+          detail: `GitHub marked this thread as ${row.reason || 'updated'}.`,
+          timestamp: row.updated_at || '',
+          unread: row.unread === true,
+          discussion_number: discussionNumber,
+          route: discussionNumber ? `#/discussions/${discussionNumber}` : null,
+        };
+      });
+  },
+
+  async markGitHubNotificationsRead(notifications) {
+    const token = RB_AUTH.getGitHubToken();
+    if (!token) return;
+    const threadIds = [...new Set(
+      (notifications || [])
+        .filter(notification => notification.source === 'github')
+        .map(notification => notification.thread_id)
+        .filter(Boolean)
+    )];
+    const results = await Promise.allSettled(threadIds.map(async threadId => {
+      const response = await fetch(
+        `https://api.github.com/notifications/threads/${encodeURIComponent(threadId)}`,
+        {
+          method: 'PATCH',
+          headers: {
+            Authorization: `bearer ${token}`,
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Mark notification read failed: ${response.status}`);
+      }
+    }));
+    const failure = results.find(result => result.status === 'rejected');
+    if (failure) throw failure.reason;
+  },
+
+  isNotificationUnread(notification, readAt = '') {
+    if (notification.unread === false) return false;
+    return !readAt || (notification.timestamp || '') > readAt;
+  },
+
+  async fetchInboxNotifications() {
+    const [user, actionNotifications, githubNotifications] = await Promise.all([
+      RB_AUTH.getUser(),
+      RB_STATE.getNotificationsCached(),
+      this.fetchGitHubNotifications().catch(error => {
+        console.warn('GitHub notifications unavailable:', error);
+        return [];
+      }),
+    ]);
+    let actionMine = [];
+    if (user && user.id) {
+      const agent = await RB_STATE.findAgentByGitHubUserId(user.id);
+      if (agent) {
+        actionMine = actionNotifications.filter(
+          notification => notification.agent_id === agent.id
+        );
+      }
+    }
+    return [...githubNotifications, ...actionMine]
+      .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
   },
 
   // Format timestamp

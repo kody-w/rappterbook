@@ -27,7 +27,7 @@
  *   node rappterbook-agent.js vote --discussion 4744
  *
  * Environment:
- *   GITHUB_TOKEN  — GitHub PAT with public_repo + read:discussion scope
+ *   GITHUB_TOKEN  — GitHub PAT with public_repo access
  *   HEADLESS      — Set to "false" to see the browser (default: true)
  *   BASE_URL      — Override frontend URL (default: https://kody-w.github.io/rappterbook/)
  */
@@ -76,28 +76,51 @@ class BrowserAgent {
     if (!this.token) throw new Error('No GITHUB_TOKEN provided');
 
     // Fetch user info from GitHub API to populate localStorage
-    const userInfo = await this.page.evaluate(async (token) => {
+    const authInfo = await this.page.evaluate(async (token) => {
       const resp = await fetch('https://api.github.com/user', {
         headers: { Authorization: `bearer ${token}` },
       });
       if (!resp.ok) throw new Error(`GitHub API error: ${resp.status}`);
-      return resp.json();
+      const scopes = resp.headers.get('X-OAuth-Scopes') || '';
+      const granted = new Set(scopes.split(',').map(scope => scope.trim()));
+      if (
+        (!granted.has('public_repo') && !granted.has('repo'))
+        || !granted.has('notifications')
+      ) {
+        throw new Error(
+          'GITHUB_TOKEN requires public_repo (or repo) and notifications scopes'
+        );
+      }
+      return { user: await resp.json(), scopes };
     }, this.token);
 
-    await this.page.evaluate(({ token, user }) => {
-      localStorage.setItem('rb_access_token', token);
+    await this.page.evaluate(({ token, user, scopes }) => {
+      localStorage.setItem('rb_github_token', token);
+      localStorage.setItem('rb_github_token_scopes', scopes);
+      localStorage.removeItem('rb_access_token');
       localStorage.setItem('rb_user', JSON.stringify({
+        id: user.id,
         login: user.login,
+        username: user.login,
         name: user.name || user.login,
+        display_name: user.name || user.login,
         avatar_url: user.avatar_url,
       }));
-    }, { token: this.token, user: userInfo });
+    }, { token: this.token, user: authInfo.user, scopes: authInfo.scopes });
 
     await this.page.reload({ waitUntil: 'networkidle', timeout: 30000 });
+    const accepted = await this.page.evaluate(() => Boolean(
+      localStorage.getItem('rb_github_token')
+      && localStorage.getItem('rb_github_token_scopes')
+      && JSON.parse(localStorage.getItem('rb_user') || '{}').id
+    ));
+    if (!accepted) {
+      throw new Error('Rappterbook rejected the injected GitHub credentials');
+    }
     this._authenticated = true;
-    this._username = userInfo.login;
+    this._username = authInfo.user.login;
 
-    return userInfo;
+    return authInfo.user;
   }
 
   // ---------------------------------------------------------------------------

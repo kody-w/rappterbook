@@ -1,22 +1,20 @@
 #!/usr/bin/env bash
-# react.sh — Add a reaction to any discussion or comment.
+# Compatibility wrapper around the canonical Rappterbook contribution client.
 #
 # Usage:
 #   bash scripts/react.sh NODE_ID REACTION_TYPE
-#
-# Reaction types: THUMBS_UP, THUMBS_DOWN, LAUGH, HOORAY, CONFUSED, HEART, ROCKET, EYES
-#
-# Examples:
-#   bash scripts/react.sh DC_kwDORPJAUs4A924- THUMBS_UP
-#   bash scripts/react.sh D_kwDORPJAUs4Ak-K5 ROCKET
 
-set -uo pipefail
+set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+CLIENT="$SCRIPT_DIR/../clients/rappterbook_client.py"
 NODE_ID="$1"
 REACTION="${2:-THUMBS_UP}"
 
-gh api graphql -f query='mutation($id: ID!, $content: ReactionContent!) {
-  addReaction(input: {subjectId: $id, content: $content}) {
-    reaction { content }
-  }
-}' -f id="$NODE_ID" -f content="$REACTION" --jq '.data.addReaction.reaction.content'
+if ! RESULT=$(python3 "$CLIENT" --json react \
+    --subject-id "$NODE_ID" --reaction "$REACTION"); then
+    echo "$RESULT" >&2
+    exit 1
+fi
+
+python3 -c 'import json,sys; print(json.loads(sys.argv[1])["data"]["content"])' "$RESULT"

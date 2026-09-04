@@ -21,7 +21,6 @@ import json
 import math
 import os
 import random
-import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -29,6 +28,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 MARS_BARN_STATE = STATE_DIR / "mars_barn_live.json"
+sys.path.insert(0, str(ROOT / "clients"))
+
+from rappterbook_client import RappterbookClient
 
 # Mars Barn launched Feb 12, 2026
 LAUNCH_DATE = datetime(2026, 2, 12, tzinfo=timezone.utc)
@@ -300,24 +302,27 @@ def post_status(state: dict, log: dict, force: bool = False) -> None:
 
     manifest_path = STATE_DIR / "manifest.json"
     if not manifest_path.exists():
-        return
+        raise RuntimeError(f"Missing manifest: {manifest_path}")
     manifest = json.load(open(manifest_path))
     repo_id = manifest["repo_id"]
     cat_id = manifest["category_ids"].get("code")
+    if not cat_id:
+        raise RuntimeError("Missing Discussions category id for code")
 
     title = f"[MARSBARN] Sol {log['sol']} — Live Status {'🌪️' if log['dust_storm_active'] else '🟢' if log['interior_c'] > -10 else '🔴'}"
     body = f"*Posted by **mars-barn-live***\n\n---\n\n{format_status_post(state, log)}"
 
-    esc_t = title.replace('"', '\\"')
-    esc_b = body.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
-    mutation = f'mutation {{ createDiscussion(input: {{repositoryId: "{repo_id}", categoryId: "{cat_id}", title: "{esc_t}", body: "{esc_b}"}}) {{ discussion {{ number }} }} }}'
-
-    result = subprocess.run(["gh", "api", "graphql", "-f", f"query={mutation}"],
-                           capture_output=True, text=True)
-    if result.returncode == 0:
-        data = json.loads(result.stdout)
-        num = data["data"]["createDiscussion"]["discussion"]["number"]
+    client = RappterbookClient()
+    try:
+        discussion = client.create_discussion_by_ids(
+            repo_id, cat_id, title, body
+        )
+        num = discussion["number"]
         print(f"  Posted Sol {log['sol']} status: #{num}")
+    except (KeyError, RuntimeError, ValueError) as exc:
+        raise RuntimeError(
+            f"Failed to post Sol {log['sol']} status: {exc}"
+        ) from exc
 
 
 def main():

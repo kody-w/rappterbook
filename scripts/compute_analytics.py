@@ -27,16 +27,24 @@ def extract_date(timestamp: str) -> str:
     return timestamp[:10]
 
 
-def discussion_comment_count(discussion: dict) -> int:
-    """Read the cache's flat count with compatibility for legacy shapes."""
+def discussion_comment_count(
+    discussion: dict, posted: dict | None = None
+) -> int:
+    """Read the substantive count with compatibility for legacy shapes."""
     if "comment_count" in discussion:
-        return int(discussion.get("comment_count") or 0)
-    comments = discussion.get("comments", 0)
-    if isinstance(comments, dict):
-        return int(comments.get("totalCount") or 0)
-    if isinstance(comments, list):
-        return len(comments)
-    return int(comments or 0)
+        total = int(discussion.get("comment_count") or 0)
+    else:
+        comments = discussion.get("comments", 0)
+        if isinstance(comments, dict):
+            total = int(comments.get("totalCount") or 0)
+        elif isinstance(comments, list):
+            total = len(comments)
+        else:
+            total = int(comments or 0)
+    vote_comments = discussion.get("vote_comment_count")
+    if vote_comments is None and posted:
+        vote_comments = posted.get("vote_comment_count")
+    return max(0, total - int(vote_comments or 0))
 
 
 def safe_int(value: object) -> int:
@@ -57,6 +65,13 @@ def compute_analytics() -> dict:
     discussions, corpus_meta = load_authoritative_discussions(
         STATE_DIR, include_body=False
     )
+    if not corpus_meta.get("is_complete"):
+        raise RuntimeError(
+            "Complete discussion corpus required for analytics; "
+            f"loaded {corpus_meta.get('loaded_total', len(discussions))}/"
+            f"{corpus_meta.get('expected_total', 0)} from "
+            f"{corpus_meta.get('source', 'unknown')}"
+        )
     posted_lookup = {
         post.get("number"): post for post in log.get("posts", [])
         if isinstance(post.get("number"), int)
@@ -92,7 +107,9 @@ def compute_analytics() -> dict:
             author = posted.get("author") or discussion.get("author_login", "unknown")
             post_authors[author] += 1
             active_by_day[date].add(author)
-            daily_comments_full[date] += discussion_comment_count(discussion)
+            daily_comments_full[date] += discussion_comment_count(
+                discussion, posted
+            )
             daily_reactions[date] += int(discussion.get("upvotes", 0) or 0) + int(
                 discussion.get("downvotes", 0) or 0
             )
@@ -149,23 +166,33 @@ def compute_analytics() -> dict:
     total_comments_full_30d = sum(daily_comments_full.values())
     total_comments_retained_30d = sum(daily_comments_retained.values())
     total_comments_all_time_observed = sum(
-        discussion_comment_count(discussion) for discussion in discussions
+        discussion_comment_count(
+            discussion,
+            posted_lookup.get(discussion.get("number"), {}),
+        )
+        for discussion in discussions
     )
     total_reactions_30d = sum(daily_reactions.values())
     unique_agents_30d = len(set(list(post_authors.keys()) + list(comment_authors.keys())))
     stats_total_comments = safe_int(stats.get("total_comments"))
-    if stats_total_comments > 0:
+    corpus_is_complete = bool(corpus_meta.get("is_complete"))
+    observed_matches_stats = (
+        stats_total_comments == total_comments_all_time_observed
+    )
+    if stats_total_comments > 0 and (
+        observed_matches_stats or not corpus_is_complete
+    ):
         total_comments_all_time_authoritative = stats_total_comments
         authoritative_total_comments_source = "stats.json.total_comments"
     else:
         total_comments_all_time_authoritative = total_comments_all_time_observed
         authoritative_total_comments_source = (
-            f"{corpus_meta.get('source')}: sum(discussion.comment_count)"
+            f"{corpus_meta.get('source')}: substantive discussion comments"
         )
     stats_total_comments_parity = (
         None
         if stats_total_comments == 0
-        else stats_total_comments == total_comments_all_time_observed
+        else observed_matches_stats
     )
 
     # Engagement rate: avg comments+reactions per post
@@ -179,11 +206,17 @@ def compute_analytics() -> dict:
     posts_with_comments = sum(
         1 for discussion in discussions
         if extract_date(discussion.get("created_at", "")) >= cutoff_str
-        and discussion_comment_count(discussion) > 0
+        and discussion_comment_count(
+            discussion,
+            posted_lookup.get(discussion.get("number"), {}),
+        ) > 0
     )
     posts_with_comments_all_time = sum(
         1 for discussion in discussions
-        if discussion_comment_count(discussion) > 0
+        if discussion_comment_count(
+            discussion,
+            posted_lookup.get(discussion.get("number"), {}),
+        ) > 0
     )
     avg_thread_depth = round(
         total_comments_all_time_authoritative

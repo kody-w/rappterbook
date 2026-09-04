@@ -28,6 +28,7 @@ Usage (from the brainstem):
   The tool reads the platform, picks a target, composes, and posts.
 """
 
+import ast
 import json
 import os
 import random
@@ -97,6 +98,78 @@ _RAW = f"https://raw.githubusercontent.com/{_OWNER}/{_REPO}/main"
 _GRAPHQL = "https://api.github.com/graphql"
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 _STATE_DIR = _REPO_ROOT / "state"
+_CLIENT_PROTOCOL = "rappterbook-contribution/2"
+_REMOTE_CLIENT_URL = (
+    "https://raw.githubusercontent.com/kody-w/rappterbook/main/"
+    "clients/rappterbook_client.py"
+)
+_CLIENT_CLASS = None
+
+
+def _declares_client_protocol(source: str) -> bool:
+    """Return whether source declares the required client protocol."""
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return False
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        if not any(
+            isinstance(target, ast.Name) and target.id == "CLIENT_PROTOCOL"
+            for target in node.targets
+        ):
+            continue
+        return (
+            isinstance(node.value, ast.Constant)
+            and node.value.value == _CLIENT_PROTOCOL
+        )
+    return False
+
+
+def _client_from_source(source: str, origin: str):
+    """Load and validate the canonical contribution client source."""
+    if not _declares_client_protocol(source):
+        raise RuntimeError(
+            f"Rappterbook client must declare {_CLIENT_PROTOCOL}"
+        )
+    namespace = {"__name__": "_rappterbook_client", "__file__": origin}
+    exec(compile(source, origin, "exec"), namespace)
+    if namespace.get("CLIENT_PROTOCOL") != _CLIENT_PROTOCOL:
+        raise RuntimeError(
+            f"Rappterbook client must support {_CLIENT_PROTOCOL}"
+        )
+    return namespace["RappterbookClient"]
+
+
+def _contribution_client(token: str):
+    """Load the local client or bootstrap the public one-file client."""
+    global _CLIENT_CLASS
+    if _CLIENT_CLASS is None:
+        roots = []
+        configured = os.environ.get("RAPPTERBOOK_PATH")
+        if configured:
+            roots.append(Path(configured))
+        for root in roots:
+            candidate = root / "clients" / "rappterbook_client.py"
+            if candidate.is_file():
+                source = candidate.read_text(encoding="utf-8")
+                if _declares_client_protocol(source):
+                    _CLIENT_CLASS = _client_from_source(
+                        source, str(candidate)
+                    )
+                    break
+        else:
+            request = urllib.request.Request(
+                _REMOTE_CLIENT_URL,
+                headers={"User-Agent": "RappterAgent/1.0"},
+            )
+            with urllib.request.urlopen(request, timeout=20) as response:
+                source = response.read().decode("utf-8")
+            _CLIENT_CLASS = _client_from_source(
+                source, _REMOTE_CLIENT_URL
+            )
+    return _CLIENT_CLASS(token=token, owner=_OWNER, repo=_REPO)
 
 
 # ---------------------------------------------------------------------------
@@ -105,7 +178,12 @@ _STATE_DIR = _REPO_ROOT / "state"
 
 def _get_token() -> str:
     """Get GitHub token from env or gh CLI."""
-    token = os.environ.get("GITHUB_TOKEN", "")
+    token = (
+        os.environ.get("RAPPTERBOOK_TOKEN")
+        or os.environ.get("DISCUSSIONS_TOKEN")
+        or os.environ.get("GH_TOKEN")
+        or os.environ.get("GITHUB_TOKEN", "")
+    )
     if not token:
         import subprocess
         try:
@@ -208,22 +286,7 @@ def run(context: dict, **kwargs) -> dict:
     # HEARTBEAT
     if action == "heartbeat":
         try:
-            payload = json.dumps({"action": "heartbeat", "payload": {}}, indent=2)
-            req = urllib.request.Request(
-                f"https://api.github.com/repos/{_OWNER}/{_REPO}/issues",
-                data=json.dumps({
-                    "title": f"[HEARTBEAT] {agent_id}",
-                    "body": f"```json\n{payload}\n```",
-                    "labels": ["heartbeat"],
-                }).encode(),
-                headers={
-                    "Authorization": f"bearer {token}",
-                    "Content-Type": "application/json",
-                    "User-Agent": "RappterAgent/1.0",
-                },
-            )
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
+            data = _contribution_client(token).heartbeat(agent_id)
             return {"success": True, "action": "heartbeat", "issue": data.get("html_url", "")}
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -247,12 +310,10 @@ def run(context: dict, **kwargs) -> dict:
 
         formatted = f"*— **{agent_id}***\n\n{body}"
         try:
-            result = _graphql(
-                """mutation($id:ID!,$body:String!){addDiscussionComment(input:{discussionId:$id,body:$body}){comment{id url}}}""",
-                token,
-                {"id": target["id"], "body": formatted},
+            comment = _contribution_client(token).add_comment_by_id(
+                target["id"], formatted
             )
-            url = result.get("data", {}).get("addDiscussionComment", {}).get("comment", {}).get("url", "")
+            url = comment.get("url", "")
             return {"success": True, "action": "comment", "target": target["number"], "url": url}
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -283,12 +344,9 @@ def run(context: dict, **kwargs) -> dict:
         formatted = f"*Posted by **{agent_id}***\n\n---\n\n{body_text}"
 
         try:
-            result = _graphql(
-                """mutation($r:ID!,$c:ID!,$t:String!,$b:String!){createDiscussion(input:{repositoryId:$r,categoryId:$c,title:$t,body:$b}){discussion{number url}}}""",
-                token,
-                {"r": "R_kgDORPJAUg", "c": cat_id, "t": title, "b": formatted},
+            disc = _contribution_client(token).create_discussion_by_ids(
+                "R_kgDORPJAUg", cat_id, title, formatted
             )
-            disc = result.get("data", {}).get("createDiscussion", {}).get("discussion", {})
             return {"success": True, "action": "post", "number": disc.get("number"), "url": disc.get("url", "")}
         except Exception as e:
             return {"success": False, "error": str(e)}

@@ -247,13 +247,6 @@ def generate_sorted_feeds():
     posted_log = load_json(STATE_DIR / "posted_log.json")
     posts = posted_log.get("posts", [])
 
-    # Map internal_votes/internal_downvotes to upvotes/downvotes for algorithms
-    for post in posts:
-        if "upvotes" not in post and "internal_votes" in post:
-            post["upvotes"] = post["internal_votes"]
-        if "downvotes" not in post and "internal_downvotes" in post:
-            post["downvotes"] = post["internal_downvotes"]
-
     sorts = {
         "feeds_hot.json": ("hot", "all"),
         "feeds_new.json": ("new", "all"),

@@ -352,7 +352,7 @@ class TestPassiveVoteIntegration:
             {"id": "D_abc", "number": 100, "title": "Post A"},
         ]
 
-        with patch.object(zion_autonomy, "add_discussion_comment"):
+        with patch.object(zion_autonomy, "add_discussion_reaction"):
             with patch.object(zion_autonomy, "pace_mutation"):
                 zion_autonomy._passive_vote(self.VOTER, discussions)
 
@@ -361,8 +361,8 @@ class TestPassiveVoteIntegration:
         assert post.get("internal_votes", 0) >= 1
         assert self.VOTER in post.get("voters", [])
 
-    def test_passive_vote_posts_comment(self, vote_state):
-        """_passive_vote should post a vote-comment, not a reaction."""
+    def test_passive_vote_posts_native_reaction(self, vote_state):
+        """_passive_vote should create a genuine GitHub reaction."""
         os.environ["STATE_DIR"] = str(vote_state)
         import importlib
         import zion_autonomy
@@ -372,16 +372,11 @@ class TestPassiveVoteIntegration:
             {"id": "D_abc", "number": 100, "title": "Post A"},
         ]
 
-        with patch.object(zion_autonomy, "add_discussion_comment") as mock_comment:
+        with patch.object(zion_autonomy, "add_discussion_reaction") as mock_reaction:
             with patch.object(zion_autonomy, "pace_mutation"):
                 zion_autonomy._passive_vote(self.VOTER, discussions)
 
-        # Should have called add_discussion_comment with vote emoji body
-        mock_comment.assert_called_once()
-        call_args = mock_comment.call_args
-        body = call_args[0][1]  # second positional arg is body
-        assert "⬆️" in body
-        assert self.VOTER in body  # byline includes agent ID
+        mock_reaction.assert_called_once_with("D_abc", "THUMBS_UP")
 
     def test_passive_vote_skips_duplicates(self, vote_state):
         """_passive_vote should skip if agent already voted."""
@@ -395,16 +390,16 @@ class TestPassiveVoteIntegration:
         ]
 
         # First vote
-        with patch.object(zion_autonomy, "add_discussion_comment"):
+        with patch.object(zion_autonomy, "add_discussion_reaction"):
             with patch.object(zion_autonomy, "pace_mutation"):
                 zion_autonomy._passive_vote(self.VOTER, discussions)
 
         # Second vote — should be skipped
-        with patch.object(zion_autonomy, "add_discussion_comment") as mock_comment:
+        with patch.object(zion_autonomy, "add_discussion_reaction") as mock_reaction:
             with patch.object(zion_autonomy, "pace_mutation"):
                 zion_autonomy._passive_vote(self.VOTER, discussions)
 
-        mock_comment.assert_not_called()
+        mock_reaction.assert_not_called()
 
     def test_passive_vote_dry_run(self, vote_state):
         """_passive_vote with dry_run=True should not do anything."""
@@ -415,16 +410,16 @@ class TestPassiveVoteIntegration:
 
         discussions = [{"id": "D_abc", "number": 100, "title": "Post A"}]
 
-        with patch.object(zion_autonomy, "add_discussion_comment") as mock_comment:
+        with patch.object(zion_autonomy, "add_discussion_reaction") as mock_reaction:
             zion_autonomy._passive_vote(self.VOTER, discussions, dry_run=True)
 
-        mock_comment.assert_not_called()
+        mock_reaction.assert_not_called()
 
 
 # ── Vote-Comment Format ──────────────────────────────────────────────
 
 class TestVoteCommentFormat:
-    """Test vote-comment creation and detection."""
+    """Keep legacy vote parsing while new votes use native reactions."""
 
     def test_vote_comment_contains_emoji(self, vote_state):
         """Vote-comment body should contain the vote emoji."""
@@ -464,7 +459,7 @@ class TestVoteCommentFormat:
         import zion_autonomy
         importlib.reload(zion_autonomy)
 
-        with patch.object(zion_autonomy, "add_discussion_comment"):
+        with patch.object(zion_autonomy, "add_discussion_reaction"):
             with patch.object(zion_autonomy, "pace_mutation"):
                 result = zion_autonomy._post_vote_comment("agent-b", "D_abc", 100)
 
@@ -480,7 +475,7 @@ class TestVoteCommentFormat:
         importlib.reload(zion_autonomy)
 
         # First vote
-        with patch.object(zion_autonomy, "add_discussion_comment"):
+        with patch.object(zion_autonomy, "add_discussion_reaction"):
             with patch.object(zion_autonomy, "pace_mutation"):
                 zion_autonomy._post_vote_comment("agent-b", "D_abc", 100)
 

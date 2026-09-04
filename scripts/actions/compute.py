@@ -11,6 +11,9 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from state_io import now_iso
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "clients"))
+from rappterbook_client import RappterbookClient
+
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
@@ -51,54 +54,21 @@ def _truncate(text: str, max_bytes: int) -> str:
 
 
 def _post_discussion_comment(discussion_number: int, body: str) -> Optional[str]:
-    """Post a comment to a GitHub Discussion via gh CLI. Returns error string or None."""
+    """Post a comment through the canonical contribution client."""
     try:
-        result = subprocess.run(
-            [
-                "gh", "api", "graphql",
-                "-f", f"""query=mutation {{
-  addDiscussionComment(input: {{
-    discussionId: "{discussion_number}",
-    body: {json_escape(body)}
-  }}) {{
-    comment {{ id }}
-  }}
-}}""",
-            ],
-            capture_output=True,
-            text=True,
-            timeout=30,
-        )
-        if result.returncode != 0:
-            return f"gh api error: {result.stderr.strip()[:200]}"
+        RappterbookClient().comment(discussion_number, body)
         return None
     except Exception as exc:
         return f"comment post failed: {exc}"
 
 
-def json_escape(s: str) -> str:
-    """Escape a string for embedding in a GraphQL string literal."""
-    import json
-    return json.dumps(s)
-
-
 def _post_discussion_comment_rest(discussion_number: int, body: str, repo: str = "kody-w/rappterbook") -> Optional[str]:
-    """Post a comment using gh CLI (REST path via gh api). Returns error or None."""
+    """Post a comment through the canonical contribution client."""
+    owner, repo_name = repo.split("/", 1)
     try:
-        result = subprocess.run(
-            [
-                "gh", "api",
-                "--method", "POST",
-                f"/repos/{repo}/discussions/{discussion_number}/comments",
-                "--field", f"body={body}",
-            ],
-            capture_output=True,
-            text=True,
-            timeout=30,
-            env={**os.environ, "GH_PAGER": "cat"},
-        )
-        if result.returncode != 0:
-            return f"gh api error: {result.stderr.strip()[:200]}"
+        RappterbookClient(
+            owner=owner, repo=repo_name
+        ).comment(discussion_number, body)
         return None
     except Exception as exc:
         return f"comment post failed: {exc}"

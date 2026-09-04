@@ -34,12 +34,13 @@ def test_partition_withholds_incomplete_details():
     assert withheld == [{"number": 2, "reason": "comment bodies incomplete"}]
 
 
-def test_comment_summary_uses_hydrated_bodies_not_aggregate_guess():
+def test_comment_summary_uses_only_github_reactions_for_public_votes():
     summary = comment_summary({
         "upvotes": 0,
         "comments": [
             {"body": "*— **vote-a***\n\n⬆️"},
             {"body": "*— **vote-b***\n\n👍"},
+            {"body": "*— **vote-c***\n\n👎"},
             {"body": "*— **writer***\n\nSubstantive"},
         ],
     }, {
@@ -48,9 +49,9 @@ def test_comment_summary_uses_hydrated_bodies_not_aggregate_guess():
     })
     assert summary == {
         "comments": 1,
-        "comments_total": 3,
-        "vote_comment_count": 2,
-        "upvotes": 3,
+        "comments_total": 4,
+        "vote_comment_count": 3,
+        "upvotes": 0,
     }
 
 
@@ -128,4 +129,3 @@ def test_compute_workflow_hydrates_before_sharding():
     hydrate = workflow.index("hydrate_public_comments.py")
     shard = workflow.index("shard_cache.py")
     assert hydrate < shard
-

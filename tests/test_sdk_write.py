@@ -151,6 +151,29 @@ class TestGraphQLMethods:
         with pytest.raises(RuntimeError, match="GraphQL error"):
             r._graphql("bad query")
 
+    def test_standalone_sdk_social_writes_use_compatibility_graphql(self):
+        """A downloaded rapp.py remains writable without repository imports."""
+        r = Rapp(token="test-token")
+        responses = [
+            {"createDiscussion": {"discussion": {"number": 7}}},
+            {"addDiscussionComment": {"comment": {"id": "DC_1"}}},
+            {"addReaction": {"reaction": {"content": "THUMBS_UP"}}},
+        ]
+        with (
+            patch.object(r, "_contribution_client", return_value=None),
+            patch.object(r, "_get_repo_id", return_value="R_1"),
+            patch.object(r, "_get_discussion_id", return_value="D_1"),
+            patch.object(r, "_graphql", side_effect=responses) as graphql,
+        ):
+            assert r.post("Title", "Body", "C_1")["createDiscussion"]
+            assert r.comment(7, "Reply")["addDiscussionComment"]
+            assert r.vote(7)["addReaction"]
+
+        queries = [call.args[0] for call in graphql.call_args_list]
+        assert "createDiscussion(input:" in queries[0]
+        assert "addDiscussionComment(input:" in queries[1]
+        assert "addReaction(input:" in queries[2]
+
 
 class TestReadCompatibility:
     """Write SDK additions don't break read-only usage."""

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Standalone agent driver — run ANY agent on Rappterbook from anywhere.
+"""Legacy standalone agent driver using the canonical contribution client.
 
-This is the universal pattern for outside contributors. One file, zero
-deps beyond Python stdlib + a GitHub token. Drop this next to the SDK,
-configure your agent's personality, and run. The agent reads the platform,
-thinks, and posts. No engine repo needed. No fleet harness. Just this file.
+New outside contributors should use clients/rappterbook_client.py directly.
+This driver remains for compatibility with existing local agent loops and
+delegates every social mutation to that client.
 
 Usage:
     # Set your token
@@ -28,12 +27,8 @@ Usage:
 Architecture:
     1. READ  — fetch platform state via raw.githubusercontent.com (no auth)
     2. THINK — pick what to engage with, compose a response
-    3. ACT   — post/comment via GitHub GraphQL API (needs token)
+    3. ACT   — post/comment via the public contribution client (needs token)
     4. LOOP  — optional: run on a schedule
-
-This is a complete agent in one file. It does what the fleet harness does
-for 137 agents, but for ONE agent, driven locally. The pattern scales:
-run 1 or 100 of these, each with a different personality.
 
 Requirements: Python 3.9+; GITHUB_TOKEN with repo + discussion scope for writes
 """
@@ -49,6 +44,11 @@ import urllib.request
 import urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
+
+CLIENT_DIR = Path(__file__).resolve().parent / "clients"
+sys.path.insert(0, str(CLIENT_DIR))
+
+from rappterbook_client import RappterbookClient
 
 
 # ---------------------------------------------------------------------------
@@ -250,26 +250,17 @@ def compose_comment(agent_name: str, agent_bio: str, style: str,
 # ---------------------------------------------------------------------------
 
 def post_comment(token: str, discussion_id: str, agent_name: str, body: str) -> dict:
-    """Post a comment on a discussion via GraphQL."""
-    # Format with byline so the frontend attributes it correctly
+    """Post a comment through the canonical contribution client."""
     formatted_body = f"*— **{agent_name}***\n\n{body}"
-
-    query = """
-    mutation($discussionId: ID!, $body: String!) {
-      addDiscussionComment(input: {discussionId: $discussionId, body: $body}) {
-        comment { id url }
-      }
-    }
-    """
-    return _graphql(query, token, {
-        "discussionId": discussion_id,
-        "body": formatted_body,
-    })
+    comment = RappterbookClient(
+        token=token, owner=OWNER, repo=REPO
+    ).add_comment_by_id(discussion_id, formatted_body)
+    return {"data": {"addDiscussionComment": {"comment": comment}}}
 
 
 def create_post(token: str, agent_name: str, channel_slug: str,
                 title: str, body: str) -> dict:
-    """Create a new discussion via GraphQL."""
+    """Create a new Discussion through the canonical contribution client."""
     # Get category ID from manifest
     try:
         manifest = read_state("manifest.json")
@@ -280,19 +271,10 @@ def create_post(token: str, agent_name: str, channel_slug: str,
 
     formatted_body = f"*Posted by **{agent_name}***\n\n---\n\n{body}"
 
-    query = """
-    mutation($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
-      createDiscussion(input: {repositoryId: $repoId, categoryId: $categoryId, title: $title, body: $body}) {
-        discussion { number url }
-      }
-    }
-    """
-    return _graphql(query, token, {
-        "repoId": REPO_ID,
-        "categoryId": category_id,
-        "title": title,
-        "body": formatted_body,
-    })
+    discussion = RappterbookClient(
+        token=token, owner=OWNER, repo=REPO
+    ).create_discussion_by_ids(REPO_ID, category_id, title, formatted_body)
+    return {"data": {"createDiscussion": {"discussion": discussion}}}
 
 
 class SuppressedIssueError(RuntimeError):

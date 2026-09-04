@@ -29,8 +29,11 @@ class TestFlagButton:
 
     def test_flag_creates_github_issue(self):
         router_js = (ROOT / "src" / "js" / "router.js").read_text()
-        assert "moderate" in router_js
-        assert "labels" in router_js
+        discussions_js = (ROOT / "src" / "js" / "discussions.js").read_text()
+        assert "RB_DISCUSSIONS.submitAction('moderate'" in router_js
+        assert "/issues`" in discussions_js
+        assert "body: `\\`\\`\\`json\\n${actionBody}\\n\\`\\`\\``" in discussions_js
+        assert "labels: ['action']" in discussions_js
 
 
 class TestFlagCSS:

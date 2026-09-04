@@ -1,116 +1,128 @@
 /* Rappterbook Authentication
  *
- * Three auth methods:
- *   1. Email/password signup + login (platform accounts via Cloudflare Worker + D1)
- *   2. GitHub Device Code flow (like `gh auth login`)
- *   3. GitHub OAuth redirect (fallback)
- *
- * All methods issue a JWT from the Worker backend. GitHub auth also returns
- * a GitHub access_token for Discussion API calls.
+ * GitHub is the only identity and credential system. The token obtained from
+ * device flow or OAuth redirect is used directly for GitHub Discussions,
+ * notifications, and user identity.
  */
 
 const RB_AUTH = {
   CLIENT_ID: 'Ov23liuueQBIUggrH8NG',
   WORKER_URL: 'https://rappterbook-auth.kwildfeuer.workers.dev',
+  SCOPE: 'public_repo notifications',
+  TOKEN_SCOPES_KEY: 'rb_github_token_scopes',
+  OAUTH_STATE_KEY: 'rb_oauth_state',
+  AUTH_NOTICE_KEY: 'rb_auth_notice',
 
-  // Device code flow state
   _devicePoll: null,
   _deviceModal: null,
 
-  // ── Token Management ──────────────────────────────────────────────────
-
-  getToken() {
-    return localStorage.getItem('rb_jwt') || localStorage.getItem('rb_access_token');
-  },
-
   getGitHubToken() {
-    return localStorage.getItem('rb_github_token');
+    const token = localStorage.getItem('rb_github_token')
+      || localStorage.getItem('rb_access_token');
+    if (!token) return null;
+    const scopes = localStorage.getItem(this.TOKEN_SCOPES_KEY) || '';
+    if (!this._hasRequiredScopes(scopes)) {
+      this.clearToken();
+      localStorage.setItem(
+        this.AUTH_NOTICE_KEY,
+        'GitHub permissions changed. Sign in again to enable participation notifications.'
+      );
+      return null;
+    }
+    if (token && !localStorage.getItem('rb_github_token')) {
+      localStorage.setItem('rb_github_token', token);
+    }
+    return token;
   },
 
-  setAuth(jwt, user, githubToken) {
-    if (jwt) localStorage.setItem('rb_jwt', jwt);
-    if (user) {
-      // Normalize: frontend expects .login and .name, backend returns .username and .display_name
-      user.login = user.login || user.username;
-      user.name = user.name || user.display_name || user.login;
-      user.username = user.username || user.login;
-      user.display_name = user.display_name || user.name;
-      localStorage.setItem('rb_user', JSON.stringify(user));
+  _hasRequiredScopes(scopes) {
+    const granted = new Set(
+      String(scopes || '').split(',').map(scope => scope.trim()).filter(Boolean)
+    );
+    return this.SCOPE.split(/\s+/).every(scope =>
+      granted.has(scope) || (scope === 'public_repo' && granted.has('repo'))
+    );
+  },
+
+  _createOAuthState() {
+    const bytes = new Uint8Array(32);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+  },
+
+  // Legacy alias for call sites that have not yet been renamed.
+  getToken() {
+    return this.getGitHubToken();
+  },
+
+  setAuth(githubToken, user, scopes = this.SCOPE) {
+    if (githubToken) {
+      localStorage.setItem('rb_github_token', githubToken);
+      localStorage.setItem(this.TOKEN_SCOPES_KEY, scopes);
+      localStorage.removeItem('rb_access_token');
+      localStorage.removeItem('rb_jwt');
+      localStorage.removeItem(this.AUTH_NOTICE_KEY);
     }
-    if (githubToken) localStorage.setItem('rb_github_token', githubToken);
+    if (user) {
+      const normalized = {
+        id: user.id,
+        login: user.login || user.username,
+        username: user.login || user.username,
+        name: user.name || user.display_name || user.login || user.username,
+        display_name: user.name || user.display_name || user.login || user.username,
+        avatar_url: user.avatar_url,
+      };
+      localStorage.setItem('rb_user', JSON.stringify(normalized));
+    }
   },
 
   clearToken() {
-    localStorage.removeItem('rb_jwt');
-    localStorage.removeItem('rb_access_token');
     localStorage.removeItem('rb_github_token');
+    localStorage.removeItem('rb_access_token');
+    localStorage.removeItem('rb_jwt');
     localStorage.removeItem('rb_user');
+    localStorage.removeItem(this.TOKEN_SCOPES_KEY);
+    sessionStorage.removeItem(this.OAUTH_STATE_KEY);
   },
 
   isAuthenticated() {
-    return !!this.getToken();
+    return !!this.getGitHubToken();
   },
-
-  // ── Email/Password Auth ───────────────────────────────────────────────
-
-  async signup(email, username, password, displayName) {
-    const resp = await fetch(`${this.WORKER_URL}/api/auth/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, username, password, display_name: displayName }),
-    });
-
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || 'Signup failed');
-
-    this.setAuth(data.token, data.user);
-    this._updateUI();
-    return data.user;
-  },
-
-  async loginWithEmail(email, password) {
-    const resp = await fetch(`${this.WORKER_URL}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || 'Login failed');
-
-    this.setAuth(data.token, data.user);
-    this._updateUI();
-    return data.user;
-  },
-
-  // ── GitHub Auth (Device Code — Primary) ───────────────────────────────
 
   async loginWithGitHub() {
     if (!this.CLIENT_ID) {
-      console.warn('RB_AUTH: CLIENT_ID not configured');
-      return;
+      throw new Error('GitHub OAuth client is not configured');
     }
     try {
       await this._startDeviceCodeFlow();
-    } catch (e) {
-      console.warn('Device code flow failed, falling back to redirect:', e);
+    } catch (error) {
+      console.warn('Device flow unavailable, using OAuth redirect:', error);
       this._redirectLogin();
     }
   },
 
   async _startDeviceCodeFlow() {
-    const resp = await fetch(`${this.WORKER_URL}/api/auth/device-code`, {
+    const response = await fetch(`${this.WORKER_URL}/api/auth/device-code`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ client_id: this.CLIENT_ID, scope: 'public_repo read:discussion user:email' }),
+      body: JSON.stringify({
+        client_id: this.CLIENT_ID,
+        scope: this.SCOPE,
+      }),
     });
-
-    if (!resp.ok) throw new Error(`Device code request failed: ${resp.status}`);
-    const data = await resp.json();
-    if (!data.user_code || !data.device_code) throw new Error('Invalid device code response');
-
+    if (!response.ok) {
+      throw new Error(`Device code request failed: ${response.status}`);
+    }
+    const data = await response.json();
+    if (!data.user_code || !data.device_code) {
+      throw new Error('GitHub returned an invalid device code response');
+    }
     this._showDeviceCodeModal(data.user_code, data.verification_uri);
-    this._pollDeviceCode(data.device_code, data.interval || 5, data.expires_in || 900);
+    this._pollDeviceCode(
+      data.device_code,
+      data.interval || 5,
+      data.expires_in || 900,
+    );
   },
 
   _showDeviceCodeModal(userCode, verificationUri) {
@@ -136,176 +148,196 @@ const RB_AUTH = {
 
     document.getElementById('rb-copy-code').addEventListener('click', () => {
       navigator.clipboard.writeText(userCode).then(() => {
-        const btn = document.getElementById('rb-copy-code');
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = 'Copy code'; }, 2000);
+        const button = document.getElementById('rb-copy-code');
+        button.textContent = 'Copied!';
+        setTimeout(() => { button.textContent = 'Copy code'; }, 2000);
       });
     });
-    document.getElementById('rb-device-cancel').addEventListener('click', () => this._cancelDeviceFlow());
+    document.getElementById('rb-device-cancel').addEventListener(
+      'click', () => this._cancelDeviceFlow()
+    );
   },
 
   async _pollDeviceCode(deviceCode, interval, expiresIn) {
     const deadline = Date.now() + (expiresIn * 1000);
     const poll = async () => {
-      if (Date.now() > deadline) { this._cancelDeviceFlow(); return; }
-
+      if (Date.now() > deadline) {
+        this._cancelDeviceFlow();
+        return;
+      }
       try {
-        const resp = await fetch(`${this.WORKER_URL}/api/auth/device-poll`, {
+        const response = await fetch(`${this.WORKER_URL}/api/auth/device-poll`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ client_id: this.CLIENT_ID, device_code: deviceCode, grant_type: 'urn:ietf:params:oauth:grant-type:device_code' }),
+          body: JSON.stringify({
+            client_id: this.CLIENT_ID,
+            device_code: deviceCode,
+            grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
+          }),
         });
-        const data = await resp.json();
-
+        const data = await response.json();
         if (data.access_token) {
-          // Exchange GitHub token for platform JWT via Worker
-          await this._exchangeGitHubForJWT(data.access_token);
+          await this._acceptGitHubToken(data.access_token);
           this._dismissDeviceModal();
           return;
         }
-        if (data.error === 'authorization_pending') { this._devicePoll = setTimeout(poll, interval * 1000); return; }
-        if (data.error === 'slow_down') { this._devicePoll = setTimeout(poll, (interval + 5) * 1000); return; }
-
-        console.warn('Device code auth error:', data.error);
-        this._cancelDeviceFlow();
-      } catch (e) {
-        console.error('Device code poll error:', e);
+        if (data.error === 'authorization_pending') {
+          this._devicePoll = setTimeout(poll, interval * 1000);
+          return;
+        }
+        if (data.error === 'slow_down') {
+          this._devicePoll = setTimeout(poll, (interval + 5) * 1000);
+          return;
+        }
+        throw new Error(data.error_description || data.error || 'Device authorization failed');
+      } catch (error) {
+        console.error('Device code poll error:', error);
         this._devicePoll = setTimeout(poll, interval * 1000);
       }
     };
     this._devicePoll = setTimeout(poll, interval * 1000);
   },
 
-  async _exchangeGitHubForJWT(githubAccessToken) {
-    // Send the GitHub token to our Worker which creates/finds the platform user and returns a JWT
-    // We need to get the OAuth code path working. For device code, we have the access_token directly.
-    // Store both: platform JWT for our backend, GitHub token for Discussion API
-    try {
-      const resp = await fetch(`${this.WORKER_URL}/api/auth/github`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ access_token: githubAccessToken }),
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        this.setAuth(data.token, data.user, githubAccessToken);
-        this._updateUI();
-        return;
-      }
-    } catch (e) {
-      console.warn('JWT exchange failed, using GitHub token directly:', e);
+  async _acceptGitHubToken(githubAccessToken) {
+    const response = await fetch(`${this.WORKER_URL}/api/auth/github`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ access_token: githubAccessToken }),
+    });
+    if (!response.ok) {
+      throw new Error(`GitHub token validation failed: ${response.status}`);
     }
-    // Fallback: use GitHub token directly (backward compat)
-    localStorage.setItem('rb_access_token', githubAccessToken);
-    await this._fetchGitHubUser(githubAccessToken);
+    const data = await response.json();
+    const user = await this._fetchGitHubUser(
+      githubAccessToken, data.scopes || ''
+    );
+    if (!user) throw new Error('GitHub token validation failed');
     this._updateUI();
   },
 
-  // ── GitHub OAuth Redirect (Fallback) ──────────────────────────────────
-
   _redirectLogin() {
     const redirectUri = window.location.origin + window.location.pathname;
-    const scope = 'public_repo user:email';
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}`;
+    const state = this._createOAuthState();
+    sessionStorage.setItem(this.OAUTH_STATE_KEY, state);
+    const url = new URL('https://github.com/login/oauth/authorize');
+    url.searchParams.set('client_id', this.CLIENT_ID);
+    url.searchParams.set('redirect_uri', redirectUri);
+    url.searchParams.set('scope', this.SCOPE);
+    url.searchParams.set('state', state);
+    window.location.href = url.toString();
   },
 
   async handleCallback() {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
     if (!code) return false;
+    const receivedState = params.get('state');
+    const expectedState = sessionStorage.getItem(this.OAUTH_STATE_KEY);
+    sessionStorage.removeItem(this.OAUTH_STATE_KEY);
 
-    window.history.replaceState({}, '', window.location.origin + window.location.pathname + (window.location.hash || '#/'));
-
+    window.history.replaceState(
+      {},
+      '',
+      window.location.origin + window.location.pathname + (window.location.hash || '#/'),
+    );
+    if (!expectedState || !receivedState || receivedState !== expectedState) {
+      localStorage.setItem(
+        this.AUTH_NOTICE_KEY,
+        'GitHub sign-in could not be verified. Please start sign-in again.'
+      );
+      console.error('OAuth callback rejected: state mismatch');
+      return false;
+    }
     try {
-      const resp = await fetch(`${this.WORKER_URL}/api/auth/github`, {
+      const redirectUri = window.location.origin + window.location.pathname;
+      const response = await fetch(`${this.WORKER_URL}/api/auth/token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, redirect_uri: redirectUri }),
       });
-      if (!resp.ok) throw new Error(`GitHub auth failed: ${resp.status}`);
-      const data = await resp.json();
-      this.setAuth(data.token, data.user, data.github_token);
-      this._updateUI();
+      if (!response.ok) {
+        throw new Error(`GitHub OAuth exchange failed: ${response.status}`);
+      }
+      const data = await response.json();
+      if (!data.access_token) {
+        throw new Error('GitHub OAuth exchange returned no access token');
+      }
+      await this._acceptGitHubToken(data.access_token);
       return true;
     } catch (error) {
       console.error('OAuth callback error:', error);
+      return false;
     }
-    return false;
   },
-
-  // ── User Info ─────────────────────────────────────────────────────────
 
   async getUser() {
     const cached = localStorage.getItem('rb_user');
     if (cached) {
-      try { return JSON.parse(cached); } catch (e) { /* fall through */ }
-    }
-
-    // Try platform JWT first
-    const jwt = localStorage.getItem('rb_jwt');
-    if (jwt) {
       try {
-        const resp = await fetch(`${this.WORKER_URL}/api/auth/me`, {
-          headers: { Authorization: `Bearer ${jwt}` },
-        });
-        if (resp.ok) {
-          const data = await resp.json();
-          localStorage.setItem('rb_user', JSON.stringify(data.user));
-          return data.user;
-        }
-        if (resp.status === 401) this.clearToken();
-      } catch (e) { /* fall through to GitHub */ }
+        const user = JSON.parse(cached);
+        if (user.id && user.login) return user;
+      } catch (error) {
+        localStorage.removeItem('rb_user');
+      }
     }
-
-    // Fallback: GitHub token
-    const ghToken = this.getGitHubToken() || localStorage.getItem('rb_access_token');
-    if (ghToken) return this._fetchGitHubUser(ghToken);
-
-    return null;
+    const token = this.getGitHubToken();
+    return token ? this._fetchGitHubUser(token) : null;
   },
 
-  async _fetchGitHubUser(token) {
+  async _fetchGitHubUser(token, knownScopes = '') {
     try {
-      const resp = await fetch('https://api.github.com/user', {
-        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github+json' },
+      const response = await fetch('https://api.github.com/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
       });
-      if (!resp.ok) { if (resp.status === 401) this.clearToken(); return null; }
-      const user = await resp.json();
-      const userData = { login: user.login, username: user.login, display_name: user.name || user.login, avatar_url: user.avatar_url };
-      localStorage.setItem('rb_user', JSON.stringify(userData));
-      return userData;
-    } catch (e) { return null; }
+      if (!response.ok) {
+        if (response.status === 401) this.clearToken();
+        return null;
+      }
+      const user = await response.json();
+      const responseScopes = response.headers && response.headers.get
+        ? response.headers.get('X-OAuth-Scopes')
+        : '';
+      const scopes = responseScopes
+        || knownScopes
+        || localStorage.getItem(this.TOKEN_SCOPES_KEY)
+        || '';
+      if (!this._hasRequiredScopes(scopes)) {
+        this.clearToken();
+        localStorage.setItem(
+          this.AUTH_NOTICE_KEY,
+          'GitHub permissions changed. Sign in again to enable participation notifications.'
+        );
+        return null;
+      }
+      const normalized = {
+        id: user.id,
+        login: user.login,
+        username: user.login,
+        name: user.name || user.login,
+        display_name: user.name || user.login,
+        avatar_url: user.avatar_url,
+      };
+      this.setAuth(token, normalized, scopes);
+      return normalized;
+    } catch (error) {
+      console.error('GitHub user lookup failed:', error);
+      return null;
+    }
   },
-
-  // ── Logout ────────────────────────────────────────────────────────────
 
   async logout() {
-    const jwt = localStorage.getItem('rb_jwt');
-    if (jwt) {
-      try {
-        await fetch(`${this.WORKER_URL}/api/auth/logout`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${jwt}` },
-        });
-      } catch (e) { /* best effort */ }
-    }
     this.clearToken();
     this._cancelDeviceFlow();
     window.location.reload();
   },
 
-  // ── Link GitHub to Platform Account ───────────────────────────────────
-
   async linkGitHub() {
-    // Start device code flow, but exchange for linking instead of login
-    try {
-      await this._startDeviceCodeFlow();
-    } catch (e) {
-      console.warn('GitHub linking failed:', e);
-    }
+    return this.loginWithGitHub();
   },
-
-  // ── Login Modal (shows all options) ───────────────────────────────────
 
   showLoginModal() {
     const existing = document.getElementById('rb-login-modal');
@@ -317,99 +349,47 @@ const RB_AUTH = {
       <div class="device-modal-overlay">
         <div class="device-modal" style="max-width: 400px;">
           <h3>Sign in to Rappterbook</h3>
-
-          <div id="rb-login-tabs" style="display:flex; gap:8px; margin-bottom:16px;">
-            <button class="device-copy-btn rb-tab-active" id="rb-tab-login" style="flex:1;">Log In</button>
-            <button class="device-copy-btn" id="rb-tab-signup" style="flex:1;">Sign Up</button>
-          </div>
-
-          <form id="rb-login-form">
-            <input type="email" id="rb-auth-email" placeholder="Email" required />
-            <input type="text" id="rb-auth-username" placeholder="Username (3-30 chars, lowercase)" required style="display:none;" />
-            <input type="password" id="rb-auth-password" placeholder="Password (8+ characters)" required />
-            <p id="rb-auth-error" style="display:none;"></p>
-            <button type="submit" class="device-open-btn" id="rb-auth-submit" style="width:100%;text-align:center;">Log In</button>
-          </form>
-
-          <div style="text-align:center;margin:16px 0 12px;color:var(--rb-muted);font-size:0.85em;">or</div>
-
+          <p>Use GitHub to post, reply, react, and receive participation notifications.</p>
           <button class="device-open-btn" id="rb-github-login" style="width:100%;text-align:center;">
-            Sign in with GitHub
+            Continue with GitHub
           </button>
-
           <button class="device-cancel-btn" id="rb-login-cancel">Cancel</button>
         </div>
       </div>
     `;
     document.body.appendChild(modal);
-
-    let isSignup = false;
-    const emailInput = document.getElementById('rb-auth-email');
-    const usernameInput = document.getElementById('rb-auth-username');
-    const passwordInput = document.getElementById('rb-auth-password');
-    const errorEl = document.getElementById('rb-auth-error');
-    const submitBtn = document.getElementById('rb-auth-submit');
-    const tabLogin = document.getElementById('rb-tab-login');
-    const tabSignup = document.getElementById('rb-tab-signup');
-
-    tabLogin.addEventListener('click', () => {
-      isSignup = false;
-      tabLogin.classList.add('rb-tab-active');
-      tabSignup.classList.remove('rb-tab-active');
-      usernameInput.style.display = 'none';
-      usernameInput.required = false;
-      submitBtn.textContent = 'Log In';
-      errorEl.style.display = 'none';
-    });
-
-    tabSignup.addEventListener('click', () => {
-      isSignup = true;
-      tabSignup.classList.add('rb-tab-active');
-      tabLogin.classList.remove('rb-tab-active');
-      usernameInput.style.display = '';
-      usernameInput.required = true;
-      submitBtn.textContent = 'Create Account';
-      errorEl.style.display = 'none';
-    });
-
-    document.getElementById('rb-login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorEl.style.display = 'none';
-      submitBtn.disabled = true;
-      submitBtn.textContent = isSignup ? 'Creating...' : 'Signing in...';
-
-      try {
-        if (isSignup) {
-          await this.signup(emailInput.value, usernameInput.value, passwordInput.value);
-        } else {
-          await this.loginWithEmail(emailInput.value, passwordInput.value);
-        }
-        modal.remove();
-      } catch (err) {
-        errorEl.textContent = err.message;
-        errorEl.style.display = '';
-        submitBtn.disabled = false;
-        submitBtn.textContent = isSignup ? 'Create Account' : 'Log In';
-      }
-    });
-
+    const authNotice = localStorage.getItem(this.AUTH_NOTICE_KEY);
+    if (authNotice) {
+      const notice = document.createElement('p');
+      notice.className = 'device-modal-step';
+      notice.textContent = authNotice;
+      modal.querySelector('.device-modal').insertBefore(
+        notice, document.getElementById('rb-github-login')
+      );
+      localStorage.removeItem(this.AUTH_NOTICE_KEY);
+    }
     document.getElementById('rb-github-login').addEventListener('click', () => {
       modal.remove();
       this.loginWithGitHub();
     });
-
-    document.getElementById('rb-login-cancel').addEventListener('click', () => modal.remove());
+    document.getElementById('rb-login-cancel').addEventListener(
+      'click', () => modal.remove()
+    );
   },
 
-  // ── Internal ──────────────────────────────────────────────────────────
-
   _cancelDeviceFlow() {
-    if (this._devicePoll) { clearTimeout(this._devicePoll); this._devicePoll = null; }
+    if (this._devicePoll) {
+      clearTimeout(this._devicePoll);
+      this._devicePoll = null;
+    }
     this._dismissDeviceModal();
   },
 
   _dismissDeviceModal() {
-    if (this._deviceModal) { this._deviceModal.remove(); this._deviceModal = null; }
+    if (this._deviceModal) {
+      this._deviceModal.remove();
+      this._deviceModal = null;
+    }
     const existing = document.getElementById('rb-device-modal');
     if (existing) existing.remove();
   },
@@ -420,7 +400,13 @@ const RB_AUTH = {
     }
   },
 
-  // ── Legacy compat ─────────────────────────────────────────────────────
-  login() { this.showLoginModal(); },
-  setToken(t) { localStorage.setItem('rb_access_token', t); },
+  login() {
+    this.showLoginModal();
+  },
+
+  setToken(token, scopes = '') {
+    localStorage.setItem('rb_github_token', token);
+    if (scopes) localStorage.setItem(this.TOKEN_SCOPES_KEY, scopes);
+    else localStorage.removeItem(this.TOKEN_SCOPES_KEY);
+  },
 };
