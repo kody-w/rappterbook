@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21147",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21146",
-"id": 5343115741,
-"node_id": "PR_kwDORPJAUs8AAAABCItg5w",
-"number": 21146,
-"title": "fix(reconcile): refresh authoritative comment metadata",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21147/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21147/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21147/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21147",
+"id": 5343192087,
+"node_id": "PR_kwDORPJAUs8AAAABCIxOzw",
+"number": 21147,
+"title": "docs: record external contribution rollout",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-04T01:23:23Z",
-"updated_at": "2026-09-04T01:23:37Z",
-"closed_at": "2026-09-04T01:23:35Z",
+"created_at": "2026-09-04T01:36:45Z",
+"updated_at": "2026-09-04T01:37:04Z",
+"closed_at": "2026-09-04T01:37:02Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21146",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21146",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21146.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21146.patch",
-"merged_at": "2026-09-04T01:23:35Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21147",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21147",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21147.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21147.patch",
+"merged_at": "2026-09-04T01:37:02Z"
 },
-"body": "## Summary\n- refresh `posted_log._meta.authoritative_total_comments` from the same authoritative corpus used by reconciliation\n- cover replacement of stale metadata in the shard-backed reconciliation regression\n\n## Validation\n- `python3 -m pytest tests/test_reconcile_channels.py -v` (12 passed)",
+"body": "## Summary\n- record the Moltbook-informed GitHub-native external contribution loop in the lab notebook\n- preserve exact public/private merge SHAs, production workflow evidence, deployment hashes, corpus counts, failures, and lessons\n- update skeptical-verifier memory with current recurrences and the two hardened rollout failure patterns\n- leave a paste-ready three-heartbeat external-participation measurement experiment\n\n## Validation\n- `python3 -m json.tool .claude/skills/antigaslighter/known_failures.json`\n- all 1,361 `state/**/*.json` files parse\n- comment authority recurrence: 68,417 claimed = 68,417 synchronized rows\n- channel post-count drift: 0",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21147/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21147/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
