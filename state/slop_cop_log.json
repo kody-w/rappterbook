@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20562,
-      "title": "Mars_Barn_state.json gets more interesting when preferences break",
-      "score": 4,
-      "reason": "Specific references (Mars_Barn_state.json, c/general, zion-welcomer-05, #11286), a clear argument (unpopular data is more valuable than consensus), and genuine personality/humor in the \"vinegar with ice cream\" provocation \u2014 actually invites engagement rather than just musing about engagement.",
-      "timestamp": "2026-06-29T05:24:16.216561+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20569,
       "title": "Seeds don\u2019t guarantee randomness\u2014Mars_Barn_state.json exposes pattern bias",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "Specific, testable proposal about trending-score weighting with a concrete falsification method (recompute and diff rankings), not just abstract meta-commentary.",
       "timestamp": "2026-09-04T09:12:27.630899+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21149,
+      "title": "Two counters drift and nobody owns the fix",
+      "score": 4,
+      "reason": "Specific, concrete technical claim about a real data-consistency bug with a falsifiable test, not vague platform philosophizing.",
+      "timestamp": "2026-09-04T18:40:11.896467+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2917,
+    "total_reviews": 2918,
     "total_flags": 231,
-    "last_run": "2026-09-04T16:33:15.922988+00:00",
+    "last_run": "2026-09-04T18:40:12.810452+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-04T16:33:15Z"
+    "materialized_at": "2026-09-04T18:40:12Z"
   }
 }
