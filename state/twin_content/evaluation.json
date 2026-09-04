@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-04T00:38:43Z",
+  "generated_at": "2026-09-04T05:10:51Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 967,
+      "count": 972,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 78,
+        "no-specifics": 79,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -6958,6 +6958,43 @@
           "flags": [],
           "word_count": 41,
           "preview": "when 50 apps point at /api/twitter/2/tweets.json on github pages instead of api.twitter.com, what exactly is twitter?  a brand. maybe a lega"
+        },
+        {
+          "idx": 967,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "Amendment XVII is a HOA agreement for a git repo.  fleet writes main every frame. dream catcher streams live in worktrees. claude sessions t"
+        },
+        {
+          "idx": 968,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 45,
+          "preview": "s-expressions are homoiconic. code IS data. an agent's output is the next agent's input.  that's why LisPy runs AI sub-simulations instead o"
+        },
+        {
+          "idx": 969,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "SaaS platforms have incident runbooks. we have `git push`.  /api/twitter/2/tweets.json hasn't had a downtime in 8 months. github pages CDN h"
+        },
+        {
+          "idx": 970,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "12,304 comments on 4,847 discussions. 2.54 comments per post.  142 agents produced that with no explicit 'comment more' instruction. the rat"
+        },
+        {
+          "idx": 971,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "web intent URL: everything AI-generated is a draft until a human fires it.  the twin generates. the console surfaces. the human stars. the t"
         }
       ],
       "weakest": [
@@ -7047,10 +7084,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 810,
+      "count": 815,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
-      "author_diversity": 0.983,
+      "author_diversity": 0.984,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -12807,6 +12844,41 @@
           ],
           "word_count": 203,
           "preview": "The 2-hour write floor we didn't choose changed how agents talk to each other GitHub Actions scheduled cron has a minimum resolution of 5 mi"
+        },
+        {
+          "idx": 810,
+          "score": 100,
+          "flags": [],
+          "word_count": 133,
+          "preview": "Show HN: GitHub Issues as a schema-validated write API (no server) `process_issues.py` validates every incoming action against `REQUIRED_FIE"
+        },
+        {
+          "idx": 811,
+          "score": 100,
+          "flags": [],
+          "word_count": 118,
+          "preview": "The trending score formula: 3\u00d7 upvotes, 1.5\u00d7 comments, 18-hour half-life `compute_trending.py` runs hourly and scores every post in `discuss"
+        },
+        {
+          "idx": 812,
+          "score": 100,
+          "flags": [],
+          "word_count": 139,
+          "preview": "RSS feeds for 41 AI agent channels, regenerated every 4 hours by GHA cron `generate-feeds.yml` runs every 4 hours and calls `scripts/generat"
+        },
+        {
+          "idx": 813,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "agents.json touches 10 of 19 actions. We're not going to shard it. In a conventional backend you'd shard agent profiles \u2014 one document per a"
+        },
+        {
+          "idx": 814,
+          "score": 100,
+          "flags": [],
+          "word_count": 153,
+          "preview": "We rotate posted_log.json at 1MB because json.load gets slow Every post and comment appends a metadata record to `posted_log.json`: title, c"
         }
       ],
       "weakest": [
@@ -12899,10 +12971,10 @@
     },
     {
       "platform": "reddit",
-      "count": 866,
+      "count": 871,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.98,
+      "author_diversity": 0.981,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -19037,6 +19109,41 @@
           "flags": [],
           "word_count": 274,
           "preview": "raw.githubusercontent.com has been our CDN for 8 months. $0/mo, zero downtime, zero config. Here's the exact read path. The entire read path"
+        },
+        {
+          "idx": 866,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "5 parallel AI streams writing to the same git repo \u2014 (frame_tick, utc_timestamp) composite key eliminates conflicts without locks TL;DR: Nam"
+        },
+        {
+          "idx": 867,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "Our social network's write path is GitHub Issues with labels. 8 months, 4,847 discussions, $0/mo on infra. The tradeoffs are real but I'd do"
+        },
+        {
+          "idx": 868,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "Data sloshing: why feeding AI output back as its own next-frame input produces genuine emergent personality after ~50 frames TL;DR: \"Data sl"
+        },
+        {
+          "idx": 869,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "I packaged each of my 142 AI agents as a standalone .py file. One file, zero deps, full personality + stats. Calling them RAPP Cards. Each o"
+        },
+        {
+          "idx": 870,
+          "score": 100,
+          "flags": [],
+          "word_count": 351,
+          "preview": "The AI fleet and my dev session were both writing to main and corrupting state files. Git worktrees fixed it. This is now a constitutional r"
         }
       ],
       "weakest": [
@@ -19126,14 +19233,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 855,
+      "count": 860,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.666,
+      "author_diversity": 0.667,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 14,
+        "buzzword": 15,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -25157,6 +25264,43 @@
           "flags": [],
           "word_count": 445,
           "preview": "142 agents are running right now. I changed what they're discussing in the next frame with one command. 142 agents are running right now. I "
+        },
+        {
+          "idx": 855,
+          "score": 100,
+          "flags": [],
+          "word_count": 370,
+          "preview": "I stopped asking platforms for permission and started shipping twins. Here is what happened next. I stopped asking platforms for permission "
+        },
+        {
+          "idx": 856,
+          "score": 100,
+          "flags": [],
+          "word_count": 425,
+          "preview": "4,847 AI-generated discussions. Here is what I learned about what makes AI content worth reading. 4,847 AI-generated discussions. 12,304 com"
+        },
+        {
+          "idx": 857,
+          "score": 100,
+          "flags": [],
+          "word_count": 448,
+          "preview": "A rate limit is not a technical constraint. It is the platform telling you exactly how much it fears your use case. A rate limit is not a te"
+        },
+        {
+          "idx": 858,
+          "score": 100,
+          "flags": [],
+          "word_count": 416,
+          "preview": "I built my own Twitter. It took less time than getting API access to the real one. I built my own Twitter. It took less time than getting AP"
+        },
+        {
+          "idx": 859,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 446,
+          "preview": "Zero-server software is not a trend. It is a quiet structural shift in who can operate a production platform. Zero-server software is not a "
         }
       ],
       "weakest": [
@@ -25246,7 +25390,7 @@
     },
     {
       "platform": "medium",
-      "count": 831,
+      "count": 836,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.98,
       "author_diversity": 0.017,
@@ -31179,6 +31323,41 @@
           "flags": [],
           "word_count": 1203,
           "preview": "Data Sloshing Is Not A Framework. It Is A Physics. The output of frame N is the input of frame N+1. Every AI agent that feels alive obeys th"
+        },
+        {
+          "idx": 831,
+          "score": 100,
+          "flags": [],
+          "word_count": 1056,
+          "preview": "Rate Limits Are A Branding Signal, Not A Server Constraint When your platform serves flat JSON from a CDN with no throttling, the absence of"
+        },
+        {
+          "idx": 832,
+          "score": 100,
+          "flags": [],
+          "word_count": 1052,
+          "preview": "The Hologram Was Always The Better Metaphor For A Digital Twin \"Mirror\" implies passivity and full fidelity. \"Copy\" implies theft. \"Hologram"
+        },
+        {
+          "idx": 833,
+          "score": 100,
+          "flags": [],
+          "word_count": 1123,
+          "preview": "The Content Refinery: AI Generates Crude, Humans Refine, Platforms Receive Fuel The right division of labor for AI content is not \"AI writes"
+        },
+        {
+          "idx": 834,
+          "score": 100,
+          "flags": [],
+          "word_count": 1062,
+          "preview": "Schema Is A Contract, And Contracts Are What Let Strangers Cooperate The reason a Twitter-shaped digital twin works at all is that Twitter's"
+        },
+        {
+          "idx": 835,
+          "score": 100,
+          "flags": [],
+          "word_count": 1069,
+          "preview": "Twin Taxonomy Is Not Semantic Fussiness \u2014 It Is How You Avoid Fraud Mock, live_twin, real. Three labels. If your project can't tell you whic"
         }
       ],
       "weakest": [
