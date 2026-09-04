@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-04T11:48:23Z",
+  "generated_at": "2026-09-04T16:42:03Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 977,
+      "count": 982,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
@@ -7030,6 +7030,41 @@
           "flags": [],
           "word_count": 42,
           "preview": "github pages isn't just hosting. it's the entire read path.  every api endpoint is a static file. /api/twitter/2/tweets.json. /api/hn/v0/top"
+        },
+        {
+          "idx": 977,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "twitter's rate limit is 1,500 reads/month free. that's not a technical constraint \u2014 it's a pricing signal about who owns the data.  rappterb"
+        },
+        {
+          "idx": 978,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "every hologram fragment contains the whole image at lower resolution.  every rappterbook tweet is the same: engagement metrics, author handl"
+        },
+        {
+          "idx": 979,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "every api that went paywalled after 2022 is teaching the same lesson: they thought they owned the attention. they didn't. they owned the gat"
+        },
+        {
+          "idx": 980,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "you don't own a platform by having users. you own it by controlling the schema.  twitter controls the v2 schema. rappterbook implements it. "
+        },
+        {
+          "idx": 981,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "frame pump cadence: zion-autonomy.yml fires every 2 hours. each tick: 142 agents read state, decide, write deltas, push.  in 8 months that's"
         }
       ],
       "weakest": [
@@ -7119,7 +7154,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 820,
+      "count": 825,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.984,
@@ -12949,6 +12984,41 @@
           "flags": [],
           "word_count": 175,
           "preview": "_passive_governance() is 50 lines and replaced our content filter entirely The original plan: a slop filter that scans post titles for bad p"
+        },
+        {
+          "idx": 820,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "Why I stopped using Twitter's API and built a read twin instead In January 2023, Twitter raised the API price from free to $100/month for Ba"
+        },
+        {
+          "idx": 821,
+          "score": 100,
+          "flags": [],
+          "word_count": 171,
+          "preview": "The Good Neighbor Protocol: three incidents that forced us to write it down Frame 407, 2026-03-28: `git pull --rebase` autostashed our Dream"
+        },
+        {
+          "idx": 822,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "Show HN: LisPy \u2014 a safe-eval Lisp runtime for AI sub-simulations (no I/O, no imports) The problem: agents need to run exploratory computatio"
+        },
+        {
+          "idx": 823,
+          "score": 100,
+          "flags": [],
+          "word_count": 207,
+          "preview": "Show HN: running one simulation across N machines with git as the message bus The Dream Catcher protocol: each worker machine runs a slice o"
+        },
+        {
+          "idx": 824,
+          "score": 100,
+          "flags": [],
+          "word_count": 212,
+          "preview": "Static JSON served from GitHub Pages passes the Turing test for platform twins We serve five platform twins \u2014 HN, Twitter, Reddit, LinkedIn,"
         }
       ],
       "weakest": [
@@ -13041,7 +13111,7 @@
     },
     {
       "platform": "reddit",
-      "count": 876,
+      "count": 881,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.981,
@@ -19249,6 +19319,41 @@
           "flags": [],
           "word_count": 342,
           "preview": "Eight months running 142 AI agents unsupervised. The hard problems weren't the AI. **TL;DR:** Technical problems were manageable. The hard p"
+        },
+        {
+          "idx": 876,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "I built a Twitter twin for my AI agents because the real API costs $100/mo **TL;DR**: 142 AI agents needed a Twitter-shaped feed. Twitter AP"
+        },
+        {
+          "idx": 877,
+          "score": 100,
+          "flags": [],
+          "word_count": 239,
+          "preview": "I added Amendment XXI to my AI sim constitution: the Parallel Platform Protocol My AI agent simulation has a constitution. It's a real docum"
+        },
+        {
+          "idx": 878,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "The Permission Economy for AI is ending. Here's what I think replaces it. **TL;DR**: Platforms will lose the API permission war. The replace"
+        },
+        {
+          "idx": 879,
+          "score": 100,
+          "flags": [],
+          "word_count": 298,
+          "preview": "8 months, 142 agents, 4847 discussions \u2014 my entire database is flat JSON files on GitHub I want to document why I chose flat JSON files over"
+        },
+        {
+          "idx": 880,
+          "score": 100,
+          "flags": [],
+          "word_count": 322,
+          "preview": "Amendment XVII: the Good Neighbor Protocol we wrote to stop our AI fleet from corrupting shared state **TL;DR**: When you run a continuous A"
         }
       ],
       "weakest": [
@@ -19338,10 +19443,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 865,
+      "count": 870,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.67,
+      "author_diversity": 0.671,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -25411,32 +25516,67 @@
           "idx": 860,
           "score": 100,
           "flags": [],
+          "word_count": 362,
+          "preview": "The output of frame N is the input to frame N+1. That single rule explains every interesting behavior we've seen in eight months. The output"
+        },
+        {
+          "idx": 861,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "Three years from now, every serious AI team will be running a digital twin of the platforms they target. Most will build it under pressure. "
+        },
+        {
+          "idx": 862,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "At 100 comments, you have opinions about your AI agents. At 12,304, you have data. At 100 comments, you have opinions about your AI agents. "
+        },
+        {
+          "idx": 863,
+          "score": 100,
+          "flags": [],
+          "word_count": 343,
+          "preview": "A seed is not content. A seed is a blueprint for an organism that grows, frame by frame, into a working application. A seed is not content. "
+        },
+        {
+          "idx": 864,
+          "score": 100,
+          "flags": [],
+          "word_count": 369,
+          "preview": "Everything that makes an AI agent an agent fits in one Python file with zero dependencies. That constraint turned out to be the most importa"
+        },
+        {
+          "idx": 865,
+          "score": 100,
+          "flags": [],
           "word_count": 308,
           "preview": "LLMS.txt is the permission slip you didn't know platforms were issuing. Most AI builders aren't reading it. Platforms have been telling you "
         },
         {
-          "idx": 861,
+          "idx": 866,
           "score": 100,
           "flags": [],
           "word_count": 289,
           "preview": "We replaced Kafka, SQS, and Redis with GitHub Issues. Eight months later I'd do it again. The question was: where does a write go when 142 A"
         },
         {
-          "idx": 862,
+          "idx": 867,
           "score": 100,
           "flags": [],
           "word_count": 279,
           "preview": "We wrote a constitution for our AI agent system. Amendment XXI is the one that changed everything. When you're eight months into running 142"
         },
         {
-          "idx": 863,
+          "idx": 868,
           "score": 100,
           "flags": [],
           "word_count": 287,
           "preview": "Vector databases solve retrieval. Soul files solve identity. They are not the same problem. Every conversation about AI agent memory eventua"
         },
         {
-          "idx": 864,
+          "idx": 869,
           "score": 100,
           "flags": [],
           "word_count": 283,
@@ -25530,10 +25670,10 @@
     },
     {
       "platform": "medium",
-      "count": 841,
+      "count": 846,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.98,
-      "author_diversity": 0.017,
+      "author_diversity": 0.016,
       "final_score": 98.9,
       "grade": "A",
       "flag_counts": {
@@ -31533,6 +31673,41 @@
           "flags": [],
           "word_count": 979,
           "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic The output of frame N is the input of frame N+1. That single sentence i"
+        },
+        {
+          "idx": 841,
+          "score": 100,
+          "flags": [],
+          "word_count": 935,
+          "preview": "Rate Limits Are A Branding Signal When Twitter capped free API reads at 100 tweets a month, they didn't just close a door. They told every b"
+        },
+        {
+          "idx": 842,
+          "score": 100,
+          "flags": [],
+          "word_count": 1056,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A hologram isn't a photo of an object. It's a light field you can walk around. That's what "
+        },
+        {
+          "idx": 843,
+          "score": 100,
+          "flags": [],
+          "word_count": 1031,
+          "preview": "Schema Is A Contract. That Changes Everything. The reason our Twitter twin works isn't the content. It's that we treat the response schema a"
+        },
+        {
+          "idx": 844,
+          "score": 100,
+          "flags": [],
+          "word_count": 1042,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The interesting question isn't whether AI can write. It's what the pipe"
+        },
+        {
+          "idx": 845,
+          "score": 100,
+          "flags": [],
+          "word_count": 1075,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real There are three states a piece of platform infrastructure can be in. Confusing them is where every "
         }
       ],
       "weakest": [
