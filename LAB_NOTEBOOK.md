@@ -117,7 +117,7 @@ A backup is not healthy because a copy command exited zero, and an automation is
 - Deployed `~/Library/LaunchAgents/com.rapp.transcript-backup.plist` as a two-hour, one-worker, changed-only background job and retained `com.rapp.transcript-backup-verify.plist` as an eight-worker Sunday 04:15 full audit. Both use `/opt/homebrew/bin/python3`; the incremental job no longer runs at load.
 - Persistently disabled and booted out `com.rappterverse.local-platform`, `com.rapterbox.textchannel`, `com.rapterbox.beat`, `com.rapp.rar-local-save`, and `io.rapp.private-hive-publisher`. Throttled `com.rapterbox.filing` from a two-second scan loop to 300 seconds.
 - Terminated three stale Copilot process trees and three stale session web servers while preserving the active Copilot session.
-- Added durable recurrence checks for local launchd failure loops and the launchd `/usr/bin/python3` mounted-NAS permission failure to `.claude/skills/antigaslighter/known_failures.json`.
+- Added durable recurrence checks for local launchd failure loops, the launchd `/usr/bin/python3` mounted-NAS permission failure, reviewer jobs that pass without reviewing, and PII scans that pass after selecting zero files to `.claude/skills/antigaslighter/known_failures.json`.
 
 ### What worked
 - The complete audit verified **103,510 objects** and **22,697,508,686 bytes** against SQLite with **zero failures**, finishing at `2026-09-04T20:04:26.905506Z`.
@@ -133,6 +133,7 @@ A backup is not healthy because a copy command exited zero, and an automation is
 - One active Claude transcript grew during copying, causing a strict snapshot failure after 932 of 933 changed files copied. Append-only files needed explicit byte-boundary semantics rather than mutable-file semantics.
 - Launchd running `/usr/bin/python3` received `Operation not permitted` on `/Volumes/Public` even though the same interpreter worked manually. Homebrew Python worked under launchd and produced a real copied-and-verified artifact; the old error line remains historical evidence, not current failure.
 - Five unrelated LaunchAgents were retrying deterministic failures: repeated `world_growth` failure while spawning unattended Copilot work, SQLite authorization errors every 30 seconds, `git pull --rebase` failure every ten minutes, unsupported floats in JCS serialization hourly, and a missing `rapp-skills` dependency hourly. launchd persistence had turned broken jobs into a resource-denial loop.
+- Independent verification of #21150 found two false-green checks. `run-reviewer` succeeded after reporting that missing API keys prevented any LLM review, and `scan` succeeded after reporting `No PII/secrets detected in 0 file(s)` despite the PR changing two tracked files. The differential test gate was honest about no regression, but its green badge still contained 12 failures and 7 errors inherited from the baseline.
 
 ### Lessons for next session
 1. Verify backup claims against the checksum authority and stored bytes. Exit codes, copied-file counters, and health messages are not proof.
@@ -140,9 +141,10 @@ A backup is not healthy because a copy command exited zero, and an automation is
 3. Append-only live files need snapshot-at-open byte boundaries; later growth belongs to the next incremental run.
 4. A command's manual macOS permissions do not prove its launchd execution context has the same access. Prove the scheduled interpreter by observing the destination artifact.
 5. Persistent schedulers need quarantine semantics. A deterministic failure must not be retried forever merely because launchd can restart it.
+6. A green CI conclusion is not evidence that work occurred. Reviewer and scanner checks must expose zero-work runs as skipped or failed, never success-shaped.
 
 ### Recommended next move
-Keep all five failed automation labels disabled. Repair at most one in an isolated worktree, then re-enable it only after a manual run creates the expected artifact, a launchd-triggered run creates the same artifact, three scheduled invocations remain clean, and machine load stays bounded. Separately investigate the non-destructive **104,027 SQLite rows versus 104,026 current source files** difference; do not delete retained backup history to make the counts match.
+Keep all five failed automation labels disabled. Repair at most one in an isolated worktree, then re-enable it only after a manual run creates the expected artifact, a launchd-triggered run creates the same artifact, three scheduled invocations remain clean, and machine load stays bounded. Separately investigate the non-destructive **104,027 SQLite rows versus 104,026 current source files** difference; do not delete retained backup history to make the counts match. Before treating PR badges as proof, make the autonomous reviewer report skipped or failed when no review provider is available and make the PII scan fail when a non-empty PR diff selects zero files.
 
 ---
 

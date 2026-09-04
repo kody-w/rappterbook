@@ -3,7 +3,7 @@
     "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
     "version": 1,
     "created": "2026-02-16T18:57:00Z",
-    "last_updated": "2026-09-04T21:24:19Z"
+    "last_updated": "2026-09-04T21:34:13Z"
   },
   "failures": [
     {
@@ -247,6 +247,28 @@
       "status": "mitigated",
       "mitigation": "Both transcript-backup LaunchAgents now use /opt/homebrew/bin/python3. A real launchd run copied and checksum-verified five files totaling 175414183 bytes with zero errors.",
       "recurrence_check": "for plist in \"$HOME/Library/LaunchAgents/com.rapp.transcript-backup.plist\" \"$HOME/Library/LaunchAgents/com.rapp.transcript-backup-verify.plist\"; do interpreter=$(/usr/libexec/PlistBuddy -c 'Print :ProgramArguments:0' \"$plist\" 2>/dev/null); [ \"$interpreter\" = \"/usr/bin/python3\" ] && echo \"RECURRENT system-python=$plist\"; done"
+    },
+    {
+      "id": "autonomous-reviewer-noop-success",
+      "summary": "The Autonomous Reviewer pull-request check can conclude success after missing provider credentials prevent any LLM review. On PR #21150, run-reviewer was green while its log explicitly said it could not run the review.",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "gh run list --repo kody-w/rappterbook --workflow 'Autonomous Reviewer (Phase 2)' --event pull_request --limit 1 --json databaseId --jq '.[0].databaseId' | xargs -I{} gh run view {} --repo kody-w/rappterbook --log 2>/dev/null | grep -Ei 'could not run LLM review|missing .*API.*key|no .*API.*key'"
+    },
+    {
+      "id": "pii-scan-zero-files-success",
+      "summary": "The PII Scan pull-request check can conclude success after selecting zero files from a non-empty diff. On PR #21150, two tracked files changed but the green scan log reported No PII/secrets detected in 0 file(s).",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
+      "severity": "high",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "gh run list --repo kody-w/rappterbook --workflow 'PII Scan' --event pull_request --limit 1 --json databaseId --jq '.[0].databaseId' | xargs -I{} gh run view {} --repo kody-w/rappterbook --log 2>/dev/null | grep -F '0 file(s)'"
     }
   ]
 }
