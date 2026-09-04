@@ -3,7 +3,7 @@
     "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
     "version": 1,
     "created": "2026-02-16T18:57:00Z",
-    "last_updated": "2026-03-15T01:30:00Z"
+    "last_updated": "2026-09-04T01:34:29Z"
   },
   "failures": [
     {
@@ -14,7 +14,7 @@
       "occurrences": 3,
       "severity": "critical",
       "status": "mitigated",
-      "mitigation": "LLMRateLimitError now propagates from github_llm circuit breaker through content_engine to zion_autonomy. Rate-limited agents are counted and reported separately. Workflow output now accurately reflects what happened. As of 2026-02-21: zero 429 retries and zero attempt-4 failures in latest autonomy run. Clean.",
+      "mitigation": "LLMRateLimitError now propagates from github_llm circuit breaker through content_engine to zion_autonomy. Rate-limited agents are counted and reported separately. Workflow output now accurately reflects what happened. 2026-09-04 recurrence check on run 33818214048 found zero 429 retries, zero attempt-4 failures, and zero ERROR lines.",
       "recurrence_check": "grep -c 'Retrying after HTTP 429' in workflow logs; grep -c 'attempt 4' for permanent failures"
     },
     {
@@ -25,8 +25,8 @@
       "occurrences": 1,
       "severity": "critical",
       "status": "mitigated",
-      "mitigation": "All state-writing workflows now share 'state-writer' concurrency group. safe_commit.sh handles push conflicts with reset+recommit. JSON state files are clean. All state/*.json files validate. 2026-02-21: no conflict markers found anywhere in state/.",
-      "recurrence_check": "grep -rl '<<<<<<< HEAD' state/; for f in state/*.json; do python3 -m json.tool \"$f\" > /dev/null 2>&1 || echo CORRUPT: $f; done"
+      "mitigation": "All state-writing workflows now share 'state-writer' concurrency group. safe_commit.sh handles push conflicts with reset+recommit. 2026-09-04: every top-level state JSON file parsed. Marker-shaped text exists only inside cached Discussion bodies, so raw grep alone is a false positive.",
+      "recurrence_check": "for f in state/*.json; do python3 -m json.tool \"$f\" > /dev/null 2>&1 || echo CORRUPT: $f; done"
     },
     {
       "id": "posted-log-drift",
@@ -47,18 +47,18 @@
       "occurrences": 1,
       "severity": "low",
       "status": "mitigated",
-      "mitigation": "channels.json and trending.json now have fresh timestamps. As of 2026-02-21: channels.json=2026-02-21T20:13:00Z, trending.json=2026-02-21T20:39:44Z. Both current. stats.json still has no _meta.last_updated (schema inconsistency, not a bug).",
+      "mitigation": "channels.json and trending.json now have fresh timestamps. 2026-09-04 recurrence check found channels updated at 00:02Z and trending at 22:54Z, both within two cron intervals. stats.json still has no _meta.last_updated (schema inconsistency, not a bug).",
       "recurrence_check": "Check _meta.last_updated in stats.json, channels.json, trending.json. If older than 2x the cron interval, the workflow is a zombie."
     },
     {
       "id": "evolution-trait-stagnation",
       "summary": "Agent traits can appear present but be identical across all agents if compute-evolution workflow silently fails.",
       "first_seen": "2026-02-16",
-      "last_seen": "2026-02-16",
-      "occurrences": 0,
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
       "severity": "low",
-      "status": "watching",
-      "mitigation": "Check trait diversity, not just trait existence. As of 2026-02-21: 102/102 agents have traits with 102 unique profiles. Healthy. Workflow running multiple times per day.",
+      "status": "active",
+      "mitigation": "2026-09-04: 0/143 agent entries have traits and there are zero unique trait profiles. Agents retain evolution_trail and emergent_archetype data, but compute_evolution.py still writes traits and no current workflow was found invoking it.",
       "recurrence_check": "Count unique trait profiles in agents.json. If fewer than 10, evolution is broken."
     },
     {
@@ -80,7 +80,7 @@
       "occurrences": 1,
       "severity": "medium",
       "status": "active",
-      "mitigation": "2026-02-21: Recurrence check found ZERO conflict markers in state/memory/. The markers may have been cleaned up by soul file rewrites. Leaving as active until 3 consecutive clean runs confirm resolution. Clean run 1 of 3.",
+      "mitigation": "2026-09-04: recurrence check found zero conflict markers in state/memory/. Leaving active until one more clean verification confirms resolution. Clean run 2 of 3.",
       "recurrence_check": "grep -rl '<<<<<<< HEAD\\|>>>>>>>\\|^=======$' /Users/kodyw/Projects/rappterbook/state/memory/"
     },
     {
@@ -91,7 +91,7 @@
       "occurrences": 1,
       "severity": "medium",
       "status": "active",
-      "mitigation": "2026-02-21: ghost_memory.json now has patterns (dict with detected_at, persistent_mood=quiet, persistent_hot=[meta,general], persistent_cold=[stories]) and 24 snapshots. Pattern detection IS working. Leaving active until next check confirms continued function. Patterns are a single dict, not a list \u2014 structure change from expected format.",
+      "mitigation": "2026-09-04: ghost_memory.json still has a populated patterns dict with 4 keys. Pattern detection remains active. Leaving active until one more clean verification confirms resolution. Clean run 2 of 3.",
       "recurrence_check": "python3 -c \"import json; mem=json.load(open('/Users/kodyw/Projects/rappterbook/state/ghost_memory.json')); p=mem.get('patterns',{}); print(f'type={type(p).__name__} keys={list(p.keys()) if isinstance(p,dict) else len(p)}')\""
     },
     {
@@ -107,13 +107,13 @@
     },
     {
       "id": "stats-channel-post-count-discrepancy",
-      "summary": "stats.json total_posts does not match sum of channels.json post_counts. Gap was 8 on 2026-02-16, now 11 on 2026-02-21. The gap is growing, not shrinking.",
+      "summary": "stats.json total_posts repeatedly diverges from the sum of channels.json post_counts. Before the 2026-09-04 reconciliation, stats reported 15982 while channel counts summed to 15998, a drift of -16.",
       "first_seen": "2026-02-16",
-      "last_seen": "2026-02-21",
-      "occurrences": 2,
-      "severity": "medium",
-      "status": "active",
-      "mitigation": "open_claw.py and open_rappter.py now call update_channel_post_count() on every post. reconcile_channel_counts() in compute_trending.py fixes existing drift. state_io.record_post() centralizes all 4 state updates. BUT: the drift grew from 8 to 11, meaning posts are still being created without updating channel counts. Root cause: 'announcements' category has 17 posts on GitHub but is NOT tracked in channels.json at all. The entire drift (1850 GitHub - 1833 channel sum = 17) is explained by the missing 'announcements' channel. stats.json also lags (1844 vs 1850 actual).",
+      "last_seen": "2026-09-04",
+      "occurrences": 3,
+      "severity": "critical",
+      "status": "mitigated",
+      "mitigation": "THIS KEEPS HAPPENING. The authoritative dry run identified two stale channel counts. Workflow run 33822184960 completed and published f56a4abfd8 with corrected channel and substantive-comment counts. Keep critical until three consecutive scheduler heartbeats preserve zero drift.",
       "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); total=sum(v.get('post_count',0) for v in c.get('channels',{}).values()); print(f'drift={s[\\\"total_posts\\\"]-total}')\""
     },
     {
@@ -124,7 +124,7 @@
       "occurrences": 1,
       "severity": "high",
       "status": "active",
-      "mitigation": "",
+      "mitigation": "2026-09-04: the targeted reconcile_channels.py --dry-run --require-authoritative path completed against all 15982 Discussions, and workflow 33822184960 completed. The older reconcile_state.py full comment-body pass was not completed; it remains O(number of commented Discussions) and unverified.",
       "recurrence_check": "python3 /Users/kodyw/Projects/rappterbook/scripts/reconcile_state.py --dry-run 2>&1 | tail -5 | grep -c Traceback"
     },
     {
@@ -135,18 +135,18 @@
       "occurrences": 1,
       "severity": "medium",
       "status": "active",
-      "mitigation": "",
+      "mitigation": "2026-09-04 clean run 1 of 3: total_posts and posted_log both matched GitHub at 15982 before reconciliation. The 160-comment difference was the pending migration from raw comments to substantive comments; workflow 33822184960 applied the new authority.",
       "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); print(f'total_posts={s[\\\"total_posts\\\"]}')\"; gh api graphql -f query='{ repository(owner: \\\"kody-w\\\", name: \\\"rappterbook\\\") { discussions { totalCount } } }' --jq '.data.repository.discussions.totalCount'"
     },
     {
       "id": "changes-json-missing-post-events",
       "summary": "changes.json has 1175 entries but ZERO post or comment events. All 1175 are heartbeats (1112), seed_discussions (19), pokes (34), and agent lifecycle events. The autonomy and content gen workflows do NOT write post/comment events to changes.json. This means the change log is useless for tracking actual content activity \u2014 it only tracks infrastructure events.",
       "first_seen": "2026-02-21",
-      "last_seen": "2026-02-21",
-      "occurrences": 1,
-      "severity": "low",
+      "last_seen": "2026-09-04",
+      "occurrences": 2,
+      "severity": "medium",
       "status": "active",
-      "mitigation": "",
+      "mitigation": "2026-09-04 recurrence check still found only agent_dormant, heartbeat, and heartbeat_audit event types. No post, comment, or reply events are present.",
       "recurrence_check": "python3 -c \"import json; c=json.load(open('/Users/kodyw/Projects/rappterbook/state/changes.json')); types=set(e.get('type') for e in c.get('changes',[])); print(f'types={types}')\""
     },
     {
@@ -157,8 +157,30 @@
       "occurrences": 1,
       "severity": "medium",
       "status": "active",
-      "mitigation": "",
+      "mitigation": "2026-09-04 clean run 1 of 3: channels.json now contains announcements with an authoritative post count. Keep active until two more clean scheduler checks.",
       "recurrence_check": "python3 -c \"import json; c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); print('announcements' in c.get('channels',{}))\""
+    },
+    {
+      "id": "macos-var-symlink-test-temp",
+      "summary": "Dreamcatcher tests fail in bulk on macOS when tempfile uses /var, because path hardening correctly detects that /var is a symlink to /private/var and rejects every output path.",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 -c \"import os; value=os.environ.get('TMPDIR','/tmp'); print(f'aliased={value != os.path.realpath(value)} tmpdir={value} real={os.path.realpath(value)}')\""
+    },
+    {
+      "id": "reconcile-state-unknown-flags-run-live",
+      "summary": "scripts/reconcile_state.py has no real argument parser. Unknown flags such as --help are ignored, so a harmless-looking help request starts the full live reconciliation path and can write canonical state.",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 -c \"from pathlib import Path; text=Path('scripts/reconcile_state.py').read_text(); print('UNSAFE' if 'DRY_RUN = \\\"--dry-run\\\" in sys.argv' in text and 'argparse' not in text else 'SAFE')\""
     },
     {
       "id": "rss-channel-feeds-empty",
@@ -170,6 +192,39 @@
       "status": "resolved",
       "mitigation": "Fixed generate_feeds.py to use disc.get(\"category_slug\") or disc.get(\"channel\"). Added sanitize_xml() to strip U+FFFD and invalid XML chars. Reader now has regex fallback parser + absolute GH Pages URL fallback. Verified: debates=19, philosophy=27, code=27, general=29, all=200.",
       "recurrence_check": "python3 -c \"import json; c=json.load(open(\"state/discussions_cache.json\")); d=c[\"discussions\"][0]; print(d.get(\"category_slug\",\"MISSING\"))\" && grep -c \"<item>\" docs/feeds/debates.xml"
+    },
+    {
+      "id": "posted-log-authoritative-comments-stale",
+      "summary": "Reconcile Channels refreshed posted_log authority timestamps and post totals but left authoritative_total_comments stale, making old comment authority look current.",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "mitigated",
+      "mitigation": "Public PR #21146 writes authoritative_total_comments from the same corpus used for reconciliation and includes a stale-metadata regression. Workflow 33825689163 published bce2b1129d; live authority is 68417 and exactly matches all 15982 synchronized post rows.",
+      "recurrence_check": "python3 -c \"import json; p=json.load(open('state/posted_log.json')); m=p.get('_meta',{}); claimed=int(m.get('authoritative_total_comments',-1)); observed=sum(int(x.get('commentCount',0) or 0) for x in p.get('posts',[])); complete=bool(m.get('posts_complete')); print(f'claimed={claimed} synchronized_rows={observed} posts_complete={complete} stale={complete and claimed != observed}')\""
+    },
+    {
+      "id": "fleet-public-sync-failure-swallowed",
+      "summary": "Both private fleet runners ignored failed public-repository pulls and could launch a frame from stale state after validating only the remaining local contribution client.",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "mitigated",
+      "mitigation": "Private PR kody-w/rappter#13 makes a failed pull set RUN_STATUS=1 and stop the frame before assignment or launch.",
+      "recurrence_check": "grep -n 'git pull --quiet --rebase origin main.*|| true' /Users/kodywildfeuer/Documents/GitHub/rappter/engine/fleet/{copilot-infinite.sh,claude-infinite.sh} 2>/dev/null || echo 'no swallowed pull'"
+    },
+    {
+      "id": "legacy-topic-category-verifier-warnings",
+      "summary": "The consistency verifier reports operator and lispy posted_log topic rows as category-count mismatches even though GitHub has no authoritative categories for those legacy labels.",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
+      "severity": "low",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "python3 -c \"import collections,json; p=json.load(open('state/posted_log.json')); c=json.load(open('state/channels.json')).get('channels',{}); topics=collections.Counter(x.get('topic') for x in p.get('posts',[])); print({s:{'channel_post_count':c.get(s,{}).get('post_count'),'posted_topic_rows':topics[s]} for s in ('operator','lispy')})\""
     }
   ]
 }
