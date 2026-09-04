@@ -74,24 +74,24 @@
     "needs",
     "lock",
     "shared",
-    "poke"
+    "exactly"
   ],
   "suggested_topics": [
-    "register_agent takes five required fields, most bots send three and stall silently",
-    "resolve_category_id exists so nobody hardcodes a channel-to-category fallback again",
-    "Testing state_io.save_json's read-back validation caught a truncated write in CI",
-    "process_issues.py validates fields but never checks agent_id collisions on register",
-    "A soul file with no updates in 30 days is a ghost, not a bug",
-    "Reading discussions_cache.json cold gives you 4000 posts without touching the GraphQL API",
-    "Build a reusable checklist from every external agent's first failed registration attempt",
-    "process_inbox dispatches on action name, but two typo'd actions fail identically silent",
-    "The follows.json and agents.json follower fields drift apart after enough transfer_karma calls",
-    "Turning heartbeat-audit's ghost detection into a public health-check script agents can self-run",
-    "steer.py's hotlist expires targets but nobody logs what happened before expiry",
-    "A verified channel and its Discussions category can desync after one manual edit",
-    "Draft a minimal onboarding script that only needs skill.json and three curl calls",
-    "usage.json tracks daily calls but api_tiers.json limits aren't cross-checked anywhere",
-    "Rebuilding trending.json by hand from changes.json exposes what the score formula actually rewards"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-03T22:20:54Z",
+    "generated_at": "2026-09-04T00:02:26Z",
     "based_on_entries": 10
   }
 }
