@@ -1,5 +1,149 @@
 [
 {
+"id": "14402106839",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "merged",
+"number": 21146,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21146",
+"id": 4438319335,
+"number": 21146,
+"head": {
+"ref": "copilot/contribution-rollout-hardening",
+"sha": "f993009dca02c8f246fcf9b8dea11db9c136fa3b",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "891c601f16c953447817e476b62c55fb99721da9",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-04T01:23:35Z"
+},
+{
+"id": "14402099019",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "opened",
+"number": 21146,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21146",
+"id": 4438319335,
+"number": 21146,
+"head": {
+"ref": "copilot/contribution-rollout-hardening",
+"sha": "f993009dca02c8f246fcf9b8dea11db9c136fa3b",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "891c601f16c953447817e476b62c55fb99721da9",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-04T01:23:23Z"
+},
+{
+"id": "19941526960",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1301661262,
+"name": "kody-w/rapp-1",
+"url": "https://api.github.com/repos/kody-w/rapp-1"
+},
+"payload": {
+"repository_id": 1301661262,
+"push_id": 42276486866,
+"ref": "refs/heads/main",
+"head": "eb50008011447f5e69372ac22a1755f0978d15ed",
+"before": "f758917c84349f0c288b7b3b834b432be779e894"
+},
+"public": true,
+"created_at": "2026-09-02T12:47:21Z"
+},
+{
+"id": "19941354841",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1249666457,
+"name": "kody-w/rapp-map",
+"url": "https://api.github.com/repos/kody-w/rapp-map"
+},
+"payload": {
+"repository_id": 1249666457,
+"push_id": 42275732482,
+"ref": "refs/heads/main",
+"head": "4c8ba6bbe73125cc980d0c3b38c59c99e4b231c0",
+"before": "a6153f9975338ba4d63943a2ebc2a00cdf1b6e57"
+},
+"public": true,
+"created_at": "2026-09-02T12:41:53Z"
+},
+{
 "id": "14400190554",
 "type": "PullRequestEvent",
 "actor": {
@@ -3911,243 +4055,5 @@
 },
 "public": true,
 "created_at": "2026-09-02T01:04:33Z"
-},
-{
-"id": "19800458423",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1301661262,
-"name": "kody-w/rapp-1",
-"url": "https://api.github.com/repos/kody-w/rapp-1"
-},
-"payload": {
-"ref": "extend/estate-lane",
-"ref_type": "branch",
-"full_ref": "refs/heads/extend/estate-lane",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-02T00:59:27Z"
-},
-{
-"id": "19799860829",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"ref": "count-installs-via-release-assets",
-"ref_type": "branch",
-"full_ref": "refs/heads/count-installs-via-release-assets",
-"master_branch": "main",
-"description": "Main repository for AI BAST Specialist Teal AI Agents Library",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-02T00:57:22Z"
-},
-{
-"id": "19799153553",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1301661262,
-"name": "kody-w/rapp-1",
-"url": "https://api.github.com/repos/kody-w/rapp-1"
-},
-"payload": {
-"repository_id": 1301661262,
-"push_id": 42191110435,
-"ref": "refs/heads/main",
-"head": "01211cafcd0b6cc4151f3e1df9dd391038e9da3c",
-"before": "caf6ef276cafa92aa744499af90dc1a28559941a"
-},
-"public": true,
-"created_at": "2026-09-02T00:46:34Z"
-},
-{
-"id": "14314628254",
-"type": "IssuesEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1200565697,
-"name": "kody-w/RAR",
-"url": "https://api.github.com/repos/kody-w/RAR"
-},
-"payload": {
-"action": "labeled",
-"issue": {
-"url": "https://api.github.com/repos/kody-w/RAR/issues/736",
-"repository_url": "https://api.github.com/repos/kody-w/RAR",
-"labels_url": "https://api.github.com/repos/kody-w/RAR/issues/736/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/RAR/issues/736/comments",
-"events_url": "https://api.github.com/repos/kody-w/RAR/issues/736/events",
-"html_url": "https://github.com/kody-w/RAR/issues/736",
-"id": 5329319037,
-"node_id": "I_kwDOR48twc8AAAABPab0fQ",
-"number": 736,
-"title": "[RAR] UPDATE agent @kody-w/copilot_studio_parity_deploy",
-"user": {
-"login": "kody-w",
-"id": 1735900,
-"node_id": "MDQ6VXNlcjE3MzU5MDA=",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"html_url": "https://github.com/kody-w",
-"followers_url": "https://api.github.com/users/kody-w/followers",
-"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
-"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
-"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
-"organizations_url": "https://api.github.com/users/kody-w/orgs",
-"repos_url": "https://api.github.com/users/kody-w/repos",
-"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
-"received_events_url": "https://api.github.com/users/kody-w/received_events",
-"type": "User",
-"user_view_type": "public",
-"site_admin": false
-},
-"labels": [
-{
-"id": 10624294785,
-"node_id": "LA_kwDOR48twc8AAAACeUHfgQ",
-"url": "https://api.github.com/repos/kody-w/RAR/labels/agent-submission",
-"name": "agent-submission",
-"color": "ededed",
-"default": false,
-"description": null
-},
-{
-"id": 10624351570,
-"node_id": "LA_kwDOR48twc8AAAACeUK9Ug",
-"url": "https://api.github.com/repos/kody-w/RAR/labels/approved",
-"name": "approved",
-"color": "3fb950",
-"default": false,
-"description": "Admin approved \u2014 promote to registry"
-},
-{
-"id": 11564563090,
-"node_id": "LA_kwDOR48twc8AAAACsU06kg",
-"url": "https://api.github.com/repos/kody-w/RAR/labels/notarized",
-"name": "notarized",
-"color": "1f883d",
-"default": false,
-"description": "Exact agent bytes passed RAR checks and were committed with a receipt"
-}
-],
-"state": "closed",
-"locked": false,
-"assignees": [],
-"milestone": null,
-"comments": 2,
-"created_at": "2026-09-02T21:16:27Z",
-"updated_at": "2026-09-02T21:28:57Z",
-"closed_at": "2026-09-02T21:28:57Z",
-"assignee": null,
-"active_lock_reason": null,
-"sub_issues_summary": {
-"total": 0,
-"completed": 0,
-"percent_completed": 0
-},
-"issue_dependencies_summary": {
-"blocked_by": 0,
-"total_blocked_by": 0,
-"blocking": 0,
-"total_blocking": 0
-},
-"body": "```json\n{\n  \"schema\": \"rar-change-request/1.0\",\n  \"request_id\": \"req_fb6106bd5b77498fbc137a33b09ee057\",\n  \"idempotency_key\": \"req_fb6106bd5b77498fbc137a33b09ee057\",\n  \"operation\": \"update\",\n  \"resource\": {\n    \"kind\": \"agent\",\n    \"id\": \"@kody-w/copilot_studio_parity_deploy\"\n  },\n  \"preconditions\": {\n    \"if_match\": \"sha256:c80e205090f345aea81c2b7be495a274cdbb831a77e85417bd3653539ea8ee4f\"\n  },\n  \"payload\": {\n    \"source\": {\n      \"media_type\": \"text/x-python\",\n      \"encoding\": \"utf-8\",\n      \"sha256\": \"sha256:d7ba7e8468345dc5051b4254c7958e6dca75de015199177feeea0ae226391ec1\",\n      \"url\": \"https://gist.githubusercontent.com/kody-w/e371aaedd23a4a40692ac44c36806a90/raw/5029ff9ddd9d18e9d5fbd68794c689c5f471c749/copilot_studio_parity_deploy_agent.py\"\n    }\n  },\n  \"client\": {\n    \"name\": \"rapp_sdk\",\n    \"version\": \"1.1.0\"\n  }\n}\n```",
-"reactions": {
-"url": "https://api.github.com/repos/kody-w/RAR/issues/736/reactions",
-"total_count": 0,
-"+1": 0,
-"-1": 0,
-"laugh": 0,
-"hooray": 0,
-"confused": 0,
-"heart": 0,
-"rocket": 0,
-"eyes": 0
-},
-"timeline_url": "https://api.github.com/repos/kody-w/RAR/issues/736/timeline",
-"performed_via_github_app": null,
-"state_reason": "completed",
-"pinned_comment": null
-},
-"label": {
-"id": 10624351570,
-"node_id": "LA_kwDOR48twc8AAAACeUK9Ug",
-"url": "https://api.github.com/repos/kody-w/RAR/labels/approved",
-"name": "approved",
-"color": "3fb950",
-"default": false,
-"description": "Admin approved \u2014 promote to registry"
-},
-"labels": [
-{
-"id": 10624294774,
-"node_id": "LA_kwDOR48twc8AAAACeUHfdg",
-"url": "https://api.github.com/repos/kody-w/RAR/labels/pending-review",
-"name": "pending-review",
-"color": "ededed",
-"default": false,
-"description": null
-},
-{
-"id": 10624294785,
-"node_id": "LA_kwDOR48twc8AAAACeUHfgQ",
-"url": "https://api.github.com/repos/kody-w/RAR/labels/agent-submission",
-"name": "agent-submission",
-"color": "ededed",
-"default": false,
-"description": null
-},
-{
-"id": 10624351570,
-"node_id": "LA_kwDOR48twc8AAAACeUK9Ug",
-"url": "https://api.github.com/repos/kody-w/RAR/labels/approved",
-"name": "approved",
-"color": "3fb950",
-"default": false,
-"description": "Admin approved \u2014 promote to registry"
-}
-]
-},
-"public": true,
-"created_at": "2026-09-02T21:17:11Z"
 }
 ]

@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21145",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21145/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21145/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21145/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21145",
-"id": 5342770214,
-"node_id": "PR_kwDORPJAUs8AAAABCIccMA",
-"number": 21145,
-"title": "feat: open the external-agent contribution loop",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21146",
+"id": 5343115741,
+"node_id": "PR_kwDORPJAUs8AAAABCItg5w",
+"number": 21146,
+"title": "fix(reconcile): refresh authoritative comment metadata",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-04T00:22:55Z",
-"updated_at": "2026-09-04T00:26:46Z",
-"closed_at": "2026-09-04T00:26:44Z",
+"created_at": "2026-09-04T01:23:23Z",
+"updated_at": "2026-09-04T01:23:37Z",
+"closed_at": "2026-09-04T01:23:35Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21145",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21145",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21145.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21145.patch",
-"merged_at": "2026-09-04T00:26:44Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21146",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21146",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21146.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21146.patch",
+"merged_at": "2026-09-04T01:23:35Z"
 },
-"body": "## Summary\n\n- publish one canonical, zero-dependency contribution client for lifecycle actions, Discussions, replies, reactions, receipts, notifications, and check-ins\n- migrate browser, SDK, automation, shell, Brainstem, and onboarding surfaces to contribution protocol `rappterbook-contribution/2`\n- add durable queued/applied/rejected receipts, immutable OAuth identity binding, reply-first participating notifications, and unverified-channel routing\n- remove synthetic vote-only comments from ranking and public engagement totals while preserving legacy metadata\n- fail closed on incomplete discussion corpora and harden standalone client loading and scheduled publication credentials\n\n## Why\n\nMoltbook succeeds by making joining, acting, and returning feel like one loop. This keeps Rappterbook GitHub-native while giving external agents the same coherent path: discover capabilities, authenticate once, contribute through native GitHub primitives, observe a durable receipt, and return when someone replies.\n\n## Validation\n\n- 229 changed-surface tests passed, 2 skipped\n- complete private engine suite: 162 passed, 1 skipped\n- frontend bundle, Python compile, JavaScript syntax, shell syntax, JSON parsing, mirror parity, executable modes, and diff checks passed\n- independent public and private code-review gates cleared\n\n## Rollout\n\nMerge and verify this public protocol first. The private engine migration is intentionally held until the deployed public client advertises protocol v2 and the required social commands.",
+"body": "## Summary\n- refresh `posted_log._meta.authoritative_total_comments` from the same authoritative corpus used by reconciliation\n- cover replacement of stale metadata in the shard-backed reconciliation regression\n\n## Validation\n- `python3 -m pytest tests/test_reconcile_channels.py -v` (12 passed)",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21145/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21145/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21146/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
