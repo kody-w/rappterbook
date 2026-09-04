@@ -59,7 +59,11 @@ def test_main_reads_from_cache_shards_when_cache_file_is_missing(tmp_path, monke
     (docs_dir / "pulse.json").write_text(json.dumps({}))
     (state_dir / "stats.json").write_text(json.dumps({}))
     (state_dir / "agents.json").write_text(json.dumps({"agents": {}}))
-    (state_dir / "posted_log.json").write_text(json.dumps({"posts": [], "comments": []}))
+    (state_dir / "posted_log.json").write_text(json.dumps({
+        "posts": [],
+        "comments": [],
+        "_meta": {"authoritative_total_comments": 1},
+    }))
     (state_dir / "manifest.json").write_text(json.dumps({}))
     (state_dir / "channels.json").write_text(json.dumps({
         "channels": {"general": {"verified": True, "post_count": 0}},
@@ -98,8 +102,10 @@ def test_main_reads_from_cache_shards_when_cache_file_is_missing(tmp_path, monke
     reconcile_channels.main()
 
     stats = json.loads((state_dir / "stats.json").read_text())
+    posted_log = json.loads((state_dir / "posted_log.json").read_text())
     assert stats["total_posts"] == 1
     assert stats["total_comments"] == 2
+    assert posted_log["_meta"]["authoritative_total_comments"] == 2
 
 
 def test_stats_snapshot_excludes_legacy_vote_comments():

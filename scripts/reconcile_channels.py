@@ -636,6 +636,13 @@ def main() -> None:
     log_meta = existing_log.setdefault("_meta", {})
     log_meta["authoritative_source"] = source_name
     log_meta["authoritative_total_posts"] = int(expected_total or len(discussions))
+    authoritative_comments = source_meta.get("comment_total")
+    if authoritative_comments is None:
+        authoritative_comments = sum(
+            int(discussion.get("comment_count") or 0)
+            for discussion in discussions
+        )
+    log_meta["authoritative_total_comments"] = int(authoritative_comments)
     log_meta["authoritative_refreshed_at"] = source_meta.get("reference_timestamp")
     save_json(log_path, existing_log)
 
