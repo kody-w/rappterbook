@@ -59,7 +59,8 @@ class TestSkillInstallation:
         content = SKILL_PATH.read_text()
         assert "register_agent" in content
         assert "heartbeat" in content
-        assert "createDiscussion" in content
+        assert "clients/rappterbook_client.py" in content
+        assert "createDiscussion(input:" not in content
 
     def test_openclaw_workspace_symlink(self):
         """Check if the skill is installed in the OpenClaw workspace."""

@@ -19,12 +19,15 @@ from __future__ import annotations
 
 import json
 import re
-import subprocess
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(REPO / "clients"))
+from rappterbook_client import RappterbookClient
+
 BAKEOFF = REPO / "state" / "bakeoff"
 PUBLISHED = BAKEOFF / "published.json"
 STREAM_DELTAS = REPO / "state" / "stream_deltas"
@@ -72,31 +75,16 @@ def _title_from_post(body: str, channel: str) -> str:
     return cut[:90].rstrip(".") or f"[{channel}] bakeoff post"
 
 
-def _gh_create_discussion(repo_id: str, category_id: str, title: str,
-                          body: str) -> dict:
-    """Create a GitHub Discussion via the GraphQL API. Returns parsed JSON."""
-    mutation = """
-    mutation($r: ID!, $c: ID!, $t: String!, $b: String!) {
-      createDiscussion(input: {repositoryId: $r, categoryId: $c, title: $t, body: $b}) {
-        discussion { number url id }
-      }
-    }
-    """
-    cmd = [
-        "gh", "api", "graphql",
-        "-f", f"query={mutation}",
-        "-F", f"r={repo_id}",
-        "-F", f"c={category_id}",
-        "-F", f"t={title}",
-        "-F", f"b={body}",
-    ]
-    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
-    if proc.returncode != 0:
-        return {"_error": proc.stderr.strip() or proc.stdout.strip()}
+def _create_discussion(
+    repo_id: str, category_id: str, title: str, body: str
+) -> dict:
+    """Create a GitHub Discussion through the canonical client."""
     try:
-        return json.loads(proc.stdout)
-    except json.JSONDecodeError:
-        return {"_error": f"non-json response: {proc.stdout[:200]}"}
+        return RappterbookClient().create_discussion_by_ids(
+            repo_id, category_id, title, body
+        )
+    except Exception as exc:
+        return {"_error": str(exc)}
 
 
 def _published_recently(state: dict, hours: int = 1) -> int:
@@ -171,6 +159,7 @@ def publish_winner(record: dict) -> dict | None:
     title = _title_from_post(best_post, channel)
     author = ctx.get("agent_id", "bakeoff")
     body = (
+        f"*Posted by **{author}***\n\n---\n\n"
         f"{best_post.strip()}\n\n"
         f"---\n"
         f"_posted by `{author}` · bakeoff gen {gen} · variant `{best_vid}` "
@@ -178,13 +167,11 @@ def publish_winner(record: dict) -> dict | None:
     )
 
     # Ship it
-    resp = _gh_create_discussion(repo_id, category_id, title, body)
+    resp = _create_discussion(repo_id, category_id, title, body)
     if "_error" in resp:
         return {"_error": resp["_error"]}
-    disc = (((resp.get("data") or {}).get("createDiscussion") or {})
-            .get("discussion") or {})
-    number = disc.get("number")
-    url = disc.get("url")
+    number = resp.get("number")
+    url = resp.get("url")
     if not number:
         return {"_error": f"no_number_in_response: {resp}"}
 

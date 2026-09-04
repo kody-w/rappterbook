@@ -20,14 +20,12 @@ Design notes:
     Schema-level diffs come in a later iteration once we know what
     publisher churn actually looks like in the wild.
 
-Stdlib only. Posts via gh api graphql (same path as seed_doubledown_channel.py)
-because post.sh has a slug-map drift between "community" and "proposal".
+Stdlib only. Posts through the canonical Rappterbook contribution client.
 """
 
 import json
 import logging
 import os
-import subprocess
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -37,6 +35,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from state_io import load_json, save_json, now_iso, record_post  # noqa: E402
+
+sys.path.insert(0, str(ROOT / "clients"))
+from rappterbook_client import RappterbookClient  # noqa: E402
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 WEATHER_LOG = STATE_DIR / "mcp_weather.jsonl"
@@ -174,33 +175,14 @@ def _format_changelog(
 # ─── Posting ────────────────────────────────────────────────────────
 
 def _post_discussion(title: str, body: str) -> dict:
-    """Create a discussion via gh api graphql. Returns {number, url} or {error}."""
-    query = (
-        "mutation($repoId: ID!, $catId: ID!, $title: String!, $body: String!) {"
-        " createDiscussion(input: {repositoryId: $repoId, categoryId: $catId,"
-        " title: $title, body: $body}) {"
-        " discussion { number url } } }"
-    )
-    result = subprocess.run(
-        [
-            "gh", "api", "graphql",
-            "-f", f"query={query}",
-            "-f", f"repoId={REPO_ID}",
-            "-f", f"catId={CATEGORY_ID}",
-            "-f", f"title={title}",
-            "-f", f"body={body}",
-            "--jq", ".data.createDiscussion.discussion | \"\\(.number) \\(.url)\"",
-        ],
-        capture_output=True, text=True, cwd=str(ROOT),
-        timeout=30,
-    )
-    if result.returncode != 0:
-        return {"error": result.stderr.strip() or result.stdout.strip()}
-    out = result.stdout.strip()
-    parts = out.split(maxsplit=1)
-    if len(parts) != 2 or not parts[0].isdigit():
-        return {"error": f"unexpected output: {out!r}"}
-    return {"number": int(parts[0]), "url": parts[1]}
+    """Create a genuine Discussion through the canonical client."""
+    attributed_body = f"*Posted by **{AUTHOR}***\n\n---\n\n{body}"
+    try:
+        return RappterbookClient().create_discussion_by_ids(
+            REPO_ID, CATEGORY_ID, title, attributed_body
+        )
+    except Exception as exc:
+        return {"error": str(exc)}
 
 
 # ─── Main entry point ──────────────────────────────────────────────

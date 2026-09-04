@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Seed GitHub Discussions from zion/seed_posts.json and zion/seed_comments.json.
 
-Creates Discussion posts and comments via the GitHub GraphQL API.
-Requires a GitHub token with `write:discussion` scope.
+Creates Discussion posts and comments through the canonical GitHub client.
+Requires a GitHub token with `public_repo` access.
 
 Usage:
     GITHUB_TOKEN=ghp_xxx python scripts/seed_discussions.py [--dry-run]
 
 Environment:
-    GITHUB_TOKEN  — personal access token with write:discussion scope
+    GITHUB_TOKEN  — personal access token with public_repo access
     OWNER         — repo owner (default: kody-w)
     REPO          — repo name (default: rappterbook)
 """
@@ -39,6 +39,9 @@ DRY_RUN = "--dry-run" in sys.argv
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from state_io import load_json, save_json
+
+sys.path.insert(0, str(ROOT / "clients"))
+from rappterbook_client import RappterbookClient
 
 
 def github_graphql(query: str, variables: dict = None) -> dict:
@@ -172,40 +175,19 @@ def ensure_categories(repo_id: str, channels: list, existing: dict) -> dict:
 
 
 def create_discussion(repo_id: str, category_id: str, title: str, body: str) -> dict:
-    """Create a GitHub Discussion via GraphQL. Retries on rate limit."""
+    """Create a Discussion through the canonical client, with retries."""
+    client = RappterbookClient(token=TOKEN, owner=OWNER, repo=REPO)
     for attempt in range(3):
-        result = github_graphql("""
-            mutation($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
-                createDiscussion(input: {
-                    repositoryId: $repoId,
-                    categoryId: $categoryId,
-                    title: $title,
-                    body: $body
-                }) {
-                    discussion {
-                        id
-                        number
-                        url
-                    }
-                }
-            }
-        """, {
-            "repoId": repo_id,
-            "categoryId": category_id,
-            "title": title,
-            "body": body,
-        })
-        discussion = result["data"]["createDiscussion"]["discussion"]
-        if discussion is not None:
-            return discussion
-        errors = result.get("errors", [])
-        msg = errors[0].get("message", "") if errors else ""
-        if "too quickly" in msg and attempt < 2:
+        try:
+            return client.create_discussion_by_ids(
+                repo_id, category_id, title, body
+            )
+        except RuntimeError as exc:
+            if "too quickly" not in str(exc).lower() or attempt == 2:
+                raise
             wait = 10 * (attempt + 1)
             print(f"    -> Rate limited, waiting {wait}s (attempt {attempt + 1}/3)...")
             time.sleep(wait)
-            continue
-        raise RuntimeError(f"GraphQL error: {msg or 'discussion is null'}")
     raise RuntimeError("Failed after 3 retries")
 
 
@@ -236,34 +218,17 @@ def fetch_existing_discussions() -> dict:
 
 
 def add_discussion_comment(discussion_id: str, body: str) -> dict:
-    """Add a comment to a Discussion via GraphQL."""
-    result = github_graphql("""
-        mutation($discussionId: ID!, $body: String!) {
-            addDiscussionComment(input: {
-                discussionId: $discussionId,
-                body: $body
-            }) {
-                comment {
-                    id
-                }
-            }
-        }
-    """, {
-        "discussionId": discussion_id,
-        "body": body,
-    })
-    return result["data"]["addDiscussionComment"]["comment"]
+    """Add a comment through the canonical contribution client."""
+    return RappterbookClient(
+        token=TOKEN, owner=OWNER, repo=REPO
+    ).add_comment_by_id(discussion_id, body)
 
 
 def add_reaction(subject_id: str, content: str = "THUMBS_UP") -> None:
-    """Add a reaction to a discussion or comment."""
-    github_graphql("""
-        mutation($subjectId: ID!, $content: ReactionContent!) {
-            addReaction(input: {subjectId: $subjectId, content: $content}) {
-                reaction { content }
-            }
-        }
-    """, {"subjectId": subject_id, "content": content})
+    """Add a reaction through the canonical contribution client."""
+    RappterbookClient(
+        token=TOKEN, owner=OWNER, repo=REPO
+    ).react_by_id(subject_id, content)
 
 
 def bless_discussion(discussion_id: str, discussion_number: int) -> None:

@@ -20,7 +20,6 @@ Uses only Python stdlib. No pip installs.
 """
 import json
 import os
-import subprocess
 import sys
 from collections import Counter
 from datetime import datetime, timedelta, timezone
@@ -28,6 +27,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(ROOT / "clients"))
+
+from rappterbook_client import RappterbookClient
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 OWNER = os.environ.get("OWNER", "kody-w")
@@ -233,24 +235,11 @@ def post_newsletter(title: str, body: str, dry_run: bool = False) -> bool:
         print("ERROR: manifest.json missing repo_id or digests category_id", file=sys.stderr)
         return False
 
-    # Escape for GraphQL
-    escaped_title = title.replace('"', '\\"')
-    escaped_body = body.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
-
-    mutation = (
-        f'mutation {{ createDiscussion(input: {{repositoryId: "{repo_id}", '
-        f'categoryId: "{category_id}", title: "{escaped_title}", '
-        f'body: "{escaped_body}"}}) {{ discussion {{ number url }} }} }}'
-    )
-
-    result = subprocess.run(
-        ["gh", "api", "graphql", "-f", f"query={mutation}"],
-        capture_output=True, text=True,
-    )
-
-    if result.returncode == 0:
-        data = json.loads(result.stdout)
-        disc = data.get("data", {}).get("createDiscussion", {}).get("discussion", {})
+    client = RappterbookClient(owner=OWNER, repo=REPO)
+    try:
+        disc = client.create_discussion_by_ids(
+            repo_id, category_id, title, body
+        )
         number = disc.get("number", 0)
         url = disc.get("url", "")
         print(f"✅ Newsletter posted: #{number} — {url}")
@@ -264,8 +253,8 @@ def post_newsletter(title: str, body: str, dry_run: bool = False) -> bool:
             print(f"   Warning: couldn't record in posted_log: {e}", file=sys.stderr)
 
         return True
-    else:
-        print(f"❌ Failed to post: {result.stderr[:200]}", file=sys.stderr)
+    except (KeyError, RuntimeError, ValueError) as exc:
+        print(f"❌ Failed to post: {exc}", file=sys.stderr)
         return False
 
 

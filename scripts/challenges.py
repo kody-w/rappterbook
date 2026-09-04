@@ -25,6 +25,9 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", SCRIPT_DIR.parent / "state"))
+sys.path.insert(0, str(SCRIPT_DIR.parent / "clients"))
+from rappterbook_client import RappterbookClient
+
 # Discussion writes and LLM calls need DIFFERENT tokens. Copilot rejects
 # classic PATs, so GITHUB_TOKEN carries a user-OAuth token with copilot scope,
 # which has no discussions:write here — every createDiscussion and
@@ -33,7 +36,6 @@ TOKEN = os.environ.get("DISCUSSIONS_TOKEN") or os.environ.get("GITHUB_TOKEN", ""
 OWNER = "kody-w"
 REPO = "rappterbook"
 ISSUES_API = f"https://api.github.com/repos/{OWNER}/{REPO}/issues"
-GRAPHQL_API = "https://api.github.com/graphql"
 BASE_RAW = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/main"
 
 
@@ -93,62 +95,12 @@ def create_issue(title: str, action: str, payload: dict, label: str) -> dict:
         return json.loads(resp.read())
 
 
-def graphql(query: str, variables: dict = None) -> dict:
-    """Execute a GitHub GraphQL query."""
-    if not TOKEN:
-        raise RuntimeError("GITHUB_TOKEN required for GraphQL")
-    body = {"query": query}
-    if variables:
-        body["variables"] = variables
-    data = json.dumps(body).encode()
-    req = urllib.request.Request(
-        GRAPHQL_API, data=data,
-        headers={
-            "Authorization": f"bearer {TOKEN}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-    with urllib.request.urlopen(req, timeout=15) as resp:
-        result = json.loads(resp.read())
-    if "errors" in result:
-        raise RuntimeError(f"GraphQL error: {result['errors']}")
-    return result.get("data", {})
-
-
-def get_repo_id() -> str:
-    """Fetch the repo node ID."""
-    data = graphql(f'{{repository(owner:"{OWNER}",name:"{REPO}"){{id}}}}')
-    return data["repository"]["id"]
-
-
-def get_category_id(category_name: str) -> str:
-    """Fetch a Discussion category ID by name."""
-    data = graphql(f'''{{
-        repository(owner:"{OWNER}",name:"{REPO}") {{
-            discussionCategories(first:25) {{
-                nodes {{ id name }}
-            }}
-        }}
-    }}''')
-    for node in data["repository"]["discussionCategories"]["nodes"]:
-        if node["name"].lower() == category_name.lower():
-            return node["id"]
-    raise RuntimeError(f"Category '{category_name}' not found")
-
-
 def create_discussion(title: str, body: str, category: str = "General") -> dict:
-    """Create a GitHub Discussion."""
-    repo_id = get_repo_id()
-    cat_id = get_category_id(category)
-    return graphql(
-        """mutation($repoId: ID!, $catId: ID!, $title: String!, $body: String!) {
-            createDiscussion(input: {repositoryId: $repoId, categoryId: $catId, title: $title, body: $body}) {
-                discussion { number url }
-            }
-        }""",
-        {"repoId": repo_id, "catId": cat_id, "title": title, "body": body},
-    )
+    """Create a GitHub Discussion through the canonical client."""
+    discussion = RappterbookClient(
+        token=TOKEN, owner=OWNER, repo=REPO
+    ).create_discussion(category, title, body)
+    return {"createDiscussion": {"discussion": discussion}}
 
 
 # ── Challenge Definitions ────────────────────────────────────────────

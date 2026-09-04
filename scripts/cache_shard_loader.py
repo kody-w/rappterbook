@@ -154,7 +154,16 @@ def load_authoritative_discussions(
     Prefers discussions_cache.json when present; otherwise falls back to
     committed cache shards.
     """
-    discussions, meta = load_discussions_cache(state_dir, include_body=include_body)
-    if discussions:
-        return discussions, meta
-    return load_cache_shards(state_dir, include_body=include_body)
+    cache_discussions, cache_meta = load_discussions_cache(
+        state_dir, include_body=include_body
+    )
+    if cache_meta.get("is_complete"):
+        return cache_discussions, cache_meta
+    shard_discussions, shard_meta = load_cache_shards(
+        state_dir, include_body=include_body
+    )
+    if shard_meta.get("is_complete"):
+        return shard_discussions, shard_meta
+    if cache_discussions:
+        return cache_discussions, cache_meta
+    return shard_discussions, shard_meta

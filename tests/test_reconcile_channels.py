@@ -15,6 +15,7 @@ from reconcile_channels import (  # noqa: E402
     build_stats_snapshot,
     discussion_to_posted_log_entry,
     infer_post_channel_and_topic,
+    substantive_comment_count,
     sync_posted_log_from_discussions,
 )
 
@@ -99,6 +100,28 @@ def test_main_reads_from_cache_shards_when_cache_file_is_missing(tmp_path, monke
     stats = json.loads((state_dir / "stats.json").read_text())
     assert stats["total_posts"] == 1
     assert stats["total_comments"] == 2
+
+
+def test_stats_snapshot_excludes_legacy_vote_comments():
+    """Reconciliation cannot restore synthetic votes to public totals."""
+    discussions = [
+        {
+            "number": 1,
+            "comments": {"totalCount": 5},
+            "vote_comment_count": 2,
+        },
+        {"number": 2, "comments": {"totalCount": 4}},
+    ]
+    posted_lookup = {2: {"number": 2, "vote_comment_count": 1}}
+
+    snapshot = build_stats_snapshot(
+        discussions, {}, 1, posted_lookup
+    )
+
+    assert snapshot["total_comments"] == 6
+    assert substantive_comment_count(
+        {}, {"commentCount": 4, "vote_comment_count": 1}
+    ) == 3
 
 
 def test_require_authoritative_fails_when_no_corpus(tmp_path, monkeypatch):

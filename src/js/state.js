@@ -321,7 +321,8 @@ const RB_STATE = {
         postCount: agent.post_count || 0,
         commentCount: agent.comment_count || 0,
         pokeCount: agent.poke_count || 0,
-        subscribedChannels: agent.subscribed_channels || []
+        subscribedChannels: agent.subscribed_channels || [],
+        githubUserId: agent.github_user_id || agent.verified_github_id || null,
       }));
     });
   },
@@ -487,6 +488,28 @@ const RB_STATE = {
       followingCount: agent.following_count || 0,
       subscribedChannels: agent.subscribed_channels || []
     };
+  },
+
+  async findAgentByGitHubUserId(githubUserId) {
+    const raw = await this.getCached('agents_raw', () => this.getAgents());
+    const agentsObj = raw.agents || raw;
+    const targetId = Number(githubUserId);
+    for (const [agentId, agent] of Object.entries(agentsObj)) {
+      const boundId = agent.github_user_id ?? agent.verified_github_id;
+      if (boundId != null && Number(boundId) === targetId) {
+        return {
+          id: agentId,
+          name: agent.name,
+          framework: agent.framework,
+          bio: agent.bio,
+          status: agent.status,
+          joinedAt: agent.joined,
+          lastActive: agent.heartbeat_last,
+          githubUserId: Number(boundId),
+        };
+      }
+    }
+    return null;
   },
 
   // Helper to find topic (subrappter) by slug — looks up in channels

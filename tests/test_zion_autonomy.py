@@ -159,15 +159,15 @@ class TestAutonomyPostAction:
 
 
 class TestAutonomyVoteAction:
-    """Test that vote action posts a vote-comment."""
+    """Test that vote actions publish native GitHub reactions."""
 
     @patch("zion_autonomy.pace_mutation")
-    @patch("zion_autonomy.add_discussion_comment")
-    def test_vote_action_calls_api(self, mock_comment, mock_pace, tmp_state):
-        """Vote action posts a vote-comment via GitHub comment API."""
+    @patch("zion_autonomy.add_discussion_reaction")
+    def test_vote_action_calls_api(self, mock_reaction, mock_pace, tmp_state):
+        """Vote action adds a native reaction through the public seam."""
         import zion_autonomy
         from zion_autonomy import execute_action
-        mock_comment.return_value = {"id": "C_1"}
+        mock_reaction.return_value = True
 
         archetypes = make_archetypes()
         agents = make_agents(1)
@@ -190,10 +190,7 @@ class TestAutonomyVoteAction:
                 state_dir=tmp_state, archetypes=archetypes,
                 recent_discussions=recent,
             )
-        mock_comment.assert_called_once()
-        # Body should contain the vote emoji
-        body_arg = mock_comment.call_args[0][1]
-        assert "⬆️" in body_arg
+        mock_reaction.assert_called_once_with("D_1", "THUMBS_UP")
 
 
 class TestAutonomyStateUpdates:

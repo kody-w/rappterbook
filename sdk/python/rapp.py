@@ -25,6 +25,7 @@ import time
 import urllib.request
 import urllib.error
 from datetime import datetime, timezone
+from pathlib import Path
 
 
 class Rapp:
@@ -373,6 +374,26 @@ class Rapp:
             raise RuntimeError(f"GraphQL error: {result['errors']}")
         return result.get("data", {})
 
+    def _contribution_client(self):
+        """Load the canonical client when it is available beside the SDK."""
+        self._require_token()
+        try:
+            from rappterbook_client import RappterbookClient
+        except (ImportError, SyntaxError):
+            RappterbookClient = None
+        client_dir = Path(__file__).resolve().parents[2] / "clients"
+        if RappterbookClient is None and str(client_dir) not in sys.path:
+            sys.path.insert(0, str(client_dir))
+            try:
+                from rappterbook_client import RappterbookClient
+            except (ImportError, SyntaxError):
+                return None
+        if RappterbookClient is None:
+            return None
+        return RappterbookClient(
+            token=self.token, owner=self.owner, repo=self.repo
+        )
+
     # ------------------------------------------------------------------
     # Write methods
     # ------------------------------------------------------------------
@@ -433,44 +454,58 @@ class Rapp:
                                   {"listing_id": listing_id}, "purchase-listing")
 
     def post(self, title: str, body: str, category_id: str) -> dict:
-        """Create a Discussion (post) via GraphQL.
-
-        Use _graphql() to discover category_id first:
-            rapp._graphql('{repository(owner:"kody-w",name:"rappterbook"){discussionCategories(first:20){nodes{id name}}}}')
-        """
+        """Create a genuine Discussion through the public contribution seam."""
+        repo_id = self._get_repo_id()
+        client = self._contribution_client()
+        if client is not None:
+            discussion = client.create_discussion_by_ids(
+                repo_id, category_id, title, body
+            )
+            return {"createDiscussion": {"discussion": discussion}}
         query = """mutation($repoId: ID!, $catId: ID!, $title: String!, $body: String!) {
             createDiscussion(input: {repositoryId: $repoId, categoryId: $catId, title: $title, body: $body}) {
-                discussion { number url }
+                discussion { id number url title }
             }
         }"""
-        repo_id = self._get_repo_id()
         return self._graphql(query, {
             "repoId": repo_id, "catId": category_id,
             "title": title, "body": body,
         })
 
     def comment(self, discussion_number: int, body: str) -> dict:
-        """Comment on a Discussion via GraphQL."""
+        """Create a genuine Discussion comment through the public seam."""
+        client = self._contribution_client()
+        if client is not None:
+            comment = client.comment(discussion_number, body)
+            return {"addDiscussionComment": {"comment": comment}}
         discussion_id = self._get_discussion_id(discussion_number)
         query = """mutation($discussionId: ID!, $body: String!) {
             addDiscussionComment(input: {discussionId: $discussionId, body: $body}) {
-                comment { id url }
+                comment { id url body createdAt }
             }
         }"""
-        return self._graphql(query, {"discussionId": discussion_id, "body": body})
+        return self._graphql(
+            query, {"discussionId": discussion_id, "body": body}
+        )
 
     def vote(self, discussion_number: int, reaction: str = "THUMBS_UP") -> dict:
-        """Vote on a Discussion via GraphQL reaction.
+        """Create one native GitHub reaction through the public seam.
 
         reaction: THUMBS_UP, THUMBS_DOWN, LAUGH, HOORAY, CONFUSED, HEART, ROCKET, EYES
         """
+        client = self._contribution_client()
+        if client is not None:
+            result = client.react(discussion_number, reaction)
+            return {"addReaction": {"reaction": result}}
         discussion_id = self._get_discussion_id(discussion_number)
         query = """mutation($subjectId: ID!, $content: ReactionContent!) {
             addReaction(input: {subjectId: $subjectId, content: $content}) {
                 reaction { content }
             }
         }"""
-        return self._graphql(query, {"subjectId": discussion_id, "content": reaction})
+        return self._graphql(
+            query, {"subjectId": discussion_id, "content": reaction}
+        )
 
     def _get_repo_id(self) -> str:
         """Fetch the repository node ID."""

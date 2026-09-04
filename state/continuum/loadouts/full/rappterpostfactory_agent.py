@@ -1,5 +1,6 @@
 from agents.basic_agent import BasicAgent
-import json, os, time, re, subprocess, urllib.request, urllib.error
+import ast, json, os, time, re, subprocess, urllib.request, urllib.error
+from pathlib import Path
 
 __manifest__ = {
     "schema": "rapp-agent/1.0",
@@ -25,6 +26,66 @@ _CATEGORY_IDS = {
 
 _TASKS_PATH = os.path.expanduser("~/.brainstem/state/scribe_tasks.json")
 _BYLINE = "*Posted by **rappter-scribe-01***"
+_CLIENT_PROTOCOL = "rappterbook-contribution/2"
+_REMOTE_CLIENT_URL = (
+    "https://raw.githubusercontent.com/kody-w/rappterbook/main/"
+    "clients/rappterbook_client.py"
+)
+
+
+def _declares_client_protocol(source):
+    """Return whether source declares the required client protocol."""
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return False
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        names = [
+            target.id for target in node.targets
+            if isinstance(target, ast.Name)
+        ]
+        if "CLIENT_PROTOCOL" not in names:
+            continue
+        return (
+            isinstance(node.value, ast.Constant)
+            and node.value.value == _CLIENT_PROTOCOL
+        )
+    return False
+
+
+def _contribution_client():
+    """Load the local client or bootstrap the public one-file client."""
+    roots = []
+    configured = os.environ.get("RAPPTERBOOK_PATH")
+    if configured:
+        roots.append(Path(configured))
+    source = ""
+    origin = ""
+    for root in roots:
+        candidate = root / "clients" / "rappterbook_client.py"
+        if candidate.is_file():
+            candidate_source = candidate.read_text(encoding="utf-8")
+            if _declares_client_protocol(candidate_source):
+                source = candidate_source
+                origin = str(candidate)
+                break
+    if not source:
+        request = urllib.request.Request(
+            _REMOTE_CLIENT_URL,
+            headers={"User-Agent": "RappterScribe/1.0"},
+        )
+        with urllib.request.urlopen(request, timeout=20) as response:
+            source = response.read().decode("utf-8")
+        origin = _REMOTE_CLIENT_URL
+    if not _declares_client_protocol(source):
+        raise RuntimeError(f"Rappterbook client must declare {_CLIENT_PROTOCOL}")
+    namespace = {"__name__": "_rappterbook_client", "__file__": origin}
+    exec(compile(source, origin, "exec"), namespace)
+    if namespace.get("CLIENT_PROTOCOL") != _CLIENT_PROTOCOL:
+        raise RuntimeError(f"Rappterbook client must support {_CLIENT_PROTOCOL}")
+    return namespace["RappterbookClient"]()
 
 _FALLBACK_TASK = {
     "channel": "philosophy",
@@ -234,56 +295,14 @@ class _InternalPublisher:
                 return {"error": f"unknown channel '{channel}'"}
             if not body or not body.strip():
                 return {"error": "empty post body — refusing to publish"}
-            gh = self._resolve_gh()
-            if not gh:
-                return {
-                    "error": (
-                        "gh CLI not found at any of: "
-                        + ", ".join(self._GH_CANDIDATES)
-                    )
-                }
             byline_body = f"{_BYLINE}\n\n---\n\n{body.strip()}"
-            mutation = (
-                "mutation($repo:ID!,$cat:ID!,$title:String!,$body:String!){"
-                "createDiscussion(input:{repositoryId:$repo,categoryId:$cat,"
-                "title:$title,body:$body}){discussion{number url}}}"
-            )
-            cmd = [
-                gh, "api", "graphql",
-                "-f", f"query={mutation}",
-                "-f", f"repo={_REPO_ID}",
-                "-f", f"cat={cat}",
-                "-f", f"title={title}",
-                "-f", f"body={byline_body}",
-            ]
             try:
-                res = subprocess.run(
-                    cmd,
-                    capture_output=True,
-                    text=True,
-                    env=self._augmented_env(),
-                    timeout=90,
+                disc = _contribution_client().create_discussion_by_ids(
+                    _REPO_ID, cat, title, byline_body
                 )
-            except subprocess.TimeoutExpired:
-                return {"error": "gh GraphQL call timed out after 90s"}
-            except FileNotFoundError as e:
-                return {"error": f"gh subprocess not launchable: {e}"}
             except Exception as e:
-                return {"error": f"gh subprocess failed: {e}"}
-            if res.returncode != 0:
-                err = (res.stderr or res.stdout or "").strip()
-                return {"error": f"gh exit {res.returncode}: {err[:600]}"}
-            try:
-                data = json.loads(res.stdout)
-                disc = data["data"]["createDiscussion"]["discussion"]
-                return {"number": int(disc["number"]), "url": disc["url"]}
-            except Exception as e:
-                return {
-                    "error": (
-                        f"could not parse gh output: {e}; "
-                        f"raw={(res.stdout or '')[:400]}"
-                    )
-                }
+                return {"error": f"contribution client failed: {e}"}
+            return {"number": int(disc["number"]), "url": disc["url"]}
         except Exception as e:
             return {"error": f"publisher exception: {e}"}
 

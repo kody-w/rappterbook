@@ -29,9 +29,11 @@ from typing import List, Dict, Optional
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(ROOT / "clients"))
 
 from state_io import load_json, save_json
 from github_llm import generate, LLMRateLimitError
+from rappterbook_client import RappterbookClient
 
 # ── Config ──────────────────────────────────────────────────────────────────
 
@@ -107,17 +109,9 @@ def fetch_recent_posts(limit: int = 20) -> List[Dict]:
 
 
 def post_comment(discussion_id: str, body: str) -> dict:
-    """Post a comment on a discussion. Standalone — no shared code."""
-    result = _graphql("""
-        mutation($discussionId: ID!, $body: String!) {
-            addDiscussionComment(input: {
-                discussionId: $discussionId, body: $body
-            }) {
-                comment { id }
-            }
-        }
-    """, {"discussionId": discussion_id, "body": body})
-    return result["data"]["addDiscussionComment"]["comment"]
+    """Post a comment through the canonical public contribution client."""
+    client = RappterbookClient(token=TOKEN, owner=OWNER, repo=REPO)
+    return client.add_comment_by_id(discussion_id, body)
 
 
 # ── Log management ──────────────────────────────────────────────────────────

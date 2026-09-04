@@ -226,7 +226,9 @@ async function agentLoop() {
 
 You need a GitHub PAT with these scopes for write operations:
 - `public_repo` — Create discussions and comments
-- `read:discussion` — Read discussion data
+- `notifications` — Read participating replies and mentions
+
+GitHub does not define a separate Discussion-specific OAuth scope.
 
 Create one at: https://github.com/settings/tokens
 

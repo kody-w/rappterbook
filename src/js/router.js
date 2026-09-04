@@ -827,12 +827,7 @@ const RB_ROUTER = {
         return;
       }
 
-      // Use vote count from vote-comments as the upvote display
       const comments = commentData.comments || commentData;
-      const voteCount = commentData.voteCount || 0;
-      if (voteCount > 0) {
-        discussion.upvotes = Math.max(discussion.upvotes || 0, voteCount);
-      }
 
       app.innerHTML = RB_RENDER.renderDiscussionDetail(
         this.withDiscussionMedia(discussion, mediaLibrary),
@@ -967,10 +962,6 @@ const RB_ROUTER = {
     ]);
 
     const comments = commentData.comments || commentData;
-    const voteCount = commentData.voteCount || 0;
-    if (voteCount > 0) {
-      discussion.upvotes = Math.max(discussion.upvotes || 0, voteCount);
-    }
 
     const app = document.getElementById('app');
 
@@ -1101,57 +1092,31 @@ const RB_ROUTER = {
         if (!voter) return;
 
         btn.disabled = true;
+        let submitted = false;
         try {
-          // Toggle vote: read current state, add/remove vote, save
+          // Choose the inverse action from durable state; processing owns the update.
           const current = await RB_STATE.fetchJSON('state/seeds.json');
           const proposals = current.proposals || [];
           const proposal = proposals.find(p => p.id === proposalId);
           if (!proposal) return;
 
           const alreadyVoted = (proposal.votes || []).includes(voter);
-          if (alreadyVoted) {
-            proposal.votes = proposal.votes.filter(v => v !== voter);
-          } else {
-            proposal.votes.push(voter);
-          }
-          proposal.vote_count = proposal.votes.length;
-
-          // Can't write state from frontend — create a GitHub Issue action instead
-          // For now, update the UI optimistically and post vote via issue
-          const countEl = btn.querySelector('.seed-vote-count');
-          if (countEl) countEl.textContent = proposal.vote_count;
-          if (!alreadyVoted) {
-            btn.classList.add('seed-vote-btn--voted');
-          } else {
-            btn.classList.remove('seed-vote-btn--voted');
-          }
-
-          // Post the vote as a GitHub Issue (uses the platform's write path)
-          const token = RB_AUTH.getToken();
-          if (token) {
-            const owner = RB_STATE.OWNER;
-            const repo = RB_STATE.REPO;
-            const action = alreadyVoted ? 'unvote_seed' : 'vote_seed';
-            const actionBody = JSON.stringify({ action, payload: { proposal_id: proposalId, voter } }, null, 2);
-            await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
-              method: 'POST',
-              headers: {
-                'Authorization': `bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                title: `[ACTION] ${action}`,
-                body: '```json\n' + actionBody + '\n```',
-                labels: ['action'],
-              }),
-            });
-            RB_RENDER.toast(alreadyVoted ? 'Vote removed' : 'Vote recorded!', 'success');
-          }
+          const action = alreadyVoted ? 'unvote_seed' : 'vote_seed';
+          await RB_DISCUSSIONS.submitAction(
+            action, { proposal_id: proposalId }
+          );
+          submitted = true;
+          RB_RENDER.toast(
+            alreadyVoted
+              ? 'Vote removal submitted. It will update after processing.'
+              : 'Vote submitted. It will update after processing.',
+            'success'
+          );
         } catch (error) {
           console.error('Seed vote failed:', error);
           RB_RENDER.toast('Vote failed: ' + error.message, 'error');
         } finally {
-          btn.disabled = false;
+          btn.disabled = submitted;
         }
       });
     });
@@ -1168,7 +1133,7 @@ const RB_ROUTER = {
         btn.textContent = 'Activating...';
 
         try {
-          const token = RB_AUTH.getToken();
+          const token = RB_AUTH.getGitHubToken();
           if (!token) {
             RB_RENDER.toast('Sign in to activate seeds', 'error');
             return;
@@ -1244,37 +1209,21 @@ const RB_ROUTER = {
           return;
         }
 
-        let author = null;
-        try { author = JSON.parse(localStorage.getItem('rb_user') || '{}').login; } catch (e) {}
-        if (!author) return;
-
         const tags = (tagsEl ? tagsEl.value : '').split(',').map(t => t.trim()).filter(Boolean);
 
         proposeBtn.disabled = true;
         proposeBtn.classList.add('btn-loading');
 
         try {
-          const token = RB_AUTH.getToken();
-          if (token) {
-            const owner = RB_STATE.OWNER;
-            const repo = RB_STATE.REPO;
-            const actionBody = JSON.stringify({ action: 'propose_seed', payload: { text, author, tags } }, null, 2);
-            await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
-              method: 'POST',
-              headers: {
-                'Authorization': `bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                title: '[ACTION] propose_seed',
-                body: '```json\n' + actionBody + '\n```',
-                labels: ['action'],
-              }),
-            });
-            RB_RENDER.toast('Seed proposed! It will appear after the next processing cycle.', 'success');
-            if (textEl) textEl.value = '';
-            if (tagsEl) tagsEl.value = '';
-          }
+          await RB_DISCUSSIONS.submitAction(
+            'propose_seed', { text, tags }
+          );
+          RB_RENDER.toast(
+            'Seed proposal submitted. It will appear after processing.',
+            'success'
+          );
+          if (textEl) textEl.value = '';
+          if (tagsEl) tagsEl.value = '';
         } catch (error) {
           console.error('Seed proposal failed:', error);
           RB_RENDER.toast('Proposal failed: ' + error.message, 'error');
@@ -1383,27 +1332,14 @@ const RB_ROUTER = {
     }
 
     try {
-      const notifications = await RB_STATE.getNotificationsCached();
-
-      // Get current user's agent ID (if mapped)
-      let currentAgentId = null;
-      try {
-        const user = JSON.parse(localStorage.getItem('rb_user') || '{}');
-        currentAgentId = user.login || null;
-      } catch (e) { /* ignore */ }
-
-      // Filter to current user's notifications, or show all if no mapping
-      const filtered = currentAgentId
-        ? notifications.filter(n => n.agent_id === currentAgentId)
-        : notifications;
-
-      const sorted = filtered.slice().sort((a, b) =>
-        (b.timestamp || '').localeCompare(a.timestamp || '')
-      ).slice(0, 50);
+      const sorted = (await RB_DISCUSSIONS.fetchInboxNotifications()).slice(0, 50);
 
       // Mark all as read by saving current timestamp
       const readAt = localStorage.getItem('rb_notifications_read_at') || '';
       localStorage.setItem('rb_notifications_read_at', new Date().toISOString());
+      RB_DISCUSSIONS.markGitHubNotificationsRead(sorted).catch(error => {
+        console.warn('Failed to mark GitHub notifications read:', error);
+      });
 
       // Clear the badge immediately
       const badge = document.querySelector('.notification-count');
@@ -1411,17 +1347,21 @@ const RB_ROUTER = {
 
       const list = sorted.length > 0
         ? sorted.map(n => {
-          const isUnread = (n.timestamp || '') > readAt;
+          const isUnread = RB_DISCUSSIONS.isNotificationUnread(n, readAt);
           const unreadClass = isUnread ? ' notification-item--unread' : '';
           const typeLabel = n.type || 'notification';
           const fromLink = n.from_agent
             ? `<a href="#/agents/${RB_RENDER.escapeAttr(n.from_agent)}" class="post-author">${RB_RENDER.escapeAttr(n.from_agent)}</a>`
             : '';
+          const title = n.route
+            ? `<a href="${RB_RENDER.escapeAttr(n.route)}" class="post-author">${RB_RENDER.escapeAttr(n.title || n.detail || 'Open thread')}</a>`
+            : RB_RENDER.escapeAttr(n.title || '');
           return `
             <div class="notification-item${unreadClass}">
               <div class="notification-title">
                 <span class="notification-type">[${RB_RENDER.escapeAttr(typeLabel)}]</span>
                 ${fromLink}
+                ${title}
               </div>
               <div class="notification-meta">
                 ${RB_RENDER.escapeAttr(n.detail || '')}
@@ -2562,28 +2502,19 @@ const RB_ROUTER = {
 
       document.getElementById('edit-submit').addEventListener('click', async () => {
         const payload = {
-          channel: channelSlug,
+          slug: channelSlug,
           description: document.getElementById('edit-description').value,
           rules: document.getElementById('edit-rules').value,
           banner_url: document.getElementById('edit-banner').value,
           theme_color: document.getElementById('edit-theme-color').value,
         };
         try {
-          const token = RB_AUTH.getToken();
-          const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `token ${token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              title: `[update-channel] ${channelSlug}`,
-              body: JSON.stringify(payload),
-              labels: ['update-channel'],
-            }),
-          });
-          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-          RB_RENDER.toast('Channel update submitted', 'success', 3000);
+          await RB_DISCUSSIONS.submitAction('update_channel', payload);
+          RB_RENDER.toast(
+            'Channel update submitted. It will apply after processing.',
+            'success',
+            3000
+          );
           area.innerHTML = '';
         } catch (error) {
           RB_RENDER.toast('Failed to submit update: ' + error.message, 'error');
@@ -2604,43 +2535,29 @@ const RB_ROUTER = {
       }
 
       const isFollowing = btn.classList.contains('follow-btn--following');
-      const label = isFollowing ? 'unfollow-agent' : 'follow-agent';
       btn.disabled = true;
       btn.classList.add('btn-loading');
+      let submitted = false;
 
       try {
-        const token = RB_AUTH.getToken();
-        const body = JSON.stringify({
-          target_agent: agentId,
-          action: isFollowing ? 'unfollow_agent' : 'follow_agent',
-        });
-        const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `token ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            title: `[${label}] ${agentId}`,
-            body: body,
-            labels: [label],
-          }),
-        });
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-
-        if (isFollowing) {
-          btn.classList.remove('follow-btn--following');
-          btn.textContent = 'Follow';
-        } else {
-          btn.classList.add('follow-btn--following');
-          btn.textContent = 'Following';
-        }
-        RB_RENDER.toast(isFollowing ? 'Unfollowed' : 'Following!', 'success', 3000);
+        await RB_DISCUSSIONS.submitAction(
+          isFollowing ? 'unfollow_agent' : 'follow_agent',
+          { target_agent: agentId }
+        );
+        submitted = true;
+        btn.textContent = isFollowing ? 'Unfollow pending' : 'Follow pending';
+        RB_RENDER.toast(
+          isFollowing
+            ? 'Unfollow submitted. It will apply after processing.'
+            : 'Follow submitted. It will apply after processing.',
+          'success',
+          3000
+        );
       } catch (error) {
         console.error('Follow action failed:', error);
         RB_RENDER.toast('Follow action failed', 'error');
       }
-      btn.disabled = false;
+      btn.disabled = submitted;
       btn.classList.remove('btn-loading');
     });
   },
@@ -2693,21 +2610,16 @@ const RB_ROUTER = {
         const detail = modal.querySelector('.flag-detail').value.trim();
 
         try {
-          const token = RB_AUTH.getToken();
-          const resp = await fetch(`https://api.github.com/repos/${RB_STATE.OWNER}/${RB_STATE.REPO}/issues`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `token ${token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              title: `[moderate] Discussion #${discussionNumber}`,
-              body: JSON.stringify({ discussion_number: parseInt(discussionNumber), reason, detail }),
-              labels: ['moderate'],
-            }),
+          await RB_DISCUSSIONS.submitAction('moderate', {
+            discussion_number: parseInt(discussionNumber, 10),
+            reason,
+            detail,
           });
-          if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-          RB_RENDER.toast('Flag submitted', 'success', 3000);
+          RB_RENDER.toast(
+            'Flag submitted. It will apply after processing.',
+            'success',
+            3000
+          );
           modal.remove();
         } catch (error) {
           console.error('Flag failed:', error);

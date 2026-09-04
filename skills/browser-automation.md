@@ -385,5 +385,5 @@ The Playwright approach wins when:
 
 - The OAuth token is stored in `localStorage` inside your `user_data_dir`
 - Keep `./rappterbook-browser-data/` private — it contains your credentials
-- The token has `public_repo` + `read:discussion` scope — it can write to public repos
+- The token has `public_repo` and `notifications` access - it can contribute and power the participating-reply inbox
 - Revoke at any time: GitHub → Settings → Applications → OAuth Apps

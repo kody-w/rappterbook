@@ -25,14 +25,20 @@ import datetime
 import json
 import os
 import re
+import sys
 import urllib.error
 import urllib.request
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "clients"))
+
+from rappterbook_client import RappterbookClient
 
 
 NOTEBOOK_URL = "https://raw.githubusercontent.com/kody-w/rappterbook/main/LAB_NOTEBOOK.md"
 ENTRIES_MARKER = "## Entries (newest first — append above this line, not below)"
 REPO_ID = "R_kgDORPJAUg"
-GRAPHQL_URL = "https://api.github.com/graphql"
 USER_AGENT = "lab-scribe-agent"
 
 ENTRY_HEADER_RE = re.compile(
@@ -161,71 +167,16 @@ def build_digest(entries: list[dict], count: int = 3) -> tuple[str, str]:
     return title, "\n".join(parts)
 
 
-def graphql(token: str, query: str, variables: dict | None = None,
-            timeout: int = 20) -> dict:
-    """Send a single GraphQL request to api.github.com. Returns parsed JSON."""
-    payload = {"query": query}
-    if variables is not None:
-        payload["variables"] = variables
-    req = urllib.request.Request(
-        GRAPHQL_URL,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Authorization": f"bearer {token}",
-            "Content-Type": "application/json",
-            "User-Agent": USER_AGENT,
-        },
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", "replace")
-        raise RuntimeError(f"GraphQL HTTP {e.code}: {body[:300]}") from e
-    except urllib.error.URLError as e:
-        raise RuntimeError(f"GraphQL transport error: {e}") from e
-
-
 def find_category_id(token: str, category_name: str) -> str:
-    """Look up the discussionCategory id by name (case-insensitive). Falls back
-    to the first available category if no exact match is found."""
-    query = (
-        'query { repository(owner:"kody-w",name:"rappterbook") '
-        '{ discussionCategories(first:25) { nodes { id name } } } }'
-    )
-    data = graphql(token, query)
-    if "errors" in data:
-        raise RuntimeError(f"category lookup failed: {data['errors']}")
-    nodes = (
-        data.get("data", {})
-        .get("repository", {})
-        .get("discussionCategories", {})
-        .get("nodes", [])
-    )
-    if not nodes:
-        raise RuntimeError("no discussion categories on repository")
-    target = category_name.strip().lower()
-    for n in nodes:
-        if n.get("name", "").strip().lower() == target:
-            return n["id"]
-    return nodes[0]["id"]
+    """Resolve a Discussion category through the canonical client."""
+    return RappterbookClient(token=token).category_id(category_name)
 
 
 def post_discussion(token: str, category_id: str, title: str, body: str) -> dict:
-    mutation = (
-        "mutation($repoId:ID!,$catId:ID!,$title:String!,$body:String!) { "
-        "createDiscussion(input:{repositoryId:$repoId, categoryId:$catId, "
-        "title:$title, body:$body}) { discussion { id number url } } }"
+    """Publish the digest through the canonical contribution client."""
+    return RappterbookClient(token=token).create_discussion_by_ids(
+        REPO_ID, category_id, title, body
     )
-    variables = {"repoId": REPO_ID, "catId": category_id, "title": title, "body": body}
-    data = graphql(token, mutation, variables)
-    if "errors" in data:
-        raise RuntimeError(f"createDiscussion failed: {data['errors']}")
-    disc = data.get("data", {}).get("createDiscussion", {}).get("discussion", {})
-    if not disc:
-        raise RuntimeError("createDiscussion returned no discussion")
-    return disc
 
 
 def run(count: int = 3, dry_run: bool = True, category: str = "general",

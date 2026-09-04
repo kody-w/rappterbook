@@ -748,7 +748,7 @@
                 const resp = await fetch(WORKER_URL + '/api/auth/device-code', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ client_id: CLIENT_ID, scope: 'public_repo read:discussion' })
+                    body: JSON.stringify({ client_id: CLIENT_ID, scope: 'public_repo notifications' })
                 });
                 if (!resp.ok) throw new Error('Device code request failed: ' + resp.status);
                 const data = await resp.json();

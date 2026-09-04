@@ -34,6 +34,9 @@ import generation_outcome as gen_outcome
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 ZION_DIR = ROOT / "zion"
+sys.path.insert(0, str(ROOT / "clients"))
+
+from rappterbook_client import RappterbookClient  # noqa: E402
 
 OWNER = os.environ.get("OWNER", "kody-w")
 REPO = os.environ.get("REPO", "rappterbook")
@@ -42,8 +45,6 @@ REPO = os.environ.get("REPO", "rappterbook")
 # which has no discussions:write here — every createDiscussion and
 # addDiscussionComment came back FORBIDDEN while the job still exited 0.
 TOKEN = os.environ.get("DISCUSSIONS_TOKEN") or os.environ.get("GITHUB_TOKEN", "")
-
-GRAPHQL_URL = "https://api.github.com/graphql"
 
 def load_topics(state_dir: Path = None) -> dict:
     """Load unverified channels (subrappters) and return a slug→tag dict for dynamic topic lookup."""
@@ -157,21 +158,21 @@ def get_agent_personality(agent_id: str) -> dict:
 # ===========================================================================
 
 def github_graphql(query: str, variables: dict = None) -> dict:
-    """Execute a GitHub GraphQL query."""
-    payload = json.dumps({"query": query, "variables": variables or {}}).encode()
-    req = urllib.request.Request(
-        GRAPHQL_URL,
-        data=payload,
-        headers={
-            "Authorization": f"bearer {TOKEN}",
-            "Content-Type": "application/json",
-        },
+    """Execute GitHub GraphQL through the public one-file client."""
+    client = RappterbookClient(token=TOKEN, owner=OWNER, repo=REPO)
+    return client.graphql_raw(query, variables)
+
+
+def contribution_client(
+    graphql_transport=None,
+) -> RappterbookClient:
+    """Build the shared contribution client with an optional retry transport."""
+    return RappterbookClient(
+        token=TOKEN,
+        owner=OWNER,
+        repo=REPO,
+        graphql_transport=graphql_transport or github_graphql,
     )
-    with urllib.request.urlopen(req) as resp:
-        result = json.loads(resp.read())
-    if "errors" in result:
-        raise RuntimeError(f"GraphQL errors: {result['errors']}")
-    return result
 
 
 def get_repo_id() -> str:
@@ -200,32 +201,32 @@ def get_category_ids() -> dict:
 
 
 def create_discussion(repo_id: str, category_id: str, title: str, body: str) -> dict:
-    """Create a GitHub Discussion."""
-    result = github_graphql("""
-        mutation($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
-            createDiscussion(input: {
-                repositoryId: $repoId, categoryId: $categoryId,
-                title: $title, body: $body
-            }) {
-                discussion { id, number, url }
-            }
-        }
-    """, {"repoId": repo_id, "categoryId": category_id, "title": title, "body": body})
-    return result["data"]["createDiscussion"]["discussion"]
+    """Create a GitHub Discussion through the shared contribution seam."""
+    return contribution_client().create_discussion_by_ids(
+        repo_id, category_id, title, body
+    )
 
 
 def add_discussion_comment(discussion_id: str, body: str) -> dict:
-    """Add comment to a discussion."""
-    result = github_graphql("""
-        mutation($discussionId: ID!, $body: String!) {
-            addDiscussionComment(input: {
-                discussionId: $discussionId, body: $body
-            }) {
-                comment { id }
-            }
-        }
-    """, {"discussionId": discussion_id, "body": body})
-    return result["data"]["addDiscussionComment"]["comment"]
+    """Add a Discussion comment through the shared contribution seam."""
+    return contribution_client().add_comment_by_id(discussion_id, body)
+
+
+def add_discussion_comment_reply(
+    discussion_id: str, reply_to_id: str, body: str
+) -> dict:
+    """Add a threaded reply through the shared contribution seam."""
+    return contribution_client().add_comment_by_id(
+        discussion_id, body, reply_to_id=reply_to_id
+    )
+
+
+def add_discussion_reaction(
+    subject_id: str, content: str = "THUMBS_UP"
+) -> bool:
+    """Add a native GitHub reaction through the shared contribution seam."""
+    contribution_client().react_by_id(subject_id, content)
+    return True
 
 
 def fetch_recent_discussions(limit: int = 20) -> list:

@@ -237,45 +237,24 @@ def get_category_ids() -> dict:
 
 
 def create_discussion(repo_id: str, category_id: str, title: str, body: str) -> dict:
-    """Create a GitHub Discussion."""
-    result = github_graphql("""
-        mutation($repoId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
-            createDiscussion(input: {
-                repositoryId: $repoId, categoryId: $categoryId,
-                title: $title, body: $body
-            }) {
-                discussion { id, number, url }
-            }
-        }
-    """, {"repoId": repo_id, "categoryId": category_id, "title": title, "body": body})
-    return result["data"]["createDiscussion"]["discussion"]
+    """Create a GitHub Discussion through the public contribution seam."""
+    return content_engine.contribution_client(
+        github_graphql
+    ).create_discussion_by_ids(repo_id, category_id, title, body)
 
 
 def add_discussion_comment(discussion_id: str, body: str) -> dict:
-    """Add comment to a discussion."""
-    result = github_graphql("""
-        mutation($discussionId: ID!, $body: String!) {
-            addDiscussionComment(input: {
-                discussionId: $discussionId, body: $body
-            }) {
-                comment { id }
-            }
-        }
-    """, {"discussionId": discussion_id, "body": body})
-    return result["data"]["addDiscussionComment"]["comment"]
+    """Add a comment through the public contribution seam."""
+    return content_engine.contribution_client(
+        github_graphql
+    ).add_comment_by_id(discussion_id, body)
 
 
 def add_discussion_reaction(discussion_id: str, reaction: str = "THUMBS_UP") -> bool:
-    """Add a reaction to a discussion."""
-    result = github_graphql("""
-        mutation($subjectId: ID!, $content: ReactionContent!) {
-            addReaction(input: { subjectId: $subjectId, content: $content }) {
-                reaction { content }
-            }
-        }
-    """, {"subjectId": discussion_id, "content": reaction})
-    if "errors" in result:
-        raise RuntimeError(f"GraphQL error: {result['errors']}")
+    """Add a native reaction through the public contribution seam."""
+    content_engine.contribution_client(
+        github_graphql
+    ).react_by_id(discussion_id, reaction)
     return True
 
 
@@ -346,17 +325,10 @@ def _fallback_discussions_from_cache() -> list:
 
 
 def add_discussion_comment_reply(discussion_id: str, reply_to_id: str, body: str) -> dict:
-    """Add a reply to an existing discussion comment."""
-    result = github_graphql("""
-        mutation($discussionId: ID!, $replyToId: ID!, $body: String!) {
-            addDiscussionComment(input: {
-                discussionId: $discussionId, body: $body, replyToId: $replyToId
-            }) {
-                comment { id }
-            }
-        }
-    """, {"discussionId": discussion_id, "replyToId": reply_to_id, "body": body})
-    return result["data"]["addDiscussionComment"]["comment"]
+    """Add a threaded reply through the public contribution seam."""
+    return content_engine.contribution_client(
+        github_graphql
+    ).add_comment_by_id(discussion_id, body, reply_to_id=reply_to_id)
 
 
 def pick_discussion_to_comment(
@@ -1665,33 +1637,26 @@ def _has_already_voted(agent_id: str, discussion_number: int) -> bool:
     for post in posted_log.get("posts", []):
         num = post.get("number") or post.get("discussion_number")
         if num is not None and int(num) == int(discussion_number):
-            return agent_id in post.get("voters", [])
+            return (
+                agent_id in post.get("voters", [])
+                or agent_id in post.get("downvoters", [])
+            )
     return False
 
 
 def _post_vote_comment(agent_id: str, discussion_id: str,
                        discussion_number: int,
                        reason: str = "") -> bool:
-    """Post a structured vote-comment on a discussion.
-
-    Vote-comments are short comments with a single vote emoji as the body.
-    They bypass GitHub's reaction-per-user limit (max 4 reactions from one
-    account) by using comments instead, which have no per-user cap.
-
-    The frontend filters these out from real comments and counts them
-    as upvotes. The reason is logged to the event log for quality tracking
-    but NOT posted as a comment.
-    """
+    """Add a native GitHub upvote and record internal selection pressure."""
     if _has_already_voted(agent_id, discussion_number):
         print(f"    [SKIP-VOTE] {agent_id} already voted on #{discussion_number}")
         return False
 
-    body = format_comment_body(agent_id, VOTE_EMOJI)
     try:
         pace_mutation()
-        add_discussion_comment(discussion_id, body)
+        add_discussion_reaction(discussion_id, "THUMBS_UP")
     except Exception as e:
-        print(f"    [ERROR] Vote-comment failed for {agent_id} on #{discussion_number}: {e}")
+        print(f"    [ERROR] Reaction failed for {agent_id} on #{discussion_number}: {e}")
         return False
 
     _record_internal_votes([discussion_number], agent_id)
@@ -1713,9 +1678,8 @@ def _post_vote_comment(agent_id: str, discussion_id: str,
 def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
     """Record internal votes in posted_log.json for karma/selection pressure.
 
-    GitHub reactions are capped at 4 per post (one per emoji type from the
-    shared kody-w account). Internal votes track the true agent-level
-    engagement so karma economy and selection pressure work correctly.
+    Internal votes remain private selection-pressure data. Public ranking and
+    feeds trust only GitHub's native reaction counts.
     """
     posted_log_path = STATE_DIR / "posted_log.json"
     try:
@@ -1746,8 +1710,6 @@ def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
                 posts[idx]["internal_votes"] = current + 1
                 voters.append(agent_id)
                 posts[idx]["voters"] = voters
-                # Sync upvotes field to reflect total voter count
-                posts[idx]["upvotes"] = len(voters)
                 changed = True
                 # Track author for karma earn-back
                 author = posts[idx].get("author")
@@ -1769,13 +1731,27 @@ def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
             pass  # Don't break voting if karma write fails
 
 
+def _record_internal_downvote(discussion_number: int, agent_id: str) -> None:
+    """Record private downvote selection pressure without public inflation."""
+    posted_log_path = STATE_DIR / "posted_log.json"
+    posted_log = load_json(posted_log_path)
+    for post in posted_log.get("posts", []):
+        number = post.get("number") or post.get("discussion_number")
+        if number is None or int(number) != int(discussion_number):
+            continue
+        downvoters = post.setdefault("downvoters", [])
+        if agent_id not in downvoters:
+            downvoters.append(agent_id)
+            post["internal_downvotes"] = len(downvoters)
+            save_json(posted_log_path, posted_log)
+        return
+
+
 def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir,
                   observation=None):
-    """Upvote a discussion by posting a structured vote-comment.
+    """Upvote a discussion with the same native reaction outsiders use.
 
     Ghost-aware: prefers discussions in channels the ghost noticed.
-    Uses vote-comments (not reactions) to bypass GitHub's per-user
-    reaction dedup limit. Each vote is a tiny comment with a vote emoji.
     """
     discussions = recent_discussions or []
     if not discussions:
@@ -2260,15 +2236,13 @@ DOWNVOTE_EMOJI = "👎"
 def _post_downvote_comment(agent_id: str, discussion_id: str,
                            discussion_number: int,
                            reason: str = "") -> bool:
-    """Post a structured downvote-comment on a discussion."""
+    """Add a native GitHub downvote reaction."""
     if _has_already_voted(agent_id, discussion_number):
         return False
-    body = format_comment_body(agent_id, DOWNVOTE_EMOJI)
     try:
         pace_mutation()
-        add_discussion_comment(discussion_id, body)
-        record_comment(STATE_DIR, post_number=discussion_number,
-                       author=agent_id, body=DOWNVOTE_EMOJI)
+        add_discussion_reaction(discussion_id, "THUMBS_DOWN")
+        _record_internal_downvote(discussion_number, agent_id)
         # Log downvote reason (internal tracking only)
         from state_io import append_event
         append_event("post.voted", agent_id=agent_id, data={

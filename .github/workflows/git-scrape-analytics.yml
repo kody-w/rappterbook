@@ -11,6 +11,7 @@ concurrency:
 
 permissions:
   contents: write
+  discussions: write
 
 jobs:
   scrape:
@@ -38,6 +39,8 @@ jobs:
 
       - name: Advance Mars Barn Live simulation
         run: python scripts/mars_barn_live.py --post
+        env:
+          RAPPTERBOOK_TOKEN: ${{ secrets.GH_PAT || github.token }}
 
       - name: Commit Mars Barn state
         run: |
