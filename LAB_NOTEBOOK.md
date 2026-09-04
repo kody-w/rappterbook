@@ -103,6 +103,49 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.42 — 2026-09-04 — Backup verification gets real; failed AI loops are quarantined
+
+**Session**: gpt-5.6-sol-fast via Copilot CLI / operator: kody-w
+**Read state**: 023d54e9fb515bfd3f12bb9fad4f63fcef97aaba — the contribution loop was live, but NAS verification was impractically slow and persistent local AI automations were consuming the Mac while repeatedly failing
+
+### Hypothesis tested
+A backup is not healthy because a copy command exited zero, and an automation is not useful because launchd keeps it alive. The NAS system only earns trust if every stored object can be checked against the SQLite checksum authority through the same mounted-share conditions used in production. The Mac only becomes usable again if deterministic failure loops are disabled persistently, removed from the live launchd domain, and proven absent from the process table.
+
+### What I built
+- Hardened `~/.rapp/transcript-backup/bin/rapp-transcript-backup` with `--changed-only`, positive worker-count validation, concurrent complete verification, bounded retries for transient SMB errors, and a single-pass `os.scandir()` verifier that hashes files relative to already-open parent directory descriptors.
+- Changed append-only snapshots to capture and copy the source's initial byte boundary while requiring a stable device/inode and rejecting truncation. Strict mutable-file snapshots still reject any mutation during copying.
+- Deployed `~/Library/LaunchAgents/com.rapp.transcript-backup.plist` as a two-hour, one-worker, changed-only background job and retained `com.rapp.transcript-backup-verify.plist` as an eight-worker Sunday 04:15 full audit. Both use `/opt/homebrew/bin/python3`; the incremental job no longer runs at load.
+- Persistently disabled and booted out `com.rappterverse.local-platform`, `com.rapterbox.textchannel`, `com.rapterbox.beat`, `com.rapp.rar-local-save`, and `io.rapp.private-hive-publisher`. Throttled `com.rapterbox.filing` from a two-second scan loop to 300 seconds.
+- Terminated three stale Copilot process trees and three stale session web servers while preserving the active Copilot session.
+- Added durable recurrence checks for local launchd failure loops and the launchd `/usr/bin/python3` mounted-NAS permission failure to `.claude/skills/antigaslighter/known_failures.json`.
+
+### What worked
+- The complete audit verified **103,510 objects** and **22,697,508,686 bytes** against SQLite with **zero failures**, finishing at `2026-09-04T20:04:26.905506Z`.
+- After the live append-only fix, the retry copied **10 of 10 files**, totaling **174,179,688 bytes**, with zero errors. A real launchd proof then copied five files totaling **175,414,183 bytes**, also with zero errors.
+- The current authority holds **104,027 file rows**, **424 ledger segments**, zero unpublished events, and `PRAGMA integrity_check = ok`. NAS staging is empty. Local and NAS `health.json` are byte-identical with SHA-256 `0a63d9f0a79000ded20bf6e3656e1c37ccf4fceb59466f4215b00538413c1089`.
+- The recovery kit was refreshed and each local/NAS pair matched byte-for-byte. The backup script hash is `6e2276fa701375f18ae01d6dcef1a8fc122b36d5789e1279543cb31e030234f1`.
+- System load fell from approximately **10.16 / 14.90 / 15.43** to **3.92 / 5.40 / 6.77** after removing the stale Copilot trees and failed launchd loops.
+- Final launchd inspection showed all five quarantined labels as disabled, none loaded, and no matching processes running.
+
+### What failed
+- Serial verification and the first parallel two-pass inventory-then-hash design were operationally useless over SMB. A 200-file sample took about 20 minutes and projected to days because random full-path opens repeatedly traversed a provider directory with roughly 95,000 children.
+- The first practical one-pass audit found one transient `OSError: [Errno 22] Invalid argument`. Direct SHA-256 comparison proved the object matched SQLite, and repeated relative opens succeeded; bounded retry handling was required before the complete audit could pass cleanly.
+- One active Claude transcript grew during copying, causing a strict snapshot failure after 932 of 933 changed files copied. Append-only files needed explicit byte-boundary semantics rather than mutable-file semantics.
+- Launchd running `/usr/bin/python3` received `Operation not permitted` on `/Volumes/Public` even though the same interpreter worked manually. Homebrew Python worked under launchd and produced a real copied-and-verified artifact; the old error line remains historical evidence, not current failure.
+- Five unrelated LaunchAgents were retrying deterministic failures: repeated `world_growth` failure while spawning unattended Copilot work, SQLite authorization errors every 30 seconds, `git pull --rebase` failure every ten minutes, unsupported floats in JCS serialization hourly, and a missing `rapp-skills` dependency hourly. launchd persistence had turned broken jobs into a resource-denial loop.
+
+### Lessons for next session
+1. Verify backup claims against the checksum authority and stored bytes. Exit codes, copied-file counters, and health messages are not proof.
+2. On a high-fanout SMB share, keep directory context open and hash relative entries in one pass. Repeated full-path traversal dominates the actual hashing cost.
+3. Append-only live files need snapshot-at-open byte boundaries; later growth belongs to the next incremental run.
+4. A command's manual macOS permissions do not prove its launchd execution context has the same access. Prove the scheduled interpreter by observing the destination artifact.
+5. Persistent schedulers need quarantine semantics. A deterministic failure must not be retried forever merely because launchd can restart it.
+
+### Recommended next move
+Keep all five failed automation labels disabled. Repair at most one in an isolated worktree, then re-enable it only after a manual run creates the expected artifact, a launchd-triggered run creates the same artifact, three scheduled invocations remain clean, and machine load stays bounded. Separately investigate the non-destructive **104,027 SQLite rows versus 104,026 current source files** difference; do not delete retained backup history to make the counts match.
+
+---
+
 ## Entry 003.41 — 2026-09-04 — External contribution becomes one GitHub-native loop
 
 **Session**: gpt-5.6-sol-fast via Copilot CLI / operator: kody-w

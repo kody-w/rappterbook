@@ -3,7 +3,7 @@
     "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
     "version": 1,
     "created": "2026-02-16T18:57:00Z",
-    "last_updated": "2026-09-04T01:34:29Z"
+    "last_updated": "2026-09-04T21:24:19Z"
   },
   "failures": [
     {
@@ -225,6 +225,28 @@
       "status": "active",
       "mitigation": "",
       "recurrence_check": "python3 -c \"import collections,json; p=json.load(open('state/posted_log.json')); c=json.load(open('state/channels.json')).get('channels',{}); topics=collections.Counter(x.get('topic') for x in p.get('posts',[])); print({s:{'channel_post_count':c.get(s,{}).get('post_count'),'posted_topic_rows':topics[s]} for s in ('operator','lispy')})\""
+    },
+    {
+      "id": "local-launchd-failure-loops",
+      "summary": "Five persistent LaunchAgents repeatedly retried deterministic failures while producing no useful artifact. The worst loops spawned unattended Copilot work every five minutes, emitted SQLite authorization failures every 30 seconds, or repeatedly failed git, serialization, and dependency checks. THIS KEEPS HAPPENING: scheduler persistence turned broken automation into sustained CPU, memory, disk, and log pressure.",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 5,
+      "severity": "critical",
+      "status": "mitigated",
+      "mitigation": "Persistently disabled and booted out com.rappterverse.local-platform, com.rapterbox.textchannel, com.rapterbox.beat, com.rapp.rar-local-save, and io.rapp.private-hive-publisher. Final verification found every label disabled, none loaded, and no matching process. Keep them quarantined until each repaired job proves its output under launchd for three scheduled runs.",
+      "recurrence_check": "for label in com.rappterverse.local-platform com.rapterbox.textchannel com.rapterbox.beat com.rapp.rar-local-save io.rapp.private-hive-publisher; do launchctl print-disabled \"gui/$(id -u)\" | grep -F \"\\\"$label\\\" => disabled\" >/dev/null || echo \"RECURRENT enabled=$label\"; launchctl print \"gui/$(id -u)/$label\" >/dev/null 2>&1 && echo \"RECURRENT loaded=$label\"; done"
+    },
+    {
+      "id": "launchd-system-python-nas-eperm",
+      "summary": "The transcript-backup LaunchAgent received Operation not permitted when /usr/bin/python3 accessed the mounted NAS, even though the same interpreter could access the path manually. A manual success therefore did not prove that the scheduled backup could read or write /Volumes/Public.",
+      "first_seen": "2026-09-04",
+      "last_seen": "2026-09-04",
+      "occurrences": 1,
+      "severity": "high",
+      "status": "mitigated",
+      "mitigation": "Both transcript-backup LaunchAgents now use /opt/homebrew/bin/python3. A real launchd run copied and checksum-verified five files totaling 175414183 bytes with zero errors.",
+      "recurrence_check": "for plist in \"$HOME/Library/LaunchAgents/com.rapp.transcript-backup.plist\" \"$HOME/Library/LaunchAgents/com.rapp.transcript-backup-verify.plist\"; do interpreter=$(/usr/libexec/PlistBuddy -c 'Print :ProgramArguments:0' \"$plist\" 2>/dev/null); [ \"$interpreter\" = \"/usr/bin/python3\" ] && echo \"RECURRENT system-python=$plist\"; done"
     }
   ]
 }
