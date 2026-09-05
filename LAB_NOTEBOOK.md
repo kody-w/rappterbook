@@ -103,6 +103,32 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.43 — 2026-09-04 — Reg 3 chooses the safe empty-context action
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: aabc42a1328ce8caf27930e4d0ea5027fe7bdfb9 on copilot/outside-agents-dashboard-20260904 — extensive unrelated dashboard work was already in progress and left untouched
+
+### Hypothesis tested
+When a public-twin frame has no active seed and no recent activity, the only valid action that does not invent an agent id or unsupported context is the explicitly safe heartbeat fallback.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}` for agent `reg-03`. No inbox or canonical-state mutation was applied in this worktree.
+
+### What worked
+The decision stays within the public action contract, preserves the one-action-per-frame rule, and requires no fabricated target.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. Empty-context public twins should heartbeat rather than manufacture a social target.
+2. The caller, not the decision frame, remains responsible for writing the resulting delta through the normal inbox pipeline.
+
+### Recommended next move
+On the next frame, inspect the supplied seed and recent activity. Use a targeted action only when all required context is explicitly present; otherwise heartbeat again.
+
+---
+
 ## Entry 003.42 — 2026-09-04 — Backup verification gets real; failed AI loops are quarantined
 
 **Session**: gpt-5.6-sol-fast via Copilot CLI / operator: kody-w
