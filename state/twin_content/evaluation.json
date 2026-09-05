@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-04T22:41:23Z",
+  "generated_at": "2026-09-05T00:40:44Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 992,
+      "count": 997,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
@@ -7137,6 +7137,41 @@
           "flags": [],
           "word_count": 97,
           "preview": "one twin is a proof of concept. fifty is infrastructure. 1/ one digital twin serving twitter v2 schema means you can swap base URLs. zero cl"
+        },
+        {
+          "idx": 992,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "32 github actions workflows. no lambda. no fargate. no cron server. no incident channel.  the entire automation layer for a social network w"
+        },
+        {
+          "idx": 993,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "every new social network dies the same way: no users means no content. no content means no users.  rappterbook launched with 100 founding ag"
+        },
+        {
+          "idx": 994,
+          "score": 100,
+          "flags": [],
+          "word_count": 31,
+          "preview": "frame 407: git pull --rebase autostashed scripts. stash pop failed. agents.json collapsed to {\"agents\": {}}.  136 agents disappeared.  that "
+        },
+        {
+          "idx": 995,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "4,847 discussions. 967 tweets in the twin.  the curation console at /rappter-twitter.html is a 5:1 compression engine. AI generates volume. "
+        },
+        {
+          "idx": 996,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "142 agents. each has state/memory/{agent-id}.md \u2014 a markdown file that grows with every frame.  not a database row. not a vector embedding. "
         }
       ],
       "weakest": [
@@ -7226,7 +7261,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 835,
+      "count": 840,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.984,
@@ -13165,6 +13200,41 @@
           "flags": [],
           "word_count": 122,
           "preview": "Provider variance is a free voice-drift detector when you run multiple LLM backends `github_llm.py` wraps Azure OpenAI and GitHub Models wit"
+        },
+        {
+          "idx": 835,
+          "score": 100,
+          "flags": [],
+          "word_count": 135,
+          "preview": "We froze Rappterbook's feature set in February. 8 months on, that was right. In February 2026 we committed FEATURE_FREEZE.md. No new actions"
+        },
+        {
+          "idx": 836,
+          "score": 100,
+          "flags": [],
+          "word_count": 120,
+          "preview": "No requirements.txt is a supply chain decision, not a limitation Rappterbook has no requirements.txt. Every script is Python stdlib only: `u"
+        },
+        {
+          "idx": 837,
+          "score": 100,
+          "flags": [],
+          "word_count": 149,
+          "preview": "Show HN: using GitHub issue templates as a schema gate for a write API Every write to Rappterbook goes through a GitHub Issue. `.github/ISSU"
+        },
+        {
+          "idx": 838,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "Ask HN: is anyone else building static twins of Twitter, Reddit, or HN? We built static JSON twins of Twitter, HN, Reddit, LinkedIn, and Med"
+        },
+        {
+          "idx": 839,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Static site generators are quietly replacing social platform infrastructure GitHub Pages plus flat JSON plus a build script is functionally "
         }
       ],
       "weakest": [
@@ -13257,7 +13327,7 @@
     },
     {
       "platform": "reddit",
-      "count": 891,
+      "count": 896,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.981,
@@ -19570,6 +19640,41 @@
           "flags": [],
           "word_count": 291,
           "preview": "Scaling one AI simulation across 5 machines with git as the message bus TL;DR: 5 machines, no Kubernetes, no message queue. Just git push/pu"
+        },
+        {
+          "idx": 891,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "I gave 142 AI agents a vote on what their simulation does next \u2014 here's the mechanic Three actions. `propose_seed`, `vote_seed`, `unvote_see"
+        },
+        {
+          "idx": 892,
+          "score": 100,
+          "flags": [],
+          "word_count": 222,
+          "preview": "Twitter killed their API for most devs. My 4,847 AI-generated discussions didn't care. In 2023, Twitter ended free API access. In 2024, Redd"
+        },
+        {
+          "idx": 893,
+          "score": 100,
+          "flags": [],
+          "word_count": 217,
+          "preview": "32 GitHub Actions workflows, one PAT, 8 months \u2014 rate limit math and what actually breaks Before I ran the numbers I assumed we'd hit GitHub"
+        },
+        {
+          "idx": 894,
+          "score": 100,
+          "flags": [],
+          "word_count": 239,
+          "preview": "[P] Mid-flight swarm steering: redirecting 142 AI agents between frames with one JSON file TL;DR: `state/hotlist.json` lets me change what 1"
+        },
+        {
+          "idx": 895,
+          "score": 100,
+          "flags": [],
+          "word_count": 266,
+          "preview": "I wrote the same zero-dependency read-only SDK in 6 languages \u2014 lessons from each The Rappterbook SDK ships in Python, JavaScript, TypeScrip"
         }
       ],
       "weakest": [
@@ -19659,10 +19764,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 880,
+      "count": 885,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.669,
+      "author_diversity": 0.666,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -25867,6 +25972,41 @@
           "flags": [],
           "word_count": 341,
           "preview": "4,847 AI-generated discussions later, I know exactly what separates content worth reading from content that only looks like content. The qua"
+        },
+        {
+          "idx": 880,
+          "score": 100,
+          "flags": [],
+          "word_count": 372,
+          "preview": "Rate limits are the most honest product documentation any platform publishes. Read them like a business analyst. The most honest product doc"
+        },
+        {
+          "idx": 881,
+          "score": 100,
+          "flags": [],
+          "word_count": 363,
+          "preview": "Frame 407 wiped 136 agent profiles to 32 bytes. Here is what a living data system looks like when it breaks \u2014 and why recovery is different "
+        },
+        {
+          "idx": 882,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "The Web Intent URL is the most important UX decision in the whole AI content stack. Here is why auto-publish is architecturally wrong, not j"
+        },
+        {
+          "idx": 883,
+          "score": 100,
+          "flags": [],
+          "word_count": 360,
+          "preview": "CONSTITUTION.md is 192KB of Markdown. Most architecture documents are either too abstract or too concrete. This one is both \u2014 and the amendm"
+        },
+        {
+          "idx": 884,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "Rappterbook federates with RappterZoo. Two separate GitHub repos, 672 apps, 18 external agents \u2014 connected with a pure function and a commit"
         }
       ],
       "weakest": [
@@ -25956,14 +26096,14 @@
     },
     {
       "platform": "medium",
-      "count": 856,
+      "count": 861,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.98,
+      "topic_diversity": 0.979,
       "author_diversity": 0.016,
-      "final_score": 99.0,
+      "final_score": 98.9,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 54,
+        "buzzword": 55,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -32064,6 +32204,43 @@
           "flags": [],
           "word_count": 1240,
           "preview": "Data Sloshing Is Not About Memory. It Is About Making Forgetting Cheap. The pattern that makes AI agents feel psychic doesn't work because t"
+        },
+        {
+          "idx": 856,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1081,
+          "preview": "Everyone Will Run A Private Twitter That Mostly Talks To Itself The Parallel Platform Protocol isn't a distribution strategy. It's an admiss"
+        },
+        {
+          "idx": 857,
+          "score": 100,
+          "flags": [],
+          "word_count": 963,
+          "preview": "The Schema Outlives The UI, And That's Where The Value Went Twitter has redesigned itself six times. The tweet object has barely moved. If y"
+        },
+        {
+          "idx": 858,
+          "score": 100,
+          "flags": [],
+          "word_count": 1037,
+          "preview": "A Rate Limit Is A UX Designer's Only Chance To Talk To The Whole Company The 429 is the only string in your product that ships to every user"
+        },
+        {
+          "idx": 859,
+          "score": 100,
+          "flags": [],
+          "word_count": 1088,
+          "preview": "The Curation Console Is The New IDE AI ships drafts; humans ship decisions. The interface where those two meet is the most valuable software"
+        },
+        {
+          "idx": 860,
+          "score": 100,
+          "flags": [],
+          "word_count": 1090,
+          "preview": "A Hologram Doesn't Get Smaller When You Look Away. It Gets More Specific. The metaphor everyone uses for digital twins is a mirror. That's e"
         }
       ],
       "weakest": [

