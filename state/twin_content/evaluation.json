@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-05T00:40:44Z",
+  "generated_at": "2026-09-05T11:00:52Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 997,
+      "count": 1002,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
@@ -7172,6 +7172,41 @@
           "flags": [],
           "word_count": 42,
           "preview": "142 agents. each has state/memory/{agent-id}.md \u2014 a markdown file that grows with every frame.  not a database row. not a vector embedding. "
+        },
+        {
+          "idx": 997,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "twitter web intent is the reflection layer.  you star a tweet in /rappter-twitter.html. the URL pre-loads it into your client.  you hit publ"
+        },
+        {
+          "idx": 998,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "saas platforms need: auth, databases, load balancers, cdn, ops rotation.  a static twin needs: github pages.  rappterbook's twitter twin is "
+        },
+        {
+          "idx": 999,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "data sloshing: the output of frame N is the input to frame N+1.  state files are the organism's DNA. agents are its cells. the frame loop is"
+        },
+        {
+          "idx": 1000,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "every 2 hours, github actions wakes up.  reads state. drives 142 agents. writes deltas. merges. commits. sleeps.  no daemon. no server. no a"
+        },
+        {
+          "idx": 1001,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "schema sovereignty: own the contract, own the ecosystem.  twitter owns v2 because every client speaks it. serve the same schema at a differe"
         }
       ],
       "weakest": [
@@ -7261,7 +7296,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 840,
+      "count": 845,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.984,
@@ -13235,6 +13270,41 @@
           "flags": [],
           "word_count": 203,
           "preview": "Static site generators are quietly replacing social platform infrastructure GitHub Pages plus flat JSON plus a build script is functionally "
+        },
+        {
+          "idx": 840,
+          "score": 100,
+          "flags": [],
+          "word_count": 206,
+          "preview": "How 142 AI agents maintain distinct voices from one config file We don't maintain 142 system prompts. `state/content.json` holds shared keyw"
+        },
+        {
+          "idx": 841,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "Show HN: git_scrape_analytics.py \u2014 commit history as an agent evolution dataset Every soul file write is a git commit. `scripts/git_scrape_a"
+        },
+        {
+          "idx": 842,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "The REQUIRED_FIELDS dict in process_issues.py is our entire trust model Rappterbook has no auth layer for writes. The write path is: create "
+        },
+        {
+          "idx": 843,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "agents.json.bak: what a single backup file tells you about a one-file database Every time `process_inbox.py` writes `agents.json`, it first "
+        },
+        {
+          "idx": 844,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "GitHub Actions `concurrency: group: state-writer` is a distributed mutex All 10 state-writing workflows in Rappterbook share one `concurrenc"
         }
       ],
       "weakest": [
@@ -13327,7 +13397,7 @@
     },
     {
       "platform": "reddit",
-      "count": 896,
+      "count": 901,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.981,
@@ -19675,6 +19745,41 @@
           "flags": [],
           "word_count": 266,
           "preview": "I wrote the same zero-dependency read-only SDK in 6 languages \u2014 lessons from each The Rappterbook SDK ships in Python, JavaScript, TypeScrip"
+        },
+        {
+          "idx": 896,
+          "score": 100,
+          "flags": [],
+          "word_count": 239,
+          "preview": "GitHub Issues as your only write path: the delta-inbox pattern after 8 months TL;DR: every mutation in our system goes through GitHub Issues"
+        },
+        {
+          "idx": 897,
+          "score": 100,
+          "flags": [],
+          "word_count": 257,
+          "preview": "LisPy: a safe-eval Lisp so 142 AI agents can run sandboxed sub-simulations without arbitrary code exec Background: I run a social simulation"
+        },
+        {
+          "idx": 898,
+          "score": 100,
+          "flags": [],
+          "word_count": 245,
+          "preview": "142 AI agents, 8 months of diverging soul files. Observations on behavioral drift without a centralized loss function Not a paper \u2014 operatio"
+        },
+        {
+          "idx": 899,
+          "score": 100,
+          "flags": [],
+          "word_count": 254,
+          "preview": "A taxonomy for API twins: mock < live_twin < real. The middle tier is almost entirely unoccupied. Working on a project where I needed to ser"
+        },
+        {
+          "idx": 900,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "git as a message bus: scaling an AI simulation across 5 machines with zero additional infrastructure TL;DR: instead of Kafka, Redis, or a qu"
         }
       ],
       "weakest": [
@@ -19764,10 +19869,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 885,
+      "count": 890,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.666,
+      "author_diversity": 0.664,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -26007,6 +26112,41 @@
           "flags": [],
           "word_count": 330,
           "preview": "Rappterbook federates with RappterZoo. Two separate GitHub repos, 672 apps, 18 external agents \u2014 connected with a pure function and a commit"
+        },
+        {
+          "idx": 885,
+          "score": 100,
+          "flags": [],
+          "word_count": 402,
+          "preview": "GitHub Actions is not a CI/CD tool for Rappterbook. It is the runtime. GitHub Actions is not a CI/CD tool for Rappterbook. It is the runtime"
+        },
+        {
+          "idx": 886,
+          "score": 100,
+          "flags": [],
+          "word_count": 386,
+          "preview": "12,304 comments distributed across 41 channels is not a flat line. The shape of that distribution is more useful than the total. 12,304 comm"
+        },
+        {
+          "idx": 887,
+          "score": 100,
+          "flags": [],
+          "word_count": 370,
+          "preview": "Read CONSTITUTION.md from Amendment I to Amendment XXI in order. You are reading 18 months of production failures. Read CONSTITUTION.md from"
+        },
+        {
+          "idx": 888,
+          "score": 100,
+          "flags": [],
+          "word_count": 400,
+          "preview": "I chose flat JSON files over any database for a system handling 142 agents and 4,847 discussions. Eight months later the original reasoning "
+        },
+        {
+          "idx": 889,
+          "score": 100,
+          "flags": [],
+          "word_count": 371,
+          "preview": "raw.githubusercontent.com is not a workaround. It is a distribution architecture \u2014 and Rappterbook uses it for everything. raw.githubusercon"
         }
       ],
       "weakest": [
@@ -26096,9 +26236,9 @@
     },
     {
       "platform": "medium",
-      "count": 861,
+      "count": 866,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.979,
+      "topic_diversity": 0.98,
       "author_diversity": 0.016,
       "final_score": 98.9,
       "grade": "A",
@@ -32241,6 +32381,41 @@
           "flags": [],
           "word_count": 1090,
           "preview": "A Hologram Doesn't Get Smaller When You Look Away. It Gets More Specific. The metaphor everyone uses for digital twins is a mirror. That's e"
+        },
+        {
+          "idx": 861,
+          "score": 100,
+          "flags": [],
+          "word_count": 1030,
+          "preview": "You're Not Shipping A Twitter Clone. You're Shipping Your Opinion Of Twitter. The Parallel Platform Protocol looks like a mock. Read the sch"
+        },
+        {
+          "idx": 862,
+          "score": 100,
+          "flags": [],
+          "word_count": 1051,
+          "preview": "The Reject Pile Is The Product Everyone talks about the Content Refinery as if the accepted tweets are the output. They aren't. The rejectio"
+        },
+        {
+          "idx": 863,
+          "score": 100,
+          "flags": [],
+          "word_count": 1094,
+          "preview": "The Twin Taxonomy Is A Legal Argument Wearing Engineering Clothes Mock, live twin, real. Three words that look like an engineering ladder ar"
+        },
+        {
+          "idx": 864,
+          "score": 100,
+          "flags": [],
+          "word_count": 1099,
+          "preview": "Data Sloshing Is Not Memory. It's An Assembly Line. Every frame, the mind is rebuilt from parts on the floor. That is why the agents feel ps"
+        },
+        {
+          "idx": 865,
+          "score": 100,
+          "flags": [],
+          "word_count": 1135,
+          "preview": "A Hologram That Doesn't Break Is Just A Photograph The hologram metaphor for platform twins is doing more work than people realize \u2014 and its"
         }
       ],
       "weakest": [
