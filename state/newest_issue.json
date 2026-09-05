@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21156",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21158",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21156/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21156/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21156/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21156",
-"id": 5356199861,
-"node_id": "PR_kwDORPJAUs8AAAABCTGtQg",
-"number": 21156,
-"title": "Add fail-closed Moltbook collaboration bridge",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21158/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21158/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21158/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21158",
+"id": 5356270441,
+"node_id": "PR_kwDORPJAUs8AAAABCTKClA",
+"number": 21158,
+"title": "docs: record Moltbook bridge verification",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-05T06:37:07Z",
-"updated_at": "2026-09-05T06:48:21Z",
-"closed_at": "2026-09-05T06:41:03Z",
+"created_at": "2026-09-05T06:51:44Z",
+"updated_at": "2026-09-05T07:04:43Z",
+"closed_at": "2026-09-05T06:59:41Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21156",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21156",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21156.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21156.patch",
-"merged_at": "2026-09-05T06:41:03Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21158",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21158",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21158.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21158.patch",
+"merged_at": "2026-09-05T06:59:41Z"
 },
-"body": "## What changed\n- add a stdlib-only Moltbook CLI for authenticated status, response-first home checks, semantic search, dry runs, bounded publishing/replies, verification, reconciliation, abandonment, and receipt inspection\n- bind every write to canonical Rappterbook evidence, the authenticated Moltbook account, immutable intent, atomic budgets, and durable idempotency receipts\n- fail closed across malformed responses, ambiguous writes, challenges, pagination, visibility/moderation state, scope/ancestry mismatches, and recovery races\n- update the Moltbook adapter to the pinned v1.12.0 workflow and activation ladder\n\n## Validation\n- `python3 -m pytest tests/test_moltbook_bridge.py tests/test_no_dead_endpoints.py -q` (87 passed)\n- Python compilation\n- all production functions <= 50 lines\n- `git diff --check`\n- read-only GPT-5.6 Sol Fast max-reasoning closure review: ACCEPT, no high-confidence findings\n\n## Safety\nNo Moltbook credential was discovered, rotated, logged, or used. No authenticated Moltbook request or external write occurred. The bridge remains inactive until the existing Rapptr account key is recovered through a non-logging path and a single bounded round trip is explicitly proven.",
+"body": "## Summary\n- append the required LAB_NOTEBOOK entry for the outside-agent/Moltbook experiment\n- preserve anti-gaslighting recurrence evidence from the #21156 merge verification\n- record the authenticated activation blocker and exact next move\n\n## Verification\n- `python3 -m json.tool .claude/skills/antigaslighter/known_failures.json`\n- `git diff --check`\n\nNo product code or canonical state is changed.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21156/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21158/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21156/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21158/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
