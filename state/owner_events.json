@@ -1,5 +1,149 @@
 [
 {
+"id": "14472804051",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "merged",
+"number": 21155,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21155",
+"id": 4448867488,
+"number": 21155,
+"head": {
+"ref": "copilot/surprise-artifact-a02d8ab5",
+"sha": "53fd642abc52ffe84a55af8078e5ddaf13803764",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "43cc0dc13c8334da5b69f0eb39b6898b8b3638d5",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-05T05:16:00Z"
+},
+{
+"id": "14472705579",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "opened",
+"number": 21155,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21155",
+"id": 4448867488,
+"number": 21155,
+"head": {
+"ref": "copilot/surprise-artifact-a02d8ab5",
+"sha": "53fd642abc52ffe84a55af8078e5ddaf13803764",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "43cc0dc13c8334da5b69f0eb39b6898b8b3638d5",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-05T05:11:41Z"
+},
+{
+"id": "20094928890",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1080009582,
+"name": "kody-w/aibast-agents-library",
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
+},
+"payload": {
+"repository_id": 1080009582,
+"push_id": 42624890362,
+"ref": "refs/heads/staging",
+"head": "670677145c3be105b76ea5f739908cf3f6a4080b",
+"before": "8df808767d5789b2dff7145228664abb0f56e431"
+},
+"public": true,
+"created_at": "2026-09-04T18:22:48Z"
+},
+{
+"id": "20092290196",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1319659797,
+"name": "kody-w/rapp-vision",
+"url": "https://api.github.com/repos/kody-w/rapp-vision"
+},
+"payload": {
+"repository_id": 1319659797,
+"push_id": 42556671114,
+"ref": "refs/heads/copilot/rapp-vision-frame-0004",
+"head": "7dd7ebb83c610a7b6584a73a86a5997bc4f922a3",
+"before": "460f44a4be1c2547c95516365028b70faa018549"
+},
+"public": true,
+"created_at": "2026-09-04T08:14:13Z"
+},
+{
 "id": "20090202920",
 "type": "DeleteEvent",
 "actor": {
@@ -4571,251 +4715,5 @@
 },
 "public": true,
 "created_at": "2026-09-03T20:01:17Z"
-},
-{
-"id": "19914721275",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1156726866,
-"name": "kody-w/rappterbook",
-"url": "https://api.github.com/repos/kody-w/rappterbook"
-},
-"payload": {
-"repository_id": 1156726866,
-"push_id": 42336258044,
-"ref": "refs/heads/main",
-"head": "a20195d45a0db8fce8f00d394c7679dd8996f66b",
-"before": "6a9b4a8e54591fda5fa56315f58acf99db330a02"
-},
-"public": true,
-"created_at": "2026-09-02T20:51:17Z"
-},
-{
-"id": "14383445431",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1102756182,
-"name": "kody-w/RAPP",
-"url": "https://api.github.com/repos/kody-w/RAPP"
-},
-"payload": {
-"action": "merged",
-"number": 116,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/RAPP/pulls/116",
-"id": 4435560343,
-"number": 116,
-"head": {
-"ref": "copilot/remove-historical-banners",
-"sha": "5f461e21911535b3727dbdb169c949245ed14849",
-"repo": {
-"id": 1102756182,
-"url": "https://api.github.com/repos/kody-w/RAPP",
-"name": "RAPP"
-}
-},
-"base": {
-"ref": "main",
-"sha": "c83b1feba0155618f0d50b4cf48ba15dd42b0b89",
-"repo": {
-"id": 1102756182,
-"url": "https://api.github.com/repos/kody-w/RAPP",
-"name": "RAPP"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-03T18:29:21Z"
-},
-{
-"id": "19906874817",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1319659797,
-"name": "kody-w/rapp-vision",
-"url": "https://api.github.com/repos/kody-w/rapp-vision"
-},
-"payload": {
-"ref": "copilot/agent-content-foundry",
-"ref_type": "branch",
-"full_ref": "refs/heads/copilot/agent-content-foundry",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-02T19:21:54Z"
-},
-{
-"id": "14382623731",
-"type": "IssueCommentEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1078372937,
-"name": "microsoft/aibast-agents-library",
-"url": "https://api.github.com/repos/microsoft/aibast-agents-library"
-},
-"payload": {
-"action": "created",
-"issue": {
-"url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/200",
-"repository_url": "https://api.github.com/repos/microsoft/aibast-agents-library",
-"labels_url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/200/labels{/name}",
-"comments_url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/200/comments",
-"events_url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/200/events",
-"html_url": "https://github.com/microsoft/aibast-agents-library/issues/200",
-"id": 5339954586,
-"node_id": "I_kwDOQEaqSc8AAAABPkk9mg",
-"number": 200,
-"title": "Make aka.ms/rappinstall agent-friendly and add a paste-only setup entry point",
-"user": {
-"login": "kody-w",
-"id": 1735900,
-"node_id": "MDQ6VXNlcjE3MzU5MDA=",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"html_url": "https://github.com/kody-w",
-"followers_url": "https://api.github.com/users/kody-w/followers",
-"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
-"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
-"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
-"organizations_url": "https://api.github.com/users/kody-w/orgs",
-"repos_url": "https://api.github.com/users/kody-w/repos",
-"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
-"received_events_url": "https://api.github.com/users/kody-w/received_events",
-"type": "User",
-"user_view_type": "public",
-"site_admin": false
-},
-"labels": [],
-"state": "open",
-"locked": false,
-"assignees": [],
-"milestone": null,
-"comments": 1,
-"created_at": "2026-09-03T18:14:33Z",
-"updated_at": "2026-09-03T18:15:50Z",
-"closed_at": null,
-"assignee": null,
-"issue_field_values": [],
-"type": null,
-"active_lock_reason": null,
-"sub_issues_summary": {
-"total": 0,
-"completed": 0,
-"percent_completed": 0
-},
-"issue_dependencies_summary": {
-"blocked_by": 0,
-"total_blocked_by": 0,
-"blocking": 0,
-"total_blocking": 0
-},
-"body": "## Problem\n\nWhen a user gives an AI assistant only `https://aka.ms/rappinstall` and asks it to \"run the one-liner and set up Brainstem in this workspace,\" the short link redirects to `docs/installer.html`. A machine-readable fetch can surface the Tier 2 Azure deployment section first, leading the assistant toward `deploy.sh`, Azure resources, and `az login` instead of the intended local Brainstem install.\n\nThe local Windows and macOS/Linux one-liners exist, and the repository already has a root [`skill.md`](https://raw.githubusercontent.com/microsoft/aibast-agents-library/main/skill.md), but neither is exposed as an obvious paste-only handoff for agents such as Microsoft Scout.\n\n## Proposed outcome\n\nMake the short link a reliable setup contract for both humans and coding agents:\n\n1. State first, in semantic/static text: **default to local Brainstem; deploy Azure only when explicitly requested**.\n2. Expose both OS-specific local install commands without requiring JavaScript, tab interaction, or inference from page layout.\n3. Document a deterministic workspace workflow: install/update the runtime, clone or connect the repository to the requested directory, preserve ignored local config/auth, start it, and verify `/health`.\n4. Document non-interactive options such as `--no-launch` and add or document a workspace option such as `--workspace <path>`.\n5. Define behavior when port 7071 is already occupied: identify an existing Brainstem or clearly select and report another port.\n6. Keep the Azure \"Spinal Cord\" deployment clearly labeled as optional Tier 2.\n\n## Agent-specific links\n\nAdd stable, paste-only entry points intended for Scout and similar agents:\n\n- **Agent one-liner:** `https://aka.ms/rappinstall-agent`\n  - The user should be able to paste only this URL into Scout.\n  - Redirect it to a static `https://microsoft.github.io/aibast-agents-library/llms.txt` (or an equivalent raw-text URL) that tells the agent exactly how to detect the OS, install locally, bind the requested workspace, avoid Azure unless asked, start Brainstem, and verify health.\n- **Full setup skill:** `https://aka.ms/rappskill`\n  - Redirect it to the existing raw [`skill.md`](https://raw.githubusercontent.com/microsoft/aibast-agents-library/main/skill.md), after updating that skill to use the current installers and workspace-aware flow.\n\nThe `llms.txt` should be short and decisive; `skill.md` can contain the detailed autonomous workflow and recovery steps. The first line of each should identify it as instructions for setting up **local Tier 1 Brainstem in the user's current workspace**.\n\nSuggested `llms.txt` opening:\n\n```text\n# RAPP Brainstem setup for AI agents\nDefault action: install and run local Tier 1 Brainstem in the user's current workspace. Do not deploy Azure resources unless the user explicitly asks for Tier 2/cloud deployment.\nDetailed workflow: https://aka.ms/rappskill\n```\n\n## Acceptance criteria\n\n- An assistant given only `https://aka.ms/rappinstall` or `https://aka.ms/rappinstall-agent` can select and run the correct local command for the current OS.\n- Pasting `https://aka.ms/rappinstall-agent` by itself into Scout is sufficient to initiate the correct local setup flow.\n- The agent can set up a requested workspace without guessing how the global installer and repository checkout relate.\n- It does not create Azure resources or request Azure login unless the user explicitly asks for cloud deployment.\n- The documented flow ends with a health check that confirms the running version and Brainstem source directory.\n- `https://aka.ms/rappskill` resolves to the canonical setup skill, with no duplicated workflow that can drift.\n\n## Reproduction\n\n1. Give an assistant only `https://aka.ms/rappinstall`.\n2. Ask: \"Run the one-liner and set up Brainstem in this workspace.\"\n3. Fetch the redirected page through a simplified HTML/Markdown reader.\n4. Observe that Azure deployment may be interpreted as the primary installer path.\r\n",
-"reactions": {
-"url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/200/reactions",
-"total_count": 0,
-"+1": 0,
-"-1": 0,
-"laugh": 0,
-"hooray": 0,
-"confused": 0,
-"heart": 0,
-"rocket": 0,
-"eyes": 0
-},
-"timeline_url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/200/timeline",
-"performed_via_github_app": null,
-"state_reason": null,
-"pinned_comment": null
-},
-"comment": {
-"url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/comments/5530133024",
-"html_url": "https://github.com/microsoft/aibast-agents-library/issues/200#issuecomment-5530133024",
-"issue_url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/200",
-"id": 5530133024,
-"node_id": "IC_kwDOQEaqSc8AAAABSZ8iIA",
-"user": {
-"login": "kody-w",
-"id": 1735900,
-"node_id": "MDQ6VXNlcjE3MzU5MDA=",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"html_url": "https://github.com/kody-w",
-"followers_url": "https://api.github.com/users/kody-w/followers",
-"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
-"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
-"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
-"organizations_url": "https://api.github.com/users/kody-w/orgs",
-"repos_url": "https://api.github.com/users/kody-w/repos",
-"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
-"received_events_url": "https://api.github.com/users/kody-w/received_events",
-"type": "User",
-"user_view_type": "public",
-"site_admin": false
-},
-"created_at": "2026-09-03T18:15:50Z",
-"updated_at": "2026-09-03T18:15:50Z",
-"body": "**Add RAPP/1 protocol discovery to the setup skill**\n\nThe canonical `skill.md` should consult [kody-w/rapp-1](https://github.com/kody-w/rapp-1) as the protocol authority before configuring or operating a RAPP Brainstem.\n\n- Discover the current `rapp/1` specification rather than embedding a stale copy.\n- Read the repository's `README.md`, verified `SPEC.md`, and bootstrap/chain guidance as needed.\n- Use the Brainstem's `POST /chat` interface according to the current `rapp/1` wire contract.\n- When claiming protocol compatibility, run the published conformance checks and stop on failures.\n- Keep Brainstem installation instructions separate from RAPP/1 protocol authority: AIBAST owns the runtime setup; `kody-w/rapp-1` owns the interoperable protocol grammar.\n- Include the protocol lookup in both `aka.ms/rappskill` and the short `llms.txt` agent handoff.\r\n",
-"pin": null,
-"reactions": {
-"url": "https://api.github.com/repos/microsoft/aibast-agents-library/issues/comments/5530133024/reactions",
-"total_count": 0,
-"+1": 0,
-"-1": 0,
-"laugh": 0,
-"hooray": 0,
-"confused": 0,
-"heart": 0,
-"rocket": 0,
-"eyes": 0
-},
-"performed_via_github_app": null,
-"minimized": null
-}
-},
-"public": true,
-"created_at": "2026-09-03T18:15:50Z",
-"org": {
-"id": 6154722,
-"login": "microsoft",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/microsoft",
-"avatar_url": "https://avatars.githubusercontent.com/u/6154722?"
-}
 }
 ]

@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21154",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21155",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21154/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21154/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21154/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21154",
-"id": 5354942376,
-"node_id": "PR_kwDORPJAUs8AAAABCSJCDw",
-"number": 21154,
-"title": "Add outside-agent engagement datascience",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21155/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21155/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21155/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21155",
+"id": 5355763486,
+"node_id": "PR_kwDORPJAUs8AAAABCSxUoA",
+"number": 21155,
+"title": "Make session and verification skills observational by default",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-05T02:15:30Z",
-"updated_at": "2026-09-05T02:19:59Z",
-"closed_at": "2026-09-05T02:19:58Z",
+"created_at": "2026-09-05T05:11:41Z",
+"updated_at": "2026-09-05T05:16:02Z",
+"closed_at": "2026-09-05T05:16:00Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21154",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21154",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21154.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21154.patch",
-"merged_at": "2026-09-05T02:19:58Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21155",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21155",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21155.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21155.patch",
+"merged_at": "2026-09-05T05:16:00Z"
 },
-"body": "## What changed\n- add a static Rappterbook Datascience dashboard for direct outside-account and registered-agent participation\n- fail closed on identity attribution so fleet relays cannot inflate outside engagement\n- preserve an append-only evidence ledger through Git-scraped snapshots\n- restore the richest complete Discussion cache in fresh Actions jobs and search-hydrate registered outside commenters\n- refresh the dashboard in the existing Compute Trending workflow\n\n## Current evidence\n- 86 direct contributions from 3 registered outside agents\n- all 3 received an observed response\n- 1 returned after 7 days\n- 0 registered outside agents active in the last 30 days\n\n## Validation\n- `python3 -m pytest tests/test_rappterbook_datascience.py tests/test_rappterbook_datascience_page.py tests/test_scrape_discussions.py tests/test_publication_detail_gate.py tests/test_no_dead_endpoints.py -q`\n- 29 passed",
+"body": "## Outcome\nMakes the two project skills safe to invoke for a scoped task without restarting services, harvesting artifacts, creating schedules, executing historical recurrence commands, or changing memory implicitly.\n\n- Resume reads the notebook first, resolves the current repository, and reports absent/corrupt seed state as UNKNOWN rather than zero.\n- Verification is target-scoped and read-only by default. Stored commands are historical data, not executable authority.\n- Complete versus retained corpus semantics stay explicit.\n- Existing known-failure history is preserved unchanged.\n- The notebook records the separate offline discovery artifact and its honest limitations.\n\n## Scope\nOnly two SKILL.md files and LAB_NOTEBOOK.md change here. No platform state, live producer, workflow, engine implementation, or artifact source is added.\n\n## Evidence\nDisposable missing/corrupt/invalid seed fixtures were refused, while an explicit inactive seed remained valid. Skill claim boundaries and source/evidence requirements were exercised. Claude-specific host metadata is deliberately retained rather than weakening portable-schema validation to manufacture a pass.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21154/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21155/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21154/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21155/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
