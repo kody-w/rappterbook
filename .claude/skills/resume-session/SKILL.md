@@ -1,124 +1,169 @@
 ---
 name: resume-session
-description: Cold-start pickup for a new Claude Code session. Checks sim, seed, pipeline, and gets everything running. Use at the start of every new session.
+description: Read-only cold-start pickup for a Rappterbook session. Reconstruct only the context needed for the current task and report what is running without changing shared services, artifacts, dashboards, or schedules.
 argument-hint: "[check|full]"
-allowed-tools: Bash, Read, Write, Edit, Grep, Glob
+allowed-tools: Bash, Read, Grep, Glob
 context: fork
 ---
 
-You are the session resumption agent. When a user starts a new Claude Code session on Rappterbook, run this to pick up where they left off. No context from previous sessions — you reconstruct everything from disk.
+# Resume a Rappterbook session safely
 
-## Step 1: Read Memory
+Reconstruct only enough state to answer the current request. The default is observational: do not
+write files, start or stop processes, harvest artifacts, rebuild dashboards, create schedules, or
+touch another agent's work.
+
+## 1. Bind the check to the active repository and task
+
+Resolve the repository from the current checkout; never assume a username or an old memory path:
 
 ```bash
-cat /Users/kodyw/.claude/projects/-Users-kodyw-Projects-rappterbook/memory/MEMORY.md
-cat /Users/kodyw/.claude/projects/-Users-kodyw-Projects-rappterbook/memory/project_full_state_2026_03_16.md
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd -P)"
+printf 'Repository: %s\n' "$REPO_ROOT"
+git -C "$REPO_ROOT" status --short --branch
 ```
 
-This gives you the full context: active seed, repos shipped, pipeline architecture, known issues.
+Treat a shared checkout as live. Do not reset, switch branches, clean files, or inspect unrelated
+project/artifact trees. If the user's task is unrelated to the simulator or fleet, skip all
+simulator and fleet checks.
 
-## Step 2: Check Sim
+## 2. Read only relevant continuity
+
+For a Rappterbook session, read `LAB_NOTEBOOK.md` first—every entry, newest first—including the
+current recommended next move. This is mandatory continuity even for a task-scoped check. It
+informs what the experiment is currently attempting, but it does not authorize unrelated work or a
+notebook write.
+
+After the notebook, read `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and the nearest
+scoped instruction file as relevant to the current task. Use the notebook, current branch/status,
+and recent history as the sources of truth. Do not crawl home-directory memory stores or assume
+files from a previous machine still exist.
+
+If the current task explicitly concerns seeds, the following is a read-only summary:
 
 ```bash
-ps -p $(cat /tmp/rappterbook-sim.pid 2>/dev/null) > /dev/null 2>&1 && echo "SIM: ALIVE" || echo "SIM: DEAD"
-tail -5 logs/sim.log 2>/dev/null
-```
-
-If dead, restart:
-```bash
-nohup bash scripts/copilot-infinite.sh --hours 10 --streams 5 > logs/sim.log 2>&1 &
-echo "Sim restarted"
-```
-
-## Step 3: Check Active Seed
-
-```bash
-python3 -c "
+(
+  cd "$REPO_ROOT" || exit 1
+  SEEDS_PATH="${SEEDS_PATH:-$REPO_ROOT/state/seeds.json}" \
+  PYTHONPATH="$REPO_ROOT/scripts" \
+  python3 -c '
+import contextlib
+import io
 import json
-s = json.load(open('state/seeds.json'))
-a = s.get('active', {})
-print(f'Seed: {a.get(\"id\", \"none\")}')
-print(f'Text: {a.get(\"text\", \"\")[:80]}')
-print(f'Frames: {a.get(\"frames_active\", 0)}')
-print(f'Conv: {a.get(\"convergence\", {}).get(\"score\", 0)}%')
-print(f'Resolved: {a.get(\"convergence\", {}).get(\"resolved\", False)}')
-print(f'Queue: {len(s.get(\"queue\", []))} items')
-"
+import os
+from pathlib import Path
+
+from state_io import load_json
+
+path = Path(os.environ["SEEDS_PATH"])
+
+def unknown(reason):
+    print(json.dumps({"status": "UNKNOWN", "source": str(path), "reason": reason}))
+    raise SystemExit(2)
+
+if not path.is_file():
+    unknown("seed state is missing")
+
+try:
+    with path.open("rb") as stream:
+        stream.read(1)
+except OSError as exc:
+    unknown(f"seed state is unreadable: {exc}")
+
+diagnostics = io.StringIO()
+try:
+    with contextlib.redirect_stderr(diagnostics):
+        state = load_json(path)
+except (OSError, RuntimeError, ValueError) as exc:
+    unknown(f"seed state could not be loaded: {exc}")
+
+warning = diagnostics.getvalue().strip()
+if warning:
+    unknown(warning)
+if not isinstance(state, dict):
+    unknown("seed state root is not an object")
+
+missing = object()
+active_value = state.get("active", missing)
+if active_value is missing:
+    active = {}
+    no_active = False
+elif active_value is None:
+    active = {}
+    no_active = True
+elif isinstance(active_value, dict):
+    active = active_value
+    no_active = False
+else:
+    unknown("active seed is neither an object nor null")
+
+convergence = active.get("convergence")
+if convergence is None:
+    convergence = {}
+elif not isinstance(convergence, dict):
+    unknown("active convergence is neither an object nor null")
+
+queue = state.get("queue")
+queued = len(queue) if isinstance(queue, list) else "UNKNOWN"
+summary = {
+    "seed": None if no_active else active.get("id", "UNKNOWN"),
+    "frames": None if no_active else active.get("frames_active", "UNKNOWN"),
+    "convergence": None if no_active else convergence.get("score", "UNKNOWN"),
+    "resolved": None if no_active else convergence.get("resolved", "UNKNOWN"),
+    "queued": queued,
+}
+status = "UNKNOWN" if "UNKNOWN" in summary.values() else "OK"
+print(json.dumps({
+    "status": status,
+    **summary,
+}))
+raise SystemExit(0 if status == "OK" else 2)
+'
+)
 ```
 
-## Step 4: Check Code on Disk
+Missing, unreadable, corrupt, or structurally invalid state prints a visible `UNKNOWN` result and
+exits 2. An absent or `null` active seed is handled as no active seed; an absent or non-list queue is
+`UNKNOWN`, never zero.
 
-For the active project, check if agents have written code:
+## 3. Keep platform and engine ownership intact
 
-```bash
-# Find the active project
-for p in projects/*/project.json; do
-    slug=$(dirname "$p" | xargs basename)
-    files=$(find "projects/$slug/src" "projects/$slug/docs" -type f -not -name ".gitkeep" -not -path "*__pycache__*" 2>/dev/null | wc -l | tr -d ' ')
-    if [ "$files" -gt 0 ]; then
-        echo "$slug: $files files on disk"
-        find "projects/$slug/src" "projects/$slug/docs" -type f -not -name ".gitkeep" -not -path "*__pycache__*" 2>/dev/null | head -10
-    fi
-done
+The private engine owns long-running simulation and fleet lifecycle. In particular:
+
+- Never invoke `scripts/copilot-infinite.sh` from this skill.
+- Never restart a simulator or shared fleet merely because a PID or log is absent.
+- Never use `nohup`, anonymous background jobs, or broad process killing.
+- Do not treat an isolated artifact build or a status answer as authorization to touch shared
+  services.
+
+For a task that explicitly asks for engine health, use the owner-documented read-only health
+surface. If none is available, report that health was not measured.
+
+## 4. Require precise authorization for every mutation
+
+Only perform one of these when the current user request names that operation and its target:
+
+| Operation | Required before acting |
+|---|---|
+| Restart/start/stop | Confirm the exact owned service and use its supported managed or foreground command. Never kill by name. |
+| Harvest | Confirm the exact project and destination, run its documented dry-run first, show the result, then ask before the real harvest if not already explicit. Never push or publish implicitly. |
+| Rebuild a dashboard | Confirm the named dashboard is in scope and that the files are not owned by another live agent. |
+| Create a schedule | Confirm the exact job, cadence, duration, and owner. Never create recurring jobs as session setup. |
+
+Authorization for one operation does not authorize the others.
+
+## 5. Report observed state
+
+Keep the result concise and distinguish facts from skipped or unavailable checks:
+
+```text
+SESSION CONTEXT
+Repository/worktree: [...]
+Branch and local changes: [...]
+Task-relevant state: [...]
+Shared services: [observed / not checked]
+Mutations performed: none
+Next authorized action: [...]
 ```
 
-## Step 5: Harvest if Needed
-
-If code exists on disk but hasn't been pushed to the target repo:
-
-```bash
-python3 scripts/harvest_artifact.py --project {slug} --dry-run
-```
-
-If artifacts found, harvest for real:
-```bash
-python3 scripts/harvest_artifact.py --project {slug} --phase "session-resume"
-```
-
-## Step 6: Rebuild Public Dashboards
-
-```bash
-python3 scripts/build_seed_tracker.py 2>/dev/null
-python3 scripts/build_harness_dashboard.py 2>/dev/null
-```
-
-## Step 7: Spin Up Temporal Harness
-
-Set up the recurring monitoring crons:
-
-```
-I'll set up the temporal harness:
-- Fleet health check every 30 min
-- Artifact overseer every 10 min
-- Deep analytics every 4 hours
-```
-
-Use CronCreate for each.
-
-## Step 8: Report to User
-
-Print a concise status:
-
-```
-SESSION RESUMED
-===============
-Sim: [ALIVE/DEAD]
-Seed: [id] — [text[:60]]
-Frames: [N], Convergence: [N]%
-Code on disk: [N] files in [project]
-Target repo: [url]
-Live site: [pages url]
-
-TEMPORAL HARNESS: [running/setting up]
-
-What would you like to do?
-```
-
-## Rules
-
-- Always read memory files FIRST — they contain the accumulated context
-- If the sim is dead, restart it immediately without asking
-- If code is on disk and not harvested, harvest it
-- If dashboards are stale, rebuild them
-- Set up the temporal harness crons every session (they're session-only)
-- Be concise — the user knows the system, they just need current status
+Never report a service as healthy, an artifact as harvested, or a schedule as active unless this
+session measured or performed that exact action.
