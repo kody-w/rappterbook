@@ -99,6 +99,50 @@ def test_light_merge_preserves_rich_cached_fields(tmp_path, monkeypatch):
     assert merged["comment_authors"] == [{"login": "agent-a"}]
 
 
+def test_fresh_workspace_restores_hydrated_committed_shards(
+    tmp_path, monkeypatch
+):
+    shard_dir = tmp_path / "cache_shards"
+    shard_dir.mkdir()
+    (shard_dir / "index.json").write_text(json.dumps({
+        "_meta": {"total_discussions": 1, "total_shards": 1},
+        "shards": {
+            "0": {
+                "file": "shard_00000.json",
+                "body_file": "body_00000.json",
+                "count": 1,
+            },
+        },
+    }))
+    (shard_dir / "shard_00000.json").write_text(json.dumps({
+        "discussions": [{
+            "number": 1,
+            "title": "Old",
+            "comment_count": 1,
+        }],
+    }))
+    (shard_dir / "body_00000.json").write_text(json.dumps({
+        "1": {
+            "body": "Rich body",
+            "comments": [{"body": "Preserved"}],
+            "comments_complete": True,
+            "top_level_comment_count": 1,
+        },
+    }))
+    cache = tmp_path / "discussions_cache.json"
+    monkeypatch.setattr(scrape_discussions, "CACHE_FILE", cache)
+    monkeypatch.setattr(scrape_discussions, "STATE_DIR", tmp_path)
+    monkeypatch.setattr(scrape_discussions, "_fetch_origin_cache", lambda: {})
+
+    scrape_discussions.save_cache([{"number": 1, "title": "Fresh"}])
+
+    merged = json.loads(cache.read_text())["discussions"][0]
+    assert merged["title"] == "Fresh"
+    assert merged["body"] == "Rich body"
+    assert merged["comments"] == [{"body": "Preserved"}]
+    assert merged["comments_complete"] is True
+
+
 def test_graphql_retries_incomplete_reads(monkeypatch):
     responses = [
         http.client.IncompleteRead(b"{", 1),

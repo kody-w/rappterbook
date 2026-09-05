@@ -45,6 +45,8 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
+from cache_shard_loader import load_cache_shards
+
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 OWNER = "kody-w"
 REPO = "rappterbook"
@@ -431,18 +433,38 @@ def _fetch_origin_cache() -> dict[int, dict]:
         return {}
 
 
-def save_cache(discussions: list[dict], merge: bool = True) -> None:
+def _load_committed_shards() -> dict[int, dict]:
+    """Load the committed rich cache used to seed fresh CI workspaces."""
+    discussions, meta = load_cache_shards(STATE_DIR, include_body=True)
+    if not meta.get("is_complete"):
+        return {}
+    print(f"  Committed shards have {len(discussions)} discussions")
+    return {discussion["number"]: discussion for discussion in discussions}
+
+
+def _cache_richness(discussions: dict[int, dict]) -> tuple[int, int, int]:
+    """Rank cache candidates by corpus size and retained public detail."""
+    complete_comments = sum(
+        1 for row in discussions.values() if row.get("comments_complete") is True
+    )
+    bodies = sum(1 for row in discussions.values() if row.get("body"))
+    return len(discussions), complete_comments, bodies
+
+
+def save_cache(
+    discussions: list[dict],
+    merge: bool = True,
+    extra_meta: dict | None = None,
+) -> None:
     """Write the data warehouse to disk, merging with existing data.
 
     When merge=True (default), new discussions are merged into the existing
     cache keyed by discussion number.  Newer data wins for duplicate numbers.
     This prevents --recent N runs from destroying older cached data.
 
-    Origin-fetch safeguard: before merging with the local file, we also fetch
-    the origin cache from raw.githubusercontent.com and use whichever source
-    (local or origin) has MORE discussions as the merge base.  This prevents
-    the stale-local-cache overwrite bug where a sim with only ~200 cached
-    discussions pushes a shrunken cache over the full ~5000-discussion origin.
+    Fresh CI workspaces restore the richest complete base from the local root
+    cache, the historical origin cache, or committed cache shards. This keeps
+    hydrated comments from disappearing after every metadata-only scrape.
     """
     CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
 
@@ -457,17 +479,23 @@ def save_cache(discussions: list[dict], merge: bool = True) -> None:
         except (json.JSONDecodeError, OSError, KeyError):
             local_by_num = {}
 
-    # Fetch origin cache; use the larger set as the merge base
+    # Select the complete base that retains the most hydrated public detail.
     if merge:
         origin_by_num = _fetch_origin_cache()
-        if len(origin_by_num) > len(local_by_num):
-            print(
-                f"  Origin ({len(origin_by_num)}) > local ({len(local_by_num)}) "
-                "— using origin as merge base"
-            )
-            existing_by_num = origin_by_num
-        else:
-            existing_by_num = local_by_num
+        shard_by_num = _load_committed_shards()
+        candidates = {
+            "local": local_by_num,
+            "origin": origin_by_num,
+            "committed shards": shard_by_num,
+        }
+        source, existing_by_num = max(
+            candidates.items(),
+            key=lambda item: _cache_richness(item[1]),
+        )
+        print(
+            f"  Using {source} as merge base "
+            f"(rank={_cache_richness(existing_by_num)})"
+        )
     else:
         existing_by_num = {}
 
@@ -523,6 +551,7 @@ def save_cache(discussions: list[dict], merge: bool = True) -> None:
             "total": len(merged),
             "owner": OWNER,
             "repo": REPO,
+            **(extra_meta or {}),
         },
         "discussions": merged,
     }

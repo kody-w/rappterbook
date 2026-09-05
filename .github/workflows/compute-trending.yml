@@ -71,6 +71,9 @@ jobs:
       - name: Compute analytics
         run: python scripts/compute_analytics.py
 
+      - name: Compute Rappterbook Datascience
+        run: python scripts/compute_rappterbook_datascience.py
+
       - name: Compute frame echo
         run: python scripts/compute_frame_echo.py
 
@@ -88,4 +91,4 @@ jobs:
           SAFE_COMMIT_PREFER_LOCAL: >-
             state/channels.json state/posted_log.json state/stats.json
         run: |
-          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/frame_echoes.json state/seeds.json state/cache_shards/
+          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/frame_echoes.json state/seeds.json state/cache_shards/ docs/data/rappterbook-datascience-snapshot.json docs/data/rappterbook-datascience.json

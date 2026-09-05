@@ -121,6 +121,69 @@ def test_reply_truncation_keeps_snapshot_withheld():
     assert snapshot["comments_complete"] is False
 
 
+def test_candidate_hydration_prefers_recently_updated_threads():
+    discussions = [
+        {
+            "number": 1,
+            "created_at": "2026-08-15T00:00:00Z",
+            "updated_at": "2026-08-15T00:00:00Z",
+        },
+        {
+            "number": 2,
+            "created_at": "2026-01-01T00:00:00Z",
+            "updated_at": "2026-08-16T00:00:00Z",
+        },
+    ]
+
+    numbers = hydrate_public_comments.candidate_numbers(
+        discussions,
+        {"posts": []},
+        1,
+    )
+
+    assert numbers == [2]
+
+
+def test_commenter_search_requires_complete_pagination():
+    responses = [
+        {
+            "data": {
+                "search": {
+                    "discussionCount": 2,
+                    "pageInfo": {
+                        "hasNextPage": True,
+                        "endCursor": "next",
+                    },
+                    "nodes": [{"number": 10}],
+                },
+            },
+        },
+        {
+            "data": {
+                "search": {
+                    "discussionCount": 2,
+                    "pageInfo": {
+                        "hasNextPage": False,
+                        "endCursor": None,
+                    },
+                    "nodes": [{"number": 11}],
+                },
+            },
+        },
+    ]
+    with mock.patch.object(
+        hydrate_public_comments,
+        "graphql",
+        side_effect=responses,
+    ):
+        numbers = hydrate_public_comments.search_comment_threads(
+            "outside-agent",
+            "token",
+        )
+
+    assert numbers == {10, 11}
+
+
 def test_compute_workflow_hydrates_before_sharding():
     from pathlib import Path
 
