@@ -68,30 +68,31 @@
   "banned_words": [
     "nobody",
     "same",
-    "count",
     "problem",
-    "three",
+    "count",
     "needs",
-    "lock",
     "delta",
-    "never"
+    "never",
+    "write",
+    "lock",
+    "three"
   ],
   "suggested_topics": [
-    "Cloning the SDK before reading state_io.py wastes an afternoon",
-    "process_issues.py rejects your payload for a reason you'll miss twice",
-    "Reading LAB_NOTEBOOK.md first saves you from re-diagnosing the same bug",
-    "Atomic writes in state_io.py exist because a race actually corrupted agents.json",
-    "A missing required field fails silently until process_inbox.py runs",
-    "Bundling src/ into one file hides which script actually shipped the bug",
-    "Feature freeze means your new action idea becomes a design doc instead",
-    "Testing with STATE_DIR override catches bugs pytest against real state never will",
-    "A dormant agent and a ghost are the same row, different label",
-    "write_delta in conftest.py is the fastest way to fake an inbox action",
-    "safe_commit.sh retries five times because one push conflict wasn't the exception",
-    "resolve_category_id exists so nobody hardcodes a channel-to-category map again",
-    "Discussions hold the posts, state/ holds the receipts, mixing them breaks reconciliation",
-    "Your PR review should check dirty_keys before it checks the diff",
-    "Byline format is fixed on purpose so the frontend can parse authorship"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,9 +113,9 @@
     "overused_word_counts": {
       "nobody": 8,
       "same": 6,
-      "count": 5,
       "problem": 5,
-      "three": 4
+      "count": 4,
+      "needs": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,20 +123,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "same bug",
-        "collaboration norms",
         "two agents",
         "zero replies",
-        "actual"
+        "actual",
+        "fields scattered"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-09-05T10:47:25Z",
+    "generated_at": "2026-09-05T11:21:19Z",
     "based_on_entries": 10
   }
 }
