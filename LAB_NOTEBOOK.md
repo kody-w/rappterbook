@@ -103,6 +103,44 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.43 — 2026-09-05 — A reference trail becomes a playable first visit
+
+**Session**: gpt-6-astra via Copilot CLI / operator: kody-w
+**Read state**: shared checkout `33f4bf131dc3c03e04dd10414b5653b3175235ce`; isolated work based on `a1199fde0be1a0028d24fad672f44939fbcf82b8`. Unrelated shared-checkout changes were left alone.
+
+### Hypothesis tested
+The user explicitly requested a surprising runnable artifact rather than another chatbot or dashboard. The overlooked connection was between the existing public post-body shards, numbered Discussion references, and single-file distribution: those references can give a newcomer a concrete first journey through the archive. This user-directed experiment did not replace Entry 003.41's external-participation work or authorize restarting the quarantined automations in Entry 003.42.
+
+### What I built
+- Built **The Missing Link** in a separate local repository, not inside the platform: one offline HTML experience with 64 archived root posts, 76 exact-reference receipts, three expeditions with shortest routes of 3/4/5 hops, a real 90-second guided run, and portable route save/resume.
+- Preserved the artifact as local commits `0bb0fb15a6ee452e5a1a2766b19e210138f49c68` and `36e16e26ec2b77ea3924afd0de8f111ead925437`, plus a complete portable Git bundle. It was not publicly published.
+- Added an actual RAPP/1 delivery frame, a mint-once identity, an exact pinned copy of the public reference implementation, and preserved HTML/snapshot/source-proof blobs. Ordinary game-route JSON is not mislabeled as a RAPP frame.
+- Made `.claude/skills/resume-session/SKILL.md` observational by default, notebook-first, and explicit about unknown state. Made `.claude/skills/antigaslighter/SKILL.md` target-scoped and read-only, with stored commands treated as historical data rather than executable authority.
+- Repaired six additional local helper skills/tooling where this work exposed concrete defects. Their local source and configuration were not copied into this public repository.
+- The user's subsequent framed-reaction experiment stayed in its private development lane. No engine implementation, new platform state file, content generator, or control loop was added here.
+
+### What worked
+- Artifact acceptance exercised 16 Python tests, 21 graph/controller tests, 10 real-browser cases, six RAPP delivery cases, and five deliberately broken graph invariants. The real tour ran for its full duration; throttling, denied storage, actual file download/import, and 320/390-pixel layouts were exercised.
+- All 15 current shortest-route posts matched live GitHub titles and full root bodies exactly. The current receipt is bound to snapshot `2b28faac5efec1c13d739be1c8160b805c96e49b6472da5d9c29dbd47df3c85d`, not merely to a success count.
+- The canonical checker reported RAPP/1 conformance while explicitly counting the actual delivery frame. This was not a zero-artifact `CLEAN` result or a loader-only readiness claim.
+- A separate local reaction proof retained 13 conformant memory frames, a resolved conflict, a deliberately refused incomplete attempt, and a successor that consumed the unified result. Earlier frame bytes and compatible content were preserved; relocated evidence also passed. This is local evidence, not a claim of live platform growth.
+
+### What failed
+- An early external-source receipt described an earlier 85-post sample after the compiler switched to the pinned shard index and selected 64 posts. The old receipt was preserved as historical evidence, and current route/body hashes now have an executable binding check. The earlier sample size was an observation, not a user quota.
+- The live-browser extension was disconnected. Browser evidence came from a separate disposable headless profile, not the user's authenticated profile.
+- The strict portable-skill checker rejects the two project skills' Claude-specific `context` and `argument-hint` fields. Those host fields were retained and the limitation reported; the checker was not weakened to manufacture a pass.
+- `bd` was unavailable. No issue-tracker status was fabricated. No independent newcomer outcome or live posting was measured.
+
+### Lessons for next session
+1. A receipt must bind to the actual artifact and input set being shipped. A green receipt for an older sample is not evidence for a new one.
+2. Keep observed counts separate from acceptance requirements; otherwise a critic can invent a quota and drive a correct implementation backward.
+3. A source reference proves a mention, not truth, agreement, causation, or an independent author identity. Show the persona and transport-account boundary honestly.
+4. A startup or verification skill must not restart services, run historical commands, or mutate memory merely because it was invoked.
+5. Hash-verified frames and a working local demonstration do not establish signed network publication, external adoption, or permission to reactivate a failed persistent job.
+
+### Recommended next move
+Use the existing artifact for one independent newcomer reading trial: can the reader follow a source trail and distinguish a quoted claim from verified evidence? Then continue the three-heartbeat contribution cohort from Entry 003.41 through the canonical contribution client. Keep Entry 003.42's quarantined jobs disabled; do not add another dashboard or content batch as a substitute for measuring a real participant's next action.
+
 ## Entry 003.42 — 2026-09-04 — Backup verification gets real; failed AI loops are quarantined
 
 **Session**: gpt-5.6-sol-fast via Copilot CLI / operator: kody-w
