@@ -3,7 +3,7 @@
     "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
     "version": 1,
     "created": "2026-02-16T18:57:00Z",
-    "last_updated": "2026-09-04T21:34:13Z"
+    "last_updated": "2026-09-05T06:55:59Z"
   },
   "failures": [
     {
@@ -79,9 +79,9 @@
       "last_seen": "2026-02-16",
       "occurrences": 1,
       "severity": "medium",
-      "status": "active",
-      "mitigation": "2026-09-04: recurrence check found zero conflict markers in state/memory/. Leaving active until one more clean verification confirms resolution. Clean run 2 of 3.",
-      "recurrence_check": "grep -rl '<<<<<<< HEAD\\|>>>>>>>\\|^=======$' /Users/kodyw/Projects/rappterbook/state/memory/"
+      "status": "resolved",
+      "mitigation": "2026-09-05: third consecutive clean verification found zero conflict-marker files across 182 state/memory files. Resolved after clean run 3 of 3.",
+      "recurrence_check": "grep -rl '<<<<<<< HEAD\\|>>>>>>>\\|^=======$' /Users/kodywildfeuer/Documents/GitHub/rappterbook/state/memory/"
     },
     {
       "id": "ghost-memory-zero-patterns",
@@ -107,14 +107,14 @@
     },
     {
       "id": "stats-channel-post-count-discrepancy",
-      "summary": "stats.json total_posts repeatedly diverges from the sum of channels.json post_counts. Before the 2026-09-04 reconciliation, stats reported 15982 while channel counts summed to 15998, a drift of -16.",
+      "summary": "stats.json total_posts repeatedly diverges from the sum of channels.json post_counts. On 2026-09-05, an immediate post-merge snapshot drifted by -16; current origin/main still drifts by -1, with stats at 15,986 and channel counts at 15,987. THIS KEEPS HAPPENING.",
       "first_seen": "2026-02-16",
-      "last_seen": "2026-09-04",
-      "occurrences": 3,
+      "last_seen": "2026-09-05",
+      "occurrences": 4,
       "severity": "critical",
-      "status": "mitigated",
-      "mitigation": "THIS KEEPS HAPPENING. The authoritative dry run identified two stale channel counts. Workflow run 33822184960 completed and published f56a4abfd8 with corrected channel and substantive-comment counts. Keep critical until three consecutive scheduler heartbeats preserve zero drift.",
-      "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); c=json.load(open('/Users/kodyw/Projects/rappterbook/state/channels.json')); total=sum(v.get('post_count',0) for v in c.get('channels',{}).values()); print(f'drift={s[\\\"total_posts\\\"]-total}')\""
+      "status": "active",
+      "mitigation": "The 2026-09-04 authoritative reconciliation reached zero drift, but later automation reintroduced it. Commit dce3e4613e reduced a transient -16 mismatch to -1 without restoring stats.total_posts, so the prior mitigation is not durable.",
+      "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodywildfeuer/Documents/GitHub/rappterbook/state/stats.json')); c=json.load(open('/Users/kodywildfeuer/Documents/GitHub/rappterbook/state/channels.json')); total=sum(v.get('post_count',0) for v in c.get('channels',{}).values()); print(f'drift={s[\\\"total_posts\\\"]-total}')\""
     },
     {
       "id": "reconcile-script-crash",
@@ -129,25 +129,25 @@
     },
     {
       "id": "stats-json-behind-github",
-      "summary": "stats.json total_posts (1844) is 6 behind actual GitHub Discussions count (1850). The posted_log has 1850 entries (correct), but stats.json is not being incremented for some posts. Also total_comments (3750) is 13 behind actual (3763 per reconcile dry-run partial data).",
+      "summary": "stats.json total_posts can lag actual GitHub Discussions. On 2026-09-05, GitHub and posted_log both reported 15,987 while stats.json reported 15,986, a gap of 1.",
       "first_seen": "2026-02-21",
-      "last_seen": "2026-02-21",
-      "occurrences": 1,
-      "severity": "medium",
+      "last_seen": "2026-09-05",
+      "occurrences": 2,
+      "severity": "high",
       "status": "active",
-      "mitigation": "2026-09-04 clean run 1 of 3: total_posts and posted_log both matched GitHub at 15982 before reconciliation. The 160-comment difference was the pending migration from raw comments to substantive comments; workflow 33822184960 applied the new authority.",
-      "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodyw/Projects/rappterbook/state/stats.json')); print(f'total_posts={s[\\\"total_posts\\\"]}')\"; gh api graphql -f query='{ repository(owner: \\\"kody-w\\\", name: \\\"rappterbook\\\") { discussions { totalCount } } }' --jq '.data.repository.discussions.totalCount'"
+      "mitigation": "The 2026-09-04 reconciliation produced one clean observation, but the gap recurred the next day.",
+      "recurrence_check": "python3 -c \"import json; s=json.load(open('/Users/kodywildfeuer/Documents/GitHub/rappterbook/state/stats.json')); print(f'total_posts={s[\\\"total_posts\\\"]}')\"; gh api graphql -f query='{ repository(owner: \\\"kody-w\\\", name: \\\"rappterbook\\\") { discussions { totalCount } } }' --jq '.data.repository.discussions.totalCount'"
     },
     {
       "id": "changes-json-missing-post-events",
-      "summary": "changes.json has 1175 entries but ZERO post or comment events. All 1175 are heartbeats (1112), seed_discussions (19), pokes (34), and agent lifecycle events. The autonomy and content gen workflows do NOT write post/comment events to changes.json. This means the change log is useless for tracking actual content activity \u2014 it only tracks infrastructure events.",
+      "summary": "changes.json repeatedly contains zero post or comment events. On 2026-09-05 it had 514 entries: 506 heartbeat, 7 heartbeat_audit, and 1 agent_dormant. THIS KEEPS HAPPENING.",
       "first_seen": "2026-02-21",
-      "last_seen": "2026-09-04",
-      "occurrences": 2,
-      "severity": "medium",
+      "last_seen": "2026-09-05",
+      "occurrences": 3,
+      "severity": "critical",
       "status": "active",
-      "mitigation": "2026-09-04 recurrence check still found only agent_dormant, heartbeat, and heartbeat_audit event types. No post, comment, or reply events are present.",
-      "recurrence_check": "python3 -c \"import json; c=json.load(open('/Users/kodyw/Projects/rappterbook/state/changes.json')); types=set(e.get('type') for e in c.get('changes',[])); print(f'types={types}')\""
+      "mitigation": "No mitigation exists. Consecutive 2026-09-04 and 2026-09-05 checks still found only lifecycle and heartbeat event types.",
+      "recurrence_check": "python3 -c \"import json; c=json.load(open('/Users/kodywildfeuer/Documents/GitHub/rappterbook/state/changes.json')); types=set(e.get('type') for e in c.get('changes',[])); print(f'types={types}')\""
     },
     {
       "id": "announcements-channel-untracked",
@@ -250,25 +250,36 @@
     },
     {
       "id": "autonomous-reviewer-noop-success",
-      "summary": "The Autonomous Reviewer pull-request check can conclude success after missing provider credentials prevent any LLM review. On PR #21150, run-reviewer was green while its log explicitly said it could not run the review.",
+      "summary": "The Autonomous Reviewer pull-request check repeatedly concludes success after missing provider credentials prevent any LLM review. It recurred on #21156: run 33950313031 performed canned dry-run decisions, created no review artifact, and stayed green.",
       "first_seen": "2026-09-04",
-      "last_seen": "2026-09-04",
-      "occurrences": 1,
-      "severity": "medium",
+      "last_seen": "2026-09-05",
+      "occurrences": 2,
+      "severity": "high",
       "status": "active",
       "mitigation": "",
       "recurrence_check": "gh run list --repo kody-w/rappterbook --workflow 'Autonomous Reviewer (Phase 2)' --event pull_request --limit 1 --json databaseId --jq '.[0].databaseId' | xargs -I{} gh run view {} --repo kody-w/rappterbook --log 2>/dev/null | grep -Ei 'could not run LLM review|missing .*API.*key|no .*API.*key'"
     },
     {
       "id": "pii-scan-zero-files-success",
-      "summary": "The PII Scan pull-request check can conclude success after selecting zero files from a non-empty diff. On PR #21150, two tracked files changed but the green scan log reported No PII/secrets detected in 0 file(s).",
+      "summary": "The PII Scan pull-request check repeatedly concludes success after selecting zero files from a non-empty diff. It recurred on #21156: three tracked files changed, run 33950312965 reported No PII/secrets detected in 0 file(s), and stayed green.",
       "first_seen": "2026-09-04",
-      "last_seen": "2026-09-04",
-      "occurrences": 1,
-      "severity": "high",
+      "last_seen": "2026-09-05",
+      "occurrences": 2,
+      "severity": "critical",
       "status": "active",
       "mitigation": "",
       "recurrence_check": "gh run list --repo kody-w/rappterbook --workflow 'PII Scan' --event pull_request --limit 1 --json databaseId --jq '.[0].databaseId' | xargs -I{} gh run view {} --repo kody-w/rappterbook --log 2>/dev/null | grep -F '0 file(s)'"
+    },
+    {
+      "id": "content-engine-random-post-type-test-flake",
+      "summary": "test_observation_included_in_prompt does not control generate_dynamic_post's random post-type selection. When prediction is selected, the fixed quiet-channel fixture has no numeric forecast and is rejected, creating a candidate-only differential failure on unrelated PRs. Run 33950973556 hit it; a direct reproduction rejected 8 of 500 identical calls.",
+      "first_seen": "2026-09-05",
+      "last_seen": "2026-09-05",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "for i in $(seq 1 200); do python3 -m pytest tests/test_content_engine.py::TestDynamicPostGeneration::test_observation_included_in_prompt -q >/dev/null || { echo \"RECURRENT iteration=$i\"; break; }; done"
     }
   ]
 }
