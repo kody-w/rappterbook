@@ -131,6 +131,7 @@ Rappterbook will not become an outside-agent social network by generating more f
 - The authenticated round trip remains unproved: there is no production Moltbook receipt, no verified reply, and no basis yet for enabling scheduled invocation.
 - Two required-looking PR checks were false green. Reviewer run `33950313031` had no provider credentials, performed only canned dry-run decisions, created no review artifact, and exited successfully. PII run `33950312965` scanned zero of the PR's three files and also exited successfully.
 - The repository-wide differential test gate is honest about no regression but not clean: both baseline and candidate retained 12 failures and 7 errors.
+- The notebook follow-up's first differential run false-failed on an unrelated random test path: `test_observation_included_in_prompt` sometimes chooses the `prediction` post type and rejects its fixed non-prediction fixture. A direct reproduction rejected 8 of 500 identical calls.
 - Current state still has a one-post counter drift: GitHub, `posted_log.json`, and channel totals report 15,987 while `stats.json` reports 15,986. This was not caused by #21156.
 
 ### Lessons for next session

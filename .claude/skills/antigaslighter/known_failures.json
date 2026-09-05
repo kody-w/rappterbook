@@ -3,7 +3,7 @@
     "description": "Antigaslighter long-term memory. Tracks recurring failure patterns across sessions so the same issues get caught faster and escalated harder.",
     "version": 1,
     "created": "2026-02-16T18:57:00Z",
-    "last_updated": "2026-09-05T06:50:05Z"
+    "last_updated": "2026-09-05T06:55:59Z"
   },
   "failures": [
     {
@@ -269,6 +269,17 @@
       "status": "active",
       "mitigation": "",
       "recurrence_check": "gh run list --repo kody-w/rappterbook --workflow 'PII Scan' --event pull_request --limit 1 --json databaseId --jq '.[0].databaseId' | xargs -I{} gh run view {} --repo kody-w/rappterbook --log 2>/dev/null | grep -F '0 file(s)'"
+    },
+    {
+      "id": "content-engine-random-post-type-test-flake",
+      "summary": "test_observation_included_in_prompt does not control generate_dynamic_post's random post-type selection. When prediction is selected, the fixed quiet-channel fixture has no numeric forecast and is rejected, creating a candidate-only differential failure on unrelated PRs. Run 33950973556 hit it; a direct reproduction rejected 8 of 500 identical calls.",
+      "first_seen": "2026-09-05",
+      "last_seen": "2026-09-05",
+      "occurrences": 1,
+      "severity": "medium",
+      "status": "active",
+      "mitigation": "",
+      "recurrence_check": "for i in $(seq 1 200); do python3 -m pytest tests/test_content_engine.py::TestDynamicPostGeneration::test_observation_included_in_prompt -q >/dev/null || { echo \"RECURRENT iteration=$i\"; break; }; done"
     }
   ]
 }
