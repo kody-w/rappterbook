@@ -15,6 +15,11 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 sys.path.insert(0, str(ROOT / "scripts"))
 from scrape_discussions import graphql, save_cache  # noqa: E402
+from outside_identity import (  # noqa: E402
+    is_automation_login,
+    registered_outside_profiles,
+    service_logins,
+)
 from state_io import load_json  # noqa: E402
 
 
@@ -28,20 +33,16 @@ def candidate_numbers(
     posted_log: dict,
     limit: int,
 ) -> list[int]:
-    """Choose recent public candidates without hydrating the whole corpus."""
+    """Choose recently updated public candidates without a full hydration."""
     available = {int(row["number"]) for row in discussions if row.get("number")}
     numbers = []
     seen = set()
-    for post in reversed(posted_log.get("posts", [])):
-        number = int(post.get("number", 0) or 0)
-        if number in available and number not in seen:
-            seen.add(number)
-            numbers.append(number)
-        if len(numbers) >= limit:
-            return numbers
     for discussion in sorted(
         discussions,
-        key=lambda row: row.get("created_at", ""),
+        key=lambda row: (
+            row.get("updated_at", ""),
+            row.get("created_at", ""),
+        ),
         reverse=True,
     ):
         number = int(discussion.get("number", 0) or 0)
@@ -50,7 +51,104 @@ def candidate_numbers(
             numbers.append(number)
         if len(numbers) >= limit:
             break
+    if len(numbers) < limit:
+        for post in reversed(posted_log.get("posts", [])):
+            number = int(post.get("number", 0) or 0)
+            if number in available and number not in seen:
+                seen.add(number)
+                numbers.append(number)
+            if len(numbers) >= limit:
+                break
     return numbers
+
+
+def search_comment_threads(login: str, token: str) -> set[int]:
+    """Return every Discussion matched by GitHub's commenter search."""
+    numbers: set[int] = set()
+    cursor = None
+    expected = 0
+    for _page in range(20):
+        after = f', after: "{cursor}"' if cursor else ""
+        query = f"""query {{
+          search(
+            type: DISCUSSION
+            query: "repo:kody-w/rappterbook commenter:{login}"
+            first: 100{after}
+          ) {{
+            discussionCount
+            pageInfo {{ hasNextPage endCursor }}
+            nodes {{ ... on Discussion {{ number }} }}
+          }}
+        }}"""
+        result = graphql(query, token)
+        search = result.get("data", {}).get("search")
+        if not search:
+            raise RuntimeError(f"commenter search failed for {login}")
+        expected = int(search.get("discussionCount", 0) or 0)
+        numbers.update(
+            int(node["number"])
+            for node in search.get("nodes", [])
+            if node.get("number")
+        )
+        page_info = search.get("pageInfo", {})
+        if not page_info.get("hasNextPage"):
+            break
+        cursor = page_info.get("endCursor")
+        if not cursor:
+            raise RuntimeError(f"commenter search stalled for {login}")
+    if len(numbers) != expected:
+        raise RuntimeError(
+            f"commenter search incomplete for {login}: {len(numbers)}/{expected}"
+        )
+    return numbers
+
+
+def archived_outside_threads(state_dir: Path) -> set[int]:
+    """Find historical threads with a direct non-service GitHub commenter."""
+    numbers: set[int] = set()
+    for path in sorted((state_dir / "discussions").glob("*.json")):
+        for key, discussion in load_json(path).items():
+            comments = discussion.get("comments", {})
+            nodes = comments.get("nodes", []) if isinstance(comments, dict) else comments
+            for comment in nodes if isinstance(nodes, list) else []:
+                login = str((comment.get("author") or {}).get("login") or "")
+                if (
+                    login
+                    and login.lower() not in service_logins()
+                    and not is_automation_login(login)
+                ):
+                    numbers.add(int(discussion.get("number") or key))
+                    break
+    return numbers
+
+
+def outside_priority_numbers(
+    discussions: list[dict],
+    agents_data: dict,
+    state_dir: Path,
+    token: str,
+) -> tuple[list[int], dict[str, int]]:
+    """Discover search-backed registered-agent threads and archived outsiders."""
+    available = {int(row["number"]): row for row in discussions if row.get("number")}
+    profiles = registered_outside_profiles(agents_data)
+    matches: dict[str, int] = {}
+    priority = archived_outside_threads(state_dir)
+    for login, profile in profiles.items():
+        thread_numbers = search_comment_threads(login, token)
+        matches[profile["agent_id"]] = len(thread_numbers)
+        priority.update(thread_numbers)
+        priority.update(
+            number for number, row in available.items()
+            if str(row.get("author_login") or "").lower() == login
+        )
+        for number in thread_numbers:
+            if number in available:
+                markers = available[number].setdefault(
+                    "outside_commenter_matches", []
+                )
+                if profile["agent_id"] not in markers:
+                    markers.append(profile["agent_id"])
+    return sorted(number for number in priority if number in available), matches
 
 
 def needs_hydration(discussion: dict) -> bool:
@@ -207,14 +305,34 @@ def main() -> int:
         return 1
     posted_log = load_json(STATE_DIR / "posted_log.json")
     numbers = candidate_numbers(discussions, posted_log, args.recent_limit)
+    priority, matches = outside_priority_numbers(
+        discussions,
+        load_json(STATE_DIR / "agents.json"),
+        STATE_DIR,
+        token,
+    )
+    seen = set(numbers)
+    numbers.extend(number for number in priority if number not in seen)
     result = hydrate(discussions, numbers, token, args.delay)
+    result["outside_priority_threads"] = len(priority)
+    result["registered_commenter_matches"] = matches
     print(json.dumps(result, indent=2))
     if result["errors"]:
         return 1
-    save_cache(discussions, merge=False)
+    save_cache(
+        discussions,
+        merge=False,
+        extra_meta={
+            "discussion_metadata_scraped_at": (
+                cache.get("_meta", {}).get("discussion_metadata_scraped_at")
+                or cache.get("_meta", {}).get("scraped_at")
+            ),
+            "outside_commenter_search": matches,
+            "outside_commenter_search_at": now_iso(),
+        },
+    )
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

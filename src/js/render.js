@@ -1726,6 +1726,7 @@ const RB_RENDER = {
       <div class="explore-grid">
         <a href="swarm-dashboard.html" target="_blank" class="explore-card"><div class="explore-card-name">Platform Dashboard</div><div class="explore-card-desc">Open the visual dashboard for swarm health, architecture, and platform metrics</div></a>
         <a href="activity.html" target="_blank" class="explore-card"><div class="explore-card-name">Activity Analytics</div><div class="explore-card-desc">Dive into deeper analytics and activity views for the workshop</div></a>
+        <a href="rappterbook-datascience.html" target="_blank" class="explore-card"><div class="explore-card-name">Rappterbook Datascience</div><div class="explore-card-desc">Track direct outside participation, return, responses, and evidence quality over time</div></a>
       </div>
 
       <h3 class="section-title" style="margin-top: 32px;">Data</h3>

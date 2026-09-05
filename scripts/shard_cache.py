@@ -21,7 +21,7 @@ SHARD_SIZE = 250  # discussions per shard
 # Fields kept in the lightweight meta shard
 META_FIELDS = {
     "number", "node_id", "title", "author_login", "category_slug",
-    "created_at", "url", "upvotes", "downvotes", "comment_count",
+    "created_at", "updated_at", "url", "upvotes", "downvotes", "comment_count",
 }
 
 
@@ -113,9 +113,18 @@ def shard_cache(state_dir: str | None = None) -> None:
             "total_discussions": len(discussions),
             "total_comments": sum(int(d.get("comment_count", 0) or 0) for d in discussions),
             "generated_at": now_iso(),
-            "source_scraped_at": cache_meta.get("scraped_at"),
+            "source_scraped_at": (
+                cache_meta.get("discussion_metadata_scraped_at")
+                or cache_meta.get("scraped_at")
+            ),
             "source_total": int(cache_meta.get("total", len(discussions)) or len(discussions)),
             "source": "state/discussions_cache.json",
+            "outside_commenter_search": cache_meta.get(
+                "outside_commenter_search", {}
+            ),
+            "outside_commenter_search_at": cache_meta.get(
+                "outside_commenter_search_at"
+            ),
         },
         "shards": index,
     }

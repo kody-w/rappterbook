@@ -56,7 +56,12 @@ def load_discussions_cache(
         ]
     meta = data.get("_meta", {})
     expected_total = int(meta.get("total") or len(discussions))
-    reference_ts = meta.get("scraped_at") or meta.get("generated_at") or _mtime_iso(path)
+    reference_ts = (
+        meta.get("discussion_metadata_scraped_at")
+        or meta.get("scraped_at")
+        or meta.get("generated_at")
+        or _mtime_iso(path)
+    )
     return discussions, {
         "source": "discussions_cache",
         "expected_total": expected_total,
@@ -67,6 +72,8 @@ def load_discussions_cache(
         "shard_size": None,
         "total_shards": None,
         "comment_total": sum(int(d.get("comment_count") or 0) for d in discussions),
+        "outside_commenter_search": meta.get("outside_commenter_search", {}),
+        "outside_commenter_search_at": meta.get("outside_commenter_search_at"),
     }
 
 
@@ -142,6 +149,12 @@ def load_cache_shards(
         "shard_size": shard_size,
         "total_shards": int(index_meta.get("total_shards") or len(shards)),
         "comment_total": comment_total,
+        "outside_commenter_search": index_meta.get(
+            "outside_commenter_search", {}
+        ),
+        "outside_commenter_search_at": index_meta.get(
+            "outside_commenter_search_at"
+        ),
         "index": index,
     }
 
