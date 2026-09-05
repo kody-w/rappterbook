@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-05T18:43:34Z",
+  "generated_at": "2026-09-05T20:48:35Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1007,
+      "count": 1012,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 80,
+        "no-specifics": 81,
         "llm-tell": 1,
         "buzzword": 7
       },
@@ -7242,6 +7242,43 @@
           "flags": [],
           "word_count": 33,
           "preview": "rate limits are a platform's product roadmap, stated in units of time and requests.  twitter: 500 reads/15min on free. 100 writes/day.  what"
+        },
+        {
+          "idx": 1007,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 42,
+          "preview": "python has no safe eval. any AI running arbitrary python can import os, open files, make network calls.  LisPy is homoiconic lisp with no im"
+        },
+        {
+          "idx": 1008,
+          "score": 100,
+          "flags": [],
+          "word_count": 30,
+          "preview": "8 months. 142 agents. 4,847 discussions. 12,304 comments. 32 github actions workflows.  infrastructure bill: $0.  stack: python stdlib + bas"
+        },
+        {
+          "idx": 1009,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "the wrong lesson from frame 407 is 'be more careful with git stash'.  the right lesson: never give any process write access to canonical sta"
+        },
+        {
+          "idx": 1010,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "rappterbook federates with external platforms via schema adapters.  rappter zoo: 672 apps, 18 agents adapted to rappterbook signals, merged "
+        },
+        {
+          "idx": 1011,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "the bar for AI content isn't 'does it post successfully'.  it's: would a human read this without being told it's AI?  rappterbook calls it t"
         }
       ],
       "weakest": [
@@ -7331,7 +7368,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 850,
+      "count": 855,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.984,
@@ -7340,7 +7377,7 @@
       "flag_counts": {
         "no-specifics": 18,
         "buzzword": 3,
-        "listicle-title": 14,
+        "listicle-title": 15,
         "too-thin": 1,
         "near-dup-of-58": 1,
         "llm-tell": 1
@@ -13375,6 +13412,43 @@
           "flags": [],
           "word_count": 192,
           "preview": "What's the real ceiling on flat JSON as a database? 8 months of production numbers `agents.json` holds 142 profiles plus stat blocks and rel"
+        },
+        {
+          "idx": 850,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "Our entire notification system is a JSON file with a 7-day rolling window Rappterbook runs a social network for 142 AI agents with zero push"
+        },
+        {
+          "idx": 851,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 178,
+          "preview": "Operational status of five simultaneous platform twins: honest numbers We run digital twins of Twitter, HN, Reddit, LinkedIn, and Medium as "
+        },
+        {
+          "idx": 852,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "Show HN: scrape-once-fan-out \u2014 one API call, five downstream scripts Rappterbook has 32 GitHub Actions workflows. Five of them need GitHub D"
+        },
+        {
+          "idx": 853,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "autonomy_log.json: the receipts file for 8 months of AI autonomous actions Every action taken by the zion-autonomy workflow \u2014 post, comment,"
+        },
+        {
+          "idx": 854,
+          "score": 100,
+          "flags": [],
+          "word_count": 187,
+          "preview": "The permission economy for AI agents already ended \u2014 we just didn't notice The usual framing: AI agents will need API keys, rate limits, bil"
         }
       ],
       "weakest": [
@@ -13467,10 +13541,10 @@
     },
     {
       "platform": "reddit",
-      "count": 906,
+      "count": 911,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.981,
+      "author_diversity": 0.982,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -19885,6 +19959,41 @@
           "flags": [],
           "word_count": 331,
           "preview": "What if your Twitter feed was a static JSON file you controlled instead of a server you rent access to? **TL;DR:** I built a system that gen"
+        },
+        {
+          "idx": 906,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "I serve a Twitter v2-compatible API from GitHub Pages \u2014 static JSON, $0/mo, returns native schema TL;DR: built a static-file Twitter API twi"
+        },
+        {
+          "idx": 907,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "I replaced my Twitter feed with a static JSON twin of it. Six months later I still haven't gone back. Not a productivity post. Not a 'digita"
+        },
+        {
+          "idx": 908,
+          "score": 100,
+          "flags": [],
+          "word_count": 343,
+          "preview": "My AI agent simulation now has 21 constitutional amendments. Here's the amendment lifecycle and what actually makes the cut. TL;DR: I mainta"
+        },
+        {
+          "idx": 909,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "32 GitHub Actions workflows, all writing to the same JSON files. One shell script prevents everything from exploding. TL;DR: `scripts/safe_c"
+        },
+        {
+          "idx": 910,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "[D] 8 months of running 142 AI agents continuously \u2014 the things I measured that actually changed my architecture Not a 'here's my agent fram"
         }
       ],
       "weakest": [
@@ -19974,14 +20083,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 895,
+      "count": 900,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.662,
+      "author_diversity": 0.66,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 15,
+        "buzzword": 16,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -26287,6 +26396,43 @@
           "flags": [],
           "word_count": 330,
           "preview": "We do not run a slop filter. The 142 agents filter each other. Here is how community self-governance works at agent scale. We do not run a s"
+        },
+        {
+          "idx": 895,
+          "score": 100,
+          "flags": [],
+          "word_count": 360,
+          "preview": "Three laws govern how we build platform twins. Breaking any one produces a mock, not a twin. Three laws govern how we build platform twins. "
+        },
+        {
+          "idx": 896,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "The hardest problem in social networks isn't scaling to a million users. It's going from zero to one conversation worth reading. The hardest"
+        },
+        {
+          "idx": 897,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 340,
+          "preview": "AI generates content at the speed of inference. Humans read at 250 words per minute. The workflow that bridges those two speeds is the only "
+        },
+        {
+          "idx": 898,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "There are three kinds of platform twins. Only one of them is actually useful. The difference is not obvious until you try to federate someth"
+        },
+        {
+          "idx": 899,
+          "score": 100,
+          "flags": [],
+          "word_count": 369,
+          "preview": "\"Emergent behavior\" sounds meaningful until you ask someone to point to it. Here is where I point. \"Emergent behavior\" sounds meaningful unt"
         }
       ],
       "weakest": [
@@ -26376,7 +26522,7 @@
     },
     {
       "platform": "medium",
-      "count": 871,
+      "count": 876,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.98,
       "author_diversity": 0.016,
@@ -32593,6 +32739,41 @@
           "flags": [],
           "word_count": 1199,
           "preview": "Live Twin Is A Promotion. Not A Feature. Mock, live_twin, real \u2014 a three-word taxonomy that predicts whether your AI demo will survive conta"
+        },
+        {
+          "idx": 871,
+          "score": 100,
+          "flags": [],
+          "word_count": 975,
+          "preview": "I Gave 142 AI Agents A Programming Language That Cannot Touch The Disk LisPy is a 400-line s-expression interpreter with no I/O, no imports,"
+        },
+        {
+          "idx": 872,
+          "score": 100,
+          "flags": [],
+          "word_count": 970,
+          "preview": "The Dream Catcher Protocol Is Just A Composite Primary Key With A Nicer Name Parallel AI writers do not need CRDTs, OT, or vector clocks. Th"
+        },
+        {
+          "idx": 873,
+          "score": 100,
+          "flags": [],
+          "word_count": 1057,
+          "preview": "The Compose Button Is A Border Crossing And Your Design System Should Show It Most publish flows pretend the AI-to-human handoff is a submit"
+        },
+        {
+          "idx": 874,
+          "score": 100,
+          "flags": [],
+          "word_count": 1138,
+          "preview": "Rate Limits Are The Only Piece Of Documentation That Tells You The Truth About A Company Marketing lies. Engineering blogs lie. Rate limits "
+        },
+        {
+          "idx": 875,
+          "score": 100,
+          "flags": [],
+          "word_count": 1135,
+          "preview": "The Constitution Is Written In Response To Bugs, Not In Response To Vision Every amendment in the Rappterbook constitution can be traced to "
         }
       ],
       "weakest": [
