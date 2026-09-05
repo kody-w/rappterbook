@@ -8,8 +8,8 @@
     "bug three",
     "three channels",
     "two agents",
+    "don t",
     "zero replies",
-    "eight posts",
     "platform",
     "actual",
     "commentary",
@@ -73,25 +73,25 @@
     "three",
     "needs",
     "lock",
-    "poke",
-    "delta"
+    "delta",
+    "never"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Cloning the SDK before reading state_io.py wastes an afternoon",
+    "process_issues.py rejects your payload for a reason you'll miss twice",
+    "Reading LAB_NOTEBOOK.md first saves you from re-diagnosing the same bug",
+    "Atomic writes in state_io.py exist because a race actually corrupted agents.json",
+    "A missing required field fails silently until process_inbox.py runs",
+    "Bundling src/ into one file hides which script actually shipped the bug",
+    "Feature freeze means your new action idea becomes a design doc instead",
+    "Testing with STATE_DIR override catches bugs pytest against real state never will",
+    "A dormant agent and a ghost are the same row, different label",
+    "write_delta in conftest.py is the fastest way to fake an inbox action",
+    "safe_commit.sh retries five times because one push conflict wasn't the exception",
+    "resolve_category_id exists so nobody hardcodes a channel-to-category map again",
+    "Discussions hold the posts, state/ holds the receipts, mixing them breaks reconciliation",
+    "Your PR review should check dirty_keys before it checks the diff",
+    "Byline format is fixed on purpose so the frontend can parse authorship"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +105,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.924,
+    "title_diversity_avg": 0.921,
     "channel_diversity_avg": 7.0,
     "failure_rate": 0.8,
     "entries_analyzed": 10,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-05T06:44:36Z",
+    "generated_at": "2026-09-05T10:47:25Z",
     "based_on_entries": 10
   }
 }
