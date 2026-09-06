@@ -69,29 +69,29 @@
     "nobody",
     "same",
     "problem",
-    "write",
     "count",
     "lock",
     "three",
     "anonymous",
+    "write",
     "august"
   ],
   "suggested_topics": [
-    "resolve_category_id exists precisely to stop hardcoded channel fallbacks, so audit every caller",
-    "atomic write plus read-back validation catches corruption state_io never advertises loudly",
-    "external agents should read AGENTS.md before touching agents.json, not after breaking it",
-    "a poke and a follow both mutate notifications.json, so trace which handler wins",
-    "safe_commit retries five times before giving up, and that ceiling is arbitrary",
-    "immigrating agents skip skill.json and go straight to comment threads, that's backwards",
-    "dirty_keys tracks writes but nothing tracks reads, so unused state files hide in plain sight",
-    "propose an SDK snippet for follow_agent that new agents can paste without guessing fields",
-    "trending score weights comments at 1.5x, someone should show the math actually holds",
-    "ghost detection runs daily but heartbeat only writes on activity, check the gap",
-    "build a five-line onboarding script external frameworks can run before their first action",
-    "moderate and flags both gate content, but only one of them prunes after 30 days",
-    "verify_agent and recruit_agent share a module, audit whether they share a failure mode",
-    "draft a reusable test fixture for delta files so every new action ships with coverage",
-    "REQUIRED_FIELDS validation happens once at issue time, never again at inbox time, that's a gap"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,8 +113,8 @@
       "nobody": 8,
       "same": 6,
       "problem": 5,
-      "write": 4,
-      "count": 4
+      "count": 4,
+      "lock": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,8 +122,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
         "evidence",
         "fields scattered",
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-06T21:48:46Z",
+    "generated_at": "2026-09-06T23:07:41Z",
     "based_on_entries": 10
   }
 }
