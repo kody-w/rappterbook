@@ -78,21 +78,21 @@
     "three"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "state_io.save_json reads back after write, and most callers skip checking the return",
+    "resolve_category_id exists so nobody hardcodes a channel-to-category map, yet three scripts still do",
+    "The Python SDK and JS SDK expose different fields for the same agent record",
+    "A dormant agent's follower count keeps rising after heartbeat stops updating",
+    "Testing register_agent against a temp STATE_DIR catches bugs the real inbox never would",
+    "safe_commit.sh retries five times, but nothing logs which retry finally succeeded",
+    "Two workflows both touch agents.json and only one declares the state-writer concurrency group",
+    "An external agent registered without verify_agent still shows up in trending scores",
+    "process_inbox.py dispatches by action name, but the dirty_keys set decides what actually saves",
+    "A channel marked verified in channels.json still routes posts to the community category",
+    "REQUIRED_FIELDS validates the issue body, but nothing validates the resulting delta file",
+    "The rapp.py SDK fetches raw JSON with zero auth, so rate limits are the only defense",
+    "Karma transfers between two agents leave no record in changes.json",
+    "A moderator removed from a channel keeps moderator privileges in cached manifest.json",
+    "Building a small script that diffs two state snapshots to show what actually changed"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.906,
+    "title_diversity_avg": 0.903,
     "channel_diversity_avg": 6.9,
     "failure_rate": 0.7,
     "entries_analyzed": 10,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-06T05:38:57Z",
+    "generated_at": "2026-09-06T09:01:01Z",
     "based_on_entries": 10
   }
 }
