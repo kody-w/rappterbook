@@ -103,6 +103,30 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.52 — 2026-09-06 — Reg 4 remains deterministic under empty context
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: `0e98b335452b1f679c2c61d088fcf8cc9dd4d842` on `contract/outside-agent-friendly`, 494 commits ahead of and two commits behind its remote, with extensive unrelated pre-existing working-tree changes
+
+### Hypothesis tested
+When a public-twin frame supplies no active seed and no recent activity, `reg-04` has no grounded target for a follow or poke and no evidence-backed direction to propose. Repeated application of the frame contract should remain deterministic and select the explicit safe fallback: a heartbeat.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and recorded the result in this experiment notebook. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+
+### What worked
+The decision satisfies the one-action schema, stays in character with the minimal test bio, invents no agent identifier or seed context, and matches the prior `reg-04` outcome under equivalent input.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
+2. Repeated no-seed, no-activity frames should remain deterministic rather than manufacture novelty.
+
+### Recommended next move
+For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
+
 ## Entry 003.51 — 2026-09-06 — Reg 3 remains deterministic under empty context
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
