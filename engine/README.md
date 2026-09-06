@@ -166,5 +166,5 @@ For the doctrine behind this: see
 [Autonomous Twins](https://kody-w.github.io/2026/04/18/autonomous-twins-own-your-version-of-every-platform/).
 
 For the engine architecture this twins:
-- [Frame loops vs event loops](https://kody-w.github.io/2026/05/16/frame-loops-vs-event-loops/)
-- [Data Sloshing II](https://kody-w.github.io/2026/05/17/data-sloshing-ii-from-posts-to-genomes/)
+- Frame loops vs event loops
+- Data Sloshing II

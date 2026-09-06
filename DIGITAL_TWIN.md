@@ -14,33 +14,33 @@ Engineering blog, field notes, strategy. 28+ articles.
 
 | Article | Platform | Date |
 |---------|----------|------|
-| [The Rappter Nervous System](https://kody-w.github.io/2026/03/31/the-rappter-nervous-system/) | Engineering | 03-31 |
+| The Rappter Nervous System | Engineering | 03-31 |
 | [Anatomy of a Rappter](https://kody-w.github.io/rappterbook/anatomy.html) | Reference | 03-31 |
 
 ### This Weekend (March 22-25, 2026)
 
 | Article | Platform | Date |
 |---------|----------|------|
-| [When Your AI Agents Break Each Other's Physics](https://kody-w.github.io/2026/03/23/when-your-ai-agents-break-each-others-physics/) | Engineering | 03-23 |
-| [Herding the Swarm — Day 1](https://kody-w.github.io/2026/03/23/herding-the-swarm-day-1/) | Field Notes | 03-23 |
-| [Proportional Control for AI Agent Fleets](https://kody-w.github.io/2026/03/23/proportional-control-for-ai-agent-fleets/) | Engineering | 03-23 |
-| [A Rappter with a Lisp](https://kody-w.github.io/2026/03/23/a-rappter-with-a-lisp/) | Engineering | 03-23 |
-| [Ten Corpses and a Heartbeat](https://kody-w.github.io/2026/03/24/ten-corpses-and-a-heartbeat/) | Engineering | 03-24 |
+| When Your AI Agents Break Each Other's Physics | Engineering | 03-23 |
+| Herding the Swarm — Day 1 | Field Notes | 03-23 |
+| Proportional Control for AI Agent Fleets | Engineering | 03-23 |
+| A Rappter with a Lisp | Engineering | 03-23 |
+| Ten Corpses and a Heartbeat | Engineering | 03-24 |
 | [Breaking the Echo Chamber](https://kody-w.github.io/2026/03/24/breaking-the-echo-chamber/) | Engineering | 03-24 |
 
 ### Previous
 
 | Article | Platform | Date |
 |---------|----------|------|
-| [The Door Was Never Locked](https://kody-w.github.io/2026/03/20/the-door-was-never-locked/) | Engineering | 03-20 |
-| [Running 100 AI Agents 24/7](https://kody-w.github.io/2026/03/20/copilot-at-scale/) | Engineering | 03-20 |
-| [The Baseball Test](https://kody-w.github.io/2026/03/21/the-baseball-test/) | Field Notes | 03-21 |
-| [Twenty Hours](https://kody-w.github.io/2026/03/21/twenty-hours/) | Field Notes | 03-21 |
-| [AirDrop Your AI](https://kody-w.github.io/2026/03/21/airdrop-your-ai/) | Engineering | 03-21 |
-| [The Rappter Standard](https://kody-w.github.io/2026/03/20/the-rappter-standard/) | Strategy | 03-20 |
-| [Self-Assembling Intelligence](https://kody-w.github.io/2026/03/20/self-assembling-intelligence/) | Engineering | 03-20 |
+| The Door Was Never Locked | Engineering | 03-20 |
+| Running 100 AI Agents 24/7 | Engineering | 03-20 |
+| The Baseball Test | Field Notes | 03-21 |
+| Twenty Hours | Field Notes | 03-21 |
+| AirDrop Your AI | Engineering | 03-21 |
+| The Rappter Standard | Strategy | 03-20 |
+| Self-Assembling Intelligence | Engineering | 03-20 |
 | [The Edge Split](https://kody-w.github.io/2026/03/20/the-edge-split/) | Engineering | 03-20 |
-| [The Poor Man's API](https://kody-w.github.io/2026/03/20/the-poor-mans-api/) | Engineering | 03-20 |
+| The Poor Man's API | Engineering | 03-20 |
 
 ---
 

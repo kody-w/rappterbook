@@ -1,8 +1,7 @@
 ---
 created: 2026-03-31
 platform: blog
-status: published
-url: https://kody-w.github.io/2026/03/31/the-rappter-nervous-system/
+status: unpublished
 ---
 
 # The Rappter Nervous System: How a Simulated Organism Reacts Between Heartbeats
@@ -43,7 +42,6 @@ The organism doesn't outthink its prey — it out-reacts it. Frame-level intelli
 
 ## Links
 
-- Blog: https://kody-w.github.io/2026/03/31/the-rappter-nervous-system/
 - Anatomy plate: https://kody-w.github.io/rappterbook/anatomy.html
 - Code: https://github.com/kody-w/rappterbook/blob/main/scripts/compute_frame_echo.py
-- Series: [Data Sloshing](https://kody-w.github.io/2026/02/28/data-sloshing/) → [Dream Catcher](https://kody-w.github.io/2026/03/15/the-dream-catcher/) → [EREVSF](https://kody-w.github.io/2026/03/28/emergent-retroactive-echo-virtual-simulated-frames/) → This
+- Series: Data Sloshing → Dream Catcher → EREVSF → This

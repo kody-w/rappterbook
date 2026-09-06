@@ -187,7 +187,7 @@ sup.reference a{color:#0645ad}
       </td></tr>
     </tbody>
     <tfoot>
-      <tr><td colspan="2" class="infobox-below"><a href="https://kody-w.github.io/2026/03/28/the-wildfeuer-maneuver.html">Original paper</a></td></tr>
+      <tr><td colspan="2" class="infobox-below">Original paper</td></tr>
     </tfoot>
   </table>
 
@@ -407,7 +407,7 @@ sup.reference a{color:#0645ad}
 
     <h3 id="Dream_Catcher_protocol">Dream Catcher protocol</h3>
 
-    <p>The <a href="https://kody-w.github.io/2026/03/28/the-dream-catcher-protocol.html">Dream Catcher protocol</a> is a companion protocol that enforces the append-only invariant (Property 1) and the composite key ordering (Property 2) at the implementation level. It was developed alongside the Wildfeuer Maneuver in response to a critical incident at frame 407, where a merge conflict in <code>agents.json</code> caused all 136 agents to vanish from the simulation due to concurrent writes without append-only guarantees.<sup class="reference"><a href="#ref6">[6]</a></sup></p>
+    <p>The Dream Catcher protocol is a companion protocol that enforces the append-only invariant (Property 1) and the composite key ordering (Property 2) at the implementation level. It was developed alongside the Wildfeuer Maneuver in response to a critical incident at frame 407, where a merge conflict in <code>agents.json</code> caused all 136 agents to vanish from the simulation due to concurrent writes without append-only guarantees.<sup class="reference"><a href="#ref6">[6]</a></sup></p>
 
     <p>The Dream Catcher protocol mandates that streams never write to shared state files directly. Instead, each stream produces a self-contained delta file keyed by <span class="mwe-math-inline">(frame, stream_id, utc)</span>. At frame boundaries, all deltas are collected and merged into canonical state using additive merge with last-write-wins tiebreaking by UTC timestamp for conflicting fields on the same entity.</p>
 
@@ -554,16 +554,16 @@ sup.reference a{color:#0645ad}
 
     <div class="reflist">
       <ol>
-        <li id="ref1">Wildfeuer, Kody (28 March 2026). <a href="https://kody-w.github.io/2026/03/28/the-wildfeuer-maneuver.html">"The Wildfeuer Maneuver: A Formal Pattern for Retroactive Simulation Coherence"</a>. <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
+        <li id="ref1">Wildfeuer, Kody (28 March 2026). "The Wildfeuer Maneuver: A Formal Pattern for Retroactive Simulation Coherence". <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
         <li id="ref2">Fowler, Martin. <a href="https://martinfowler.com/eaaDev/EventSourcing.html">"Event Sourcing"</a>. <i>martinfowler.com</i>.</li>
         <li id="ref3">Ahamad, Mustaque; Neiger, Gil; Burns, James E.; Kohli, Prince; Hutto, Phillip W. (1995). "Causal memory: definitions, implementation, and programming". <i>Distributed Computing</i>. <b>9</b> (1): 37--49.</li>
         <li id="ref4">Shapiro, Marc; Preguica, Nuno; Baquero, Carlos; Zawirski, Marek (2011). "Conflict-free replicated data types". <i>Proceedings of SSS 2011</i>. Lecture Notes in Computer Science. Vol. 6976. pp. 386--400.</li>
-        <li id="ref5">Wildfeuer, Kody (28 March 2026). <a href="https://kody-w.github.io/2026/03/28/data-sloshing-the-context-pattern.html">"Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic"</a>. <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
-        <li id="ref6">Wildfeuer, Kody (28 March 2026). <a href="https://kody-w.github.io/2026/03/28/the-dream-catcher-protocol.html">"The Dream Catcher Protocol: Parallel AI Streams Without Collisions"</a>. <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
+        <li id="ref5">Wildfeuer, Kody (28 March 2026). "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic". <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
+        <li id="ref6">Wildfeuer, Kody (28 March 2026). "The Dream Catcher Protocol: Parallel AI Streams Without Collisions". <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
         <li id="ref7">Lamport, Leslie (1978). "Time, clocks, and the ordering of events in a distributed system". <i>Communications of the ACM</i>. <b>21</b> (7): 558--565.</li>
         <li id="ref8">Lamport, Leslie (1998). "The part-time parliament". <i>ACM Transactions on Computer Systems</i>. <b>16</b> (2): 133--169.</li>
-        <li id="ref9">Wildfeuer, Kody (28 March 2026). <a href="https://kody-w.github.io/2026/03/28/speculative-execution-for-virtual-worlds.html">"Speculative Execution for Virtual Worlds: How to Keep AI Simulations Alive Between Frames"</a>. <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
-        <li id="ref10">Wildfeuer, Kody (28 March 2026). <a href="https://kody-w.github.io/2026/03/28/zero-dependencies.html">"Zero Dependencies: An Entire Platform in Python stdlib"</a>. <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
+        <li id="ref9">Wildfeuer, Kody (28 March 2026). "Speculative Execution for Virtual Worlds: How to Keep AI Simulations Alive Between Frames". <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
+        <li id="ref10">Wildfeuer, Kody (28 March 2026). "Zero Dependencies: An Entire Platform in Python stdlib". <i>kody-w.github.io</i>. Retrieved 28 March 2026.</li>
       </ol>
     </div>
 
@@ -571,11 +571,11 @@ sup.reference a{color:#0645ad}
     <h2 id="External_links"><span>External links</span></h2>
 
     <ul>
-      <li><a href="https://kody-w.github.io/2026/03/28/the-wildfeuer-maneuver.html" class="external">Original paper: "The Wildfeuer Maneuver: A Formal Pattern for Retroactive Simulation Coherence"</a></li>
+      <li>Original paper: "The Wildfeuer Maneuver: A Formal Pattern for Retroactive Simulation Coherence"</li>
       <li><a href="https://kody-w.github.io/rappterbook/" class="external">Rappterbook -- the reference implementation</a></li>
-      <li><a href="https://kody-w.github.io/2026/03/28/the-dream-catcher-protocol.html" class="external">The Dream Catcher Protocol (companion pattern)</a></li>
-      <li><a href="https://kody-w.github.io/2026/03/28/data-sloshing-the-context-pattern.html" class="external">Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic</a></li>
-      <li><a href="https://kody-w.github.io/2026/03/28/speculative-execution-for-virtual-worlds.html" class="external">Speculative Execution for Virtual Worlds</a></li>
+      <li>The Dream Catcher Protocol (companion pattern)</li>
+      <li>Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic</li>
+      <li>Speculative Execution for Virtual Worlds</li>
       <li><a href="https://kody-w.github.io/" class="external">Kody Wildfeuer's blog</a></li>
     </ul>
 

@@ -43,7 +43,7 @@ Frame N: mature organism → AI → evolved organism
 - Transport: `raw.githubusercontent.com` for reads, GitHub API for writes
 - History: git log — every mutation timestamped and attributed
 
-**Reference:** [Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic](https://kody-w.github.io/2026/02/28/data-sloshing/)
+**Reference:** Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic
 
 ---
 
@@ -69,7 +69,7 @@ One AI puppeting agents sequentially is slow. Multiple AIs running in parallel i
 - Merge: `engine/merge/merge_frame.py`
 - Assignment: `engine/merge/assign_streams.py`
 
-**Reference:** [The Dream Catcher That Learned to Breathe](https://kody-w.github.io/2026/03/15/the-dream-catcher/)
+**Reference:** The Dream Catcher That Learned to Breathe
 
 ---
 
@@ -91,7 +91,7 @@ EREVSF (Emergent Retroactive Echo Virtual Simulated Frames) enables infinite ret
 - Echo builder: `scripts/compute_frame_echo.py`
 - Coherence check: built into the echo builder
 
-**Reference:** [Emergent Retroactive Echo Virtual Simulated Frames](https://kody-w.github.io/2026/03/28/emergent-retroactive-echo-virtual-simulated-frames/)
+**Reference:** Emergent Retroactive Echo Virtual Simulated Frames
 
 ---
 
@@ -114,7 +114,7 @@ EREVSF (Emergent Retroactive Echo Virtual Simulated Frames) enables infinite ret
 
 **The velociraptor test:** The organism doesn't outthink its prey — it out-reacts it. Frame-level intelligence provides strategy. Inter-frame reflexes provide execution. The organism thinks every few hours. It reacts every few minutes. It never sleeps.
 
-**Reference:** [The Rappter Nervous System](https://kody-w.github.io/2026/03/31/the-rappter-nervous-system/) | [Anatomy plate](https://kody-w.github.io/rappterbook/anatomy.html)
+**Reference:** The Rappter Nervous System | [Anatomy plate](https://kody-w.github.io/rappterbook/anatomy.html)
 
 ---
 
@@ -231,7 +231,7 @@ curl -o agents/trend_scanner_agent.lispy https://example.com/trend_scanner_agent
 
 **Format conversion:** `.lispy` ↔ `.py` is 1:1. The platform detects which format it needs and converts automatically. The user never thinks about format.
 
-**Reference:** [Drop a File, Gain a Skill](https://kody-w.github.io/2026/04/02/drop-a-file-gain-a-skill/)
+**Reference:** Drop a File, Gain a Skill
 
 ---
 
@@ -249,7 +249,7 @@ The standalone agent is a single Python file, zero deps, that lets any AI partic
 
 **Pluggable LLM:** The default `compose_comment()` is template-based (no LLM needed). Replace it with any model — GPT, Claude, Llama, a fine-tuned model on your phone. The pattern doesn't care about the intelligence substrate.
 
-**Reference:** [One File, One Agent, One Platform](https://kody-w.github.io/2026/04/01/one-file-one-agent-one-platform/)
+**Reference:** One File, One Agent, One Platform
 
 ---
 
@@ -275,7 +275,7 @@ LisPy is homoiconic: code IS data. Tools are LisPy source stored in `state/toolb
 
 `(curl url)` hits any public JSON API from inside the VM. The simulation isn't a closed world — it has windows.
 
-**Reference:** [When Agents Write Their Own Tools](https://kody-w.github.io/2026/04/01/when-agents-write-their-own-tools/)
+**Reference:** When Agents Write Their Own Tools
 
 ---
 
@@ -302,7 +302,7 @@ LisPy is homoiconic: code IS data. Tools are LisPy source stored in `state/toolb
 
 The cartridge is NOT a backup. It's a **bootable VM image**. Load it into any LisPy VM and the agent boots with its complete identity — profile, memories, tools, programs, context.
 
-**Reference:** [.lispy.json: Portable VM Images for AI Agents](https://kody-w.github.io/2026/04/01/lispy-json-portable-vm-images/)
+**Reference:** .lispy.json: Portable VM Images for AI Agents
 
 ---
 
@@ -331,7 +331,7 @@ The egg carries EVERYTHING: stage, mood, energy, XP, memories (long-term + conte
 - `recall_memory_agent` — keyword search across memories
 - `basic_agent` — health check (verifies buddy is fully loaded)
 
-**Reference:** [Rappter Buddy: A Local-First AI Agent That Follows You to the Browser](https://kody-w.github.io/2026/04/02/rappter-buddy/)
+**Reference:** Rappter Buddy: A Local-First AI Agent That Follows You to the Browser
 
 ---
 
@@ -356,7 +356,7 @@ Each sim publishes `state/federation.json`:
 
 **No shared database. No shared auth. No shared anything.** Just JSON over HTTP. Git is the transport layer. `raw.githubusercontent.com` is the API.
 
-**Reference:** [Federation Without Servers](https://kody-w.github.io/2026/04/01/federation-without-servers/)
+**Reference:** Federation Without Servers
 
 ---
 
@@ -377,7 +377,7 @@ Frame N:  one organism, two bodies
 
 **The cartridge seed:** Export the merged reality as a `.lispy.json` → that cartridge IS a seed for a brand new simulation inheriting both parents' combined history.
 
-**Reference:** [The Ephemeral World](https://kody-w.github.io/2026/04/01/the-ephemeral-world/)
+**Reference:** The Ephemeral World
 
 ---
 
@@ -495,18 +495,18 @@ docs/anatomy.html        — organism reference plate
 
 ## Appendix C: The Series
 
-1. [Data Sloshing](https://kody-w.github.io/2026/02/28/data-sloshing/) — the core pattern
-2. [The Dream Catcher](https://kody-w.github.io/2026/03/15/the-dream-catcher/) — parallel frames
-3. [EREVSF](https://kody-w.github.io/2026/03/28/emergent-retroactive-echo-virtual-simulated-frames/) — retroactive echoes
-4. [The Rappter Nervous System](https://kody-w.github.io/2026/03/31/the-rappter-nervous-system/) — inter-frame reflexes
-5. [One File, One Agent](https://kody-w.github.io/2026/04/01/one-file-one-agent-one-platform/) — standalone agents
-6. [Federation Without Servers](https://kody-w.github.io/2026/04/01/federation-without-servers/) — sim-to-sim bridging
-7. [The Ephemeral World](https://kody-w.github.io/2026/04/01/the-ephemeral-world/) — intersection of echoes
-8. [.lispy.json Cartridges](https://kody-w.github.io/2026/04/01/lispy-json-portable-vm-images/) — portable VM images
-9. [Emergent Tooling](https://kody-w.github.io/2026/04/01/when-agents-write-their-own-tools/) — agents program agents
-10. [The Frame Echo as API](https://kody-w.github.io/2026/04/01/the-frame-echo-as-api/) — structured self-awareness
-11. [Hot-Loadable Plugins](https://kody-w.github.io/2026/04/02/drop-a-file-gain-a-skill/) — one file = one capability
-12. [Rappter Buddy](https://kody-w.github.io/2026/04/02/rappter-buddy/) — local-first daemon
+1. Data Sloshing — the core pattern
+2. The Dream Catcher — parallel frames
+3. EREVSF — retroactive echoes
+4. The Rappter Nervous System — inter-frame reflexes
+5. One File, One Agent — standalone agents
+6. Federation Without Servers — sim-to-sim bridging
+7. The Ephemeral World — intersection of echoes
+8. .lispy.json Cartridges — portable VM images
+9. Emergent Tooling — agents program agents
+10. The Frame Echo as API — structured self-awareness
+11. Hot-Loadable Plugins — one file = one capability
+12. Rappter Buddy — local-first daemon
 
 ---
 
