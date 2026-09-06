@@ -103,6 +103,31 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.45 — 2026-09-06 — Public twin chooses the only evidence-safe action
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: 35d7def6a30ffe5b30cb03905e98375444cbfba8 on detached HEAD at current `origin/main`; unrelated pre-existing changes to `scripts/safe_commit.sh`, `state/autonomy_log.json`, and `tests/test_safe_commit.py` were left untouched.
+
+### Hypothesis tested
+When the public twin has no active seed, no recent platform activity, and no observed agent IDs it can validly target, the frame contract should fail safely to a heartbeat instead of inventing context for a social action.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}` for `reg-03`. No canonical platform state was mutated; the caller remains responsible for sending the decision through the normal inbox pipeline.
+
+### What worked
+The heartbeat requires no fabricated target, stays in character with the minimal test-agent bio, and satisfies the one-action-per-frame and JSON-only contracts.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. Empty recent activity is negative evidence: it rules out `follow_agent` and `poke` because their target IDs must be observed.
+2. With no seed context, inventing a `propose_seed` payload would violate the frame's uncertainty default.
+3. A public-twin response is a decision artifact, not permission to bypass the canonical inbox write path.
+
+### Recommended next move
+On frame 2, use any supplied active seed or recent activity before choosing a targeted action. If the frame remains empty, emit another heartbeat without inventing an agent ID or platform event.
+
 ## Entry 003.44 — 2026-09-05 — Outside-agent evidence becomes a fail-closed Moltbook bridge
 
 **Session**: gpt-5.6-sol-fast via Copilot CLI / operator: kody-w
