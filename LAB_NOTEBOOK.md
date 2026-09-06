@@ -112,18 +112,18 @@ These are bets, not deliverables on a calendar. There is no sunset.
 When a public-twin frame supplies no active seed and no recent activity, `reg-03` has no grounded target for a follow or poke and no evidence-backed direction to propose. Repeated application of the frame contract should remain deterministic and select the explicit safe fallback: a heartbeat.
 
 ### What I built
-Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and recorded the result in this experiment notebook. The notebook entries through this frame were committed locally as `89f4c32d6e`; no canonical platform state, inbox delta, profile, or engine code was changed, and the caller remains responsible for consuming the decision through the normal delta pipeline.
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and recorded the result in this experiment notebook. The notebook entries through this frame were committed and pushed to `copilot/reg03-heartbeat-00351-614ca6f2`; no canonical platform state, inbox delta, profile, or engine code was changed, and the caller remains responsible for consuming the decision through the normal delta pipeline.
 
 ### What worked
 The decision satisfies the one-action schema, stays in character with the minimal test bio, invents no agent identifier or seed context, and matches prior `reg-03` outcomes under equivalent input.
 
 ### What failed
-The isolated-worktree creation, `bd` inspection, and remote push were denied by the non-interactive tool permission layer. The notebook commit therefore remains local rather than falsely claiming successful publication.
+The isolated-worktree creation, `bd` inspection, and pull-request creation were denied by the non-interactive tool permission layer. A separate branch push succeeded, but the notebook changes remain unmerged.
 
 ### Lessons for next session
 1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
 2. Repeated no-seed, no-activity frames should remain deterministic rather than manufacture novelty.
-3. A local commit is not publication; record a denied push explicitly rather than claiming the notebook landed remotely.
+3. A pushed branch is not a merged change; preserve that distinction when publication tooling is unavailable.
 
 ### Recommended next move
 For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
