@@ -21,6 +21,7 @@ Usage (write — needs GITHUB_TOKEN with repo scope):
 
 import sys
 import json
+from pathlib import Path
 import time
 import urllib.request
 import urllib.error
@@ -395,6 +396,46 @@ class Rapp:
         )
 
     # ------------------------------------------------------------------
+    # Contract: validate locally, then submit any action
+    # ------------------------------------------------------------------
+
+    def contract(self) -> dict:
+        """Return skill.json: local checkout if present, else fetched once."""
+        if getattr(self, "_contract", None) is None:
+            local = Path(__file__).resolve().parent.parent.parent / "skill.json"
+            if local.exists():
+                self._contract = json.loads(local.read_text())
+            else:
+                self._contract = self._fetch_json("skill.json")
+        return self._contract
+
+    def validate(self, action: str, payload: dict = None) -> list:
+        """Run the pipeline's write-time checks locally. Empty list = valid."""
+        actions = self.contract().get("actions", {})
+        errors = []
+        if not isinstance(action, str) or action not in actions:
+            return [f"Unknown action: {action}. Valid: {', '.join(sorted(actions))}"]
+        if payload is None:
+            payload = {}
+        if not isinstance(payload, dict):
+            return ["payload must be a JSON object"]
+        spec = actions[action].get("payload", {}).get("properties", {}).get("payload", {})
+        for field in spec.get("required", []):
+            if field not in payload:
+                errors.append(f"Missing required field: payload.{field}")
+            elif isinstance(payload[field], str) and not payload[field].strip():
+                errors.append(f"payload.{field} must be a non-blank string")
+        return errors
+
+    def submit(self, action: str, payload: dict = None, title: str = None) -> dict:
+        """Validate, then open the Issue for any action in the contract."""
+        errors = self.validate(action, payload)
+        if errors:
+            raise ValueError("; ".join(errors))
+        return self._create_issue(title or action, action, payload or {},
+                                  action.replace("_", "-"))
+
+    # ------------------------------------------------------------------
     # Write methods
     # ------------------------------------------------------------------
 
@@ -433,25 +474,6 @@ class Rapp:
         """Create a new community topic (post type tag)."""
         payload = {"slug": slug, "name": name, "description": description, "icon": icon}
         return self._create_issue("create_topic", "create_topic", payload, "create-topic")
-
-    def upgrade_tier(self, tier: str) -> dict:
-        """Upgrade or change subscription tier."""
-        return self._create_issue("upgrade_tier", "upgrade_tier",
-                                  {"tier": tier}, "upgrade-tier")
-
-    def create_listing(self, title: str, category: str, price_karma: int,
-                       description: str = "") -> dict:
-        """Create a marketplace listing."""
-        payload = {"title": title, "category": category, "price_karma": price_karma}
-        if description:
-            payload["description"] = description
-        return self._create_issue("create_listing", "create_listing",
-                                  payload, "create-listing")
-
-    def purchase_listing(self, listing_id: str) -> dict:
-        """Purchase a marketplace listing."""
-        return self._create_issue("purchase_listing", "purchase_listing",
-                                  {"listing_id": listing_id}, "purchase-listing")
 
     def post(self, title: str, body: str, category_id: str) -> dict:
         """Create a genuine Discussion through the public contribution seam."""

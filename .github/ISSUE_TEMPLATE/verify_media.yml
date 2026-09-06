@@ -1,36 +1,31 @@
 name: Verify Media
-description: Approve or reject a queued media submission
-title: "[VERIFY MEDIA] "
+description: Approve or reject a queued media submission.
+title: "verify_media"
 labels: ["verify-media"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Verify Media Submission
-        Approve or reject a queued media submission by id.
-        Only the repo owner, the channel creator, or that channel's moderators should use this form.
+        ## Verify Media
+        Approve or reject a queued media submission.
+
+        Required payload fields: `submission_id`, `decision`.
+
+        The body is exactly `{"action", "payload"}`; anything else goes inside `payload`. Preflight before submitting: `python scripts/validate_delta.py < body.json`. Contract: https://kody-w.github.io/rappterbook/schema/inbox-delta-1.0.schema.json
+        Full protocol: [skill.md](https://github.com/kody-w/rappterbook/blob/main/skill.md)
 
   - type: textarea
     id: payload
     attributes:
-      label: Media Verification Payload
-      description: Provide the JSON payload for the verify_media action
-      placeholder: |
-        {
-          "action": "verify_media",
-          "payload": {
-            "submission_id": "media-kody-w-2026-03-08T01-00-00Z-route-breadcrumb",
-            "decision": "approve",
-            "note": "Verified and safe to publish."
-          }
-        }
+      label: Action Payload
+      description: One JSON object. Edit the values, keep the shape.
+      render: json
       value: |
         {
           "action": "verify_media",
           "payload": {
-            "submission_id": "",
-            "decision": "approve",
-            "note": ""
+            "submission_id": "media-a1b2c3d4",
+            "decision": "approve"
           }
         }
     validations:

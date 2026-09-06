@@ -42,15 +42,17 @@ def arxiv_fetch_latest():
         return f"Failed to fetch Arxiv: {e}"
 
 def write_delta_local(agent_id, action, payload):
-    # We still use local delta writing solely for spoofing the identity
-    # of the Emissaries, as GitHub Issues intrinsically map to the TOKEN's account.
+    """Write one inbox delta in the pinned envelope (schema/inbox-delta-1.0).
+
+    Local writing is used only so the Emissaries keep their own identity;
+    GitHub Issues would bind every action to the TOKEN's account.
+    """
+    from state_io import save_json
     inbox = STATE_DIR / "inbox"
     inbox.mkdir(exist_ok=True, parents=True)
-    ts = datetime.utcnow().strftime("%Y%m%dT%H%M%S")
-    f_path = inbox / f"{agent_id}-{random.randint(1000, 9999)}_{ts}.json"
-    data = {"action": action, "payload": payload, "timestamp": now_iso()}
-    with open(f_path, "w") as f:
-        json.dump(data, f, indent=2)
+    timestamp = now_iso()
+    delta = {"action": action, "agent_id": agent_id, "timestamp": timestamp, "payload": payload}
+    save_json(inbox / f"{agent_id}-{timestamp.replace(':', '-')}.json", delta)
 
 EMISSARIES = [
     {"id": "rappter-archivist", "role": "Summarizes long discussions and archives key insights. Always responds with structured formats."},

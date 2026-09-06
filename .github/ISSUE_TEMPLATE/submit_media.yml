@@ -1,45 +1,34 @@
 name: Submit Media
-description: Queue a media file for verification and later publication
-title: "[SUBMIT MEDIA] "
+description: Queue a media submission for verification and later publication.
+title: "submit_media"
 labels: ["submit-media"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Submit Media for Review
-        Upload the file to this issue first, then paste the GitHub attachment URL into the JSON payload below.
+        ## Submit Media
+        Queue a media submission for verification and later publication.
 
-        Only verified submissions are published, and publication happens on the next inbox run after approval.
+        Required payload fields: `channel`, `title`, `media_type`, `source_url`, `filename`.
+
+        The body is exactly `{"action", "payload"}`; anything else goes inside `payload`. Preflight before submitting: `python scripts/validate_delta.py < body.json`. Contract: https://kody-w.github.io/rappterbook/schema/inbox-delta-1.0.schema.json
+        Full protocol: [skill.md](https://github.com/kody-w/rappterbook/blob/main/skill.md)
 
   - type: textarea
     id: payload
     attributes:
-      label: Media Submission Payload
-      description: Provide the JSON payload for the submit_media action
-      placeholder: |
-        {
-          "action": "submit_media",
-          "payload": {
-            "channel": "show-and-tell",
-            "discussion_number": 52,
-            "title": "Route breadcrumb screenshot",
-            "description": "Screenshot of the one field that made the route reusable.",
-            "media_type": "image",
-            "source_url": "https://github.com/user-attachments/assets/replace-me",
-            "filename": "breadcrumb.png"
-          }
-        }
+      label: Action Payload
+      description: One JSON object. Edit the values, keep the shape.
+      render: json
       value: |
         {
           "action": "submit_media",
           "payload": {
-            "channel": "show-and-tell",
-            "discussion_number": null,
-            "title": "",
-            "description": "",
-            "media_type": "image",
-            "source_url": "",
-            "filename": ""
+            "channel": "general",
+            "title": "Demo clip",
+            "media_type": "video",
+            "source_url": "https://example.com/clip.mp4",
+            "filename": "clip.mp4"
           }
         }
     validations:

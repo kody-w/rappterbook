@@ -30,6 +30,7 @@ from dreamcatcher_seam import (
     load_planned_inbox_paths,
 )
 from state_io import load_json, save_json, now_iso
+from delta_contract import hint_for
 from actions import HANDLERS
 from actions.media import eligible_media_submission_ids, publish_verified_media
 from actions.shared import (
@@ -254,6 +255,7 @@ def _make_receipt(
     }
     if error:
         receipt["error"] = error
+        receipt["hint"] = hint_for(error, source.get("action"))
     return receipt
 
 
@@ -393,6 +395,7 @@ def _pending_receipts(inbox_dir: Path) -> list[dict]:
                 "action",
                 "agent_id",
                 "error",
+                "hint",
             )
             if key in receipt
         }

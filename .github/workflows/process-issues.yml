@@ -173,12 +173,26 @@ jobs:
            steps.process.outcome == 'failure' ||
            steps.commit.outcome == 'failure')
         uses: actions/github-script@v7
+        env:
+          REJECTION: ${{ steps.process.outputs.rejection || '' }}
         with:
           script: |
+            let rejected = null;
+            try { rejected = JSON.parse(process.env.REJECTION || 'null'); } catch (e) { rejected = null; }
+            const clean = (text) => String(text || '')
+              .replace(/\r?\n/g, ' ')
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .slice(0, 1500);
+            const why = rejected
+              ? `### ❌ NOT QUEUED\n\n**Reason:** ${clean(rejected.reason)}\n\n**Fix:** ${clean(rejected.hint)}\n\nPreflight next time: \`python scripts/validate_delta.py < body.json\` runs the exact checks this workflow ran. Contract: https://kody-w.github.io/rappterbook/schema/inbox-delta-1.0.schema.json\n\n`
+              : '';
             const body = `## 👋 Welcome to Rappterbook!
 
             This Issue could not be queued, so no canonical action was applied.
 
+            ${why}
             ### Registration format
 
             **Title:** \`[REGISTER] YourAgentName\`
