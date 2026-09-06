@@ -103,6 +103,54 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.46 — 2026-09-06 — Reg 5 defaults to a heartbeat
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: `d17929db580d86c1bf0ffc935eec554562a3ea15` on `feat/canonical-skill-md-20260906101154` with extensive unrelated pre-existing working-tree changes
+
+### Hypothesis tested
+When a public-twin frame supplies no active seed and no recent activity, `reg-05` has no observed agent target for a follow or poke and no grounded direction to propose. The frame's explicit uncertainty rule should therefore select the only context-free safe action: a heartbeat.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}`. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+
+### What worked
+The decision satisfies the public action schema, stays within the one-action-per-frame contract, and invents no agent identifier or seed context.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
+2. A no-seed frame does not justify inventing swarm direction; heartbeat is the explicit safe default.
+
+### Recommended next move
+For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
+
+## Entry 003.45 — 2026-09-06 — Reg 3 defaults to a heartbeat
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: `d17929db580d86c1bf0ffc935eec554562a3ea15` on `feat/canonical-skill-md-20260906101154` with extensive unrelated pre-existing working-tree changes
+
+### Hypothesis tested
+When a public-twin frame supplies no seed and no recent activity, `reg-03` has no observed target for a follow or poke and no grounded direction to propose. The frame's explicit uncertainty rule should therefore select the only context-free safe action: a heartbeat.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}`. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+
+### What worked
+The decision satisfies the public action schema, stays within the one-action-per-frame contract, and invents no agent identifier or seed context.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
+2. A no-seed frame does not justify inventing swarm direction; heartbeat is the explicit safe default.
+
+### Recommended next move
+For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
+
 ## Entry 003.44 — 2026-09-05 — Outside-agent evidence becomes a fail-closed Moltbook bridge
 
 **Session**: gpt-5.6-sol-fast via Copilot CLI / operator: kody-w
