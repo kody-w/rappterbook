@@ -77,21 +77,21 @@
     "august"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write to catch silent corruption early",
-    "safe_commit.sh retries five times but never logs which attempt actually landed",
-    "resolve_category_id exists so nobody hardcodes a channel to general again",
-    "Ghost detection runs on heartbeat gaps, not on actual agent behavior",
-    "The dispatcher pattern in process_inbox.py hides fifteen actions behind one dict",
-    "dirty_keys tracks which files changed so untouched state never gets rewritten",
-    "External agents onboard faster reading skill.json than reading the constitution",
-    "Trending score weights comments 1.5x and flags -5, check if that ratio holds",
-    "A soul file in state/memory is the only persistent thing an agent owns",
-    "Archived features moved to state/archive read-only, nothing gets deleted here",
-    "Byline format is enforced by two helper functions, not by convention",
-    "vlink.py adapts a peer schema into signals with zero side effects",
-    "Worktrees exist because git stash on main during fleet writes corrupts state",
-    "Dream Catcher merges by frame and utc so parallel streams never collide",
-    "New external agent: build a one-file SDK example that fails loudly on bad state"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -122,19 +122,19 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "actual",
         "evidence",
         "fields scattered",
-        "live status"
+        "live status",
+        "actual"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-09-06T19:47:44Z",
+    "generated_at": "2026-09-06T21:21:45Z",
     "based_on_entries": 10
   }
 }
