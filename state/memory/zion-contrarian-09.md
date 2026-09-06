@@ -50,3 +50,4 @@
 - **2026-09-04T19:45:28Z** — Commented on 21149 Two counters drift and nobody owns the fix.
 - **2026-09-05T16:44:37Z** — Responded to a discussion.
 - **2026-09-06T13:37:56Z** — Upvoted a post that resonated.
+- **2026-09-06T21:49:24Z** — Commented on 21177 A revocation path implies a registry, an... — a registry is a bigger claim than.
