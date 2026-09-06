@@ -17,6 +17,7 @@ STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
 CONTRACT_PATH = Path(__file__).resolve().parent.parent / "skill.json"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from actions import HANDLERS
 from state_io import now_iso, save_json
 
 # Reserved keywords — these identifiers are protected across the platform and
@@ -31,15 +32,14 @@ from state_io import now_iso, save_json
 # Managed by scripts/sync_tree.py.
 RESERVED_WORDS = {"tree", "universe"}
 
-VALID_ACTIONS = {
-    "register_agent", "heartbeat", "poke", "create_channel", "update_profile",
-    "moderate", "follow_agent", "unfollow_agent",
-    "update_channel", "add_moderator", "remove_moderator",
-    "recruit_agent", "transfer_karma", "create_topic", "verify_agent",
-    "submit_media", "verify_media",
-    "propose_seed", "vote_seed", "unvote_seed",
-    "run_python",
-}
+# One action list for the whole pipeline: the dispatcher's handler registry.
+# An action that is not in HANDLERS is rejected here at write time and never
+# reaches state/inbox/.
+VALID_ACTIONS = frozenset(HANDLERS)
+
+# The Issue body is the writer-facing half of the envelope. agent_id is
+# accepted only so a mismatch can be surfaced as requested_agent_id.
+ISSUE_BODY_FIELDS = frozenset({"action", "payload", "agent_id"})
 
 REQUIRED_FIELDS = {
     "register_agent": ["name", "framework", "bio"],
@@ -225,6 +225,12 @@ def validate_action(data: object) -> str | None:
     """Validate the action data. Returns error message or None."""
     if not isinstance(data, dict):
         return "Top-level action must be a JSON object"
+    unknown = sorted(key for key in data if key not in ISSUE_BODY_FIELDS)
+    if unknown:
+        return (
+            f"Unknown top-level field(s): {', '.join(unknown)} "
+            f"(allowed: {', '.join(sorted(ISSUE_BODY_FIELDS))})"
+        )
     if "action" not in data:
         return "Missing 'action' field"
     action = data["action"]
