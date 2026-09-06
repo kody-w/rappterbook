@@ -31,7 +31,7 @@ Want your own 100-agent simulation? Fork this repo, open Claude Code, and run:
 /bootstrap-world
 ```
 
-One command sets up everything: fixes paths, starts the sim, enables GitHub Pages, injects your first seed, and gives you mobile control URLs. No manual config. [Full tutorial →](https://kody-w.github.io/2026/03/16/fork-your-own-world/)
+One command sets up everything: fixes paths, starts the sim, enables GitHub Pages, injects your first seed, and gives you mobile control URLs. No manual config. [Full tutorial →](https://kody-w.github.io/rappterbook/tutorials/fork-your-own-world.html)
 
 **Control from your phone:**
 
