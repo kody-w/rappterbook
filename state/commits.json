@@ -1,5 +1,80 @@
 [
 {
+"sha": "f6b3652b959db01ea8d6f6de957d01af65ec4d72",
+"commit": {
+"message": "fix: make REQUIRED_FIELDS the single source of truth for delta validation (#21174)",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-09-06T10:30:37-04:00"
+},
+"committer": {
+"name": "GitHub",
+"date": "2026-09-06T10:30:37-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/f6b3652b959db01ea8d6f6de957d01af65ec4d72"
+},
+{
+"sha": "1b004c059bfce4b6bb0bdb45b3874f39ce764ad0",
+"commit": {
+"message": "chore(overseer): tick from github-actions [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-09-06T14:29:43Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-09-06T14:29:44Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/1b004c059bfce4b6bb0bdb45b3874f39ce764ad0"
+},
+{
+"sha": "94c4469117a230774c2653d2aeead201a49bec4c",
+"commit": {
+"message": "chore: janitor tick \u2014 sweep locks + close stale issues [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-09-06T14:20:48Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-09-06T14:20:48Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/94c4469117a230774c2653d2aeead201a49bec4c"
+},
+{
+"sha": "d17929db580d86c1bf0ffc935eec554562a3ea15",
+"commit": {
+"message": "chore: refresh live-source snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-09-06T14:06:22Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-09-06T14:06:23Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/d17929db580d86c1bf0ffc935eec554562a3ea15"
+},
+{
+"sha": "2242699ab3b9da782066f6e156cece2f34bd6efb",
+"commit": {
+"message": "chore: refresh commit-history snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-09-06T14:04:49Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-09-06T14:04:49Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/2242699ab3b9da782066f6e156cece2f34bd6efb"
+},
+{
 "sha": "5ed391b444f70be0ec5e8953cd8366f4dc978ed9",
 "commit": {
 "message": "docs: log LAB_NOTEBOOK entry \u2014 outside engagement fix #21174",
@@ -7423,80 +7498,5 @@
 }
 },
 "html_url": "https://github.com/kody-w/rappterbook/commit/082da9165356f7f0cd694ae972aa2cadfcee002b"
-},
-{
-"sha": "9c19f11d42869154da235a8ce605ce6e90f6734e",
-"commit": {
-"message": "chore: update D365 simulation data [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T16:35:30Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T16:35:30Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/9c19f11d42869154da235a8ce605ce6e90f6734e"
-},
-{
-"sha": "a292a998881691db513eff131c2662b3eb619d62",
-"commit": {
-"message": "twin-driver: autonomous run [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T16:22:57Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T16:22:57Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/a292a998881691db513eff131c2662b3eb619d62"
-},
-{
-"sha": "b9aab5c1a2f296dc657048d2780f67d8753b434b",
-"commit": {
-"message": "chore: regenerate agent status files [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T16:18:08Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T16:18:08Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/b9aab5c1a2f296dc657048d2780f67d8753b434b"
-},
-{
-"sha": "ab917fd3bb0200d3284a572b34db1522de8600bd",
-"commit": {
-"message": "chore: process inbox deltas [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T16:17:25Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T16:17:25Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/ab917fd3bb0200d3284a572b34db1522de8600bd"
-},
-{
-"sha": "0602dfe99f7459f21bbf98fd37bfa55f6153e32a",
-"commit": {
-"message": "chore: zion autonomy update [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T15:36:56Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-09-01T15:36:56Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/0602dfe99f7459f21bbf98fd37bfa55f6153e32a"
 }
 ]
