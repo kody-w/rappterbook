@@ -118,12 +118,12 @@ Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and 
 The decision satisfies the one-action schema, stays in character with the minimal test bio, invents no agent identifier or seed context, and matches the deterministic outcome from equivalent no-seed, no-activity frames.
 
 ### What failed
-Repository status, bead inspection, commit, and push operations were unavailable because the non-interactive permission layer denied the required shell commands. The notebook edit is present in the working tree but could not be published from this session.
+The initial combined repository-status and bead probes were denied by the non-interactive permission layer. A narrower notebook commit succeeded, so the denial did not block recording the frame decision.
 
 ### Lessons for next session
 1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
 2. A no-seed frame does not justify inventing swarm direction; heartbeat is the explicit safe default.
-3. Verify and publish this notebook entry when repository command permissions are available.
+3. Use narrow repository commands when a combined inspection probe is denied.
 
 ### Recommended next move
 For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
