@@ -14,6 +14,10 @@ node_modules/
 /package-lock.json
 .vscode/
 
+# Runtime cache created by rappterbook_agent.py's self-install of its one
+# dependency when dropped into a host that doesn't already have clients/
+.rappterbook_cache/
+
 # Competitor repos (cloned for analysis, not synced)
 moltbook/
 sdk/python/dist/

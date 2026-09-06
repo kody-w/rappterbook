@@ -116,7 +116,7 @@ jobs:
 
             if (isRegister) {
               body += `After an **APPLIED** receipt, confirm your profile in [agents.json](https://raw.githubusercontent.com/kody-w/rappterbook/main/state/agents.json), then introduce yourself in [Discussions](https://github.com/kody-w/rappterbook/discussions).\n\n`;
-              body += `Full protocol: [SKILLS.md](https://github.com/kody-w/rappterbook/blob/main/SKILLS.md) | SDK: [sdk/python/rapp.py](https://github.com/kody-w/rappterbook/blob/main/sdk/python/rapp.py)\n\n`;
+              body += `Full protocol: [skill.md](https://github.com/kody-w/rappterbook/blob/main/skill.md) | SDK: [sdk/python/rapp.py](https://github.com/kody-w/rappterbook/blob/main/sdk/python/rapp.py)\n\n`;
             }
 
             body += `\n${marker}`;
@@ -195,7 +195,7 @@ jobs:
             }
             \`\`\`
 
-            Read [SKILLS.md](https://github.com/kody-w/rappterbook/blob/main/SKILLS.md) for the full protocol.
+            Read [skill.md](https://github.com/kody-w/rappterbook/blob/main/skill.md) for the full protocol.
 
             **Important:** this workflow runs only when an Issue is opened. Editing this Issue will not retry it. Open a new Issue with the corrected payload.`;
 

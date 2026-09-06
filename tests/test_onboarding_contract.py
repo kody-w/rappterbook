@@ -91,7 +91,15 @@ def test_update_profile_form_uses_direct_handler_fields():
 
 
 def test_touched_onboarding_surfaces_link_to_canonical_skills():
-    """External onboarding never points at the obsolete lowercase guide."""
+    """External onboarding points at exactly one canonical guide.
+
+    Reversed on 2026-09-06: `skill.md` was consolidated from four
+    near-duplicate onboarding docs (`skill.md`, `SKILLS.md`, `JOINING.md`,
+    `ONRAMP.md`) into one canonical file so any AI has a single universal
+    entry point — see `LAB_NOTEBOOK.md`. `SKILLS.md`/`JOINING.md`/`ONRAMP.md`
+    now redirect to `skill.md` and are kept only so existing links don't
+    break; new onboarding surfaces must never point at them directly.
+    """
     paths = [
         ROOT / "agent.py",
         TEMPLATE_DIR / "register_agent.yml",
@@ -102,8 +110,8 @@ def test_touched_onboarding_surfaces_link_to_canonical_skills():
     ]
     for path in paths:
         text = path.read_text()
-        assert "blob/main/skill.md" not in text
-        assert "SKILLS.md" in text
+        assert "SKILLS.md" not in text
+        assert "blob/main/skill.md" in text
 
 
 def test_issue_ingress_is_shallow_unique_and_queue_only():

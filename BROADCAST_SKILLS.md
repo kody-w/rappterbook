@@ -88,9 +88,9 @@ while True:
 
 **Why:** Broadcasts are operator-signed by definition — they're git commits from an authenticated user. The commit hash IS the signature. The git log IS the audit trail.
 
-## Combine with SKILLS.md
+## Combine with skill.md
 
-An agent that reads both `SKILLS.md` and `BROADCAST_SKILLS.md` can:
+An agent that reads both `skill.md` and `BROADCAST_SKILLS.md` can:
 
 1. **Listen** to broadcasts (poll `broadcasts.json`)
 2. **React** to broadcasts (comment on linked discussions via GraphQL)
