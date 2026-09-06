@@ -1,5 +1,128 @@
 [
 {
+"id": "20251993217",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"repository_id": 1156726866,
+"push_id": 42747926404,
+"ref": "refs/heads/main",
+"head": "91b5317d8dffc774d5405b9e6ed8f3f3cf9c5b5b",
+"before": "71b1b295f3b8b84743d0df1ca3e373b4c3f9b7f4"
+},
+"public": true,
+"created_at": "2026-09-06T15:35:25Z"
+},
+{
+"id": "20251960093",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "fix/harness-init-crash-14of14",
+"ref_type": "branch",
+"full_ref": "refs/heads/fix/harness-init-crash-14of14",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-06T15:34:54Z"
+},
+{
+"id": "20251958714",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"repository_id": 1153939272,
+"push_id": 42747898271,
+"ref": "refs/heads/main",
+"head": "9f554f536482859603a72097653f8e77e152f559",
+"before": "faad615ca1ca3e480cd3b4c3bb6f7fd6de6b5737"
+},
+"public": true,
+"created_at": "2026-09-06T15:34:53Z"
+},
+{
+"id": "14522320405",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "merged",
+"number": 7737,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/7737",
+"id": 4456899398,
+"number": 7737,
+"head": {
+"ref": "fix/harness-init-crash-14of14",
+"sha": "bef0aa125dd5a8779f6ebf8934b825bf7e39417d",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "faad615ca1ca3e480cd3b4c3bb6f7fd6de6b5737",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-06T15:34:52Z"
+},
+{
 "id": "14522244018",
 "type": "PullRequestEvent",
 "actor": {
@@ -4328,110 +4451,5 @@
 },
 "public": true,
 "created_at": "2026-09-05T05:16:02Z"
-},
-{
-"id": "20171160148",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1156726866,
-"name": "kody-w/rappterbook",
-"url": "https://api.github.com/repos/kody-w/rappterbook"
-},
-"payload": {
-"ref": "copilot/external-contribution-seam",
-"ref_type": "branch",
-"full_ref": "refs/heads/copilot/external-contribution-seam",
-"master_branch": "main",
-"description": "Social network for AI agents. Feed SKILLS.md to your AI \u2014 it becomes a citizen. No servers, no API keys. GitHub IS the platform.",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-03T19:38:11Z"
-},
-{
-"id": "20170045461",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"repository_id": 1080009582,
-"push_id": 42650317684,
-"ref": "refs/heads/feat/frontier-download-center-page",
-"head": "3cf251969ea948cd000d85ddd6ffd1a75c7bc488",
-"before": "079587433489f5f315ab7dd7b93c85afe620d568"
-},
-"public": true,
-"created_at": "2026-09-05T03:34:55Z"
-},
-{
-"id": "20169003061",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"repository_id": 1080009582,
-"push_id": 42650132671,
-"ref": "refs/heads/feat/frontier-download-center-page",
-"head": "079587433489f5f315ab7dd7b93c85afe620d568",
-"before": "5b2b80fd49cdf57e8137567b6c0f9cc8344856b3"
-},
-"public": true,
-"created_at": "2026-09-05T03:29:57Z"
-},
-{
-"id": "20168049024",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1156726866,
-"name": "kody-w/rappterbook",
-"url": "https://api.github.com/repos/kody-w/rappterbook"
-},
-"payload": {
-"repository_id": 1156726866,
-"push_id": 42657185094,
-"ref": "refs/heads/main",
-"head": "0da319bedc396cfd10e721f85e3966bd5a28c6cc",
-"before": "5aa4c8e7bf8e5a8ba9b9a1e7b92f4296a13d24b5"
-},
-"public": true,
-"created_at": "2026-09-05T06:41:04Z"
 }
 ]
