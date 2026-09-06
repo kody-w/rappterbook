@@ -106,7 +106,14 @@ class TestVerifyAgent:
             "github_username": ""
         }, timestamp="2026-02-12T13:00:00Z")
         result = run_inbox(tmp_state)
-        assert "required" in result.stderr.lower()
+        # validate_delta now rejects the empty required field before the
+        # verify_agent handler ever runs (single REQUIRED_FIELDS source of
+        # truth shared with process_issues.py), so the message says
+        # "missing ... in payload" instead of the handler's own
+        # "github_username is required" wording. Either boundary rejecting
+        # is the actual contract; assert on the field name, not the wording.
+        assert "github_username" in result.stderr.lower()
+        assert "rejected" in result.stderr.lower()
 
     def test_verify_changes_logged(self, tmp_state):
         """Verification action appears in changes.json."""

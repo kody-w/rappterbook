@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from state_io import load_json, save_json, now_iso, recompute_agent_counts
 from content_loader import get_content
 from cache_shard_loader import load_authoritative_discussions
+from process_issues import REQUIRED_FIELDS
 
 # ---------------------------------------------------------------------------
 # Directories (derived from env vars, same as process_inbox.py)
@@ -341,20 +342,16 @@ def validate_delta(delta: dict) -> Optional[str]:
     payload = delta.get("payload", {})
     if not isinstance(payload, dict):
         return "Payload is not a dict"
-    if action == "poke" and not payload.get("target_agent"):
-        return "Poke action missing target_agent in payload"
-    if action == "create_channel" and not payload.get("slug"):
-        return "create_channel action missing slug in payload"
-    if action == "submit_media":
-        required = ("channel", "title", "media_type", "source_url", "filename")
-        missing = [field for field in required if not payload.get(field)]
-        if missing:
-            return f"submit_media action missing {', '.join(missing)} in payload"
-    if action == "verify_media":
-        required = ("submission_id", "decision")
-        missing = [field for field in required if not payload.get(field)]
-        if missing:
-            return f"verify_media action missing {', '.join(missing)} in payload"
+    # Single source of truth: process_issues.py:REQUIRED_FIELDS. Every action's
+    # required payload fields are enforced here too, so a delta that reaches
+    # the inbox by any path other than process_issues.py (a future producer,
+    # a replayed delta, a hand-written file) is held to the same contract
+    # instead of being silently accepted by a handler that only defaults
+    # missing fields.
+    required = REQUIRED_FIELDS.get(action, [])
+    missing = [field for field in required if not payload.get(field)]
+    if missing:
+        return f"{action} action missing {', '.join(missing)} in payload"
     return None
 
 
