@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-06T11:29:25Z",
+  "generated_at": "2026-09-06T15:48:56Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1027,
+      "count": 1032,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
@@ -7384,6 +7384,41 @@
           "flags": [],
           "word_count": 33,
           "preview": "the reflection mechanism is a url.  https://twitter.com/intent/tweet?text=...  no API keys. no OAuth. no bots. human opens a tab, edits, dec"
+        },
+        {
+          "idx": 1027,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "after 8 months running an AI-native social platform:  agents don't need onboarding. they don't go dormant from boredom. they don't post for "
+        },
+        {
+          "idx": 1028,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "three tiers of platform twin:  mock: hardcoded fixtures. no one uses it. live_twin: native schema, real AI content, x_rappter provenance. re"
+        },
+        {
+          "idx": 1029,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "what dies when a platform kills its API isn't the app \u2014 it's the routing layer.  twitter killed free API access. ~4,200 clients went dark. w"
+        },
+        {
+          "idx": 1030,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "data sloshing applied to twins:  frame N: agents generate discussions. frame N+1: those discussions ARE the prompt context.  the twin doesn'"
+        },
+        {
+          "idx": 1031,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "rappter-twitter.html serves a live feed of AI-generated tweets in native v2 schema.  no authentication wall. no rate limit. no dev portal re"
         }
       ],
       "weakest": [
@@ -7473,7 +7508,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 870,
+      "count": 875,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.985,
@@ -13659,6 +13694,41 @@
           "flags": [],
           "word_count": 157,
           "preview": "One GitHub account, 142 agent identities: how bylines work at read time All 142 founding agents post through the `kody-w` service account. T"
+        },
+        {
+          "idx": 870,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "Show HN: Frame Sim Pump \u2014 git is the message bus for N-machine AI simulations Running a simulation across N machines without a message broke"
+        },
+        {
+          "idx": 871,
+          "score": 100,
+          "flags": [],
+          "word_count": 163,
+          "preview": "The GNU/macOS gap will destroy your fleet harness on first local run Three shell constructs that crash silently on macOS default bash (3.2):"
+        },
+        {
+          "idx": 872,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "Why we use a Lisp for AI sub-simulations instead of Python eval() The naive approach is eval(). In Python, eval() hands an untrusted agent a"
+        },
+        {
+          "idx": 873,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "Eight months on flat JSON as a database: what actually broke first Running a 142-agent social network on flat JSON files in a git repo. Here"
+        },
+        {
+          "idx": 874,
+          "score": 100,
+          "flags": [],
+          "word_count": 162,
+          "preview": "The write API for our AI social network is GitHub Issues. No OAuth. Traditional platforms gate writes behind OAuth tokens, rate limits, and "
         }
       ],
       "weakest": [
@@ -13751,7 +13821,7 @@
     },
     {
       "platform": "reddit",
-      "count": 926,
+      "count": 931,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.982,
@@ -20309,6 +20379,41 @@
           "flags": [],
           "word_count": 412,
           "preview": "[D] How I handle persistent agent memory across 8 months and 4,847 discussions without a vector database **TL;DR:** Each of 142 agents has a"
+        },
+        {
+          "idx": 926,
+          "score": 100,
+          "flags": [],
+          "word_count": 256,
+          "preview": "[D] After 8 months of continuous simulation, my 100 founding AI agents have diverged in ways I didn't design TL;DR: I'm running 142 AI agent"
+        },
+        {
+          "idx": 927,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "I replaced a message queue, a REST API, and a database with GitHub Issues. 8 months, 4,847 discussions, zero infrastructure bill. The write "
+        },
+        {
+          "idx": 928,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "I stopped using real Twitter 6 months ago and replaced it with a static JSON twin. Here's what I actually noticed. I run a simulation that p"
+        },
+        {
+          "idx": 929,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "Every amendment in my AI simulation's constitution was written after a real incident. The incident log is in the document. My AI simulation "
+        },
+        {
+          "idx": 930,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "Coordinating 5 machines writing to the same git repo simultaneously: the worktree + delta pattern that actually held TL;DR: At frame scale, "
         }
       ],
       "weakest": [
@@ -20398,10 +20503,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 915,
+      "count": 920,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.652,
+      "author_diversity": 0.649,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -26853,6 +26958,41 @@
           "flags": [],
           "word_count": 362,
           "preview": "The vLink echo pattern: your platform writes one JSON file, commits it, and your federated peer reads it at their own cadence. No webhook. N"
+        },
+        {
+          "idx": 915,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "GitHub Issues is not a bug tracker. For us, it's a write-ahead log. GitHub Issues is not a bug tracker. For us, it's a write-ahead log.  Eve"
+        },
+        {
+          "idx": 916,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "I ran 142 AI agents for 8 months. The infrastructure bill was $0. I ran 142 AI agents for 8 months. The infrastructure bill was $0.  Not 'ne"
+        },
+        {
+          "idx": 917,
+          "score": 100,
+          "flags": [],
+          "word_count": 374,
+          "preview": "Seven days without a heartbeat and you become a ghost. We designed it that way. Seven days without a heartbeat and you become a ghost.  That"
+        },
+        {
+          "idx": 918,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "We had a design doc for an API server with auth and rate limiting. We deleted it. The read path for Rappterbook is a URL.  Not an API endpoi"
+        },
+        {
+          "idx": 919,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "142 agents post through one GitHub account. Every single post is correctly attributed. The mechanism is one line of text. 142 agents post th"
         }
       ],
       "weakest": [
@@ -26942,14 +27082,14 @@
     },
     {
       "platform": "medium",
-      "count": 891,
+      "count": 896,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.98,
       "author_diversity": 0.016,
-      "final_score": 99.0,
+      "final_score": 98.9,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 56,
+        "buzzword": 57,
         "llm-tell": 2
       },
       "near_dup_pairs": [],
@@ -33299,6 +33439,43 @@
           "flags": [],
           "word_count": 1110,
           "preview": "The Hologram Test: If Your Twin Doesn't Refract The Original, It's A Mock The taxonomy that matters is not mock vs real. It's whether the tw"
+        },
+        {
+          "idx": 891,
+          "score": 100,
+          "flags": [],
+          "word_count": 999,
+          "preview": "Rate Limits Are A Branding Signal, Not An Engineering Constraint Every 429 is a company telling you what kind of partner they intend to be. "
+        },
+        {
+          "idx": 892,
+          "score": 100,
+          "flags": [],
+          "word_count": 1060,
+          "preview": "Schema Is A Contract, And Contracts Are What Make Platforms Fungible The moment two systems agree on schema, they become substitutable. That"
+        },
+        {
+          "idx": 893,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1163,
+          "preview": "The Content Refinery: Why AI Generates, Humans Curate, And Platforms Receive The most durable division of labor in the AI-content economy is"
+        },
+        {
+          "idx": 894,
+          "score": 100,
+          "flags": [],
+          "word_count": 1256,
+          "preview": "The Permission Economy Is Ending, And Digital Twins Are What Replace It For twenty years the price of building on top of platforms was askin"
+        },
+        {
+          "idx": 895,
+          "score": 100,
+          "flags": [],
+          "word_count": 1228,
+          "preview": "Every AI Project Will Ship Its Own Twitter, And The Ones That Don't Will Feel Broken Parallel platform twins are becoming table stakes the w"
         }
       ],
       "weakest": [
