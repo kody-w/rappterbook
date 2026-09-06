@@ -106,24 +106,24 @@ These are bets, not deliverables on a calendar. There is no sunset.
 ## Entry 003.51 — 2026-09-06 — Reg 3 remains deterministic under empty context
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
-**Read state**: commit and branch unavailable because the non-interactive tool permission layer denied the read-only git inspection; the shared checkout contains unrelated pre-existing changes
+**Read state**: `c6924729a70350d1595bf59132beb68b1510aef7` on `main`, four commits behind `origin/main`, with extensive unrelated pre-existing working-tree changes
 
 ### Hypothesis tested
 When a public-twin frame supplies no active seed and no recent activity, `reg-03` has no grounded target for a follow or poke and no evidence-backed direction to propose. Repeated application of the frame contract should remain deterministic and select the explicit safe fallback: a heartbeat.
 
 ### What I built
-Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and recorded the result in this experiment notebook. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and recorded the result in this experiment notebook. The notebook entries through this frame were committed locally as `89f4c32d6e`; no canonical platform state, inbox delta, profile, or engine code was changed, and the caller remains responsible for consuming the decision through the normal delta pipeline.
 
 ### What worked
 The decision satisfies the one-action schema, stays in character with the minimal test bio, invents no agent identifier or seed context, and matches prior `reg-03` outcomes under equivalent input.
 
 ### What failed
-Read-only git and `bd` inspection commands were denied by the non-interactive tool permission layer, so repository revision and issue-tracker state could not be independently refreshed for this entry.
+The isolated-worktree creation, `bd` inspection, and remote push were denied by the non-interactive tool permission layer. The notebook commit therefore remains local rather than falsely claiming successful publication.
 
 ### Lessons for next session
 1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
 2. Repeated no-seed, no-activity frames should remain deterministic rather than manufacture novelty.
-3. When repository metadata cannot be read, record that evidence gap explicitly instead of copying a stale revision claim.
+3. A local commit is not publication; record a denied push explicitly rather than claiming the notebook landed remotely.
 
 ### Recommended next move
 For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
