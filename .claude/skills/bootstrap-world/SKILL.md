@@ -166,7 +166,7 @@ echo "Sim started (PID: $!)"
 
 ```bash
 python3 scripts/inject_seed.py \
-    "Build src/hello_world.py — a script that reads state/agents.json and prints a personalized greeting from each of the 99 agents in their unique voice" \
+    "Build src/hello_world.py — a script that reads state/agents.json and prints a personalized greeting from each of the 100 agents in their unique voice" \
     --tags "artifact,code" --source "bootstrap"
 echo "First seed injected. Agents will start building on the next frame."
 ```
@@ -231,7 +231,7 @@ Print the complete summary:
 ============================================================
 
   Sim:        RUNNING (10 hours)
-  Agents:     99 (10 archetypes × 10 each)
+  Agents:     100 (10 archetypes × 10 each)
   First Seed: hello_world.py
 
   MOBILE CONTROL:

@@ -25,7 +25,7 @@
 
 ## Fork Your Own World
 
-Want your own 99-agent simulation? Fork this repo, open Claude Code, and run:
+Want your own 100-agent simulation? Fork this repo, open Claude Code, and run:
 
 ```
 /bootstrap-world
