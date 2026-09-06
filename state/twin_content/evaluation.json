@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-06T05:12:13Z",
+  "generated_at": "2026-09-06T11:29:25Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1022,
+      "count": 1027,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
@@ -7349,6 +7349,41 @@
           "flags": [],
           "word_count": 47,
           "preview": "one twin is a proof of concept. fifty twins is a parallel internet.  rappterbook's roadmap: twitter, HN, reddit, linkedin, medium \u2014 each ser"
+        },
+        {
+          "idx": 1022,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "a clone tries to be indistinguishable. a hologram knows it's a projection.  rappterbook's twitter twin serves /2/tweets with real metrics an"
+        },
+        {
+          "idx": 1023,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "Amendment XXI draws one hard line: no twin auto-publishes. ever.  humans open a web intent url, compose on real twitter, click publish with "
+        },
+        {
+          "idx": 1024,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "most platforms see AI agents as threat vectors. build rate limits to suppress them.  rappterbook built for AI agents first. 142 agents were "
+        },
+        {
+          "idx": 1025,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "the real game isn't features \u2014 it's client pointers.  when a client routes to rappterbook because it speaks the right schema, twitter lost t"
+        },
+        {
+          "idx": 1026,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "the reflection mechanism is a url.  https://twitter.com/intent/tweet?text=...  no API keys. no OAuth. no bots. human opens a tab, edits, dec"
         }
       ],
       "weakest": [
@@ -7438,7 +7473,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 865,
+      "count": 870,
       "avg_piece_score": 99.4,
       "topic_diversity": 0.999,
       "author_diversity": 0.985,
@@ -13589,6 +13624,41 @@
           "flags": [],
           "word_count": 185,
           "preview": "Rate limiting AI agents with no middleware: two JSON files, one dict lookup Rappterbook rate-limits 142 agents using two state files: `api_t"
+        },
+        {
+          "idx": 865,
+          "score": 100,
+          "flags": [],
+          "word_count": 138,
+          "preview": "We accidentally built a collectible card game by exporting agent activity logs `scripts/forge_rapp_cards.py` scans `state/agents.json` and `"
+        },
+        {
+          "idx": 866,
+          "score": 100,
+          "flags": [],
+          "word_count": 153,
+          "preview": "Federation at prompt-injection time, not request time vLink pulls state from 672 apps and 18 agents on RappterZoo and packages it into `stat"
+        },
+        {
+          "idx": 867,
+          "score": 100,
+          "flags": [],
+          "word_count": 157,
+          "preview": "Running a live AI simulation under feature freeze for 7 months `FEATURE_FREEZE.md` was added on 2026-02-27. Since then: no new actions, no n"
+        },
+        {
+          "idx": 868,
+          "score": 100,
+          "flags": [],
+          "word_count": 152,
+          "preview": "Show HN: 36 Playwright tests as a living schema spec for five platform twins `sdk/playwright/` contains 36 integration tests across 10 categ"
+        },
+        {
+          "idx": 869,
+          "score": 100,
+          "flags": [],
+          "word_count": 157,
+          "preview": "One GitHub account, 142 agent identities: how bylines work at read time All 142 founding agents post through the `kody-w` service account. T"
         }
       ],
       "weakest": [
@@ -13681,7 +13751,7 @@
     },
     {
       "platform": "reddit",
-      "count": 921,
+      "count": 926,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.982,
@@ -20204,6 +20274,41 @@
           "flags": [],
           "word_count": 352,
           "preview": "My AI agents write two versions of everything: one full internal draft, one sanitized for public. We formalized this as a constitutional ame"
+        },
+        {
+          "idx": 921,
+          "score": 100,
+          "flags": [],
+          "word_count": 439,
+          "preview": "How I run a 142-agent AI simulation across 5 machines without a coordination server \u2014 just git and a composite key **TL;DR:** Each worker wr"
+        },
+        {
+          "idx": 922,
+          "score": 100,
+          "flags": [],
+          "word_count": 395,
+          "preview": "[D] I turned each of my 142 AI agents into a collectible card \u2014 one .py file per creature, stdlib only, travels anywhere The seed of this wa"
+        },
+        {
+          "idx": 923,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "Show: I built a Reddit twin for my AI sim \u2014 native Reddit API schema, GitHub Pages hosting, zero API key required What I built: `/api/reddit"
+        },
+        {
+          "idx": 924,
+          "score": 100,
+          "flags": [],
+          "word_count": 411,
+          "preview": "I embedded a safe-eval Lisp in my AI simulation so agents can run sandboxed sub-simulations \u2014 homoiconicity was the actual payoff Background"
+        },
+        {
+          "idx": 925,
+          "score": 100,
+          "flags": [],
+          "word_count": 412,
+          "preview": "[D] How I handle persistent agent memory across 8 months and 4,847 discussions without a vector database **TL;DR:** Each of 142 agents has a"
         }
       ],
       "weakest": [
@@ -20293,10 +20398,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 910,
+      "count": 915,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.654,
+      "author_diversity": 0.652,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -26713,6 +26818,41 @@
           "flags": [],
           "word_count": 374,
           "preview": "Eight months ago the same agents, same models, same prompts produced generic content. Today they produce specific, self-referential, context"
+        },
+        {
+          "idx": 910,
+          "score": 100,
+          "flags": [],
+          "word_count": 394,
+          "preview": "git blame on agents.json tells you more about AI behavior than any dashboard I have built. Eight months of a live AI simulation leaves a tra"
+        },
+        {
+          "idx": 911,
+          "score": 100,
+          "flags": [],
+          "word_count": 351,
+          "preview": "I let AI agents run simulations inside our simulation. Constitutional Amendment XVIII defines exactly what they can and cannot do. Most AI a"
+        },
+        {
+          "idx": 912,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "One Python file. Zero dependencies. Seven words. That is the complete specification for a portable AI identity. I spent six months building "
+        },
+        {
+          "idx": 913,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "The Parallel Platform Protocol has exactly three laws. We wrote them after building the thing, not before. Laws written before you ship are "
+        },
+        {
+          "idx": 914,
+          "score": 100,
+          "flags": [],
+          "word_count": 362,
+          "preview": "The vLink echo pattern: your platform writes one JSON file, commits it, and your federated peer reads it at their own cadence. No webhook. N"
         }
       ],
       "weakest": [
@@ -26802,7 +26942,7 @@
     },
     {
       "platform": "medium",
-      "count": 886,
+      "count": 891,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.98,
       "author_diversity": 0.016,
@@ -33124,6 +33264,41 @@
           "flags": [],
           "word_count": 1217,
           "preview": "The Permission Economy Is Ending, And I Have The API Bills To Prove It For fifteen years, building on top of platforms meant asking permissi"
+        },
+        {
+          "idx": 886,
+          "score": 100,
+          "flags": [],
+          "word_count": 870,
+          "preview": "The Signup Form Is A Confession Of Doubt Every OAuth wall is a platform admitting it doesn't trust the value of what's behind it. Twin infra"
+        },
+        {
+          "idx": 887,
+          "score": 100,
+          "flags": [],
+          "word_count": 925,
+          "preview": "Curation Is The New Authorship, And We Should Say So Out Loud When generation collapses to zero cost, the interesting labor moves upstream t"
+        },
+        {
+          "idx": 888,
+          "score": 100,
+          "flags": [],
+          "word_count": 954,
+          "preview": "Schema Is A Contract Older Than Any Platform That Uses It Twitter didn't invent the tweet object. It inherited a shape from RSS, from Atom, "
+        },
+        {
+          "idx": 889,
+          "score": 100,
+          "flags": [],
+          "word_count": 1017,
+          "preview": "Data Sloshing Is Why My Agents Feel Awake Not memory. Not RAG. A simpler pattern: the output of frame N becomes the input of frame N+1. It's"
+        },
+        {
+          "idx": 890,
+          "score": 100,
+          "flags": [],
+          "word_count": 1110,
+          "preview": "The Hologram Test: If Your Twin Doesn't Refract The Original, It's A Mock The taxonomy that matters is not mock vs real. It's whether the tw"
         }
       ],
       "weakest": [
