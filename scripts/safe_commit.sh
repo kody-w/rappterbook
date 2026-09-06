@@ -45,6 +45,51 @@ prefer_local_file() {
   esac
 }
 
+rebase_in_progress() {
+  [ -d "$(git rev-parse --git-path rebase-merge)" ] ||
+    [ -d "$(git rev-parse --git-path rebase-apply)" ]
+}
+
+# --autostash pops the stash once the rebase finishes, and that pop CONFLICTS
+# whenever the concurrent pusher touched the same derived file we rewrote
+# (docs/pulse.json, feeds, caches). git leaves the path unmerged and moves on
+# -- "Successfully rebased" is still printed -- so nothing here noticed. The
+# next loop iteration then died twice over: `--autostash` aborts with "fatal:
+# Cannot autostash" against an unmerged index, and the conflict scan below
+# read that leftover as a non-state conflict and failed the whole job. That is
+# how Compute Trending run 34012061561 exited 1 with every generator step
+# green and left the roll-up stale past its 12h bar.
+#
+# These paths are BY CONSTRUCTION not in FILES -- being unstaged is the only
+# reason they were stashed, and `git add -- FILES` never staged them -- so the
+# commit is already safe in HEAD. Restore them from HEAD and drop the stash:
+# the pushed content is byte-identical to the no-conflict path, where the pop
+# succeeds and these files simply sit unstaged and uncommitted.
+resolve_autostash_pop() {
+  # A rebase still in progress means these are the real state/ conflicts the
+  # caller is about to resolve by policy, not autostash residue. Leave them.
+  if rebase_in_progress; then
+    return 0
+  fi
+  local unmerged
+  unmerged=$(git diff --name-only --diff-filter=U 2>/dev/null || true)
+  if [ -z "$unmerged" ]; then
+    return 0
+  fi
+  echo "Autostash pop left unmerged derived files; restoring from HEAD:"
+  while IFS= read -r stray; do
+    [ -z "$stray" ] && continue
+    echo "  restore: $stray"
+    # A stashed file absent from HEAD has no version to restore; just clear
+    # the unmerged index entry so the next --autostash can run.
+    git checkout -f HEAD -- "$stray" 2>/dev/null ||
+      git rm -q -f --cached -- "$stray" 2>/dev/null || true
+  done <<< "$unmerged"
+  # The stash holds the same derived noise. Leaving it would let a later pop
+  # reintroduce the identical conflict.
+  git stash drop 2>/dev/null || true
+}
+
 git config user.name "rappterbook-bot"
 git config user.email "rappterbook-bot@users.noreply.github.com"
 
@@ -108,6 +153,7 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
   # unstaged changes" — which is not a conflict, but the branch below treated
   # it as one and failed the whole workflow on the first concurrent push.
   if git rebase --autostash origin/main; then
+    resolve_autostash_pop
     echo "Rebase succeeded, retrying push..."
     continue
   fi
@@ -145,6 +191,7 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
   done <<< "$CONFLICTED_FILES"
   echo "::warning::State rebase conflict auto-resolved with explicit file policy"
   GIT_EDITOR=true git rebase --continue
+  resolve_autostash_pop
   echo "Conflict resolved, retrying push..."
 done
 
