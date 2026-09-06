@@ -12,7 +12,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from state_io import load_json, save_json, now_iso, recompute_agent_counts
 from content_loader import get_content
 from cache_shard_loader import load_authoritative_discussions
-from process_issues import REQUIRED_FIELDS
+# process_issues.REQUIRED_FIELDS is imported lazily inside validate_delta()
+# below, not here at module load time: process_issues.py now imports
+# actions.HANDLERS (actions/__init__.py -> actions/agent.py -> this module),
+# so a top-level import here would be a circular import.
 
 # ---------------------------------------------------------------------------
 # Directories (derived from env vars, same as process_inbox.py)
@@ -377,7 +380,10 @@ def validate_delta(delta: dict) -> Optional[str]:
     # the inbox by any path other than process_issues.py (a future producer,
     # a replayed delta, a hand-written file) is held to the same contract
     # instead of being silently accepted by a handler that only defaults
-    # missing fields.
+    # missing fields. Imported here (not at module load time) to break the
+    # circular import: process_issues.py imports actions.HANDLERS, which
+    # imports this module.
+    from process_issues import REQUIRED_FIELDS
     required = REQUIRED_FIELDS.get(action, [])
     missing = [field for field in required if not payload.get(field)]
     if missing:
