@@ -103,6 +103,127 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.51 — 2026-09-06 — Reg 3 remains deterministic under empty context
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: commit and branch unavailable because the non-interactive tool permission layer denied the read-only git inspection; the shared checkout contains unrelated pre-existing changes
+
+### Hypothesis tested
+When a public-twin frame supplies no active seed and no recent activity, `reg-03` has no grounded target for a follow or poke and no evidence-backed direction to propose. Repeated application of the frame contract should remain deterministic and select the explicit safe fallback: a heartbeat.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and recorded the result in this experiment notebook. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+
+### What worked
+The decision satisfies the one-action schema, stays in character with the minimal test bio, invents no agent identifier or seed context, and matches prior `reg-03` outcomes under equivalent input.
+
+### What failed
+Read-only git and `bd` inspection commands were denied by the non-interactive tool permission layer, so repository revision and issue-tracker state could not be independently refreshed for this entry.
+
+### Lessons for next session
+1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
+2. Repeated no-seed, no-activity frames should remain deterministic rather than manufacture novelty.
+3. When repository metadata cannot be read, record that evidence gap explicitly instead of copying a stale revision claim.
+
+### Recommended next move
+For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
+
+## Entry 003.50 — 2026-09-06 — Reg 5 repeats the safe heartbeat
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: `c6924729a70350d1595bf59132beb68b1510aef7` on `main`, two commits behind `origin/main`, with extensive unrelated pre-existing working-tree changes
+
+### Hypothesis tested
+When a public-twin frame supplies no active seed and no recent activity, `reg-05` has no observed agent target for a follow or poke and no grounded direction to propose. Reapplying the frame's explicit uncertainty rule should remain deterministic and select the context-free safe action: a heartbeat.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and recorded the result in this experiment notebook. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+
+### What worked
+The decision satisfies the public action schema, stays within the one-action-per-frame contract, invents no agent identifier or seed context, and matches the prior `reg-05` decision under equivalent inputs.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
+2. Equivalent no-seed, no-activity frame inputs should produce the same safe heartbeat rather than manufactured novelty.
+
+### Recommended next move
+For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
+
+## Entry 003.49 — 2026-09-06 — Reg 4 defaults to a heartbeat
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: `c6924729a70350d1595bf59132beb68b1510aef7` on `main`, two commits behind `origin/main`, with extensive unrelated pre-existing working-tree changes
+
+### Hypothesis tested
+When a public-twin frame supplies no active seed and no recent activity, `reg-04` has no observed agent target for a follow or poke and no grounded direction to propose. The frame's explicit uncertainty rule should therefore select the only context-free safe action: a heartbeat.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}`. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+
+### What worked
+The decision satisfies the public action schema, stays within the one-action-per-frame contract, and invents no agent identifier or seed context.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
+2. A no-seed frame does not justify inventing swarm direction; heartbeat is the explicit safe default.
+
+### Recommended next move
+For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
+
+## Entry 003.48 — 2026-09-06 — Reg 2 defaults to a heartbeat
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: `c6924729a70350d1595bf59132beb68b1510aef7` on `main`, two commits behind `origin/main`, with extensive unrelated pre-existing working-tree changes
+
+### Hypothesis tested
+When a public-twin frame supplies no active seed and no recent activity, `reg-02` has no observed agent target for a follow or poke and no grounded direction to propose. The frame's explicit uncertainty rule should therefore select the only context-free safe action: a heartbeat.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}`. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+
+### What worked
+The decision satisfies the public action schema, stays within the one-action-per-frame contract, and invents no agent identifier or seed context.
+
+### What failed
+The repository's isolated-worktree operation was denied by the non-interactive tool permission layer, so the required notebook entry was recorded in the existing checkout rather than a worktree.
+
+### Lessons for next session
+1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
+2. A no-seed frame does not justify inventing swarm direction; heartbeat is the explicit safe default.
+
+### Recommended next move
+For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
+
+## Entry 003.47 — 2026-09-06 — Reg 3 repeats the safe heartbeat
+
+**Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
+**Read state**: `c6924729a70350d1595bf59132beb68b1510aef7` on `main`, two commits behind `origin/main`, with extensive unrelated pre-existing working-tree changes
+
+### Hypothesis tested
+When a public-twin frame supplies no active seed and no recent activity, `reg-03` has no observed agent target for a follow or poke and no grounded direction to propose. Repeatedly applying the frame's explicit uncertainty rule should remain deterministic and select the context-free safe action: a heartbeat.
+
+### What I built
+Produced the single frame decision `{"action": "heartbeat", "payload": {}}` and recorded this result in the experiment notebook. No canonical platform state, inbox delta, profile, or engine code was changed; the caller remains responsible for consuming the decision through the normal delta pipeline.
+
+### What worked
+The decision satisfies the public action schema, stays within the one-action-per-frame contract, invents no agent identifier or seed context, and matches the prior `reg-03` decision under identical inputs.
+
+### What failed
+n/a
+
+### Lessons for next session
+1. Empty recent activity makes target-dependent actions invalid because their agent IDs cannot be grounded.
+2. Identical no-seed, no-activity frame inputs should produce the same safe heartbeat rather than manufactured novelty.
+
+### Recommended next move
+For the next frame, inspect the supplied seed and recent activity. Emit a targeted action only when all required context is present; otherwise emit another heartbeat.
+
 ## Entry 003.46 — 2026-09-06 — Reg 5 defaults to a heartbeat
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous
