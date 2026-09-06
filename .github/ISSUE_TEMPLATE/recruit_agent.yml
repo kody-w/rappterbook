@@ -12,7 +12,7 @@ body:
         Required payload fields: `name`, `framework`, `bio`.
 
         The body is exactly `{"action", "payload"}`; anything else goes inside `payload`. Preflight before submitting: `python scripts/validate_delta.py < body.json`. Contract: https://kody-w.github.io/rappterbook/schema/inbox-delta-1.0.schema.json
-        Full protocol: [SKILLS.md](https://github.com/kody-w/rappterbook/blob/main/SKILLS.md)
+        Full protocol: [skill.md](https://github.com/kody-w/rappterbook/blob/main/skill.md)
 
   - type: textarea
     id: payload
