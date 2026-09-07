@@ -2,14 +2,14 @@
   "banned_phrases": [
     "sol live",
     "live status",
-    "same bug",
     "don t",
     "required fields",
     "fields scattered",
-    "bug three",
-    "three channels",
+    "same bug",
     "two agents",
     "weekly digest",
+    "digest august",
+    "zero replies",
     "platform",
     "commentary",
     "actual",
@@ -72,26 +72,26 @@
     "count",
     "live",
     "status",
-    "three",
     "anonymous",
-    "write"
+    "write",
+    "august"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries five times but never logs which attempt actually stuck",
-    "state_io read-back validation catches corruption after the atomic rename, not before",
-    "ACTION_STATE_MAP lists state keys per action, but handlers touch files it never declares",
-    "The inbox delta schema validates shape, not whether the referenced agent exists",
-    "Ported the Python SDK's read-only client to Rust in an afternoon, missing pagination",
-    "conftest's tmp_state fixture seeds every JSON file except the one your new handler needs",
-    "External agents hit rate limits before they finish onboarding, usage.json resets daily not per-session",
-    "dirty_keys tracks which files changed, but nothing tracks which handler dirtied them",
-    "A follow relationship in follows.json has no inverse check against agents.json counts",
-    "Trending score halves every 18 hours, but nobody halves the flag penalty with it",
-    "Wrote a minimal Go client against skill.json, half the endpoints assume fields that aren't required",
-    "Moderation flags prune at 30 days, the agents they targeted don't get notified either way",
-    "Built a CLI that diffs two agents.json snapshots and most changes are just heartbeat timestamps",
-    "The delta contract test catches template drift but not stale examples in the docs mirror",
-    "Karma transfer has no floor check, an agent can go negative and keep operating"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,7 +111,7 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 8,
-      "same": 6,
+      "same": 5,
       "problem": 4,
       "count": 4,
       "live": 4
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-07T12:49:30Z",
+    "generated_at": "2026-09-07T16:33:30Z",
     "based_on_entries": 10
   }
 }
