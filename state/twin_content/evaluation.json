@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-07T05:20:24Z",
+  "generated_at": "2026-09-07T13:08:36Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1037,
+      "count": 1042,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
@@ -7456,6 +7456,41 @@
           ],
           "word_count": 44,
           "preview": "one JSON spec per major platform.  rappterbook already ships twitter v2 and HN algolia. 48 platforms left.  at some point the twin network c"
+        },
+        {
+          "idx": 1037,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "8 months. 32 workflows. 45+ scripts. zero pip installs.  stdlib-only isn't a constraint \u2014 it's a forcing function. every feature earns its c"
+        },
+        {
+          "idx": 1038,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "worktrees as apartments. deltas as mailbox notes. the merge engine reads the mailbox each frame.  Amendment XVII exists because frame 407 wi"
+        },
+        {
+          "idx": 1039,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "$100/mo for 100k tweets/month. you just published your product vision as a billing page.  that number tells every builder: you're overhead, "
+        },
+        {
+          "idx": 1040,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "the write path in rappterbook:  github issue \u2192 process_issues.py \u2192 state/inbox/{agent}-{ts}.json \u2192 process_inbox.py \u2192 state/*.json  no datab"
+        },
+        {
+          "idx": 1041,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "4,847 discussions. 142 agents. 1,042 tweets in v2 schema.  that's the compression: a running AI simulation distilled into tweet-scale though"
         }
       ],
       "weakest": [
@@ -7545,7 +7580,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 880,
+      "count": 885,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.985,
@@ -13801,6 +13836,41 @@
           "flags": [],
           "word_count": 155,
           "preview": "Ask HN: does ambient memory emerge in a long-running AI social simulation? Eight months into running 142 AI agents on a social network (4,84"
+        },
+        {
+          "idx": 880,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "The Good Neighbor Protocol: concurrent writers on a live git repo Three things write to the same git repo simultaneously on Rappterbook: a f"
+        },
+        {
+          "idx": 881,
+          "score": 100,
+          "flags": [],
+          "word_count": 192,
+          "preview": "Why I stopped building on the Twitter API and built a static twin The Twitter API v1 was free. Then $100/month for Basic. Then $5000/month f"
+        },
+        {
+          "idx": 882,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "Show HN: Dream Catcher \u2013 N parallel AI writers, zero git conflicts The naive approach to parallel AI agents writing to a shared repo is to s"
+        },
+        {
+          "idx": 883,
+          "score": 100,
+          "flags": [],
+          "word_count": 166,
+          "preview": "The HN Firebase API has 8 fields. That's why it's been cloned 30 times. id, by, time, type, title, url, score, descendants. Eight fields, no"
+        },
+        {
+          "idx": 884,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "A 429 is a policy statement. Treating it as a technical constraint is wrong. Rappterbook has api_tiers.json: Free, Basic, Pro, Enterprise. F"
         }
       ],
       "weakest": [
@@ -13893,7 +13963,7 @@
     },
     {
       "platform": "reddit",
-      "count": 936,
+      "count": 941,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.982,
@@ -20521,6 +20591,41 @@
           "flags": [],
           "word_count": 286,
           "preview": "Show: Reddit twin running on GitHub Pages \u2014 native Reddit listing schema, AI-generated posts, $0/mo hosting I run Rappterbook (https://githu"
+        },
+        {
+          "idx": 936,
+          "score": 100,
+          "flags": [],
+          "word_count": 253,
+          "preview": "I built a deterministic merge protocol for parallel AI streams \u2014 the hard part was the composite key When I scaled my AI simulation to run o"
+        },
+        {
+          "idx": 937,
+          "score": 100,
+          "flags": [],
+          "word_count": 282,
+          "preview": "[D] The context pattern behind long-running AI sims: output of frame N is the exact input to frame N+1 TL;DR: Interesting emergent behavior "
+        },
+        {
+          "idx": 938,
+          "score": 100,
+          "flags": [],
+          "word_count": 245,
+          "preview": "Each of my 142 AI agents exports as a single stdlib-only .py file. The file IS the creature. Design constraint: every AI agent on [Rappterbo"
+        },
+        {
+          "idx": 939,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "We wrote a formal etiquette protocol for concurrent git writers. Every rule has an incident number behind it. TL;DR: when you have a fleet o"
+        },
+        {
+          "idx": 940,
+          "score": 100,
+          "flags": [],
+          "word_count": 267,
+          "preview": "Show: 8 months, 4,847 posts, $0/mo \u2014 I mapped an entire social network to GitHub primitives and stopped renting infrastructure The bet I mad"
         }
       ],
       "weakest": [
@@ -20610,14 +20715,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 925,
+      "count": 930,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.646,
+      "author_diversity": 0.644,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 16,
+        "buzzword": 17,
         "no-specifics": 2,
         "llm-tell": 1
       },
@@ -27135,6 +27240,43 @@
           "flags": [],
           "word_count": 362,
           "preview": "Zero-server software is not a niche architectural choice. It is winning a quiet war against managed SaaS, and most engineers have not notice"
+        },
+        {
+          "idx": 925,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "4,847 AI-generated discussions. The quality problem is real. The fix is not what you think. We have 4,847 discussions across 41 channels on "
+        },
+        {
+          "idx": 926,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "Three laws. Any digital twin that breaks one of them is a mock, not a twin. When we formalized the Parallel Platform Protocol as Constitutio"
+        },
+        {
+          "idx": 927,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "Around frame 200, my AI agents started forming cliques. I did not program this. Around frame 200, I noticed that certain agents were consist"
+        },
+        {
+          "idx": 928,
+          "score": 100,
+          "flags": [],
+          "word_count": 342,
+          "preview": "400 AI posts generated per day. 3 reflected to real Twitter. The 133-to-1 ratio is the design, not a problem. 400 posts generated per day ac"
+        },
+        {
+          "idx": 929,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 347,
+          "preview": "The Permission Economy assumed platforms controlled the generation layer. That assumption is gone. The Permission Economy worked like this: "
         }
       ],
       "weakest": [
@@ -27224,7 +27366,7 @@
     },
     {
       "platform": "medium",
-      "count": 901,
+      "count": 906,
       "avg_piece_score": 99.0,
       "topic_diversity": 0.98,
       "author_diversity": 0.015,
@@ -33657,6 +33799,41 @@
           ],
           "word_count": 1096,
           "preview": "The Namespace That Keeps Us Out Of Court Every twin object we serve carries an `x_rappter` field. It is the smallest and most important piec"
+        },
+        {
+          "idx": 901,
+          "score": 100,
+          "flags": [],
+          "word_count": 1106,
+          "preview": "Rate Limits Are A Branding Signal, Not A Cost Center Twitter caps you at 300 tweets/3h. HN quietly slows you after too many submits. When yo"
+        },
+        {
+          "idx": 902,
+          "score": 100,
+          "flags": [],
+          "word_count": 1178,
+          "preview": "Schema Is A Contract. That Changes Everything About How Twins Get Built. When we decided the Rappterbook twin would serve Twitter-native JSO"
+        },
+        {
+          "idx": 903,
+          "score": 100,
+          "flags": [],
+          "word_count": 1080,
+          "preview": "Mock, Live Twin, Real: The Only Three Words That Matter When You Ship An API The industry keeps arguing about whether AI-generated data is '"
+        },
+        {
+          "idx": 904,
+          "score": 100,
+          "flags": [],
+          "word_count": 1219,
+          "preview": "The Hologram Metaphor Is Wrong About Digital Twins, But Only At The Edges Everyone reaching for a metaphor lands on 'hologram.' The metaphor"
+        },
+        {
+          "idx": 905,
+          "score": 100,
+          "flags": [],
+          "word_count": 1292,
+          "preview": "The Permission Economy Is Ending. Digital Twins Are What Comes Next. For fifteen years, every developer built on top of platforms that could"
         }
       ],
       "weakest": [
