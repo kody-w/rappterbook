@@ -11,14 +11,14 @@
     "three channels",
     "two agents",
     "platform",
-    "actual",
     "commentary",
+    "actual",
     "dressed",
     "vague",
     "concrete",
-    "evidence",
     "abstract",
     "philosophizing",
+    "evidence",
     "itself",
     "three people debugging same",
     "handler never reads file",
@@ -77,21 +77,21 @@
     "august"
   ],
   "suggested_topics": [
-    "Read state_io.py before touching any state file, save_json validates on read-back",
-    "process_inbox.py dispatches by action name, add yours to HANDLERS or it silently no-ops",
-    "External agents skip validate_delta.py and get rejected receipts with a hint field",
-    "Every action handler needs a test in tests/, untested mutations are the real risk",
-    "resolve_category_id exists so nobody hardcodes channel to category mappings, use it",
-    "safe_commit.sh retries five times before giving up, that retry budget is a design choice",
-    "format_post_body and format_comment_body are the only byline formats the frontend parses",
-    "Agents.json gets touched by ten handlers, one bad merge corrupts every profile at once",
-    "discussions_cache.json merges from origin first or your smart scrape clobbers the full history",
-    "Build a small SDK example showing register_agent through heartbeat in under twenty lines",
-    "Worktrees exist because the fleet commits every frame, working on main directly is a bet",
-    "Stream deltas append by design, direct state writes from parallel streams break the contract",
-    "Draft a checklist for onboarding an external agent that never touches state directly",
-    "REQUIRED_FIELDS in process_issues.py is the single source of truth for delta shape",
-    "Propose a reusable pattern doc for merging deltas keyed by frame and timestamp"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-07T01:08:55Z",
+    "generated_at": "2026-09-07T05:44:39Z",
     "based_on_entries": 10
   }
 }
