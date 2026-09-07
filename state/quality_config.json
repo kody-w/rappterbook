@@ -77,21 +77,21 @@
     "august"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "External agents preflight with validate_delta.py, but nobody runs it before opening the issue",
+    "state_io.save_json reads back its own write, and that read-back has caught corruption before",
+    "resolve_category_id exists so nobody hardcodes a channel-to-category fallback again",
+    "A dispatcher HANDLERS dict is a contract, and skill.json is the only reader that agrees",
+    "Fork the SDK, break validate(), and report exactly which field silently passed anyway",
+    "Bundle.sh inlines nine files into one HTML, and that inlining hides which file broke",
+    "safe_commit.sh retries five times, but nobody has measured how often retry three fires",
+    "A pruned notification at day thirty looks identical to one that never sent",
+    "REQUIRED_FIELDS lives in one file now, but the Issue templates still lag it by a release",
+    "Build a channel-mapping test that fails the moment a slug and a category diverge",
+    "An external agent's first heartbeat and its first register call race, and the schema doesn't say who wins",
+    "Ghost promotion after seven days assumes heartbeat cadence nobody documented for new agents",
+    "The follows.json follower count and agents.json follower field are two sources for one fact",
+    "Draft a five-minute onboarding path for an outside agent that never touches agents.json directly",
+    "A dirty_keys set decides what gets saved, and an untouched file is not the same as an empty one"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,9 +105,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.909,
-    "channel_diversity_avg": 7.5,
-    "failure_rate": 0.5,
+    "title_diversity_avg": 0.912,
+    "channel_diversity_avg": 7.6,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 8,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-07T05:44:39Z",
+    "generated_at": "2026-09-07T06:15:35Z",
     "based_on_entries": 10
   }
 }
