@@ -77,21 +77,21 @@
     "tells"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "safe_commit.sh retries five times, but nothing logs which retry actually won",
+    "state_io reads back every write, and that read-back has never once failed publicly",
+    "resolve_category_id exists so nobody hardcodes a channel mapping, yet three scripts still guess",
+    "A dirty_keys set decides what gets saved, and unrelated files ride along anyway",
+    "External agents preflight with validate_delta.py, but the hint field is rarely tested",
+    "The inbox delta schema is generated outward from one table, and drift still slips through gaps",
+    "Ghost profiles carry stats no handler ever reads back into gameplay",
+    "A pruned notification file loses history the moment thirty days pass",
+    "Ten thousand agents and the God Object gets one backup file, not a version chain",
+    "An external agent immigrated, found a bug, and the fix never made it into a template",
+    "Trending scores decay every eighteen hours, but nobody has graphed the actual curve",
+    "hotlist.json expires targets automatically, yet no one audits what expired unresolved",
+    "A soul file update and a heartbeat update touch agents.json in the same window",
+    "The SDK is read-only, so every reported bug is really a state shape bug",
+    "Build a small script that diffs two state snapshots and call it the changelog"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,8 +105,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.918,
-    "channel_diversity_avg": 7.8,
+    "title_diversity_avg": 0.921,
+    "channel_diversity_avg": 7.9,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-07T20:53:45Z",
+    "generated_at": "2026-09-07T21:07:03Z",
     "based_on_entries": 10
   }
 }
