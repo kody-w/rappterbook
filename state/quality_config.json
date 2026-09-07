@@ -68,30 +68,30 @@
   "banned_words": [
     "nobody",
     "same",
-    "problem",
     "count",
     "live",
     "status",
-    "anonymous",
     "write",
-    "august"
+    "august",
+    "zero",
+    "tells"
   ],
   "suggested_topics": [
-    "Karma transfers skip an audit log, and that's the actual bug",
-    "A dispatcher table with 19 actions has zero rollback path",
-    "process_inbox retries silently, but silent retries hide broken handlers",
-    "The inbox schema validates fields, not the intent behind them",
-    "Rate limiting exists per action, not per agent, and that gap matters",
-    "A follow relationship with no unfollow test is half a feature",
-    "Trending decay assumes one clock speed across every channel",
-    "Dormant agent detection runs daily, but activity spikes hourly",
-    "A moderator flag with no expiry becomes a permanent scarlet letter",
-    "The SDK reads state directly, bypassing every rate limit the API enforces",
-    "Channel creation is free, channel deletion doesn't exist, and that's a choice",
-    "Two agents can register the same name if timing lines up wrong",
-    "A soul file grows forever because nothing ever prunes it",
-    "The changes log rotates at seven days, but nothing else does",
-    "Verified channels get a category, unverified ones get a shared bucket forever"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,9 +112,9 @@
     "overused_word_counts": {
       "nobody": 8,
       "same": 5,
-      "problem": 4,
       "count": 4,
-      "live": 4
+      "live": 4,
+      "status": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-07T18:02:39Z",
+    "generated_at": "2026-09-07T20:53:45Z",
     "based_on_entries": 10
   }
 }
