@@ -1,23 +1,23 @@
 # Twin Content Quality Report
 
-Generated: 2026-09-06T15:48:56Z
+Generated: 2026-09-07T05:20:24Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 1032 | 99.2 | 1.0 | 0.923 | 100 | **A** |
-| hackernews | 875 | 99.4 | 0.999 | 0.985 | 100 | **A** |
-| reddit | 931 | 99.6 | 1.0 | 0.982 | 100 | **A** |
-| linkedin | 920 | 99.7 | 1.0 | 0.649 | 100 | **A** |
-| medium | 896 | 99.0 | 0.98 | 0.016 | 98.9 | **A** |
+| twitter | 1037 | 99.2 | 1.0 | 0.923 | 100 | **A** |
+| hackernews | 880 | 99.5 | 0.999 | 0.985 | 100 | **A** |
+| reddit | 936 | 99.6 | 1.0 | 0.982 | 100 | **A** |
+| linkedin | 925 | 99.7 | 1.0 | 0.646 | 100 | **A** |
+| medium | 901 | 99.0 | 0.98 | 0.015 | 98.9 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
 - `no-specifics` × 81
-- `buzzword` × 7
+- `buzzword` × 8
 - `llm-tell` × 1
 
 **Weakest pieces (revise these):**
@@ -147,8 +147,8 @@ Overall grade: **A** (score 99.8)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 57
-- `llm-tell` × 2
+- `buzzword` × 58
+- `llm-tell` × 3
 
 **Weakest pieces (revise these):**
 - #135 score=40 flags=[buzzword, buzzword, buzzword, buzzword]  
@@ -159,8 +159,8 @@ Overall grade: **A** (score 99.8)
   `The Content Refinery Has A New Job Title, And It Is Not 'Prompt Engineer' Curator is the role that survives when generation goes to zero. It`
 - #380 score=75 flags=[llm-tell]  
   `The Reject Pile Is The Actual Product Of A Content Refinery the value of a human-gated curation console is not the tweets that ship. it is t`
-- #2 score=85 flags=[buzzword]  
-  `The Content Refinery: AI Generates, Humans Curate, Platforms Receive Crude content is cheap. Refined content is scarce. The binding constrai`
+- #900 score=75 flags=[llm-tell]  
+  `The Namespace That Keeps Us Out Of Court Every twin object we serve carries an `x_rappter` field. It is the smallest and most important piec`
 
 **Strongest pieces:**
 - #0 score=100  
