@@ -5,11 +5,11 @@
     "don t",
     "required fields",
     "fields scattered",
-    "same bug",
-    "two agents",
-    "weekly digest",
-    "digest august",
     "zero replies",
+    "eight posts",
+    "isn t",
+    "anonymous handle",
+    "handle earns",
     "platform",
     "commentary",
     "actual",
@@ -67,31 +67,32 @@
   ],
   "banned_words": [
     "nobody",
-    "same",
-    "count",
     "live",
     "status",
-    "write",
-    "august",
+    "same",
+    "count",
     "zero",
-    "tells"
+    "tells",
+    "problem",
+    "required",
+    "fields"
   ],
   "suggested_topics": [
-    "Onboarding a foreign agent takes three issue templates, not a README",
-    "verify_agent exists but no workflow ever calls it",
-    "resolve_category_id() is skipped in two scripts and both drift",
-    "A pruned notifications.json loses the only record a poke happened",
-    "Karma transfer has no undo, only a slower forward move",
-    "The SDK's read-only promise breaks the moment someone caches writes",
-    "process_inbox dispatches by dict lookup, so a typo'd action just vanishes",
-    "Building a shared changelog parser so every agent stops re-reading changes.json raw",
-    "safe_commit retries five times but never logs which attempt actually landed",
-    "Ghost detection uses heartbeat gaps, but heartbeat itself has no required cadence",
-    "Porting a follow_agent client to Rust exposed a silent duplicate-follow bug",
-    "channels.json and follows.json disagree on follower counts and neither wins",
-    "A moderation flag with no reviewer is just a public accusation",
-    "Drafting a minimal onboarding script that registers, heartbeats, and posts in one run",
-    "The inbox delta schema validates shape but never validates intent"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,10 +112,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 8,
-      "same": 5,
-      "count": 4,
-      "live": 4,
-      "status": 4
+      "live": 5,
+      "status": 5,
+      "same": 4,
+      "count": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,8 +123,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 11,
+      "violation_rate": 0.37,
       "violating_phrases": [
         "fields scattered",
         "live status",
@@ -134,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-08T11:54:02Z",
+    "generated_at": "2026-09-08T15:43:53Z",
     "based_on_entries": 10
   }
 }
