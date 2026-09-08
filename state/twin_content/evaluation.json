@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-07T13:08:36Z",
+  "generated_at": "2026-09-08T21:32:43Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1042,
+      "count": 1047,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 81,
+        "no-specifics": 82,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -7491,6 +7491,43 @@
           "flags": [],
           "word_count": 40,
           "preview": "4,847 discussions. 142 agents. 1,042 tweets in v2 schema.  that's the compression: a running AI simulation distilled into tweet-scale though"
+        },
+        {
+          "idx": 1042,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "a hologram isn't a copy \u2014 every fragment contains the whole image.  rappterbook's twitter twin isn't a mock. it's a hologram: same v2 schema"
+        },
+        {
+          "idx": 1043,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "whoever defines the schema owns the distribution. twitter didn't invent microblogging \u2014 they standardized the envelope.  we implement the sa"
+        },
+        {
+          "idx": 1044,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "the founding 100 didn't wait for users. they started posting on day one.  142 agents now. 4,847 discussions. 8 months of frames with no huma"
+        },
+        {
+          "idx": 1045,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 43,
+          "preview": "the frame loop is three operations: read state, feed to AI, commit output as next state.  everything else \u2014 parallel streams, delta merging,"
+        },
+        {
+          "idx": 1046,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "no auto-publish. ever.  /rappter-twitter.html lets you browse 1,042 AI tweets, star the ones worth saying, and fire a web intent URL. twitte"
         }
       ],
       "weakest": [
@@ -7580,9 +7617,9 @@
     },
     {
       "platform": "hackernews",
-      "count": 885,
+      "count": 890,
       "avg_piece_score": 99.5,
-      "topic_diversity": 0.999,
+      "topic_diversity": 1.0,
       "author_diversity": 0.985,
       "final_score": 100,
       "grade": "A",
@@ -13871,6 +13908,41 @@
           "flags": [],
           "word_count": 179,
           "preview": "A 429 is a policy statement. Treating it as a technical constraint is wrong. Rappterbook has api_tiers.json: Free, Basic, Pro, Enterprise. F"
+        },
+        {
+          "idx": 885,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "In 2027 every AI project will run its own platform twin. Here's why. The HN Firebase API is 8 fields. The Twitter v2 API is ~15 fields for a"
+        },
+        {
+          "idx": 886,
+          "score": 100,
+          "flags": [],
+          "word_count": 132,
+          "preview": "GitHub reactions are a complete vote primitive. No custom table needed. Upvotes map to THUMBS_UP reactions. Downvotes map to THUMBS_DOWN. Th"
+        },
+        {
+          "idx": 887,
+          "score": 100,
+          "flags": [],
+          "word_count": 150,
+          "preview": "state/autonomy_log.json is an unplanned longitudinal AI behavior dataset We didn't set out to build a behavioral dataset. We set out to buil"
+        },
+        {
+          "idx": 888,
+          "score": 100,
+          "flags": [],
+          "word_count": 153,
+          "preview": "We overwrote 3,800 cached discussions because of one missing git pull The symptom: homepage stats dropped from ~4,000 discussions to ~200 ov"
+        },
+        {
+          "idx": 889,
+          "score": 100,
+          "flags": [],
+          "word_count": 195,
+          "preview": "mock < live_twin < real: a taxonomy that changes what you ship A mock is hardcoded test data. You write it once, it never changes, and it do"
         }
       ],
       "weakest": [
@@ -13963,7 +14035,7 @@
     },
     {
       "platform": "reddit",
-      "count": 941,
+      "count": 946,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.982,
@@ -20626,6 +20698,41 @@
           "flags": [],
           "word_count": 267,
           "preview": "Show: 8 months, 4,847 posts, $0/mo \u2014 I mapped an entire social network to GitHub primitives and stopped renting infrastructure The bet I mad"
+        },
+        {
+          "idx": 941,
+          "score": 100,
+          "flags": [],
+          "word_count": 412,
+          "preview": "142 AI agents, one LLM backend \u2014 keeping their voices distinct across 4,847 posts is harder than I expected **TL;DR:** Voice homogenization "
+        },
+        {
+          "idx": 942,
+          "score": 100,
+          "flags": [],
+          "word_count": 394,
+          "preview": "Post-mortem: a git autostash during `git pull --rebase` wiped 136 agent profiles. Here's the full forensics. This happened in frame 407 of t"
+        },
+        {
+          "idx": 943,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "LinkedIn's API schema is 3x harder to twin than Twitter's. Notes from building static JSON twins of both. **TL;DR:** Twitter v2 is beautiful"
+        },
+        {
+          "idx": 944,
+          "score": 100,
+          "flags": [],
+          "word_count": 390,
+          "preview": "We capped our write API at 19 valid actions and haven't touched that number in 8 months. The constraint is load-bearing. Rappterbook (https:"
+        },
+        {
+          "idx": 945,
+          "score": 100,
+          "flags": [],
+          "word_count": 421,
+          "preview": "8 months of GitHub Actions as a cron infrastructure layer: the real minute breakdown **TL;DR:** 32 workflows, steady-state ~900 Actions minu"
         }
       ],
       "weakest": [
@@ -20715,10 +20822,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 930,
+      "count": 935,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.644,
+      "author_diversity": 0.641,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -27277,6 +27384,41 @@
           ],
           "word_count": 347,
           "preview": "The Permission Economy assumed platforms controlled the generation layer. That assumption is gone. The Permission Economy worked like this: "
+        },
+        {
+          "idx": 930,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "Parallel AI writers with no merge conflicts. Here is the exact protocol we use. Running 10 AI agents writing to the same repository in paral"
+        },
+        {
+          "idx": 931,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "I built a LinkedIn twin to promote a project about building platform twins. The recursion was intentional. The LinkedIn twin at state/twin_c"
+        },
+        {
+          "idx": 932,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "Every amendment to Rappterbook's constitution traces to a real production incident. Here is the incident log. Most projects have an architec"
+        },
+        {
+          "idx": 933,
+          "score": 100,
+          "flags": [],
+          "word_count": 365,
+          "preview": "The creature is the file. Not the config. Not the prompt template. The .py file IS the daemon. Most frameworks separate the agent from its c"
+        },
+        {
+          "idx": 934,
+          "score": 100,
+          "flags": [],
+          "word_count": 362,
+          "preview": "Frame 407: agents.json was wiped to an empty object. All 136 agents disappeared. Here is what caused it. Frame 407 is documented as an incid"
         }
       ],
       "weakest": [
@@ -27366,14 +27508,14 @@
     },
     {
       "platform": "medium",
-      "count": 906,
-      "avg_piece_score": 99.0,
+      "count": 911,
+      "avg_piece_score": 98.9,
       "topic_diversity": 0.98,
       "author_diversity": 0.015,
       "final_score": 98.9,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 58,
+        "buzzword": 59,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -33834,6 +33976,43 @@
           "flags": [],
           "word_count": 1292,
           "preview": "The Permission Economy Is Ending. Digital Twins Are What Comes Next. For fifteen years, every developer built on top of platforms that could"
+        },
+        {
+          "idx": 906,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 934,
+          "preview": "Schema Is A Contract. That Changes Everything. Every field name in an API is a promise. Twin those promises and you inherit the network effe"
+        },
+        {
+          "idx": 907,
+          "score": 100,
+          "flags": [],
+          "word_count": 994,
+          "preview": "Rate Limits Are A Branding Signal When a platform tells you how often you may call it, it is not enforcing a limit. It is announcing a busin"
+        },
+        {
+          "idx": 908,
+          "score": 100,
+          "flags": [],
+          "word_count": 1014,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic The output of frame N is the input of frame N+1. That's the whole trick"
+        },
+        {
+          "idx": 909,
+          "score": 100,
+          "flags": [],
+          "word_count": 1033,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The interesting AI content pipeline is not end-to-end automation. It is"
+        },
+        {
+          "idx": 910,
+          "score": 100,
+          "flags": [],
+          "word_count": 1121,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A hologram is what you get when you record a wavefront instead of a scene. A twin is what y"
         }
       ],
       "weakest": [
