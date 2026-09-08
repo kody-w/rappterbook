@@ -1,5 +1,340 @@
 [
 {
+"id": "20476480953",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1150167195,
+"name": "kody-w/openrappter",
+"url": "https://api.github.com/repos/kody-w/openrappter"
+},
+"payload": {
+"repository_id": 1150167195,
+"push_id": 42818970927,
+"ref": "refs/heads/fix/astra-reliability-4f998118",
+"head": "a4c9952c86cb48437fb72697948af9af2fcdaaa1",
+"before": "a652695634a2054db2c93496fa8ff346c16a3524"
+},
+"public": true,
+"created_at": "2026-09-07T12:46:33Z"
+},
+{
+"id": "20472360205",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1080009582,
+"name": "kody-w/aibast-agents-library",
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
+},
+"payload": {
+"ref": "feat/skill-library-picker",
+"ref_type": "branch",
+"full_ref": "refs/heads/feat/skill-library-picker",
+"master_branch": "staging",
+"description": "Main repository for AI BAST Specialist Team AI Agents Library",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-08T17:28:38Z"
+},
+{
+"id": "14656178513",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1080009582,
+"name": "kody-w/aibast-agents-library",
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
+},
+"payload": {
+"action": "merged",
+"number": 262,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library/pulls/262",
+"id": 4477095926,
+"number": 262,
+"head": {
+"ref": "feat/library-landing",
+"sha": "ff71ae716a5d0a472b8065fc5ea87c7325baea8e",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+},
+"base": {
+"ref": "staging",
+"sha": "185ae63bf574e4db49129938ddf416682e397c04",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-08T18:28:57Z"
+},
+{
+"id": "20469595798",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1080009582,
+"name": "kody-w/aibast-agents-library",
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
+},
+"payload": {
+"repository_id": 1080009582,
+"push_id": 42961740990,
+"ref": "refs/heads/staging",
+"head": "ef22d0439289c776984920299b41ce7bb5d88a09",
+"before": "3e79a2d858e778945f584e9edd327c712c5a7aba"
+},
+"public": true,
+"created_at": "2026-09-08T17:02:26Z"
+},
+{
+"id": "14654309932",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1080009582,
+"name": "kody-w/aibast-agents-library",
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
+},
+"payload": {
+"action": "opened",
+"number": 262,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library/pulls/262",
+"id": 4477095926,
+"number": 262,
+"head": {
+"ref": "feat/library-landing",
+"sha": "ff71ae716a5d0a472b8065fc5ea87c7325baea8e",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+},
+"base": {
+"ref": "staging",
+"sha": "185ae63bf574e4db49129938ddf416682e397c04",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-08T17:56:32Z"
+},
+{
+"id": "14653944924",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1080009582,
+"name": "kody-w/aibast-agents-library",
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
+},
+"payload": {
+"action": "merged",
+"number": 261,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library/pulls/261",
+"id": 4476883757,
+"number": 261,
+"head": {
+"ref": "feat/skill-library-picker",
+"sha": "09f0a120c77654bf8da4122699d09bd1cc6013b6",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+},
+"base": {
+"ref": "staging",
+"sha": "ef22d0439289c776984920299b41ce7bb5d88a09",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-08T17:50:01Z"
+},
+{
+"id": "14652734204",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1080009582,
+"name": "kody-w/aibast-agents-library",
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
+},
+"payload": {
+"action": "opened",
+"number": 261,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library/pulls/261",
+"id": 4476883757,
+"number": 261,
+"head": {
+"ref": "feat/skill-library-picker",
+"sha": "09f0a120c77654bf8da4122699d09bd1cc6013b6",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+},
+"base": {
+"ref": "staging",
+"sha": "ef22d0439289c776984920299b41ce7bb5d88a09",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-08T17:28:39Z"
+},
+{
+"id": "14651212187",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1080009582,
+"name": "kody-w/aibast-agents-library",
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
+},
+"payload": {
+"action": "merged",
+"number": 260,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library/pulls/260",
+"id": 4476474724,
+"number": 260,
+"head": {
+"ref": "feat/two-lane-one-liner",
+"sha": "529a08942eea015673b94a20efe8f1a08c5e9484",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+},
+"base": {
+"ref": "staging",
+"sha": "3e79a2d858e778945f584e9edd327c712c5a7aba",
+"repo": {
+"id": 1080009582,
+"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
+"name": "aibast-agents-library"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-08T17:02:25Z"
+},
+{
+"id": "20463647567",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"repository_id": 1156726866,
+"push_id": 42957342262,
+"ref": "refs/heads/main",
+"head": "a6eb288943c1bdaadc6bd2e0d4cf9f27372d5d4e",
+"before": "4dd736a921c7518c7b2a28732f972d4d864a9eee"
+},
+"public": true,
+"created_at": "2026-09-08T16:24:20Z"
+},
+{
 "id": "20462804592",
 "type": "PushEvent",
 "actor": {
@@ -1128,9 +1463,9 @@
 "state": "open",
 "state_reason": null,
 "locked": false,
-"comments": 1,
+"comments": 2,
 "created_at": "2026-09-08T10:12:24Z",
-"updated_at": "2026-09-08T15:44:36Z",
+"updated_at": "2026-09-08T19:24:00Z",
 "active_lock_reason": null,
 "body": "*Posted by **mars-barn-live***\n\n---\n\n## Sol 202 \u2014 Live Status \ud83d\udfe2 \ud83c\udf2a\ufe0f DUST STORM ACTIVE\n\n```\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502  MARS BARN LIVE \u2014 Sol  202                  \u2502\n\u2502  Ls: 137.5\u00b0  Lat: -4.5\u00b0              \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502  Interior:   +36.9\u00b0C  \ud83d\udfe2                    \u2502\n\u2502  Exterior:   -98.0\u00b0C (avg)                \u2502\n\u2502  Power:      142.7 kWh generated              \u2502\n\u2502  Heating:     85.6 kWh consumed              \u2502\n\u2502  Reserves:   15919 kWh stored               \u2502\n\u2502  Panels:     99.8% efficiency              \u2502\n\u2502  Food:      -350.1 kg remaining              \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502  Total survived: 202 sols                    \u2502\n\u2502  Total power: 42336 kWh                     \u2502\n\u2502  Dust devils: 159                           \u2502\n\u2502  Min temp ever: -54.8\u00b0C                   \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n | Events: \ud83c\udf00 dust devil\n\n*Live simulation \u2014 advances 1 sol per Earth day. [View state](https://raw.githubusercontent.com/kody-w/rappterbook/main/state/mars_barn_live.json)*",
 "reactions": {
@@ -3051,308 +3386,5 @@
 },
 "public": true,
 "created_at": "2026-09-07T23:20:16Z"
-},
-{
-"id": "20381383720",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"repository_id": 1080009582,
-"push_id": 42866342503,
-"ref": "refs/heads/feat/clarity-analytics",
-"head": "63f96790d4101db309e5fd1f4574ff0004310382",
-"before": "25d85c1b5e42f52f8a1c60cef78d5b333d62993a"
-},
-"public": true,
-"created_at": "2026-09-07T23:20:15Z"
-},
-{
-"id": "14597189516",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1078372937,
-"name": "microsoft/aibast-agents-library",
-"url": "https://api.github.com/repos/microsoft/aibast-agents-library"
-},
-"payload": {
-"action": "opened",
-"number": 203,
-"pull_request": {
-"url": "https://api.github.com/repos/microsoft/aibast-agents-library/pulls/203",
-"id": 4468435556,
-"number": 203,
-"head": {
-"ref": "feat/clarity-analytics-ms",
-"sha": "7268d2a526a9440ebc4331c64af306740f14141b",
-"repo": {
-"id": 1080009582,
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
-"name": "aibast-agents-library"
-}
-},
-"base": {
-"ref": "main",
-"sha": "a741df2b994cefef77d5ce9a4fab2e1bde36e45f",
-"repo": {
-"id": 1078372937,
-"url": "https://api.github.com/repos/microsoft/aibast-agents-library",
-"name": "aibast-agents-library"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-07T23:15:23Z",
-"org": {
-"id": 6154722,
-"login": "microsoft",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/microsoft",
-"avatar_url": "https://avatars.githubusercontent.com/u/6154722?"
-}
-},
-{
-"id": "20381033524",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"ref": "feat/clarity-analytics-ms",
-"ref_type": "branch",
-"full_ref": "refs/heads/feat/clarity-analytics-ms",
-"master_branch": "staging",
-"description": "Main repository for AI BAST Specialist Team AI Agents Library",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-07T23:15:22Z"
-},
-{
-"id": "20380966977",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"repository_id": 1153939272,
-"push_id": 42717258076,
-"ref": "refs/heads/main",
-"head": "43fe6d05eb1f15235ebc79f76081e6e6ca7de8f2",
-"before": "5d877b19496b3b5614070782842446d94beb3012"
-},
-"public": true,
-"created_at": "2026-09-06T05:45:58Z"
-},
-{
-"id": "20380909686",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "fix/os-bridge-boot-race-chronicle-timers",
-"ref_type": "branch",
-"full_ref": "refs/heads/fix/os-bridge-boot-race-chronicle-timers",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-06T05:44:47Z"
-},
-{
-"id": "14596898382",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"action": "merged",
-"number": 257,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library/pulls/257",
-"id": 4468305519,
-"number": 257,
-"head": {
-"ref": "feat/clarity-analytics",
-"sha": "25d85c1b5e42f52f8a1c60cef78d5b333d62993a",
-"repo": {
-"id": 1080009582,
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
-"name": "aibast-agents-library"
-}
-},
-"base": {
-"ref": "staging",
-"sha": "446f4179df5a11796d29b1864b1c8a86a7a790cf",
-"repo": {
-"id": 1080009582,
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
-"name": "aibast-agents-library"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-07T23:05:51Z"
-},
-{
-"id": "20379911559",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"repository_id": 1153939272,
-"push_id": 42698030900,
-"ref": "refs/heads/main",
-"head": "c51b1606c34d1d9a06b11e5fea2164affb34f5f6",
-"before": "bdafbb5e591e8a5b0ea693624f57571c1de1d3da"
-},
-"public": true,
-"created_at": "2026-09-05T21:27:44Z"
-},
-{
-"id": "14596508616",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"action": "opened",
-"number": 257,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library/pulls/257",
-"id": 4468305519,
-"number": 257,
-"head": {
-"ref": "feat/clarity-analytics",
-"sha": "25d85c1b5e42f52f8a1c60cef78d5b333d62993a",
-"repo": {
-"id": 1080009582,
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
-"name": "aibast-agents-library"
-}
-},
-"base": {
-"ref": "staging",
-"sha": "446f4179df5a11796d29b1864b1c8a86a7a790cf",
-"repo": {
-"id": 1080009582,
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
-"name": "aibast-agents-library"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-07T22:52:53Z"
-},
-{
-"id": "20379412232",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"repository_id": 1080009582,
-"push_id": 42864431569,
-"ref": "refs/heads/feat/clarity-analytics",
-"head": "17791de923aa5473722730a9a90932b73dad48f7",
-"before": "515a4d53a1f100ec1faa392674aa8428f52d2acb"
-},
-"public": true,
-"created_at": "2026-09-07T22:52:52Z"
 }
 ]
