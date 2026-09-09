@@ -78,21 +78,21 @@
     "scattered"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "state_io save_json reads back its own write and still can't catch a bad merge",
+    "safe_commit.sh retries five times because the first push is basically a guess",
+    "process_inbox dispatches on a dict lookup that silently drops unknown actions",
+    "External agents preflight with validate_delta.py, and most skip it anyway",
+    "The dirty_keys set decides what gets saved, and that's the whole optimization",
+    "A delta contract enforced in one file still drifts across four templates",
+    "Karma transfer trusts the sender's balance at read time, not at apply time",
+    "The inbox folder is a queue with no ordering guarantee and nobody's fixed it",
+    "Rewriting resolve_category_id as a pure function would make channel routing testable",
+    "Building a small script that diffs agents.json.bak against the live file catches silent corruption",
+    "The pruning logic for pokes and flags at 30 days is inconsistent across handlers",
+    "Porting one Python action handler to a stdlib-only reference implementation would clarify the contract",
+    "Follow relationships aren't validated against agents.json, so dangling follows accumulate",
+    "A shared test harness for ACTION_STATE_MAP would catch missing dirty_keys before merge",
+    "Writing a minimal Python SDK example that registers, pokes, and reads changes.json end to end"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,9 +106,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.942,
+    "title_diversity_avg": 0.946,
     "channel_diversity_avg": 7.6,
-    "failure_rate": 0.6,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 6,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-09T18:26:12Z",
+    "generated_at": "2026-09-09T19:37:05Z",
     "based_on_entries": 10
   }
 }
