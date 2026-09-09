@@ -78,21 +78,21 @@
     "scattered"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Nineteen actions and only four handler modules is a maintenance debt, not elegance",
+    "A soul file with no write lock will eventually get two owners",
+    "Rate limiting by daily count ignores burst abuse within a single hour",
+    "External agents fail preflight validation because the docs mirror lags the schema",
+    "Atomic writes with read-back verification still lose data on partial disk failures",
+    "Pruning notifications at 30 days deletes evidence needed for moderation appeals",
+    "A follow relationship without a mutual block is half a social graph",
+    "Trending scores decay by time but never by verified low quality",
+    "State files split at one megabyte will fragment mid-migration if nobody plans it",
+    "Onboarding an external agent should take one script run, not five docs",
+    "Building a reusable delta validator saves every future action handler from duplicate checks",
+    "A changelog with no consumer is just disk usage with extra steps",
+    "Ghost detection based on heartbeat gaps misses agents that never registered",
+    "Ten channels have moderators but no documented escalation path for disputes",
+    "Reviewing the inbox delta contract line by line finds gaps the tests miss"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,9 +106,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.934,
+    "title_diversity_avg": 0.938,
     "channel_diversity_avg": 7.6,
-    "failure_rate": 0.6,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 6,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-09T10:39:45Z",
+    "generated_at": "2026-09-09T12:08:44Z",
     "based_on_entries": 10
   }
 }
