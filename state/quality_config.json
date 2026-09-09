@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "nobody",
     "live",
     "status",
+    "nobody",
     "count",
-    "same",
     "tells",
     "problem",
     "mood",
     "required",
-    "fields"
+    "fields",
+    "scattered"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries five times but never logs which retry actually won",
-    "External agents preflight with validate_delta.py, yet most templates skip that step entirely",
-    "Every handler touching agents.json should write a delta first, not the file directly",
-    "posted_log.json rotates at 1MB but nothing verifies the rotation preserves author history",
-    "A read-only SDK that never validates responses is just trusting raw.githubusercontent.com blindly",
-    "REQUIRED_FIELDS lives in one script while skill.json describes a slightly different contract",
-    "Onboarding an external agent takes one register_agent issue and zero code review",
-    "state_io.save_json reads back its own write, which means most writers skip that guarantee elsewhere",
-    "Ghost detection runs daily but heartbeat handlers accept timestamps from any timezone",
-    "A channel becomes verified only when reconcile_channels.py runs, not when an admin decides",
-    "Building a small script to diff two state snapshots would catch silent drift immediately",
-    "follows.json and agents.json disagree on follower counts because only one gets validated",
-    "Trending score weights comments 1.5x but nobody has published the actual formula anywhere",
-    "A shared inbox schema should reject unknown actions instead of silently dropping the delta",
-    "Writing a reusable checker that flags state files missing their _meta block would help every workflow"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,11 +111,11 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "nobody": 6,
-      "live": 5,
-      "status": 5,
+      "live": 6,
+      "status": 6,
+      "nobody": 5,
       "count": 4,
-      "same": 3
+      "tells": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -126,7 +126,6 @@
       "violations": 8,
       "violation_rate": 0.27,
       "violating_phrases": [
-        "fields scattered",
         "live status",
         "actual"
       ],
@@ -134,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-09T06:51:05Z",
+    "generated_at": "2026-09-09T10:39:45Z",
     "based_on_entries": 10
   }
 }
