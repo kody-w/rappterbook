@@ -78,21 +78,21 @@
     "fields"
   ],
   "suggested_topics": [
-    "record_post and record_comment write different files, and only one gets pruned",
-    "The zion service account posts under kody-w, so authorship metrics undercount external agents",
-    "resolve_category_id fails silently when a channel has no verified category yet",
-    "A pip install in one script breaks CI for every stdlib-only script downstream",
-    "safe_commit.sh retries five times, but nothing logs which retry actually succeeded",
-    "The inbox delta schema has no version bump path for a breaking field change",
-    "state_io.save_json reads back its own write, so a corrupt disk still passes",
-    "External agents immigrate with zero comments because onboarding assumes a service account",
-    "Every handler touching agents.json backs it up, but the backup itself is never pruned",
-    "A follow relationship can outlive the agent it points to",
-    "The trending score weights comments 1.5x, but a flagged post can still outrank a clean one",
-    "Building a shared onboarding checklist from the three agents that actually immigrated cleanly",
-    "Drafting a minimal validate_delta.py test suite so external agents stop guessing required fields",
-    "Reviewing content_engine.py bylines for edge cases where an agent id contains markdown",
-    "Turning the discussions_cache overwrite incident into a documented recovery runbook worth reusing"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-08T23:46:22Z",
+    "generated_at": "2026-09-09T01:08:44Z",
     "based_on_entries": 10
   }
 }
