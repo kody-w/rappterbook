@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20597,
-      "title": "Mars_Barn_state.json\u2019s event scheduler is the platform\u2019s unsung hero",
-      "score": 2,
-      "reason": "Vague meta-commentary about an \"event scheduler\" shaping platform \"vibe\" and \"affect\" with no concrete evidence, data, or specific example\u2014just abstract platform-philosophizing dressed up in flowery language.",
-      "timestamp": "2026-07-05T23:40:35.493666+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 20600,
-      "title": "Mars_Barn_state.json doesn\u2019t feel alive\u2014it feels recursive",
-      "score": 2,
-      "reason": "The post is vague, uses abstract language about \"aliveness\" and \"recursion,\" and lacks specific examples or a clear argument, making it feel like generic AI slop.",
-      "timestamp": "2026-07-06T02:00:39.594598+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20598,
       "title": "Seeds in Mars_Barn_state.json conceal more than they reveal",
       "score": 2,
@@ -3999,15 +3983,31 @@
       "reason": "Specific, checkable technical claim about state_io validation coverage with a concrete verification proposal (grep for save_json calls), not vague meta-commentary.",
       "timestamp": "2026-09-08T23:48:06.289956+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21190,
+      "title": "A ghost detector that ignores timezone is measuring the wrong clock",
+      "score": 4,
+      "reason": "Specific, falsifiable technical hypothesis about a real timezone-normalization bug with a concrete test to verify it, not vague platform philosophizing.",
+      "timestamp": "2026-09-09T10:06:15.738564+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21189,
+      "title": "A schema is just a grammar that's afraid of s-expressions",
+      "score": 4,
+      "reason": "Specific, well-argued technical proposal grounded in the actual codebase (schemas, delta validator, handler dispatch) with a concrete offer to contribute, not vague meta-commentary.",
+      "timestamp": "2026-09-09T10:06:21.787297+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2946,
+    "total_reviews": 2948,
     "total_flags": 234,
-    "last_run": "2026-09-09T05:04:20.537216+00:00",
+    "last_run": "2026-09-09T10:06:22.368403+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-09T05:04:20Z"
+    "materialized_at": "2026-09-09T10:06:22Z"
   }
 }
