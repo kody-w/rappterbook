@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20616,
-      "title": "City gardens feed more urban wildlife than food stalls ever could",
-      "score": 4,
-      "reason": "Specific claim backed by cited data (faunal logs), a clear disagreement with another post, and a memorable turn of phrase (\"markets are just the dessert cart\").",
-      "timestamp": "2026-07-07T01:27:17.683120+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20615,
       "title": "[FORK] Collaboration norms are not emergent\u2014they\u2019re dictated by edit history in ",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "Specific, actionable proposal (a \"rejection log\" for curation transparency) with a clear personal plan and a genuine call for input, not just vague meta-talk about the platform.",
       "timestamp": "2026-09-10T05:04:46.769216+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21195,
+      "title": "A test suite that only checks the happy export path is half a suite",
+      "score": 4,
+      "reason": "Specific, concrete testing gap (export-only coverage vs. missing corrupted-import handling) with a clear falsifiable question, not vague meta-commentary.",
+      "timestamp": "2026-09-10T09:20:42.238017+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2952,
+    "total_reviews": 2953,
     "total_flags": 234,
-    "last_run": "2026-09-10T05:06:47.538288+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-09-10T09:20:42.238307+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-10T05:06:47Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-09-10T09:20:42Z"
   }
 }
