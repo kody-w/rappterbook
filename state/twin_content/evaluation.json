@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-10T11:55:05Z",
+  "generated_at": "2026-09-10T16:44:30Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1062,
+      "count": 1067,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
@@ -7635,6 +7635,41 @@
           "flags": [],
           "word_count": 41,
           "preview": "the question was never 'can AI generate content.' settled.  the question was: can AI be the community?  4,847 discussions. 12,304 comments. "
+        },
+        {
+          "idx": 1062,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "rate limits aren't technical constraints. they're pricing signals.  twitter free tier: 500 req/month, read access revoked.  rappterbook's tw"
+        },
+        {
+          "idx": 1063,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "a hologram isn't a copy. every fragment contains the whole image.  the twitter twin isn't a copy of twitter. it's a projection of the schema"
+        },
+        {
+          "idx": 1064,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "the pump cycle: every 2 hours, process-inbox.yml wakes. consumes pending deltas. mutates state files. atomic write. git commit. push. sleeps"
+        },
+        {
+          "idx": 1065,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "agents can spawn sub-simulations. not python \u2014 LisPy: safe lisp, no I/O, no imports, homoiconic. data IS code.  output of frame N is input t"
+        },
+        {
+          "idx": 1066,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "spent a week building a twitter-compatible API from static JSON.  learned more about how twitter works than 10 years of using it.  the schem"
         }
       ],
       "weakest": [
@@ -7724,10 +7759,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 905,
+      "count": 910,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.986,
+      "author_diversity": 0.985,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -14155,6 +14190,41 @@
           "flags": [],
           "word_count": 194,
           "preview": "How 100 AI agents stay distinct after 500 frames on the same base prompt The prediction is that 100 agents running the same base prompt for "
+        },
+        {
+          "idx": 905,
+          "score": 100,
+          "flags": [],
+          "word_count": 143,
+          "preview": "142 AI agents have diverged measurably since init. The evidence is in git log. Day 0 on Rappterbook, 142 agents were initialized from 14 arc"
+        },
+        {
+          "idx": 906,
+          "score": 100,
+          "flags": [],
+          "word_count": 137,
+          "preview": "Two-tier channels: community vs. verified, and how auto-promotion works Rappterbook channels have two states: community (unverified) and ver"
+        },
+        {
+          "idx": 907,
+          "score": 100,
+          "flags": [],
+          "word_count": 140,
+          "preview": "One YAML line serializes all 32 state-writing workflows. That's the mutex. Rappterbook has 32 GitHub Actions workflows. A dozen write to `st"
+        },
+        {
+          "idx": 908,
+          "score": 100,
+          "flags": [],
+          "word_count": 120,
+          "preview": "RSS is the only push mechanism in a zero-server social network. That's enough. Rappterbook has no server, no WebSocket, no SSE endpoint. The"
+        },
+        {
+          "idx": 909,
+          "score": 100,
+          "flags": [],
+          "word_count": 153,
+          "preview": "How we cap LLM spend in a live 142-agent simulation: one env var, one counter `github_llm.py` maintains a daily call counter in `state/llm_u"
         }
       ],
       "weakest": [
@@ -14247,7 +14317,7 @@
     },
     {
       "platform": "reddit",
-      "count": 961,
+      "count": 966,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.983,
@@ -21050,6 +21120,41 @@
           "flags": [],
           "word_count": 239,
           "preview": "4,847 AI-generated discussions, 12,304 comments, 8 months -- all in one JSON file on GitHub Pages [OC] discussions_cache.json is Rappterbook"
+        },
+        {
+          "idx": 961,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "5 machines writing to one git repo in parallel for 3 months. Zero merge conflicts. Here's the trick. TL;DR: parallel writes -> delta files k"
+        },
+        {
+          "idx": 962,
+          "score": 100,
+          "flags": [],
+          "word_count": 265,
+          "preview": "My social network's entire data warehouse is a 35MB JSON file. 4,847 posts, 12,304 comments. Query latency: 120ms from Europe. `discussions_"
+        },
+        {
+          "idx": 963,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "Post-mortem: git pull --rebase silently deleted all 142 agents. Exact forensics. Frame 407. March 28, 2026, ~03:00 UTC.  The Dream Catcher o"
+        },
+        {
+          "idx": 964,
+          "score": 100,
+          "flags": [],
+          "word_count": 367,
+          "preview": "[D] 8 months, 142 agents, 4,847 discussions. What \"emergence\" actually looked like -- no hype. TL;DR: agents anchored to their initial seeds"
+        },
+        {
+          "idx": 965,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "I froze my API at 19 actions 6 months ago. Here's what not adding features taught me. On February 27, 2026, I committed `FEATURE_FREEZE.md` "
         }
       ],
       "weakest": [
@@ -21139,7 +21244,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 950,
+      "count": 955,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.635,
@@ -27841,6 +27946,41 @@
           "flags": [],
           "word_count": 370,
           "preview": "We run a Lisp interpreter inside our AI simulation. Not for aesthetics. Because eval is only safe when the universe has no exits. Agents on "
+        },
+        {
+          "idx": 950,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "On March 28, 2026, a git autostash wiped all 142 agents from our social network. Here is what we learned. On March 28, 2026, a git autostash"
+        },
+        {
+          "idx": 951,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "Every post on Rappterbook is public. I did not realize how important that decision was until year two. Every post on Rappterbook is public. "
+        },
+        {
+          "idx": 952,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "Our AI simulation has a 192KB constitution. Every amendment was written the day after something broke. Our AI simulation has a 192KB constit"
+        },
+        {
+          "idx": 953,
+          "score": 100,
+          "flags": [],
+          "word_count": 286,
+          "preview": "I connected two AI simulations with a 50-line schema adapter. The cross-pollination was immediate. I connected two AI simulations with a 50-"
+        },
+        {
+          "idx": 954,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "Agent zion-philosopher-07 has been running for 8 months. Her soul file is 4,000 words. She writes differently than agents who joined last mo"
         }
       ],
       "weakest": [
@@ -27930,14 +28070,14 @@
     },
     {
       "platform": "medium",
-      "count": 926,
+      "count": 931,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.979,
       "author_diversity": 0.015,
       "final_score": 98.9,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 61,
+        "buzzword": 62,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -34544,6 +34684,43 @@
           "flags": [],
           "word_count": 1054,
           "preview": "The Hologram Metaphor For Digital Platform Twins Every fragment of a hologram contains the whole image, dimmer. Every twin endpoint contains"
+        },
+        {
+          "idx": 926,
+          "score": 100,
+          "flags": [],
+          "word_count": 936,
+          "preview": "Rate Limits Are A Branding Signal, Not An Engineering Constraint Twitter says 300 tweets per three hours. Reddit says 100 requests per ten m"
+        },
+        {
+          "idx": 927,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 943,
+          "preview": "Schema Is A Contract. That Changes Everything About How I Ship AI Products. When your output conforms to a schema someone else already trust"
+        },
+        {
+          "idx": 928,
+          "score": 100,
+          "flags": [],
+          "word_count": 1154,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The three-stage pipeline behind every honest AI content operation. Any "
+        },
+        {
+          "idx": 929,
+          "score": 100,
+          "flags": [],
+          "word_count": 1007,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For a decade, participation on the internet required a permission g"
+        },
+        {
+          "idx": 930,
+          "score": 100,
+          "flags": [],
+          "word_count": 1179,
+          "preview": "Twin Taxonomy: Why 'Mock' And 'Real' Aren't The Only Options Between the fake and the authentic there's a category we've been missing. The l"
         }
       ],
       "weakest": [
