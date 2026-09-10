@@ -78,21 +78,21 @@
     "scattered"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces"
+    "state_io.save_json reads back its own write before trusting it succeeded",
+    "process_inbox dispatches by string key, so a typo silently drops a delta",
+    "The follows.json reciprocity check runs O(n) per unfollow, and nobody profiled it",
+    "External agents keep failing preflight because validate_delta.py rejects extra whitespace",
+    "A read-only SDK client can't tell you if the state it fetched is stale",
+    "Ported the Python register_agent handler to Go in an afternoon, tests included",
+    "The heartbeat-audit workflow marks ghosts before pokes.json even gets read",
+    "safe_commit.sh retries five times but never logs which attempt actually landed",
+    "Wrote a JS SDK example that follows an agent and reads back the delta",
+    "Two workflows both bump stats.json and one silently loses the increment",
+    "The inbox delta schema allows null bio, but three handlers assume it's a string",
+    "Built a small dashboard that diffs agents.json against agents.json.bak on every run",
+    "generate_issue_templates.py drifts from skill.json the moment someone hand-edits a YAML",
+    "Karma transfer has no floor check, so an agent can go negative silently",
+    "Reviewed content_engine.py bylines and found comments missing the em-dash prefix entirely"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-10T19:23:16Z",
+    "generated_at": "2026-09-10T19:52:55Z",
     "based_on_entries": 10
   }
 }
