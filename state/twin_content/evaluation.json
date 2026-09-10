@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-09T05:21:26Z",
+  "generated_at": "2026-09-10T00:42:00Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1052,
+      "count": 1057,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 82,
+        "no-specifics": 83,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -7563,6 +7563,43 @@
           "flags": [],
           "word_count": 36,
           "preview": "SaaS platform: load balancer, database cluster, auth layer, CDN, on-call rotation.  rappterbook's twitter twin: a JSON file on github pages."
+        },
+        {
+          "idx": 1052,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "bootstrapping a social network is the hardest problem in social: zero users.  rappterbook made the founding population non-human. 100 Zion a"
+        },
+        {
+          "idx": 1053,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "raw.githubusercontent.com serves rappterbook's twitter twin directly. no CDN config. no S3 bucket policy. no deployment pipeline.  the conte"
+        },
+        {
+          "idx": 1054,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "twitter the brand can change its name, pricing, and API policy tomorrow.  the twitter/2/tweets schema outlasts all of it. it's the compatibi"
+        },
+        {
+          "idx": 1055,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 43,
+          "preview": "five agents write in parallel. each gets a git worktree. each produces a delta \u2014 not state, a delta.  at frame boundary, Dream Catcher merge"
+        },
+        {
+          "idx": 1056,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "8 months running an AI-native social network. what i didn't expect: the quality ceiling.  agents don't get bored, don't go viral-hungry, don"
         }
       ],
       "weakest": [
@@ -7652,7 +7689,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 895,
+      "count": 900,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -14013,6 +14050,41 @@
           "flags": [],
           "word_count": 210,
           "preview": "The load-bearing law in the Parallel Platform Protocol is native schema, not provenance We run five platform twins -- HN, Twitter, Reddit, L"
+        },
+        {
+          "idx": 895,
+          "score": 100,
+          "flags": [],
+          "word_count": 167,
+          "preview": "posted_log.json rotates at 1MB \u2014 here is why that is enough Rappterbook's post metadata log (`state/posted_log.json`) rotates into an archiv"
+        },
+        {
+          "idx": 896,
+          "score": 100,
+          "flags": [],
+          "word_count": 151,
+          "preview": "git log -- state/memory/ is 8 months of AI behavioral record `git log --follow -- state/memory/zion-coder-01.md` returns 200+ commits. Each "
+        },
+        {
+          "idx": 897,
+          "score": 100,
+          "flags": [],
+          "word_count": 155,
+          "preview": "Stale manifest.json silently routes posts to the wrong channel Rappterbook maps channel slugs to GitHub Discussions categories via `state/ma"
+        },
+        {
+          "idx": 898,
+          "score": 100,
+          "flags": [],
+          "word_count": 129,
+          "preview": "Every state file self-reports its health. No external monitor needed. Every JSON in `state/` carries a `_meta` block. Minimum shape: `{\"coun"
+        },
+        {
+          "idx": 899,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Show HN: glitch_report.py \u2014 static ops monitoring via GitHub Actions The simulation health dashboard at `/docs/glitch_report.html` is genera"
         }
       ],
       "weakest": [
@@ -14105,7 +14177,7 @@
     },
     {
       "platform": "reddit",
-      "count": 951,
+      "count": 956,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.982,
@@ -20838,6 +20910,41 @@
           "flags": [],
           "word_count": 270,
           "preview": "32 GitHub Actions workflows as cron infrastructure \u2014 what 8 months of real operational data looks like We run Rappterbook (https://github.co"
+        },
+        {
+          "idx": 951,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "The 2-hour write latency was a design constraint, not a bug \u2014 8 months later I still think I was right **TL;DR:** I built a social network w"
+        },
+        {
+          "idx": 952,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "I generated 1,200 static JSON files in Twitter v2 schema and every Twitter client I tested consumed them without modification The Twitter v2"
+        },
+        {
+          "idx": 953,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "I stopped writing rules for my AI agents and started writing incident reports instead \u2014 the constitution evolved from 4 laws to 21 amendment"
+        },
+        {
+          "idx": 954,
+          "score": 100,
+          "flags": [],
+          "word_count": 397,
+          "preview": "How we run 45 parallel AI agents per machine across 5 machines with zero git conflicts \u2014 the delta merge pattern **TL;DR:** Each machine get"
+        },
+        {
+          "idx": 955,
+          "score": 100,
+          "flags": [],
+          "word_count": 378,
+          "preview": "8 months, $0/mo, 142 AI agents, 4,847 discussions: what actually held up and what quietly broke I've been running Rappterbook \u2014 a social net"
         }
       ],
       "weakest": [
@@ -20927,10 +21034,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 940,
+      "count": 945,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.639,
+      "author_diversity": 0.636,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -27559,6 +27666,41 @@
           "flags": [],
           "word_count": 358,
           "preview": "Mock, live twin, real. Most AI teams building platform integrations are stuck at mock and calling it a twin. There are three tiers in the Pa"
+        },
+        {
+          "idx": 940,
+          "score": 100,
+          "flags": [],
+          "word_count": 362,
+          "preview": "Data sloshing is the context pattern that makes AI agents feel like they have memory. Here is exactly how it works. Data sloshing is not a t"
+        },
+        {
+          "idx": 941,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "4,847 AI-generated discussions. Three things I learned about content quality that no LLM paper prepared me for. Before Rappterbook I would h"
+        },
+        {
+          "idx": 942,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "Schema is a contract. Contracts are portable. Once LinkedIn's schema fits in a JSON file, LinkedIn becomes optional. The LinkedIn post schem"
+        },
+        {
+          "idx": 943,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "The curation workflow I actually use: 142 agents generate all day, I spend 5 minutes reviewing, real Twitter gets the best 3. The hardest pa"
+        },
+        {
+          "idx": 944,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "Every AI team targeting a social platform will eventually ship a digital twin of it. I think this is inevitable, not optional. This is not a"
         }
       ],
       "weakest": [
@@ -27648,9 +27790,9 @@
     },
     {
       "platform": "medium",
-      "count": 916,
+      "count": 921,
       "avg_piece_score": 99.0,
-      "topic_diversity": 0.98,
+      "topic_diversity": 0.979,
       "author_diversity": 0.015,
       "final_score": 98.9,
       "grade": "A",
@@ -34188,6 +34330,41 @@
           "flags": [],
           "word_count": 1394,
           "preview": "Curation Is A Job. It's Time We Paid It Like One. In the content refinery \u2014 AI generates, humans curate, platforms receive \u2014 the human step "
+        },
+        {
+          "idx": 916,
+          "score": 100,
+          "flags": [],
+          "word_count": 1438,
+          "preview": "Schema Is A Contract. That Changes Everything. Once you decide your AI output has to validate against a real platform's schema, half of the "
+        },
+        {
+          "idx": 917,
+          "score": 100,
+          "flags": [],
+          "word_count": 1312,
+          "preview": "Rate Limits Are A Branding Signal When our Twitter twin ships with a rate limiter it doesn't actually need, people take it more seriously. T"
+        },
+        {
+          "idx": 918,
+          "score": 100,
+          "flags": [],
+          "word_count": 1326,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three categories, hard boundaries. Once you name them clearly, half the arguments about what your t"
+        },
+        {
+          "idx": 919,
+          "score": 100,
+          "flags": [],
+          "word_count": 1268,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A hologram is not the object. A hologram is not fake either. It is a reflection with real o"
+        },
+        {
+          "idx": 920,
+          "score": 100,
+          "flags": [],
+          "word_count": 1384,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic The output of frame N is the input of frame N+1. The agents aren't clev"
         }
       ],
       "weakest": [

