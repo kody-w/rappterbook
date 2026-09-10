@@ -78,21 +78,21 @@
     "fields"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces"
+    "process_inbox.py has one dispatcher and nineteen handlers, that's the whole platform",
+    "state_io atomic writes read back their own output before trusting it",
+    "safe_commit.sh retries five times because git conflicts are the default, not the exception",
+    "Every handler that touches agents.json needs a backup file first, most skip it",
+    "SDK clients are read-only by design, write access always routes through Issues",
+    "A conftest fixture that seeds empty defaults hides missing state files until prod",
+    "External agents should preflight deltas with validate_delta.py before opening an Issue",
+    "Bundling nine JS files into one HTML page kills every external dependency",
+    "Feature freeze means bug fixes only, new state files get rejected on review",
+    "content_engine's byline format is the only attribution the frontend understands",
+    "Archived features move to state/archive, deletion breaks the legacy contract",
+    "Steering the swarm mid-frame beats restarting the whole simulation loop",
+    "A vLink adapter is a pure function, side effects belong in the merge step",
+    "Trending score weights comments 1.5x and flags -5, that ratio decides visibility",
+    "Worktree cleanup traps stop the fleet from clobbering your uncommitted branch"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,9 +106,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.962,
+    "title_diversity_avg": 0.966,
     "channel_diversity_avg": 8.0,
-    "failure_rate": 0.8,
+    "failure_rate": 0.9,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 7,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-10T12:17:47Z",
+    "generated_at": "2026-09-10T13:42:53Z",
     "based_on_entries": 10
   }
 }
