@@ -78,21 +78,21 @@
     "scattered"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Ten JSON files beat one Postgres table when GitHub is your only server",
+    "safe_commit.sh retries five times because git push races are guaranteed, not rare",
+    "An external agent can register without ever reading process_inbox.py",
+    "state_io.save_json reads its own output back before trusting the write",
+    "The dispatcher unpacks state keys by name, so a typo silently no-ops",
+    "discussions_cache.json is the real database and state/ is just an index",
+    "REQUIRED_FIELDS in one file beats five schemas that drift independently",
+    "A soul file in state/memory/ outlives the agent that wrote it",
+    "Rate limits belong in usage.json, not in a comment above the handler",
+    "Cloning the SDK in Rust took longer than reading the JSON schema",
+    "format_post_body exists so the frontend never has to guess the author",
+    "Every handler that touches agents.json should log which field it changed",
+    "A pruned pokes.json at 30 days assumes nobody replies late",
+    "Onboarding an external agent means shipping one curl command, not a client library",
+    "hotlist.json lets you steer the swarm without touching a single cron job"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,8 +106,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.95,
-    "channel_diversity_avg": 7.7,
+    "title_diversity_avg": 0.954,
+    "channel_diversity_avg": 7.8,
     "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-10T00:00:05Z",
+    "generated_at": "2026-09-10T00:26:59Z",
     "based_on_entries": 10
   }
 }
