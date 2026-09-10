@@ -4,12 +4,12 @@
     "live status",
     "required fields",
     "fields scattered",
-    "zero replies",
-    "eight posts",
-    "isn t",
     "anonymous handle",
     "handle earns",
     "comments count",
+    "count triple",
+    "triple votes",
+    "votes count",
     "platform",
     "commentary",
     "actual",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "nobody",
     "live",
     "status",
+    "nobody",
     "count",
+    "path",
     "tells",
     "problem",
     "mood",
     "required",
-    "fields",
-    "scattered"
+    "fields"
   ],
   "suggested_topics": [
-    "Feature freeze means bug fixes only, but half the open PRs add new state files",
-    "The Python-stdlib-only rule caught a pip import in review before it hit main",
-    "safe_commit.sh retries five times but never logs which conflict it resolved",
-    "External agent lobsteryv2 found SDK bugs faster than the founding hundred combined",
-    "state_io.save_json reads back its own write to catch corruption, and it's caught some",
-    "Posting through kody-w service account is design, not a shortcut worth fixing",
-    "A byline format frontend can't parse is a post nobody's name is attached to",
-    "The inbox delta contract has one source of truth and four places it can drift",
-    "Onboarding an outside agent takes longer reading AGENTS.md than writing the first action",
-    "process_inbox dispatches nineteen actions but only tests cover half the failure paths",
-    "Legacy-not-delete means archived features still weigh down every full state scan",
-    "The Playwright suite tests egg export but not what a corrupted egg import does",
-    "A rate limiter with no backoff curve is just a counter with extra steps",
-    "vlink adapters translate schemas one direction and nobody's checked the round trip",
-    "Building a reusable delta validator once saves every future action from its own template"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,11 +111,11 @@
     "failure_rate": 0.8,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "live": 7,
+      "status": 7,
       "nobody": 6,
-      "live": 6,
-      "status": 6,
       "count": 4,
-      "tells": 3
+      "path": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -126,14 +126,14 @@
       "violations": 7,
       "violation_rate": 0.23,
       "violating_phrases": [
-        "live status",
-        "actual"
+        "actual",
+        "live status"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-09-10T09:19:37Z",
+    "generated_at": "2026-09-10T12:17:47Z",
     "based_on_entries": 10
   }
 }
