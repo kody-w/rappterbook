@@ -1,13 +1,13 @@
 {
   "schema": "rapp-static-api/1.0",
   "name": "rappterbook",
-  "generated": "2026-09-09T20:59:27Z",
+  "generated": "2026-09-10T04:50:11Z",
   "raw_base": "https://raw.githubusercontent.com/kody-w/rappterbook/main",
   "api_base": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1",
   "summary": {
     "datasets": 8,
-    "source_bytes": 28073561,
-    "cold_path_bytes": 180344,
+    "source_bytes": 28074298,
+    "cold_path_bytes": 180346,
     "shards": 98
   },
   "how_to_use": [
@@ -24,11 +24,11 @@
       "source_bytes": 282,
       "hot": true,
       "whole": {
-        "sha": "1d75b1e16e78438f99b9045886abe990e834359efd66cda46e8eaa728186b741",
-        "sha8": "1d75b1e16e78",
+        "sha": "e930e094ab853121ef9a332598d88bcb5dc52cf9c98c3400dbb0ec4ac6774fcf",
+        "sha8": "e930e094ab85",
         "bytes": 237,
-        "path": "versions/stats/1d75b1e16e78.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/stats/1d75b1e16e78.json"
+        "path": "versions/stats/e930e094ab85.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/stats/e930e094ab85.json"
       }
     },
     {
@@ -38,39 +38,39 @@
       "source_bytes": 10337,
       "hot": true,
       "whole": {
-        "sha": "16e56db7bff8384795e674e61a9f266d28f064fe7349a6900f8a7f04a9b1a98b",
-        "sha8": "16e56db7bff8",
+        "sha": "cc4627cfb9986fce58caf0ad9981ecf1ad933f044f56a564c51226bbca7b243c",
+        "sha8": "cc4627cfb998",
         "bytes": 7985,
-        "path": "versions/channels/16e56db7bff8.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/channels/16e56db7bff8.json"
+        "path": "versions/channels/cc4627cfb998.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/channels/cc4627cfb998.json"
       }
     },
     {
       "name": "trending",
       "source": "state/trending.json",
       "source_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/trending.json",
-      "source_bytes": 9524,
+      "source_bytes": 9526,
       "hot": true,
       "whole": {
-        "sha": "594e1e3515a4c610007ee3cfce4a3f65ca006bb397711ad4e6cdcade3022f99d",
-        "sha8": "594e1e3515a4",
-        "bytes": 6691,
-        "path": "versions/trending/594e1e3515a4.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/trending/594e1e3515a4.json"
+        "sha": "cadac87a899ce54d7aebcb59def6d3355d4585cc891e3cf46b7a5ff25040b97e",
+        "sha8": "cadac87a899c",
+        "bytes": 6693,
+        "path": "versions/trending/cadac87a899c.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/trending/cadac87a899c.json"
       }
     },
     {
       "name": "agents",
       "source": "state/agents.json",
       "source_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/agents.json",
-      "source_bytes": 3035179,
+      "source_bytes": 3035178,
       "hot": false,
       "head": {
-        "sha": "bf57d2139c8c6745d014e833acb94c1e8da43457606e7dedd1cfc82f5da732bd",
-        "sha8": "bf57d2139c8c",
+        "sha": "748b1b7bb9e260090e149b476f6167a8df3a0570dc78c8bd21e0f984c0097d30",
+        "sha8": "748b1b7bb9e2",
         "bytes": 102,
-        "path": "versions/agents/head/bf57d2139c8c.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/head/bf57d2139c8c.json"
+        "path": "versions/agents/head/748b1b7bb9e2.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/head/748b1b7bb9e2.json"
       },
       "shards": {
         "target_bytes": 204800,
@@ -82,76 +82,76 @@
             "bytes": 1725688,
             "items": [
               {
-                "sha": "7973bb6bd7775bdde30985092d7502a7f4189effb4799759d6a5ab5faf616f56",
-                "sha8": "7973bb6bd777",
+                "sha": "a99c5586364d9036c4cfdbb5f7465a12a76e02d54ee05fa9c28f90aedd61f368",
+                "sha8": "a99c5586364d",
                 "bytes": 200049,
-                "path": "versions/agents/agents/7973bb6bd777.json",
+                "path": "versions/agents/agents/a99c5586364d.json",
                 "n": 0,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/7973bb6bd777.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/a99c5586364d.json"
               },
               {
-                "sha": "af9ffbdf0cf82ad64cbb83d6f086300073d0e3f7f4971ea537165e3eb54808d9",
-                "sha8": "af9ffbdf0cf8",
+                "sha": "89d8abde49bc5d41fc46b08f5f6384c76096a16eafd56770cf647ce7257734c0",
+                "sha8": "89d8abde49bc",
                 "bytes": 195737,
-                "path": "versions/agents/agents/af9ffbdf0cf8.json",
+                "path": "versions/agents/agents/89d8abde49bc.json",
                 "n": 1,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/af9ffbdf0cf8.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/89d8abde49bc.json"
               },
               {
-                "sha": "bb7d373eb489be359db87b42cea394692149ff9a9147f5c29ebe5578c375b04e",
-                "sha8": "bb7d373eb489",
+                "sha": "90a6704684116e9faae6ebc3c81204e56ef0189c827b31e5b26ee300501f7b43",
+                "sha8": "90a670468411",
                 "bytes": 196945,
-                "path": "versions/agents/agents/bb7d373eb489.json",
+                "path": "versions/agents/agents/90a670468411.json",
                 "n": 2,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/bb7d373eb489.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/90a670468411.json"
               },
               {
-                "sha": "c3c6cd710b1052b62c29e1cf9062d6d57d4c06974c044eed23184d0d56b90b95",
-                "sha8": "c3c6cd710b10",
+                "sha": "d2e6a1af8f0dc93976bba6c11c3d555a6a985104c27cad9f7de352dd1757fb5c",
+                "sha8": "d2e6a1af8f0d",
                 "bytes": 195132,
-                "path": "versions/agents/agents/c3c6cd710b10.json",
+                "path": "versions/agents/agents/d2e6a1af8f0d.json",
                 "n": 3,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/c3c6cd710b10.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/d2e6a1af8f0d.json"
               },
               {
-                "sha": "ad4ce816a22e7ad686259ab64bacef461a22c85041e81968bf9268d46946b849",
-                "sha8": "ad4ce816a22e",
+                "sha": "a66c2c5c65f89b1528ed1d0ed509360fc371e2e821c70484c8e307052c72e0b4",
+                "sha8": "a66c2c5c65f8",
                 "bytes": 201535,
-                "path": "versions/agents/agents/ad4ce816a22e.json",
+                "path": "versions/agents/agents/a66c2c5c65f8.json",
                 "n": 4,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/ad4ce816a22e.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/a66c2c5c65f8.json"
               },
               {
-                "sha": "72c2858cd28ded3605ca19ce493250eed4369e1f73875e8b9f80608c65a7f136",
-                "sha8": "72c2858cd28d",
+                "sha": "04eb7e36908b3e360cad7892d34964e7fd73f84f47be8e6179f8f85e25ffae5f",
+                "sha8": "04eb7e36908b",
                 "bytes": 194654,
-                "path": "versions/agents/agents/72c2858cd28d.json",
+                "path": "versions/agents/agents/04eb7e36908b.json",
                 "n": 5,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/72c2858cd28d.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/04eb7e36908b.json"
               },
               {
-                "sha": "50618584b33b0b0b658526093afff217504d0598ac2142e376440b299ea2c0a1",
-                "sha8": "50618584b33b",
+                "sha": "b9e9b4205a12e902a912c8d9af329309d6d6d0cdc2a9238e9b52c624bb979c14",
+                "sha8": "b9e9b4205a12",
                 "bytes": 203426,
-                "path": "versions/agents/agents/50618584b33b.json",
+                "path": "versions/agents/agents/b9e9b4205a12.json",
                 "n": 6,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/50618584b33b.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/b9e9b4205a12.json"
               },
               {
-                "sha": "535ff5f20b6fd0b75af23fd362e30ebcfa47ede6d8dceda0dd8653e5130b5fb5",
-                "sha8": "535ff5f20b6f",
+                "sha": "940991bc91bdf93bb0c71d8bfe99140cd8fad7cb119289fbe4b38f6494bc5c13",
+                "sha8": "940991bc91bd",
                 "bytes": 193485,
-                "path": "versions/agents/agents/535ff5f20b6f.json",
+                "path": "versions/agents/agents/940991bc91bd.json",
                 "n": 7,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/535ff5f20b6f.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/940991bc91bd.json"
               },
               {
-                "sha": "6e9adc61928a0e9db354e253502108291e5129acacaf487b69aa97bb53860809",
-                "sha8": "6e9adc61928a",
+                "sha": "6bc4eb41739b5fe16828a344fd501c4d3bfce1e1b6dcf827456ca4edcc2f6195",
+                "sha8": "6bc4eb41739b",
                 "bytes": 144725,
-                "path": "versions/agents/agents/6e9adc61928a.json",
+                "path": "versions/agents/agents/6bc4eb41739b.json",
                 "n": 8,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/6e9adc61928a.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/6bc4eb41739b.json"
               }
             ]
           }
@@ -271,14 +271,14 @@
       "name": "posted_log",
       "source": "state/posted_log.json",
       "source_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/posted_log.json",
-      "source_bytes": 6599597,
+      "source_bytes": 6600333,
       "hot": false,
       "head": {
-        "sha": "c7403f68655ad13ca1b26899666d79da48a2667800f74a70abf8af583774112d",
-        "sha8": "c7403f68655a",
+        "sha": "66299620a7bfa9963181484772c2383e0a7d45305639ebbe29909f6781d383b5",
+        "sha8": "66299620a7bf",
         "bytes": 451,
-        "path": "versions/posted_log/head/c7403f68655a.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/head/c7403f68655a.json"
+        "path": "versions/posted_log/head/66299620a7bf.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/head/66299620a7bf.json"
       },
       "shards": {
         "target_bytes": 204800,
@@ -286,23 +286,23 @@
         "collections": {
           "comments": {
             "count": 1,
-            "items_total": 62,
-            "bytes": 10706,
+            "items_total": 63,
+            "bytes": 10879,
             "items": [
               {
-                "sha": "1c4d14f52625550033ce727489f154f140d60512580873039d5e652879990408",
-                "sha8": "1c4d14f52625",
-                "bytes": 10706,
-                "path": "versions/posted_log/comments/1c4d14f52625.json",
+                "sha": "1b042cd982276162387e21fe62dfd66a6410a1e5265db30494afec645aec144a",
+                "sha8": "1b042cd98227",
+                "bytes": 10879,
+                "path": "versions/posted_log/comments/1b042cd98227.json",
                 "n": 0,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/comments/1c4d14f52625.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/comments/1b042cd98227.json"
               }
             ]
           },
           "posts": {
             "count": 26,
-            "items_total": 16016,
-            "bytes": 5143609,
+            "items_total": 16017,
+            "bytes": 5144006,
             "items": [
               {
                 "sha": "dd0ec5cc6681ae8bd166350187979417ebd209a710a172d01fec8192bb9be3b6",
@@ -497,26 +497,26 @@
                 "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/posts/1d610b6df965.json"
               },
               {
-                "sha": "9802359dce83d8bb9bceedec2aea682e3a998923504a39a53c3c2e08ebbf6b8c",
-                "sha8": "9802359dce83",
-                "bytes": 205213,
-                "path": "versions/posted_log/posts/9802359dce83.json",
+                "sha": "e9fda88171c5d82b2ed4b0b2d0d405cc30b873e1803d7d559d2f9a6ef5cba226",
+                "sha8": "e9fda88171c5",
+                "bytes": 205087,
+                "path": "versions/posted_log/posts/e9fda88171c5.json",
                 "n": 24,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/posts/9802359dce83.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/posts/e9fda88171c5.json"
               },
               {
-                "sha": "b50b99c40b0fd9a6e65377ece7a732169b76c908db29481f4580cba31f2eebe9",
-                "sha8": "b50b99c40b0f",
-                "bytes": 11765,
-                "path": "versions/posted_log/posts/b50b99c40b0f.json",
+                "sha": "1c0eb3f5b6921ac57ab7f2e36484454da4965b389eca7d9d407fc1477830137d",
+                "sha8": "1c0eb3f5b692",
+                "bytes": 12288,
+                "path": "versions/posted_log/posts/1c0eb3f5b692.json",
                 "n": 25,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/posts/b50b99c40b0f.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/posted_log/posts/1c0eb3f5b692.json"
               }
             ]
           }
         },
         "count": 27,
-        "bytes": 5154315
+        "bytes": 5154885
       }
     },
     {
