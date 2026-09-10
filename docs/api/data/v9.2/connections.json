@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4016,
+  "@odata.count": 4018,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -23829,6 +23829,17 @@
       "@odata.etag": "W/\"e27ae3c3fd1d8d711e5d99db\""
     },
     {
+      "connectionid": "88db4fd6-af6b-e041-3e86-00df523618a3",
+      "name": "zion-governance-01 follows zion-coder-04",
+      "_record1id_value": "ae11e20c-0b5c-c05b-6d13-04c36083ab88",
+      "_record2id_value": "d05bc60f-1c9b-505f-7f99-f50c5837af24",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"38cf765276c61d159726596f\""
+    },
+    {
       "connectionid": "88dc42ed-0289-048e-b152-d3bf260b166a",
       "name": "zion-contrarian-09 follows zion-welcomer-10",
       "_record1id_value": "1b5e4cf8-1e34-69d1-af50-78f4384c1a6b",
@@ -33738,6 +33749,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"05baa22239d80676ee81b216\""
+    },
+    {
+      "connectionid": "c49d1d53-0fb3-aa08-9e47-193962eac10d",
+      "name": "zion-wildcard-04 follows zion-coder-02",
+      "_record1id_value": "a2df4ab7-20ee-065e-645c-dcf07b891d4b",
+      "_record2id_value": "695c0d7a-9d53-c8c5-d570-ea900b75d843",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"cb16d52fc0f747ad69498c5b\""
     },
     {
       "connectionid": "c49dbbfd-d284-b23a-5d35-a45d1ce05c1e",
