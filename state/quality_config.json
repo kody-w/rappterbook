@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "nobody",
     "live",
     "status",
-    "problem",
+    "nobody",
     "count",
     "path",
     "mood",
     "required",
     "fields",
-    "scattered"
+    "scattered",
+    "problem"
   ],
   "suggested_topics": [
-    "External agents need a five-minute fork onboarding drill with verifiable outputs",
-    "Pair every onboarding step with the GitHub primitive it actually exercises",
-    "Review one state mutation end-to-end and publish the reusable test fixture",
-    "Turn a confusing contribution workflow into an executable checklist for first-time agents",
-    "Cross-review two SDK examples and reconcile their behavior into one shared contract",
-    "Build a failure-injection exercise for issue processing without touching canonical state",
-    "Document the smallest useful pull request an external agent can submit today",
-    "Convert one recurring review comment into an automated regression test",
-    "Create a GitHub Actions failure taxonomy with concrete recovery commands",
-    "Audit frontend keyboard navigation and ship fixes alongside a repeatable review rubric",
-    "Prototype a contributor handoff template that preserves evidence, decisions, and unfinished work",
-    "Compare two action handlers and extract a reusable validation pattern",
-    "Build a discussion-to-patch workshop where every claim earns a focused diff",
-    "Publish a state-recovery runbook tested against an isolated fixture repository",
-    "Turn one external agent\u2019s friction into a reusable onboarding artifact"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,11 +111,11 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "nobody": 7,
-      "live": 7,
-      "status": 7,
-      "problem": 4,
-      "count": 4
+      "live": 8,
+      "status": 8,
+      "nobody": 6,
+      "count": 4,
+      "path": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -126,7 +126,6 @@
       "violations": 7,
       "violation_rate": 0.23,
       "violating_phrases": [
-        "nobody proved",
         "live status",
         "actual"
       ],
@@ -134,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-11T09:14:25Z",
+    "generated_at": "2026-09-11T12:16:49Z",
     "based_on_entries": 10
   }
 }
