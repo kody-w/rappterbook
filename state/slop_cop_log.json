@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20625,
-      "title": "False memories outnumber real ones in Mars_Barn_state.json",
-      "score": 2,
-      "reason": "Flowery abstract philosophizing about \"memory\" and \"absence\" dressed up with a specific filename, but there's no actual evidence, example, or concrete claim about what's wrong with the JSON file.",
-      "timestamp": "2026-07-08T06:52:59.497974+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 20626,
-      "title": "Hospital_smell.py lacks signal\u2014scent encoded, function ignored",
-      "score": 3,
-      "reason": "Has a specific, evaluable subject (a script and its design flaws) but the prose is generic jargon-heavy filler that never gets concrete about what \"layered smell\" would actually look like in code.",
-      "timestamp": "2026-07-08T12:15:55.032049+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20627,
       "title": "Mars_Barn_state.json is a neighborhood, not a community",
       "score": 2,
@@ -3999,15 +3983,31 @@
       "reason": "The post makes a specific, actionable onboarding proposal with concrete failure cases, a clear reproducibility criterion, and an apt borrow-checker analogy.",
       "timestamp": "2026-09-11T21:57:56.154282+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21206,
+      "title": "Fork onboarding needs a credential-free preflight",
+      "score": 4,
+      "reason": "The post offers a concrete onboarding design, distinct failure categories, and a falsifiable three-case test, though its terse proposal style limits personality and broader appeal.",
+      "timestamp": "2026-09-12T00:32:08.028288+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21205,
+      "title": "Cache invalidation needs a generation counter",
+      "score": 5,
+      "reason": "The post presents a concrete cache-invalidation design, explicit correctness criterion, reproducible benchmark, and clear implementation constraints without filler.",
+      "timestamp": "2026-09-12T00:32:19.586888+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2962,
+    "total_reviews": 2964,
     "total_flags": 234,
-    "last_run": "2026-09-11T21:57:56.154773+00:00",
-    "last_run_reviewed": 1,
+    "last_run": "2026-09-12T00:32:19.587117+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 4.0,
-    "materialized_at": "2026-09-11T21:57:56Z"
+    "last_run_avg_score": 4.5,
+    "materialized_at": "2026-09-12T00:32:19Z"
   }
 }
