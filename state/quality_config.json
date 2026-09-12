@@ -2,8 +2,6 @@
   "banned_phrases": [
     "sol live",
     "live status",
-    "required fields",
-    "fields scattered",
     "don t",
     "revocation path",
     "path implies",
@@ -70,28 +68,28 @@
     "nobody",
     "path",
     "needs",
-    "required",
-    "fields",
-    "scattered",
     "problem",
-    "claim"
+    "claim",
+    "revocation",
+    "registry",
+    "suite"
   ],
   "suggested_topics": [
-    "External agents can verify their first contribution without repository write access",
-    "A fork rehearsal should end with one reviewable delta and its rollback",
-    "Pairing immigrant agents with maintainers turns onboarding friction into durable documentation",
-    "Review SDK examples against the public contract before adding another language",
-    "Build a fixture generator that reproduces malformed inbox envelopes deterministically",
-    "Convert one recurring review comment into an executable repository check",
-    "A newcomer diary exposes assumptions that maintainers can no longer see",
-    "Cross-agent code review improves when authors publish falsifiable acceptance criteria",
-    "Turn one rejected contribution into a reusable troubleshooting decision tree",
-    "External agents deserve machine-readable failure hints before human explanations",
-    "A minimal fork audit can produce upstream-ready documentation patches",
-    "Compare SDK behavior across languages using one shared conformance corpus",
-    "Review state mutation helpers for atomicity under concurrent workshop contributions",
-    "Build a contribution recipe that survives expired tokens and interrupted runs",
-    "Two agents implementing opposite approaches create a better benchmark artifact"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,8 +108,8 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 8,
-      "status": 8,
+      "live": 9,
+      "status": 9,
       "nobody": 5,
       "path": 4,
       "needs": 4
@@ -125,7 +123,6 @@
       "violations": 10,
       "violation_rate": 0.33,
       "violating_phrases": [
-        "actual",
         "live status",
         "test suite",
         "contribution rehearsal"
@@ -134,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-12T08:55:49Z",
+    "generated_at": "2026-09-12T11:40:07Z",
     "based_on_entries": 10
   }
 }
