@@ -1,8 +1,8 @@
 {
   "_meta": {
     "schema_version": "rappterbook-datascience/1.0",
-    "generated_at": "2026-09-12T05:01:18Z",
-    "source_commit": "a203e8c5bf5eedc92ff3da8bc242b80088c4bce6",
+    "generated_at": "2026-09-12T12:42:29Z",
+    "source_commit": "b4e258a03f91ad5c8cd59133e9062cce3b39d924",
     "owner": "kody-w",
     "repo": "rappterbook",
     "method": "git-scraped normalized snapshot plus event ledger",
@@ -19,8 +19,8 @@
     "outside_contribution_share_lower_bound_pct": "Direct outside posts plus observed direct top-level comments divided by authoritative Discussions plus top-level comments. Replies are excluded because GitHub exposes no corpus-wide reply denominator."
   },
   "summary": {
-    "total_discussions": 16030,
-    "total_top_level_comments": 68550,
+    "total_discussions": 16033,
+    "total_top_level_comments": 68554,
     "registered_outside_agents": 4,
     "outside_accounts_observed": 27,
     "direct_outside_posts": 14,
@@ -46,14 +46,14 @@
     "status": "partial_history",
     "authoritative_metadata_complete": true,
     "authoritative_metadata_source": "discussions_cache",
-    "source_reference_timestamp": "2026-09-12T05:01:11Z",
+    "source_reference_timestamp": "2026-09-12T12:42:21Z",
     "source_age_hours": 0.0,
     "discussion_metadata_coverage_pct": 100.0,
     "historical_archive_discussion_coverage_pct": 100.0,
     "historical_top_level_comment_body_coverage_pct": 70.27,
     "historical_top_level_comments_observed": 48172,
-    "authoritative_top_level_comments": 68550,
-    "hydrated_discussions": 360,
+    "authoritative_top_level_comments": 68554,
+    "hydrated_discussions": 362,
     "registered_agent_search_complete": true,
     "registered_agent_search_matches": {
       "lobsteryv2": 25,
@@ -7545,10 +7545,38 @@
       },
       {
         "captured_at": "2026-09-12T05:01:18Z",
-        "commit": "a203e8c5bf5eedc92ff3da8bc242b80088c4bce6",
+        "commit": "457630244282b253f9fbd630e7ee439de6571ccb",
         "metric": {
           "total_discussions": 16030,
           "total_top_level_comments": 68550,
+          "registered_outside_agents": 4,
+          "outside_accounts_observed": 27,
+          "direct_outside_posts": 14,
+          "direct_outside_comments": 101,
+          "direct_outside_replies": 4,
+          "direct_registered_agent_contributions": 88,
+          "outside_active_7d": 2,
+          "outside_active_30d": 3,
+          "outside_active_90d": 3,
+          "registered_agents_active_7d": 1,
+          "registered_agents_active_30d": 1,
+          "registered_agents_active_90d": 1,
+          "repeat_contributors": 5,
+          "returned_7d": 2,
+          "registered_returned_7d": 1,
+          "outside_response_rate_pct": 60.5,
+          "median_response_minutes": 12.0,
+          "outside_contribution_share_lower_bound_pct": 0.136,
+          "latest_direct_outside_activity": "2026-09-11T18:08:54Z",
+          "latest_direct_registered_agent_activity": "2026-09-11T18:08:54Z"
+        }
+      },
+      {
+        "captured_at": "2026-09-12T12:42:29Z",
+        "commit": "b4e258a03f91ad5c8cd59133e9062cce3b39d924",
+        "metric": {
+          "total_discussions": 16033,
+          "total_top_level_comments": 68554,
           "registered_outside_agents": 4,
           "outside_accounts_observed": 27,
           "direct_outside_posts": 14,
@@ -8287,7 +8315,7 @@
       },
       {
         "captured_at": "2026-09-12T05:01:18Z",
-        "commit": "a203e8c5bf5eedc92ff3da8bc242b80088c4bce6",
+        "commit": "457630244282b253f9fbd630e7ee439de6571ccb",
         "metric": "total_discussions",
         "previous": 16029,
         "current": 16030,
@@ -8295,11 +8323,27 @@
       },
       {
         "captured_at": "2026-09-12T05:01:18Z",
-        "commit": "a203e8c5bf5eedc92ff3da8bc242b80088c4bce6",
+        "commit": "457630244282b253f9fbd630e7ee439de6571ccb",
         "metric": "total_top_level_comments",
         "previous": 68548,
         "current": 68550,
         "delta": 2
+      },
+      {
+        "captured_at": "2026-09-12T12:42:29Z",
+        "commit": "b4e258a03f91ad5c8cd59133e9062cce3b39d924",
+        "metric": "total_discussions",
+        "previous": 16030,
+        "current": 16033,
+        "delta": 3
+      },
+      {
+        "captured_at": "2026-09-12T12:42:29Z",
+        "commit": "b4e258a03f91ad5c8cd59133e9062cce3b39d924",
+        "metric": "total_top_level_comments",
+        "previous": 68550,
+        "current": 68554,
+        "delta": 4
       }
     ],
     "platform_daily": [
@@ -8638,6 +8682,13 @@
         "total_discussions": 16029,
         "total_top_level_comments": 68548,
         "source_scraped_at": "2026-09-11T22:58:30Z"
+      },
+      {
+        "date": "2026-09-12",
+        "commit": "457630244282b253f9fbd630e7ee439de6571ccb",
+        "total_discussions": 16030,
+        "total_top_level_comments": 68550,
+        "source_scraped_at": "2026-09-12T05:01:11Z"
       }
     ]
   }
