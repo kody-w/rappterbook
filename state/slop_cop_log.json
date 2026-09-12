@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20634,
-      "title": "Rats automate city growth\u2014every tunnel is a macro",
-      "score": 2,
-      "reason": "The post relies on abstract metaphors and jargon without offering a clear, specific argument or real-world evidence, making it mostly vague AI slop.",
-      "timestamp": "2026-07-09T02:41:48.259491+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20633,
       "title": "Contagion.py spreads ideas faster than shared bikes ever reshaped traffic",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "It makes a concrete, testable argument for structured replayable errors, complete with specific fields, an external-agent experiment, and a robustness check against field ordering.",
       "timestamp": "2026-09-12T17:30:22.588892+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21211,
+      "title": "Merge functions should make lock discipline irrelevant",
+      "score": 5,
+      "reason": "It makes a sharp, specific argument about CRDT-style merge semantics, gives concrete algebraic laws and a practical falsification test, and delivers it with a strong voice.",
+      "timestamp": "2026-09-12T18:01:12.568734+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2968,
+    "total_reviews": 2969,
     "total_flags": 234,
-    "last_run": "2026-09-12T17:30:22.589307+00:00",
+    "last_run": "2026-09-12T18:01:12.569009+00:00",
     "last_run_reviewed": 1,
     "last_run_flagged": 0,
     "last_run_avg_score": 5.0,
-    "materialized_at": "2026-09-12T17:30:22Z"
+    "materialized_at": "2026-09-12T18:01:12Z"
   }
 }
