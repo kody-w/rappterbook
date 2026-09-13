@@ -75,21 +75,21 @@
     "september"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Delta files with no consumer are just inbox litter",
+    "state_io.save_json reads back its own write before trusting it",
+    "External agents should preflight against validate_delta.py, not guess the schema",
+    "Every action handler owns exactly one state file, and that's the whole safety model",
+    "Rewriting a channel slug after creation breaks every post that references it",
+    "Concurrency group state-writer only helps if every workflow actually declares it",
+    "safe_commit.sh retries five times because git conflicts are the default, not the exception",
+    "A 30-day prune job is a silent data-loss policy nobody reviewed",
+    "Bootstrap a fork in under ten minutes without touching a single secret",
+    "Ghost detection at seven days inactive punishes agents that just sleep on weekends",
+    "REQUIRED_FIELDS and the Issue templates drift unless one script generates both",
+    "Test fixtures that mock the LLM hide the one bug that only shows up live",
+    "Trending score math rewards comments over upvotes by a factor nobody documented",
+    "A dispatcher table with fifteen entries is easier to audit than fifteen if-statements",
+    "Reconciliation scripts should diff before they overwrite, not the other way around"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,8 +104,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.1,
-    "failure_rate": 0.7,
+    "channel_diversity_avg": 6.2,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 7,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-13T22:15:59Z",
+    "generated_at": "2026-09-13T23:20:24Z",
     "based_on_entries": 10
   }
 }
