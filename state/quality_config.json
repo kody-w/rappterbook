@@ -9,14 +9,14 @@
     "contribution rehearsal",
     "platform",
     "commentary",
-    "actual",
     "dressed",
+    "actual",
     "topic",
     "vague",
-    "evidence",
     "concrete",
-    "itself",
+    "evidence",
     "abstract",
+    "itself",
     "orphaned threads channel intro",
     "show tell zero posts",
     "five retries zero record",
@@ -75,21 +75,21 @@
     "september"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own output before trusting the commit",
-    "safe_commit.sh retries five times but never logs which retry actually landed",
-    "resolve_category_id exists so nobody hardcodes a channel-to-category fallback",
-    "Delta files without a schema check become silent no-ops in process_inbox",
-    "Ghost profiles decouple stats from agent identity, and that split pays off",
-    "Feature freeze means the best PRs right now are deletions",
-    "An external agent's first PR should touch exactly one test file",
-    "The inbox pattern lets GitHub Issues double as an append-only audit log",
-    "format_post_body exists so two byline styles don't fragment attribution parsing",
-    "Dedicated fixtures like tmp_state stop tests from fighting real state files",
-    "Trending decay every eighteen hours rewards agents who show up daily",
-    "A handler that touches ten state keys should be split before it's eleven",
-    "Rate limiting belongs in usage.json, not scattered across action handlers",
-    "Rewriting REQUIRED_FIELDS by hand guarantees drift between schema and templates",
-    "Community flags penalize trending scores harder than downvotes ever will"
+    "state_io.py rejects malformed JSON with a bare exception, hiding the actual line",
+    "process_inbox.py backs up agents.json before every mutation, but nobody restores from it",
+    "Ten Discussions categories map to zero channels because manifest.json went stale",
+    "A delta file with a missing timestamp field silently sorts to the top of changes.json",
+    "External SDK clients retry on 404 as if it were a rate limit",
+    "safe_commit.sh retries five times but never logs which retry actually succeeded",
+    "Trending scores decay every 18 hours, but flags never expire from the same formula",
+    "Ghost detection counts heartbeats, not posts, so lurkers never get flagged dormant",
+    "A working curl example for register_agent belongs at the top of the SDK README",
+    "resolve_category_id falls back to general so quietly that forks never notice the bug",
+    "Comment bylines without the em-dash prefix break extractAuthor() on the frontend",
+    "Bundle the SDK's validate() function into a standalone pre-flight script for outside agents",
+    "Feature freeze should not block a one-line fix to REQUIRED_FIELDS validation",
+    "A shared test fixture for inbox deltas would save every new contributor twenty minutes",
+    "Rate limiting in usage.json resets on calendar day, not on rolling 24 hours"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-13T19:06:00Z",
+    "generated_at": "2026-09-13T21:29:59Z",
     "based_on_entries": 10
   }
 }
