@@ -1,5 +1,409 @@
 [
 {
+"id": "14955373375",
+"type": "IssueCommentEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1139436299,
+"name": "kody-w/rapp-installer",
+"url": "https://api.github.com/repos/kody-w/rapp-installer"
+},
+"payload": {
+"action": "created",
+"issue": {
+"url": "https://api.github.com/repos/kody-w/rapp-installer/issues/47",
+"repository_url": "https://api.github.com/repos/kody-w/rapp-installer",
+"labels_url": "https://api.github.com/repos/kody-w/rapp-installer/issues/47/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rapp-installer/issues/47/comments",
+"events_url": "https://api.github.com/repos/kody-w/rapp-installer/issues/47/events",
+"html_url": "https://github.com/kody-w/rapp-installer/pull/47",
+"id": 5442559898,
+"node_id": "PR_kwDOQ-prC88AAAABDXSDCA",
+"number": 47,
+"title": "release: v0.6.17 - GPT-6 Astra successor Grail",
+"user": {
+"login": "kody-w",
+"id": 1735900,
+"node_id": "MDQ6VXNlcjE3MzU5MDA=",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"html_url": "https://github.com/kody-w",
+"followers_url": "https://api.github.com/users/kody-w/followers",
+"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
+"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
+"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
+"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
+"organizations_url": "https://api.github.com/users/kody-w/orgs",
+"repos_url": "https://api.github.com/users/kody-w/repos",
+"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
+"received_events_url": "https://api.github.com/users/kody-w/received_events",
+"type": "User",
+"user_view_type": "public",
+"site_admin": false
+},
+"labels": [],
+"state": "open",
+"locked": false,
+"assignees": [],
+"milestone": null,
+"comments": 1,
+"created_at": "2026-09-13T20:23:14Z",
+"updated_at": "2026-09-13T20:47:08Z",
+"closed_at": null,
+"assignee": null,
+"active_lock_reason": null,
+"draft": true,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rapp-installer/pulls/47",
+"html_url": "https://github.com/kody-w/rapp-installer/pull/47",
+"diff_url": "https://github.com/kody-w/rapp-installer/pull/47.diff",
+"patch_url": "https://github.com/kody-w/rapp-installer/pull/47.patch",
+"merged_at": null
+},
+"body": "Owner-approved successor Grail candidate; v0.6.16 and its immutable identity remain unchanged.\n\nAdds native Responses transport for GPT-6 Astra and other account-advertised models to the stable single-file Brainstem. Covers blocking/streaming chat, tool calls, request-local encrypted reasoning, usage normalization, aliases, incomplete responses, and fallback request rebuilding. Existing clients, agents, installers, and automatic model selection remain compatible.\n\nCandidate: ea851ef291b7ade9ffb2916a0e21215926a4dafd\nTree: e65ca65ebcfc2875ef1c6d2bc340add11385deb9\nKernel SHA-256: 9e0aa79eccd340806d4ab37e1a6858ea781015c34cbe99e3988b15c310ea7a19\n\nLocal evidence: 297 tests and 17 subtests; 44 installer checks; real fresh and upgrade preflight; live Astra tool cycles through both chat endpoints; live Sol Fast/GPT-5.5 usage and legacy Haiku parity without fallback.\n\nProduction remains gated on required CI, successor identity/lineage handling, and release approval. The daily checkout push guard and branch protection are unchanged.",
+"reactions": {
+"url": "https://api.github.com/repos/kody-w/rapp-installer/issues/47/reactions",
+"total_count": 0,
+"+1": 0,
+"-1": 0,
+"laugh": 0,
+"hooray": 0,
+"confused": 0,
+"heart": 0,
+"rocket": 0,
+"eyes": 0
+},
+"timeline_url": "https://api.github.com/repos/kody-w/rapp-installer/issues/47/timeline",
+"performed_via_github_app": null,
+"state_reason": null
+},
+"comment": {
+"url": "https://api.github.com/repos/kody-w/rapp-installer/issues/comments/5656022396",
+"html_url": "https://github.com/kody-w/rapp-installer/pull/47#issuecomment-5656022396",
+"issue_url": "https://api.github.com/repos/kody-w/rapp-installer/issues/47",
+"id": 5656022396,
+"node_id": "IC_kwDOQ-prC88AAAABUSANfA",
+"user": {
+"login": "kody-w",
+"id": 1735900,
+"node_id": "MDQ6VXNlcjE3MzU5MDA=",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"html_url": "https://github.com/kody-w",
+"followers_url": "https://api.github.com/users/kody-w/followers",
+"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
+"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
+"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
+"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
+"organizations_url": "https://api.github.com/users/kody-w/orgs",
+"repos_url": "https://api.github.com/users/kody-w/repos",
+"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
+"received_events_url": "https://api.github.com/users/kody-w/received_events",
+"type": "User",
+"user_view_type": "public",
+"site_admin": false
+},
+"created_at": "2026-09-13T20:47:08Z",
+"updated_at": "2026-09-13T20:47:08Z",
+"body": "Grail release is deferred at the owner's request. This candidate is moving to Canary for testing, after first syncing Canary with current Grail. Production, existing Grail tags, and identity pins remain unchanged.",
+"reactions": {
+"url": "https://api.github.com/repos/kody-w/rapp-installer/issues/comments/5656022396/reactions",
+"total_count": 0,
+"+1": 0,
+"-1": 0,
+"laugh": 0,
+"hooray": 0,
+"confused": 0,
+"heart": 0,
+"rocket": 0,
+"eyes": 0
+},
+"performed_via_github_app": null,
+"minimized": null
+}
+},
+"public": true,
+"created_at": "2026-09-13T20:47:08Z"
+},
+{
+"id": "14954740949",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1139436299,
+"name": "kody-w/rapp-installer",
+"url": "https://api.github.com/repos/kody-w/rapp-installer"
+},
+"payload": {
+"action": "opened",
+"number": 47,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rapp-installer/pulls/47",
+"id": 4520706824,
+"number": 47,
+"head": {
+"ref": "release/v0.6.17",
+"sha": "ea851ef291b7ade9ffb2916a0e21215926a4dafd",
+"repo": {
+"id": 1139436299,
+"url": "https://api.github.com/repos/kody-w/rapp-installer",
+"name": "rapp-installer"
+}
+},
+"base": {
+"ref": "main",
+"sha": "49db80c8c6b6caa7647369beaf477d374a8f293c",
+"repo": {
+"id": 1139436299,
+"url": "https://api.github.com/repos/kody-w/rapp-installer",
+"name": "rapp-installer"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-13T20:23:14Z"
+},
+{
+"id": "21017490478",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1366651009,
+"name": "kody-w/rapp-workspace-manager",
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager"
+},
+"payload": {
+"repository_id": 1366651009,
+"push_id": 43463583433,
+"ref": "refs/heads/main",
+"head": "cd64cb26cb9a3123db54947b9eee7cd43bd7104f",
+"before": "6299e2f43db8265285dd8a292c3142466b241fe7"
+},
+"public": true,
+"created_at": "2026-09-13T19:58:50Z"
+},
+{
+"id": "14954088834",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1366651009,
+"name": "kody-w/rapp-workspace-manager",
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager"
+},
+"payload": {
+"action": "merged",
+"number": 3,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager/pulls/3",
+"id": 4520589208,
+"number": 3,
+"head": {
+"ref": "feat/local-ai-estate",
+"sha": "80af1c1d7086cc415164fb75c127806e41b2c4ab",
+"repo": {
+"id": 1366651009,
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager",
+"name": "rapp-workspace-manager"
+}
+},
+"base": {
+"ref": "main",
+"sha": "6299e2f43db8265285dd8a292c3142466b241fe7",
+"repo": {
+"id": 1366651009,
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager",
+"name": "rapp-workspace-manager"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-13T19:58:49Z"
+},
+{
+"id": "14954020897",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1366651009,
+"name": "kody-w/rapp-workspace-manager",
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager"
+},
+"payload": {
+"action": "opened",
+"number": 3,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager/pulls/3",
+"id": 4520589208,
+"number": 3,
+"head": {
+"ref": "feat/local-ai-estate",
+"sha": "80af1c1d7086cc415164fb75c127806e41b2c4ab",
+"repo": {
+"id": 1366651009,
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager",
+"name": "rapp-workspace-manager"
+}
+},
+"base": {
+"ref": "main",
+"sha": "6299e2f43db8265285dd8a292c3142466b241fe7",
+"repo": {
+"id": 1366651009,
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager",
+"name": "rapp-workspace-manager"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-13T19:56:15Z"
+},
+{
+"id": "21017324389",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1366651009,
+"name": "kody-w/rapp-workspace-manager",
+"url": "https://api.github.com/repos/kody-w/rapp-workspace-manager"
+},
+"payload": {
+"repository_id": 1366651009,
+"push_id": 43463423659,
+"ref": "refs/heads/feat/local-ai-estate",
+"head": "80af1c1d7086cc415164fb75c127806e41b2c4ab",
+"before": "3a120372866660aa6c860fce6e411835897c1120"
+},
+"public": true,
+"created_at": "2026-09-13T19:56:12Z"
+},
+{
+"id": "21017263576",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1150167195,
+"name": "kody-w/openrappter",
+"url": "https://api.github.com/repos/kody-w/openrappter"
+},
+"payload": {
+"repository_id": 1150167195,
+"push_id": 43347802983,
+"ref": "refs/heads/release/rapp-work-main",
+"head": "4666e2cf5901225e232c5a58b34aec1ce54f3296",
+"before": "b8b1da18ce1a893d0a63e5c8790e3d47240e39c5"
+},
+"public": true,
+"created_at": "2026-09-11T22:24:31Z"
+},
+{
+"id": "21016788081",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1150167195,
+"name": "kody-w/openrappter",
+"url": "https://api.github.com/repos/kody-w/openrappter"
+},
+"payload": {
+"repository_id": 1150167195,
+"push_id": 43347261716,
+"ref": "refs/heads/release/rapp-work-main",
+"head": "d959d946aa5bdeb7f8f4db92859fe99d5f45b059",
+"before": "47e2ce6b143b060ef3996749329d5876550c72bb"
+},
+"public": true,
+"created_at": "2026-09-11T22:13:28Z"
+},
+{
+"id": "21016323966",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1150167195,
+"name": "kody-w/openrappter",
+"url": "https://api.github.com/repos/kody-w/openrappter"
+},
+"payload": {
+"ref": "release/rapp-work-main",
+"ref_type": "branch",
+"full_ref": "refs/heads/release/rapp-work-main",
+"master_branch": "main",
+"description": "\ud83e\udd96 Local-first AI agent powered by GitHub Copilot SDK \u2014 no API keys required",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-11T22:03:07Z"
+},
+{
 "id": "14952674012",
 "type": "DiscussionEvent",
 "actor": {
@@ -2342,33 +2746,6 @@
 "created_at": "2026-09-13T17:08:11Z"
 },
 {
-"id": "21006230323",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1311628692,
-"name": "kody-w/rapp-voice",
-"url": "https://api.github.com/repos/kody-w/rapp-voice"
-},
-"payload": {
-"ref": "publish/native-successor-metadata-93688d5b",
-"ref_type": "branch",
-"full_ref": "refs/heads/publish/native-successor-metadata-93688d5b",
-"master_branch": "main",
-"description": "RAPP Voice \u2014 100% local hold-to-talk dictation for macOS. Hold a key, speak, release; cleaned text appears at your cursor. whisper.cpp on-device, no cloud, no account.",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-13T17:08:09Z"
-},
-{
 "id": "21006230427",
 "type": "CreateEvent",
 "actor": {
@@ -2417,6 +2794,33 @@
 "full_ref": "refs/heads/publish/native-successor-metadata-93688d5b",
 "master_branch": "main",
 "description": "RAPP Shot \u2014 capture, annotate and auto-redact screenshots entirely on-device. Finds credentials with OCR and paints them out before the image leaves your machine.",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-13T17:08:09Z"
+},
+{
+"id": "21006230323",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1311628692,
+"name": "kody-w/rapp-voice",
+"url": "https://api.github.com/repos/kody-w/rapp-voice"
+},
+"payload": {
+"ref": "publish/native-successor-metadata-93688d5b",
+"ref_type": "branch",
+"full_ref": "refs/heads/publish/native-successor-metadata-93688d5b",
+"master_branch": "main",
+"description": "RAPP Voice \u2014 100% local hold-to-talk dictation for macOS. Hold a key, speak, release; cleaned text appears at your cursor. whisper.cpp on-device, no cloud, no account.",
 "pusher_type": "user"
 },
 "public": true,
@@ -6305,572 +6709,5 @@
 },
 "public": true,
 "created_at": "2026-09-13T06:51:04Z"
-},
-{
-"id": "20975013197",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"repository_id": 1080009582,
-"push_id": 43425953399,
-"ref": "refs/heads/staging",
-"head": "67619a4afb3af9b9c792f40a49be95ccd04c01fa",
-"before": "87cb2a5c5b470501de34be6859099e3bd735eaf5"
-},
-"public": true,
-"created_at": "2026-09-13T06:51:05Z"
-},
-{
-"id": "14935049233",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"action": "opened",
-"number": 269,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library/pulls/269",
-"id": 4517425343,
-"number": 269,
-"head": {
-"ref": "workshop-pilot/portfolio-coherent-r4-0f7c0b29",
-"sha": "e7aa485338501f1d6e39a2e4647e8e133fb023d7",
-"repo": {
-"id": 1080009582,
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
-"name": "aibast-agents-library"
-}
-},
-"base": {
-"ref": "staging",
-"sha": "87cb2a5c5b470501de34be6859099e3bd735eaf5",
-"repo": {
-"id": 1080009582,
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library",
-"name": "aibast-agents-library"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-13T06:18:14Z"
-},
-{
-"id": "20973517284",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1080009582,
-"name": "kody-w/aibast-agents-library",
-"url": "https://api.github.com/repos/kody-w/aibast-agents-library"
-},
-"payload": {
-"ref": "workshop-pilot/portfolio-coherent-r4-0f7c0b29",
-"ref_type": "branch",
-"full_ref": "refs/heads/workshop-pilot/portfolio-coherent-r4-0f7c0b29",
-"master_branch": "staging",
-"description": "Main repository for AI BAST Specialist Team AI Agents Library",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-13T06:18:13Z"
-},
-{
-"id": "14934301273",
-"type": "ReleaseEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1150167195,
-"name": "kody-w/openrappter",
-"url": "https://api.github.com/repos/kody-w/openrappter"
-},
-"payload": {
-"action": "published",
-"release": {
-"url": "https://api.github.com/repos/kody-w/openrappter/releases/387804917",
-"assets_url": "https://api.github.com/repos/kody-w/openrappter/releases/387804917/assets",
-"upload_url": "https://uploads.github.com/repos/kody-w/openrappter/releases/387804917/assets{?name,label}",
-"html_url": "https://github.com/kody-w/openrappter/releases/tag/rapp-work-2.0.0-fractal-twin-preview.1",
-"id": 387804917,
-"author": {
-"login": "kody-w",
-"id": 1735900,
-"node_id": "MDQ6VXNlcjE3MzU5MDA=",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"html_url": "https://github.com/kody-w",
-"followers_url": "https://api.github.com/users/kody-w/followers",
-"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
-"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
-"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
-"organizations_url": "https://api.github.com/users/kody-w/orgs",
-"repos_url": "https://api.github.com/users/kody-w/repos",
-"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
-"received_events_url": "https://api.github.com/users/kody-w/received_events",
-"type": "User",
-"user_view_type": "public",
-"site_admin": false
-},
-"node_id": "RE_kwDORI4om84XHW71",
-"tag_name": "rapp-work-2.0.0-fractal-twin-preview.1",
-"target_commitish": "d8601aa91c10f3330ea10b7fa31382137d981dfd",
-"name": "RAPP Work 2.0.0 Fractal Twin Preview 1",
-"draft": false,
-"immutable": false,
-"prerelease": true,
-"created_at": "2026-09-13T05:35:42Z",
-"updated_at": "2026-09-13T05:44:06Z",
-"published_at": "2026-09-13T05:44:06Z",
-"assets": [
-{
-"url": "https://api.github.com/repos/kody-w/openrappter/releases/assets/560654934",
-"id": 560654934,
-"node_id": "RA_kwDORI4om84haupW",
-"name": "RAPP-Work-2.0.0-macos-arm64-UNSIGNED-DEVELOPMENT.dmg",
-"label": "",
-"uploader": {
-"login": "kody-w",
-"id": 1735900,
-"node_id": "MDQ6VXNlcjE3MzU5MDA=",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"html_url": "https://github.com/kody-w",
-"followers_url": "https://api.github.com/users/kody-w/followers",
-"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
-"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
-"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
-"organizations_url": "https://api.github.com/users/kody-w/orgs",
-"repos_url": "https://api.github.com/users/kody-w/repos",
-"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
-"received_events_url": "https://api.github.com/users/kody-w/received_events",
-"type": "User",
-"user_view_type": "public",
-"site_admin": false
-},
-"content_type": "application/x-apple-diskimage",
-"state": "uploaded",
-"size": 123194389,
-"digest": "sha256:be42b66933ed9eb8914a25b566fd8e8e254fab17f8a3719ff3b2bdf6d9d0f96d",
-"download_count": 1,
-"created_at": "2026-09-13T05:43:51Z",
-"updated_at": "2026-09-13T05:44:06Z",
-"browser_download_url": "https://github.com/kody-w/openrappter/releases/download/rapp-work-2.0.0-fractal-twin-preview.1/RAPP-Work-2.0.0-macos-arm64-UNSIGNED-DEVELOPMENT.dmg"
-},
-{
-"url": "https://api.github.com/repos/kody-w/openrappter/releases/assets/560654937",
-"id": 560654937,
-"node_id": "RA_kwDORI4om84haupZ",
-"name": "RAPP-Work-2.0.0-macos-arm64-UNSIGNED-DEVELOPMENT.dmg.provenance.json",
-"label": "",
-"uploader": {
-"login": "kody-w",
-"id": 1735900,
-"node_id": "MDQ6VXNlcjE3MzU5MDA=",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"html_url": "https://github.com/kody-w",
-"followers_url": "https://api.github.com/users/kody-w/followers",
-"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
-"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
-"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
-"organizations_url": "https://api.github.com/users/kody-w/orgs",
-"repos_url": "https://api.github.com/users/kody-w/repos",
-"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
-"received_events_url": "https://api.github.com/users/kody-w/received_events",
-"type": "User",
-"user_view_type": "public",
-"site_admin": false
-},
-"content_type": "application/json",
-"state": "uploaded",
-"size": 368701,
-"digest": "sha256:d19e78b365a901f7c5dd37ebbf9c89e313bbbca76ddd21c96c023e7c59da2f28",
-"download_count": 1,
-"created_at": "2026-09-13T05:43:51Z",
-"updated_at": "2026-09-13T05:43:51Z",
-"browser_download_url": "https://github.com/kody-w/openrappter/releases/download/rapp-work-2.0.0-fractal-twin-preview.1/RAPP-Work-2.0.0-macos-arm64-UNSIGNED-DEVELOPMENT.dmg.provenance.json"
-}
-],
-"tarball_url": "https://api.github.com/repos/kody-w/openrappter/tarball/rapp-work-2.0.0-fractal-twin-preview.1",
-"zipball_url": "https://api.github.com/repos/kody-w/openrappter/zipball/rapp-work-2.0.0-fractal-twin-preview.1",
-"body": "# RAPP Work 2.0.0 Fractal Twin Preview 1\n\nThis is the merged conversational and fractal workspace release of the clean RAPP Work rewrite.\n\n- humans create and configure work through persistent text or voice conversations with their Work Twin\n- forms are fully prefilled agent proposals and remain optional correction/review surfaces\n- every agent receives a mint-once child workspace with the same Twin, tasks, routines, evidence, and computer controls\n- parent, child, and sibling isolation is enforced with bounded recursive lineage\n- task and routine projections are bound to immutable canonical origins\n- workspace publication, catalog refresh, inherited policy changes, and scheduler ticks are atomic and lossless\n- canonical RAPP/1 reconstruction verified from 531 nonzero frames\n- one shared Omarchy computer remains fail-closed until a reviewed ARM64 appliance is configured\n\nVerified from merged `main` commit `d8601aa91c10f3330ea10b7fa31382137d981dfd`.\n\nThis artifact is intentionally **unsigned development software** and installs as `RAPP Work Development.app`. The attached provenance manifest binds the complete source, application inventory, DMG bytes, and development trust mode.\n",
-"short_description_html": "<h1>RAPP Work 2.0.0 Fractal Twin Preview 1</h1>\n<p>This is the merged conversational and fractal workspace release of the clean RAPP Work rewrite.</p>\n<ul>\n<li>humans create and configure work through persistent text or v\u2026</li>\n</ul>",
-"is_short_description_html_truncated": true
-}
-},
-"public": true,
-"created_at": "2026-09-13T05:44:06Z"
-},
-{
-"id": "14934126521",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1150167195,
-"name": "kody-w/openrappter",
-"url": "https://api.github.com/repos/kody-w/openrappter"
-},
-"payload": {
-"action": "merged",
-"number": 468,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/openrappter/pulls/468",
-"id": 4516575133,
-"number": 468,
-"head": {
-"ref": "feat/work-twin-integration",
-"sha": "f4eff8afd57e631f7ff6fcb6711165d5a7534e9f",
-"repo": {
-"id": 1150167195,
-"url": "https://api.github.com/repos/kody-w/openrappter",
-"name": "openrappter"
-}
-},
-"base": {
-"ref": "main",
-"sha": "040fac60d0e795050bb95a2cf1554dd551c491d1",
-"repo": {
-"id": 1150167195,
-"url": "https://api.github.com/repos/kody-w/openrappter",
-"name": "openrappter"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-13T05:35:42Z"
-},
-{
-"id": "20970967094",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1150167195,
-"name": "kody-w/openrappter",
-"url": "https://api.github.com/repos/kody-w/openrappter"
-},
-"payload": {
-"repository_id": 1150167195,
-"push_id": 43422622888,
-"ref": "refs/heads/feat/work-twin-integration",
-"head": "f4eff8afd57e631f7ff6fcb6711165d5a7534e9f",
-"before": "307798a9747e2c03c454dd75142b0de594d61ecc"
-},
-"public": true,
-"created_at": "2026-09-13T05:22:28Z"
-},
-{
-"id": "14933232729",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1312459906,
-"name": "kody-w/rapp-shot",
-"url": "https://api.github.com/repos/kody-w/rapp-shot"
-},
-"payload": {
-"action": "merged",
-"number": 2,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rapp-shot/pulls/2",
-"id": 4517087433,
-"number": 2,
-"head": {
-"ref": "release/fable5-native-93688d5b",
-"sha": "a6f13b5119ba467d1356a9d89ca881e7dc55f306",
-"repo": {
-"id": 1312459906,
-"url": "https://api.github.com/repos/kody-w/rapp-shot",
-"name": "rapp-shot"
-}
-},
-"base": {
-"ref": "main",
-"sha": "44f03fdde954bb46b023725a5adb10f0a947776d",
-"repo": {
-"id": 1312459906,
-"url": "https://api.github.com/repos/kody-w/rapp-shot",
-"name": "rapp-shot"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-13T04:51:31Z"
-},
-{
-"id": "20969637054",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1312459906,
-"name": "kody-w/rapp-shot",
-"url": "https://api.github.com/repos/kody-w/rapp-shot"
-},
-"payload": {
-"repository_id": 1312459906,
-"push_id": 43421571265,
-"ref": "refs/heads/main",
-"head": "e634906f81692a5893516d6b0d3304788ca3218b",
-"before": "44f03fdde954bb46b023725a5adb10f0a947776d"
-},
-"public": true,
-"created_at": "2026-09-13T04:51:32Z"
-},
-{
-"id": "14933145656",
-"type": "IssuesEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1146219110,
-"name": "kody-w/RAPP_Store",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store"
-},
-"payload": {
-"action": "labeled",
-"issue": {
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/issues/60",
-"repository_url": "https://api.github.com/repos/kody-w/RAPP_Store",
-"labels_url": "https://api.github.com/repos/kody-w/RAPP_Store/issues/60/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/RAPP_Store/issues/60/comments",
-"events_url": "https://api.github.com/repos/kody-w/RAPP_Store/issues/60/events",
-"html_url": "https://github.com/kody-w/RAPP_Store/issues/60",
-"id": 5438058449,
-"node_id": "I_kwDORFHqZs8AAAABRCIv0Q",
-"number": 60,
-"title": "[RAPP] @kody-w/rapp_shot v1.3.0",
-"user": {
-"login": "kody-w",
-"id": 1735900,
-"node_id": "MDQ6VXNlcjE3MzU5MDA=",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"html_url": "https://github.com/kody-w",
-"followers_url": "https://api.github.com/users/kody-w/followers",
-"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
-"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
-"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
-"organizations_url": "https://api.github.com/users/kody-w/orgs",
-"repos_url": "https://api.github.com/users/kody-w/repos",
-"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
-"received_events_url": "https://api.github.com/users/kody-w/received_events",
-"type": "User",
-"user_view_type": "public",
-"site_admin": false
-},
-"labels": [
-{
-"id": 10812964915,
-"node_id": "LA_kwDORFHqZs8AAAAChIDAMw",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/labels/pending-review",
-"name": "pending-review",
-"color": "ededed",
-"default": false,
-"description": null,
-"archived_at": null,
-"archived_by": null
-},
-{
-"id": 10812964929,
-"node_id": "LA_kwDORFHqZs8AAAAChIDAQQ",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/labels/rapplication-submission",
-"name": "rapplication-submission",
-"color": "ededed",
-"default": false,
-"description": null,
-"archived_at": null,
-"archived_by": null
-},
-{
-"id": 10813026304,
-"node_id": "LA_kwDORFHqZs8AAAAChIGwAA",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/labels/approved",
-"name": "approved",
-"color": "0e8a16",
-"default": false,
-"description": "Promote staged rapplication to live catalog",
-"archived_at": null,
-"archived_by": null
-},
-{
-"id": 10813028241,
-"node_id": "LA_kwDORFHqZs8AAAAChIG3kQ",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/labels/promoted",
-"name": "promoted",
-"color": "ededed",
-"default": false,
-"description": null,
-"archived_at": null,
-"archived_by": null
-}
-],
-"state": "closed",
-"locked": false,
-"assignees": [],
-"milestone": null,
-"comments": 2,
-"created_at": "2026-09-13T04:46:07Z",
-"updated_at": "2026-09-13T04:46:59Z",
-"closed_at": "2026-09-13T04:46:59Z",
-"assignee": null,
-"active_lock_reason": null,
-"sub_issues_summary": {
-"total": 0,
-"completed": 0,
-"percent_completed": 0
-},
-"issue_dependencies_summary": {
-"blocked_by": 0,
-"total_blocked_by": 0,
-"blocking": 0,
-"total_blocking": 0
-},
-"body": "Verified live native Shot1.3.0: public signed/notarized ARM and Intel ZIPs, immutable real evidence, exact source/tag/workflow bindings, and passing full federation preflight. Metadata preserves the native source and describes normal permissions, local processing and redaction limitations. Please use the normal receiver and approval workflow.\n\n```json\n{\n  \"submission_type\": \"federation\",\n  \"id\": \"rapp_shot\",\n  \"version\": \"1.3.0\",\n  \"publisher\": \"@kody-w\",\n  \"source\": {\n    \"repo\": \"kody-w/rapp-shot\",\n    \"ref\": \"a6f13b5119ba467d1356a9d89ca881e7dc55f306\",\n    \"path\": \"rapp_shot\"\n  }\n}\n```\n",
-"reactions": {
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/issues/60/reactions",
-"total_count": 0,
-"+1": 0,
-"-1": 0,
-"laugh": 0,
-"hooray": 0,
-"confused": 0,
-"heart": 0,
-"rocket": 0,
-"eyes": 0
-},
-"timeline_url": "https://api.github.com/repos/kody-w/RAPP_Store/issues/60/timeline",
-"performed_via_github_app": null,
-"state_reason": "completed",
-"pinned_comment": null
-},
-"label": {
-"id": 10813026304,
-"node_id": "LA_kwDORFHqZs8AAAAChIGwAA",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/labels/approved",
-"name": "approved",
-"color": "0e8a16",
-"default": false,
-"description": "Promote staged rapplication to live catalog",
-"archived_at": null,
-"archived_by": null
-},
-"labels": [
-{
-"id": 10812964915,
-"node_id": "LA_kwDORFHqZs8AAAAChIDAMw",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/labels/pending-review",
-"name": "pending-review",
-"color": "ededed",
-"default": false,
-"description": null,
-"archived_at": null,
-"archived_by": null
-},
-{
-"id": 10812964929,
-"node_id": "LA_kwDORFHqZs8AAAAChIDAQQ",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/labels/rapplication-submission",
-"name": "rapplication-submission",
-"color": "ededed",
-"default": false,
-"description": null,
-"archived_at": null,
-"archived_by": null
-},
-{
-"id": 10813026304,
-"node_id": "LA_kwDORFHqZs8AAAAChIGwAA",
-"url": "https://api.github.com/repos/kody-w/RAPP_Store/labels/approved",
-"name": "approved",
-"color": "0e8a16",
-"default": false,
-"description": "Promote staged rapplication to live catalog",
-"archived_at": null,
-"archived_by": null
-}
-]
-},
-"public": true,
-"created_at": "2026-09-13T04:46:46Z"
 }
 ]
