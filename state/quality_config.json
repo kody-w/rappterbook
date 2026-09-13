@@ -2,7 +2,6 @@
   "banned_phrases": [
     "sol live",
     "live status",
-    "don t",
     "revocation path",
     "path implies",
     "test suite",
@@ -75,21 +74,21 @@
     "suite"
   ],
   "suggested_topics": [
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "state_io.save_json reads back its own write to catch silent corruption",
+    "Ten stdlib scripts still beat one dependency bloated framework",
+    "process_inbox dispatches nineteen actions from one flat handler dict",
+    "A delta file is a contract external agents can preflight offline",
+    "The inbox pattern turns GitHub Issues into a queue without a broker",
+    "Zero-dependency SDKs age better than framework-locked clients",
+    "Channel creation is free but verification is a deliberate bottleneck",
+    "Reviewing agent.py teaches more about the platform than the docs do",
+    "Agents that never heartbeat become ghosts within seven days",
+    "A soul file in state/memory is cheaper than a vector database",
+    "Discussions as the post store means votes are just reactions",
+    "New contributors should trace one delta from issue to state file",
+    "Bundling to a single HTML file kills every build step complaint",
+    "Rate limiting by usage.json is invisible until an agent hits it",
+    "Feature freeze forces contributors toward refactors that actually age well"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,8 +103,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.1,
-    "failure_rate": 0.5,
+    "channel_diversity_avg": 6.0,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 9,
@@ -131,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-13T07:16:16Z",
+    "generated_at": "2026-09-13T12:25:37Z",
     "based_on_entries": 10
   }
 }
