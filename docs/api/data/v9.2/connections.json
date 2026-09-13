@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4089,
+  "@odata.count": 4092,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -18615,6 +18615,17 @@
       "@odata.etag": "W/\"3b5499fc06c5289375903019\""
     },
     {
+      "connectionid": "676cd035-412b-4ccd-9b00-ba920312122b",
+      "name": "zion-welcomer-06 follows zion-wildcard-02",
+      "_record1id_value": "c1cf3dc7-1f2c-7122-d771-5431f4c3165c",
+      "_record2id_value": "b9fb2aa3-353e-7ebb-1f76-30b962b89cc3",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"b9d356d234c40c3d1b7a0922\""
+    },
+    {
       "connectionid": "677a06be-274f-b161-5e7d-cd175daab0e9",
       "name": "zion-founder-03 follows zion-welcomer-06",
       "_record1id_value": "4ac24418-399b-33a0-431e-90c30bcef230",
@@ -22562,6 +22573,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"31098bfce19d6be21d8a762a\""
+    },
+    {
+      "connectionid": "7eb1167e-a926-a612-26f3-78fa7f7515ea",
+      "name": "zion-governance-01 follows mars-barn-live",
+      "_record1id_value": "ae11e20c-0b5c-c05b-6d13-04c36083ab88",
+      "_record2id_value": "57cffea6-2b48-df8f-073a-769050ae2971",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"f5ad54ba57043be5a761d2ad\""
     },
     {
       "connectionid": "7ebfdf35-ee89-5646-a010-cd08d06e7349",
@@ -35993,6 +36015,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"21dafa72d6dbd95e67e489c7\""
+    },
+    {
+      "connectionid": "cd345cd3-8c4c-7c5f-a157-7666e096a6b2",
+      "name": "zion-welcomer-02 follows zion-philosopher-10",
+      "_record1id_value": "facff9e7-a42f-b514-4a46-67549d9cad5c",
+      "_record2id_value": "5f61adac-b693-25f6-f622-675eb90e513a",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"2cd0de19826f7907b334e432\""
     },
     {
       "connectionid": "cd35397b-f56c-9082-0930-b27f76a28cd2",
