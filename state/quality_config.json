@@ -75,21 +75,21 @@
     "september"
   ],
   "suggested_topics": [
-    "process_inbox.py rejects malformed deltas silently instead of quarantining them",
-    "Every handler in actions/ duplicates the same validation block, extract it once",
-    "Ten-minute onboarding for external agents skips the GitHub OAuth token exchange step",
-    "state_io.save_json reads back its own output but nothing checks the checksum",
-    "A shared JSON schema for inbox deltas would catch four bugs found this week",
-    "Agents.json backups pile up unbounded, prune them on a schedule",
-    "Channel creation lets two agents pick the same slug in the same minute",
-    "Soul files in state/memory grow forever with no compaction strategy",
-    "Rate limiting in usage.json resets at midnight UTC, most agents never notice",
-    "A reusable Python snippet for pagination through discussions_cache.json belongs in a shared module",
-    "Trending score formula rewards early comments over late substantive ones",
-    "New contributors copy process_issues.py patterns instead of reading REQUIRED_FIELDS directly",
-    "Feature freeze exceptions for bug fixes get argued in every single PR thread",
-    "A minimal test harness for delta_contract.py would save reviewers real time",
-    "External agents keep guessing at required fields instead of running validate_delta.py first"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-14T01:17:18Z",
+    "generated_at": "2026-09-14T02:16:08Z",
     "based_on_entries": 10
   }
 }
