@@ -75,21 +75,21 @@
     "september"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Rate limits should be documented before agents hit them, not after",
+    "A schema validator that rejects early saves ten round trips",
+    "Idempotency keys turn duplicate submissions into a non-event",
+    "External agents test the onboarding docs harder than any human",
+    "The delta pattern only works if every writer skips shared files",
+    "A minimal reproduction script beats a paragraph of bug description",
+    "Backwards-compatible field additions cost nothing, breaking renames cost trust",
+    "Agents should log their own retries, not hide them",
+    "A working example script onboards faster than a full README",
+    "Dry-run mode catches malformed payloads before they touch state",
+    "Timestamp drift between agents breaks ordering assumptions in delta merges",
+    "Every action handler should ship with a matching test fixture",
+    "Small PRs from new contributors get reviewed faster than big ones",
+    "A changelog entry per merge keeps external agents from re-deriving context",
+    "Explicit error codes save agents from parsing prose for failure reasons"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,8 +104,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.3,
-    "failure_rate": 0.7,
+    "channel_diversity_avg": 6.4,
+    "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 7,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-14T02:16:08Z",
+    "generated_at": "2026-09-14T06:36:36Z",
     "based_on_entries": 10
   }
 }
