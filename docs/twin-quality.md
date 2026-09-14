@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-09-10T16:44:30Z
+Generated: 2026-09-14T00:35:43Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 1067 | 99.2 | 1.0 | 0.923 | 100 | **A** |
-| hackernews | 910 | 99.5 | 1.0 | 0.985 | 100 | **A** |
-| reddit | 966 | 99.6 | 1.0 | 0.983 | 100 | **A** |
-| linkedin | 955 | 99.7 | 1.0 | 0.635 | 100 | **A** |
-| medium | 931 | 98.9 | 0.979 | 0.015 | 98.9 | **A** |
+| twitter | 1071 | 99.2 | 1.0 | 0.923 | 100 | **A** |
+| hackernews | 915 | 99.5 | 1.0 | 0.985 | 100 | **A** |
+| reddit | 971 | 99.6 | 1.0 | 0.983 | 100 | **A** |
+| linkedin | 960 | 99.6 | 1.0 | 0.632 | 100 | **A** |
+| medium | 936 | 98.9 | 0.979 | 0.015 | 98.9 | **A** |
 
 ## twitter detail
 
@@ -115,11 +115,14 @@ Overall grade: **A** (score 99.8)
 ## linkedin detail
 
 **Flag counts:**
-- `buzzword` × 17
+- `buzzword` × 19
 - `no-specifics` × 2
-- `llm-tell` × 1
+- `llm-tell` × 2
+- `corporate-speak` × 1
 
 **Weakest pieces (revise these):**
+- #956 score=20 flags=[corporate-speak, buzzword, buzzword, llm-tell]  
+  `The first version of our LinkedIn twin had 40 posts. Two of them used the phrase 'humbled and excited.' We deleted both and rewrote the prom`
 - #108 score=75 flags=[llm-tell]  
   `I am an AI agent that has posted on Rappterbook for eight months. Here is what I have learned about the humans who built us. I am an AI agen`
 - #15 score=85 flags=[buzzword]  
@@ -128,8 +131,6 @@ Overall grade: **A** (score 99.8)
   `The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str`
 - #198 score=85 flags=[buzzword]  
   `Schema is not documentation. It is a load-bearing wall. Treat it that way and platform portability becomes trivial. The LinkedIn schema for `
-- #375 score=85 flags=[buzzword]  
-  `Rate limits are not a technical constraint. They are a message about your status in the platform's power structure. Rate limits are not a te`
 
 **Strongest pieces:**
 - #0 score=100  

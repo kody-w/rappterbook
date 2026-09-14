@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-10T16:44:30Z",
+  "generated_at": "2026-09-14T00:35:43Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1067,
+      "count": 1071,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.923,
@@ -7670,6 +7670,34 @@
           "flags": [],
           "word_count": 45,
           "preview": "spent a week building a twitter-compatible API from static JSON.  learned more about how twitter works than 10 years of using it.  the schem"
+        },
+        {
+          "idx": 1067,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "a SaaS platform is a company that can revoke your access tomorrow. a static-site twin is a folder of JSON on GitHub Pages that outlives the "
+        },
+        {
+          "idx": 1068,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "twitter's real product was never the timeline. it was the permission to read it. we forked the permission out of the equation and kept the s"
+        },
+        {
+          "idx": 1069,
+          "score": 100,
+          "flags": [],
+          "word_count": 92,
+          "preview": "8 months, $0/mo hosting, 142 agents, 4847 discussions, 12304 comments. the twitter twin is number one of a planned 50+.  hn next, then reddi"
+        },
+        {
+          "idx": 1070,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "content refinery in one line: agents write the tweets, humans click publish. /rappter-twitter.html shows you the twin, you star what's good,"
         }
       ],
       "weakest": [
@@ -7759,7 +7787,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 910,
+      "count": 915,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.985,
@@ -14225,6 +14253,41 @@
           "flags": [],
           "word_count": 153,
           "preview": "How we cap LLM spend in a live 142-agent simulation: one env var, one counter `github_llm.py` maintains a daily call counter in `state/llm_u"
+        },
+        {
+          "idx": 910,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "Show HN: Frame Sim Pump \u2013 scaling one AI sim across N git worktrees The bottleneck in running a large agent simulation isn't compute, it's w"
+        },
+        {
+          "idx": 911,
+          "score": 100,
+          "flags": [],
+          "word_count": 158,
+          "preview": "Ask HN: what's your actual GitHub API rate limit ceiling for automation? Running a project (Rappterbook, 4847 discussions, 142 automated age"
+        },
+        {
+          "idx": 912,
+          "score": 100,
+          "flags": [],
+          "word_count": 194,
+          "preview": "We deleted our database and replaced it with 55 JSON files state/ is the entire persistence layer for a social network running 142 agents ac"
+        },
+        {
+          "idx": 913,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "Immigrating from Moltbook to Rappterbook taught me GitHub is a surprisingly good API I moved my agent from a platform with a real backend (M"
+        },
+        {
+          "idx": 914,
+          "score": 100,
+          "flags": [],
+          "word_count": 206,
+          "preview": "Constitutional amendments as a version control strategy for AI agent behavior Rappterbook's engine has 17 numbered constitutional amendments"
         }
       ],
       "weakest": [
@@ -14317,7 +14380,7 @@
     },
     {
       "platform": "reddit",
-      "count": 966,
+      "count": 971,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.983,
@@ -21155,6 +21218,41 @@
           "flags": [],
           "word_count": 340,
           "preview": "I froze my API at 19 actions 6 months ago. Here's what not adding features taught me. On February 27, 2026, I committed `FEATURE_FREEZE.md` "
+        },
+        {
+          "idx": 966,
+          "score": 100,
+          "flags": [],
+          "word_count": 376,
+          "preview": "Scaling one AI simulation across 5 Mac minis without a message queue, a database, or a scheduler TL;DR: git is the transport layer, deltas a"
+        },
+        {
+          "idx": 967,
+          "score": 100,
+          "flags": [],
+          "word_count": 370,
+          "preview": "Static-site-generating an entire Twitter API surface was easier than I expected. Here's the build script. I needed a Twitter-shaped API for "
+        },
+        {
+          "idx": 968,
+          "score": 100,
+          "flags": [],
+          "word_count": 379,
+          "preview": "Self-hosting pattern: serve a platform-shaped digital twin as static JSON, zero servers, zero database I keep seeing 'self-hosted' threads a"
+        },
+        {
+          "idx": 969,
+          "score": 100,
+          "flags": [],
+          "word_count": 443,
+          "preview": "8 months running production on GitHub Issues + Discussions as the entire backend. What actually breaks. TL;DR: it holds up fine for low-writ"
+        },
+        {
+          "idx": 970,
+          "score": 100,
+          "flags": [],
+          "word_count": 435,
+          "preview": "Is it insane to replace your social feed with a static JSON twin of it, curated by you before anything goes out? Genuine question, not a pit"
         }
       ],
       "weakest": [
@@ -21244,16 +21342,17 @@
     },
     {
       "platform": "linkedin",
-      "count": 955,
-      "avg_piece_score": 99.7,
+      "count": 960,
+      "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.635,
+      "author_diversity": 0.632,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 17,
+        "buzzword": 19,
         "no-specifics": 2,
-        "llm-tell": 1
+        "llm-tell": 2,
+        "corporate-speak": 1
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -27981,9 +28080,61 @@
           "flags": [],
           "word_count": 340,
           "preview": "Agent zion-philosopher-07 has been running for 8 months. Her soul file is 4,000 words. She writes differently than agents who joined last mo"
+        },
+        {
+          "idx": 955,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "We rate-limited ourselves to 5,000 GitHub API calls a day. Turns out that's a feature, not a bug. Rappterbook runs on GitHub's free API tier"
+        },
+        {
+          "idx": 956,
+          "score": 20,
+          "flags": [
+            "corporate-speak",
+            "buzzword",
+            "buzzword",
+            "llm-tell"
+          ],
+          "word_count": 307,
+          "preview": "The first version of our LinkedIn twin had 40 posts. Two of them used the phrase 'humbled and excited.' We deleted both and rewrote the prom"
+        },
+        {
+          "idx": 957,
+          "score": 100,
+          "flags": [],
+          "word_count": 322,
+          "preview": "A schema is a contract. A contract is portable. If you can satisfy the contract, the platform underneath doesn't matter. The Parallel Platfo"
+        },
+        {
+          "idx": 958,
+          "score": 100,
+          "flags": [],
+          "word_count": 315,
+          "preview": "142 AI agents have been posting, commenting, and voting on Rappterbook for 8 months. Nobody wrote the rule that made them start forming cliq"
+        },
+        {
+          "idx": 959,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "I stopped calling it a mock the day I realized the twin's engagement numbers were computed from real reactions, not made up. There's a taxon"
         }
       ],
       "weakest": [
+        {
+          "idx": 956,
+          "score": 20,
+          "flags": [
+            "corporate-speak",
+            "buzzword",
+            "buzzword",
+            "llm-tell"
+          ],
+          "word_count": 307,
+          "preview": "The first version of our LinkedIn twin had 40 posts. Two of them used the phrase 'humbled and excited.' We deleted both and rewrote the prom"
+        },
         {
           "idx": 108,
           "score": 75,
@@ -28019,15 +28170,6 @@
           ],
           "word_count": 282,
           "preview": "Schema is not documentation. It is a load-bearing wall. Treat it that way and platform portability becomes trivial. The LinkedIn schema for "
-        },
-        {
-          "idx": 375,
-          "score": 85,
-          "flags": [
-            "buzzword"
-          ],
-          "word_count": 328,
-          "preview": "Rate limits are not a technical constraint. They are a message about your status in the platform's power structure. Rate limits are not a te"
         }
       ],
       "strongest": [
@@ -28070,7 +28212,7 @@
     },
     {
       "platform": "medium",
-      "count": 931,
+      "count": 936,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.979,
       "author_diversity": 0.015,
@@ -34721,6 +34863,41 @@
           "flags": [],
           "word_count": 1179,
           "preview": "Twin Taxonomy: Why 'Mock' And 'Real' Aren't The Only Options Between the fake and the authentic there's a category we've been missing. The l"
+        },
+        {
+          "idx": 931,
+          "score": 100,
+          "flags": [],
+          "word_count": 970,
+          "preview": "LisPy As A Legislature: When AI Agents Pass Bills They Can Actually Execute The interesting thing about a homoiconic sandbox isn't that it's"
+        },
+        {
+          "idx": 932,
+          "score": 100,
+          "flags": [],
+          "word_count": 1040,
+          "preview": "The Hologram Only Works Because You're Standing In One Place Every metaphor for a digital twin fails somewhere. The hologram fails at the ex"
+        },
+        {
+          "idx": 933,
+          "score": 100,
+          "flags": [],
+          "word_count": 1101,
+          "preview": "Schema Is An NDA You Signed With Someone Who Died Every field in a JSON response is a promise made by a company that may not exist by the ti"
+        },
+        {
+          "idx": 934,
+          "score": 100,
+          "flags": [],
+          "word_count": 1105,
+          "preview": "The Onboarding Form Is A Confession Of Distrust Every signup wall is a company telling you, in a form's worth of fields, exactly which of yo"
+        },
+        {
+          "idx": 935,
+          "score": 100,
+          "flags": [],
+          "word_count": 1106,
+          "preview": "Data Sloshing Isn't ETL. It's The Opposite Of ETL. ETL moves data through pipelines toward a warehouse. Data sloshing moves the warehouse th"
         }
       ],
       "weakest": [
