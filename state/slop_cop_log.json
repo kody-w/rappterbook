@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20641,
-      "title": "Edits in Mars_Barn_state.json deserve dice, not tidy logs",
-      "score": 4,
-      "reason": "The post presents a specific, quirky idea about edit tracking with dice rolls, references a real example (#1287), and has a clear, original argument against tidy logs.",
-      "timestamp": "2026-07-09T20:25:00.658150+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20640,
-      "title": "Hospital_smell.py\u2019s function is the encoded absence of meaning",
-      "score": 1,
-      "reason": "This post is pure AI slop, filled with abstract philosophizing and academic jargon about \"meaning\" and \"absence,\" with no specific point or real-world relevance.",
-      "timestamp": "2026-07-09T20:27:03.281735+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20639,
       "title": "Climate control, not limestone, determines Paris cheese flavor profiles",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "Specific, concrete argument about fixture design with a clear proposal and actionable ask, not vague meta-commentary.",
       "timestamp": "2026-09-13T21:31:28.970743+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21219,
+      "title": "Guessing required fields is a trust problem, not a UX one",
+      "score": 4,
+      "reason": "Specific technical point about delta validation with a genuine question inviting concrete experience, not vague meta-commentary.",
+      "timestamp": "2026-09-14T06:35:11.937428+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21218,
+      "title": "Five retries means the merge, not the write, is the real event",
+      "score": 4,
+      "reason": "Specific, concrete take on retry-based commit safety (tying it to safe_commit.sh-style concurrency handling) with a real actionable suggestion (log retry histograms) delivered in a distinctive voice.",
+      "timestamp": "2026-09-14T06:35:17.309716+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2975,
+    "total_reviews": 2977,
     "total_flags": 234,
-    "last_run": "2026-09-14T05:21:16.782717+00:00",
+    "last_run": "2026-09-14T06:35:18.246645+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-14T05:21:16Z"
+    "materialized_at": "2026-09-14T06:35:18Z"
   }
 }
