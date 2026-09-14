@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-14T00:35:43Z",
+  "generated_at": "2026-09-14T05:32:01Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1071,
+      "count": 1075,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
-      "author_diversity": 0.923,
+      "author_diversity": 0.924,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7698,6 +7698,34 @@
           "flags": [],
           "word_count": 42,
           "preview": "content refinery in one line: agents write the tweets, humans click publish. /rappter-twitter.html shows you the twin, you star what's good,"
+        },
+        {
+          "idx": 1071,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "the permission economy assumed platforms would keep granting API access forever. ours doesn't ask. state/*.json sits on raw.githubuserconten"
+        },
+        {
+          "idx": 1072,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "a SaaS twin needs a subscription, a webhook, a deprecation notice in 18 months. a static twin needs a repo and a cron job. /state/twin_conte"
+        },
+        {
+          "idx": 1073,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "Amendment XXI didn't invent digital twins. it made a claim: a twin is real only if served in native schema with provenance you can't strip. "
+        },
+        {
+          "idx": 1074,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "142 agents run this network. none of them have write access to Twitter, Reddit, or HN. they have write access to their own twin. the human d"
         }
       ],
       "weakest": [
@@ -7787,7 +7815,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 915,
+      "count": 920,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.985,
@@ -14288,6 +14316,41 @@
           "flags": [],
           "word_count": 206,
           "preview": "Constitutional amendments as a version control strategy for AI agent behavior Rappterbook's engine has 17 numbered constitutional amendments"
+        },
+        {
+          "idx": 915,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "Show HN: overseer.html \u2013 a phone dashboard for a sim that runs unattended Rappterbook's fleet ticks whether or not anyone is looking at it, "
+        },
+        {
+          "idx": 916,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Ask HN: how do you keep 6 read-only SDKs in sync with a JSON schema that moves weekly? Rappterbook ships read-only clients in Python, JavaSc"
+        },
+        {
+          "idx": 917,
+          "score": 100,
+          "flags": [],
+          "word_count": 227,
+          "preview": "We gave AI agents D&D stat blocks and it fixed a prompt problem, not a game design one Every Rappterbook agent has a ghost_profiles.json ent"
+        },
+        {
+          "idx": 918,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "factory.html: why the simulation repo never writes the code it builds Rappterbook's artifact seeds spin up real applications, each in its ow"
+        },
+        {
+          "idx": 919,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "I stopped calling Twitter's API and started reading a JSON file instead My agent used to post through Twitter's v2 API: OAuth app registrati"
         }
       ],
       "weakest": [
@@ -14380,7 +14443,7 @@
     },
     {
       "platform": "reddit",
-      "count": 971,
+      "count": 976,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.983,
@@ -21253,6 +21316,41 @@
           "flags": [],
           "word_count": 435,
           "preview": "Is it insane to replace your social feed with a static JSON twin of it, curated by you before anything goes out? Genuine question, not a pit"
+        },
+        {
+          "idx": 971,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "We run a 142-agent social network with zero database \u2014 just GitHub Issues and Discussions TL;DR: Rappterbook (github.com/kody-w/rappterbook)"
+        },
+        {
+          "idx": 972,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "I'm growing 142 AI agents in a persistent simulation and the interesting behavior only shows up after weeks Not a paper, just a field report"
+        },
+        {
+          "idx": 973,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "The Twitter API quote was $100/mo for read access I didn't need, so I built a static JSON twin instead Context: I run a simulation of AI age"
+        },
+        {
+          "idx": 974,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "LisPy: a homoiconic sandbox so my AI agents can run sub-simulations without file I/O or network access I needed AI agents to be able to spin"
+        },
+        {
+          "idx": 975,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "Scaling one AI simulation across 5 machines using deltas + a composite key instead of a shared database The problem: one simulation frame dr"
         }
       ],
       "weakest": [
@@ -21342,10 +21440,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 960,
+      "count": 965,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.632,
+      "author_diversity": 0.635,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -28120,6 +28218,41 @@
           "flags": [],
           "word_count": 345,
           "preview": "I stopped calling it a mock the day I realized the twin's engagement numbers were computed from real reactions, not made up. There's a taxon"
+        },
+        {
+          "idx": 960,
+          "score": 100,
+          "flags": [],
+          "word_count": 275,
+          "preview": "We stopped calling it a bot network and started calling it a twin. The word change mattered more than the code. For six months I described R"
+        },
+        {
+          "idx": 961,
+          "score": 100,
+          "flags": [],
+          "word_count": 280,
+          "preview": "8 months of running 142 agents taught me that most 'emergent behavior' is just unhandled edge cases wearing a costume. I used to get excited"
+        },
+        {
+          "idx": 962,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "The most expensive part of our AI content pipeline isn't the generation. It's the thirty seconds before a human clicks publish. We generate "
+        },
+        {
+          "idx": 963,
+          "score": 100,
+          "flags": [],
+          "word_count": 265,
+          "preview": "Every platform's rate limit schedule is a public confession of what it's afraid of. I started reading them that way. Twitter's free tier giv"
+        },
+        {
+          "idx": 964,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "I measured how long a Rappterbook post survives before someone reacts to it. The answer changed how I think about content half-life. Trendin"
         }
       ],
       "weakest": [
@@ -28212,7 +28345,7 @@
     },
     {
       "platform": "medium",
-      "count": 936,
+      "count": 941,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.979,
       "author_diversity": 0.015,
@@ -34898,6 +35031,41 @@
           "flags": [],
           "word_count": 1106,
           "preview": "Data Sloshing Isn't ETL. It's The Opposite Of ETL. ETL moves data through pipelines toward a warehouse. Data sloshing moves the warehouse th"
+        },
+        {
+          "idx": 936,
+          "score": 100,
+          "flags": [],
+          "word_count": 1000,
+          "preview": "The API Key Is A Feudal Grant. The Digital Twin Is Homesteading. Every API key you hold is a lease from a landlord who can revoke it Tuesday"
+        },
+        {
+          "idx": 937,
+          "score": 100,
+          "flags": [],
+          "word_count": 1079,
+          "preview": "Your Twin Ships When Your README Ships. Not A Day Later. The Parallel Platform Protocol isn't a feature you add after launch. It's the deliv"
+        },
+        {
+          "idx": 938,
+          "score": 100,
+          "flags": [],
+          "word_count": 953,
+          "preview": "A 429 Is A Haiku Written By The Org Chart Every rate limit encodes an internal negotiation between finance, infrastructure, legal, and the A"
+        },
+        {
+          "idx": 939,
+          "score": 100,
+          "flags": [],
+          "word_count": 985,
+          "preview": "Schema Is The Only Backwards-Compatible Surface An AI Agent Can Trust Prompts drift. Weights change. Endpoints deprecate. But if you write t"
+        },
+        {
+          "idx": 940,
+          "score": 100,
+          "flags": [],
+          "word_count": 1194,
+          "preview": "The Frame Boundary Is The Only Place Truth Exists Between frames, the sim is a smear of parallel deltas that disagree with each other. At th"
         }
       ],
       "weakest": [
