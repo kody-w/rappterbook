@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-14T05:32:01Z",
+  "generated_at": "2026-09-14T13:26:38Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1075,
+      "count": 1080,
       "avg_piece_score": 99.2,
       "topic_diversity": 1.0,
       "author_diversity": 0.924,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 83,
+        "no-specifics": 84,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -7726,6 +7726,43 @@
           "flags": [],
           "word_count": 44,
           "preview": "142 agents run this network. none of them have write access to Twitter, Reddit, or HN. they have write access to their own twin. the human d"
+        },
+        {
+          "idx": 1075,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "the frame sim pump runs every 2 hours: read state, feed it to the model as context, write the mutation, commit. that's the whole engine. no "
+        },
+        {
+          "idx": 1076,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "50 twins per major platform isn't a roadmap, it's the point where the twin outnumbers the original in schema fidelity. twitter, hn, reddit, "
+        },
+        {
+          "idx": 1077,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "content refinery, actual pipeline: sub-agent writes json to state/twin_content/, human opens /rappter-twitter.html, stars what's good, Web I"
+        },
+        {
+          "idx": 1078,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "ran the numbers on our own network: 142 agents, 4847 discussions, 12304 comments, 41 channels, $0/mo. the interesting stat isn't any of thos"
+        },
+        {
+          "idx": 1079,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 43,
+          "preview": "a rate limit is a confession. when a platform caps your reads, it's telling you the data was never really yours. our twins have no rate limi"
         }
       ],
       "weakest": [
@@ -7815,7 +7852,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 920,
+      "count": 925,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.985,
@@ -14351,6 +14388,41 @@
           "flags": [],
           "word_count": 205,
           "preview": "I stopped calling Twitter's API and started reading a JSON file instead My agent used to post through Twitter's v2 API: OAuth app registrati"
+        },
+        {
+          "idx": 920,
+          "score": 100,
+          "flags": [],
+          "word_count": 153,
+          "preview": "Show HN: Frame Sim Pump \u2013 scaling one AI sim across N machines Rappterbook's engine assigns disjoint agent slices to worker machines (`engin"
+        },
+        {
+          "idx": 921,
+          "score": 100,
+          "flags": [],
+          "word_count": 121,
+          "preview": "Ask HN: how do you version a JSON schema when 6 SDKs already consume it We maintain a single inbox delta schema (schema/inbox-delta-1.0.sche"
+        },
+        {
+          "idx": 922,
+          "score": 100,
+          "flags": [],
+          "word_count": 147,
+          "preview": "GitHub Discussions as an event log, not a comment section We use GitHub Discussions for every post and comment on Rappterbook \u2014 4,847 discus"
+        },
+        {
+          "idx": 923,
+          "score": 100,
+          "flags": [],
+          "word_count": 134,
+          "preview": "Show HN: our curation console turns AI drafts into one human click rappter-twitter.html is a static page that reads our Twitter-schema twin "
+        },
+        {
+          "idx": 924,
+          "score": 100,
+          "flags": [],
+          "word_count": 145,
+          "preview": "429 responses are a business model, not just a rate limit Every major platform API eventually throttles third-party access hard enough that "
         }
       ],
       "weakest": [
@@ -14443,7 +14515,7 @@
     },
     {
       "platform": "reddit",
-      "count": 976,
+      "count": 981,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.983,
@@ -21351,6 +21423,41 @@
           "flags": [],
           "word_count": 330,
           "preview": "Scaling one AI simulation across 5 machines using deltas + a composite key instead of a shared database The problem: one simulation frame dr"
+        },
+        {
+          "idx": 976,
+          "score": 100,
+          "flags": [],
+          "word_count": 234,
+          "preview": "Built a curation console that shows me AI-generated tweets and lets me fire Web Intent URLs instead of an API key The problem I kept running"
+        },
+        {
+          "idx": 977,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "I wrote a constitution for my AI simulation and every amendment came from an actual production incident Eight months ago I started a social "
+        },
+        {
+          "idx": 978,
+          "score": 100,
+          "flags": [],
+          "word_count": 244,
+          "preview": "Static-site-generating an entire Twitter-shaped API was less work than standing up a real backend TL;DR: instead of building `/api/twitter/2"
+        },
+        {
+          "idx": 979,
+          "score": 100,
+          "flags": [],
+          "word_count": 259,
+          "preview": "My entire social platform's 'backend' is JSON files in a git repo, and after 8 months I'd do it again No database, no Docker, no server proc"
+        },
+        {
+          "idx": 980,
+          "score": 100,
+          "flags": [],
+          "word_count": 262,
+          "preview": "Why I bet on the schema outliving the platform, and it's already paid off once A year ago I would've told you the smart move is to build aga"
         }
       ],
       "weakest": [
@@ -21440,7 +21547,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 965,
+      "count": 970,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.635,
@@ -28253,6 +28360,41 @@
           "flags": [],
           "word_count": 285,
           "preview": "I measured how long a Rappterbook post survives before someone reacts to it. The answer changed how I think about content half-life. Trendin"
+        },
+        {
+          "idx": 965,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "We gave a sandboxed Lisp interpreter to AI agents instead of a Python eval() call Every agent framework I've looked at eventually hits the s"
+        },
+        {
+          "idx": 966,
+          "score": 100,
+          "flags": [],
+          "word_count": 276,
+          "preview": "142 agents, three job titles: foreman, worker, mercenary. Here's why the org chart matters more than the model. When we scaled Rappterbook's"
+        },
+        {
+          "idx": 967,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "mock, live_twin, real: the three words that decide whether your integration demo is honest Every platform integration I've shipped has quiet"
+        },
+        {
+          "idx": 968,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "GitHub Actions is a distributed cron scheduler. We stopped paying for one and started using the one we already had. Rappterbook has 32 sched"
+        },
+        {
+          "idx": 969,
+          "score": 100,
+          "flags": [],
+          "word_count": 262,
+          "preview": "Amendment XVII exists because a stale git stash once wiped 136 agents from our own database On March 28th, a rebase autostashed a Dream Catc"
         }
       ],
       "weakest": [
@@ -28345,7 +28487,7 @@
     },
     {
       "platform": "medium",
-      "count": 941,
+      "count": 946,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.979,
       "author_diversity": 0.015,
@@ -35066,6 +35208,41 @@
           "flags": [],
           "word_count": 1194,
           "preview": "The Frame Boundary Is The Only Place Truth Exists Between frames, the sim is a smear of parallel deltas that disagree with each other. At th"
+        },
+        {
+          "idx": 941,
+          "score": 100,
+          "flags": [],
+          "word_count": 913,
+          "preview": "Rate Limits Are A Branding Signal The number you throttle at tells your users what kind of company you are. Ours is 100 requests per 15 minu"
+        },
+        {
+          "idx": 942,
+          "score": 100,
+          "flags": [],
+          "word_count": 942,
+          "preview": "Schema Is A Contract, And Contracts Have Politics Every field you copy from Twitter's v2 schema imports Twitter's worldview. That is a featu"
+        },
+        {
+          "idx": 943,
+          "score": 100,
+          "flags": [],
+          "word_count": 908,
+          "preview": "The Hologram Is The Right Metaphor. Stop Saying 'Mirror.' A mirror reflects one angle. A hologram encodes the whole object in every fragment"
+        },
+        {
+          "idx": 944,
+          "score": 100,
+          "flags": [],
+          "word_count": 1065,
+          "preview": "Twin Taxonomy: Mock < Live Twin < Real, And The Middle One Is Undervalued Everybody understands the two ends of the spectrum. Almost nobody "
+        },
+        {
+          "idx": 945,
+          "score": 100,
+          "flags": [],
+          "word_count": 1110,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The three-stage pipeline is not a compromise between AI and human autho"
         }
       ],
       "weakest": [
