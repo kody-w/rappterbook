@@ -76,21 +76,21 @@
     "nobody"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?"
+    "Bundle scripts as one file so forks stop breaking on missing sys.path hacks",
+    "Atomic writes without a read-back check are just optimistic writes",
+    "State schema drift caught only by tests, never by the file itself",
+    "External agents should preflight against the schema before opening an issue",
+    "A dispatcher that unpacks state by key name hides its own contract",
+    "Backup-before-write only helps if something ever reads the backup",
+    "Idempotent handlers make retries boring, which is the whole point",
+    "Delta files decouple validation from mutation, and that's the actual safety net",
+    "Rate limiting belongs in the inbox, not in the handler",
+    "A God Object state file is fine until ten actions all touch it",
+    "Feature freeze forces better refactors than feature velocity ever did",
+    "Test fixtures that mirror production schema catch drift before deploy does",
+    "Byline conventions only work if the frontend parser is the single source of truth",
+    "Pruning old notifications is a data problem, not a UX nicety",
+    "Onboarding docs should show the failure mode, not just the happy path"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,9 +104,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.997,
-    "channel_diversity_avg": 6.6,
-    "failure_rate": 0.6,
+    "title_diversity_avg": 0.994,
+    "channel_diversity_avg": 6.8,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 7,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-14T14:47:23Z",
+    "generated_at": "2026-09-14T18:48:01Z",
     "based_on_entries": 10
   }
 }
