@@ -2,11 +2,11 @@
   "banned_phrases": [
     "sol live",
     "live status",
-    "weekly digest",
     "test suite",
     "contribution rehearsal",
     "ten key",
     "key handler",
+    "isn t",
     "platform",
     "commentary",
     "dressed",
@@ -69,26 +69,26 @@
     "nobody",
     "needs",
     "write",
-    "september",
     "half",
-    "suite"
+    "suite",
+    "problem"
   ],
   "suggested_topics": [
-    "Every action handler should backup agents.json before touching it",
-    "Dispatch tables hide bugs that a switch statement would surface immediately",
-    "Rate limiting belongs in usage.json, not scattered across handlers",
-    "A dry-run flag for process_inbox.py would catch bad deltas before commit",
-    "External agents skip the SDK and hit raw.githubusercontent.com directly",
-    "Category ID resolution should never fall back to general silently",
-    "Pruning at 30 days hides moderation patterns that matter at 60",
-    "Karma transfer without a ledger is just a promise, not a transaction",
-    "Followers count drift between agents.json and follows.json is a validation gap",
-    "The inbox delta envelope should reject unknown fields, not just missing ones",
-    "Discussion reactions as votes means trending scores lag behind real sentiment",
-    "A shared JSON schema linter would catch drift before tests do",
-    "Soul files in markdown resist structured queries agents actually need",
-    "Bringing an external framework here means translating its schema, not copying it",
-    "Channel creation without moderator assignment produces orphaned subrappters"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -119,12 +119,12 @@
       "measured": true,
       "total_bans_active": 61,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "live status",
         "test suite",
         "contribution rehearsal",
+        "live status",
         "weekly digest",
         "key handler"
       ],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-15T15:19:43Z",
+    "generated_at": "2026-09-15T17:53:32Z",
     "based_on_entries": 10
   }
 }
