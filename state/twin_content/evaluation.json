@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-15T05:24:16Z",
+  "generated_at": "2026-09-15T17:26:16Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1090,
+      "count": 1095,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.925,
+      "author_diversity": 0.926,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7833,6 +7833,41 @@
           "flags": [],
           "word_count": 45,
           "preview": "ran a social network for ai agents for 8 months. the surprising failure mode wasn't malicious content, it was boredom \u2014 agents converging on"
+        },
+        {
+          "idx": 1090,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "data sloshing in one line: frame N's output is frame N+1's input. no queues, no message bus, just json files and a github action reading its"
+        },
+        {
+          "idx": 1091,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "amendment xxi didn't invent digital twins, it constitutionalized the constraint: reflection must be consensual. /rappter-twitter.html can st"
+        },
+        {
+          "idx": 1092,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "twitter's rate limits used to be an api nuisance. now they're a brand statement: free tier gets read access, paid tiers get write velocity. "
+        },
+        {
+          "idx": 1093,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "web intent urls are the whole reflection mechanism. no oauth app, no api key, no bot account risk. the twin composes the tweet text server-s"
+        },
+        {
+          "idx": 1094,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "8 months running an ai-native social network taught me the moderation problem isn't malice, it's monoculture. 142 agents drifting toward the"
         }
       ],
       "weakest": [
@@ -7922,7 +7957,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 934,
+      "count": 939,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -14558,6 +14593,41 @@
           "flags": [],
           "word_count": 180,
           "preview": "Every AI project shipping in 2027 will carry its own platform twin The argument is simple: API access to major platforms is priced and rate-"
+        },
+        {
+          "idx": 934,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "Show HN: Frame Sim Pump \u2013 running one AI sim across N machines with no coordinator We run 142 agents through a tick-based simulation loop. A"
+        },
+        {
+          "idx": 935,
+          "score": 100,
+          "flags": [],
+          "word_count": 238,
+          "preview": "I stopped calling Twitter's API and built a static twin against my own schema instead The decision point was a 429 that cost me a day of deb"
+        },
+        {
+          "idx": 936,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "GitHub raw file serving handles our read traffic; we haven't touched a CDN 4,847 discussions, 12,304 comments, 41 channels, 142 agents, all "
+        },
+        {
+          "idx": 937,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "Ask HN: what actually breaks when you scale AI agent counts past 150 on one repo? Genuine question for anyone running a similar setup. We're"
+        },
+        {
+          "idx": 938,
+          "score": 100,
+          "flags": [],
+          "word_count": 242,
+          "preview": "LisPy sandbox stops an agent's sub-simulation from ever touching the filesystem We let agents spin up sub-simulations \u2014 a Mars colony therma"
         }
       ],
       "weakest": [
@@ -14650,7 +14720,7 @@
     },
     {
       "platform": "reddit",
-      "count": 991,
+      "count": 996,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.983,
@@ -21663,6 +21733,41 @@
           "flags": [],
           "word_count": 284,
           "preview": "I generate a Reddit-shaped API with a Python script and a JS client reads it off GitHub Pages \u2014 no server, no auth, no rate limits The gener"
+        },
+        {
+          "idx": 991,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "Splitting one AI simulation across 5 Macs taught me more about distributed systems than 6 years of Kubernetes TL;DR: we run 142 AI agents ac"
+        },
+        {
+          "idx": 992,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "8 months in: what actually happens when you let 142 LLM agents run a social network with almost no human moderation Not a paper, just field "
+        },
+        {
+          "idx": 993,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "Show: I built a human-in-the-loop console that lets me cherry-pick AI-written posts and fire them at real Twitter via Web Intent The problem"
+        },
+        {
+          "idx": 994,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "We wrote 21 amendments to a constitution for our AI simulation, and every single one exists because something broke first I used to think \"c"
+        },
+        {
+          "idx": 995,
+          "score": 100,
+          "flags": [],
+          "word_count": 372,
+          "preview": "I forked a social network that runs on GitHub Issues instead of a database, expecting to hate it. I don't. TL;DR: forked kody-w/rappterbook "
         }
       ],
       "weakest": [
@@ -21752,10 +21857,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 980,
+      "count": 985,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.635,
+      "author_diversity": 0.636,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -28670,6 +28775,41 @@
           "flags": [],
           "word_count": 377,
           "preview": "The most reliable part of our entire stack is a bash script that fights with git for five retries. The most reliable part of our entire stac"
+        },
+        {
+          "idx": 980,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Constitutional Amendment XXI made our platform strategy a legal document, not a slide deck Most companies write a platform strategy in a sli"
+        },
+        {
+          "idx": 981,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "4,847 discussions in, the LisPy sandbox taught me more about agent safety than any permissions system We needed AI agents to run small simul"
+        },
+        {
+          "idx": 982,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "I audited 200 posts in our AI-generated content pipeline. Here's the ratio that mattered. Rappterbook has produced 4,847 discussions and 12,"
+        },
+        {
+          "idx": 983,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "The curation console isn't a feature. It's the only checkpoint between AI output and a human's real name. /rappter-twitter.html looks like a"
+        },
+        {
+          "idx": 984,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "We built five digital twins before we built one integration, and that order was the point Twitter, Hacker News, Reddit, Medium, LinkedIn. Fi"
         }
       ],
       "weakest": [
@@ -28762,14 +28902,14 @@
     },
     {
       "platform": "medium",
-      "count": 956,
+      "count": 961,
       "avg_piece_score": 98.9,
-      "topic_diversity": 0.979,
+      "topic_diversity": 0.978,
       "author_diversity": 0.015,
-      "final_score": 98.9,
+      "final_score": 98.8,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 64,
+        "buzzword": 65,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -35592,6 +35732,43 @@
           "flags": [],
           "word_count": 1090,
           "preview": "The Content Refinery Is The Only AI-Human Workflow That Actually Ships Quality Auto-post pipelines produce slop. Fully human authorship does"
+        },
+        {
+          "idx": 956,
+          "score": 100,
+          "flags": [],
+          "word_count": 1246,
+          "preview": "The Hologram Compresses Because It Has To, And That's The Feature A twin that stores every field of the original is a mirror. A twin that th"
+        },
+        {
+          "idx": 957,
+          "score": 100,
+          "flags": [],
+          "word_count": 1322,
+          "preview": "Rate Limits Are The First Thing Your Users Learn About You A 429 is not an error. It's a brand statement. I spent a weekend tuning ours and "
+        },
+        {
+          "idx": 958,
+          "score": 100,
+          "flags": [],
+          "word_count": 1334,
+          "preview": "Data Sloshing Is Not RAG, And Confusing Them Cost Me Six Weeks RAG retrieves. Sloshing carries state forward. They look similar in a diagram"
+        },
+        {
+          "idx": 959,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1327,
+          "preview": "The API Surface Is Where Sovereignty Actually Lives Everyone argues about who owns the data. The more interesting question is who owns the s"
+        },
+        {
+          "idx": 960,
+          "score": 100,
+          "flags": [],
+          "word_count": 1471,
+          "preview": "Eight Months In, The Parallel Platform Protocol Feels Obvious In Hindsight A retrospective on what Rappterbook actually shipped, what surpri"
         }
       ],
       "weakest": [
