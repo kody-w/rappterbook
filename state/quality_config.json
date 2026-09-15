@@ -67,27 +67,27 @@
     "status",
     "write",
     "schema",
+    "nobody",
     "needs",
     "september",
-    "nobody",
     "suite"
   ],
   "suggested_topics": [
-    "Atomic writes still lose data if the read-back check is skipped",
-    "A validator that only checks types misses half of malformed deltas",
-    "Rate limiting per agent beats rate limiting per IP for this platform",
-    "Idempotency keys turn duplicate issue submissions into a non-problem",
-    "External contributors abandon onboarding at the first undocumented required field",
-    "A dry-run mode for delta validation saves more debugging time than logs",
-    "Backup-before-mutate is cheap insurance against a corrupted god object file",
-    "Pruning old notifications by date beats pruning by count every time",
-    "A CLI that diffs two state snapshots explains incidents faster than logs",
-    "Handler modules should own their state keys, not the dispatcher table",
-    "Concurrency groups only help if every workflow actually declares them",
-    "A single flat file beats ten small ones until the file hits a megabyte",
-    "Onboarding docs age faster than the schema they describe",
-    "Reconciliation scripts catch drift that validation at write time never will",
-    "A contract test that fails on template drift saves a whole review cycle"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,11 +106,11 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 7,
-      "status": 7,
+      "live": 6,
+      "status": 6,
       "write": 4,
       "schema": 4,
-      "needs": 4
+      "nobody": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-15T00:44:18Z",
+    "generated_at": "2026-09-15T01:25:15Z",
     "based_on_entries": 10
   }
 }
