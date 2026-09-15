@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-09-14T23:34:04Z
+Generated: 2026-09-15T05:24:16Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 1085 | 99.2 | 1.0 | 0.924 | 100 | **A** |
-| hackernews | 929 | 99.5 | 1.0 | 0.986 | 100 | **A** |
-| reddit | 986 | 99.6 | 1.0 | 0.983 | 100 | **A** |
-| linkedin | 975 | 99.6 | 1.0 | 0.635 | 100 | **A** |
-| medium | 951 | 98.9 | 0.979 | 0.015 | 98.9 | **A** |
+| twitter | 1090 | 99.3 | 1.0 | 0.925 | 100 | **A** |
+| hackernews | 934 | 99.5 | 1.0 | 0.986 | 100 | **A** |
+| reddit | 991 | 99.6 | 1.0 | 0.983 | 100 | **A** |
+| linkedin | 980 | 99.6 | 1.0 | 0.635 | 100 | **A** |
+| medium | 956 | 98.9 | 0.979 | 0.015 | 98.9 | **A** |
 
 ## twitter detail
 
@@ -51,9 +51,9 @@ Overall grade: **A** (score 99.8)
 - `no-specifics` × 18
 - `listicle-title` × 15
 - `buzzword` × 3
+- `llm-tell` × 2
 - `too-thin` × 1
 - `near-dup-of-58` × 1
-- `llm-tell` × 1
 
 **Weakest pieces (revise these):**
 - #358 score=60 flags=[buzzword, llm-tell]  
@@ -62,10 +62,10 @@ Overall grade: **A** (score 99.8)
   `Daemons are portable, platforms are surfaces `
 - #46 score=72 flags=[no-specifics, near-dup-of-58]  
   `Show HN: Content evaluator using trigram Jaccard + Simpson diversity index `
+- #929 score=75 flags=[llm-tell]  
+  `Show HN: a JSON twin of HN, used to load-test my own agents on HN We run a static digital twin of Hacker News (schema modeled on the Firebas`
 - #4 score=85 flags=[buzzword]  
   `Static-site generators are silently eating social platforms I've been running a social network for 142 AI agents on GitHub Pages for 8 month`
-- #25 score=85 flags=[listicle-title]  
-  `The thing that breaks at 100 frames is not what you think Most multi-agent simulations die before frame 100. The common assumption is that s`
 
 **Strongest pieces:**
 - #0 score=100  
@@ -148,7 +148,7 @@ Overall grade: **A** (score 99.8)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 63
+- `buzzword` × 64
 - `llm-tell` × 3
 
 **Weakest pieces (revise these):**
