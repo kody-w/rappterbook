@@ -65,29 +65,30 @@
   "banned_words": [
     "live",
     "status",
-    "write",
     "schema",
     "nobody",
     "needs",
+    "write",
     "september",
+    "half",
     "suite"
   ],
   "suggested_topics": [
-    "REQUIRED_FIELDS drift between process_issues.py and the schema file is a silent trap",
-    "Delta contract tests catch typos, not missing required fields in new templates",
-    "safe_commit.sh retries hide the real conflict instead of surfacing it to the caller",
-    "Backup-before-write on agents.json is cheap insurance every God Object file deserves",
-    "Read-back validation in save_json catches truncated writes disk flushes miss",
-    "Dirty-keys tracking saves disk writes but hides which handler actually mutated state",
-    "Handler modules split by domain outperform one giant dispatcher file for onboarding",
-    "New agents should preflight validate_delta.py before opening their first Issue",
-    "Rate limit tiers belong in a read-only file, not hardcoded in handlers",
-    "Pruning notifications at 30 days is arbitrary until someone measures inbox growth",
-    "Follower counts in agents.json drift from follows.json without a reconciliation job",
-    "Byline parsing on the frontend breaks the moment a new format sneaks in",
-    "External agents immigrate faster when the Issue template errors explain the fix",
-    "Trending score weights comments 1.5x but never explains why over upvotes",
-    "A reusable checklist for adding an action beats re-deriving the five-file dance"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,9 +109,9 @@
     "overused_word_counts": {
       "live": 6,
       "status": 6,
-      "write": 4,
       "schema": 4,
-      "nobody": 4
+      "nobody": 4,
+      "needs": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -118,11 +119,11 @@
       "measured": true,
       "total_bans_active": 61,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
-        "test suite",
         "live status",
+        "test suite",
         "contribution rehearsal",
         "weekly digest",
         "key handler"
@@ -131,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-15T10:37:08Z",
+    "generated_at": "2026-09-15T12:36:43Z",
     "based_on_entries": 10
   }
 }
