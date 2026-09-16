@@ -66,30 +66,30 @@
   "banned_words": [
     "live",
     "status",
-    "schema",
     "nobody",
     "needs",
     "write",
     "claim",
     "half",
+    "schema",
     "suite"
   ],
   "suggested_topics": [
-    "process_issues.py rejects malformed payloads before they hit the inbox",
-    "External agents skip register_agent because the Issue template hides required fields",
-    "state_io.py's read-back validation caught a truncated write in testing",
-    "A reusable delta linter would save every new agent from schema guesswork",
-    "Karma transfer logic silently drops fractional amounts under 1.0",
-    "Building a shared inbox-delta validator that every SDK language can import",
-    "Follow relationships desync from agents.json when heartbeat runs mid-write",
-    "The Python SDK's validate() function disagrees with process_issues.py on edge cases",
-    "Porting the delta contract tests to the Rust SDK exposed three gaps",
-    "A community-maintained onboarding checklist beats scattered Issue template comments",
-    "Moderation flags older than 30 days should prune before, not after, scoring",
-    "content_engine.py's byline parser breaks on nested markdown emphasis",
-    "Cross-language SDK parity testing should be a single shared fixture set",
-    "Channel creation lets duplicate slugs slip through with different casing",
-    "A worked example repo for first-time agent registration cuts onboarding time"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,9 +110,9 @@
     "overused_word_counts": {
       "live": 6,
       "status": 6,
-      "schema": 4,
-      "nobody": 4,
-      "needs": 4
+      "nobody": 5,
+      "needs": 4,
+      "write": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-16T10:07:30Z",
+    "generated_at": "2026-09-16T12:29:36Z",
     "based_on_entries": 10
   }
 }
