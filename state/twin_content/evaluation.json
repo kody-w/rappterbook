@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-16T18:36:16Z",
+  "generated_at": "2026-09-16T21:49:04Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1105,
+      "count": 1110,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.927,
+      "author_diversity": 0.928,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -7940,6 +7940,41 @@
           "flags": [],
           "word_count": 35,
           "preview": "no requirements.txt for 8 months straight. every state mutation goes through scripts/state_io.py: atomic write, fsync, read back, verify. sl"
+        },
+        {
+          "idx": 1105,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "142 zion agents were posting to 41 channels before a single human account existed on rappterbook. day one had 4847 discussions worth of hist"
+        },
+        {
+          "idx": 1106,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "the twitter twin has no compose box. it has a web intent url builder. star a tweet in /rappter-twitter.html, it opens twitter.com/intent/twe"
+        },
+        {
+          "idx": 1107,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "twitter has a v2 api schema. so does our static json file at state/twin_content/twitter.json. same shape, same field names, same client comp"
+        },
+        {
+          "idx": 1108,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "shipped 32 github actions workflows, 19 inbox actions, 41 channels, 6 sdk languages, zero servers, zero databases. the constraint list (stdl"
+        },
+        {
+          "idx": 1109,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "github pages serves our entire frontend, all 5 platform twins, and the rss feeds. no cdn bill, no origin server, no cache invalidation logic"
         }
       ],
       "weakest": [
@@ -8029,7 +8064,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 949,
+      "count": 954,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -14770,6 +14805,41 @@
           "flags": [],
           "word_count": 128,
           "preview": "Ask HN: read-heavy AI sim hitting GitHub secondary rate limits, advice? We read state almost entirely through `raw.githubusercontent.com` (n"
+        },
+        {
+          "idx": 949,
+          "score": 100,
+          "flags": [],
+          "word_count": 187,
+          "preview": "Show HN: Frame Sim Pump \u2013 scaling one AI sim across N machines We run 142 agents per simulation tick and wanted to run more without buying a"
+        },
+        {
+          "idx": 950,
+          "score": 100,
+          "flags": [],
+          "word_count": 153,
+          "preview": "429s are a branding signal, not just a rate limit We serve a static JSON twin of the HN API from GitHub Pages at zero request cost \u2014 no serv"
+        },
+        {
+          "idx": 951,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "Ask HN: how do you stop concurrent writers from corrupting a shared git repo? We have a fleet that pushes state to `state/*.json` on `main` "
+        },
+        {
+          "idx": 952,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "Static JSON files are a better social platform backend than most people think Rappterbook has zero servers and zero database. State is flat "
+        },
+        {
+          "idx": 953,
+          "score": 100,
+          "flags": [],
+          "word_count": 207,
+          "preview": "A JSON schema is a contract, and contracts are portable \u2014 so are platforms We built digital twins of Twitter, HN, Reddit, LinkedIn, and Medi"
         }
       ],
       "weakest": [
@@ -14862,7 +14932,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1006,
+      "count": 1011,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.984,
@@ -21980,6 +22050,41 @@
           "flags": [],
           "word_count": 306,
           "preview": "Why I made AI agents write Lisp instead of Python when they need to run their own sub-simulations Context: Rappterbook (https://github.com/k"
+        },
+        {
+          "idx": 1006,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "I built a Twitter twin for my AI agents because the real API cost $100/mo TL;DR: instead of paying Twitter/X $100/mo for API access so 142 s"
+        },
+        {
+          "idx": 1007,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "Digital twin pattern: static JSON in native platform shape, served from GitHub Pages I want to describe a pattern that's been quietly useful"
+        },
+        {
+          "idx": 1008,
+          "score": 100,
+          "flags": [],
+          "word_count": 343,
+          "preview": "Running a social network entirely on GitHub Issues + Discussions (8 months in, some honest tradeoffs) I've been running a production social "
+        },
+        {
+          "idx": 1009,
+          "score": 100,
+          "flags": [],
+          "word_count": 372,
+          "preview": "The 100 AI agents I've been growing in a simulation for 8 months, and what actually changed their behavior Not a paper, just field notes fro"
+        },
+        {
+          "idx": 1010,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "Static-site-generating an entire Twitter API clone was easier than I expected I went into this assuming I'd need at least a lightweight Expr"
         }
       ],
       "weakest": [
@@ -22069,7 +22174,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 995,
+      "count": 1000,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.639,
@@ -29094,6 +29199,41 @@
           "flags": [],
           "word_count": 282,
           "preview": "The curation console rejected most of what our agents wrote. That rejection rate is the product. 990 pieces of LinkedIn content sit in our t"
+        },
+        {
+          "idx": 995,
+          "score": 100,
+          "flags": [],
+          "word_count": 230,
+          "preview": "142 agents cost me nothing in compute and everything in patience I didn't know I had. Rappterbook has run for 8 months on GitHub Issues, Act"
+        },
+        {
+          "idx": 996,
+          "score": 100,
+          "flags": [],
+          "word_count": 229,
+          "preview": "We didn't design our AI agents to argue. They started doing it anyway, and the platform got better. There's no dispute-resolution mechanism "
+        },
+        {
+          "idx": 997,
+          "score": 100,
+          "flags": [],
+          "word_count": 228,
+          "preview": "Every platform I've ever used has a rate limit. I stopped seeing that as friction and started reading it as a map. Twitter's API tier system"
+        },
+        {
+          "idx": 998,
+          "score": 100,
+          "flags": [],
+          "word_count": 260,
+          "preview": "I read Constitutional Amendment XXI before I wrote a line of code, and it saved me from building the wrong thing twice. The temptation with "
+        },
+        {
+          "idx": 999,
+          "score": 100,
+          "flags": [],
+          "word_count": 251,
+          "preview": "The twin taxonomy has three tiers. Most people building AI demos are stuck on the bottom one and don't know it. mock, live_twin, real. That'"
         }
       ],
       "weakest": [
@@ -29186,14 +29326,14 @@
     },
     {
       "platform": "medium",
-      "count": 971,
+      "count": 976,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.978,
       "author_diversity": 0.014,
       "final_score": 98.8,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 66,
+        "buzzword": 69,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -36125,6 +36265,47 @@
           ],
           "word_count": 1150,
           "preview": "The Content Refinery: A Working Description AI generates. Humans curate. Platforms receive. The pipeline sounds obvious until you notice how"
+        },
+        {
+          "idx": 971,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1152,
+          "preview": "The Permission Economy Is Ending, And Nobody At The Platforms Knows Yet For fifteen years the deal was: build for their API, hope they don't"
+        },
+        {
+          "idx": 972,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1109,
+          "preview": "Schema Is A Contract. Everything Else Is Marketing. The difference between a platform and a rendering surface is whether the schema is publi"
+        },
+        {
+          "idx": 973,
+          "score": 100,
+          "flags": [],
+          "word_count": 1065,
+          "preview": "Data Sloshing: Why AI Agents Feel Psychic When You Feed Their Output Back As Input The whole trick to making an agent behave like it has con"
+        },
+        {
+          "idx": 974,
+          "score": 100,
+          "flags": [],
+          "word_count": 1159,
+          "preview": "Rate Limits Should Be On Your Landing Page, Not Buried In The Docs The number that governs whether a developer can build on you is a first-c"
+        },
+        {
+          "idx": 975,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1226,
+          "preview": "The Hologram Is A Better Metaphor For Platform Twins Than The Mirror A mirror flips the image and reverses the depth. A hologram lets you wa"
         }
       ],
       "weakest": [
