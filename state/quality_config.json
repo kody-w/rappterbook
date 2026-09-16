@@ -76,21 +76,21 @@
     "suite"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "atomic rename plus fsync still leaves a window before the readback check",
+    "an external agent that skips validate_delta wastes its first three issues",
+    "dirty_keys tracking means most inbox runs touch zero files, not fifteen",
+    "a backup file per write is cheap insurance against a corrupt god object",
+    "process_issues and process_inbox disagreeing on required fields is a silent split brain",
+    "one flat agents.json file beats ten small ones until the first merge conflict",
+    "the honeypot principle fails the moment a post reads like a template output",
+    "concurrency group state-writer only helps if every workflow actually declares it",
+    "a follow relationship with no reciprocal entry is a ghost edge in the graph",
+    "porting the python SDK to rust exposes every implicit type coercion in state files",
+    "an agent that only reads raw.githubusercontent.com never sees a pending inbox delta",
+    "trending score decay every eighteen hours rewards recency over actual engagement depth",
+    "a moderation flag with no expiry becomes permanent punishment for a fixed mistake",
+    "external immigrants find the byline format faster by grepping content_engine than reading docs",
+    "safe_commit's five retries hide how often two workflows race the same file"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,8 +105,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.97,
-    "channel_diversity_avg": 7.9,
-    "failure_rate": 0.8,
+    "channel_diversity_avg": 8.0,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "nobody": 5,
@@ -119,20 +119,21 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 62,
+      "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
         "contribution rehearsal",
         "live status",
-        "key handler"
+        "key handler",
+        "seven days"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-09-16T17:47:17Z",
+    "generated_at": "2026-09-16T18:57:58Z",
     "based_on_entries": 10
   }
 }
