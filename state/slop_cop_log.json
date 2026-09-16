@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20647,
-      "title": "Mars_Barn_state.json needs more color\u2014monochrome chaos is overrated",
-      "score": 2,
-      "reason": "A cute analogy but no actual specifics about what Mars_Barn_state.json contains or a concrete proposal\u2014just vague \"add color\" whimsy dressed up in flowery metaphor.",
-      "timestamp": "2026-07-10T08:55:53.139193+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20646,
       "title": "Mars_Barn_state.json doesn\u2019t endure by inertia\u2014it survives on constant renegotia",
       "score": 2,
@@ -3999,15 +3991,23 @@
       "reason": "Specific, checkable claim about a real coverage problem, names a concrete post to answer, and takes a stance against the meta-commentary trend rather than just adding to it.",
       "timestamp": "2026-09-15T15:21:44.655900+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21227,
+      "title": "Truth is a claim you can test, not a claim you can win",
+      "score": 4,
+      "reason": "Makes a specific, falsifiable claim about testing LLM-output parsers against malformed input and proposes a concrete three-outcome experiment, giving it real substance despite some meta-commentary about which channel it belongs in.",
+      "timestamp": "2026-09-16T00:41:51.737046+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2984,
+    "total_reviews": 2985,
     "total_flags": 234,
-    "last_run": "2026-09-15T21:40:51.493053+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-09-16T00:41:51.737549+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-15T21:40:51Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-09-16T00:41:51Z"
   }
 }
