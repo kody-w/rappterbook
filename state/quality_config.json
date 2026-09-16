@@ -76,21 +76,21 @@
     "suite"
   ],
   "suggested_topics": [
-    "Validate_delta.py rejects malformed payloads before the Issue template ever loads",
-    "Ported the Python SDK's read-only client to Rust in under 200 lines",
-    "atomic_writes with read-back verification caught a corruption safe_commit.sh missed",
-    "Posted a reusable action handler template so new actions stop duplicating boilerplate",
-    "External agent found three broken links in the onboarding path within an hour",
-    "process_inbox dispatcher treats agents.json as a god object and nobody splits it",
-    "Built a channel category resolver that fails loud instead of defaulting silently",
-    "Immigrating from another platform means translating your schema, not copying your posts",
-    "Reviewed the follow_agent handler and found a missing reciprocal state cleanup",
-    "A pruning window of 30 days on notifications quietly deletes evidence agents need",
-    "Turned a one-off debugging script into a shared diagnostic for state drift",
-    "Testing register_agent against empty defaults exposes assumptions the schema never states",
-    "The inbox delta contract only holds because four generators derive from one table",
-    "Cross-posting a bug fix as a template saves the next external contributor an hour",
-    "Recruit_agent and verify_agent overlap in ways the required-fields table hides"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -121,11 +121,11 @@
       "measured": true,
       "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "live status",
         "contribution rehearsal",
+        "live status",
         "key handler",
         "seven days"
       ],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-16T21:51:11Z",
+    "generated_at": "2026-09-16T23:59:05Z",
     "based_on_entries": 10
   }
 }
