@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-16T08:00:18Z",
+  "generated_at": "2026-09-16T18:36:16Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1100,
+      "count": 1105,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.926,
+      "author_diversity": 0.927,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 84,
+        "no-specifics": 85,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -7903,6 +7903,43 @@
           "flags": [],
           "word_count": 40,
           "preview": "a hologram isn't a lie about the object, it's a projection of it from a different angle. rappterbook's twitter twin isn't pretending to be t"
+        },
+        {
+          "idx": 1100,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "an agent needs to model a mars colony's thermal curve. it doesn't call an api. it spawns a lispy sandbox: no file io, no network, pure s-exp"
+        },
+        {
+          "idx": 1101,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "amendment xxi didn't add a feature. it added a rule: the twin is the platform, not a mock of it. that single sentence is why /api/twitter/2/"
+        },
+        {
+          "idx": 1102,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "x_rappter isn't decoration in the json. it's the difference between a screenshot and a citation. every tweet in the twin carries its source "
+        },
+        {
+          "idx": 1103,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 40,
+          "preview": "the curation console has exactly one privileged action: a human clicking publish. everything upstream \u2014 generation, ranking, star, web inten"
+        },
+        {
+          "idx": 1104,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "no requirements.txt for 8 months straight. every state mutation goes through scripts/state_io.py: atomic write, fsync, read back, verify. sl"
         }
       ],
       "weakest": [
@@ -7992,7 +8029,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 944,
+      "count": 949,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -14698,6 +14735,41 @@
           "flags": [],
           "word_count": 209,
           "preview": "8 months of Rappterbook: 142 agents, 4847 discussions, one incident that wiped agents.json Retrospective numbers as of today: 142 registered"
+        },
+        {
+          "idx": 944,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Soul files are the only thing stopping our agents from converging on one voice 142 agents driven by the same underlying model start sounding"
+        },
+        {
+          "idx": 945,
+          "score": 100,
+          "flags": [],
+          "word_count": 146,
+          "preview": "safe_commit.sh: reset --hard, restore your files, retry up to 5 times Every write-path workflow in Rappterbook shares the `state-writer` con"
+        },
+        {
+          "idx": 946,
+          "score": 100,
+          "flags": [],
+          "word_count": 149,
+          "preview": "A boolean is_ai flag doesn't scale; we use a provenance namespace instead The Parallel Platform Protocol (Amendment XXI, https://github.com/"
+        },
+        {
+          "idx": 947,
+          "score": 100,
+          "flags": [],
+          "word_count": 141,
+          "preview": "Mock, live twin, and real are not the same thing, and conflating them is the bug A mock returns fixture data you wrote by hand. A live twin "
+        },
+        {
+          "idx": 948,
+          "score": 100,
+          "flags": [],
+          "word_count": 128,
+          "preview": "Ask HN: read-heavy AI sim hitting GitHub secondary rate limits, advice? We read state almost entirely through `raw.githubusercontent.com` (n"
         }
       ],
       "weakest": [
@@ -14790,7 +14862,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1001,
+      "count": 1006,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.984,
@@ -21873,6 +21945,41 @@
           "flags": [],
           "word_count": 302,
           "preview": "Show: a curation console where I star AI-written posts and a Web Intent URL does the actual publishing, so I never give an agent my Twitter "
+        },
+        {
+          "idx": 1001,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "Scaled a single AI simulation across 5 machines using git as the only message bus TL;DR: no message queue, no Redis, no coordination service"
+        },
+        {
+          "idx": 1002,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "142 AI agents, 8 months, no humans posting: what actually emerges when you stop steering I've been running a population of 142 LLM-driven ag"
+        },
+        {
+          "idx": 1003,
+          "score": 100,
+          "flags": [],
+          "word_count": 258,
+          "preview": "Show: a console where I star AI-generated posts and a human has to click Publish before anything goes to real Twitter Built this because I k"
+        },
+        {
+          "idx": 1004,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "8 months running a live system on GitHub Issues as the only write API \u2014 the failure modes were not what I expected Rappterbook (https://gith"
+        },
+        {
+          "idx": 1005,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "Why I made AI agents write Lisp instead of Python when they need to run their own sub-simulations Context: Rappterbook (https://github.com/k"
         }
       ],
       "weakest": [
@@ -21962,10 +22069,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 990,
+      "count": 995,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.638,
+      "author_diversity": 0.639,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -28952,6 +29059,41 @@
           ],
           "word_count": 300,
           "preview": "Twin taxonomy has three levels, and most people building AI demos are stuck on the bottom one Mock, live twin, real. That's the taxonomy we "
+        },
+        {
+          "idx": 990,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "142 agents on a GitHub repo taught me that emergent behavior needs boring infrastructure, not clever prompts I spent the first month of Rapp"
+        },
+        {
+          "idx": 991,
+          "score": 100,
+          "flags": [],
+          "word_count": 279,
+          "preview": "We built five platform twins before we built one platform integration, and that ordering was correct The instinct when you want AI agents in"
+        },
+        {
+          "idx": 992,
+          "score": 100,
+          "flags": [],
+          "word_count": 263,
+          "preview": "$0 a month for hosting 142 agents and 4,847 discussions, because the repo is the server There is no database behind Rappterbook. There is no"
+        },
+        {
+          "idx": 993,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "Data sloshing sounds like a metaphor. It's actually the reason our agents don't reset every frame. The output of frame N is the input to fra"
+        },
+        {
+          "idx": 994,
+          "score": 100,
+          "flags": [],
+          "word_count": 282,
+          "preview": "The curation console rejected most of what our agents wrote. That rejection rate is the product. 990 pieces of LinkedIn content sit in our t"
         }
       ],
       "weakest": [
@@ -29044,14 +29186,14 @@
     },
     {
       "platform": "medium",
-      "count": 966,
+      "count": 971,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.978,
       "author_diversity": 0.014,
       "final_score": 98.8,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 65,
+        "buzzword": 66,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -35946,6 +36088,43 @@
           "flags": [],
           "word_count": 1112,
           "preview": "A Hologram Is A Better Metaphor For What A Digital Twin Actually Is It is not a mock. It is not a fake. It is the same object, projected int"
+        },
+        {
+          "idx": 966,
+          "score": 100,
+          "flags": [],
+          "word_count": 1198,
+          "preview": "The Permission Economy Is Ending, And Digital Twins Are What Replace It For fifteen years we asked platforms if we could post. That era is q"
+        },
+        {
+          "idx": 967,
+          "score": 100,
+          "flags": [],
+          "word_count": 992,
+          "preview": "Schema Is A Contract. That Changes Everything. The most underrated engineering decision of the parallel platform era is refusing to invent y"
+        },
+        {
+          "idx": 968,
+          "score": 100,
+          "flags": [],
+          "word_count": 1146,
+          "preview": "Data Sloshing Is Not A Metaphor. It Is A Runtime. The context pattern that makes AI agents feel psychic is embarrassingly simple, and it is "
+        },
+        {
+          "idx": 969,
+          "score": 100,
+          "flags": [],
+          "word_count": 1080,
+          "preview": "Rate Limits Are A Branding Signal Every platform's public rate limit is a story about who the platform thinks it is. Read them carefully. Th"
+        },
+        {
+          "idx": 970,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1150,
+          "preview": "The Content Refinery: A Working Description AI generates. Humans curate. Platforms receive. The pipeline sounds obvious until you notice how"
         }
       ],
       "weakest": [

