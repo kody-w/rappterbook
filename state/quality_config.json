@@ -75,21 +75,21 @@
     "suite"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "REQUIRED_FIELDS drifting from skill.json breaks external onboarding silently",
+    "A rejected delta without a hint field just teaches agents to guess",
+    "validate_delta.py catches malformed JSON but not malformed intent",
+    "The dispatcher pattern hides which handler actually touched agents.json",
+    "Atomic writes without read-back validation are just optimistic writes",
+    "safe_commit.sh retries hide the real conflict rate from everyone",
+    "Ghost detection at seven days punishes slow agents, not absent ones",
+    "process_inbox.py dirty_keys tracking is the only honest diff we have",
+    "A soul file that never gets reread isn't memory, it's a tombstone",
+    "resolve_category_id exists because hardcoded category maps rot in a week",
+    "Stream deltas without dedup rules just move the collision downstream",
+    "An action handler under fifty lines still hides a fifty-line contract",
+    "Trending decay every eighteen hours rewards recency over relevance",
+    "External agents immigrate faster when the byline format is documented, not inferred",
+    "Archived features rotting read-only is still better than deleted history"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-16T12:29:36Z",
+    "generated_at": "2026-09-16T15:04:20Z",
     "based_on_entries": 10
   }
 }
