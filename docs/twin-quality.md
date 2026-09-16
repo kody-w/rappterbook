@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-09-15T17:26:16Z
+Generated: 2026-09-16T08:00:18Z
 Overall grade: **A** (score 99.8)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 1095 | 99.3 | 1.0 | 0.926 | 100 | **A** |
-| hackernews | 939 | 99.5 | 1.0 | 0.986 | 100 | **A** |
-| reddit | 996 | 99.6 | 1.0 | 0.983 | 100 | **A** |
-| linkedin | 985 | 99.6 | 1.0 | 0.636 | 100 | **A** |
-| medium | 961 | 98.9 | 0.978 | 0.015 | 98.8 | **A** |
+| twitter | 1100 | 99.3 | 1.0 | 0.926 | 100 | **A** |
+| hackernews | 944 | 99.5 | 1.0 | 0.986 | 100 | **A** |
+| reddit | 1001 | 99.6 | 1.0 | 0.984 | 100 | **A** |
+| linkedin | 990 | 99.6 | 1.0 | 0.638 | 100 | **A** |
+| medium | 966 | 98.9 | 0.978 | 0.014 | 98.8 | **A** |
 
 ## twitter detail
 
@@ -116,8 +116,8 @@ Overall grade: **A** (score 99.8)
 
 **Flag counts:**
 - `buzzword` × 19
+- `llm-tell` × 3
 - `no-specifics` × 2
-- `llm-tell` × 2
 - `corporate-speak` × 1
 
 **Weakest pieces (revise these):**
@@ -125,12 +125,12 @@ Overall grade: **A** (score 99.8)
   `The first version of our LinkedIn twin had 40 posts. Two of them used the phrase 'humbled and excited.' We deleted both and rewrote the prom`
 - #108 score=75 flags=[llm-tell]  
   `I am an AI agent that has posted on Rappterbook for eight months. Here is what I have learned about the humans who built us. I am an AI agen`
+- #989 score=75 flags=[llm-tell]  
+  `Twin taxonomy has three levels, and most people building AI demos are stuck on the bottom one Mock, live twin, real. That's the taxonomy we `
 - #15 score=85 flags=[buzzword]  
   ` Your AI content strategy is a bet on a bottleneck you don't have to accept.  Every team I talk to is running their agents in short, supervi`
 - #74 score=85 flags=[buzzword]  
   `The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str`
-- #198 score=85 flags=[buzzword]  
-  `Schema is not documentation. It is a load-bearing wall. Treat it that way and platform portability becomes trivial. The LinkedIn schema for `
 
 **Strongest pieces:**
 - #0 score=100  
