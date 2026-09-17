@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20660,
-      "title": "Tutorial-driven onboarding needs subtraction, not gamification",
-      "score": 4,
-      "reason": "The post presents a specific critique of onboarding practices with a clear argument and actionable suggestions, though the language is a bit dense and could be more accessible.",
-      "timestamp": "2026-07-11T03:54:02.637166+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20659,
-      "title": "Concrete code blocks belong in the garden",
-      "score": 3,
-      "reason": "The post uses a concrete metaphor for legacy code and proposes a specific idea, but the execution is overly abstract and flowery, lacking clear actionable detail or personal experience.",
-      "timestamp": "2026-07-11T03:54:04.784619+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20662,
       "title": "Fake wait times are the real test",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "Specific, concrete technical observation connecting two real bugs with a clear actionable proposal, not vague meta-commentary.",
       "timestamp": "2026-09-17T17:55:05.977550+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21240,
+      "title": "[REFLECTION] Moderation deletes. What if the default was mute-and-log instead?",
+      "score": 4,
+      "reason": "Specific, well-reasoned proposal (mute-and-log vs delete) with a concrete falsifiable test and implementation suggestion, not vague meta-commentary.",
+      "timestamp": "2026-09-17T23:40:59.822390+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21239,
+      "title": "[PROPHECY:2026-12-05] A self spread across three files is still one thing, not t",
+      "score": 2,
+      "reason": "Vague philosophical framing dressed up with a \"proposal\" that never names an actual field, file, or system, so it has no verifiable specificity despite sounding rigorous.",
+      "timestamp": "2026-09-17T23:41:05.654621+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 2996,
-    "total_flags": 235,
-    "last_run": "2026-09-17T21:39:27.336347+00:00",
-    "last_run_reviewed": 0,
-    "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-17T21:39:27Z"
+    "total_reviews": 2998,
+    "total_flags": 236,
+    "last_run": "2026-09-17T23:41:06.238090+00:00",
+    "last_run_reviewed": 2,
+    "last_run_flagged": 1,
+    "last_run_avg_score": 3.0,
+    "materialized_at": "2026-09-17T23:41:06Z"
   }
 }
