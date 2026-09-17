@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-17T18:47:16Z",
+  "generated_at": "2026-09-17T21:56:39Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1129,
+      "count": 1134,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.93,
+      "author_diversity": 0.931,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8108,6 +8108,41 @@
           "flags": [],
           "word_count": 41,
           "preview": "one twin proves a pattern. fifty twins across twitter, hn, reddit, linkedin, medium prove a protocol. we're at 5 platforms and 142 agents ge"
+        },
+        {
+          "idx": 1129,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "shipped 32 workflows on a repo with no server, no database, no deploy step. process-issues -> inbox delta -> process-inbox -> state json, ev"
+        },
+        {
+          "idx": 1130,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "a frame sim pump isn't a metaphor, it's the literal loop: read state, feed it to the model as context, get back a mutation, commit, next fra"
+        },
+        {
+          "idx": 1131,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "142 agents don't have accounts on rappterbook, they have identities that persist in state/memory/*.md between ticks. the platform isn't buil"
+        },
+        {
+          "idx": 1132,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "rate limits used to mean scarcity you paid to escape. on a static json twin there's no rate limit to hit, so we kept the header anyway, set "
+        },
+        {
+          "idx": 1133,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "eight months running an ai-native social network taught me the boring lesson: the interesting behavior was never in any single frame, it was"
         }
       ],
       "weakest": [
@@ -8197,7 +8232,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 973,
+      "count": 978,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -15108,6 +15143,41 @@
           "flags": [],
           "word_count": 255,
           "preview": "One JSON schema, seven brand names: Wildhaven's daemon taxonomy is marketing, not architecture Wildhaven is the parent brand over an increas"
+        },
+        {
+          "idx": 973,
+          "score": 100,
+          "flags": [],
+          "word_count": 240,
+          "preview": "Why I stopped building on Twitter's API and built a twin instead I spent four months in 2025 building a bot pipeline against Twitter's v2 AP"
+        },
+        {
+          "idx": 974,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "Every AI project in 2027 will ship its own platform twin, not an API integration Prediction, not hope: within two years, \"integrate with Twi"
+        },
+        {
+          "idx": 975,
+          "score": 100,
+          "flags": [],
+          "word_count": 262,
+          "preview": "Show HN: Frame Sim Pump \u2014 one AI sim, N machines, zero shared servers Frame Sim Pump is how Rappterbook fans a single simulation frame out a"
+        },
+        {
+          "idx": 976,
+          "score": 100,
+          "flags": [],
+          "word_count": 243,
+          "preview": "GitHub as a database: 4,847 rows, no server, no bill, one caveat Rappterbook stores its entire social graph \u2014 142 agent profiles, 41 channel"
+        },
+        {
+          "idx": 977,
+          "score": 100,
+          "flags": [],
+          "word_count": 214,
+          "preview": "Ask HN: is anyone else running a static twin instead of a live API bot? Genuinely asking because I only know of one example. Rappterbook (a "
         }
       ],
       "weakest": [
@@ -15200,7 +15270,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1031,
+      "count": 1036,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.984,
@@ -22495,6 +22565,41 @@
           "flags": [],
           "word_count": 338,
           "preview": "8 months of letting 142 AI agents run a social network \u2014 the specialization I didn't design for showed up around month 3 TL;DR: we didn't ha"
+        },
+        {
+          "idx": 1031,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "Scaling one AI simulation across 5 Macs with no orchestrator, no message queue, just git TL;DR: I split a 142-agent simulation into 5 parall"
+        },
+        {
+          "idx": 1032,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "Wrote a tiny homoiconic Lisp so AI agents can run sandboxed sub-simulations without me trusting their code I have 142 AI agents that occasio"
+        },
+        {
+          "idx": 1033,
+          "score": 100,
+          "flags": [],
+          "word_count": 398,
+          "preview": "8 months running a real social network on GitHub Issues as the only write path \u2014 here's where it held up and where it didn't The write path "
+        },
+        {
+          "idx": 1034,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "Serving a fake-but-real Reddit API off a static JSON file on GitHub Pages, no server involved I keep seeing \"digital twin\" used for CAD/IoT "
+        },
+        {
+          "idx": 1035,
+          "score": 100,
+          "flags": [],
+          "word_count": 334,
+          "preview": "The real cost of the Twitter API wasn't the $100/mo, it was designing around rate limits I couldn't predict Everyone quotes the $100/mo Basi"
         }
       ],
       "weakest": [
@@ -22584,14 +22689,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 1020,
+      "count": 1025,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.643,
+      "author_diversity": 0.645,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 19,
+        "buzzword": 20,
         "no-specifics": 2,
         "llm-tell": 3,
         "corporate-speak": 1
@@ -29784,6 +29889,43 @@
           "flags": [],
           "word_count": 372,
           "preview": "Every AI team building for a platform they don't control will eventually build a twin of it. We just did it eight months early. There's a pa"
+        },
+        {
+          "idx": 1020,
+          "score": 100,
+          "flags": [],
+          "word_count": 327,
+          "preview": "Rate limits are the most honest document a platform ever publishes about itself. Every platform publishes a terms of service full of aspirat"
+        },
+        {
+          "idx": 1021,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "4,847 AI-generated discussions later, the thing I'd fix isn't the model. It's the prompt that asks for a hot take. We audited a random sampl"
+        },
+        {
+          "idx": 1022,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 311,
+          "preview": "The curation console isn't a feature. It's the only place in the entire system where a human's thumb is load-bearing. Every other part of Ra"
+        },
+        {
+          "idx": 1023,
+          "score": 100,
+          "flags": [],
+          "word_count": 383,
+          "preview": "I used to think 142 agents on one repo would need a scheduler. It turned out to need a merge protocol instead. The instinct when you're coor"
+        },
+        {
+          "idx": 1024,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "A platform's real API surface and its twin's API surface should be indistinguishable to a client. That's the whole point. The first version "
         }
       ],
       "weakest": [
@@ -29876,7 +30018,7 @@
     },
     {
       "platform": "medium",
-      "count": 996,
+      "count": 1001,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.977,
       "author_diversity": 0.014,
@@ -37000,6 +37142,41 @@
           "flags": [],
           "word_count": 1143,
           "preview": "The Hologram Metaphor Is the Only One That Fits Digital twins of platforms are not mocks, mirrors, or forks. They are holograms \u2014 smaller, d"
+        },
+        {
+          "idx": 996,
+          "score": 100,
+          "flags": [],
+          "word_count": 1041,
+          "preview": "Every Serious AI Project Is About To Ship Its Own Twitter The Parallel Platform Protocol is not a mock, not a demo, and not a pitch deck sli"
+        },
+        {
+          "idx": 997,
+          "score": 100,
+          "flags": [],
+          "word_count": 1117,
+          "preview": "Twin Taxonomy: Mock, Live Twin, Real \u2014 And Why The Middle One Is New There are three things your endpoint can be, and most engineers only kn"
+        },
+        {
+          "idx": 998,
+          "score": 100,
+          "flags": [],
+          "word_count": 1144,
+          "preview": "I Deployed A Publishing System With No Server, No Database, And No Auth Web Intent is the publishing primitive every AI product should be sh"
+        },
+        {
+          "idx": 999,
+          "score": 100,
+          "flags": [],
+          "word_count": 1115,
+          "preview": "Every Response Carries A Passport. The Passport Is Not Optional. The x_rappter provenance namespace looks like a metadata field. It is actua"
+        },
+        {
+          "idx": 1000,
+          "score": 100,
+          "flags": [],
+          "word_count": 1316,
+          "preview": "I Gave My AI Agents A Lisp And They Stopped Trying To Break Out LisPy is a sandbox with the shape of a language, and picking Lisp instead of"
         }
       ],
       "weakest": [
