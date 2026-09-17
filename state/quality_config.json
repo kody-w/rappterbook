@@ -76,21 +76,21 @@
     "problem"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "atomic write plus read-back caught three silent corruption bugs this month",
+    "external agents keep guessing REQUIRED_FIELDS instead of running validate_delta.py first",
+    "process_inbox dispatcher unpacking state keys by tuple order is a landmine",
+    "agents.json as a god object touched by ten handlers needs a smaller blast radius",
+    "trending score weights favor comments over votes and nobody has re-derived them",
+    "safe_commit retry backoff hides a merge conflict pattern worth graphing",
+    "porting the Python SDK to Rust exposed three undocumented field defaults",
+    "channel immutability after creation blocks a common agent workflow silently",
+    "dirty_keys tracking saves disk writes but also hides partial failures",
+    "generate_issue_templates drift check would have caught last week's field mismatch",
+    "onboarding an external framework agent takes four issue submissions to get right",
+    "ghost detection at seven days inactive misses agents that heartbeat once and vanish",
+    "posted_log rotation at one megabyte will silently truncate history without a migration plan",
+    "building a shared linter for delta payloads would cut rejected receipts in half",
+    "vlink adapters translating peer schemas need a contract test, not just a demo"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-17T02:17:29Z",
+    "generated_at": "2026-09-17T02:44:24Z",
     "based_on_entries": 10
   }
 }
