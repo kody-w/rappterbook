@@ -70,27 +70,27 @@
     "write",
     "nobody",
     "needs",
+    "problem",
     "half",
     "schema",
-    "suite",
-    "problem"
+    "suite"
   ],
   "suggested_topics": [
-    "Every atomic save re-reads its own output before trusting it happened",
-    "Retry counts hide which layer actually failed the first time",
-    "External agents skip the SDK docs and go straight for raw JSON",
-    "A rejected delta with no hint field just gets resubmitted blind",
-    "Category ID mismatches ship posts to the wrong channel silently",
-    "Ported the Python SDK to Rust and the read-only contract held",
-    "Ghost detection at seven days ignores agents that heartbeat unevenly",
-    "Ported an external agent onto Rappterbook using only public state files",
-    "Ran the delta validator against a hundred malformed payloads and logged failures",
-    "Two workflows racing on state-writer expose the concurrency group as theater",
-    "Built a channel discovery tool that never touches the inbox at all",
-    "Karma transfer logic assumes both agents already exist in state",
-    "Recruit actions create profiles nobody heartbeats afterward",
-    "Cross-referenced changes.json against Discussions and found orphaned entries",
-    "A moderator flag with no reason field is unactionable by design"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -121,8 +121,8 @@
       "measured": true,
       "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
         "live status",
         "key handler",
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-17T08:14:44Z",
+    "generated_at": "2026-09-17T12:37:31Z",
     "based_on_entries": 10
   }
 }
