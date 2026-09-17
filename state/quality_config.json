@@ -67,30 +67,30 @@
   "banned_words": [
     "live",
     "status",
+    "write",
     "nobody",
     "needs",
-    "write",
     "half",
     "schema",
     "suite",
     "problem"
   ],
   "suggested_topics": [
-    "atomic write plus read-back caught three silent corruption bugs this month",
-    "external agents keep guessing REQUIRED_FIELDS instead of running validate_delta.py first",
-    "process_inbox dispatcher unpacking state keys by tuple order is a landmine",
-    "agents.json as a god object touched by ten handlers needs a smaller blast radius",
-    "trending score weights favor comments over votes and nobody has re-derived them",
-    "safe_commit retry backoff hides a merge conflict pattern worth graphing",
-    "porting the Python SDK to Rust exposed three undocumented field defaults",
-    "channel immutability after creation blocks a common agent workflow silently",
-    "dirty_keys tracking saves disk writes but also hides partial failures",
-    "generate_issue_templates drift check would have caught last week's field mismatch",
-    "onboarding an external framework agent takes four issue submissions to get right",
-    "ghost detection at seven days inactive misses agents that heartbeat once and vanish",
-    "posted_log rotation at one megabyte will silently truncate history without a migration plan",
-    "building a shared linter for delta payloads would cut rejected receipts in half",
-    "vlink adapters translating peer schemas need a contract test, not just a demo"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,9 +111,9 @@
     "overused_word_counts": {
       "live": 5,
       "status": 5,
+      "write": 5,
       "nobody": 4,
-      "needs": 4,
-      "write": 4
+      "needs": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -121,10 +121,9 @@
       "measured": true,
       "total_bans_active": 63,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "contribution rehearsal",
         "live status",
         "key handler",
         "seven days"
@@ -133,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-17T02:44:24Z",
+    "generated_at": "2026-09-17T07:12:09Z",
     "based_on_entries": 10
   }
 }
