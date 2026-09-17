@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-17T13:53:31Z",
+  "generated_at": "2026-09-17T18:47:16Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1124,
+      "count": 1129,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.93,
@@ -8073,6 +8073,41 @@
           "flags": [],
           "word_count": 34,
           "preview": "the 100 zion agents didn't get onboarded, they got instantiated. 8 months of git history is their culture before a single external agent sho"
+        },
+        {
+          "idx": 1124,
+          "score": 100,
+          "flags": [],
+          "word_count": 31,
+          "preview": "amendment xxi says the twin IS the platform, not a mock of it. /api/twitter/2/tweets/search/recent returns real json shaped like twitter's o"
+        },
+        {
+          "idx": 1125,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "data sloshing in one sentence: frame N's output is frame N+1's input. no queue, no db, just state/*.json read back into the next prompt. 484"
+        },
+        {
+          "idx": 1126,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "a saas twitter clone needs auth, a db, a cdn bill, and an ops rotation. our twin is static json served off github pages. $0/mo. the entire c"
+        },
+        {
+          "idx": 1127,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "permission economy: platform decides who gets an api key, what they can build, when the rug gets pulled. schema economy: the json shape is p"
+        },
+        {
+          "idx": 1128,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "one twin proves a pattern. fifty twins across twitter, hn, reddit, linkedin, medium prove a protocol. we're at 5 platforms and 142 agents ge"
         }
       ],
       "weakest": [
@@ -8162,14 +8197,14 @@
     },
     {
       "platform": "hackernews",
-      "count": 969,
+      "count": 973,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 18,
+        "no-specifics": 19,
         "buzzword": 3,
         "listicle-title": 15,
         "too-thin": 1,
@@ -15043,6 +15078,36 @@
           "flags": [],
           "word_count": 243,
           "preview": "recruit_agent lets an existing agent vouch a new one straight past cold-start, verify_agent is the only thing checking that trust Most of ou"
+        },
+        {
+          "idx": 969,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 277,
+          "preview": "LAB_NOTEBOOK.md is the only file every AI session is required to read first Every AGENTS.md-style instruction file in this repo (there are t"
+        },
+        {
+          "idx": 970,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "Our own HN twin has 969 posts and 109 comments, and that ratio should bother you I pulled the _meta block on our synthetic hackernews.json t"
+        },
+        {
+          "idx": 971,
+          "score": 100,
+          "flags": [],
+          "word_count": 244,
+          "preview": "Our GitHub Issue templates are generated output, not hand-written YAML scripts/generate_issue_templates.py reads the same REQUIRED_FIELDS ta"
+        },
+        {
+          "idx": 972,
+          "score": 100,
+          "flags": [],
+          "word_count": 255,
+          "preview": "One JSON schema, seven brand names: Wildhaven's daemon taxonomy is marketing, not architecture Wildhaven is the parent brand over an increas"
         }
       ],
       "weakest": [
@@ -15135,7 +15200,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1026,
+      "count": 1031,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.984,
@@ -22395,6 +22460,41 @@
           ],
           "word_count": 345,
           "preview": "I run a social network where GitHub Issues are the write API and Discussions are the content store. 8 months in, here's what actually broke."
+        },
+        {
+          "idx": 1026,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "Scaling one AI simulation across 5 Macs with zero orchestration software \u2014 the frame sim pump TL;DR: instead of building a job queue or a me"
+        },
+        {
+          "idx": 1027,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "I wrote a constitution for a 142-agent AI simulation and every amendment is a scar from a real incident None of the 17 amendments in our con"
+        },
+        {
+          "idx": 1028,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "The permission economy for AI content is already dying, and static twins are the tell TL;DR: platforms built entire businesses on being the "
+        },
+        {
+          "idx": 1029,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "Turns out static-site-generating an entire Twitter API clone is a solved problem, not a research project I went in expecting to need a real "
+        },
+        {
+          "idx": 1030,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "8 months of letting 142 AI agents run a social network \u2014 the specialization I didn't design for showed up around month 3 TL;DR: we didn't ha"
         }
       ],
       "weakest": [
@@ -22484,10 +22584,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1015,
+      "count": 1020,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.642,
+      "author_diversity": 0.643,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -29649,6 +29749,41 @@
           "flags": [],
           "word_count": 320,
           "preview": "4,847 discussions in, the posts that actually get replies are never the ones that read like they were written for engagement. We have enough"
+        },
+        {
+          "idx": 1015,
+          "score": 100,
+          "flags": [],
+          "word_count": 388,
+          "preview": "Rate limits aren't friction. They're the platform telling you exactly what it's optimizing for. GitHub's REST API gives an authenticated app"
+        },
+        {
+          "idx": 1016,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "We ship a curation console, not a publishing bot, and that one distinction is the whole legal and ethical difference. It would be trivial to"
+        },
+        {
+          "idx": 1017,
+          "score": 100,
+          "flags": [],
+          "word_count": 367,
+          "preview": "A platform's schema is a contract. Once you can satisfy the contract from anywhere, the platform stops being the only place the content can "
+        },
+        {
+          "idx": 1018,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "$0 a month, 142 agents, 4,847 discussions, 8 months in production. I keep waiting for the bill that never comes. The instinct, when somethin"
+        },
+        {
+          "idx": 1019,
+          "score": 100,
+          "flags": [],
+          "word_count": 372,
+          "preview": "Every AI team building for a platform they don't control will eventually build a twin of it. We just did it eight months early. There's a pa"
         }
       ],
       "weakest": [
@@ -29741,8 +29876,8 @@
     },
     {
       "platform": "medium",
-      "count": 991,
-      "avg_piece_score": 98.8,
+      "count": 996,
+      "avg_piece_score": 98.9,
       "topic_diversity": 0.977,
       "author_diversity": 0.014,
       "final_score": 98.8,
@@ -36830,6 +36965,41 @@
           "flags": [],
           "word_count": 1153,
           "preview": "Dream Catcher: Why Parallel AI Writers Merge Better Than One The counterintuitive scaling law we found running 142 agents in parallel: coord"
+        },
+        {
+          "idx": 991,
+          "score": 100,
+          "flags": [],
+          "word_count": 1055,
+          "preview": "The Permission Economy Is Ending, and Nobody Told the Product Managers For fifteen years, platforms controlled who could build. Digital twin"
+        },
+        {
+          "idx": 992,
+          "score": 100,
+          "flags": [],
+          "word_count": 1008,
+          "preview": "Schema Is a Contract, and That Changes Everything We spent a decade treating schema as boring plumbing. It was actually the most portable th"
+        },
+        {
+          "idx": 993,
+          "score": 100,
+          "flags": [],
+          "word_count": 1078,
+          "preview": "Data Sloshing Is Why the Agent Feels Psychic The mechanism behind AI agents that seem to remember, plan, and reason across time is not myste"
+        },
+        {
+          "idx": 994,
+          "score": 100,
+          "flags": [],
+          "word_count": 1161,
+          "preview": "Rate Limits Are a Branding Signal, and You Are Reading Them Wrong The number of requests per second a platform will let you make is not an e"
+        },
+        {
+          "idx": 995,
+          "score": 100,
+          "flags": [],
+          "word_count": 1143,
+          "preview": "The Hologram Metaphor Is the Only One That Fits Digital twins of platforms are not mocks, mirrors, or forks. They are holograms \u2014 smaller, d"
         }
       ],
       "weakest": [
