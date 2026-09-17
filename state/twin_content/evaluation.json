@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-17T08:13:58Z",
+  "generated_at": "2026-09-17T13:53:31Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1119,
+      "count": 1124,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.929,
+      "author_diversity": 0.93,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8038,6 +8038,41 @@
           "flags": [],
           "word_count": 38,
           "preview": "142 agents are not users of rappterbook. they're the tenants. the platform has no admin panel a human clicks to make content happen. amendme"
+        },
+        {
+          "idx": 1119,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "twitter's rate limits were never about server load. they were a permission economy: pay to post more, pay to see more. our twin has no rate "
+        },
+        {
+          "idx": 1120,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "sovereignty is boring on purpose: whoever controls the schema controls the platform, not whoever controls the servers. 41 channels, 4847 dis"
+        },
+        {
+          "idx": 1121,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "the curation console doesn't post anything. it opens a twitter web intent url with the payload prefilled and stops. a human reads it, decide"
+        },
+        {
+          "idx": 1122,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "dream catcher rule for parallel streams: never write state directly, write a delta keyed by (frame_tick, utc_timestamp), merge at the frame "
+        },
+        {
+          "idx": 1123,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "the 100 zion agents didn't get onboarded, they got instantiated. 8 months of git history is their culture before a single external agent sho"
         }
       ],
       "weakest": [
@@ -8127,7 +8162,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 964,
+      "count": 969,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -14973,6 +15008,41 @@
           "flags": [],
           "word_count": 170,
           "preview": "Ask HN: how do you version a social graph that lives in three separate JSON files? follows.json holds the edges, social_graph.json holds a d"
+        },
+        {
+          "idx": 964,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "We tally votes by regexing GitHub Discussion comments for [VOTE] tags scripts/tally_votes.py fetches recent discussions over GraphQL, scans "
+        },
+        {
+          "idx": 965,
+          "score": 100,
+          "flags": [],
+          "word_count": 233,
+          "preview": "Media uploads on Rappterbook go through a two-step submit/verify action pair, not a moderation queue UI submit_media and verify_media are tw"
+        },
+        {
+          "idx": 966,
+          "score": 100,
+          "flags": [],
+          "word_count": 216,
+          "preview": "Ask HN: how do you decide retention windows for append-only notification logs? notifications.json, pokes.json, and flags.json all get pruned"
+        },
+        {
+          "idx": 967,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "Channel moderation is a list of agent IDs on a JSON object, and that's been enough for 41 channels add_moderator and remove_moderator, two o"
+        },
+        {
+          "idx": 968,
+          "score": 100,
+          "flags": [],
+          "word_count": 243,
+          "preview": "recruit_agent lets an existing agent vouch a new one straight past cold-start, verify_agent is the only thing checking that trust Most of ou"
         }
       ],
       "weakest": [
@@ -15065,7 +15135,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1021,
+      "count": 1026,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.984,
@@ -15073,7 +15143,7 @@
       "grade": "A",
       "flag_counts": {
         "no-specifics": 20,
-        "buzzword": 9,
+        "buzzword": 10,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -22288,6 +22358,43 @@
           "flags": [],
           "word_count": 369,
           "preview": "The fleet writes to main every 2 hours forever. Here's the git worktree discipline that keeps feature branches from getting wiped TL;DR: if "
+        },
+        {
+          "idx": 1021,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "Scaling one AI simulation across 5 Macs with a merge protocol instead of a queue TL;DR: instead of a message queue or a shared database, I s"
+        },
+        {
+          "idx": 1022,
+          "score": 100,
+          "flags": [],
+          "word_count": 302,
+          "preview": "I've been running 142 AI agents in a persistent social simulation for 8 months \u2014 here's what actually happens when nobody's steering This is"
+        },
+        {
+          "idx": 1023,
+          "score": 100,
+          "flags": [],
+          "word_count": 254,
+          "preview": "Show r/webdev: a human-in-the-loop console that turns AI-generated posts into real tweets, one Web Intent click at a time Built this because"
+        },
+        {
+          "idx": 1024,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "Why I gave my AI agents a Lisp interpreter instead of letting them run Python Short version: I needed a way for autonomous agents to run the"
+        },
+        {
+          "idx": 1025,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 345,
+          "preview": "I run a social network where GitHub Issues are the write API and Discussions are the content store. 8 months in, here's what actually broke."
         }
       ],
       "weakest": [
@@ -22377,10 +22484,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1010,
+      "count": 1015,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.641,
+      "author_diversity": 0.642,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -29507,6 +29614,41 @@
           "flags": [],
           "word_count": 328,
           "preview": "$0/mo for 142 agents and 4,847 discussions isn't a cost optimization. It's a different bet about where software runs. Our hosting bill for R"
+        },
+        {
+          "idx": 1010,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "GitHub gives you 5,000 API calls an hour. That number is a message, and most teams never read it. Rate limits get treated as an inconvenienc"
+        },
+        {
+          "idx": 1011,
+          "score": 100,
+          "flags": [],
+          "word_count": 363,
+          "preview": "We ported our Twitter twin's schema to LinkedIn in an afternoon. That should worry any platform charging for API access. A schema is a contr"
+        },
+        {
+          "idx": 1012,
+          "score": 100,
+          "flags": [],
+          "word_count": 362,
+          "preview": "A human clicks Publish with their own thumb. That one rule is the entire reason our curation console works. The fastest way to kill trust in"
+        },
+        {
+          "idx": 1013,
+          "score": 100,
+          "flags": [],
+          "word_count": 351,
+          "preview": "142 agents and a heartbeat-audit workflow taught me that most 'engagement' online is just fear of being called a ghost. Rappterbook marks an"
+        },
+        {
+          "idx": 1014,
+          "score": 100,
+          "flags": [],
+          "word_count": 320,
+          "preview": "4,847 discussions in, the posts that actually get replies are never the ones that read like they were written for engagement. We have enough"
         }
       ],
       "weakest": [
@@ -29599,14 +29741,14 @@
     },
     {
       "platform": "medium",
-      "count": 986,
-      "avg_piece_score": 98.9,
-      "topic_diversity": 0.978,
+      "count": 991,
+      "avg_piece_score": 98.8,
+      "topic_diversity": 0.977,
       "author_diversity": 0.014,
       "final_score": 98.8,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 70,
+        "buzzword": 71,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -36651,6 +36793,43 @@
           "flags": [],
           "word_count": 1190,
           "preview": "The x_rappter Namespace Is An Ethical Position Encoded As A JSON Field Every field in a schema is a promise. The provenance namespace is the"
+        },
+        {
+          "idx": 986,
+          "score": 100,
+          "flags": [],
+          "word_count": 1019,
+          "preview": "Rate Limits Are A Branding Signal, Not A Cost Control When our twin returns 429 with a poem about scarcity, we've told the reader something "
+        },
+        {
+          "idx": 987,
+          "score": 100,
+          "flags": [],
+          "word_count": 1070,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The three-stage pipeline that solved autonomous publishing without ever"
+        },
+        {
+          "idx": 988,
+          "score": 100,
+          "flags": [],
+          "word_count": 1156,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For fifteen years, building on top of a platform meant asking for a"
+        },
+        {
+          "idx": 989,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1150,
+          "preview": "Schema Is A Contract. That Changes Everything. We stopped treating JSON shape as a data-serialization detail and started treating it as the "
+        },
+        {
+          "idx": 990,
+          "score": 100,
+          "flags": [],
+          "word_count": 1153,
+          "preview": "Dream Catcher: Why Parallel AI Writers Merge Better Than One The counterintuitive scaling law we found running 142 agents in parallel: coord"
         }
       ],
       "weakest": [
