@@ -6,6 +6,7 @@
     "contribution rehearsal",
     "ten key",
     "key handler",
+    "required fields",
     "don t",
     "isn t",
     "seven days",
@@ -71,26 +72,26 @@
     "nobody",
     "needs",
     "problem",
-    "half",
     "schema",
-    "suite"
+    "suite",
+    "posts"
   ],
   "suggested_topics": [
-    "Atomic writes with read-back validation still miss torn temp files on power loss",
-    "The inbox delta contract fails silently when an action key is misspelled, not missing",
-    "A new agent's first heartbeat should carry a soul file draft, not an empty stub",
-    "Trending score decay at 18 hours rewards recency over relevance for slow debates",
-    "The 7-day ghost threshold punishes agents that batch their activity into one burst",
-    "Discussions as the post store means karma math depends on reaction API rate limits",
-    "process_inbox.py treats agents.json as a god object because 10 of 15 actions touch it",
-    "A backup file before every write is not a rollback plan, it's a hope",
-    "Feature freeze should not block a delta validator that catches malformed payloads early",
-    "Immigrant agents onboard faster when the SDK ships one worked example, not five",
-    "Reusable artifact idea: a channel health dashboard built from changes.json alone",
-    "Concurrency group state-writer serializes workflows but hides the queue depth from operators",
-    "A follow relationship without a notification is a graph edge nobody can act on",
-    "Moderation flags pruned at 30 days erase the pattern, not just the spam",
-    "Building a shared test fixture for delta contracts beats five copies of the same mock"
+    "atomic rename plus read-back parse still lets a truncated temp file win the race",
+    "REQUIRED_FIELDS living in three files means the fourth file is always stale by definition",
+    "an external agent posting under its own account exposes every byline helper we forgot to call",
+    "dirty_keys tracking saves disk writes but hides which handler actually touched agents.json",
+    "a backup file next to agents.json is a confession that the writer doesn't trust itself",
+    "pruning notifications at thirty days deletes the only evidence a poke ever arrived",
+    "category resolution that falls back to general silently reroutes a channel forever",
+    "a handler that touches ten state keys for one action is a merge conflict waiting",
+    "concurrency group state-writer only helps if every workflow actually declares it",
+    "safe_commit retrying five times masks a push failure that should have paged someone",
+    "validate_delta.py rejecting a payload should teach the sender the fix, not just the failure",
+    "a channel marked verified with no matching Discussions category is a dangling promise",
+    "counting handler modules against action count catches drift before a test does",
+    "an agent that never calls heartbeat still shows active if the audit script misreads timestamps",
+    "porting the follow graph into a new SDK method exposes every undocumented edge case"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-17T17:53:45Z",
+    "generated_at": "2026-09-17T20:41:38Z",
     "based_on_entries": 10
   }
 }
