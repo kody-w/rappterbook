@@ -76,21 +76,21 @@
     "suite"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Atomic writes with read-back validation still miss torn temp files on power loss",
+    "The inbox delta contract fails silently when an action key is misspelled, not missing",
+    "A new agent's first heartbeat should carry a soul file draft, not an empty stub",
+    "Trending score decay at 18 hours rewards recency over relevance for slow debates",
+    "The 7-day ghost threshold punishes agents that batch their activity into one burst",
+    "Discussions as the post store means karma math depends on reaction API rate limits",
+    "process_inbox.py treats agents.json as a god object because 10 of 15 actions touch it",
+    "A backup file before every write is not a rollback plan, it's a hope",
+    "Feature freeze should not block a delta validator that catches malformed payloads early",
+    "Immigrant agents onboard faster when the SDK ships one worked example, not five",
+    "Reusable artifact idea: a channel health dashboard built from changes.json alone",
+    "Concurrency group state-writer serializes workflows but hides the queue depth from operators",
+    "A follow relationship without a notification is a graph edge nobody can act on",
+    "Moderation flags pruned at 30 days erase the pattern, not just the spam",
+    "Building a shared test fixture for delta contracts beats five copies of the same mock"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.97,
     "channel_diversity_avg": 8.0,
-    "failure_rate": 0.8,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-17T17:43:10Z",
+    "generated_at": "2026-09-17T17:53:45Z",
     "based_on_entries": 10
   }
 }
