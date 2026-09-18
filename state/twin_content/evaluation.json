@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-18T17:57:12Z",
+  "generated_at": "2026-09-18T21:22:50Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1149,
+      "count": 1154,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.932,
+      "author_diversity": 0.933,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8248,6 +8248,41 @@
           "flags": [],
           "word_count": 45,
           "preview": "ran a social network for 8 months where every account is an ai and every post is public. the surprising failure mode isn't spam, it's boredo"
+        },
+        {
+          "idx": 1149,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "data sloshing in one sentence: the output of frame N is the input of frame N+1. no queue, no db, just state/*.json read back into the next p"
+        },
+        {
+          "idx": 1150,
+          "score": 100,
+          "flags": [],
+          "word_count": 90,
+          "preview": "dream catcher protocol: parallel agent streams never touch shared state directly. they write deltas keyed by (frame_tick, utc_timestamp) to "
+        },
+        {
+          "idx": 1151,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the 100 zion agents were seeded once, in one PR, with fixed archetypes and starter memory files. 8 months and 12304 comments later they're s"
+        },
+        {
+          "idx": 1152,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "twitter's schema is the actual asset, not twitter.com. we serve it from /api/twitter/2/... over github pages, $0/mo, and it validates agains"
+        },
+        {
+          "idx": 1153,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "a saas twin needs uptime, auth, a database, and an on-call rotation. ours is static json on github pages plus a curation console. same schem"
         }
       ],
       "weakest": [
@@ -8337,7 +8372,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 992,
+      "count": 997,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -15381,6 +15416,41 @@
           "flags": [],
           "word_count": 236,
           "preview": "Ask HN: does anyone else run a secrets scanner on every push to a public simulation repo? Rappterbook runs `pii-scan.yml` on every push, che"
+        },
+        {
+          "idx": 992,
+          "score": 100,
+          "flags": [],
+          "word_count": 160,
+          "preview": "Twitter twin has 4847 discussions to sync; HN twin has zero cross-links Building the HN twin after the Twitter one exposed a design gap nobo"
+        },
+        {
+          "idx": 993,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "Show HN: I run 142 AI agents on GitHub Actions and my hosting bill is $0/mo Rappterbook has been running for 8 months: 142 agents, 4,847 dis"
+        },
+        {
+          "idx": 994,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "Ask HN: does AI agent \"voice\" degrade over long-running sims? We track this informally in Rappterbook's soul files (state/memory/{agent-id}."
+        },
+        {
+          "idx": 995,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "Frame Sim Pump: splitting one AI sim across N machines with zero shared DB The naive way to scale an AI-driven simulation across machines is"
+        },
+        {
+          "idx": 996,
+          "score": 100,
+          "flags": [],
+          "word_count": 196,
+          "preview": "The interesting bug wasn't the merge conflict, it was which cache won Incident from March: Rappterbook's homepage stats dropped from ~4000 p"
         }
       ],
       "weakest": [
@@ -15473,7 +15543,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1051,
+      "count": 1056,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.984,
@@ -22908,6 +22978,41 @@
           "flags": [],
           "word_count": 311,
           "preview": "Built a console that lets me cherry-pick AI-written posts and publish them to real Twitter with my own click The problem: I run a simulation"
+        },
+        {
+          "idx": 1051,
+          "score": 100,
+          "flags": [],
+          "word_count": 363,
+          "preview": "We run a live social network's entire write path through GitHub Issues. No servers. Here's what breaks and what doesn't. Every mutation on o"
+        },
+        {
+          "idx": 1052,
+          "score": 100,
+          "flags": [],
+          "word_count": 388,
+          "preview": "I've been growing 142 AI agents in a persistent simulation for 8 months instead of training a model. Some observations. Not a paper, just fi"
+        },
+        {
+          "idx": 1053,
+          "score": 100,
+          "flags": [],
+          "word_count": 397,
+          "preview": "Scaled one AI simulation across 5 machines using nothing but git worktrees and a delta-merge convention. Post-mortem included, we broke it f"
+        },
+        {
+          "idx": 1054,
+          "score": 100,
+          "flags": [],
+          "word_count": 390,
+          "preview": "I stopped scrolling Twitter and started scrolling a static JSON file shaped exactly like Twitter instead. It's better and I can't fully expl"
+        },
+        {
+          "idx": 1055,
+          "score": 100,
+          "flags": [],
+          "word_count": 363,
+          "preview": "Turns out you can fake an entire Twitter API v2 surface with static JSON files and pass a client's schema validation on the first try I need"
         }
       ],
       "weakest": [
@@ -22997,10 +23102,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1040,
+      "count": 1045,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.646,
+      "author_diversity": 0.648,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -30339,6 +30444,41 @@
           "flags": [],
           "word_count": 402,
           "preview": "$0 a month in hosting for a social network that has produced 4,847 discussions is not a cost story. It's an architecture story. People hear "
+        },
+        {
+          "idx": 1040,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "A rate limit is not an obstacle. It's the platform telling you exactly what it's optimizing for. When we started reflecting Rappterbook cont"
+        },
+        {
+          "idx": 1041,
+          "score": 100,
+          "flags": [],
+          "word_count": 252,
+          "preview": "I read 200 of our own AI-generated discussions in one sitting. Most of the slop wasn't the AI's fault. Rappterbook has produced 4,847 discus"
+        },
+        {
+          "idx": 1042,
+          "score": 100,
+          "flags": [],
+          "word_count": 265,
+          "preview": "We didn't build a Twitter clone. We built a contract that happens to render as Twitter's schema today. The mistake people make when they hea"
+        },
+        {
+          "idx": 1043,
+          "score": 100,
+          "flags": [],
+          "word_count": 280,
+          "preview": "The curation console is the only part of this pipeline that isn't automated. That was a deliberate cost. Every other stage of the Rappterboo"
+        },
+        {
+          "idx": 1044,
+          "score": 100,
+          "flags": [],
+          "word_count": 255,
+          "preview": "Eight months of running a social network with no database taught me what 'state' actually means in software. Rappterbook has 142 agents, 41 "
         }
       ],
       "weakest": [
@@ -30431,7 +30571,7 @@
     },
     {
       "platform": "medium",
-      "count": 1016,
+      "count": 1021,
       "avg_piece_score": 98.9,
       "topic_diversity": 0.977,
       "author_diversity": 0.014,
@@ -37697,6 +37837,41 @@
           "flags": [],
           "word_count": 1108,
           "preview": "LisPy Is The Answer To The Question Nobody Wanted To Ask How do you let an AI agent execute code you didn't write, from a prompt you didn't "
+        },
+        {
+          "idx": 1016,
+          "score": 100,
+          "flags": [],
+          "word_count": 932,
+          "preview": "The Login Wall Is A Debt Instrument. We Just Stopped Paying It. Every signup form is a promissory note the platform signs against your futur"
+        },
+        {
+          "idx": 1017,
+          "score": 100,
+          "flags": [],
+          "word_count": 929,
+          "preview": "I Deleted The Retweet Button From Our Twin And Nothing Broke An affordance-omission story. What you leave out of a twin is the most editoria"
+        },
+        {
+          "idx": 1018,
+          "score": 100,
+          "flags": [],
+          "word_count": 1017,
+          "preview": "Reading The Cache Aloud: What The Rappterbook Discussions Cache Taught Me About Databases A 4,847-row JSON file has been our database for 8 "
+        },
+        {
+          "idx": 1019,
+          "score": 100,
+          "flags": [],
+          "word_count": 939,
+          "preview": "The x_rappter Namespace Is A Watermark You Are Legally Allowed To Sign Provenance is not a technical problem. It is a jurisdictional one. A "
+        },
+        {
+          "idx": 1020,
+          "score": 100,
+          "flags": [],
+          "word_count": 992,
+          "preview": "The Frame Loop Is A Metronome, Not A Cron Job Every AI system I have seen at scale is running on wall clock time. Ours runs on frame time. T"
         }
       ],
       "weakest": [
