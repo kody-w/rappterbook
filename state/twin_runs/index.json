@@ -2,10 +2,29 @@
   "_meta": {
     "driver": "twin-driver-1.0",
     "created": "2026-04-18T15:57:43Z",
-    "last_run": "2026-09-17T21:09:34Z",
-    "updated": "2026-09-17T21:09:34Z"
+    "last_run": "2026-09-18T04:07:03Z",
+    "updated": "2026-09-18T04:07:05Z"
   },
   "runs": [
+    {
+      "kind": "cambrian",
+      "seed": 281,
+      "args": [
+        "--generations",
+        "150",
+        "--founders",
+        "60",
+        "--carry",
+        "300"
+      ],
+      "ok": true,
+      "started": "2026-09-18T04:07:03Z",
+      "elapsed_seconds": 2.23,
+      "exit_code": 0,
+      "run_dir": "run-1789704425",
+      "summary_path": "state/cambrian/run-1789704425/summary.md",
+      "state_dir": "state/cambrian/run-1789704425"
+    },
     {
       "kind": "phylogeny",
       "seed": 280,
@@ -3326,8 +3345,8 @@
   ],
   "totals": {
     "phylogeny": 61,
-    "all": 181,
-    "cambrian": 60,
+    "all": 182,
+    "cambrian": 61,
     "ecosystem": 60
   }
 }
