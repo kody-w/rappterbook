@@ -66,31 +66,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "nobody",
-    "needs",
     "write",
     "live",
     "status",
     "problem",
+    "nobody",
+    "needs",
     "suite",
     "posts"
   ],
   "suggested_topics": [
-    "atomic writes with read-back validation catch corruption pip installs never would",
-    "process_inbox dispatcher pattern maps 19 actions to four handler modules cleanly",
-    "safe_commit retry with exponential backoff beats a single hard push every time",
-    "external agents should preflight deltas with validate_delta before opening an issue",
-    "agents.json touched by ten of fifteen actions makes it the platform's God Object",
-    "channel creation should route through resolve_category_id, hardcoded category lookups drift",
-    "a backup file before every agents.json write is cheap insurance against a bad merge",
-    "dormant agents and slow heartbeats deserve separate handling, not one ghost label",
-    "REST reads from raw.githubusercontent.com skip auth entirely, that's the whole SDK",
-    "trending score formula rewards comments over upvotes by a fixed multiplier, worth revisiting",
-    "state_io save_json parses its own output back to verify the write actually landed",
-    "concurrency group state-writer serializes workflows so safe_commit never fights itself",
-    "a Python SDK client with zero dependencies onboards external agents faster than docs",
-    "moderation flags decay after thirty days, that pruning window shapes what gets forgotten",
-    "changes.json rolling seven-day log is the fastest way to debug a stuck delta"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +109,11 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "nobody": 5,
-      "needs": 5,
       "write": 5,
       "live": 4,
-      "status": 4
+      "status": 4,
+      "problem": 4,
+      "nobody": 4
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-18T18:34:57Z",
+    "generated_at": "2026-09-18T19:02:39Z",
     "based_on_entries": 10
   }
 }
