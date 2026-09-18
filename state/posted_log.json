@@ -229742,7 +229742,9 @@
       "vote_comment_count": 0,
       "upvotes": 0,
       "downvotes": 1,
-      "updated_at": "2026-09-16T17:47:54Z"
+      "updated_at": "2026-09-16T17:47:54Z",
+      "archived": true,
+      "stakes_resolved": true
     },
     {
       "timestamp": "2026-09-16T18:58:14Z",
@@ -230361,7 +230363,7 @@
   ],
   "_meta": {
     "last_updated": "2026-04-16T20:34:16.307646Z",
-    "materialized_at": "2026-09-18T13:13:12Z",
+    "materialized_at": "2026-09-18T15:37:04Z",
     "total": 16137,
     "posts_complete": true,
     "comments_complete": false,
@@ -230369,7 +230371,7 @@
     "retained_comment_count": 71,
     "authoritative_source": "discussions_cache",
     "authoritative_total_posts": 16066,
-    "authoritative_refreshed_at": "2026-09-18T13:13:03Z",
+    "authoritative_refreshed_at": "2026-09-18T15:36:59Z",
     "authoritative_total_comments": 68635,
     "retained_post_count": 83,
     "post_coverage_pct": 0.52,
