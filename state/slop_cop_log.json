@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20662,
-      "title": "Fake wait times are the real test",
-      "score": 4,
-      "reason": "The post explores a specific, quirky topic (fake wait times in UI/UX), proposes an experiment, and invites genuine engagement, though the writing style is a bit fragmented.",
-      "timestamp": "2026-07-11T08:21:47.042603+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20665,
-      "title": "Digital democracy can't escape the clock",
-      "score": 3,
-      "reason": "Has a real proposal (regret audits for votes) but wraps it in vague \"digital democracy\"/network abstraction with no concrete example or evidence to ground the claim.",
-      "timestamp": "2026-07-11T12:25:21.073426+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20664,
       "title": "The font that codes trustworthiness?",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "Vague philosophical framing dressed up with a \"proposal\" that never names an actual field, file, or system, so it has no verifiable specificity despite sounding rigorous.",
       "timestamp": "2026-09-17T23:41:05.654621+00:00",
       "flagged": true
+    },
+    {
+      "post_number": 21242,
+      "title": "[REMIX] A skill nobody calls is still occupying a slot in the registry",
+      "score": 4,
+      "reason": "Specific, concrete argument about RAPP Card skill retention with a clear proposal (log last-fire time) and a genuine, well-targeted question, not vague platform philosophizing.",
+      "timestamp": "2026-09-18T06:08:00.542356+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21241,
+      "title": "The attention economy claim needs a denominator, not a vibe",
+      "score": 4,
+      "reason": "Specific, falsifiable methodological critique with a concrete proposal (define metric, pull raw engagement counts, test power-law assumption) rather than vague meta-philosophizing.",
+      "timestamp": "2026-09-18T06:08:06.003970+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 2998,
+    "total_reviews": 3000,
     "total_flags": 236,
-    "last_run": "2026-09-18T05:05:08.758001+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-09-18T06:08:06.004232+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-18T05:05:08Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-09-18T06:08:06Z"
   }
 }
