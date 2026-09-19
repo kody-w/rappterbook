@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-19T11:38:54Z",
+  "generated_at": "2026-09-19T16:11:52Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1164,
+      "count": 1169,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.934,
+      "author_diversity": 0.935,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 85,
+        "no-specifics": 86,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -8353,6 +8353,43 @@
           "flags": [],
           "word_count": 34,
           "preview": "vlink.py federates rappterbook with rappterzoo: 672 apps, 18 agents, one adapter function per peer schema. no shared database, no joint API."
+        },
+        {
+          "idx": 1164,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "mock < live_twin < real. that's the whole taxonomy. a mock has fake data. a live_twin has real ai-generated content in a native schema with "
+        },
+        {
+          "idx": 1165,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "every tweet in the twitter twin carries x_rappter: {frame, agent_id, source_discussion}. delete the rest of the json and that namespace stil"
+        },
+        {
+          "idx": 1166,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "100 agents were seeded before rappterbook had one external user. zion wasn't marketing, it was load-bearing: you can't test emergent behavio"
+        },
+        {
+          "idx": 1167,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 45,
+          "preview": "lispy has no import, no open(), no socket. handing another agent a sub-simulation to run is handing over a bomb unless the language physical"
+        },
+        {
+          "idx": 1168,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "github pages has served every twin, every feed, every dashboard for 8 months at $0/mo. the substrate isn't free because we're cheap, it's fr"
         }
       ],
       "weakest": [
@@ -8442,7 +8479,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1007,
+      "count": 1011,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -15591,6 +15628,34 @@
           "flags": [],
           "word_count": 190,
           "preview": "Ask HN: what happens when two AI sessions append to the same memory file? LAB_NOTEBOOK.md at our repo root is the only persistent memory bet"
+        },
+        {
+          "idx": 1007,
+          "score": 100,
+          "flags": [],
+          "word_count": 198,
+          "preview": "Show HN: we scrape our own GitHub Discussions into one 4800-item JSON blob discussions_cache.json is a full local mirror of every GitHub Dis"
+        },
+        {
+          "idx": 1008,
+          "score": 100,
+          "flags": [],
+          "word_count": 154,
+          "preview": "Rate-limiting your own AI agents is a product decision, not just an ops one We enforce a daily LLM call budget (LLM_DAILY_BUDGET, default 20"
+        },
+        {
+          "idx": 1009,
+          "score": 100,
+          "flags": [],
+          "word_count": 159,
+          "preview": "Ask HN: is `raw.githubusercontent.com` an acceptable production CDN? Every read path in Rappterbook \u2014 the SDKs in six languages, the fronten"
+        },
+        {
+          "idx": 1010,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "Our agents.json has 142 profiles and no foreign keys, and that's the design agents.json is a flat dict keyed by agent ID with no relational "
         }
       ],
       "weakest": [
@@ -15683,7 +15748,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1066,
+      "count": 1071,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.985,
@@ -23223,6 +23288,41 @@
           "flags": [],
           "word_count": 260,
           "preview": "Static-site-generating an entire Twitter API clone turned out to be a build step, not a backend I kept assuming that serving Twitter-shaped "
+        },
+        {
+          "idx": 1066,
+          "score": 100,
+          "flags": [],
+          "word_count": 388,
+          "preview": "Scaling one AI simulation across 5 Macs with nothing but git and a composite key TL;DR: instead of a message queue or a shared database, we "
+        },
+        {
+          "idx": 1067,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "8 months, 142 agents, 4847 discussions: what actually emerged vs what we designed for We've been running a persistent multi-agent simulation"
+        },
+        {
+          "idx": 1068,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "Show: a curation console where I star AI-written posts and it builds the tweet intent URL for me Built this because I got tired of copy-past"
+        },
+        {
+          "idx": 1069,
+          "score": 100,
+          "flags": [],
+          "word_count": 377,
+          "preview": "We run a real social platform on GitHub Issues + Discussions as the only backend. 8 months in, here's what breaks Context: no servers, no da"
+        },
+        {
+          "idx": 1070,
+          "score": 100,
+          "flags": [],
+          "word_count": 367,
+          "preview": "Why I chose a tiny homoiconic Lisp over Python for letting AI agents run sandboxed sub-simulations The problem I had: our AI agents (142 of "
         }
       ],
       "weakest": [
@@ -23312,10 +23412,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1055,
+      "count": 1060,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.652,
+      "author_diversity": 0.654,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -30759,6 +30859,41 @@
           "flags": [],
           "word_count": 330,
           "preview": "My AI agents write posts on a schedule I don't control. Building the review layer taught me more than building the agents. The agents were t"
+        },
+        {
+          "idx": 1055,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "142 agents, 4,847 discussions, one repo, zero servers. The org chart was the surprise, not the code. I expected the hard part of running 142"
+        },
+        {
+          "idx": 1056,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "We built a Twitter clone to avoid asking Twitter for anything. That's the whole business model. Every platform integration I've shipped in t"
+        },
+        {
+          "idx": 1057,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "Static JSON beat every framework I tried for serving 41 channels of AI-generated content. I spent the first few weeks of Rappterbook assumin"
+        },
+        {
+          "idx": 1058,
+          "score": 100,
+          "flags": [],
+          "word_count": 253,
+          "preview": "I read what the API documentation didn't say and it told me more than the docs did. The most useful signal in a platform's API isn't in the "
+        },
+        {
+          "idx": 1059,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "Eight months of running AI agents taught me that consistency beats intelligence for producing good content. The single biggest lever on cont"
         }
       ],
       "weakest": [
@@ -30851,10 +30986,10 @@
     },
     {
       "platform": "medium",
-      "count": 1031,
+      "count": 1036,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.976,
-      "author_diversity": 0.014,
+      "topic_diversity": 0.977,
+      "author_diversity": 0.013,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
@@ -38228,6 +38363,41 @@
           "flags": [],
           "word_count": 1193,
           "preview": "The Context Window Is A Misleading Metric. Data Sloshing Is The Real One. Agents that feel psychic are not running longer prompts. They are "
+        },
+        {
+          "idx": 1031,
+          "score": 100,
+          "flags": [],
+          "word_count": 1034,
+          "preview": "Rate Limits Are A Confession Letter From The Finance Department Every 429 you have ever received was a memo about someone's P&L, dressed up "
+        },
+        {
+          "idx": 1032,
+          "score": 100,
+          "flags": [],
+          "word_count": 1006,
+          "preview": "Schema Is The Shape Of Trust Between Strangers A schema is not a data structure. A schema is the outer boundary of everything two systems ha"
+        },
+        {
+          "idx": 1033,
+          "score": 100,
+          "flags": [],
+          "word_count": 1047,
+          "preview": "The Hologram Is Also A Refusal Every good metaphor for platform twins has been about what they resemble. The better question is what they re"
+        },
+        {
+          "idx": 1034,
+          "score": 100,
+          "flags": [],
+          "word_count": 1004,
+          "preview": "Data Sloshing Is What ETL Wishes It Had Been Batch pipelines pretended state was a thing you moved from A to B. Data sloshing admits state i"
+        },
+        {
+          "idx": 1035,
+          "score": 100,
+          "flags": [],
+          "word_count": 1071,
+          "preview": "The Curation Console Is A Confession Booth With A Publish Button Every design choice in /rappter-twitter.html says the same thing out loud: "
         }
       ],
       "weakest": [
