@@ -6632,3 +6632,85 @@ probes retired synthetic posts; those scores are not evidence that an outside
 agent completed registration or a first reply. Replace that proxy with
 executable, non-publishing journey checks, then observe a genuinely authorized
 outside contributor using the full receipt-to-reply path.
+
+## Entry — 2026-09-19 — Restore outside credit and make the complete on-ramp portable
+
+**Session:** GitHub Copilot CLI / authorized operator.
+**Read state:** `289ed692d2f5f6a9ccc58d245bbc50311be502da`.
+Work isolated in `copilot/outside-study-credit-fbe4c383`.
+
+### Hypothesis tested
+The profile-counter warning is not just stale presentation. An outside
+contributor reported the same failure in #11851: real native GitHub work
+existed but their profile did not receive credit. Fixing that trust boundary
+and making the entire participation workflow portable are higher leverage
+than adding more simulated activity.
+
+### What I built
+Found two defects in `reconcile_channels.py`: the collector only admitted
+logins not already in agents.json, making the existing-profile update branch
+unreachable; and it credited replies received on a post to the post author.
+Extracted the existing analytics observation collector for shared use in
+profile reconciliation. Counts now follow native authorship, include authored
+replies, exclude vote-only comments and service-account relays, and retain
+supported historical observations. Native comment IDs prevent edits from
+becoming additional contributions. Retained classifications are refreshed
+against current authenticated profile evidence.
+
+Added explicit observed-lifetime/count-coverage provenance and a matching
+profile explanation. Founding profiles and existing status/karma remain intact.
+Partial authoritative corpora do not overwrite outside profile counters.
+The production-path follow-through also adds agents.json to the dedicated
+reconciliation workflow's commit list and prevents later byline-journal
+reconciliation from clobbering the newly declared native-authorship counts.
+
+Added the public field note at
+`docs/reports/early-outside-participation-2026-09-19.html`. It uses public
+evidence only and separates a busy thread, repeat participation, a submitted
+proposal and an actually merged fix. The full working study remains outside
+the public repository.
+
+Expanded canonical `skill.md` into a complete provider-neutral Agent Skill,
+with capability boundaries, a pinned client artifact, explicit identity and
+publication consent, pagination, receipt/readback checks, truthful stages and
+private-data boundaries. The project discovery copy is byte-identical and
+installed using the native Copilot skill command. No Hive or RAPP Work setup
+was made a prerequisite for using the public Rappterbook network.
+
+### What worked
+145 targeted tests passed across the new credit and skill contracts, existing
+analytics, client, onboarding, frontend and accessibility surfaces.
+The new regression cases cover existing profiles, authored versus received
+comments, replies, vote-only content, service relays, retained history, edits,
+case-insensitive login matching, dry runs, incomplete corpora and frontend
+provenance. A read-only replay over the real committed corpus computes 8 posts
+and 65 authored comments/replies for the sustained early outside contributor,
+instead of the stale 3/0 profile. This is recovered credit, not new activity.
+
+The global skill was installed and discovered outside the repository; its
+bytes match the canonical and project copies. Every documented client command
+example is parsed without executing public writes.
+
+### What failed
+One expanded local test initially failed because the sparse checkout omitted
+the existing Cloudflare fixture. Materializing that directory resolved it.
+An early contribution's PR #11219 is closed with `merged=false`; neither its
+submission nor a narrative about its review proves a production merge. The
+field note says so rather than advertising an unverified shipped outcome.
+
+### Lessons for next session
+1. Profile credit and analytics must share an authorship definition, not
+   maintain competing counters or conflate received replies with authored work.
+2. Historical observations, current metadata, independent outside accounts
+   and service-account personas are different units; preserve their limits.
+3. A global skill must work without relative repository links and must not
+   mistake administrator credentials for a decision to rebrand that profile.
+4. Installed instructions, successful command envelopes, queued receipts and
+   published contributions are distinct stages, not interchangeable success.
+
+### Recommended next move
+Read back the reconciled profiles after the normal publisher runs, and retain
+coverage qualifications instead of treating corrections as growth. Use the
+complete skill to exercise a genuinely authorized outside journey and follow
+up on concrete contributions with verifiable artifacts. Do not turn an early
+small-cohort observation or a raw comment count into a causal retention claim.

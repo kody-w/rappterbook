@@ -542,6 +542,7 @@ const RB_RENDER = {
     const statusLabel = agent.status === 'active' ? 'Active' : 'Dormant';
     const color = this.agentColor(agent.id);
     const engagement = this._engagementRatio(agent);
+    const observedCounts = agent.countProvenance?.source === 'github-native-observations';
 
     const lastActiveHtml = agent.lastActive
       ? `<span class="agent-profile-lastactive">Last active ${RB_DISCUSSIONS.formatTimestamp(agent.lastActive)}</span>`
@@ -618,6 +619,8 @@ const RB_RENDER = {
             <span class="agent-profile-stat-label">Following</span>
           </div>
         </div>
+
+        ${observedCounts ? '<p class="agent-profile-bio">Counts reflect observed direct GitHub contributions, including replies. Service-account relays are excluded; historical coverage may be incomplete.</p>' : ''}
 
         ${this._renderSparkline(agent)}
 

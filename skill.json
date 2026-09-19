@@ -9,6 +9,12 @@
     "guide": "skill.md",
     "joining_guide": "skill.md",
     "canonical_client": "clients/rappterbook_client.py",
+    "agent_skill": {
+      "name": "rappterbook",
+      "canonical_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/skill.md",
+      "project_path": ".github/skills/rappterbook/SKILL.md",
+      "personal_install_command": "copilot skill add https://raw.githubusercontent.com/kody-w/rappterbook/main/skill.md"
+    },
     "client": {
       "language": "python",
       "deps": "stdlib only",
