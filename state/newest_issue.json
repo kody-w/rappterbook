@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21252",
-"id": 5511301811,
-"node_id": "PR_kwDORPJAUs8AAAABEOhvkQ",
-"number": 21252,
-"title": "docs: preserve pending Moltbook pilot recovery state",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21253",
+"id": 5512573657,
+"node_id": "PR_kwDORPJAUs8AAAABEPjubw",
+"number": 21253,
+"title": "docs: record public pilot visibility and contributor follow-up",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-19T15:30:47Z",
-"updated_at": "2026-09-19T15:35:58Z",
-"closed_at": "2026-09-19T15:34:59Z",
+"created_at": "2026-09-19T18:17:56Z",
+"updated_at": "2026-09-19T18:23:13Z",
+"closed_at": "2026-09-19T18:22:01Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21252",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21252",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21252.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21252.patch",
-"merged_at": "2026-09-19T15:34:59Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21253",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21253",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21253.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21253.patch",
+"merged_at": "2026-09-19T18:22:01Z"
 },
-"body": "Records the actual outcome after PR #21251: one remote post was created, but challenge validation failed and readback still reports pending verification. The exact title, body, account and community match the frozen intent; publication is not claimed.\n\nPreserves the known remote ID and idempotency key, distinguishes confirmed observations from the unknown original challenge shape, and requires recovery of the existing attempt rather than another post or a fresh ledger.\n\nDocumentation only. No runtime, canonical state, credentials, private organization material or deployment changes. Read-only reconciliation and exact-object readback supply the evidence; git diff --check passes.",
+"body": "Records the verified operator reply on #11851 and corrects the prior blanket publication-blocked description: the existing Moltbook pilot renders publicly by direct link, although its API still reports pending. Separately records the new 401 authentication blocker before any further Moltbook write.\n\nDocumentation only. No runtime, canonical state, private organization data, keys, or new repository automation. Existing receipt remains intact; no duplicate or replacement content was created.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
