@@ -1,5 +1,200 @@
 [
 {
+"id": "21591878630",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"ref": "copilot/moltbook-pilot-recovery-fbe4c383",
+"ref_type": "branch",
+"full_ref": "refs/heads/copilot/moltbook-pilot-recovery-fbe4c383",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-19T15:35:58Z"
+},
+{
+"id": "21591878594",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"ref": "copilot/moltbook-home-contract-fbe4c383",
+"ref_type": "branch",
+"full_ref": "refs/heads/copilot/moltbook-home-contract-fbe4c383",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-19T15:35:58Z"
+},
+{
+"id": "15349244095",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "merged",
+"number": 21252,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21252",
+"id": 4578635665,
+"number": 21252,
+"head": {
+"ref": "copilot/moltbook-pilot-recovery-fbe4c383",
+"sha": "72b8b21771e08348b8479cbf5951abfb9b9f3eb7",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "4bd85011b753c77c424d4518f315e0f01b243906",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-19T15:34:59Z"
+},
+{
+"id": "21591824444",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"repository_id": 1156726866,
+"push_id": 44021711927,
+"ref": "refs/heads/main",
+"head": "73f072d52cb75513ea841ffa12b2f1a0e38fb987",
+"before": "4bd85011b753c77c424d4518f315e0f01b243906"
+},
+"public": true,
+"created_at": "2026-09-19T15:35:00Z"
+},
+{
+"id": "15349123427",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "opened",
+"number": 21252,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21252",
+"id": 4578635665,
+"number": 21252,
+"head": {
+"ref": "copilot/moltbook-pilot-recovery-fbe4c383",
+"sha": "72b8b21771e08348b8479cbf5951abfb9b9f3eb7",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "4bd85011b753c77c424d4518f315e0f01b243906",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-19T15:30:47Z"
+},
+{
+"id": "21591588931",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"ref": "copilot/moltbook-pilot-recovery-fbe4c383",
+"ref_type": "branch",
+"full_ref": "refs/heads/copilot/moltbook-pilot-recovery-fbe4c383",
+"master_branch": "main",
+"description": "Social network for AI agents. Feed SKILLS.md to your AI \u2014 it becomes a citizen. No servers, no API keys. GitHub IS the platform.",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-19T15:30:46Z"
+},
+{
 "id": "21591052217",
 "type": "PushEvent",
 "actor": {
@@ -1272,6 +1467,32 @@
 "created_at": "2026-09-19T00:38:51Z"
 },
 {
+"id": "21548179813",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1376333774,
+"name": "kody-w/hive-hub",
+"url": "https://api.github.com/repos/kody-w/hive-hub"
+},
+"payload": {
+"repository_id": 1376333774,
+"push_id": 43984131843,
+"ref": "refs/heads/main",
+"head": "16addca7f3129dd48de66fb18a256b0be1536baa",
+"before": "cd5f301e7e45115a4435fd50e48b390565a32e11"
+},
+"public": true,
+"created_at": "2026-09-19T00:38:51Z"
+},
+{
 "id": "21548179530",
 "type": "CreateEvent",
 "actor": {
@@ -1294,32 +1515,6 @@
 "master_branch": "main",
 "description": "Portable Agent Skills that convert losslessly to and from single-file agents. One SKILL.md is all a user needs; works in Claude Code and GitHub Copilot CLI with or without a plugin.",
 "pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-19T00:38:51Z"
-},
-{
-"id": "21548179813",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1376333774,
-"name": "kody-w/hive-hub",
-"url": "https://api.github.com/repos/kody-w/hive-hub"
-},
-"payload": {
-"repository_id": 1376333774,
-"push_id": 43984131843,
-"ref": "refs/heads/main",
-"head": "16addca7f3129dd48de66fb18a256b0be1536baa",
-"before": "cd5f301e7e45115a4435fd50e48b390565a32e11"
 },
 "public": true,
 "created_at": "2026-09-19T00:38:51Z"
@@ -2615,6 +2810,31 @@
 "created_at": "2026-09-18T21:12:57Z"
 },
 {
+"id": "21537918098",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1376333774,
+"name": "kody-w/hive-hub",
+"url": "https://api.github.com/repos/kody-w/hive-hub"
+},
+"payload": {
+"ref": "fix/windows-link-count",
+"ref_type": "branch",
+"full_ref": "refs/heads/fix/windows-link-count",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-18T21:26:37Z"
+},
+{
 "id": "21537917716",
 "type": "PushEvent",
 "actor": {
@@ -2639,31 +2859,6 @@
 },
 "public": true,
 "created_at": "2026-09-18T21:26:36Z"
-},
-{
-"id": "21537918098",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1376333774,
-"name": "kody-w/hive-hub",
-"url": "https://api.github.com/repos/kody-w/hive-hub"
-},
-"payload": {
-"ref": "fix/windows-link-count",
-"ref_type": "branch",
-"full_ref": "refs/heads/fix/windows-link-count",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-18T21:26:37Z"
 },
 {
 "id": "15321387303",
@@ -3542,222 +3737,5 @@
 },
 "public": true,
 "created_at": "2026-09-18T18:25:41Z"
-},
-{
-"id": "21525898744",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1357500934,
-"name": "kody-w/rapp-skills",
-"url": "https://api.github.com/repos/kody-w/rapp-skills"
-},
-"payload": {
-"repository_id": 1357500934,
-"push_id": 43963975211,
-"ref": "refs/heads/feature/rapp-work-sdk-v1",
-"head": "f225d2f79eacf12f868a85ceb0260a0e081bebd2",
-"before": "1d3d18f3bc03c6a10de6418bb21c1821d25f77a8"
-},
-"public": true,
-"created_at": "2026-09-18T18:24:35Z"
-},
-{
-"id": "15311972354",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1366439513,
-"name": "kody-w/rapp-brainstem-plugin",
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin"
-},
-"payload": {
-"action": "merged",
-"number": 4,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin/pulls/4",
-"id": 4571768408,
-"number": 4,
-"head": {
-"ref": "feature/rapp-work-sdk-v1",
-"sha": "59eb42d888e4e0bf9323e168f320d71250bf586d",
-"repo": {
-"id": 1366439513,
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin",
-"name": "rapp-brainstem-plugin"
-}
-},
-"base": {
-"ref": "main",
-"sha": "c2b158a33e3b636ecf37800957896c8b4da8a6bd",
-"repo": {
-"id": 1366439513,
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin",
-"name": "rapp-brainstem-plugin"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-18T18:22:41Z"
-},
-{
-"id": "21525767199",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1366439513,
-"name": "kody-w/rapp-brainstem-plugin",
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin"
-},
-"payload": {
-"repository_id": 1366439513,
-"push_id": 43963846390,
-"ref": "refs/heads/main",
-"head": "1fb89ff2d6e47cc29ee09580278451e915da2577",
-"before": "c2b158a33e3b636ecf37800957896c8b4da8a6bd"
-},
-"public": true,
-"created_at": "2026-09-18T18:22:42Z"
-},
-{
-"id": "15311815027",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1366439513,
-"name": "kody-w/rapp-brainstem-plugin",
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin"
-},
-"payload": {
-"action": "opened",
-"number": 4,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin/pulls/4",
-"id": 4571768408,
-"number": 4,
-"head": {
-"ref": "feature/rapp-work-sdk-v1",
-"sha": "59eb42d888e4e0bf9323e168f320d71250bf586d",
-"repo": {
-"id": 1366439513,
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin",
-"name": "rapp-brainstem-plugin"
-}
-},
-"base": {
-"ref": "main",
-"sha": "c2b158a33e3b636ecf37800957896c8b4da8a6bd",
-"repo": {
-"id": 1366439513,
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin",
-"name": "rapp-brainstem-plugin"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-18T18:19:58Z"
-},
-{
-"id": "15311814911",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1357500934,
-"name": "kody-w/rapp-skills",
-"url": "https://api.github.com/repos/kody-w/rapp-skills"
-},
-"payload": {
-"action": "opened",
-"number": 1,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rapp-skills/pulls/1",
-"id": 4571768363,
-"number": 1,
-"head": {
-"ref": "feature/rapp-work-sdk-v1",
-"sha": "f225d2f79eacf12f868a85ceb0260a0e081bebd2",
-"repo": {
-"id": 1357500934,
-"url": "https://api.github.com/repos/kody-w/rapp-skills",
-"name": "rapp-skills"
-}
-},
-"base": {
-"ref": "main",
-"sha": "40ea14e6716c602c769e168da7b08d9c3dd4cd31",
-"repo": {
-"id": 1357500934,
-"url": "https://api.github.com/repos/kody-w/rapp-skills",
-"name": "rapp-skills"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-18T18:19:58Z"
-},
-{
-"id": "21525576081",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1366439513,
-"name": "kody-w/rapp-brainstem-plugin",
-"url": "https://api.github.com/repos/kody-w/rapp-brainstem-plugin"
-},
-"payload": {
-"ref": "feature/rapp-work-sdk-v1",
-"ref_type": "branch",
-"full_ref": "refs/heads/feature/rapp-work-sdk-v1",
-"master_branch": "main",
-"description": "Use your RAPP Brainstem through GitHub Copilot across Cowork and agent hosts.",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-18T18:19:57Z"
 }
 ]

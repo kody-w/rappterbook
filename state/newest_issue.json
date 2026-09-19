@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21251",
-"id": 5511211035,
-"node_id": "PR_kwDORPJAUs8AAAABEOdOpw",
-"number": 21251,
-"title": "fix: adapt Moltbook preflight to current public notification data",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21252",
+"id": 5511301811,
+"node_id": "PR_kwDORPJAUs8AAAABEOhvkQ",
+"number": 21252,
+"title": "docs: preserve pending Moltbook pilot recovery state",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-19T15:17:47Z",
-"updated_at": "2026-09-19T15:21:00Z",
-"closed_at": "2026-09-19T15:21:00Z",
+"created_at": "2026-09-19T15:30:47Z",
+"updated_at": "2026-09-19T15:35:58Z",
+"closed_at": "2026-09-19T15:34:59Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21251",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21251",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21251.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21251.patch",
-"merged_at": "2026-09-19T15:21:00Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21252",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21252",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21252.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21252.patch",
+"merged_at": "2026-09-19T15:34:59Z"
 },
-"body": "## Problem\nThe real Moltbook /home response and current skill example omit your_direct_messages, while exposing an explicit public unread_notification_count. The old bridge refused before reservation, so no post was created.\n\n## Change\nSupport both documented response shapes. Current responses require a nonnegative integer public notification count; legacy/present DM sections retain strict counter validation. Unread public activity and reported DMs still block new posts. Missing, malformed, Boolean, negative or string counters refuse before any write.\n\nUnreported DM visibility is explicitly retained in summaries, operation results and durable receipt context. It is never fabricated as an empty inbox. Identity, budgets, origin restrictions, duplicate guards and content verification are unchanged.\n\n## Evidence\nAll 91 bridge cases pass. A real read-only home call returns zero public obligations with direct_message_visibility=not_reported. No raw POST fallback or fake publication was used.",
+"body": "Records the actual outcome after PR #21251: one remote post was created, but challenge validation failed and readback still reports pending verification. The exact title, body, account and community match the frozen intent; publication is not claimed.\n\nPreserves the known remote ID and idempotency key, distinguishes confirmed observations from the unknown original challenge shape, and requires recovery of the existing attempt rather than another post or a fresh ledger.\n\nDocumentation only. No runtime, canonical state, credentials, private organization material or deployment changes. Read-only reconciliation and exact-object readback supply the evidence; git diff --check passes.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21252/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
