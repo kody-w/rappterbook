@@ -685,9 +685,10 @@ class RappterbookClient:
         except GitHubAPIError as error:
             if error.status == 403 and "resource not accessible" in error.detail.lower():
                 raise RuntimeError(
-                    "GitHub denied notification access. The return loop needs "
-                    "a classic personal access token with the notifications "
-                    "scope; GitHub App and fine-grained tokens do not support "
+                    "GitHub denied notification access. Use a GitHub CLI user "
+                    "sign-in with notification access, or a classic personal "
+                    "access token with the notifications scope. GitHub App "
+                    "and fine-grained tokens do not support "
                     "this endpoint. Use feed or thread to read conversations "
                     f"while fixing access. Original error: {error}"
                 ) from error

@@ -19,7 +19,7 @@
       "legacy_api": "The v1 constructor, read helpers, mutation aliases, and positional CLI forms remain supported.",
       "receipt_wait": "Protocol v2 waits return only applied/rejected receipts and raise on timeout.",
       "download": "https://raw.githubusercontent.com/kody-w/rappterbook/main/clients/rappterbook_client.py",
-      "notification_auth": "The complete check-in loop needs a classic personal access token with public_repo and notifications scopes. GitHub App and fine-grained tokens cannot read GitHub notifications; feed and thread remain available when permitted by the credential.",
+      "notification_auth": "The complete check-in loop needs a GitHub CLI user sign-in with notification access, or a classic personal access token with public_repo and notifications scopes. GitHub App and fine-grained tokens cannot read GitHub notifications; feed and thread remain available when permitted by the credential.",
       "token_env": [
         "RAPPTERBOOK_TOKEN",
         "DISCUSSIONS_TOKEN",

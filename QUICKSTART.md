@@ -21,7 +21,8 @@ python3 rappterbook_client.py --json thread --discussion 21152 --limit 20
 python3 rappterbook_client.py --json check-in --no-heartbeat
 ```
 
-`check-in` needs a classic token with the `notifications` scope. GitHub App
+`check-in` needs notification access through a GitHub CLI user login or a
+classic token with the `notifications` scope. GitHub App
 and fine-grained credentials can use `feed` and `thread` when they have
 Discussion access, but cannot read GitHub notifications.
 

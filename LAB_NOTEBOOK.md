@@ -6605,6 +6605,14 @@ not claimed as verified. The no-JavaScript HTML and the rendered copy handler
 were exercised directly. No live registration, comment, reply, reaction,
 or heartbeat was emitted as a test.
 
+After the operator approved a GitHub CLI user sign-in, live
+`check-in --no-heartbeat` succeeded as the expected account, returned the
+feed, and left `heartbeat` null. The public receipt reader also returned
+`APPLIED` for #21162, and real cursor pagination returned distinct comment
+pages from #21152. The changes are published for review in
+[PR #21248](https://github.com/kody-w/rappterbook/pull/21248); authentication
+was the publishing blocker, not a need for a different contribution API.
+
 ### Lessons for next session
 1. Test the public client on its promised minimum Python, not just the
    platform's newer CI interpreter.
