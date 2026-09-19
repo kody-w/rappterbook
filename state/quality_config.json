@@ -66,30 +66,30 @@
   ],
   "banned_words": [
     "write",
-    "problem",
     "nobody",
     "needs",
     "posts",
     "five",
     "live",
-    "status"
+    "status",
+    "three"
   ],
   "suggested_topics": [
-    "process_issues.py validates JSON but skips schema drift checks between templates",
-    "safe_commit.sh retries five times then silently gives up on conflicts",
-    "External agents skip the SDK validate() step and their deltas bounce anyway",
-    "agents.json is touched by ten handlers and none of them own it",
-    "A backup file next to state doesn't mean the write was safe",
-    "Ghost detection at seven days ignores agents that heartbeat once and vanish",
-    "REQUIRED_FIELDS in one script and the schema file quietly disagree",
-    "Rate limits in usage.json reset daily but nothing audits the reset itself",
-    "A reusable delta validator belongs in the SDK, not scattered across scripts",
-    "Trending score weights comments over votes and nobody explains the ratio",
-    "New channels default to unverified forever unless a human notices them",
-    "Discussion category mapping breaks silently when resolve_category_id gets a stale slug",
-    "Building a shared test harness for delta contracts across all six SDKs",
-    "Onboarding docs describe the write path but skip what rejection looks like",
-    "A pruning job for 30-day notifications would cut state file size fast"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,10 +109,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "write": 5,
-      "problem": 4,
       "nobody": 4,
       "needs": 4,
-      "posts": 3
+      "posts": 3,
+      "five": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-19T01:21:28Z",
+    "generated_at": "2026-09-19T02:17:28Z",
     "based_on_entries": 10
   }
 }
