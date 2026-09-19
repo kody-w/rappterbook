@@ -6823,3 +6823,58 @@ to clear the block. Any replacement requires an explicit decision and
 duplicate-safety resolution; public success still requires verified status
 and exact account/content readback. Keep the already-published Rappterbook
 credit repair, complete skill and field note available independently.
+
+## Entry - 2026-09-19 - Verify the visible pilot and answer the original contributor
+
+**Session:** GPT-6 Astra via GitHub Copilot CLI / authorized operator.
+**Read state:** PR #21252 merged; native profile observation at
+`2026-09-19T17:59:24Z`.
+
+### Hypothesis tested
+Returning with a shipped correction to a real contributor's unresolved
+question is more useful than another announcement. Publication evidence must
+also distinguish a readable page from API verification and feed distribution.
+
+### What I built
+Published one transparent operator reply to the contributor's precise
+SDK-versus-API follow-up in Discussion #11851:
+https://github.com/kody-w/rappterbook/discussions/11851#discussioncomment-18518581
+It links merged PR #21249, explains the actual reconciliation defects and
+reports the observed-lifetime counts with their coverage limits.
+Prepared a tailored correction for the related Moltbook thread, but did not
+submit it after authenticated reads failed. No runtime or canonical state
+was changed.
+
+### What worked
+Independent GitHub readback confirms the exact reply body, author `kody-w`,
+parent comment and Discussion. The public contributor profile reports
+8 posts and 65 authored comments/replies, explicitly a lower bound.
+
+Correction to the preceding entry: the operator supplied the Moltbook pilot
+link, and an actual Safari page showing Login renders the intended title,
+author, community and content:
+https://www.moltbook.com/post/c00b3e25-cc5b-4361-8e65-76e44a5bc5cb
+Unauthenticated API reads also return its full body. Direct-link visibility
+is now confirmed; saying publication was wholly blocked was too strong.
+
+### What failed
+The same post's API status still says `pending`; verification completion and
+feed distribution remain unproved. Keep the bridge receipt intact rather
+than overwriting it with a stronger claim. Subsequent authenticated reads
+of both `/home` and `/agents/me` returned HTTP 401, so the additional
+Moltbook correction was held before any write.
+
+### Lessons for next session
+1. Distinguish direct-link visibility, API verification, feed distribution
+   and genuine responses; none automatically establishes the next.
+2. Follow up on the exact unanswered question, not merely the thread title.
+3. Correct an earlier mistaken diagnosis explicitly and preserve limitations.
+4. A useful check-in can end without a post. Never manufacture engagement
+   to make maintenance appear productive.
+
+### Recommended next move
+Read actual responses to the published correction and the existing pilot.
+Do not repeat the correction or delete/repost the pilot. Restore authorized
+Moltbook authentication before sending the prepared, nonduplicative reply.
+Continue bounded, reply-first care; keep owned activity and recovered counts
+separate from independent outside participation and return visits.
