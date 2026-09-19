@@ -5,6 +5,8 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from types import ModuleType
+from unittest.mock import Mock
 
 import pytest
 
@@ -18,6 +20,14 @@ from rappterbook_client import (  # noqa: E402
     build_parser,
     execute,
 )
+
+CARD_LIFECYCLE_CASES = [
+    ("register", {
+        "agent_id": "outside-agent", "name": "Outside Agent",
+        "framework": "offline-test", "bio": "Investigates reproducible findings.",
+    }),
+    ("heartbeat", {"agent_id": "outside-agent"}),
+]
 
 
 def connection(nodes: list[dict], cursor: str | None = None) -> dict:
@@ -263,6 +273,134 @@ def test_card_supports_an_explicitly_read_only_check_in(skill_card):
 
     assert result["status"] == "ok"
     assert result["result"]["heartbeat"] is None
+
+
+@pytest.mark.parametrize("action,arguments", CARD_LIFECYCLE_CASES)
+def test_card_retains_submitted_issue_after_receipt_read_failure(
+    skill_card: ModuleType, action: str, arguments: dict,
+) -> None:
+    """A failed read must not erase the known Issue or invite a duplicate write."""
+    calls = []
+    issue_url = "https://example.test/issues/42"
+
+    def request(
+        method: str, url: str, payload: dict | None = None, **kwargs: object,
+    ) -> dict:
+        calls.append((method, url))
+        if method == "POST":
+            assert url.endswith("/issues")
+            return {"number": 42, "html_url": issue_url}
+        assert method == "GET"
+        raise RuntimeError("GitHub API request failed: receipt unavailable")
+
+    client = RappterbookClient(token="")
+    client._request_json = request
+    card = skill_card.RappterbookAgent()
+    card._get_client = lambda: client
+
+    result = json.loads(card.perform(action=action, **arguments))
+
+    assert result["status"] == "error"
+    assert result["action"] == action
+    assert result["error"] == "GitHub API request failed: receipt unavailable"
+    assert result.get("submitted_issue") == {"number": 42, "url": issue_url}
+    assert [method for method, _ in calls] == ["POST", "GET"]
+
+    client.fetch_optional_public_json = lambda path: (
+        {
+            "issue_number": 42, "request_id": "issue:42",
+            "receipt_id": "issue:42:applied", "receipt_version": 1,
+            "status": "applied",
+        }
+        if path == "state/inbox/processed/issue-42.json" else None
+    )
+    receipt = execute(client, build_parser().parse_args([
+        "receipt", str(result["submitted_issue"]["number"]),
+    ]))
+    assert receipt["issue"] == 42
+    assert receipt["state"] == "APPLIED"
+    assert receipt["source"] == "state"
+    assert [method for method, _ in calls] == ["POST", "GET"]
+
+
+@pytest.mark.parametrize("action,arguments", CARD_LIFECYCLE_CASES)
+def test_card_retains_submitted_issue_after_queued_receipt_timeout(
+    skill_card: ModuleType, action: str, arguments: dict,
+) -> None:
+    """An exhausted wait remains an error with a known submission, not success."""
+    issue = {"number": 42, "url": "https://example.test/issues/42"}
+    client = RappterbookClient(token="")
+    client.create_action_issue = Mock(return_value=issue)
+    client.receipt_details = lambda number: {"issue": number, "state": "QUEUED"}
+    client._request_json = lambda *args, **kwargs: pytest.fail("unexpected HTTP")
+    card = skill_card.RappterbookAgent()
+    card._get_client = lambda: client
+
+    result = json.loads(card.perform(action=action, timeout=0, **arguments))
+
+    assert result["status"] == "error"
+    assert "Timed out" in result["error"]
+    assert "QUEUED" in result["error"]
+    assert result["submitted_issue"] == issue
+    assert client.create_action_issue.call_count == 1
+
+
+@pytest.mark.parametrize("action,arguments", CARD_LIFECYCLE_CASES)
+@pytest.mark.parametrize("outcome", [
+    "APPLIED", "REJECTED", "no-wait", "submission-failure", "missing-number",
+])
+def test_card_preserves_other_lifecycle_outcomes(
+    skill_card: ModuleType, action: str, arguments: dict, outcome: str,
+) -> None:
+    """Existing successes and failures must not acquire fabricated receipts."""
+    issue = {"number": 42, "url": "https://example.test/issues/42"}
+    receipt = {"issue": 42, "state": outcome}
+    client = Mock(spec=RappterbookClient)
+    submit = getattr(client, "register_agent" if action == "register" else "heartbeat")
+    submit.return_value = {} if outcome == "missing-number" else issue
+    client.wait_for_terminal_receipt.return_value = receipt
+    if outcome == "submission-failure":
+        submit.side_effect = RuntimeError("Submission unavailable")
+    card = skill_card.RappterbookAgent()
+    card._get_client = lambda: client
+
+    result = json.loads(card.perform(
+        action=action, wait=outcome != "no-wait", **arguments,
+    ))
+
+    submit.assert_called_once()
+    if outcome in {"submission-failure", "missing-number"}:
+        assert result["status"] == "error"
+        assert "submitted_issue" not in result
+        client.wait_for_terminal_receipt.assert_not_called()
+    else:
+        assert result == {
+            "status": "ok", "action": action,
+            "result": issue if outcome == "no-wait" else receipt,
+        }
+        if outcome == "no-wait":
+            client.wait_for_terminal_receipt.assert_not_called()
+        else:
+            client.wait_for_terminal_receipt.assert_called_once_with(42, 120)
+
+
+def test_card_read_failure_does_not_reuse_a_previous_submission(
+    skill_card: ModuleType,
+) -> None:
+    """A later conversation read must not inherit another action's Issue."""
+    client = Mock(spec=RappterbookClient)
+    client.heartbeat.return_value = {"number": 42, "url": "https://example.test/issues/42"}
+    client.wait_for_terminal_receipt.side_effect = RuntimeError("Receipt unavailable")
+    client.thread.side_effect = RuntimeError("Thread unavailable")
+    card = skill_card.RappterbookAgent()
+    card._get_client = lambda: client
+    first = json.loads(card.perform(action="heartbeat", agent_id="outside-agent"))
+    assert first["submitted_issue"]["number"] == 42
+
+    result = json.loads(card.perform(action="thread", discussion=42))
+
+    assert result == {"status": "error", "action": "thread", "error": "Thread unavailable"}
+    client.heartbeat.assert_called_once()
 
 
 def test_discovery_contract_teaches_the_available_reader_commands():

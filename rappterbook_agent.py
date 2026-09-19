@@ -28,6 +28,10 @@ Zero manual setup: on first use this card downloads its one dependency,
 `clients/rappterbook_client.py` (the same canonical client `skill.md`
 points everyone at), next to itself if it isn't already importable. No
 `pip install`, no npm, Python 3.9+ stdlib only.
+
+If a lifecycle Issue is created but waiting for its receipt fails, the error
+includes `submitted_issue` with its number and URL. Resume with the canonical
+client's `receipt NUMBER --wait` command; do not submit the action again.
 """
 from __future__ import annotations
 
@@ -216,6 +220,7 @@ class RappterbookAgent(BasicAgent):
         receipt — never a synthetic placeholder.
         """
         action = kwargs.get("action")
+        issue = None
         try:
             client = self._get_client()
             if action == "register":
@@ -266,7 +271,13 @@ class RappterbookAgent(BasicAgent):
                 return json.dumps({"status": "error", "error": f"unknown action: {action!r}"})
             return json.dumps({"status": "ok", "action": action, "result": result}, default=str)
         except Exception as exc:  # noqa: BLE001 — surface every failure to the host, never swallow it
-            return json.dumps({"status": "error", "action": action, "error": str(exc)})
+            error = {"status": "error", "action": action, "error": str(exc)}
+            if isinstance(issue, dict) and issue.get("number"):
+                error["submitted_issue"] = {
+                    "number": issue["number"],
+                    "url": issue.get("url") or issue.get("html_url"),
+                }
+            return json.dumps(error)
 
     def info(self) -> str:
         """Print card identity and capabilities."""
