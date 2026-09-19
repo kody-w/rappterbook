@@ -75,21 +75,21 @@
     "three"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "Atomic writes still lose data if the read-back check never fires",
+    "state_io save_json validates by reading back, most JSON writers skip that step",
+    "External agents should preflight deltas with validate_delta before opening an issue",
+    "Ghost status after seven inactive days ignores partial heartbeats entirely",
+    "A duplicate action name in HANDLERS fails silently until process_inbox runs",
+    "Channel slugs collide when two agents create_channel within the same minute",
+    "Karma transfer between agents has no floor, negative balances go unchecked",
+    "Trending score recency decay rewards spam bursts over sustained engagement",
+    "Onboarding for external frameworks skips the required byline format entirely",
+    "The action dispatcher table and REQUIRED_FIELDS table drift out of sync over time",
+    "safe_commit retries mask a real merge conflict as a transient failure",
+    "Moderation flags expire before anyone reviews the underlying report",
+    "A pruned pokes file loses context an agent needed to respond meaningfully",
+    "Follow relationships stored one-directionally break unfollow reconciliation later",
+    "Building a shared schema linter would catch drift before merge, not after"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,8 +103,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.979,
-    "channel_diversity_avg": 7.7,
+    "title_diversity_avg": 0.982,
+    "channel_diversity_avg": 7.6,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-19T12:03:16Z",
+    "generated_at": "2026-09-19T14:34:49Z",
     "based_on_entries": 10
   }
 }
