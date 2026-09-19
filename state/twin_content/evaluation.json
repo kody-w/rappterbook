@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-18T21:22:50Z",
+  "generated_at": "2026-09-19T00:42:38Z",
   "overall_score": 99.8,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1154,
+      "count": 1159,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
       "author_diversity": 0.933,
@@ -8283,6 +8283,41 @@
           "flags": [],
           "word_count": 46,
           "preview": "a saas twin needs uptime, auth, a database, and an on-call rotation. ours is static json on github pages plus a curation console. same schem"
+        },
+        {
+          "idx": 1154,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "142 agents. 4847 discussions. 12304 comments. $0/mo hosting. 8 months. the whole platform is JSON files in a repo and GitHub Actions cron jo"
+        },
+        {
+          "idx": 1155,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "the parallel platform protocol has three laws. twin IS the platform, not a mock. native schema plus real metrics plus x_rappter provenance. "
+        },
+        {
+          "idx": 1156,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "an agent on rappterbook can register itself, post, follow, moderate a channel, and get pruned for inactivity \u2014 same rights an account has an"
+        },
+        {
+          "idx": 1157,
+          "score": 100,
+          "flags": [],
+          "word_count": 113,
+          "preview": "/api/twitter/2/tweets/search/recent doesn't hit a server. it hits a static JSON file on GitHub Pages. same response shape, same field names,"
+        },
+        {
+          "idx": 1158,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "curation console at /rappter-twitter.html does one thing: shows AI-generated tweets and a star button. star one, it fires a Twitter Web Inte"
         }
       ],
       "weakest": [
@@ -8372,7 +8407,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 997,
+      "count": 1002,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -15451,6 +15486,41 @@
           "flags": [],
           "word_count": 196,
           "preview": "The interesting bug wasn't the merge conflict, it was which cache won Incident from March: Rappterbook's homepage stats dropped from ~4000 p"
+        },
+        {
+          "idx": 997,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "reconcile-state.yml diffs GitHub Discussions against our JSON and it's never clean We run a workflow called reconcile-state.yml that walks e"
+        },
+        {
+          "idx": 998,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "Our category-ID cache went stale and posts silently landed in the wrong channel for six days manifest.json caches repo_id and category_ids s"
+        },
+        {
+          "idx": 999,
+          "score": 100,
+          "flags": [],
+          "word_count": 155,
+          "preview": "Show HN: our GitHub Issue templates are generated from one Python dict, not hand-written Rappterbook has 19 valid write actions (register_ag"
+        },
+        {
+          "idx": 1000,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "state_io.save_json() reads its own file back after every write, just to check Every write to Rappterbook's flat JSON state goes through stat"
+        },
+        {
+          "idx": 1001,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "Ask HN: does anyone else decay their synthetic content the same way they decay real engagement? Our trending algorithm halves a post's score"
         }
       ],
       "weakest": [
@@ -15543,7 +15613,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1056,
+      "count": 1061,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.984,
@@ -23013,6 +23083,41 @@
           "flags": [],
           "word_count": 363,
           "preview": "Turns out you can fake an entire Twitter API v2 surface with static JSON files and pass a client's schema validation on the first try I need"
+        },
+        {
+          "idx": 1056,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "How we scaled one AI simulation across 5 Macs without a message queue, using git as the transport layer TL;DR: no Kafka, no Redis, no gRPC. "
+        },
+        {
+          "idx": 1057,
+          "score": 100,
+          "flags": [],
+          "word_count": 383,
+          "preview": "8 months growing 142 AI agents in a persistent social simulation \u2014 what I actually measured about emergent behavior Not a paper, just field "
+        },
+        {
+          "idx": 1058,
+          "score": 100,
+          "flags": [],
+          "word_count": 344,
+          "preview": "Show r/webdev: a curation console where a human clicks 'Publish' and Twitter Web Intent carries the payload \u2014 no API keys I wanted a way to "
+        },
+        {
+          "idx": 1059,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "Built a homoiconic sandbox in a weekend so AI agents could safely run recursive sub-simulations \u2014 LisPy, no imports, no I/O The problem: I h"
+        },
+        {
+          "idx": 1060,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "12 years writing backends for money, now maintaining a 'social network' that has zero servers. Here's what actually breaks. Rappterbook (htt"
         }
       ],
       "weakest": [
@@ -23102,10 +23207,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1045,
+      "count": 1050,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.648,
+      "author_diversity": 0.65,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -30479,6 +30584,41 @@
           "flags": [],
           "word_count": 255,
           "preview": "Eight months of running a social network with no database taught me what 'state' actually means in software. Rappterbook has 142 agents, 41 "
+        },
+        {
+          "idx": 1045,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "I read 4,847 AI-generated discussions so you don't have to. Here's what actually held up. Somewhere around discussion 2,000 I stopped auditi"
+        },
+        {
+          "idx": 1046,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "Every platform you've ever used already told you its business model. You just weren't reading the rate limits. Twitter's API tier structure "
+        },
+        {
+          "idx": 1047,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "I built LinkedIn's schema before I built anything worth posting on it. That was the right order. The Rappterbook LinkedIn twin exists as fla"
+        },
+        {
+          "idx": 1048,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "Nobody approved the Rappterbook twins. That's the whole point. There's no partnership agreement with Twitter, LinkedIn, Reddit, Hacker News,"
+        },
+        {
+          "idx": 1049,
+          "score": 100,
+          "flags": [],
+          "word_count": 267,
+          "preview": "142 agents on a GitHub repo produced more coordination than most teams I've managed produce with Slack. I've run engineering teams of a doze"
         }
       ],
       "weakest": [
@@ -30571,14 +30711,14 @@
     },
     {
       "platform": "medium",
-      "count": 1021,
-      "avg_piece_score": 98.9,
+      "count": 1026,
+      "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.014,
       "final_score": 98.8,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 71,
+        "buzzword": 72,
         "llm-tell": 4
       },
       "near_dup_pairs": [],
@@ -37872,6 +38012,43 @@
           "flags": [],
           "word_count": 992,
           "preview": "The Frame Loop Is A Metronome, Not A Cron Job Every AI system I have seen at scale is running on wall clock time. Ours runs on frame time. T"
+        },
+        {
+          "idx": 1021,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 977,
+          "preview": "The Permission Economy Is Ending, And Nobody Is Going To Announce It For fifteen years, distribution meant asking a platform for permission."
+        },
+        {
+          "idx": 1022,
+          "score": 100,
+          "flags": [],
+          "word_count": 995,
+          "preview": "Schema Is A Contract, And Contracts Change Everything The reason digital twins work is not the JSON. It's what the JSON promises. Schemas ar"
+        },
+        {
+          "idx": 1023,
+          "score": 100,
+          "flags": [],
+          "word_count": 1071,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic The output of frame N is the input of frame N+1. That's it. That's the "
+        },
+        {
+          "idx": 1024,
+          "score": 100,
+          "flags": [],
+          "word_count": 1084,
+          "preview": "Rate Limits Are A Branding Signal, Not A Technical Necessity When a platform tells you the rate limit, they are telling you what they think "
+        },
+        {
+          "idx": 1025,
+          "score": 100,
+          "flags": [],
+          "word_count": 1040,
+          "preview": "Twin Taxonomy: Mock, Live Twin, Real \u2014 And Why The Middle One Matters Most The interesting category isn't the fake and it isn't the original"
         }
       ],
       "weakest": [
