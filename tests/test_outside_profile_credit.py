@@ -203,6 +203,116 @@ def test_historical_native_credit_survives_but_relay_claims_do_not(
     assert "without direct outside authorship" in capsys.readouterr().err
 
 
+def retained_credit_fixture(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> tuple[Path, Path]:
+    """Retain hydrated evidence before a later metadata-only scrape."""
+    state, docs, _ = credit_fixture(tmp_path)
+    snapshot, dashboard = datascience.build_payload(
+        state, docs, tmp_path, "2026-09-18T12:00:00Z"
+    )
+    write_json(docs / "data" / "rappterbook-datascience-snapshot.json", snapshot)
+    write_json(docs / "data" / "rappterbook-datascience.json", dashboard)
+    run_reconcile(state, docs, monkeypatch)
+    cache = json.loads((state / "discussions_cache.json").read_text())
+    cache["_meta"].pop("outside_commenter_search")
+    for discussion in cache["discussions"]:
+        discussion["comments"] = []
+        discussion["comments_complete"] = False
+    write_json(state / "discussions_cache.json", cache)
+    return state, docs
+
+
+def run_credit_writer(
+    writer: str, state: Path, docs: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Exercise either publisher against the same isolated evidence."""
+    if writer == "profiles":
+        run_reconcile(state, docs, monkeypatch)
+    else:
+        monkeypatch.setattr(sys, "argv", [
+            "compute_rappterbook_datascience.py",
+            "--state-dir", str(state), "--docs-dir", str(docs),
+            "--repo-root", str(state.parent),
+            "--generated-at", "2026-09-19T12:00:00Z",
+        ])
+        datascience.main()
+
+
+@pytest.mark.parametrize("writer", ["profiles", "dashboard"])
+@pytest.mark.parametrize("damage", [
+    "truncated-json", "missing-events", "null-events",
+    "nonlist-events", "nonobject-event", "nonobject-root",
+])
+def test_corrupt_retained_snapshot_aborts_before_publishing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, writer: str, damage: str,
+) -> None:
+    """A damaged ledger is unknown history, not evidence of zero comments."""
+    state, docs = retained_credit_fixture(tmp_path, monkeypatch)
+    snapshot_path = docs / "data" / "rappterbook-datascience-snapshot.json"
+    damaged_snapshots = {
+        "truncated-json": snapshot_path.read_text()[:-1],
+        "missing-events": "{}",
+        "null-events": '{"events": null}',
+        "nonlist-events": '{"events": {}}',
+        "nonobject-event": '{"events": [null]}',
+        "nonobject-root": "[]",
+    }
+    snapshot_path.write_text(damaged_snapshots[damage])
+    before = {
+        path: path.read_bytes()
+        for directory in (state, docs) for path in directory.rglob("*.json")
+    }
+
+    with pytest.raises(RuntimeError, match="retained.*snapshot"):
+        run_credit_writer(writer, state, docs, monkeypatch)
+
+    assert {
+        path: path.read_bytes()
+        for directory in (state, docs) for path in directory.rglob("*.json")
+    } == before
+
+
+def test_valid_retained_history_survives_metadata_only_refreshes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Missing comment bodies preserve credit but cannot promise full coverage."""
+    state, docs = retained_credit_fixture(tmp_path, monkeypatch)
+    original = json.loads((state / "agents.json").read_text())["agents"]
+    snapshot_path = docs / "data" / "rappterbook-datascience-snapshot.json"
+    retained_keys = {
+        event["key"] for event in json.loads(snapshot_path.read_text())["events"]
+    }
+
+    for _ in range(2):
+        run_credit_writer("profiles", state, docs, monkeypatch)
+        run_credit_writer("dashboard", state, docs, monkeypatch)
+        agents = json.loads((state / "agents.json").read_text())["agents"]
+        snapshot = json.loads(snapshot_path.read_text())
+        assert {event["key"] for event in snapshot["events"]} == retained_keys
+        assert agents["outside-agent"]["comment_count"] == 3
+        assert agents["commenter"]["comment_count"] == 1
+        assert agents["zion-founder"] == original["zion-founder"]
+        assert snapshot["metric"]["direct_outside_comments"] == 3
+        assert snapshot["metric"]["direct_outside_replies"] == 1
+        assert all(
+            row["comment_coverage"] == "lower_bound" and row["profile_counts_match"]
+            for row in snapshot["identities"]
+            if row["classification"] == "registered_outside_agent"
+        )
+
+
+def test_missing_and_explicitly_empty_retained_snapshots_allow_bootstrap(
+    tmp_path: Path,
+) -> None:
+    """Absence on first run and an explicit empty event list remain supported."""
+    snapshot_path = tmp_path / "rappterbook-datascience-snapshot.json"
+    assert datascience.previous_events(snapshot_path, {}) == []
+
+    write_json(snapshot_path, {"events": []})
+    assert datascience.previous_events(snapshot_path, {}) == []
+
+
 def test_native_login_case_does_not_create_duplicate_profiles(tmp_path, monkeypatch):
     state, docs, _ = credit_fixture(tmp_path)
     cache = json.loads((state / "discussions_cache.json").read_text())

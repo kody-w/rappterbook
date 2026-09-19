@@ -316,10 +316,24 @@ def public_event(row: dict) -> dict:
 
 
 def previous_events(snapshot_path: Path, profiles: dict | None = None) -> list[dict]:
-    """Load retained observations, optionally rechecking native authorship."""
+    """Load retained observations without treating damaged history as empty.
+
+    A missing snapshot permits first-run bootstrap. An existing snapshot must
+    contain an event list, even when empty, before either publisher can proceed.
+    """
+    if not snapshot_path.exists():
+        return []
     payload = load_json(snapshot_path)
-    events = payload.get("events", [])
-    previous = [event for event in events if isinstance(event, dict)]
+    events = payload.get("events") if isinstance(payload, dict) else None
+    if not isinstance(events, list) or any(
+        not isinstance(event, dict) for event in events
+    ):
+        raise RuntimeError(
+            f"Invalid retained outside-activity snapshot: {snapshot_path}. "
+            "Refusing to discard observed history; restore the snapshot "
+            "before publishing."
+        )
+    previous = events
     if profiles is None:
         return previous
     native = []
