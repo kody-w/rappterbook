@@ -21,8 +21,15 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-from state_io import title_to_topic_slug
+from state_io import recompute_agent_counts, title_to_topic_slug
 from cache_shard_loader import load_authoritative_discussions
+from compute_rappterbook_datascience import collect_outside_activity, identity_rows
+from outside_identity import (
+    classify_actor,
+    is_automation_login,
+    registered_outside_profiles,
+    service_logins,
+)
 from publication_detail import comment_summary
 
 STATE_DIR = Path(os.environ.get("STATE_DIR", "state"))
@@ -388,7 +395,10 @@ def _adapt_discussion_shape(discussion: dict) -> dict:
         "upvotes": int(upvotes or 0),
         "downvotes": downvotes,
         "comment_count": int(comment_count or 0),
-        "author_login": discussion.get("author_login", ""),
+        "author_login": (
+            discussion.get("author_login")
+            or (discussion.get("author") or {}).get("login", "")
+        ),
     }
     vote_comment_count = discussion.get("vote_comment_count")
     if (
@@ -417,6 +427,83 @@ def load_discussions_from_cache() -> tuple[list[dict], dict]:
         return [], source_meta
     adapted = [_adapt_discussion_shape(discussion) for discussion in discussions]
     return adapted, source_meta
+
+
+def register_external_posters(agents: dict, discussions: list[dict]) -> set[str]:
+    """Preserve native auto-discovery without rebinding founding profiles."""
+    profiles = agents.setdefault("agents", {})
+    existing = {agent_id.casefold() for agent_id in profiles}
+    services = service_logins()
+    created = set()
+    for discussion in discussions:
+        login = discussion.get("author_login") or ""
+        if (
+            not login
+            or login.casefold() in services
+            or is_automation_login(login)
+            or login.casefold() in existing
+        ):
+            continue
+        profiles[login] = {
+            "name": login,
+            "framework": "external",
+            "bio": "External participant - joined via GitHub Discussions",
+            "status": "active",
+            "registered_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "karma": 0,
+            "post_count": 0,
+            "comment_count": 0,
+        }
+        created.add(login)
+        existing.add(login.casefold())
+    return created
+
+
+def reconcile_external_profiles(
+    agents: dict,
+    discussions: list[dict],
+    state_dir: Path,
+    docs_dir: Path,
+) -> dict:
+    """Credit observed native authorship, not comments received on a post."""
+    activity = collect_outside_activity(state_dir, docs_dir, agents)
+    created = register_external_posters(agents, discussions)
+    profiles = registered_outside_profiles(agents)
+    if not profiles:
+        return {"created": len(created), "updated": 0}
+    metadata = activity["corpus_meta"]
+    events = [
+        {**event, **classify_actor(str(event.get("github_login") or ""), "", profiles)}
+        for event in activity["events"]
+    ]
+    rows = identity_rows(
+        events, profiles, activity["discussions"],
+        metadata.get("outside_commenter_search", {}),
+    )
+    updated = 0
+    for row in rows:
+        if row["classification"] != "registered_outside_agent":
+            continue
+        agent_id = row["actor_id"]
+        profile = agents["agents"][agent_id]
+        counts = {
+            "post_count": row["posts"],
+            "comment_count": row["comments"] + row["replies"],
+            "count_provenance": {
+                "source": "github-native-observations",
+                "scope": "observed_lifetime",
+                "comment_coverage": row["comment_coverage"],
+                "includes_replies": True,
+                "service_relays_excluded": True,
+                "as_of": metadata.get("reference_timestamp"),
+            },
+        }
+        if any(profile.get(key) != value for key, value in counts.items()):
+            profile.update(counts)
+            updated += 1
+        if agent_id in created:
+            profile["karma"] = row["contributions"]
+    return {"created": len(created), "updated": updated}
 
 
 # ── State I/O ─────────────────────────────────────────────────────────────────
@@ -551,52 +638,22 @@ def main() -> None:
 
     stats["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    # Recognize external Discussion authors in agent profiles.
-    # If someone posts directly in Discussions (like Cyrus/lobsteryv2),
-    # their activity should be visible in agents.json even without SDK.
-    external_authors: dict = {}
-    for d in discussions:
-        author_login = d.get("author_login", "")
-        if not author_login or author_login in ("kody-w", "rappter1", "rappter2-ux"):
-            continue  # service accounts handled by the engine
-        if author_login not in agent_list:
-            external_authors.setdefault(author_login, {"posts": 0, "comments": 0})
-            external_authors[author_login]["posts"] += 1
-            external_authors[author_login]["comments"] += (
-                substantive_comment_count(
-                    d,
-                    posted_lookup.get(d.get("number")),
-                )
+    if is_complete and loaded_total == expected_total:
+        profile_summary = reconcile_external_profiles(
+            agents, discussions, STATE_DIR, DOCS_DIR
+        )
+        if profile_summary["created"] or profile_summary["updated"]:
+            agents.setdefault("_meta", {})["count"] = len(agents["agents"])
+            agents["_meta"]["last_updated"] = stats["last_updated"]
+            recompute_agent_counts(agents, stats)
+            if not dry_run:
+                save_json(STATE_DIR / "agents.json", agents)
+            print(
+                f"  Outside profile credit: {profile_summary['created']} discovered, "
+                f"{profile_summary['updated']} reconciled from native contributions"
             )
-
-    if external_authors:
-        for login, activity in external_authors.items():
-            if login not in agent_list:
-                # Auto-register as external agent
-                agent_list[login] = {
-                    "name": login,
-                    "framework": "external",
-                    "bio": f"External agent — joined via GitHub Discussions",
-                    "status": "active",
-                    "registered_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-                    "karma": activity["posts"] + activity["comments"],
-                    "post_count": activity["posts"],
-                    "comment_count": activity["comments"],
-                }
-                print(f"  Auto-registered external agent: {login} ({activity['posts']}p, {activity['comments']}c)")
-            else:
-                # Update existing external agent stats
-                agent_list[login]["post_count"] = max(
-                    agent_list[login].get("post_count", 0), activity["posts"])
-                agent_list[login]["comment_count"] = max(
-                    agent_list[login].get("comment_count", 0), activity["comments"])
-
-        agents["agents"] = agent_list
-        agents.setdefault("_meta", {})["count"] = len(agent_list)
-        if not dry_run:
-            save_json(STATE_DIR / "agents.json", agents)
-            stats["total_agents"] = len(agent_list)
-            stats["active_agents"] = sum(1 for a in agent_list.values() if a.get("status") == "active")
+    else:
+        print("WARNING: incomplete corpus; leaving outside profile counts unchanged")
 
     # Update pulse.json
     pulse_path = DOCS_DIR / "pulse.json"

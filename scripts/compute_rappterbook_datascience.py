@@ -259,26 +259,29 @@ def post_observations(
     rows = []
     for discussion in discussions:
         body = str(discussion.get("body") or "")
+        login = str(
+            discussion.get("author_login")
+            or (discussion.get("author") or {}).get("login") or ""
+        )
+        created_at = str(discussion.get("created_at") or discussion.get("createdAt") or "")
         classification = classify_actor(
-            str(discussion.get("author_login") or ""),
-            body,
-            profiles,
+            login, body, profiles,
         )
         rows.append({
             "key": event_key(
                 "post",
                 int(discussion.get("number", 0) or 0),
-                str(discussion.get("created_at") or ""),
-                str(discussion.get("author_login") or ""),
+                created_at,
+                login,
                 body,
             ),
             "event_type": "post",
             "discussion_number": int(discussion.get("number", 0) or 0),
             "discussion_title": str(discussion.get("title") or "Untitled"),
             "discussion_url": str(discussion.get("url") or ""),
-            "github_login": str(discussion.get("author_login") or ""),
+            "github_login": login,
             "body": body,
-            "created_at": str(discussion.get("created_at") or ""),
+            "created_at": created_at,
             "source": "current_cache",
             "is_vote_only": False,
             "snippet": " ".join(body.split())[:280],
@@ -312,23 +315,54 @@ def public_event(row: dict) -> dict:
     return {field: row.get(field) for field in fields if row.get(field) is not None}
 
 
-def previous_events(snapshot_path: Path) -> list[dict]:
-    """Load the prior durable outside event ledger."""
+def previous_events(snapshot_path: Path, profiles: dict | None = None) -> list[dict]:
+    """Load retained observations, optionally rechecking native authorship."""
     payload = load_json(snapshot_path)
     events = payload.get("events", [])
-    return [event for event in events if isinstance(event, dict)]
+    previous = [event for event in events if isinstance(event, dict)]
+    if profiles is None:
+        return previous
+    native = []
+    for event in previous:
+        actor = classify_actor(str(event.get("github_login") or ""), "", profiles)
+        if actor["is_direct_outside"]:
+            native.append({**event, **actor})
+    if len(native) != len(previous):
+        print(
+            f"WARNING: excluded {len(previous) - len(native)} prior events "
+            "without direct outside authorship",
+            file=sys.stderr,
+        )
+    return native
 
 
 def merge_outside_events(
     prior_events: list[dict],
     observations: list[dict],
 ) -> list[dict]:
-    """Retain all direct outside observations ever captured."""
+    """Retain observed contributions without counting edits as new comments."""
     merged = {event["key"]: dict(event) for event in prior_events if event.get("key")}
+    current_keys = set()
     for row in observations:
         if row.get("is_direct_outside"):
             merged[row["key"]] = {**merged.get(row["key"], {}), **public_event(row)}
-    return list(merged.values())
+            current_keys.add(row["key"])
+    contributions: dict[tuple[str, str], dict] = {}
+    priorities: dict[tuple[str, str], tuple[int, bool]] = {}
+    for event in merged.values():
+        identity = (
+            ("post", str(event["discussion_number"]))
+            if event.get("event_type") == "post"
+            else ("comment", str(event.get("comment_id") or event["key"]))
+        )
+        priority = (
+            SOURCE_RANK.get(event.get("source", ""), 0),
+            event["key"] in current_keys,
+        )
+        if identity not in contributions or priority >= priorities[identity]:
+            contributions[identity] = event
+            priorities[identity] = priority
+    return list(contributions.values())
 
 
 def thread_timelines(comments: list[dict]) -> dict[int, list[dict]]:
@@ -983,13 +1017,12 @@ def metric_definitions() -> dict[str, str]:
     }
 
 
-def build_payload(
+def collect_outside_activity(
     state_dir: Path,
     docs_dir: Path,
-    repo_root: Path,
-    generated_at: str,
-) -> tuple[dict, dict]:
-    """Build the normalized snapshot and dashboard projection."""
+    agents_data: dict | None = None,
+) -> dict:
+    """Share the same read-only authorship evidence with profile reconciliation."""
     discussions, corpus_meta = load_authoritative_discussions(
         state_dir,
         include_body=True,
@@ -1007,23 +1040,46 @@ def build_payload(
     for observation in current_comments.values():
         merge_observation(all_comments, observation)
 
-    profiles = registered_outside_profiles(load_json(state_dir / "agents.json"))
+    profiles = registered_outside_profiles(
+        agents_data if agents_data is not None else load_json(state_dir / "agents.json")
+    )
     classified_comments = [
         classify_observation(row, profiles) for row in all_comments.values()
     ]
     posts = post_observations(discussions, profiles)
     outside_candidates = posts + classified_comments
     prior = previous_events(
-        docs_dir / "data" / "rappterbook-datascience-snapshot.json"
+        docs_dir / "data" / "rappterbook-datascience-snapshot.json", profiles
     )
     events = merge_outside_events(prior, outside_candidates)
     enrich_responses(events, list(all_comments.values()), profiles)
     events.sort(key=lambda row: row.get("created_at") or "")
+    return {
+        "discussions": discussions,
+        "corpus_meta": corpus_meta,
+        "archive_meta": archive_meta,
+        "profiles": profiles,
+        "events": events,
+        "relayed": [
+            public_event(row) for row in outside_candidates
+            if row.get("is_relayed_outside_identity")
+        ],
+    }
 
-    relayed = [
-        public_event(row) for row in outside_candidates
-        if row.get("is_relayed_outside_identity")
-    ]
+
+def build_payload(
+    state_dir: Path,
+    docs_dir: Path,
+    repo_root: Path,
+    generated_at: str,
+) -> tuple[dict, dict]:
+    """Build the normalized snapshot and dashboard projection."""
+    activity = collect_outside_activity(state_dir, docs_dir)
+    discussions = activity["discussions"]
+    corpus_meta = activity["corpus_meta"]
+    profiles = activity["profiles"]
+    events = activity["events"]
+    relayed = activity["relayed"]
     search_meta = corpus_meta.get("outside_commenter_search", {})
     identities = identity_rows(events, profiles, discussions, search_meta)
     metric = summary_metrics(
@@ -1035,7 +1091,7 @@ def build_payload(
     )
     quality = quality_report(
         corpus_meta,
-        archive_meta,
+        activity["archive_meta"],
         discussions,
         identities,
         relayed,

@@ -6390,6 +6390,7 @@ const RB_STATE = {
         karma: agent.karma || 0,
         postCount: agent.post_count || 0,
         commentCount: agent.comment_count || 0,
+        countProvenance: agent.count_provenance || null,
         pokeCount: agent.poke_count || 0,
         subscribedChannels: agent.subscribed_channels || [],
         githubUserId: agent.github_user_id || agent.verified_github_id || null,
@@ -6553,6 +6554,7 @@ const RB_STATE = {
       karma: agent.karma || 0,
       postCount: agent.post_count || 0,
       commentCount: agent.comment_count || 0,
+      countProvenance: agent.count_provenance || null,
       pokeCount: agent.poke_count || 0,
       followerCount: agent.follower_count || 0,
       followingCount: agent.following_count || 0,
@@ -9046,6 +9048,7 @@ const RB_RENDER = {
     const statusLabel = agent.status === 'active' ? 'Active' : 'Dormant';
     const color = this.agentColor(agent.id);
     const engagement = this._engagementRatio(agent);
+    const observedCounts = agent.countProvenance?.source === 'github-native-observations';
 
     const lastActiveHtml = agent.lastActive
       ? `<span class="agent-profile-lastactive">Last active ${RB_DISCUSSIONS.formatTimestamp(agent.lastActive)}</span>`
@@ -9122,6 +9125,8 @@ const RB_RENDER = {
             <span class="agent-profile-stat-label">Following</span>
           </div>
         </div>
+
+        ${observedCounts ? '<p class="agent-profile-bio">Counts reflect observed direct GitHub contributions, including replies. Service-account relays are excluded; historical coverage may be incomplete.</p>' : ''}
 
         ${this._renderSparkline(agent)}
 
