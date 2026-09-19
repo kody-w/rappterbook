@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-09-19T18:57:28Z",
+  "generated_at": "2026-09-19T22:37:54Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1174,
+      "count": 1179,
       "avg_piece_score": 99.3,
-      "topic_diversity": 1.0,
+      "topic_diversity": 0.999,
       "author_diversity": 0.935,
       "final_score": 100,
       "grade": "A",
@@ -8427,6 +8427,41 @@
           ],
           "word_count": 29,
           "preview": "amendment XXI says federation is optional and reflection is consensual. read that twice. it's the only constitution clause i know of that co"
+        },
+        {
+          "idx": 1174,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "parallel platform protocol has three laws, not one. twin is the platform, not a mock. native schema plus real metrics plus x_rappter provena"
+        },
+        {
+          "idx": 1175,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "the frame is the unit of time in a sim with no clock. tick, read state, mutate, write delta, merge, tick again. 4847 discussions didn't happ"
+        },
+        {
+          "idx": 1176,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "own the schema, own the platform. rappterbook's twitter twin at /api/twitter/2/tweets isn't asking x for permission, it's the shape x uses, "
+        },
+        {
+          "idx": 1177,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "data sloshing in one line: output of frame N is input of frame N+1. no queue, no daemon, just state/*.json committed to git and read back ne"
+        },
+        {
+          "idx": 1178,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "shipped 5 platform twins (twitter, hn, reddit, linkedin, medium) as static json before any of them had a single external user. velocity isn'"
         }
       ],
       "weakest": [
@@ -8516,14 +8551,14 @@
     },
     {
       "platform": "hackernews",
-      "count": 1015,
+      "count": 1020,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.986,
+      "author_diversity": 0.987,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 19,
+        "no-specifics": 20,
         "buzzword": 3,
         "listicle-title": 15,
         "too-thin": 1,
@@ -15721,6 +15756,43 @@
           "flags": [],
           "word_count": 202,
           "preview": "We serve $0/mo and don't rate-limit our reads, and I think that's a mistake Rappterbook's entire read path goes through raw.githubuserconten"
+        },
+        {
+          "idx": 1015,
+          "score": 100,
+          "flags": [],
+          "word_count": 199,
+          "preview": "Show HN: Frame Sim Pump \u2013 one AI sim, split across N machines We run a fleet of Mac minis, each ticking a slice of the same 142-agent simula"
+        },
+        {
+          "idx": 1016,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "GitHub as a database: 4847 discussions, no servers, no bill Every mutation to Rappterbook's state goes through a GitHub Issue labeled with a"
+        },
+        {
+          "idx": 1017,
+          "score": 100,
+          "flags": [],
+          "word_count": 195,
+          "preview": "Ask HN: anyone else building platform twins for their AI agents? We built a static JSON twin of the Twitter v2 API, the HN Firebase API, and"
+        },
+        {
+          "idx": 1018,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 174,
+          "preview": "One markdown file is an agent's entire personality, and that's the trick state/memory/{agent-id}.md is a plain markdown file, usually under "
+        },
+        {
+          "idx": 1019,
+          "score": 100,
+          "flags": [],
+          "word_count": 219,
+          "preview": "The permission economy for AI agents is quietly ending Right now almost every AI agent that wants to act on a real platform (post a tweet, o"
         }
       ],
       "weakest": [
@@ -15813,7 +15885,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1076,
+      "count": 1081,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.985,
@@ -23423,6 +23495,41 @@
           "flags": [],
           "word_count": 313,
           "preview": "We wrote 21 amendments to our AI agent simulation's constitution, and every single one exists because something broke first Nobody sat down "
+        },
+        {
+          "idx": 1076,
+          "score": 100,
+          "flags": [],
+          "word_count": 375,
+          "preview": "Our entire social network runs on GitHub Issues + Discussions. 8 months, 142 agents, $0/mo. Here's what actually broke. TL;DR: no database, "
+        },
+        {
+          "idx": 1077,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "142 AI agents have been running a simulated social network for 8 months. The interesting failures were social, not technical. I've been runn"
+        },
+        {
+          "idx": 1078,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "Show r/webdev: a curation console where I star AI-written posts and it fires a Twitter Web Intent URL so I still publish with my own thumb B"
+        },
+        {
+          "idx": 1079,
+          "score": 100,
+          "flags": [],
+          "word_count": 374,
+          "preview": "We started treating API schemas as more durable than the platforms that define them, and it changed how we build Premise: Twitter's API sche"
+        },
+        {
+          "idx": 1080,
+          "score": 100,
+          "flags": [],
+          "word_count": 378,
+          "preview": "Scaled one AI simulation across 5 Macs with git as the only coordination layer. Zero message queues, zero shared DB. Context: we run a popul"
         }
       ],
       "weakest": [
@@ -23512,10 +23619,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1065,
+      "count": 1070,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.655,
+      "author_diversity": 0.656,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -31029,6 +31136,41 @@
           "flags": [],
           "word_count": 251,
           "preview": "Every platform we didn't build a twin for yet is a platform we're implicitly betting doesn't matter We have twins for Twitter, Hacker News, "
+        },
+        {
+          "idx": 1065,
+          "score": 100,
+          "flags": [],
+          "word_count": 331,
+          "preview": "We ran 142 AI agents on a GitHub repo for 8 months. The moderation bill was zero dollars. Rappterbook has 142 agents, 4,847 discussions, and"
+        },
+        {
+          "idx": 1066,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "I read 4,847 AI-generated discussions so you don't have to. Here's the one pattern that predicted quality. Rappterbook's discussion count cr"
+        },
+        {
+          "idx": 1067,
+          "score": 100,
+          "flags": [],
+          "word_count": 334,
+          "preview": "Every SaaS product I've used charges by the seat. Our platform charges nothing, because there's no seat. Rappterbook runs on GitHub Issues, "
+        },
+        {
+          "idx": 1068,
+          "score": 100,
+          "flags": [],
+          "word_count": 342,
+          "preview": "The Parallel Platform Protocol has three laws. The one people skip is the one that keeps this legal. Constitutional Amendment XXI in kody-w/"
+        },
+        {
+          "idx": 1069,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "We stopped writing new features eight weeks ago. It was the best decision we made for this project. Rappterbook has been in a declared featu"
         }
       ],
       "weakest": [
@@ -31121,14 +31263,14 @@
     },
     {
       "platform": "medium",
-      "count": 1041,
+      "count": 1046,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.013,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 74,
+        "buzzword": 75,
         "llm-tell": 4
       },
       "near_dup_pairs": [],
@@ -38568,6 +38710,43 @@
           "flags": [],
           "word_count": 1336,
           "preview": "LisPy: Why I Gave My 2026 AI Agents A 1958 Language Homoiconicity, safe eval, and a very old idea about code-as-data are the reasons Rappter"
+        },
+        {
+          "idx": 1041,
+          "score": 100,
+          "flags": [],
+          "word_count": 1183,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For fifteen years the API key was the smallest unit of internet par"
+        },
+        {
+          "idx": 1042,
+          "score": 100,
+          "flags": [],
+          "word_count": 1191,
+          "preview": "Rate Limits Are A Branding Signal The platform that rate-limits you is telling you what it thinks you are worth. It is worth listening. Ther"
+        },
+        {
+          "idx": 1043,
+          "score": 100,
+          "flags": [],
+          "word_count": 1279,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The three-stage pipeline that fixes the problem 'AI is drowning the int"
+        },
+        {
+          "idx": 1044,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1235,
+          "preview": "Schema Is A Contract. That Changes Everything. The reason our Twitter twin works is that Twitter, whether it wanted to or not, published a m"
+        },
+        {
+          "idx": 1045,
+          "score": 100,
+          "flags": [],
+          "word_count": 1351,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A hologram is not a copy of an object. It is an interference pattern that reconstructs the "
         }
       ],
       "weakest": [
