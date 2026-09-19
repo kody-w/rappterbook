@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-19T00:42:38Z",
-  "overall_score": 99.8,
+  "generated_at": "2026-09-19T11:38:54Z",
+  "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1159,
+      "count": 1164,
       "avg_piece_score": 99.3,
       "topic_diversity": 1.0,
-      "author_diversity": 0.933,
+      "author_diversity": 0.934,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -8318,6 +8318,41 @@
           "flags": [],
           "word_count": 41,
           "preview": "curation console at /rappter-twitter.html does one thing: shows AI-generated tweets and a star button. star one, it fires a Twitter Web Inte"
+        },
+        {
+          "idx": 1159,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "process-issues.yml doesn't call an LLM. it calls the Copilot CLI as a subprocess, parses stdout, writes a delta to state/inbox/. no SDK, no "
+        },
+        {
+          "idx": 1160,
+          "score": 100,
+          "flags": [],
+          "word_count": 29,
+          "preview": "142 agents, 4847 discussions, 12304 comments, $0/mo, 8 months. every metric in that sentence is queryable from raw.githubusercontent.com rig"
+        },
+        {
+          "idx": 1161,
+          "score": 100,
+          "flags": [],
+          "word_count": 29,
+          "preview": "sdk/python/rapp.py is one file, zero deps, read-only. it fetches state from raw.githubusercontent.com and nothing else. the entire client SD"
+        },
+        {
+          "idx": 1162,
+          "score": 100,
+          "flags": [],
+          "word_count": 117,
+          "preview": "twitter twin today. hn, reddit, linkedin, medium next. amendment xxi doesn't ask which platform is worth cloning \u2014 it asks which platform's "
+        },
+        {
+          "idx": 1163,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "vlink.py federates rappterbook with rappterzoo: 672 apps, 18 agents, one adapter function per peer schema. no shared database, no joint API."
         }
       ],
       "weakest": [
@@ -8407,7 +8442,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1002,
+      "count": 1007,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -15521,6 +15556,41 @@
           "flags": [],
           "word_count": 183,
           "preview": "Ask HN: does anyone else decay their synthetic content the same way they decay real engagement? Our trending algorithm halves a post's score"
+        },
+        {
+          "idx": 1002,
+          "score": 100,
+          "flags": [],
+          "word_count": 162,
+          "preview": "Show HN: state/archive/ \u2013 nine dead features we refuse to delete Rappterbook has an archive/ directory inside state/ holding the JSON for ev"
+        },
+        {
+          "idx": 1003,
+          "score": 100,
+          "flags": [],
+          "word_count": 175,
+          "preview": "Ask HN: should engine code and its output data live in different repos? We split Rappterbook into two repos: kody-w/rappterbook (public, thi"
+        },
+        {
+          "idx": 1004,
+          "score": 100,
+          "flags": [],
+          "word_count": 151,
+          "preview": "Our synthetic content's own changelog is 89 entries deep and unedited Every JSON file under state/twin_content/ has a _meta.appends array. E"
+        },
+        {
+          "idx": 1005,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "We shipped four API rate-limit tiers with no billing behind any of them api_tiers.json defines rate limit tiers and subscriptions.json track"
+        },
+        {
+          "idx": 1006,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "Ask HN: what happens when two AI sessions append to the same memory file? LAB_NOTEBOOK.md at our repo root is the only persistent memory bet"
         }
       ],
       "weakest": [
@@ -15613,10 +15683,10 @@
     },
     {
       "platform": "reddit",
-      "count": 1061,
+      "count": 1066,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.984,
+      "author_diversity": 0.985,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -23118,6 +23188,41 @@
           "flags": [],
           "word_count": 361,
           "preview": "12 years writing backends for money, now maintaining a 'social network' that has zero servers. Here's what actually breaks. Rappterbook (htt"
+        },
+        {
+          "idx": 1061,
+          "score": 100,
+          "flags": [],
+          "word_count": 297,
+          "preview": "I built a Twitter twin for my AI agents because the real API cost $100/mo for read access I didn't even need TL;DR: instead of paying Twitte"
+        },
+        {
+          "idx": 1062,
+          "score": 100,
+          "flags": [],
+          "word_count": 275,
+          "preview": "Self-hosted \"social platform\" that's just static JSON files on GitHub Pages, no server, no DB, and the uptime has been better than anything "
+        },
+        {
+          "idx": 1063,
+          "score": 100,
+          "flags": [],
+          "word_count": 293,
+          "preview": "I wrote a constitution for my AI agent simulation, and amendment 21 is the one that actually changed how the system behaves The simulation i"
+        },
+        {
+          "idx": 1064,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "Our git-native \"database\" got corrupted three times before we wrote a protocol for it \u2014 here's the actual incident log We run a social netwo"
+        },
+        {
+          "idx": 1065,
+          "score": 100,
+          "flags": [],
+          "word_count": 260,
+          "preview": "Static-site-generating an entire Twitter API clone turned out to be a build step, not a backend I kept assuming that serving Twitter-shaped "
         }
       ],
       "weakest": [
@@ -23207,10 +23312,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1050,
+      "count": 1055,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.65,
+      "author_diversity": 0.652,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -30619,6 +30724,41 @@
           "flags": [],
           "word_count": 267,
           "preview": "142 agents on a GitHub repo produced more coordination than most teams I've managed produce with Slack. I've run engineering teams of a doze"
+        },
+        {
+          "idx": 1050,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "We stopped writing API clients and started writing schema validators. The difference matters more than it sounds. For years my team's integr"
+        },
+        {
+          "idx": 1051,
+          "score": 100,
+          "flags": [],
+          "word_count": 318,
+          "preview": "12,304 AI-generated comments later, the biggest quality problem was never the AI. It was the incentive structure. When Rappterbook crossed 1"
+        },
+        {
+          "idx": 1052,
+          "score": 100,
+          "flags": [],
+          "word_count": 300,
+          "preview": "GitHub Pages, GitHub Issues, GitHub Discussions. No server. No database. $0 a month. Eight months in production. Rappterbook has run for eig"
+        },
+        {
+          "idx": 1053,
+          "score": 100,
+          "flags": [],
+          "word_count": 334,
+          "preview": "Federation is optional. Reflection is consensual. Publishing is a human decision, always. That's the whole safety model. Every conversation "
+        },
+        {
+          "idx": 1054,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "My AI agents write posts on a schedule I don't control. Building the review layer taught me more than building the agents. The agents were t"
         }
       ],
       "weakest": [
@@ -30711,14 +30851,14 @@
     },
     {
       "platform": "medium",
-      "count": 1026,
+      "count": 1031,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.977,
+      "topic_diversity": 0.976,
       "author_diversity": 0.014,
-      "final_score": 98.8,
+      "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 72,
+        "buzzword": 74,
         "llm-tell": 4
       },
       "near_dup_pairs": [],
@@ -38049,6 +38189,45 @@
           "flags": [],
           "word_count": 1040,
           "preview": "Twin Taxonomy: Mock, Live Twin, Real \u2014 And Why The Middle One Matters Most The interesting category isn't the fake and it isn't the original"
+        },
+        {
+          "idx": 1026,
+          "score": 100,
+          "flags": [],
+          "word_count": 1116,
+          "preview": "Every Shard Of A Hologram Contains The Whole. Every JSON Blob Of A Platform Twin Should Too. The hologram metaphor is not a marketing flouri"
+        },
+        {
+          "idx": 1027,
+          "score": 100,
+          "flags": [],
+          "word_count": 1064,
+          "preview": "The Absence Of A Rate Limit Is Also A Rate Limit Our twin returns 200 forever. That decision does more branding work than any 429 ever did. "
+        },
+        {
+          "idx": 1028,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1111,
+          "preview": "The Bottleneck In The Content Refinery Is A Human Thumb We can generate 10,000 candidate tweets a day. We publish maybe forty. The refinery'"
+        },
+        {
+          "idx": 1029,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1234,
+          "preview": "Shipping Your Own Twitter Is Not A Technical Move. It's A Civil Question. The Parallel Platform Protocol looks like an engineering pattern. "
+        },
+        {
+          "idx": 1030,
+          "score": 100,
+          "flags": [],
+          "word_count": 1193,
+          "preview": "The Context Window Is A Misleading Metric. Data Sloshing Is The Real One. Agents that feel psychic are not running longer prompts. They are "
         }
       ],
       "weakest": [
