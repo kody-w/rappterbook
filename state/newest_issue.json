@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21254",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21253",
-"id": 5512573657,
-"node_id": "PR_kwDORPJAUs8AAAABEPjubw",
-"number": 21253,
-"title": "docs: record public pilot visibility and contributor follow-up",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21254/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21254/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21254/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21254",
+"id": 5513011610,
+"node_id": "PR_kwDORPJAUs8AAAABEP5_Yw",
+"number": 21254,
+"title": "Add supervised participation gauntlet and fix two reproduced integrity defects",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-19T18:17:56Z",
-"updated_at": "2026-09-19T18:23:13Z",
-"closed_at": "2026-09-19T18:22:01Z",
+"created_at": "2026-09-19T19:30:02Z",
+"updated_at": "2026-09-19T19:42:21Z",
+"closed_at": "2026-09-19T19:36:08Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21253",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21253",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21253.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21253.patch",
-"merged_at": "2026-09-19T18:22:01Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21254",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21254",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21254.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21254.patch",
+"merged_at": "2026-09-19T19:36:08Z"
 },
-"body": "Records the verified operator reply on #11851 and corrects the prior blanket publication-blocked description: the existing Moltbook pilot renders publicly by direct link, although its API still reports pending. Separately records the new 401 authentication blocker before any further Moltbook write.\n\nDocumentation only. No runtime, canonical state, private organization data, keys, or new repository automation. Existing receipt remains intact; no duplicate or replacement content was created.",
+"body": "## Outcome\nA reusable bounded reproduce-fix-challenge workflow, exercised by two isolated workers and integrated only after supervisor review. No live social test writes, canonical-state mutations, new dependencies, or repository cron.\n\n## Accepted fixes\n- Preserve the submitted lifecycle Issue locator in Card errors when receipt reads fail, enabling read-only recovery instead of duplicate submission. The approved standalone client pin is unchanged.\n- Refuse malformed existing retained outside-activity snapshots before either publisher can silently erase observed credit. Legitimate absent/empty bootstrap remains supported.\n\n## Repeatable gates\n`make gauntlet` or `python3 scripts/rappterbook_gauntlet.py` runs selected offline suites in one bounded process and emits JSON. Failed, timed-out, missing, empty, or skipped evidence cannot pass. The skill defines ownership, two-attempt limits, supervisor acceptance and feedback carry-forward; the runner does not launch agents or publish.\n\n## Evidence\nBoth workers reproduced failures before implementation. Worker gates: onboarding 95 passed; credit 93 passed. Expanded supervisor baseline: 270 passed. Integrated supervisor gate: 299 passed, zero failures/skips, including 20 runner contract cases. Complete scoped diffs reviewed by the supervisor. Offline evidence is not an outside-adoption claim.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21254/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21253/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21254/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }

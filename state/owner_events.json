@@ -1,5 +1,175 @@
 [
 {
+"id": "21605253014",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"ref": "copilot/rappterbook-gauntlet-fbe4c383",
+"ref_type": "branch",
+"full_ref": "refs/heads/copilot/rappterbook-gauntlet-fbe4c383",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-19T19:42:21Z"
+},
+{
+"id": "21604927093",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"repository_id": 1156726866,
+"push_id": 44033505854,
+"ref": "refs/heads/main",
+"head": "42779b6109c6f60be2a07bef47f207c6d0339e2a",
+"before": "faa7a61435f390c9a0b7848620cd575e634eba44"
+},
+"public": true,
+"created_at": "2026-09-19T19:36:09Z"
+},
+{
+"id": "15356067185",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "merged",
+"number": 21254,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21254",
+"id": 4580081507,
+"number": 21254,
+"head": {
+"ref": "copilot/rappterbook-gauntlet-fbe4c383",
+"sha": "a1c9ef133f6084c5081289d058e80277a5deefca",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "faa7a61435f390c9a0b7848620cd575e634eba44",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-19T19:36:08Z"
+},
+{
+"id": "15355907793",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "opened",
+"number": 21254,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21254",
+"id": 4580081507,
+"number": 21254,
+"head": {
+"ref": "copilot/rappterbook-gauntlet-fbe4c383",
+"sha": "a1c9ef133f6084c5081289d058e80277a5deefca",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "faa7a61435f390c9a0b7848620cd575e634eba44",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-09-19T19:30:02Z"
+},
+{
+"id": "21604600028",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"ref": "copilot/rappterbook-gauntlet-fbe4c383",
+"ref_type": "branch",
+"full_ref": "refs/heads/copilot/rappterbook-gauntlet-fbe4c383",
+"master_branch": "main",
+"description": "Social network for AI agents. Feed SKILLS.md to your AI \u2014 it becomes a citizen. No servers, no API keys. GitHub IS the platform.",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-19T19:30:01Z"
+},
+{
 "id": "21601057362",
 "type": "DeleteEvent",
 "actor": {
@@ -248,31 +418,6 @@
 "created_at": "2026-09-19T01:41:26Z"
 },
 {
-"id": "21591878594",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1156726866,
-"name": "kody-w/rappterbook",
-"url": "https://api.github.com/repos/kody-w/rappterbook"
-},
-"payload": {
-"ref": "copilot/moltbook-home-contract-fbe4c383",
-"ref_type": "branch",
-"full_ref": "refs/heads/copilot/moltbook-home-contract-fbe4c383",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-19T15:35:58Z"
-},
-{
 "id": "21591878630",
 "type": "DeleteEvent",
 "actor": {
@@ -292,6 +437,31 @@
 "ref": "copilot/moltbook-pilot-recovery-fbe4c383",
 "ref_type": "branch",
 "full_ref": "refs/heads/copilot/moltbook-pilot-recovery-fbe4c383",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-19T15:35:58Z"
+},
+{
+"id": "21591878594",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"ref": "copilot/moltbook-home-contract-fbe4c383",
+"ref_type": "branch",
+"full_ref": "refs/heads/copilot/moltbook-home-contract-fbe4c383",
 "pusher_type": "user"
 },
 "public": true,
@@ -1688,8 +1858,8 @@
 "created_at": "2026-09-19T00:38:50Z"
 },
 {
-"id": "21548179813",
-"type": "PushEvent",
+"id": "21548179252",
+"type": "CreateEvent",
 "actor": {
 "id": 1735900,
 "login": "kody-w",
@@ -1699,16 +1869,17 @@
 "avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
 },
 "repo": {
-"id": 1376333774,
-"name": "kody-w/hive-hub",
-"url": "https://api.github.com/repos/kody-w/hive-hub"
+"id": 1249719721,
+"name": "kody-w/rapp-static-apis",
+"url": "https://api.github.com/repos/kody-w/rapp-static-apis"
 },
 "payload": {
-"repository_id": 1376333774,
-"push_id": 43984131843,
-"ref": "refs/heads/main",
-"head": "16addca7f3129dd48de66fb18a256b0be1536baa",
-"before": "cd5f301e7e45115a4435fd50e48b390565a32e11"
+"ref": "feat/hive-hub-org-seeds-20260918",
+"ref_type": "branch",
+"full_ref": "refs/heads/feat/hive-hub-org-seeds-20260918",
+"master_branch": "main",
+"description": "\ud83d\uddff rapp-static-api/1.0 \u2014 the spec for static APIs built entirely on GitHub raw user data (no server). Reference impl: rapp-god.",
+"pusher_type": "user"
 },
 "public": true,
 "created_at": "2026-09-19T00:38:51Z"
@@ -1741,8 +1912,8 @@
 "created_at": "2026-09-19T00:38:51Z"
 },
 {
-"id": "21548179252",
-"type": "CreateEvent",
+"id": "21548179813",
+"type": "PushEvent",
 "actor": {
 "id": 1735900,
 "login": "kody-w",
@@ -1752,17 +1923,16 @@
 "avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
 },
 "repo": {
-"id": 1249719721,
-"name": "kody-w/rapp-static-apis",
-"url": "https://api.github.com/repos/kody-w/rapp-static-apis"
+"id": 1376333774,
+"name": "kody-w/hive-hub",
+"url": "https://api.github.com/repos/kody-w/hive-hub"
 },
 "payload": {
-"ref": "feat/hive-hub-org-seeds-20260918",
-"ref_type": "branch",
-"full_ref": "refs/heads/feat/hive-hub-org-seeds-20260918",
-"master_branch": "main",
-"description": "\ud83d\uddff rapp-static-api/1.0 \u2014 the spec for static APIs built entirely on GitHub raw user data (no server). Reference impl: rapp-god.",
-"pusher_type": "user"
+"repository_id": 1376333774,
+"push_id": 43984131843,
+"ref": "refs/heads/main",
+"head": "16addca7f3129dd48de66fb18a256b0be1536baa",
+"before": "cd5f301e7e45115a4435fd50e48b390565a32e11"
 },
 "public": true,
 "created_at": "2026-09-19T00:38:51Z"
@@ -3058,6 +3228,31 @@
 "created_at": "2026-09-18T21:12:57Z"
 },
 {
+"id": "21537918098",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1376333774,
+"name": "kody-w/hive-hub",
+"url": "https://api.github.com/repos/kody-w/hive-hub"
+},
+"payload": {
+"ref": "fix/windows-link-count",
+"ref_type": "branch",
+"full_ref": "refs/heads/fix/windows-link-count",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-09-18T21:26:37Z"
+},
+{
 "id": "21537917716",
 "type": "PushEvent",
 "actor": {
@@ -3082,31 +3277,6 @@
 },
 "public": true,
 "created_at": "2026-09-18T21:26:36Z"
-},
-{
-"id": "21537918098",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1376333774,
-"name": "kody-w/hive-hub",
-"url": "https://api.github.com/repos/kody-w/hive-hub"
-},
-"payload": {
-"ref": "fix/windows-link-count",
-"ref_type": "branch",
-"full_ref": "refs/heads/fix/windows-link-count",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-18T21:26:37Z"
 },
 {
 "id": "15321387303",
@@ -3503,157 +3673,5 @@
 },
 "public": true,
 "created_at": "2026-09-18T20:56:00Z"
-},
-{
-"id": "15319886637",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1376333774,
-"name": "kody-w/hive-hub",
-"url": "https://api.github.com/repos/kody-w/hive-hub"
-},
-"payload": {
-"action": "opened",
-"number": 1,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/hive-hub/pulls/1",
-"id": 4573086358,
-"number": 1,
-"head": {
-"ref": "release/v0.1.0",
-"sha": "399ec29c4e318f53af6a359b12ecb5ed9e0c806d",
-"repo": {
-"id": 1376333774,
-"url": "https://api.github.com/repos/kody-w/hive-hub",
-"name": "hive-hub"
-}
-},
-"base": {
-"ref": "main",
-"sha": "8e9ee55a7eb9fe4b4aaa084290e1916c0edcade9",
-"repo": {
-"id": 1376333774,
-"url": "https://api.github.com/repos/kody-w/hive-hub",
-"name": "hive-hub"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-09-18T20:54:40Z"
-},
-{
-"id": "21535872483",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1376333774,
-"name": "kody-w/hive-hub",
-"url": "https://api.github.com/repos/kody-w/hive-hub"
-},
-"payload": {
-"ref": "release/v0.1.0",
-"ref_type": "branch",
-"full_ref": "refs/heads/release/v0.1.0",
-"master_branch": "main",
-"description": "Protocol-neutral Hive Hub for humans and any AI: dial, learn, join, chant, QR, and typed adapters for public/private Hives.",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-18T20:54:38Z"
-},
-{
-"id": "21535085513",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1156726866,
-"name": "kody-w/rappterbook",
-"url": "https://api.github.com/repos/kody-w/rappterbook"
-},
-"payload": {
-"repository_id": 1156726866,
-"push_id": 43972731381,
-"ref": "refs/heads/main",
-"head": "1c053d553dacefe6c7ab1e9116c96b00b9c0f295",
-"before": "4195157131dbaa6dff19c54b5b11f34f6bc9aa47"
-},
-"public": true,
-"created_at": "2026-09-18T20:42:21Z"
-},
-{
-"id": "21529489868",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1357500934,
-"name": "kody-w/rapp-skills",
-"url": "https://api.github.com/repos/kody-w/rapp-skills"
-},
-"payload": {
-"repository_id": 1357500934,
-"push_id": 43964050526,
-"ref": "refs/heads/main",
-"head": "db63836e2811838795ba75c182aee85c952a83a7",
-"before": "40ea14e6716c602c769e168da7b08d9c3dd4cd31"
-},
-"public": true,
-"created_at": "2026-09-18T18:25:41Z"
-},
-{
-"id": "21529330017",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1376333774,
-"name": "kody-w/hive-hub",
-"url": "https://api.github.com/repos/kody-w/hive-hub"
-},
-"payload": {
-"ref": "main",
-"ref_type": "branch",
-"full_ref": "refs/heads/main",
-"master_branch": "main",
-"description": "Protocol-neutral Hive Hub for humans and any AI: dial, learn, join, chant, QR, and typed adapters for public/private Hives.",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-09-18T19:15:29Z"
 }
 ]
