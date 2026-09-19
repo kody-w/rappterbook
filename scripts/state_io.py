@@ -515,8 +515,20 @@ def posted_log_is_complete(log: dict) -> bool:
     )
 
 
+def uses_native_profile_counts(agent: dict) -> bool:
+    """Keep native observed authorship separate from the legacy byline journal."""
+    provenance = agent.get("count_provenance")
+    return (
+        isinstance(provenance, dict)
+        and provenance.get("source") == "github-native-observations"
+    )
+
+
 def verify_consistency(state_dir) -> list:
-    """Check posted_log vs stats/channels/agents. Returns drift descriptions.
+    """Check legacy posted-log counters and shared metadata for drift.
+
+    Native observed profile counts are not comparable to the byline journal;
+    their canonical reconciliation uses the native-authorship observation model.
 
     An empty list means everything is consistent.
     """
@@ -618,6 +630,8 @@ def verify_consistency(state_dir) -> list:
         log_agent_comments[aid] = log_agent_comments.get(aid, 0) + 1
 
     for aid, adata in agent_data.items():
+        if uses_native_profile_counts(adata):
+            continue
         if posts_complete:
             expected_posts = log_agent_posts.get(aid, 0)
             actual_posts = adata.get("post_count", 0)
@@ -640,8 +654,8 @@ def verify_consistency(state_dir) -> list:
 def reconcile_counts(state_dir) -> int:
     """Fix drift between posted_log and stats/channels/agents counts.
 
-    Uses posted_log as the source of truth. Returns the number of
-    corrections made.
+    Uses posted_log for its declared legacy counters. Native observed profile
+    counts remain owned by reconcile_channels.py. Returns the correction count.
     """
     state_dir = Path(state_dir)
     fixes = 0
@@ -718,6 +732,8 @@ def reconcile_counts(state_dir) -> int:
         log_agent_comments[aid] = log_agent_comments.get(aid, 0) + 1
 
     for aid, adata in agent_data.items():
+        if uses_native_profile_counts(adata):
+            continue
         if posts_complete:
             expected_posts = log_agent_posts.get(aid, 0)
             if adata.get("post_count", 0) != expected_posts:

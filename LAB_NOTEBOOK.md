@@ -6660,6 +6660,9 @@ against current authenticated profile evidence.
 Added explicit observed-lifetime/count-coverage provenance and a matching
 profile explanation. Founding profiles and existing status/karma remain intact.
 Partial authoritative corpora do not overwrite outside profile counters.
+The production-path follow-through also adds agents.json to the dedicated
+reconciliation workflow's commit list and prevents later byline-journal
+reconciliation from clobbering the newly declared native-authorship counts.
 
 Added the public field note at
 `docs/reports/early-outside-participation-2026-09-19.html`. It uses public

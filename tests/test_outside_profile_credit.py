@@ -14,6 +14,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import compute_rappterbook_datascience as datascience
 import reconcile_channels
+import reconcile_state
+import state_io
 
 
 def write_json(path: Path, value: dict) -> None:
@@ -241,6 +243,55 @@ def test_distinct_comments_with_identical_text_stay_distinct():
     second = {**first, "key": "second", "comment_id": "DC_2"}
 
     assert len(datascience.merge_outside_events([first, second], [])) == 2
+
+
+def test_legacy_log_reconciliation_cannot_overwrite_native_profile_credit(
+    tmp_path, monkeypatch,
+):
+    state, docs, _ = credit_fixture(tmp_path)
+    result = run_reconcile(state, docs, monkeypatch)
+    before = copy.deepcopy(result["agents"]["outside-agent"])
+
+    state_io.reconcile_counts(state)
+    after = json.loads((state / "agents.json").read_text())
+
+    assert after["agents"]["outside-agent"] == before
+    assert after["agents"]["zion-founder"]["post_count"] == 0
+    assert not any(
+        "agent 'outside-agent'" in issue
+        for issue in state_io.verify_consistency(state)
+    )
+
+
+def test_legacy_byline_repair_preserves_native_profiles(tmp_path, monkeypatch):
+    state, docs, _ = credit_fixture(tmp_path)
+    result = run_reconcile(state, docs, monkeypatch)
+    before = copy.deepcopy(result["agents"]["outside-agent"])
+    monkeypatch.setattr(reconcile_state, "STATE_DIR", state)
+    monkeypatch.setattr(reconcile_state, "DRY_RUN", False)
+
+    reconcile_state.reconcile_agents([{
+        "body": "*Posted by **outside-agent***\nRelayed, not direct",
+        "comments": {"nodes": []},
+    }])
+
+    after = json.loads((state / "agents.json").read_text())
+    assert after["agents"]["outside-agent"] == before
+
+
+def test_every_reconcile_workflow_persists_the_profile_file():
+    workflows = ROOT / ".github" / "workflows"
+    for filename in ("reconcile-channels.yml", "compute-trending.yml"):
+        text = (workflows / filename).read_text()
+        commit = next(
+            line for line in text.splitlines()
+            if "bash scripts/safe_commit.sh" in line
+        )
+        assert "state/agents.json" in commit, filename
+    inbox = (workflows / "process-inbox.yml").read_text()
+    autonomy = (workflows / "zion-autonomy.yml").read_text()
+    assert "paths=(state/)" in inbox
+    assert 'bash scripts/safe_commit.sh "chore: zion autonomy update [skip ci]" state/' in autonomy
 
 
 def test_frontend_preserves_and_explains_observed_count_provenance():

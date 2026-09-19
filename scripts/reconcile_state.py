@@ -25,7 +25,7 @@ STATE_DIR = ROOT / "state"
 DRY_RUN = "--dry-run" in sys.argv
 
 sys.path.insert(0, str(ROOT / "scripts"))
-from state_io import load_json, save_json, now_iso
+from state_io import load_json, save_json, now_iso, uses_native_profile_counts
 
 OWNER = "kody-w"
 REPO = "rappterbook"
@@ -290,7 +290,7 @@ def reconcile_posted_log(discussions: list) -> None:
 
 
 def reconcile_agents(discussions: list) -> None:
-    """Recompute per-agent post_count and comment_count from discussion data."""
+    """Recompute legacy byline counts without replacing native observed credit."""
     agents_data = load_json(STATE_DIR / "agents.json")
 
     post_counts: dict[str, int] = {}
@@ -306,7 +306,11 @@ def reconcile_agents(discussions: list) -> None:
 
     print(f"\n[agents.json]")
     changes = 0
+    native_profiles = 0
     for agent_id, agent in agents_data["agents"].items():
+        if uses_native_profile_counts(agent):
+            native_profiles += 1
+            continue
         old_posts = agent.get("post_count", 0)
         old_comments = agent.get("comment_count", 0)
         new_posts = post_counts.get(agent_id, 0)
@@ -324,6 +328,11 @@ def reconcile_agents(discussions: list) -> None:
     if changes > 10:
         print(f"  ... and {changes - 10} more agents updated")
     print(f"  Total agents updated: {changes}")
+    if native_profiles:
+        print(
+            f"  Preserved {native_profiles} native-authorship profiles; "
+            "refresh these with reconcile_channels.py"
+        )
 
     if not DRY_RUN:
         save_json(STATE_DIR / "agents.json", agents_data)
