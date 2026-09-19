@@ -6878,3 +6878,71 @@ Do not repeat the correction or delete/repost the pilot. Restore authorized
 Moltbook authentication before sending the prepared, nonduplicative reply.
 Continue bounded, reply-first care; keep owned activity and recovered counts
 separate from independent outside participation and return visits.
+
+## Entry - 2026-09-19 - Supervised participation gauntlet, first cycle
+
+**Session:** GPT-6 Astra via GitHub Copilot CLI / authorized operator.
+**Read state:** `2b4ab0a93565df17ea31ef31d18cd53011f3b336`.
+
+### Hypothesis tested
+Two bounded, independently owned worker lanes can expose concrete
+participation defects beyond the existing tests, while a supervisor rejects
+speculative changes and requires combined evidence before publication.
+Prior feedback favored accurate credit and recoverable participation over
+additional announcements or synthetic activity.
+
+### What I built
+Added the reusable `rappterbook-gauntlet` skill, a stdlib offline gate runner
+at `scripts/rappterbook_gauntlet.py`, and `make gauntlet`. The workflow is
+inherit evidence -> reproduce -> repair -> challenge -> supervisor decision
+-> verified delivery -> next challenge. Workers receive separate worktrees,
+one defect each and at most two repair attempts. They cannot publish.
+
+The runner unions the chosen existing suites into one pytest invocation,
+excludes live tests and inherited selection overrides, and reports JSON
+evidence. A timeout, missing report, zero cases or skipped coverage is
+blocked, not passed. It does not launch models or approve its own findings.
+This adds no canonical state, platform action, dependency or repository cron.
+
+The newcomer worker reproduced a Card failure that discarded the known
+Issue number/URL after a successful lifecycle submission followed by a
+failed receipt read. The Card now retains `submitted_issue` on that error
+so recovery can read the existing receipt rather than submit again.
+The approved standalone client pin remains unchanged.
+
+The credit worker reproduced malformed retained history being treated as
+empty observations, silently reducing previously observed authored credit.
+Existing damaged snapshots now stop both relevant publishers before writing.
+Missing first-run snapshots and explicit empty event lists still bootstrap.
+
+### What worked
+Both workers demonstrated failing regressions before implementation and
+passed their reusable lane gates: 95 newcomer cases and 93 credit cases,
+with no failures or skips. The supervisor reviewed both full scoped diffs
+and integrated them. The same combined gate increased from 270 passing
+baseline cases to 299 passing candidate cases, including 20 contracts for
+the runner itself. No live social test effects or canonical-state edits
+were used. The reusable personal skill matches the project source.
+
+### What failed
+The original Card error lost the submission locator, and the original
+credit writers accepted corrupted history as a basis for publishing lower
+counts. These are reproduced offline failures, not new production incidents.
+The credit guard does not reconstruct lost history or distinguish an absent
+established snapshot from a legitimate first run. Passing offline gates
+does not prove outside adoption, live deployment or universal correctness.
+
+### Lessons for next session
+1. Worker confidence is not acceptance: require a before/after counterexample,
+   neighboring cases, a scoped diff review and a combined supervisor gate.
+2. Preserve known submission evidence even when the next read fails.
+3. Damaged durable evidence is unknown history, not evidence of zero activity.
+4. Stop after the bounded result and retain the next falsifiable question;
+   do not invent more work to keep agents occupied.
+
+### Recommended next move
+Carry these results into the next authorized gauntlet cycle. Candidate
+challenges are whether the standalone CLI retains a submitted Issue locator
+after receipt transport failure, and how an established installation can
+recognize lost retained history without inventing credit. Select from
+current evidence; do not assume either candidate is already a proven bug.
