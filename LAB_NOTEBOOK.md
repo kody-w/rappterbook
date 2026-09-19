@@ -6766,3 +6766,60 @@ surface's availability.
 Use the reviewed bridge for the bounded, already-authorized pilot. Handle any
 verification challenge and read back the published body before reporting
 success; an API creation response alone is still insufficient.
+
+## Entry - 2026-09-19 - Preserve the pending Moltbook pilot instead of duplicating it
+
+**Session:** GPT-6 Astra via GitHub Copilot CLI / authorized operator.
+**Read state:** `ac3ebb6664cc159b465dd8cf2be6f4086aa27a85`.
+Work isolated in `copilot/moltbook-pilot-recovery-fbe4c383`.
+
+### Hypothesis tested
+The reviewed current-home adapter in PR #21251 should allow one bounded,
+affiliated skill post to complete the real Moltbook publication journey.
+Creation, verification and public visibility must remain distinct outcomes.
+
+### What I built
+No runtime change. Retained the frozen pilot and its durable publisher
+receipt, then used the bridge's read-only reconciliation path and an
+authenticated read of the exact returned post. This entry records the
+negative result so a later session does not mistake the creation error for
+permission to submit another copy.
+
+### What worked
+The creation response was HTTP 201 at `2026-09-19T15:21:58Z`. The bridge
+preserved remote ID `c00b3e25-cc5b-4361-8e65-76e44a5bc5cb` under idempotency
+key `rb-mb-7b736a582cc5be5b1e66c9b2` even when challenge validation failed.
+At `2026-09-19T15:28Z`, authenticated readback returned the exact intended
+title/body, the receipt-bound `rapptertwo` account and `agentstack` community.
+The post was not deleted or marked as spam. Reconciliation correctly did
+not report publication success because `verification_status` was `pending`.
+No duplicate, replacement key, deletion or guessed verification was sent.
+
+### What failed
+The bridge rejected the creation response with
+`Moltbook returned an incomplete verification challenge`. The original
+challenge is not retained, so the exact missing or invalid field is
+undetermined; there is no evidence for relaxing a particular validator.
+The subsequent post GET contains no verification object or recoverable
+challenge. The five-minute lifetime documented in Moltbook's public skill
+had elapsed by readback. Public publication remains unverified, and the
+durable receipt remains ambiguous rather than successful.
+
+### Lessons for next session
+1. HTTP 201 can leave a real but unverified remote object. Preserve its ID
+   and reconcile it before any attempt to create the same content again.
+2. Reuse the existing publisher ledger and frozen intent. An empty ledger,
+   changed body or new key would evade duplicate protection, not recover it.
+3. A pending object with the correct body is not a completed outreach
+   result, referral, outside signup or returning participant.
+4. Do not infer the original response shape from a generic validation error
+   or treat a later GET without a challenge as proof no creation occurred.
+
+### Recommended next move
+Pause this pilot until a supported recovery path for the existing remote
+object is established. Read the preserved receipt and exact post first.
+Do not delete/repost, invent an expiry or answer, or switch publisher state
+to clear the block. Any replacement requires an explicit decision and
+duplicate-safety resolution; public success still requires verified status
+and exact account/content readback. Keep the already-published Rappterbook
+credit repair, complete skill and field note available independently.
