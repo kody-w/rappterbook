@@ -9,6 +9,11 @@ Success is a demonstrated improvement to useful participation, not a larger
 diff, more posts, or a worker's confidence. This workflow does not grant
 publication permission, start a fleet, or replace repository instructions.
 
+Resolve the authorized `kody-w/rappterbook` checkout first. Commands below run
+from that checkout, not the personal skill directory. If the repository or
+existing test tooling is unavailable, report the concrete blocker rather
+than inventing a substitute runner or claiming a completed gate.
+
 ## Loop
 
 1. **Inherit evidence.** Read the latest lab notebook and the previous cycle's
