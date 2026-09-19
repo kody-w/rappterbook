@@ -699,6 +699,119 @@ def test_incomplete_home_payload_blocks_before_reservation(tmp_path):
     assert bridge.load_receipt_log(tmp_path)["events"] == []
 
 
+def test_current_home_contract_preserves_unknown_dm_visibility(tmp_path, capsys):
+    """Current public notification data is not a fabricated empty DM inbox."""
+    home = {
+        "your_account": {"name": "Rapptr", "unread_notification_count": 0},
+        "activity_on_your_posts": [],
+    }
+    fake = SequenceAPI([
+        api_response("/home", home),
+        api_response("/posts", {
+            "success": True,
+            "verification_required": True,
+            "post": {
+                "id": "post_current",
+                "verification_status": "pending",
+                "verification": {
+                    "verification_code": "moltbook_verify_current",
+                    "challenge_text": "twenty minus five",
+                    "expires_at": "2026-09-05T03:00:00Z",
+                },
+            },
+        }),
+    ])
+
+    result = bridge.execute_operation(
+        "publish", post_payload(), api_key="moltbook_secret",
+        state_dir=tmp_path, request_func=fake,
+        timestamp="2026-09-05T02:00:00Z",
+    )
+
+    assert result["status"] == "pending_verification"
+    assert result["home_context"]["direct_message_visibility"] == "not_reported"
+    assert "your_direct_messages" not in home
+    events = bridge.load_receipt_log(tmp_path)["events"]
+    assert events[0]["details"]["home_context"]["direct_message_visibility"] == "not_reported"
+    assert events[-1]["details"]["home_context"]["unread_notification_count"] == 0
+    assert sum(method == "POST" for method, _, _ in fake.calls) == 1
+    assert "unknown, not empty" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("count", [None, True, "0", -1])
+def test_invalid_current_notification_counter_blocks_before_reservation(tmp_path, count):
+    home = {
+        "your_account": {"name": "Rapptr", "unread_notification_count": count},
+        "activity_on_your_posts": [],
+    }
+    fake = SequenceAPI([api_response("/home", home)])
+
+    with pytest.raises(bridge.MoltbookPolicyError, match="unread_notification_count"):
+        bridge.execute_operation(
+            "publish", post_payload(), api_key="moltbook_secret",
+            state_dir=tmp_path, request_func=fake,
+        )
+
+    assert bridge.load_receipt_log(tmp_path)["events"] == []
+    assert len(fake.calls) == 1
+
+
+def test_missing_both_notification_and_dm_counters_remains_blocked(tmp_path):
+    fake = SequenceAPI([api_response("/home", {
+        "your_account": {"name": "Rapptr"},
+        "activity_on_your_posts": [],
+    })])
+
+    with pytest.raises(bridge.MoltbookPolicyError, match="required public notification"):
+        bridge.execute_operation(
+            "publish", post_payload(), api_key="moltbook_secret",
+            state_dir=tmp_path, request_func=fake,
+        )
+
+    assert bridge.load_receipt_log(tmp_path)["events"] == []
+
+
+def test_current_account_notifications_block_even_without_own_post_activity(tmp_path):
+    fake = SequenceAPI([api_response("/home", {
+        "your_account": {"name": "Rapptr", "unread_notification_count": 2},
+        "activity_on_your_posts": [],
+    })])
+
+    with pytest.raises(bridge.MoltbookPolicyError, match="Respond to 2"):
+        bridge.execute_operation(
+            "publish", post_payload(), api_key="moltbook_secret",
+            state_dir=tmp_path, request_func=fake,
+        )
+
+    assert bridge.load_receipt_log(tmp_path)["events"] == []
+
+
+@pytest.mark.parametrize("direct_messages", [
+    None, {}, {"unread_message_count": -1, "pending_request_count": 0},
+    {"unread_message_count": 0, "pending_request_count": False},
+])
+def test_present_but_malformed_dm_data_cannot_use_the_current_contract(direct_messages):
+    with pytest.raises(bridge.MoltbookPolicyError, match="DM"):
+        bridge.validate_publish_home({
+            "your_account": {"name": "Rapptr", "unread_notification_count": 0},
+            "activity_on_your_posts": [],
+            "your_direct_messages": direct_messages,
+        })
+
+
+def test_home_summary_discloses_current_dm_visibility_without_invented_counts():
+    fake = SequenceAPI([api_response("/home", {
+        "your_account": {"name": "Rapptr", "unread_notification_count": 0},
+        "activity_on_your_posts": [],
+    })])
+
+    result = bridge.home_summary(api_key="moltbook_secret", request_func=fake)
+
+    assert result["pending_response_count"] == 0
+    assert result["home_context"]["direct_message_visibility"] == "not_reported"
+    assert "unread_message_count" not in json.dumps(result)
+
+
 @pytest.mark.parametrize(
     "agent",
     [
