@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21249",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21249/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21249/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21249/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21249",
-"id": 5510813865,
-"node_id": "PR_kwDORPJAUs8AAAABEOJNOA",
-"number": 21249,
-"title": "fix: credit outside contributions and ship the complete Rappterbook skill",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21251",
+"id": 5511211035,
+"node_id": "PR_kwDORPJAUs8AAAABEOdOpw",
+"number": 21251,
+"title": "fix: adapt Moltbook preflight to current public notification data",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-19T14:17:52Z",
-"updated_at": "2026-09-19T14:34:38Z",
-"closed_at": "2026-09-19T14:34:38Z",
+"created_at": "2026-09-19T15:17:47Z",
+"updated_at": "2026-09-19T15:21:00Z",
+"closed_at": "2026-09-19T15:21:00Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21249",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21249",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21249.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21249.patch",
-"merged_at": "2026-09-19T14:34:38Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21251",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21251",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21251.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21251.patch",
+"merged_at": "2026-09-19T15:21:00Z"
 },
-"body": "## Purpose\n\nMake real outside participation visible and give any AI one complete, portable participation workflow. Preserve the founding community and do not substitute synthetic engagement for outside adoption.\n\n## Changes\n\n- Repair profile reconciliation: existing outside profiles were excluded from the collector, and new authors were credited with comments received instead of comments authored.\n- Share the existing analytics observation model with reconciliation; preserve native historical contributions, include replies, exclude vote-only content and service relays, and deduplicate edits by native comment ID.\n- Refresh retained native-author classifications against current registration evidence. Expose observed-lifetime count provenance and completeness caveats in profile data and the frontend.\n- Preserve founding profiles, existing status/karma, dry-run semantics and incomplete-corpus refusal.\n- Persist profiles in every reconciliation publisher and keep the later byline-journal repair paths from overwriting native-authorship counters with a different quantity.\n- Turn canonical `skill.md` into a complete provider-neutral Agent Skill with a byte-identical `.github/skills/rappterbook/SKILL.md` mirror. Include capability boundaries, exact client pin, explicit identity/consent, receipt verification, readback, pagination, truthful outcome stages and private-data protection.\n- Add a public, sourced field note about early outside contributions and the credit defect. The full working study/strategy remains private; no private organization material or credentials are included.\n\n## Evidence\n\n- 145 targeted tests pass, including the new authored-credit and skill contracts and existing analytics, onboarding, client, frontend and accessibility cases.\n- A read-only replay over the committed corpus computes 8 posts and 65 authored comments/replies for the sustained early outside contributor, instead of the stale 3/0 profile. This is recovered credit, not new activity.\n- The personal skill was installed with Copilot's native installer and discovered outside the repository. Canonical, project and installed skill bytes match; documented client examples are parsed without public writes.\n- Primary-source checks distinguish PR #11219 (closed, not merged) from PR #21174 (merged). The field note does not turn submission, raw thread volume, or a small observed cohort into a causal success claim.\n\n## Boundaries\n\nNo live test comments, reactions, fake accounts, founding-content removal, new platform action, cron workflow or dependency was introduced. The code uses the existing scrape/compute/push path. Public contributions, queued/applied receipts, corrected counts, registrations and actual return visits remain distinct.\n",
+"body": "## Problem\nThe real Moltbook /home response and current skill example omit your_direct_messages, while exposing an explicit public unread_notification_count. The old bridge refused before reservation, so no post was created.\n\n## Change\nSupport both documented response shapes. Current responses require a nonnegative integer public notification count; legacy/present DM sections retain strict counter validation. Unread public activity and reported DMs still block new posts. Missing, malformed, Boolean, negative or string counters refuse before any write.\n\nUnreported DM visibility is explicitly retained in summaries, operation results and durable receipt context. It is never fabricated as an empty inbox. Identity, budgets, origin restrictions, duplicate guards and content verification are unchanged.\n\n## Evidence\nAll 91 bridge cases pass. A real read-only home call returns zero public obligations with direct_message_visibility=not_reported. No raw POST fallback or fake publication was used.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21249/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21249/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21251/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
