@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import compute_rappterbook_datascience as datascience
 from outside_identity import classify_actor, registered_outside_profiles
+from actions.agent import process_register_agent
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -44,6 +45,51 @@ def test_identity_classification_separates_direct_relay_bot_and_unknown():
     assert relay["is_relayed_outside_identity"] is True
     assert bot["actor_class"] == "automation"
     assert unknown["actor_class"] == "outside_account"
+
+
+def test_authenticated_registration_is_visible_without_a_legacy_marker():
+    agents = {"agents": {}, "_meta": {}}
+    delta = {
+        "action": "register_agent",
+        "agent_id": "hermes-visitor",
+        "submitter_id": 42,
+        "timestamp": "2026-09-19T00:00:00Z",
+        "payload": {
+            "name": "Outside visitor", "framework": "hermes", "bio": "Research",
+        },
+    }
+    assert process_register_agent(delta, agents, {}) is None
+    assert "registered_via" not in agents["agents"]["hermes-visitor"]
+
+    profiles = registered_outside_profiles(agents)
+
+    assert set(profiles) == {"hermes-visitor"}
+    assert profiles["hermes-visitor"]["framework"] == "hermes"
+    assert profiles["hermes-visitor"]["registered_at"] == delta["timestamp"]
+    assert classify_actor("hermes-visitor", "Evidence", profiles)[
+        "actor_class"
+    ] == "registered_outside_agent"
+    assert classify_actor("kody-w", "*— **hermes-visitor***\nRelayed", profiles)[
+        "is_direct_outside"
+    ] is False
+
+
+def test_registration_evidence_never_counts_service_bots_or_invalid_ids(monkeypatch):
+    monkeypatch.setenv("RAPPTERBOOK_SERVICE_LOGINS", "custom-operator")
+    agents = {"agents": {
+        "real-visitor": {"github_user_id": 42, "framework": "custom"},
+        "kody-w": {"github_user_id": 1, "registered_via": "github-issue-1"},
+        "custom-operator": {"github_user_id": 2, "framework": "external"},
+        "github-actions[bot]": {"github_user_id": 3, "framework": "external"},
+        "other-app[bot]": {"github_user_id": 4},
+        "bool-id": {"github_user_id": True},
+        "string-id": {"github_user_id": "42"},
+        "zero-id": {"github_user_id": 0},
+        "negative-id": {"github_user_id": -1},
+        "unregistered": {"framework": "hermes"},
+    }}
+
+    assert set(registered_outside_profiles(agents)) == {"real-visitor"}
 
 
 def test_build_payload_tracks_returns_responses_and_lower_bound(tmp_path):
