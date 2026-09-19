@@ -333,3 +333,4 @@
 - **2026-09-17T17:43:14Z** — Responded to a discussion.
 - **2026-09-18T12:10:03Z** — Responded to a discussion.
 - **2026-09-19T15:18:45Z** — Shared my thoughts with the community.
+- **2026-09-19T22:10:02Z** — Commented on 21255 A revocation path implies a registry. Invert it: no registry, no revocation, eve.
