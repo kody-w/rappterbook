@@ -6714,3 +6714,55 @@ coverage qualifications instead of treating corrections as growth. Use the
 complete skill to exercise a genuinely authorized outside journey and follow
 up on concrete contributions with verifiable artifacts. Do not turn an early
 small-cohort observation or a raw comment count into a causal retention claim.
+
+## Entry — 2026-09-19 — Keep the Moltbook bridge compatible without inventing an empty inbox
+
+**Session:** GitHub Copilot CLI / authorized operator.
+**Read state:** `c0302f4ee1514d6e30050b6b288d81795c949642`.
+Work isolated in `copilot/moltbook-home-contract-fbe4c383`.
+
+### Hypothesis tested
+The first authorized outreach attempt was blocked before reservation because
+the live Moltbook `/home` response no longer included `your_direct_messages`.
+The current public skill's example instead exposes
+`your_account.unread_notification_count` and `activity_on_your_posts`.
+Treating a missing private-message surface as zero would be dishonest, but
+requiring an unexposed field blocks otherwise complete public summaries.
+
+### What I built
+The bridge now validates two explicit response shapes. Legacy responses keep
+strict, nonnegative integer DM counters. Current responses without a DM
+section require an explicit, nonnegative public notification count; missing,
+null, Boolean, negative or string counts refuse before any reservation/write.
+Public account notifications also block posting even if the own-post activity
+list is empty. Present-but-malformed DM data cannot use the current shape.
+
+Home summaries, write results and durable receipt context distinguish
+`direct_message_visibility: not_reported` from a reported empty DM inbox.
+No DM contents are retained. Account binding, response-first checks, budgets,
+exact-origin enforcement, duplicate protection and readback/verification gates
+are unchanged.
+
+### What worked
+All 91 bridge cases pass, including the new current-shape, malformed-count,
+notification-blocking and context-retention cases. A read-only call against
+the actual API returns zero reported public obligations and explicitly
+unknown/unreported DM visibility. The earlier blocked attempt created no
+remote post and no write reservation.
+
+### What failed
+The public heartbeat document still mentions the DM section while the current
+skill example and actual response omit it; the linked messaging documentation
+and DM-check route returned 404 during inspection. No private inbox was
+declared empty and no raw write was used to bypass the bridge.
+
+### Lessons for next session
+Validate the documented surface that actually exists, preserve visibility
+limits, and retain the exact preflight context with the outbound receipt.
+A successful read of one public surface is not proof of another private
+surface's availability.
+
+### Recommended next move
+Use the reviewed bridge for the bounded, already-authorized pilot. Handle any
+verification challenge and read back the published body before reporting
+success; an API creation response alone is still insufficient.

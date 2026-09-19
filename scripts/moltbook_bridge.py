@@ -5,6 +5,10 @@ The bridge never discovers credentials from disk and never publishes generic
 fleet output. Authenticated commands require ``MOLTBOOK_API_KEY``. Outbound
 content must point back to canonical GitHub evidence and every write is
 recorded under ``state/twin_echoes/moltbook.json``.
+
+Posting accepts the legacy home/DM summary or the current documented public
+notification summary. Missing DM visibility is recorded as ``not_reported``,
+never an empty inbox; reported unread activity still blocks new posts.
 """
 from __future__ import annotations
 
@@ -512,6 +516,7 @@ def _merged_receipt_details(
             "budget_day",
             "candidate_remote_ids",
             "challenge_fingerprint",
+            "home_context",
             "observed_present_remote_ids",
             "reconciliation_complete",
             "reconciliation_uncertain",
@@ -948,6 +953,7 @@ def _reserve_operation(
     *,
     state_dir: Path | None,
     timestamp: str | None,
+    home_context: dict | None = None,
 ) -> tuple[dict, bool]:
     """Atomically recheck policy and append the pre-network reservation."""
     with receipt_lock(state_dir):
@@ -969,6 +975,7 @@ def _reserve_operation(
                 "candidate_remote_ids": [],
                 "reconciliation_complete": False,
                 "reconciliation_uncertain": False,
+                "home_context": home_context,
             },
         )
         return queued, True
@@ -1014,11 +1021,16 @@ def _reserve_verification(
 
 
 def pending_response_count(home: dict) -> int:
-    """Count reply and DM obligations that must precede a new post."""
+    """Count reported obligations from a validated legacy or current home."""
     count = 0
     activity = home.get("activity_on_your_posts", [])
     if isinstance(activity, list):
         count += len(activity)
+    notification_count = (home.get("your_account") or {}).get(
+        "unread_notification_count"
+    )
+    if type(notification_count) is int:
+        count = max(count, notification_count)
     direct_messages = home.get("your_direct_messages", {})
     if not isinstance(direct_messages, dict):
         return count
@@ -1029,12 +1041,11 @@ def pending_response_count(home: dict) -> int:
     return count
 
 
-def validate_publish_home(home: dict) -> None:
-    """Require enough /home structure to prove posting obligations are clear."""
+def validate_publish_home(home: dict) -> dict:
+    """Validate both documented home shapes and disclose missing DM visibility."""
     required_types = {
         "your_account": dict,
         "activity_on_your_posts": list,
-        "your_direct_messages": dict,
     }
     invalid = [
         key
@@ -1046,18 +1057,38 @@ def validate_publish_home(home: dict) -> None:
             "Moltbook /home omitted required posting fields: "
             + ", ".join(invalid)
         )
-    direct_messages = home["your_direct_messages"]
-    invalid_counts = [
-        key
-        for key in ("unread_message_count", "pending_request_count")
-        if isinstance(direct_messages.get(key), bool)
-        or not isinstance(direct_messages.get(key), int)
-    ]
-    if invalid_counts:
+    account = home["your_account"]
+    notifications = account.get("unread_notification_count")
+    if "unread_notification_count" in account and (
+        type(notifications) is not int or notifications < 0
+    ):
         raise MoltbookPolicyError(
-            "Moltbook /home omitted required DM counters: "
-            + ", ".join(invalid_counts)
+            "Moltbook /home returned an invalid unread_notification_count"
         )
+    has_dms = "your_direct_messages" in home
+    if not has_dms and "unread_notification_count" not in account:
+        raise MoltbookPolicyError(
+            "Moltbook /home omitted required public notification counter"
+        )
+    direct_messages = home.get("your_direct_messages")
+    if has_dms:
+        if not isinstance(direct_messages, dict):
+            raise MoltbookPolicyError("Moltbook /home returned invalid DM data")
+        invalid_counts = [
+            key for key in ("unread_message_count", "pending_request_count")
+            if type(direct_messages.get(key)) is not int or direct_messages[key] < 0
+        ]
+        if invalid_counts:
+            raise MoltbookPolicyError(
+                "Moltbook /home omitted or invalidated required DM counters: "
+                + ", ".join(invalid_counts)
+            )
+    return {
+        "scope": "public_notifications_and_reported_dms",
+        "own_post_activity_count": len(home["activity_on_your_posts"]),
+        "unread_notification_count": notifications,
+        "direct_message_visibility": "reported" if has_dms else "not_reported",
+    }
 
 
 def _response_data(response: ApiResponse) -> dict:
@@ -1643,18 +1674,25 @@ def _check_home_before_write(
     *,
     api_key: str,
     request_func: Callable,
-) -> None:
+) -> dict:
     """Call /home and enforce response-first policy before reserving."""
     home_response = request_func("GET", "/home", api_key=api_key)
     home_data = _ensure_success(home_response, secret=api_key)
     if operation != "publish":
-        return
-    validate_publish_home(home_data)
+        return {"scope": "reply", "direct_message_visibility": "not_checked"}
+    context = validate_publish_home(home_data)
     obligations = pending_response_count(home_data)
     if obligations:
         raise MoltbookPolicyError(
             f"Respond to {obligations} Moltbook obligation(s) before posting"
         )
+    if context["direct_message_visibility"] == "not_reported":
+        print(
+            "NOTICE: Moltbook /home reports public notifications but does not "
+            "expose DM counters; private DM visibility is unknown, not empty.",
+            file=sys.stderr,
+        )
+    return context
 
 
 def _authenticated_agent_id(
@@ -1720,6 +1758,7 @@ def _execute_reserved_operation(
     state_dir: Path | None,
     request_func: Callable,
     timestamp: str | None,
+    home_context: dict | None = None,
 ) -> dict:
     """Reserve, send, and finalize one write while holding its key lease."""
     with operation_lock(key, state_dir):
@@ -1729,6 +1768,7 @@ def _execute_reserved_operation(
             normalized,
             state_dir=state_dir,
             timestamp=timestamp,
+            home_context=home_context,
         )
         if not reserved:
             return _idempotent_receipt_result(reservation)
@@ -1779,7 +1819,7 @@ def execute_operation(
     )
     if prior:
         return _idempotent_receipt_result(prior)
-    _check_home_before_write(
+    home_context = _check_home_before_write(
         operation,
         api_key=api_key,
         request_func=request_func,
@@ -1788,7 +1828,7 @@ def execute_operation(
         api_key=api_key,
         request_func=request_func,
     )
-    return _execute_reserved_operation(
+    result = _execute_reserved_operation(
         key,
         operation,
         normalized,
@@ -1797,7 +1837,9 @@ def execute_operation(
         state_dir=state_dir,
         request_func=request_func,
         timestamp=timestamp,
+        home_context=home_context,
     )
+    return {**result, "home_context": home_context}
 
 
 def _raise_recorded_creation_error(
@@ -3410,6 +3452,7 @@ def home_summary(*, api_key: str, request_func: Callable = api_request) -> dict:
         request_func("GET", "/home", api_key=api_key),
         secret=api_key,
     )
+    context = validate_publish_home(home)
     account = home.get("your_account", {})
     activity = home.get("activity_on_your_posts", [])
     if not isinstance(activity, list):
@@ -3422,6 +3465,7 @@ def home_summary(*, api_key: str, request_func: Callable = api_request) -> dict:
             if isinstance(account, dict) and account.get(key) is not None
         },
         "pending_response_count": pending_response_count(home),
+        "home_context": context,
         "activity_on_your_posts": [
             {
                 key: item.get(key)
