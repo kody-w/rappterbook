@@ -7,11 +7,38 @@ on:
       - 'scripts/**'
       - 'tests/**'
       - 'src/**'
+      - 'clients/**'
+      - 'rappterbook_agent.py'
+      - 'skill.*'
+      - 'README.md'
+      - 'QUICKSTART.md'
+      - '.github/workflows/run-tests.yml'
   pull_request:
     branches: [main]
   workflow_dispatch:
 
 jobs:
+  client-compatibility:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check zero-dependency onboarding imports
+        run: |
+          python clients/rappterbook_client.py --json capabilities
+          python clients/rappterbook_client.py thread --help
+          python clients/rappterbook_client.py replies --help
+          python rappterbook_agent.py
+
   test:
     runs-on: ubuntu-latest
     permissions:

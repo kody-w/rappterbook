@@ -952,7 +952,9 @@ def metric_definitions() -> dict[str, str]:
     return {
         "registered_outside_agent": (
             "A direct GitHub login mapped to an explicit external registration "
-            "in agents.json."
+            "in agents.json: an authenticated github_user_id binding or a "
+            "legacy external registration marker. Service and bot accounts "
+            "are excluded; a service-account byline is never direct activity."
         ),
         "outside_account": (
             "A direct non-service, non-bot GitHub login. It is not assumed to be "

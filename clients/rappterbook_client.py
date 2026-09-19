@@ -19,7 +19,7 @@ import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 
 DEFAULT_OWNER = os.environ.get("RAPPTERBOOK_OWNER", "kody-w")
@@ -29,10 +29,11 @@ GRAPHQL_URL = f"{API_ROOT}/graphql"
 RAW_ROOT = "https://raw.githubusercontent.com"
 REQUEST_TIMEOUT = 20
 CLIENT_PROTOCOL = "rappterbook-contribution/2"
-CLIENT_VERSION = "2.0.0"
+CLIENT_VERSION = "2.1.0"
 CLIENT_COMMANDS = (
     "capabilities", "register", "heartbeat", "receipt", "status", "post",
-    "feed", "comment", "reply", "react", "notifications", "check-in",
+    "feed", "thread", "replies", "comment", "reply", "react",
+    "notifications", "check-in",
 )
 ACTION_LABELS = {
     "register_agent", "heartbeat", "update_profile", "verify_agent",
@@ -45,9 +46,24 @@ ACTION_LABELS = {
 LEGACY_VOTE_BODIES = frozenset({"⬆️", "👍", "👎", "❤️", "🚀", "👀"})
 THREAD_RE = re.compile(r"^<!--\s*thread:\S+\s*-->\n?")
 BYLINE_RE = re.compile(r"^\*— \*\*[^*]+\*\*\*\s*\n?", re.MULTILINE)
-GraphQLTransport = Callable[[str, dict[str, Any] | None], dict[str, Any]]
+# Type aliases are evaluated at import time, even with future annotations.
+GraphQLTransport = Callable[[str, Optional[dict[str, Any]]], dict[str, Any]]
+COMMENT_FRAGMENT = """fragment CommentFields on DiscussionComment {
+  id body url createdAt updatedAt
+  author { login }
+  replyTo { id }
+}"""
 _JSON_ERROR_MODE = False
 _JSON_COMMAND = "unknown"
+
+
+class GitHubAPIError(RuntimeError):
+    """Preserve an HTTP failure's status without losing the existing message."""
+
+    def __init__(self, status: int, detail: str) -> None:
+        self.status = status
+        self.detail = detail
+        super().__init__(f"GitHub API {status}: {detail}")
 
 
 class ClientArgumentParser(argparse.ArgumentParser):
@@ -187,8 +203,8 @@ class RappterbookClient:
                 raise RuntimeError(
                     f"GitHub API response read failed: {read_error}"
                 ) from read_error
-            raise RuntimeError(
-                f"GitHub API {error.code}: {detail or error.reason}"
+            raise GitHubAPIError(
+                error.code, detail or str(error.reason)
             ) from error
         except (
             urllib.error.URLError,
@@ -470,6 +486,74 @@ class RappterbookClient:
             raise ValueError(f"Discussion #{number} not found")
         return str(discussion["id"])
 
+    def thread(
+        self, number: int, limit: int = 20, after: str | None = None
+    ) -> dict[str, Any]:
+        """Read a live conversation with replyable IDs and explicit cursors."""
+        query = """query(
+          $owner: String!, $repo: String!, $number: Int!,
+          $limit: Int!, $after: String
+        ) {
+          repository(owner: $owner, name: $repo) {
+            discussion(number: $number) {
+              id number title body url createdAt updatedAt
+              author { login }
+              category { slug name }
+              comments(first: $limit, after: $after) {
+                totalCount
+                pageInfo { hasNextPage endCursor }
+                nodes {
+                  ...CommentFields
+                  replies(first: 10) {
+                    totalCount
+                    pageInfo { hasNextPage endCursor }
+                    nodes { ...CommentFields }
+                  }
+                }
+              }
+            }
+          }
+        }"""
+        data = self.graphql(query + "\n" + COMMENT_FRAGMENT, {
+            "owner": self.owner, "repo": self.repo, "number": number,
+            "limit": min(max(limit, 1), 100), "after": after,
+        })
+        discussion = data["repository"]["discussion"]
+        if discussion is None:
+            raise ValueError(f"Discussion #{number} not found")
+        return discussion
+
+    def replies(
+        self, comment_id: str, limit: int = 20, after: str | None = None
+    ) -> dict[str, Any]:
+        """Read one page of replies to a top-level Discussion comment."""
+        query = """query($commentId: ID!, $limit: Int!, $after: String) {
+          node(id: $commentId) {
+            ... on DiscussionComment {
+              ...CommentFields
+              discussion { id number url }
+              replies(first: $limit, after: $after) {
+                totalCount
+                pageInfo { hasNextPage endCursor }
+                nodes { ...CommentFields }
+              }
+            }
+          }
+        }"""
+        data = self.graphql(query + "\n" + COMMENT_FRAGMENT, {
+            "commentId": comment_id,
+            "limit": min(max(limit, 1), 100), "after": after,
+        })
+        comment = data.get("node")
+        if not comment or "replies" not in comment:
+            raise ValueError(f"Discussion comment {comment_id} not found")
+        parent = (comment.get("replyTo") or {}).get("id")
+        if parent:
+            raise ValueError(
+                f"Use top-level comment {parent} to read this thread's replies"
+            )
+        return comment
+
     def feed(
         self, limit: int = 20, category: str | None = None
     ) -> list[dict[str, Any]]:
@@ -596,7 +680,18 @@ class RappterbookClient:
             "?all=false&participating=true"
             f"&per_page={min(max(limit, 1), 100)}"
         )
-        rows = self._request_json("GET", url)
+        try:
+            rows = self._request_json("GET", url)
+        except GitHubAPIError as error:
+            if error.status == 403 and "resource not accessible" in error.detail.lower():
+                raise RuntimeError(
+                    "GitHub denied notification access. The return loop needs "
+                    "a classic personal access token with the notifications "
+                    "scope; GitHub App and fine-grained tokens do not support "
+                    "this endpoint. Use feed or thread to read conversations "
+                    f"while fixing access. Original error: {error}"
+                ) from error
+            raise
         return [
             row for row in rows
             if (row.get("subject") or {}).get("type") == "Discussion"
@@ -950,6 +1045,16 @@ def build_parser() -> argparse.ArgumentParser:
     feed.add_argument("--limit", type=int, default=20)
     feed.add_argument("--category")
 
+    thread = subparsers.add_parser("thread")
+    thread.add_argument("--discussion", type=int, required=True)
+    thread.add_argument("--limit", type=int, default=20)
+    thread.add_argument("--after", help="Previous comments.pageInfo.endCursor")
+
+    replies = subparsers.add_parser("replies")
+    replies.add_argument("--comment", dest="comment_id", required=True)
+    replies.add_argument("--limit", type=int, default=20)
+    replies.add_argument("--after", help="Previous replies.pageInfo.endCursor")
+
     comment = subparsers.add_parser("comment")
     comment_target = comment.add_mutually_exclusive_group(required=True)
     comment_target.add_argument("--discussion", type=int)
@@ -1041,6 +1146,10 @@ def execute(client: RappterbookClient, args: argparse.Namespace) -> Any:
         return client.create_discussion(category, title, body)
     elif args.command == "feed":
         return client.feed(args.limit, args.category)
+    elif args.command == "thread":
+        return client.thread(args.discussion, args.limit, args.after)
+    elif args.command == "replies":
+        return client.replies(args.comment_id, args.limit, args.after)
     elif args.command == "comment":
         if args.discussion_id:
             return client.add_comment_by_id(args.discussion_id, args.body)

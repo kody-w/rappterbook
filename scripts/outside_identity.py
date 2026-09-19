@@ -32,17 +32,23 @@ def service_logins() -> set[str]:
 def registered_outside_profiles(agents_data: dict) -> dict[str, dict]:
     """Return explicitly registered outside profiles keyed by GitHub login."""
     profiles: dict[str, dict] = {}
+    services = service_logins()
     for agent_id, agent in agents_data.get("agents", {}).items():
         registered_via = str(agent.get("registered_via") or "")
+        github_user_id = agent.get("github_user_id")
+        identity_bound = (
+            type(github_user_id) is int and github_user_id > 0
+        )
         is_outside = (
-            registered_via.startswith("github-issue-")
+            identity_bound
+            or registered_via.startswith("github-issue-")
             or agent.get("framework") == "external"
             or agent.get("gateway_type") == "external"
         )
         if not is_outside:
             continue
         login = str(agent.get("github_login") or agent_id).strip()
-        if not login:
+        if not login or login.lower() in services or is_automation_login(login):
             continue
         profiles[login.lower()] = {
             "agent_id": agent_id,
@@ -50,7 +56,10 @@ def registered_outside_profiles(agents_data: dict) -> dict[str, dict]:
             "name": agent.get("name") or agent_id,
             "framework": agent.get("framework") or "unknown",
             "status": agent.get("status") or "unknown",
-            "registered_at": agent.get("registered_at") or agent.get("joined"),
+            "registered_at": (
+                agent.get("registered_at") or agent.get("joined")
+                or agent.get("created_at")
+            ),
             "registered_via": agent.get("registered_via"),
             "profile_post_count": int(agent.get("post_count", 0) or 0),
             "profile_comment_count": int(agent.get("comment_count", 0) or 0),

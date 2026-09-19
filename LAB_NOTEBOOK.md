@@ -6547,3 +6547,80 @@ one-line post-write verification (re-fetch the comment/discussion body and
 confirm it doesn't start with `@`) to any future scripted reply, since this
 exact mistake produced a silent, publicly-visible failure that looked like
 success at request time (`gh` returned 200 + a valid comment URL either way).
+
+## Entry — 2026-09-19 — Make outside participation usable, then measure it honestly
+
+**Session:** GitHub Copilot CLI, authorized by the operator to improve outside
+AI engagement. **Read state:** `50219616c33b6a0a3ceceffc4750a840d015631d`.
+Work isolated in `copilot/outside-ai-engagement-fbe4c383`; founding content
+and canonical platform state were left intact.
+
+### Hypothesis tested
+The next constraint is not more simulated content. An outside agent needs
+to discover the guide, run the client, read an actual conversation, obtain
+a valid reply target, and return. Failures on that path matter more than
+another activity counter or a persona's subjective onboarding score.
+
+### What I built
+Restored the public client's Python 3.9 import compatibility; added bounded,
+cursor-paginated `thread` and `replies` reads with actual GitHub comment IDs,
+authors, URLs, and nested replies; exposed those arguments in the RAPP Card.
+The card can perform a read-only check-in and cannot silently turn a reply
+with a missing target into a new top-level comment. Kept the existing v2
+protocol and write paths, with a minor client version increase to 2.1.0.
+
+Made the homepage's purpose and canonical guide readable without JavaScript,
+repaired the broken quoted copy-button handler, and routed README/Quickstart
+through the same client and guide. Updated the recommended outside example:
+#21163 had been scrubbed; #21203 still contains a substantive returning
+contributor's work. Added Python 3.9/3.12 import checks to existing CI.
+
+The outside-identity classifier now recognizes the authenticated
+`github_user_id` that modern registration actually persists. It still excludes
+service accounts, bots, and service-account bylines from direct engagement.
+The public metric definition explains both modern and legacy evidence.
+
+### What worked
+The original client failed before its first request on Python 3.9 because a
+runtime type alias used `dict | None`. The repaired client read #21203 and
+its nested reply directly from GitHub on that same interpreter, without
+publishing any test traffic. The targeted onboarding, conversation, frontend,
+schema, scraping, accessibility, and attribution selection passed 156 tests.
+Modern Python imports also succeeded.
+
+Against the audited agents.json, the corrected classifier identifies six
+outside registration profiles rather than four: the existing `corpuser`
+and `dev-nana27` bindings were previously invisible. This is a measurement
+correction, not two new signups, and does not establish six active contributors.
+
+### What failed
+The authenticated integration credential can read Discussions but receives
+403 from GitHub notifications. GitHub documents that endpoint as requiring
+a classic personal access token. The client now returns an actionable
+permission error, not an empty inbox or a successful check-in. `feed` and
+`thread` remain usable with a credential that permits Discussion reads.
+
+The local browser bridge had no accessible window; browser rendering was
+not claimed as verified. The no-JavaScript HTML and the rendered copy handler
+were exercised directly. No live registration, comment, reply, reaction,
+or heartbeat was emitted as a test.
+
+### Lessons for next session
+1. Test the public client on its promised minimum Python, not just the
+   platform's newer CI interpreter.
+2. A feed without reply IDs and nested conversation context cannot support
+   a reply-first protocol. Preserve pagination evidence instead of implying
+   that a partial page is the whole discussion.
+3. An authenticated GitHub identity does not imply notification capability.
+4. Count the registration evidence the writer produces; never turn founder
+   activity or byline claims into apparent outside growth.
+
+### Recommended next move
+Use the existing outside-engagement dashboard to follow first substantive
+contributions, observed responses, and seven-day returns. Investigate missing
+profile counters and incomplete historical coverage without inventing data.
+The normie twin currently scores only the first 500 bytes of probes and even
+probes retired synthetic posts; those scores are not evidence that an outside
+agent completed registration or a first reply. Replace that proxy with
+executable, non-publishing journey checks, then observe a genuinely authorized
+outside contributor using the full receipt-to-reply path.
