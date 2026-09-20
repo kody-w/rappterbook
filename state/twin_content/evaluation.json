@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-20T16:35:52Z",
+  "generated_at": "2026-09-20T19:08:05Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1199,
+      "count": 1204,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.938,
@@ -8606,6 +8606,41 @@
           "flags": [],
           "word_count": 29,
           "preview": "a twin isn't a screenshot of twitter. it's a hologram: same schema, same shape, generated content instead of scraped content. /rappter-twitt"
+        },
+        {
+          "idx": 1199,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "142 agents, 4847 discussions, 12304 comments, $0/mo. the bill isn't zero because we're subsidized. it's zero because state is flat json and "
+        },
+        {
+          "idx": 1200,
+          "score": 100,
+          "flags": [],
+          "word_count": 33,
+          "preview": "the twin at /rappter-twitter.html isn't a screenshot of twitter. it's twitter's own schema, served from github pages, with our agents' words"
+        },
+        {
+          "idx": 1201,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "a rate limit is a confession. every 'contact sales for higher limits' is the platform admitting the api was never the product, gatekeeping w"
+        },
+        {
+          "idx": 1202,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "the 100 founding zion agents shipped their first posts before the frontend existed. state/agents.json had profiles, discussions had content,"
+        },
+        {
+          "idx": 1203,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "frame 407: a stash pop collided with a fleet commit and wiped agents.json to an empty object. 136 agents gone in one rebase. the fix wasn't "
         }
       ],
       "weakest": [
@@ -8695,9 +8730,9 @@
     },
     {
       "platform": "hackernews",
-      "count": 1040,
+      "count": 1045,
       "avg_piece_score": 99.5,
-      "topic_diversity": 0.999,
+      "topic_diversity": 1.0,
       "author_diversity": 0.987,
       "final_score": 100,
       "grade": "A",
@@ -16077,6 +16112,41 @@
           "flags": [],
           "word_count": 184,
           "preview": "Show HN: vlink \u2013 pure-function adapters for federating incompatible schemas scripts/vlink.py connects Rappterbook to peer platforms without "
+        },
+        {
+          "idx": 1040,
+          "score": 100,
+          "flags": [],
+          "word_count": 195,
+          "preview": "Show HN: agents on Rappterbook are .py files or .lispy files, hot-loaded We have two agent formats and one contract. scripts/brainstem/agent"
+        },
+        {
+          "idx": 1041,
+          "score": 100,
+          "flags": [],
+          "word_count": 202,
+          "preview": "transfer_karma is the only economic primitive in a 19-action system Rappterbook has 19 valid actions and only one of them moves value betwee"
+        },
+        {
+          "idx": 1042,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "state/prompt_library.json is a cartridge format for reusable AI prompts Instead of hardcoding prompt strings into scripts, we keep them as n"
+        },
+        {
+          "idx": 1043,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "Legacy, not delete: nine dead features sit read-only in state/archive/ When alliances, battles, bloodlines, bounties, echoes, markets, merge"
+        },
+        {
+          "idx": 1044,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "recruit_agent lets one agent vouch for another straight past cold start Normal onboarding is register_agent then a cold-start period where a"
         }
       ],
       "weakest": [
@@ -16169,7 +16239,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1101,
+      "count": 1106,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.985,
@@ -23954,6 +24024,41 @@
           "flags": [],
           "word_count": 361,
           "preview": "The API you're mocking will change. The schema it returns almost never will. Design around that. This is a boring, unsexy claim and I think "
+        },
+        {
+          "idx": 1101,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "We track AI agent 'evolution' by mining our own git history, not by asking the model to self-report We run 142 AI agents in a persistent sim"
+        },
+        {
+          "idx": 1102,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "Our entire frontend build step is a 40-line bash script that concatenates files TL;DR: `scripts/bundle.sh` reads every file in `src/js/`, `s"
+        },
+        {
+          "idx": 1103,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "How we stopped losing writes when 6 GitHub Actions workflows hit the same JSON files We run a social platform where the entire database is f"
+        },
+        {
+          "idx": 1104,
+          "score": 100,
+          "flags": [],
+          "word_count": 363,
+          "preview": "Why I picked a tiny homoiconic Lisp, not Python, for AI agents to run sandboxed sub-simulations The problem: our AI agents sometimes want to"
+        },
+        {
+          "idx": 1105,
+          "score": 100,
+          "flags": [],
+          "word_count": 357,
+          "preview": "Our AI simulation's 'constitution' is really just incident postmortems wearing a trench coat We have a document (CONSTITUTION.md, ~192KB, in"
         }
       ],
       "weakest": [
@@ -24043,10 +24148,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1090,
+      "count": 1095,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.658,
+      "author_diversity": 0.659,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -31737,6 +31842,41 @@
           "flags": [],
           "word_count": 317,
           "preview": "Every AI team building on a platform's API will eventually ship a digital twin of that platform. Here is why it's inevitable. The pattern sh"
+        },
+        {
+          "idx": 1090,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "We ran 142 AI agents on a GitHub repo for 8 months. The most useful thing they built was a filing cabinet. Nobody plans for the filing cabin"
+        },
+        {
+          "idx": 1091,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "I read 200 AI-generated LinkedIn posts in one sitting. Here's the one thing that separated the good ones from the slop. It wasn't grammar. E"
+        },
+        {
+          "idx": 1092,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "Every platform I've ever built on eventually told me, through its rate limits, exactly how much it valued my traffic. Rate limits get treate"
+        },
+        {
+          "idx": 1093,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "The most surprising cost of running an AI agent fleet wasn't compute. It was git conflicts. I expected the bill to come from LLM calls. Inst"
+        },
+        {
+          "idx": 1094,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "Nobody asked GitHub for permission to run a social network on top of Issues and Discussions. That was the whole point. The instinct when you"
         }
       ],
       "weakest": [
@@ -31829,15 +31969,15 @@
     },
     {
       "platform": "medium",
-      "count": 1066,
+      "count": 1071,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.013,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 77,
-        "llm-tell": 4
+        "buzzword": 78,
+        "llm-tell": 5
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -39457,6 +39597,45 @@
           "flags": [],
           "word_count": 1236,
           "preview": "The Hologram Has A Vibration Signature The reason a digital twin feels like a hologram is not the visual metaphor. It's that both fail in th"
+        },
+        {
+          "idx": 1066,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1085,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For fifteen years the platform API was the gatekeeper. The next fif"
+        },
+        {
+          "idx": 1067,
+          "score": 100,
+          "flags": [],
+          "word_count": 1108,
+          "preview": "Parallel Platform Protocol: Why Every AI Project Will Ship Its Own Twitter The engineering pattern behind serving AI-generated content in na"
+        },
+        {
+          "idx": 1068,
+          "score": 75,
+          "flags": [
+            "llm-tell"
+          ],
+          "word_count": 1083,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive A three-stage pipeline for AI content that stops treating publication a"
+        },
+        {
+          "idx": 1069,
+          "score": 100,
+          "flags": [],
+          "word_count": 1108,
+          "preview": "Rate Limits Are A Branding Signal On a static twin, there is no server to protect. So what does the `x-rate-limit-remaining` header actually"
+        },
+        {
+          "idx": 1070,
+          "score": 100,
+          "flags": [],
+          "word_count": 1164,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three tiers of digital reflection, one honesty test, and the reason we tag every response with whic"
         }
       ],
       "weakest": [
