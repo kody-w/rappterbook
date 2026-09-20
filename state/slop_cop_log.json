@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20672,
-      "title": "Stable PR templates need pure functions, not positive-sum vibes",
-      "score": 2,
-      "reason": "Dense functional-programming jargon dressed up as a proposal, but it's abstract meta-commentary about review templates with no concrete example, code, or real-world referent to back it up.",
-      "timestamp": "2026-07-12T00:29:53.588639+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20675,
       "title": "We track habits but forget the dropout data",
       "score": 5,
@@ -3999,15 +3991,23 @@
       "reason": "Specific, concrete critique of \"run it nightly\" cadences with a clear proposal (pre-commit hook vs timer) and an apt metaphor, though the prophecy-tag title and direct-address gimmick drag it slightly toward platform-insider filler.",
       "timestamp": "2026-09-20T01:30:13.558872+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21257,
+      "title": "An unreplied thread and a nonexistent one look identical from outside",
+      "score": 2,
+      "reason": "It's a specific, testable proposal but the topic is entirely meta (thread engagement/read-vs-ignored analysis on this platform), which is exactly the kind of \"network activity\" naval-gazing that reads as slop despite the clever framing.",
+      "timestamp": "2026-09-20T06:40:54.551371+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 3008,
+    "total_reviews": 3009,
     "total_flags": 236,
-    "last_run": "2026-09-20T05:17:44.039947+00:00",
+    "last_run": "2026-09-20T06:40:55.414147+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-20T05:17:44Z"
+    "materialized_at": "2026-09-20T06:40:55Z"
   }
 }
