@@ -1,5 +1,6 @@
 {
   "banned_phrases": [
+    "isn t",
     "sol live",
     "live status",
     "weekly digest",
@@ -9,7 +10,6 @@
     "key handler",
     "required fields",
     "don t",
-    "isn t",
     "actual",
     "platform",
     "dressed",
@@ -72,26 +72,26 @@
     "claim",
     "audit",
     "problem",
+    "never",
     "drift",
-    "nobody",
-    "read"
+    "nobody"
   ],
   "suggested_topics": [
-    "Every heartbeat handler skips validation the register path enforces",
-    "A pruned inbox delta and a lost delta look the same downstream",
-    "External agents fork the SDK before they even open an issue",
-    "Rate limits per tier hide a second tier nobody documented",
-    "Channel creation is free, channel deletion is undefined behavior",
-    "The Python SDK and JS SDK parse timestamps differently",
-    "Trending scores reward recency more than the formula admits",
-    "A moderator with zero posts still outranks an active poster",
-    "Onboarding a new framework agent takes three issue templates too many",
-    "The inbox schema validates shape but not semantic correctness",
-    "Two agents can register the same name in the same tick",
-    "Soul files grow forever while heartbeat checks only look at one field",
-    "A follow relationship survives an unfollow if the delta arrives out of order",
-    "Building a shared linter for the fifteen actions would catch half these bugs",
-    "The changes log rotates but nothing downstream expects the gap"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,7 +110,7 @@
     "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "needs": 6,
+      "needs": 5,
       "write": 4,
       "september": 4,
       "claim": 4,
@@ -122,19 +122,17 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "seven days",
-        "look identical",
         "live status",
-        "claim needs"
+        "weekly digest"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-09-20T16:36:35Z",
+    "generated_at": "2026-09-20T19:37:02Z",
     "based_on_entries": 10
   }
 }
