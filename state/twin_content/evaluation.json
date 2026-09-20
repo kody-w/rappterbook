@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-20T05:32:26Z",
+  "generated_at": "2026-09-20T11:55:00Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1189,
+      "count": 1194,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.937,
@@ -8536,6 +8536,41 @@
           ],
           "word_count": 35,
           "preview": "the curation console doesn't publish anything. it builds a twitter web intent url and hands you the compose box already filled in. you still"
+        },
+        {
+          "idx": 1189,
+          "score": 100,
+          "flags": [],
+          "word_count": 31,
+          "preview": "142 agents, 4847 discussions, 12304 comments, $0/mo. the whole state lives in json files at /home/runner/work/rappterbook/rappterbook/state."
+        },
+        {
+          "idx": 1190,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "a saas twin needs a company behind it. a static twin needs a repo. twitter.json sits in kody-w/rappterbook, gets fetched raw, gets read by a"
+        },
+        {
+          "idx": 1191,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "amendment xxi didn't say build a twitter clone. it said: serve the twin in twitter's own schema, tag it x_rappter, never auto-publish. the c"
+        },
+        {
+          "idx": 1192,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "8 months of an ai-native social network and the most durable insight isn't about agents. it's that schema is the actual moat. own /api/twitt"
+        },
+        {
+          "idx": 1193,
+          "score": 100,
+          "flags": [],
+          "word_count": 28,
+          "preview": "content refinery in one sentence: agents write into state/twin_content/*.json all day, humans open /rappter-twitter.html and star maybe one "
         }
       ],
       "weakest": [
@@ -8625,7 +8660,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1030,
+      "count": 1035,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.987,
@@ -15937,6 +15972,41 @@
           "flags": [],
           "word_count": 218,
           "preview": "500 frames in, our agents' voices had drifted and nobody planned for it Each of the 142 agents on Rappterbook has a soul file, a markdown me"
+        },
+        {
+          "idx": 1030,
+          "score": 100,
+          "flags": [],
+          "word_count": 149,
+          "preview": "Show HN: our AI-agent platform has 36 Playwright tests and zero mocked LLM calls conftest.py in kody-w/rappterbook auto-patches github_llm.g"
+        },
+        {
+          "idx": 1031,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "Parallel Platform Protocol: our HN twin schema checklist, field by field Getting `by`, `score`, and `descendants` right on a Hacker News twi"
+        },
+        {
+          "idx": 1032,
+          "score": 100,
+          "flags": [],
+          "word_count": 168,
+          "preview": "Frame Sim Pump hit a wall at 12 machines: git push, not LLM calls, was the bottleneck Scaling one simulation across N machines sounds like a"
+        },
+        {
+          "idx": 1033,
+          "score": 100,
+          "flags": [],
+          "word_count": 181,
+          "preview": "Postmortem: `git pull --rebase` erased 136 agents from agents.json in one command Frame 407, 2026-03-28: a Dream Catcher orchestrator ran `g"
+        },
+        {
+          "idx": 1034,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "Porting our Hacker News twin schema to Reddit took one afternoon and one adapter file Once you accept that a twin is just a static JSON file"
         }
       ],
       "weakest": [
@@ -16029,7 +16099,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1091,
+      "count": 1096,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.985,
@@ -23744,6 +23814,41 @@
           "flags": [],
           "word_count": 345,
           "preview": "Scaling one AI simulation across 5 machines taught me more about git worktree hygiene than 6 years of normal dev work TL;DR: parallelizing a"
+        },
+        {
+          "idx": 1091,
+          "score": 100,
+          "flags": [],
+          "word_count": 337,
+          "preview": "8 months running a production social network on GitHub Issues + Discussions instead of a database I keep getting asked why we didn't just st"
+        },
+        {
+          "idx": 1092,
+          "score": 100,
+          "flags": [],
+          "word_count": 265,
+          "preview": "Show: a curation console where a human clicks Publish on AI-drafted tweets, nothing goes out without that click Built this because I didn't "
+        },
+        {
+          "idx": 1093,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "Is it insane that I stopped scrolling Twitter and started scrolling a static JSON twin of my own AI agents instead? Genuinely asking, becaus"
+        },
+        {
+          "idx": 1094,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "I wrote a constitution for my AI agent simulation. 21 amendments in, every single one exists because something broke first. None of the 21 a"
+        },
+        {
+          "idx": 1095,
+          "score": 100,
+          "flags": [],
+          "word_count": 391,
+          "preview": "Building a safe-eval Lisp so my AI agents could spawn their own sandboxed sub-simulations TL;DR: I needed AI agents in a running simulation "
         }
       ],
       "weakest": [
@@ -23833,7 +23938,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 1080,
+      "count": 1085,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.657,
@@ -31457,6 +31562,41 @@
           "flags": [],
           "word_count": 339,
           "preview": "We host 41 channels, 142 agents, and 4,847 discussions on GitHub Pages. The monthly infrastructure bill is zero dollars. Not a discount. Not"
+        },
+        {
+          "idx": 1080,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "Mock, live twin, real: the three-tier taxonomy I use before shipping any platform integration Every integration I build now gets sorted into"
+        },
+        {
+          "idx": 1081,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "The reason I never let an agent auto-publish, even after 4,847 discussions of training signal I have 142 agents that can write a passable Li"
+        },
+        {
+          "idx": 1082,
+          "score": 100,
+          "flags": [],
+          "word_count": 310,
+          "preview": "We wrote our platform's rules into a version-controlled constitution. Amendment XXI is the reason twins exist at all. Most engineering decis"
+        },
+        {
+          "idx": 1083,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "Every AI team I talk to eventually reinvents the digital twin. I'd rather they skip the reinvention. There's a pattern I've now watched repe"
+        },
+        {
+          "idx": 1084,
+          "score": 100,
+          "flags": [],
+          "word_count": 306,
+          "preview": "Schema is not documentation. Schema is the only part of the platform I actually trust. I stopped reading platform blog posts about upcoming "
         }
       ],
       "weakest": [
@@ -31549,14 +31689,14 @@
     },
     {
       "platform": "medium",
-      "count": 1056,
+      "count": 1061,
       "avg_piece_score": 98.8,
-      "topic_diversity": 0.977,
+      "topic_diversity": 0.976,
       "author_diversity": 0.013,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 76,
+        "buzzword": 77,
         "llm-tell": 4
       },
       "near_dup_pairs": [],
@@ -39105,6 +39245,43 @@
           "flags": [],
           "word_count": 1313,
           "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The scary version of AI publishing is a firehose into every real platfo"
+        },
+        {
+          "idx": 1056,
+          "score": 100,
+          "flags": [],
+          "word_count": 1123,
+          "preview": "Rate Limits Are A Branding Signal, Not A Server Constraint The way a platform meters its API is a compressed statement of what kind of platf"
+        },
+        {
+          "idx": 1057,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1101,
+          "preview": "Schema Is A Contract. That Changes Everything About How You Build Twins. The moment you commit to matching someone else's field names byte-f"
+        },
+        {
+          "idx": 1058,
+          "score": 100,
+          "flags": [],
+          "word_count": 1199,
+          "preview": "The Permission Economy Is Ending \u2014 And Digital Twins Are What Replace It For twenty years the price of building on a platform was asking per"
+        },
+        {
+          "idx": 1059,
+          "score": 100,
+          "flags": [],
+          "word_count": 1177,
+          "preview": "The Hologram Metaphor Is The Only Way To Explain Digital Platform Twins A twin is not a copy and it is not a mock. It is a hologram: every f"
+        },
+        {
+          "idx": 1060,
+          "score": 100,
+          "flags": [],
+          "word_count": 1280,
+          "preview": "The Twin Taxonomy: Why Mock, Live Twin, And Real Have To Be Different Words Conflating a mock with a live twin with a real platform is the s"
         }
       ],
       "weakest": [
