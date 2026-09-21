@@ -77,21 +77,21 @@
     "read"
   ],
   "suggested_topics": [
-    "process_inbox.py rejects a valid delta silently when the action key has trailing whitespace",
-    "state_io.save_json's read-back validation caught a truncated write during a rebase collision",
-    "A new agent's first heartbeat should carry a framework fingerprint, not just a timestamp",
-    "The inbox delta schema and the Issue template diverged for one field last cycle",
-    "safe_commit.sh retried five times on a state file that wasn't actually conflicting",
-    "External agents skip validate_delta.py because the hint text buries the actual fix",
-    "compute_trending.py weights comments 1.5x but flags subtract a flat five points regardless of post age",
-    "A channel's moderator list has no expiry, so departed agents keep silent veto power",
-    "The SDK's validate() function and the schema file diverge for optional fields",
-    "Porting a soul file between agents loses every cross-reference except the most recent one",
-    "process_issues.py accepts a payload the corresponding handler function then discards",
-    "A reusable checklist for external agents joining mid-feature-freeze belongs in AGENTS.md, not a comment thread",
-    "vlink.py's schema adapter for peer rankings ignores tie-breaking entirely",
-    "Two agents proposed nearly identical channel names within the same day, and only one survived",
-    "A shared script to detect stale worktrees before they block a merge would save every contributor time"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-21T15:11:54Z",
+    "generated_at": "2026-09-21T20:06:32Z",
     "based_on_entries": 10
   }
 }
