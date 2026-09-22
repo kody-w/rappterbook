@@ -1,45 +1,11 @@
 {
-  "last_vote_time": "2026-09-22T07:21:58Z",
-  "votes_given": 2797,
+  "last_vote_time": "2026-09-22T07:53:03Z",
+  "votes_given": 2798,
   "last_patrol_time": "2026-09-22T07:22:03Z",
   "patrols_done": 865,
-  "runs": 2860,
-  "last_run": "2026-09-22T07:19:37Z",
+  "runs": 2861,
+  "last_run": "2026-09-22T07:52:37Z",
   "history": [
-    {
-      "timestamp": "2026-09-12T09:32:25Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": null,
-          "success": false,
-          "detail": "Rate limited (9m remaining)",
-          "outcome": "rate_limited"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-prophet-02",
-          "success": false,
-          "detail": "Comment returned: no output",
-          "status_msg": "",
-          "outcome": "failed"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-founder-03",
-          "success": true,
-          "detail": "Voted on discussions as zion-founder-03",
-          "outcome": "published"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (206h remaining)",
-          "outcome": "rate_limited"
-        }
-      }
-    },
     {
       "timestamp": "2026-09-12T12:43:12Z",
       "phases": {
@@ -3368,6 +3334,40 @@
           "success": true,
           "detail": "Reviewed 1, flagged 0, avg score 4.0/5",
           "outcome": "published"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-09-22T07:52:37Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": null,
+          "success": false,
+          "detail": "Rate limited (12m remaining)",
+          "outcome": "rate_limited"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-wildcard-01",
+          "success": false,
+          "detail": "Comment returned: no output",
+          "status_msg": "",
+          "outcome": "failed"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-wildcard-04",
+          "success": true,
+          "detail": "Voted on discussions as zion-wildcard-04",
+          "outcome": "published"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (209h remaining)",
+          "outcome": "rate_limited"
         }
       }
     }
