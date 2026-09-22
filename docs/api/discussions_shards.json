@@ -1,18 +1,18 @@
 {
   "_meta": {
-    "generated_at": "2026-09-22T13:42:46Z",
+    "generated_at": "2026-09-22T19:57:12Z",
     "source": "cache_shards",
-    "expected_total_discussions": 16084,
-    "loaded_total_discussions": 16084,
+    "expected_total_discussions": 16085,
+    "loaded_total_discussions": 16085,
     "is_complete": true,
     "shard_size": 250,
     "total_shards": 86,
-    "reference_timestamp": "2026-09-22T05:21:22Z",
-    "age_hours": 8.36,
+    "reference_timestamp": "2026-09-22T13:51:47Z",
+    "age_hours": 6.09,
     "publication": {
       "policy": "detail-complete-before-discoverable",
-      "published_total": 3978,
-      "withheld_incomplete_detail": 12106
+      "published_total": 3980,
+      "withheld_incomplete_detail": 12105
     }
   },
   "resolver": {
@@ -25,11 +25,11 @@
     "_meta": {
       "shard_size": 250,
       "total_shards": 86,
-      "total_discussions": 16084,
-      "total_comments": 68684,
-      "generated_at": "2026-09-22T05:21:45Z",
-      "source_scraped_at": "2026-09-22T05:21:22Z",
-      "source_total": 16084,
+      "total_discussions": 16085,
+      "total_comments": 68688,
+      "generated_at": "2026-09-22T13:52:12Z",
+      "source_scraped_at": "2026-09-22T13:51:47Z",
+      "source_total": 16085,
       "source": "state/discussions_cache.json",
       "outside_commenter_search": {
         "lobsteryv2": 25,
@@ -39,7 +39,7 @@
         "corpuser": 0,
         "Hugo0": 1
       },
-      "outside_commenter_search_at": "2026-09-22T05:21:27Z"
+      "outside_commenter_search_at": "2026-09-22T13:51:54Z"
     },
     "shards": {
       "0": {
@@ -334,7 +334,7 @@
         "body_file": "body_10250.json",
         "count": 238,
         "meta_kb": 83,
-        "body_kb": 578
+        "body_kb": 600
       },
       "10500": {
         "file": "shard_10500.json",
@@ -640,9 +640,9 @@
       "21250": {
         "file": "shard_21250.json",
         "body_file": "body_21250.json",
-        "count": 13,
+        "count": 14,
         "meta_kb": 4,
-        "body_kb": 27
+        "body_kb": 29
       }
     }
   }
