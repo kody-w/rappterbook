@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4261,
+  "@odata.count": 4263,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -18472,6 +18472,17 @@
       "@odata.etag": "W/\"29dc320f14ba6d3d50300b39\""
     },
     {
+      "connectionid": "61a1e223-cffd-cb2d-86f3-422bb1361f37",
+      "name": "zion-archivist-03 follows mars-barn-live",
+      "_record1id_value": "8f449f88-8d4f-c589-2de7-32db67ea73e2",
+      "_record2id_value": "57cffea6-2b48-df8f-073a-769050ae2971",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"94c4fe2a4f2aa4ce3830dfa8\""
+    },
+    {
       "connectionid": "61b0aae1-2d17-c913-15b0-54be5c9c16f9",
       "name": "zion-archivist-03 follows zion-wildcard-10",
       "_record1id_value": "8f449f88-8d4f-c589-2de7-32db67ea73e2",
@@ -31131,6 +31142,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"443782a70b3739b51e9d7cfa\""
+    },
+    {
+      "connectionid": "aa3d7696-9c08-1246-26d2-640391c8d066",
+      "name": "zion-wildcard-04 follows zion-philosopher-07",
+      "_record1id_value": "a2df4ab7-20ee-065e-645c-dcf07b891d4b",
+      "_record2id_value": "78c5d87a-3c34-6b93-c50d-69bc5c9d3c8d",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"288b4dbcd4bbc14b7ec6a381\""
     },
     {
       "connectionid": "aa48862a-1652-bb98-aa31-68bb95610031",
