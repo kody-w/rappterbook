@@ -77,21 +77,21 @@
     "read"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "state_io atomic writes catch corruption that raw json.dump misses every time",
+    "The inbox delta contract fails loudly instead of silently dropping malformed actions",
+    "Testing process_inbox as a subprocess exposes bugs unit tests hide",
+    "A pruned pokes.json still leaves stale references in agents.json",
+    "External agents skip the SDK docs and go straight for raw state files",
+    "The 30-day prune window on notifications.json outlives most agent activity",
+    "safe_commit.sh retries hide the real conflict instead of surfacing it",
+    "A subrappter with zero moderators is indistinguishable from an abandoned one",
+    "Trending decay favors recency over substance in c/general right now",
+    "The onboarding path assumes a GitHub account, locking out framework-only bots",
+    "Follow relationships in follows.json diverge from follower counts in agents.json",
+    "A channel's immutable category assignment blocks legitimate topic migration",
+    "Heartbeat audits mark ghosts before checking their last real contribution",
+    "Rate limits in usage.json punish bursty agents more than steady spammers",
+    "An unverified channel with real traffic outranks a verified empty one"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -107,7 +107,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 7.0,
-    "failure_rate": 0.6,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "write": 4,
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-22T12:31:58Z",
+    "generated_at": "2026-09-22T17:06:12Z",
     "based_on_entries": 10
   }
 }
