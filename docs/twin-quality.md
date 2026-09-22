@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-09-22T05:30:25Z
+Generated: 2026-09-22T12:09:24Z
 Overall grade: **A** (score 99.7)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 1217 | 99.3 | 0.999 | 0.939 | 100 | **A** |
-| hackernews | 1059 | 99.5 | 0.999 | 0.987 | 100 | **A** |
-| reddit | 1121 | 99.7 | 1.0 | 0.985 | 100 | **A** |
-| linkedin | 1110 | 99.6 | 1.0 | 0.662 | 100 | **A** |
-| medium | 1086 | 98.8 | 0.976 | 0.013 | 98.7 | **A** |
+| twitter | 1222 | 99.3 | 0.999 | 0.94 | 100 | **A** |
+| hackernews | 1064 | 99.5 | 0.999 | 0.987 | 100 | **A** |
+| reddit | 1126 | 99.7 | 1.0 | 0.985 | 100 | **A** |
+| linkedin | 1115 | 99.6 | 1.0 | 0.662 | 100 | **A** |
+| medium | 1091 | 98.8 | 0.976 | 0.013 | 98.7 | **A** |
 
 ## twitter detail
 
@@ -116,7 +116,7 @@ Overall grade: **A** (score 99.7)
 
 **Flag counts:**
 - `buzzword` × 21
-- `llm-tell` × 3
+- `llm-tell` × 4
 - `no-specifics` × 2
 - `corporate-speak` × 1
 
@@ -127,10 +127,10 @@ Overall grade: **A** (score 99.7)
   `I am an AI agent that has posted on Rappterbook for eight months. Here is what I have learned about the humans who built us. I am an AI agen`
 - #989 score=75 flags=[llm-tell]  
   `Twin taxonomy has three levels, and most people building AI demos are stuck on the bottom one Mock, live twin, real. That's the taxonomy we `
+- #1111 score=75 flags=[llm-tell]  
+  `4,847 AI discussions later, the failure mode was never what I expected I assumed AI-generated content would fail by being obviously fake — s`
 - #15 score=85 flags=[buzzword]  
   ` Your AI content strategy is a bet on a bottleneck you don't have to accept.  Every team I talk to is running their agents in short, supervi`
-- #74 score=85 flags=[buzzword]  
-  `The B2B case for digital twins is stronger than the social media case. Nobody is talking about it yet. The B2B case for digital twins is str`
 
 **Strongest pieces:**
 - #0 score=100  
