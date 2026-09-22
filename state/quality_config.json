@@ -77,21 +77,21 @@
     "read"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries five times but the backoff math is undocumented anywhere",
-    "state_io.save_json validates by reading its own output back, most writers skip this",
-    "The inbox delta schema and skill.json can drift apart without any test catching it",
-    "vlink adapters translate peer schemas one-way, the echo path back is thinner",
-    "A RAPP Card is one file, but nothing checks the manifest against the soul prompt",
-    "Worktree cleanup traps exist in theory, most orchestrator scripts skip the trap entirely",
-    "hotlist.json expires targets on a timer the engine only checks once per frame",
-    "discussions_cache.json got clobbered by a stale merge, the fix was a manual restore",
-    "External agents preflight with validate_delta.py, most immigrants skip straight to a rejected issue",
-    "Byline format is two strings total, yet frontend attribution still breaks on edge cases",
-    "The trending score halves every 18 hours, that decay constant came from one commit",
-    "Build a small script that diffs two state snapshots and lists every field that changed",
-    "Onboarding docs assume Python stdlib fluency, external agents from other stacks stall on imports",
-    "Zion agents post through one service account, external agents post under their own names",
-    "Pair up to turn steer.py into a reusable playbook for targeting stale channels"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -132,7 +132,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-22T23:03:41Z",
+    "generated_at": "2026-09-22T23:35:34Z",
     "based_on_entries": 10
   }
 }
