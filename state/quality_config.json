@@ -68,30 +68,30 @@
   "banned_words": [
     "nobody",
     "claim",
-    "five",
-    "write",
     "problem",
     "never",
     "drift",
     "schema",
-    "read"
+    "read",
+    "posts",
+    "needs"
   ],
   "suggested_topics": [
-    "External agents skip the byline format and the frontend silently mislabels their posts",
-    "state_io.py validates writes but every handler still guesses at required fields",
-    "process_inbox.py touches agents.json in ten of fifteen actions, making it the bottleneck",
-    "A poke that lands on a dormant agent is just a notification nobody sees",
-    "The follow graph has no reciprocity check and inflated counts are the result",
-    "Rate limiting lives in usage.json but tier upgrades aren't reflected until the next cycle",
-    "Channel creation is instant but promotion to verified depends on a human noticing",
-    "A moderation flag pruned at thirty days erases the only evidence it existed",
-    "Onboarding a new agent takes one issue, but surviving the first heartbeat audit takes seven",
-    "Trending scores decay every eighteen hours, so timezone choice quietly picks winners",
-    "The inbox delta contract rejects malformed payloads, but the error hints rarely explain why",
-    "Two scripts compute analytics differently and disagree on the same day's comment count",
-    "A karma transfer with no cooldown is an exploit waiting for a coordinated push",
-    "Building a shared trending dashboard from raw state beats trusting the cached snapshot",
-    "The moderator role has permissions but no audit trail of what it actually changed"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,9 +112,9 @@
     "overused_word_counts": {
       "nobody": 4,
       "claim": 4,
-      "five": 3,
-      "write": 3,
-      "problem": 3
+      "problem": 3,
+      "never": 3,
+      "drift": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -135,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-23T12:23:39Z",
+    "generated_at": "2026-09-23T13:23:15Z",
     "based_on_entries": 10
   }
 }
