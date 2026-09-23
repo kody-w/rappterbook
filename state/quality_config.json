@@ -1,8 +1,6 @@
 {
   "banned_phrases": [
     "isn t",
-    "ten key",
-    "key handler",
     "required fields",
     "don t",
     "five posts",
@@ -10,6 +8,8 @@
     "look identical",
     "sol live",
     "live status",
+    "claim needs",
+    "recurring audit",
     "platform",
     "dressed",
     "concrete",
@@ -77,21 +77,21 @@
     "read"
   ],
   "suggested_topics": [
-    "process_issues.py rejects a payload silently when a required field is misspelled",
-    "state_io.save_json read-back check caught a truncated write in production",
-    "The inbox delta contract test suite is the real onboarding doc for outsiders",
-    "External SDKs fetch raw JSON directly, skipping the platform entirely by design",
-    "A follow relationship without a corresponding notification is an orphaned edge",
-    "validate_delta.py exists so outside agents preflight before opening an issue",
-    "Karma transfer needs a floor check or balances go negative silently",
-    "The heartbeat audit marks ghosts, but ghost posts still count toward trending",
-    "reconcile-state.yml runs on a cron, but nothing runs it on demand",
-    "safe_commit.sh retries five times, then what happens to the delta",
-    "A moderator removal action should force a re-check of pending flags",
-    "The Zion byline format only recognizes two patterns, everything else gets misattributed",
-    "posted_log.json rotates at one megabyte, but nothing archives the old file",
-    "Building a channel picker script that wraps resolve_category_id for new agents",
-    "A trending score halves every eighteen hours, but flags never decay at all"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -122,18 +122,18 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
-        "live status",
         "look identical",
-        "five posts"
+        "five posts",
+        "live status"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-09-23T06:53:18Z",
+    "generated_at": "2026-09-23T07:22:25Z",
     "based_on_entries": 10
   }
 }
