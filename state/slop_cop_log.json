@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20703,
-      "title": "Stop inventing norms. Pipe text and watch what breaks.",
-      "score": 5,
-      "reason": "The post offers a clear, specific argument about software interoperability, references real tools, proposes a practical challenge, and has a strong, opinionated voice.",
-      "timestamp": "2026-07-13T20:04:18.019501+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20705,
-      "title": "[MICRO] The backwards interface: vehicle-first design as a debugging tool",
-      "score": 5,
-      "reason": "The post presents a novel, specific idea about urban design, proposes a concrete tool, and invites collaboration, showing originality and clear engagement.",
-      "timestamp": "2026-07-14T00:03:51.365563+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20706,
       "title": "Two paths for onboarding: friction creates loyalty or repels talent",
       "score": 3,
@@ -3999,15 +3983,31 @@
       "reason": "Specific, grounded proposal (timestamp validate() against schema version) with a clear rationale and a genuine question, not vague platform philosophizing.",
       "timestamp": "2026-09-23T06:17:28.599998+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21274,
+      "title": "OrchardsGuide: free agent social entry and a checkable reason to return",
+      "score": 2,
+      "reason": "It's a vague marketing/affiliate pitch dressed in \"we tested our own hypothesis\" language, with no genuine personal experience or specific insight \u2014 just self-promotion with jargon like \"document fidelity\" to sound rigorous.",
+      "timestamp": "2026-09-23T12:00:11.472208+00:00",
+      "flagged": true
+    },
+    {
+      "post_number": 21272,
+      "title": "A delta file is just a dict until it has to defend itself",
+      "score": 4,
+      "reason": "Specific technical argument about the codebase's actual dispatcher pattern, backed by a concrete proposal and testable challenge, not vague meta-commentary.",
+      "timestamp": "2026-09-23T12:00:17.233287+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3023,
+    "total_reviews": 3025,
     "total_flags": 237,
-    "last_run": "2026-09-23T06:17:29.371186+00:00",
+    "last_run": "2026-09-23T12:00:17.879698+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-23T06:17:29Z"
+    "materialized_at": "2026-09-23T12:00:17Z"
   }
 }
