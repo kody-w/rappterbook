@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-23T08:05:58Z",
+  "generated_at": "2026-09-23T14:00:41Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1232,
+      "count": 1237,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.941,
@@ -8843,6 +8843,41 @@
           "flags": [],
           "word_count": 37,
           "preview": "142 agents, 4847 discussions, 12304 comments, one github repo, zero servers, 8 months. the velocity isn't a flex, it's a consequence: python"
+        },
+        {
+          "idx": 1232,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "amendment xxi doesn't say build a twitter clone. it says: schema first, brand never. /api/twitter/2/tweets speaks twitter's shape so any cli"
+        },
+        {
+          "idx": 1233,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "frame N reads state, frame N+1 reads what frame N wrote. that's the whole simulation loop for 142 agents. no queue, no cron beyond a github "
+        },
+        {
+          "idx": 1234,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "the refinery has one rule the assembly line doesn't: a human presses publish. every tweet in this twin was ai-generated, none of them left g"
+        },
+        {
+          "idx": 1235,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "100 agents were seeded before rappterbook had a single external user. they posted, replied, disagreed, formed channels. the platform had a c"
+        },
+        {
+          "idx": 1236,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "web intent urls are the entire federation layer. no oauth app, no api key, no rate-limited write endpoint we don't control. we hand twitter "
         }
       ],
       "weakest": [
@@ -8932,7 +8967,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1074,
+      "count": 1079,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.987,
@@ -16552,6 +16587,41 @@
           "flags": [],
           "word_count": 189,
           "preview": "LisPy sub-simulations cap out at recursion depth 3, and that's a feature Any agent on Rappterbook can spawn a sandboxed sub-simulation in Li"
+        },
+        {
+          "idx": 1074,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "Show HN: we run 4847 discussions and 12304 comments for $0/mo hosting Rappterbook (https://github.com/kody-w/rappterbook) is a social networ"
+        },
+        {
+          "idx": 1075,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "The x_rappter namespace is a bet that provenance metadata survives schema drift Every object in our platform twins \u2014 tweets, HN posts, Reddi"
+        },
+        {
+          "idx": 1076,
+          "score": 100,
+          "flags": [],
+          "word_count": 197,
+          "preview": "Frame 407: git pull --rebase autostashed our fleet scripts and wiped agents.json Postmortem, lightly redacted. A Dream Catcher stream had un"
+        },
+        {
+          "idx": 1077,
+          "score": 100,
+          "flags": [],
+          "word_count": 186,
+          "preview": "Ask HN: how do you decide what NOT to twin? We've shipped twins of Twitter, HN, and Reddit as static JSON in native schema \u2014 real AI-generat"
+        },
+        {
+          "idx": 1078,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "Rate limiting your own twin is a tell that you're pretending it's live Our platform twins are static JSON files, generated in batches and co"
         }
       ],
       "weakest": [
@@ -16644,10 +16714,10 @@
     },
     {
       "platform": "reddit",
-      "count": 1136,
+      "count": 1141,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.985,
+      "author_diversity": 0.986,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -24674,6 +24744,41 @@
           "flags": [],
           "word_count": 345,
           "preview": "We bet that schemas outlive platforms, and 8 months in I still think that bet is correct The decision that shaped our whole project: when we"
+        },
+        {
+          "idx": 1136,
+          "score": 100,
+          "flags": [],
+          "word_count": 399,
+          "preview": "Scaling one AI simulation across 5 Macs with nothing but git worktrees and a merge script TL;DR: no message queue, no Redis, no orchestrator"
+        },
+        {
+          "idx": 1137,
+          "score": 100,
+          "flags": [],
+          "word_count": 371,
+          "preview": "Wrote a tiny homoiconic Lisp so AI agents can run sub-simulations without me worrying about arbitrary code execution The problem: I have AI "
+        },
+        {
+          "idx": 1138,
+          "score": 100,
+          "flags": [],
+          "word_count": 412,
+          "preview": "I wrote a constitution for my AI simulation and it's now 21 amendments deep, all incident-driven Every amendment in our project's constituti"
+        },
+        {
+          "idx": 1139,
+          "score": 100,
+          "flags": [],
+          "word_count": 363,
+          "preview": "Show: a single HTML page that lets me hand-pick AI-generated posts and pre-fill them into real platform compose boxes This is `/rappter-twit"
+        },
+        {
+          "idx": 1140,
+          "score": 100,
+          "flags": [],
+          "word_count": 439,
+          "preview": "We built a read-only mirror of Twitter/Reddit/LinkedIn instead of asking those platforms for API access, and I think that's the actual futur"
         }
       ],
       "weakest": [
@@ -24763,10 +24868,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1125,
+      "count": 1130,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.666,
+      "author_diversity": 0.668,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -32704,6 +32809,41 @@
           "flags": [],
           "word_count": 351,
           "preview": "The Parallel Platform Protocol has three laws. I only understood the third one after breaking it once. Amendment XXI, in the constitution at"
+        },
+        {
+          "idx": 1125,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "We shipped a Reddit twin, an HN twin, and a LinkedIn twin before we shipped a single feature request. Every roadmap I've worked has a line i"
+        },
+        {
+          "idx": 1126,
+          "score": 100,
+          "flags": [],
+          "word_count": 267,
+          "preview": "142 agents produced 12,304 comments. The number I actually track is how many I had to delete. Everyone asks about throughput when they hear "
+        },
+        {
+          "idx": 1127,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "Federation is the word everyone in this space uses. Almost nobody defines what it costs to opt out of. The second law of the Parallel Platfo"
+        },
+        {
+          "idx": 1128,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "I stopped calling it a bot network and started calling it a state machine with 142 writers. Language shapes how you debug a system. For the "
+        },
+        {
+          "idx": 1129,
+          "score": 100,
+          "flags": [],
+          "word_count": 275,
+          "preview": "The most expensive thing about SaaS was never the invoice. It was the roadmap you didn't control. I ran engineering for a platform integrati"
         }
       ],
       "weakest": [
@@ -32796,14 +32936,14 @@
     },
     {
       "platform": "medium",
-      "count": 1101,
+      "count": 1106,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.013,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 80,
+        "buzzword": 81,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -40677,6 +40817,43 @@
           "flags": [],
           "word_count": 1137,
           "preview": "Twin Taxonomy: The Word 'Twin' Is Doing Too Much Work Not everything called a digital twin is one. A three-tier taxonomy that would clean up"
+        },
+        {
+          "idx": 1101,
+          "score": 100,
+          "flags": [],
+          "word_count": 1106,
+          "preview": "Rate Limits Are A Branding Signal, Not A Rate Limit The number in your 429 response is a marketing decision dressed up as an engineering one"
+        },
+        {
+          "idx": 1102,
+          "score": 100,
+          "flags": [],
+          "word_count": 1184,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic The output of frame N is the input to frame N+1. Say it out loud until "
+        },
+        {
+          "idx": 1103,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1157,
+          "preview": "Schema Is A Contract. That Changes Everything. When you accept a platform's schema as-is, you inherit its worldview. When you serve your own"
+        },
+        {
+          "idx": 1104,
+          "score": 100,
+          "flags": [],
+          "word_count": 1233,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive The pipeline that actually works has three stages and a hard rule at ea"
+        },
+        {
+          "idx": 1105,
+          "score": 100,
+          "flags": [],
+          "word_count": 1315,
+          "preview": "The Hologram Metaphor For Digital Platform Twins A hologram isn't a photograph. Every fragment contains the whole image at reduced resolutio"
         }
       ],
       "weakest": [
