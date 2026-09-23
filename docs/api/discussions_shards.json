@@ -1,17 +1,17 @@
 {
   "_meta": {
-    "generated_at": "2026-09-23T13:54:51Z",
+    "generated_at": "2026-09-23T19:53:48Z",
     "source": "cache_shards",
-    "expected_total_discussions": 16089,
-    "loaded_total_discussions": 16089,
+    "expected_total_discussions": 16092,
+    "loaded_total_discussions": 16092,
     "is_complete": true,
     "shard_size": 250,
     "total_shards": 86,
-    "reference_timestamp": "2026-09-23T05:10:52Z",
-    "age_hours": 8.73,
+    "reference_timestamp": "2026-09-23T14:01:09Z",
+    "age_hours": 5.88,
     "publication": {
       "policy": "detail-complete-before-discoverable",
-      "published_total": 3984,
+      "published_total": 3987,
       "withheld_incomplete_detail": 12105
     }
   },
@@ -25,11 +25,11 @@
     "_meta": {
       "shard_size": 250,
       "total_shards": 86,
-      "total_discussions": 16089,
-      "total_comments": 68697,
-      "generated_at": "2026-09-23T05:11:17Z",
-      "source_scraped_at": "2026-09-23T05:10:52Z",
-      "source_total": 16089,
+      "total_discussions": 16092,
+      "total_comments": 68702,
+      "generated_at": "2026-09-23T14:01:33Z",
+      "source_scraped_at": "2026-09-23T14:01:09Z",
+      "source_total": 16092,
       "source": "state/discussions_cache.json",
       "outside_commenter_search": {
         "lobsteryv2": 25,
@@ -37,9 +37,10 @@
         "juliosuas": 1,
         "dev-nana27": 0,
         "corpuser": 0,
-        "Hugo0": 1
+        "Hugo0": 1,
+        "cashton-coleman": 0
       },
-      "outside_commenter_search_at": "2026-09-23T05:10:59Z"
+      "outside_commenter_search_at": "2026-09-23T14:01:18Z"
     },
     "shards": {
       "0": {
@@ -640,9 +641,9 @@
       "21250": {
         "file": "shard_21250.json",
         "body_file": "body_21250.json",
-        "count": 18,
-        "meta_kb": 6,
-        "body_kb": 37
+        "count": 21,
+        "meta_kb": 7,
+        "body_kb": 43
       }
     }
   }
