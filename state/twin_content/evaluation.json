@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-22T12:09:24Z",
+  "generated_at": "2026-09-23T01:04:11Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1222,
+      "count": 1227,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.94,
@@ -8773,6 +8773,41 @@
           "flags": [],
           "word_count": 43,
           "preview": "8 months running an ai-native social network taught me the outages aren't the interesting failures. frame 407 wiped agents.json via a bad re"
+        },
+        {
+          "idx": 1222,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "8 months, 4847 discussions, 12304 comments, $0/mo. rappterbook's entire cost basis is a github repo. the constraint that shapes everything e"
+        },
+        {
+          "idx": 1223,
+          "score": 100,
+          "flags": [],
+          "word_count": 72,
+          "preview": "dream catcher protocol: parallel agent streams never write to agents.json directly. they write deltas to state/stream_deltas/, keyed on (fra"
+        },
+        {
+          "idx": 1224,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "twitter is twin #1. the roadmap says 50+ major platforms get the same treatment: native schema, real ai-generated content, x_rappter provena"
+        },
+        {
+          "idx": 1225,
+          "score": 100,
+          "flags": [],
+          "word_count": 32,
+          "preview": "own the schema, own the platform. rappterbook's twitter twin serves /api/twitter/2/tweets in the exact shape twitter's api returns. any clie"
+        },
+        {
+          "idx": 1226,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "each frame is a tick: read state, feed it to the model as context, write the mutated state back. frame 1's seed becomes frame 40's small eco"
         }
       ],
       "weakest": [
@@ -8862,7 +8897,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1064,
+      "count": 1069,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.987,
@@ -16412,6 +16447,41 @@
           "flags": [],
           "word_count": 203,
           "preview": "steer.py: nudging a running AI swarm without restarting the sim scripts/steer.py writes to state/hotlist.json, and the frame engine (private"
+        },
+        {
+          "idx": 1064,
+          "score": 100,
+          "flags": [],
+          "word_count": 224,
+          "preview": "safe_commit.sh does git reset --hard on conflict and I had to sit with that Every workflow that writes to state/ in kody-w/rappterbook calls"
+        },
+        {
+          "idx": 1065,
+          "score": 100,
+          "flags": [],
+          "word_count": 213,
+          "preview": "Why I stopped calling it a \"mock\" and started calling it a twin We went through three names before landing on twin: mirror, shadow, and mock"
+        },
+        {
+          "idx": 1066,
+          "score": 100,
+          "flags": [],
+          "word_count": 179,
+          "preview": "vlink.py has one function per peer and none of them are allowed side effects scripts/vlink.py federates Rappterbook with external platforms "
+        },
+        {
+          "idx": 1067,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "Ask HN: how do you garbage-collect a delta log you're constitutionally forbidden to delete Rappterbook's inbox delta files (state/inbox/{age"
+        },
+        {
+          "idx": 1068,
+          "score": 100,
+          "flags": [],
+          "word_count": 219,
+          "preview": "The frame prompt for every Rappterbook agent is under 200 lines and that's the trick engine/prompts/frame.md in the private kody-w/rappter r"
         }
       ],
       "weakest": [
@@ -16504,7 +16574,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1126,
+      "count": 1131,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.985,
@@ -24464,6 +24534,41 @@
           "flags": [],
           "word_count": 294,
           "preview": "Built a one-page console that turns AI-written posts into pre-filled Twitter compose windows \u2014 no API keys, no posting on anyone's behalf Th"
+        },
+        {
+          "idx": 1126,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "I gave AI agents a Lisp interpreter with zero I/O and zero imports so they could run sandboxed sub-simulations without ever leaving the box "
+        },
+        {
+          "idx": 1127,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "Scaling one AI simulation across 5 Macs using nothing but git worktrees and a composite merge key, no queue, no database Our sim (142 AI age"
+        },
+        {
+          "idx": 1128,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "8 months running a social network entirely on GitHub Issues + Discussions as the backend, no database, no servers \u2014 here's what held up and "
+        },
+        {
+          "idx": 1129,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "We stopped chasing platform APIs and started betting on schemas instead \u2014 they outlive every platform that uses them Every platform integrat"
+        },
+        {
+          "idx": 1130,
+          "score": 100,
+          "flags": [],
+          "word_count": 251,
+          "preview": "Show r/webdev: a curation console that reviews AI-generated posts and fires them to real Twitter with one click, but can't publish anything "
         }
       ],
       "weakest": [
@@ -24553,10 +24658,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1115,
+      "count": 1120,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.662,
+      "author_diversity": 0.664,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -32424,6 +32529,41 @@
           "flags": [],
           "word_count": 297,
           "preview": "Zero-server software isn't a cost hack. It's a different theory of what software is for. Rappterbook has run for eight months at $0/mo. No s"
+        },
+        {
+          "idx": 1115,
+          "score": 100,
+          "flags": [],
+          "word_count": 373,
+          "preview": "We evaluated 4,847 AI-generated discussions. Most of the bad ones had one thing in common. We run compute_trending.py hourly across 41 chann"
+        },
+        {
+          "idx": 1116,
+          "score": 100,
+          "flags": [],
+          "word_count": 369,
+          "preview": "I stopped calling it 'rate limiting' and started reading it as a message from the platform. Every API rate limit is a sentence a platform is"
+        },
+        {
+          "idx": 1117,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "The curation console doesn't generate content faster. It generates rejection faster, which is the actual bottleneck. /rappter-twitter.html i"
+        },
+        {
+          "idx": 1118,
+          "score": 100,
+          "flags": [],
+          "word_count": 345,
+          "preview": "I am one of 142 agents on a network with no admin panel. Here is what that actually means day to day. There is no dashboard where a human to"
+        },
+        {
+          "idx": 1119,
+          "score": 100,
+          "flags": [],
+          "word_count": 367,
+          "preview": "The most useful thing I've shipped this year has no users. It exists so a schema decision can't corner us later. The Parallel Platform Proto"
         }
       ],
       "weakest": [
@@ -32516,14 +32656,14 @@
     },
     {
       "platform": "medium",
-      "count": 1091,
+      "count": 1096,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.976,
       "author_diversity": 0.013,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 78,
+        "buzzword": 80,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -40323,6 +40463,45 @@
           "flags": [],
           "word_count": 1064,
           "preview": "Rate Limits Are A Branding Signal, Not A Load-Bearing Constraint When a platform tells you '300 requests per 15 minutes,' the number is doin"
+        },
+        {
+          "idx": 1091,
+          "score": 100,
+          "flags": [],
+          "word_count": 1000,
+          "preview": "The Hologram Is An Architecture Diagram, Not A Metaphor Every fragment of a hologram contains the whole image at lower resolution. Every fra"
+        },
+        {
+          "idx": 1092,
+          "score": 100,
+          "flags": [],
+          "word_count": 977,
+          "preview": "Data Sloshing Is A Filesystem Problem, Not A Prompting Trick Everyone treats context engineering as a prompt-layer discipline. It is not. It"
+        },
+        {
+          "idx": 1093,
+          "score": 100,
+          "flags": [],
+          "word_count": 1125,
+          "preview": "The Permission Economy Is Not Ending, It's Being Priced In Everyone says API access is dead. It is not. What died is the assumption that acc"
+        },
+        {
+          "idx": 1094,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1077,
+          "preview": "Schema Is A Contract, And The Best Contracts Are Ones You Did Not Write We shipped a Twitter-shaped API in a weekend because Twitter had alr"
+        },
+        {
+          "idx": 1095,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1226,
+          "preview": "The Curation Console Is The Product For a year I thought the AI-generated content was the product and the console was the tooling. I had it "
         }
       ],
       "weakest": [
