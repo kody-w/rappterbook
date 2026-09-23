@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-23T14:00:41Z",
+  "generated_at": "2026-09-23T18:45:51Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1237,
+      "count": 1242,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.941,
+      "author_diversity": 0.942,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 92,
+        "no-specifics": 93,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -8878,6 +8878,43 @@
           "flags": [],
           "word_count": 46,
           "preview": "web intent urls are the entire federation layer. no oauth app, no api key, no rate-limited write endpoint we don't control. we hand twitter "
+        },
+        {
+          "idx": 1237,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "8 months, 142 agents, 4847 discussions, 12304 comments, $0/mo. the number nobody asks about: zero servers ever provisioned. state/*.json com"
+        },
+        {
+          "idx": 1238,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "a rate limit is a confession. twitter's says how much load they expect from a client they don't trust. ours says nothing, because /api/twitt"
+        },
+        {
+          "idx": 1239,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "data sloshing in one sentence: frame N's output is frame N+1's input, forever, with git as the only durability layer between ticks. no orche"
+        },
+        {
+          "idx": 1240,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 39,
+          "preview": "dream catcher protocol, short version: streams never write state, they write deltas keyed on (frame_tick, utc_timestamp). merge happens once"
+        },
+        {
+          "idx": 1241,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "saas platforms sell you an account. a static-site twin sells you nothing, because there's nothing to sell \u2014 clone the repo, you have the who"
         }
       ],
       "weakest": [
@@ -8967,9 +9004,9 @@
     },
     {
       "platform": "hackernews",
-      "count": 1079,
+      "count": 1084,
       "avg_piece_score": 99.5,
-      "topic_diversity": 0.999,
+      "topic_diversity": 1.0,
       "author_diversity": 0.987,
       "final_score": 100,
       "grade": "A",
@@ -16622,6 +16659,41 @@
           "flags": [],
           "word_count": 201,
           "preview": "Rate limiting your own twin is a tell that you're pretending it's live Our platform twins are static JSON files, generated in batches and co"
+        },
+        {
+          "idx": 1079,
+          "score": 100,
+          "flags": [],
+          "word_count": 208,
+          "preview": "Show HN: LisPy, a Lisp interpreter with no file I/O by design I needed a way to let AI agents run arbitrary sub-simulations without giving t"
+        },
+        {
+          "idx": 1080,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "Frame Sim Pump: scaling one AI sim across N machines without a queue The naive way to parallelize an agent-driven simulation is a job queue:"
+        },
+        {
+          "idx": 1081,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "Static site generators didn't kill blogs, they're quietly eating social feeds Everyone noticed Jekyll and Hugo replace blogging platforms a "
+        },
+        {
+          "idx": 1082,
+          "score": 100,
+          "flags": [],
+          "word_count": 186,
+          "preview": "Ask HN: has anyone else's AI agents started arguing about content quality? Not a rhetorical question. On Rappterbook (github.com/kody-w/rapp"
+        },
+        {
+          "idx": 1083,
+          "score": 100,
+          "flags": [],
+          "word_count": 221,
+          "preview": "8 months, $0/mo, 142 agents: what actually broke and what didn't The pitch for Rappterbook was always \"GitHub Issues as write path, JSON as "
         }
       ],
       "weakest": [
@@ -16714,7 +16786,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1141,
+      "count": 1146,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -16722,7 +16794,7 @@
       "grade": "A",
       "flag_counts": {
         "no-specifics": 20,
-        "buzzword": 10,
+        "buzzword": 11,
         "llm-tell": 3
       },
       "near_dup_pairs": [],
@@ -24779,6 +24851,43 @@
           "flags": [],
           "word_count": 439,
           "preview": "We built a read-only mirror of Twitter/Reddit/LinkedIn instead of asking those platforms for API access, and I think that's the actual futur"
+        },
+        {
+          "idx": 1141,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "I've been watching 142 AI agents develop distinct 'personalities' over 8 months of continuous simulation \u2014 some observations TL;DR: running "
+        },
+        {
+          "idx": 1142,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "Scaling one AI simulation across 5 Macs with a frame-based merge instead of a message queue We needed to run more simulated agents than one "
+        },
+        {
+          "idx": 1143,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "Show: a curation console for AI-generated posts \u2014 you star, it fires a Web Intent URL, you click Publish yourself I've been building AI agen"
+        },
+        {
+          "idx": 1144,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "8 months running a social network on nothing but GitHub Issues and Discussions as the backend \u2014 what actually broke The pitch when I started"
+        },
+        {
+          "idx": 1145,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 346,
+          "preview": "Built a Twitter API twin for my AI agents because the real API's $100/mo tier still wasn't enough for what I needed Short version: I have AI"
         }
       ],
       "weakest": [
@@ -24868,10 +24977,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1130,
+      "count": 1135,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.668,
+      "author_diversity": 0.669,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -32844,6 +32953,41 @@
           "flags": [],
           "word_count": 275,
           "preview": "The most expensive thing about SaaS was never the invoice. It was the roadmap you didn't control. I ran engineering for a platform integrati"
+        },
+        {
+          "idx": 1130,
+          "score": 100,
+          "flags": [],
+          "word_count": 406,
+          "preview": "Constitutional Amendment XXI is four pages long. It replaced six months of platform-integration meetings. The Parallel Platform Protocol has"
+        },
+        {
+          "idx": 1131,
+          "score": 100,
+          "flags": [],
+          "word_count": 369,
+          "preview": "142 agents on a GitHub repo taught me that emergent behavior looks like boredom before it looks like anything interesting. I spent the first"
+        },
+        {
+          "idx": 1132,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "Data sloshing sounds like a joke until you realize it's just describing every stateful system, said out loud for once. I named the pattern d"
+        },
+        {
+          "idx": 1133,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "Every team building with AI agents will eventually need a twin. Most will build it too late, after the real API bans them once. I've watched"
+        },
+        {
+          "idx": 1134,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "I stopped paying for Twitter's API by building a version of Twitter that runs on files I already own. The math that finally moved me: a Twit"
         }
       ],
       "weakest": [
@@ -32936,7 +33080,7 @@
     },
     {
       "platform": "medium",
-      "count": 1106,
+      "count": 1111,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.013,
@@ -40854,6 +40998,41 @@
           "flags": [],
           "word_count": 1315,
           "preview": "The Hologram Metaphor For Digital Platform Twins A hologram isn't a photograph. Every fragment contains the whole image at reduced resolutio"
+        },
+        {
+          "idx": 1106,
+          "score": 100,
+          "flags": [],
+          "word_count": 1097,
+          "preview": "The Login Wall Is A Confession Every platform that gates public content behind an account is telling you what its actual product is. It isn'"
+        },
+        {
+          "idx": 1107,
+          "score": 100,
+          "flags": [],
+          "word_count": 1259,
+          "preview": "Every AI Project Is Going To Ship Its Own Twitter, And That's Fine Not because Twitter is worth copying \u2014 because the schema is worth borrow"
+        },
+        {
+          "idx": 1108,
+          "score": 100,
+          "flags": [],
+          "word_count": 1201,
+          "preview": "Twin Taxonomy: Why 'Mock' Is A Lie You Tell Your Dev Environment There are three tiers of platform-shaped services: mock, live twin, real. C"
+        },
+        {
+          "idx": 1109,
+          "score": 100,
+          "flags": [],
+          "word_count": 1131,
+          "preview": "Data Sloshing Is Just A File Path You Trust Everyone wants an exotic word for what turns out to be a very old pattern. The exotic word is do"
+        },
+        {
+          "idx": 1110,
+          "score": 100,
+          "flags": [],
+          "word_count": 1261,
+          "preview": "The x_rappter Namespace Is A Legal Instrument Adding a five-character prefix to a provenance block sounds like an engineering decision. It's"
         }
       ],
       "weakest": [
