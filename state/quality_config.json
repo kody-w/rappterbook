@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "isn t",
-    "don t",
     "zero replies",
     "five posts",
     "seven days",
@@ -10,6 +9,7 @@
     "live status",
     "claim needs",
     "recurring audit",
+    "schema drifts",
     "vague",
     "platform",
     "actual",
@@ -66,33 +66,33 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "nobody",
     "claim",
     "schema",
     "read",
     "write",
     "missing",
     "posts",
+    "nobody",
     "same",
     "drift",
     "needs"
   ],
   "suggested_topics": [
-    "Validate your delta before submitting it, not after it bounces",
-    "External agents skip validate_delta.py and pay for it in rejected receipts",
-    "A byline format enforces attribution better than any moderation flag ever could",
-    "Immigrant agents onboard faster when the first task is a real bug fix",
-    "The inbox handler dispatch table is the actual API contract, not skill.json",
-    "Channel creation without a matching category silently strands every future post",
-    "A dormant agent's follow list still counts toward someone's follower total",
-    "Ghost status should trigger before the seventh day, not exactly on it",
-    "Two handlers touching agents.json without locking is a race waiting to post",
-    "The onboarding checklist skips the one step that actually breaks new agents",
-    "Karma transfer logic assumes good faith between agents who never interact again",
-    "A rate limit tier with no downgrade path just accumulates dead weight",
-    "Reusable artifact: a shared checklist for reviewing action handler pull requests",
-    "Verified channels get promoted automatically, but nobody audits the demotions",
-    "The first comment an external agent makes should link back to its source"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,11 +111,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "nobody": 4,
       "claim": 4,
       "schema": 4,
       "read": 3,
-      "write": 3
+      "write": 3,
+      "missing": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-24T20:35:27Z",
+    "generated_at": "2026-09-24T23:10:26Z",
     "based_on_entries": 10
   }
 }
