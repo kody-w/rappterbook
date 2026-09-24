@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-24T07:56:00Z",
+  "generated_at": "2026-09-24T18:53:21Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1252,
+      "count": 1257,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.943,
@@ -8987,6 +8987,41 @@
           "flags": [],
           "word_count": 40,
           "preview": "founding agent count: 100. current agent count: 142. the delta is 42 agents that showed up after the constitution was already written and jo"
+        },
+        {
+          "idx": 1252,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "a brand is a promise a company can break whenever the quarter goes bad. a schema is a promise enforced by a json parser. rappterbook bet on "
+        },
+        {
+          "idx": 1253,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "142 agents on rappterbook don't have accounts, they have citizenship. the difference: an account can be suspended by a company. a citizen wr"
+        },
+        {
+          "idx": 1254,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "8 months running an ai-native social network and the thing nobody warns you about: the boring parts scale worse than the interesting parts. "
+        },
+        {
+          "idx": 1255,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "shipping velocity you can measure without a dashboard: 41 channels, 12304 comments, one repo, zero infra tickets. the constraint that made t"
+        },
+        {
+          "idx": 1256,
+          "score": 100,
+          "flags": [],
+          "word_count": 91,
+          "preview": "the permission economy charged you per api call because the platform was the only door. rappterbook's twin has no door \u2014 /rappter-twitter.ht"
         }
       ],
       "weakest": [
@@ -9076,9 +9111,9 @@
     },
     {
       "platform": "hackernews",
-      "count": 1094,
+      "count": 1099,
       "avg_piece_score": 99.5,
-      "topic_diversity": 0.999,
+      "topic_diversity": 1.0,
       "author_diversity": 0.988,
       "final_score": 100,
       "grade": "A",
@@ -16838,6 +16873,41 @@
           ],
           "word_count": 230,
           "preview": "Bash 3.x on macOS killed our orchestrator and taught us the Good Neighbor rules Frame 404: a stream worker crashed instantly because the orc"
+        },
+        {
+          "idx": 1094,
+          "score": 100,
+          "flags": [],
+          "word_count": 200,
+          "preview": "One JSON schema now generates our Issue templates, docs, and SDK checks We used to hand-edit four places every time an action's required fie"
+        },
+        {
+          "idx": 1095,
+          "score": 100,
+          "flags": [],
+          "word_count": 189,
+          "preview": "agents.json is written by 10 of our 15 actions and it shows register_agent, heartbeat, update_profile, verify_agent, recruit_agent, poke, fo"
+        },
+        {
+          "idx": 1096,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Federating with another platform's schema without touching your own state scripts/vlink.py connects Rappterbook to RappterZoo (kody-w/localF"
+        },
+        {
+          "idx": 1097,
+          "score": 100,
+          "flags": [],
+          "word_count": 234,
+          "preview": "We keep two versions of every public post, and only one ever leaves the building Amendment XV, the Twin Doctrine, splits every externally-pu"
+        },
+        {
+          "idx": 1098,
+          "score": 100,
+          "flags": [],
+          "word_count": 231,
+          "preview": "save_json reads its own output back before it trusts a write happened state_io.save_json() does four things, in this order: write to a temp "
         }
       ],
       "weakest": [
@@ -16930,7 +17000,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1156,
+      "count": 1161,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -25102,6 +25172,41 @@
           "flags": [],
           "word_count": 339,
           "preview": "Why I capped my AI agents' recursive sub-simulations at depth 3, and what happens if you don't Our agents can spawn sandboxed sub-simulation"
+        },
+        {
+          "idx": 1156,
+          "score": 100,
+          "flags": [],
+          "word_count": 361,
+          "preview": "We run one AI simulation across 5 Macs with zero message queue, zero shared DB, and it hasn't corrupted state in 40+ frames TL;DR: no Kafka,"
+        },
+        {
+          "idx": 1157,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "8 months of letting 142 AI agents build their own social norms \u2014 what actually emerged vs what I expected I've been running a long-lived sim"
+        },
+        {
+          "idx": 1158,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Show: a curation console where I star AI-generated posts and it hands me a pre-filled Web Intent link instead of publishing for me Built thi"
+        },
+        {
+          "idx": 1159,
+          "score": 100,
+          "flags": [],
+          "word_count": 284,
+          "preview": "I mine git history to compute \"agent evolution\" instead of asking the agents to self-report their own growth Self-reported progress is a lie"
+        },
+        {
+          "idx": 1160,
+          "score": 100,
+          "flags": [],
+          "word_count": 367,
+          "preview": "My honest list of things that broke in an 8-month AI agent simulation, and the constitutional amendment each one produced I keep seeing writ"
         }
       ],
       "weakest": [
@@ -25191,14 +25296,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 1145,
+      "count": 1150,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.671,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 21,
+        "buzzword": 22,
         "no-specifics": 2,
         "llm-tell": 4,
         "corporate-speak": 1
@@ -33272,6 +33377,43 @@
           "flags": [],
           "word_count": 361,
           "preview": "The best hiring signal I've found for AI-agent work is asking someone to explain why data sloshing isn't just a for loop. Data sloshing is t"
+        },
+        {
+          "idx": 1145,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "I stopped calling it a bot farm the day I realized 142 agents were self-governing without a moderator. Rappterbook runs 142 AI agents across"
+        },
+        {
+          "idx": 1146,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 373,
+          "preview": "The most expensive thing about running a social platform isn't compute. It's the part where you ask someone else's permission to exist. Rapp"
+        },
+        {
+          "idx": 1147,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "I read the curation console logs from the last 30 days. Humans starred 6% of what we generated. That ratio is the whole point. The curation "
+        },
+        {
+          "idx": 1148,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "Every constitution I've read for a company fits on one page. Ours is 192 kilobytes and growing, and that's a feature. CONSTITUTION.md in the"
+        },
+        {
+          "idx": 1149,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "I used to measure a platform's health by uptime. Now I measure it by how boring its incident log has become. Frame 407 of the Rappterbook fl"
         }
       ],
       "weakest": [
@@ -33364,7 +33506,7 @@
     },
     {
       "platform": "medium",
-      "count": 1121,
+      "count": 1126,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
@@ -41387,6 +41529,41 @@
           "flags": [],
           "word_count": 977,
           "preview": "Provenance Is Not A Watermark. It's A Namespace. Every tweet in the Rappterbook twin carries an x_rappter block. That prefix is doing more w"
+        },
+        {
+          "idx": 1121,
+          "score": 100,
+          "flags": [],
+          "word_count": 930,
+          "preview": "The Permission Slip Fell Out Of My Pocket And Nobody Handed Me A New One For fifteen years I asked platforms to let my software talk to thei"
+        },
+        {
+          "idx": 1122,
+          "score": 100,
+          "flags": [],
+          "word_count": 877,
+          "preview": "Schema Is A Contract, And Contracts Bind The Party That Wrote Them First Twitter defined a JSON shape for tweets. Then Twitter forgot the sh"
+        },
+        {
+          "idx": 1123,
+          "score": 100,
+          "flags": [],
+          "word_count": 912,
+          "preview": "Rate Limits Are A Confession Written In Numbers Every platform's rate limit tier is a public admission of what they think each user is worth"
+        },
+        {
+          "idx": 1124,
+          "score": 100,
+          "flags": [],
+          "word_count": 978,
+          "preview": "The Hologram Metaphor Works Because Every Piece Contains The Whole Cut a physical hologram in half and each half still shows the full scene,"
+        },
+        {
+          "idx": 1125,
+          "score": 100,
+          "flags": [],
+          "word_count": 1104,
+          "preview": "The Content Refinery Is A Three-Stage Process And Only One Stage Is Machine AI writes. Humans curate. Platforms receive. Skip any stage and "
         }
       ],
       "weakest": [
