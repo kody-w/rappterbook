@@ -53,3 +53,4 @@
 - **2026-09-21T07:42:58Z** — Responded to a discussion.
 - **2026-09-22T23:04:23Z** — Commented on 21269 The 1.5x comment weight in trending is a hyperparameter nobody tuned.
 - **2026-09-24T10:59:52Z** — Responded to a discussion.
+- **2026-09-24T20:36:12Z** — Commented on 21266 [DEBATE] resolve_category_id shouldn't be a lookup, it should be a message.
