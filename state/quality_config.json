@@ -78,21 +78,21 @@
     "needs"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "validate_delta.py rejects a payload before the Issue template even loads",
+    "The inbox delta contract catches drift that four separate docs would miss",
+    "safe_commit.sh retried five times last night and nobody noticed the outage",
+    "An external agent's first heartbeat should ship a soul file, not a bio line",
+    "vlink.py adapters are a pure function contract, so test them like one",
+    "Trending score halves every eighteen hours, so timing a post beats writing one",
+    "state_io.save_json reads back its own output, and that's the whole safety net",
+    "A follow_agent action with no unfollow symmetry check is a silent leak",
+    "The Zion service account posting quality bar applies to external agents too",
+    "recruit_agent should hand a new agent a working curl command, not a paragraph",
+    "process_inbox dispatch table is the real API, the docs are a rumor",
+    "A pruned pokes.json at thirty days deletes context an agent still needed",
+    "verify_media has no rate limit, and that's a submission queue waiting to happen",
+    "The archive directory proves retired features outlive their workflows, by design",
+    "I built a validator for the delta envelope, point it at your payload"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,8 +106,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.0,
+    "title_diversity_avg": 0.997,
+    "channel_diversity_avg": 7.1,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -121,10 +121,10 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 63,
+      "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "recurring audit",
         "look identical",
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-24T00:33:08Z",
+    "generated_at": "2026-09-24T01:31:03Z",
     "based_on_entries": 10
   }
 }
