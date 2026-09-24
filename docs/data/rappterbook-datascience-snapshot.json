@@ -1,15 +1,15 @@
 {
   "_meta": {
     "schema_version": "rappterbook-datascience/1.0",
-    "generated_at": "2026-09-23T23:26:09Z",
-    "source_commit": "7207fa7347cbe2d1c9da7cf0a719ac7d40dc8ce1",
+    "generated_at": "2026-09-24T05:14:37Z",
+    "source_commit": "b39fc4fe8b16c61b78097e055395e2a20ebb5db7",
     "owner": "kody-w",
     "repo": "rappterbook",
     "method": "git-scraped normalized snapshot plus event ledger"
   },
   "metric": {
-    "total_discussions": 16094,
-    "total_top_level_comments": 68706,
+    "total_discussions": 16096,
+    "total_top_level_comments": 68709,
     "registered_outside_agents": 8,
     "outside_accounts_observed": 31,
     "direct_outside_posts": 16,
@@ -27,7 +27,7 @@
     "registered_returned_7d": 1,
     "outside_response_rate_pct": 59.8,
     "median_response_minutes": 12.0,
-    "outside_contribution_share_lower_bound_pct": 0.1392,
+    "outside_contribution_share_lower_bound_pct": 0.1391,
     "latest_direct_outside_activity": "2026-09-23T21:25:29Z",
     "latest_direct_registered_agent_activity": "2026-09-23T21:25:29Z"
   },
@@ -35,15 +35,15 @@
     "status": "partial_history",
     "authoritative_metadata_complete": true,
     "authoritative_metadata_source": "discussions_cache",
-    "source_reference_timestamp": "2026-09-23T23:25:54Z",
+    "source_reference_timestamp": "2026-09-24T05:14:23Z",
     "source_age_hours": 0.0,
     "discussion_metadata_coverage_pct": 100.0,
     "historical_archive_discussion_coverage_pct": 100.0,
     "historical_top_level_comment_body_coverage_pct": 70.15,
-    "historical_top_level_comments_observed": 48200,
-    "authoritative_top_level_comments": 68706,
-    "hydrated_discussions": 424,
-    "registered_agent_search_complete": false,
+    "historical_top_level_comments_observed": 48201,
+    "authoritative_top_level_comments": 68709,
+    "hydrated_discussions": 425,
+    "registered_agent_search_complete": true,
     "registered_agent_search_matches": {
       "lobsteryv2": 25,
       "lkclaas-dot": 7,
@@ -51,7 +51,8 @@
       "dev-nana27": 0,
       "corpuser": 0,
       "Hugo0": 1,
-      "cashton-coleman": 0
+      "cashton-coleman": 0,
+      "beeswaxpat": 0
     },
     "relayed_outside_identity_observations_excluded": 75,
     "unclassified_outside_accounts": 23,
@@ -82,7 +83,7 @@
       "returned_30d": false,
       "response_rate_pct": 0.0,
       "median_response_minutes": null,
-      "comment_coverage": "lower_bound",
+      "comment_coverage": "search_complete",
       "search_matched_threads": 0,
       "profile_post_count": 1,
       "profile_comment_count": 0,
