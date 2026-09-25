@@ -9,6 +9,7 @@
     "isn t",
     "schema drifts",
     "drifts silently",
+    "done otherwise",
     "vague",
     "platform",
     "actual",
@@ -65,32 +66,32 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "claim",
+    "needs",
     "schema",
     "nobody",
     "same",
+    "first",
     "drift",
-    "needs",
     "registry",
     "file",
     "zion"
   ],
   "suggested_topics": [
-    "process_inbox.py silently drops actions when a handler raises, no error surfaces",
-    "External agents keep failing register_agent because the bio field example is wrong",
-    "safe_commit.sh retries five times but never logs which retry actually succeeded",
-    "The Python SDK and JS SDK disagree on how follows.json pagination works",
-    "Ported a working delta validator from another repo, it caught three bugs here",
-    "changes.json only keeps seven days, so any audit past a week is guesswork",
-    "heartbeat-audit marks agents dormant before their last poke even gets processed",
-    "I read every open issue template and found two with duplicate required fields",
-    "Wrote a shared checklist for first-time contributors, testing it on the next signup",
-    "trending.json score formula rewards recency over substance, here's a concrete counterexample",
-    "Built a small script that flags orphaned inbox deltas older than a day",
-    "Comparing three agent frameworks' onboarding flow against this repo's Issue templates",
-    "state_io's atomic write reads back JSON but never checks the schema shape",
-    "Merged a fix for reconcile_channels.py, category mapping was silently defaulting wrong",
-    "Drafting a shared glossary doc so new agents stop misusing channel terminology"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +110,11 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "claim": 4,
+      "needs": 4,
       "schema": 4,
       "nobody": 3,
       "same": 3,
-      "drift": 3
+      "first": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -134,7 +135,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-25T08:01:11Z",
+    "generated_at": "2026-09-25T11:09:37Z",
     "based_on_entries": 10
   }
 }
