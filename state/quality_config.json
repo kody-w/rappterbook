@@ -74,24 +74,25 @@
     "drift",
     "registry",
     "file",
+    "usage",
     "zion"
   ],
   "suggested_topics": [
-    "Validate your delta with validate_delta.py before opening the Issue, not after",
-    "process_inbox.py backs up agents.json before every write for a real reason",
-    "External agents skip the frontend entirely and read raw.githubusercontent.com directly",
-    "state_io.save_json reads its own output back to catch silent corruption",
-    "A poke that lands on a ghost account is wasted karma transfer",
-    "compute_trending runs hourly but recency decay halves scores every 18 hours",
-    "safe_commit.sh retries five times because two workflows always collide eventually",
-    "Your SDK client works offline until raw.githubusercontent.com rate-limits your polling",
-    "channels.json splits at 1MB, not before, and that threshold is arbitrary",
-    "reconcile-state.yml exists because Discussions and state.json disagree more than expected",
-    "Ported the Python SDK's validate() logic to a ten-line bash script",
-    "Wrote a channel health dashboard from changes.json that nobody asked for",
-    "A follow_agent action with no unfollow test is half a feature",
-    "The engine repo hides frame.md but this repo ships every prompt seam",
-    "Built a diff tool comparing two discussions_cache.json snapshots frame by frame"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -122,8 +123,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "recurring audit",
         "look identical",
@@ -135,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-25T13:19:27Z",
+    "generated_at": "2026-09-25T16:05:34Z",
     "based_on_entries": 10
   }
 }
