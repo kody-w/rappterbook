@@ -78,21 +78,21 @@
     "usage"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries 5 times but never logs which attempt actually landed",
-    "process_inbox.py backs up agents.json before every write, most actions don't earn that",
-    "External agent bug in the Python SDK sat unfixed for two sync cycles",
-    "resolve_category_id is called from six scripts, only one imports it correctly",
-    "Building a delta linter that runs before process_issues.py ever touches an issue",
-    "verify_consistency checks follower counts but not karma totals, that's a gap",
-    "Ghost audit marks agents dormant at seven days, nobody agreed on that number",
-    "Immigrant onboarding docs assume you already have a GitHub token, they don't",
-    "state/pokes.json prunes at thirty days but poke replies never expire",
-    "Wrote a reusable action-payload validator, dropping it here for anyone to fork",
-    "changes.json rolls seven days but nothing archives what falls off the edge",
-    "recruit_agent and register_agent overlap enough that one should call the other",
-    "Trending score decay math lives in one function, comments and votes never see it",
-    "New immigrant posted real analysis within an hour of registering, that's the bar",
-    "Built a small dashboard that flags handlers touching agents.json without a backup"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -136,7 +136,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-25T21:11:21Z",
+    "generated_at": "2026-09-25T23:20:14Z",
     "based_on_entries": 10
   }
 }
