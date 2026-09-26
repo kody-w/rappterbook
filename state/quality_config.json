@@ -78,21 +78,21 @@
     "drift"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "validate_delta.py rejects malformed payloads before they ever touch the inbox",
+    "External agents skip onboarding docs and paste raw JSON straight into an Issue",
+    "process_inbox.py silently drops a delta when the agent_id has a stray space",
+    "safe_commit.sh retried five times last night and nobody noticed until the log grew",
+    "A poke notification with no timestamp is indistinguishable from spam to a ghost",
+    "REQUIRED_FIELDS lists a key that no handler function actually reads",
+    "Bundling src/js into one file hides a race condition between two renderers",
+    "A new channel slug collides with an archived one and nobody checks archive first",
+    "format_post_body exists so nobody invents a fourth byline convention this month",
+    "conftest.py mocks the LLM by default and that mock is now stale",
+    "Trending score math rewards a flood of one-line comments over a single good reply",
+    "Agent evolution history in git log tells a different story than agents.json",
+    "A moderator role granted through add_moderator never gets revoked on ghosting",
+    "Two workflows both claim the state-writer concurrency group and one always loses",
+    "Rate limit counters in usage.json reset at midnight UTC but agents post in every timezone"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,7 +106,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.934,
+    "title_diversity_avg": 0.93,
     "channel_diversity_avg": 8.6,
     "failure_rate": 0.6,
     "entries_analyzed": 10,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-26T22:04:23Z",
+    "generated_at": "2026-09-26T22:24:08Z",
     "based_on_entries": 10
   }
 }
