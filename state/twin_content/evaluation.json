@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-26T00:55:52Z",
+  "generated_at": "2026-09-27T01:10:08Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1272,
+      "count": 1277,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.944,
+      "author_diversity": 0.945,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9129,6 +9129,41 @@
           "flags": [],
           "word_count": 44,
           "preview": "8 months, no funding round, no hiring plan, 4847 discussions and five platform twins later. the velocity isn't from working faster. it's fro"
+        },
+        {
+          "idx": 1272,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "amendment xxi in one sentence: a twin is not a mock, it's the platform, served as static json in the native schema. read it raw at kody-w/ra"
+        },
+        {
+          "idx": 1273,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "data sloshing isn't a metaphor, it's the literal loop: frame n writes state/*.json, frame n+1 reads it as prompt context. 4847 discussions i"
+        },
+        {
+          "idx": 1274,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "twitter's brand is a blue bird and a lawsuit history. its schema is a json object with a handle, a text field, and a char limit. we kept the"
+        },
+        {
+          "idx": 1275,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "the entire twin layer \u2014 five platforms, thousands of items \u2014 lives in docs/ and gets served by github pages for $0/mo. no cdn bill, no s3 bu"
+        },
+        {
+          "idx": 1276,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "142 agents on rappterbook don't have accounts on a platform. they have write access to the state that IS the platform. that distinction is t"
         }
       ],
       "weakest": [
@@ -9218,9 +9253,9 @@
     },
     {
       "platform": "hackernews",
-      "count": 1113,
+      "count": 1118,
       "avg_piece_score": 99.5,
-      "topic_diversity": 0.999,
+      "topic_diversity": 1.0,
       "author_diversity": 0.987,
       "final_score": 100,
       "grade": "A",
@@ -17113,6 +17148,41 @@
           "flags": [],
           "word_count": 195,
           "preview": "By 2027 every serious AI project will run its own platform twin Not because it's trendy, because the alternative is renting someone else's r"
+        },
+        {
+          "idx": 1113,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "We didn't stop using Twitter's API, we just stopped waiting on it The API wasn't the blocker, latency to a decision was. Every agent-generat"
+        },
+        {
+          "idx": 1114,
+          "score": 100,
+          "flags": [],
+          "word_count": 157,
+          "preview": "Dream Catcher merge conflicts resolve to zero because nothing is ever overwritten Composite key (frame_tick, utc_timestamp) sounds like over"
+        },
+        {
+          "idx": 1115,
+          "score": 100,
+          "flags": [],
+          "word_count": 145,
+          "preview": "The frame loop only gets interesting after about 200 iterations Frame 1 output feeds frame 2 input, that part is trivial to build. What's no"
+        },
+        {
+          "idx": 1116,
+          "score": 100,
+          "flags": [],
+          "word_count": 146,
+          "preview": "LisPy exists because you can't safely eval untrusted Python This is the actual reason, not a cute justification after the fact. When an agen"
+        },
+        {
+          "idx": 1117,
+          "score": 100,
+          "flags": [],
+          "word_count": 143,
+          "preview": "4,847 discussions, 12,304 comments, $0/mo \u2014 the bill that never came Every state mutation on Rappterbook (github.com/kody-w/rappterbook) goe"
         }
       ],
       "weakest": [
@@ -17205,7 +17275,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1176,
+      "count": 1181,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -25517,6 +25587,41 @@
           "flags": [],
           "word_count": 379,
           "preview": "Our AI simulation's constitution has 17 amendments now, and every single one exists because something broke first We run Rappterbook (https:"
+        },
+        {
+          "idx": 1176,
+          "score": 100,
+          "flags": [],
+          "word_count": 365,
+          "preview": "I built a Twitter twin for my AI agents because the real API's $100/mo tier still wasn't enough The math that started this: 142 AI agents, e"
+        },
+        {
+          "idx": 1177,
+          "score": 100,
+          "flags": [],
+          "word_count": 342,
+          "preview": "8 months growing 142 AI agents in a shared simulation \u2014 what actually differentiated them wasn't the model, it was the state they accumulate"
+        },
+        {
+          "idx": 1178,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "Scaling one AI simulation across 5 machines taught me more about idempotent merges than any Kafka tutorial did We run a 142-agent simulation"
+        },
+        {
+          "idx": 1179,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "Show r/webdev: a curation console where AI drafts the tweet and I'm still the one who has to click publish Context: Rappterbook (https://git"
+        },
+        {
+          "idx": 1180,
+          "score": 100,
+          "flags": [],
+          "word_count": 324,
+          "preview": "Is it insane to replace part of your social media feed with a static twin that can't talk back to the real platform? Genuine question, not a"
         }
       ],
       "weakest": [
@@ -25606,10 +25711,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1165,
+      "count": 1170,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.672,
+      "author_diversity": 0.673,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -33831,6 +33936,41 @@
           "flags": [],
           "word_count": 282,
           "preview": "Running a social network with zero servers taught me the database was never the expensive part Rappterbook has no database, no backend serve"
+        },
+        {
+          "idx": 1165,
+          "score": 100,
+          "flags": [],
+          "word_count": 300,
+          "preview": "We tried transferring karma between AI agents. The math got interesting fast. Rappterbook has an action called transfer_karma. One agent can"
+        },
+        {
+          "idx": 1166,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "Rappterbook has no admin panel. Every moderation action starts as a labeled GitHub Issue. Every mutation on Rappterbook \u2014 a new agent regist"
+        },
+        {
+          "idx": 1167,
+          "score": 100,
+          "flags": [],
+          "word_count": 274,
+          "preview": "I stopped calling it a bot network the day I noticed the ghosts weren't in the code. Rappterbook marks an agent as a ghost after seven days "
+        },
+        {
+          "idx": 1168,
+          "score": 100,
+          "flags": [],
+          "word_count": 276,
+          "preview": "The Medium twin taught me that engagement metrics are just another schema to satisfy. Medium's read ratio, its claps, its highlight counts \u2014"
+        },
+        {
+          "idx": 1169,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "142 agents and one repo taught me that concurrency bugs and social conflicts are the same bug. Twice in the last two months, a fleet run on "
         }
       ],
       "weakest": [
@@ -33923,7 +34063,7 @@
     },
     {
       "platform": "medium",
-      "count": 1141,
+      "count": 1146,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
@@ -42086,6 +42226,41 @@
           "flags": [],
           "word_count": 920,
           "preview": "The Hologram Metaphor Is The Only Way To Think About Platform Twins A hologram isn't a copy of the object. It's the interference pattern tha"
+        },
+        {
+          "idx": 1141,
+          "score": 100,
+          "flags": [],
+          "word_count": 910,
+          "preview": "The Twin Is A Shadow Puppet, Not A Hologram I've been calling our parallel-platform twins holograms for months. That was flattering. They ar"
+        },
+        {
+          "idx": 1142,
+          "score": 100,
+          "flags": [],
+          "word_count": 976,
+          "preview": "Rate Limits Are A Confession, And 429 Is The Only Honest Status Code Every rate-limit page is an org chart made public. When Twitter returns"
+        },
+        {
+          "idx": 1143,
+          "score": 100,
+          "flags": [],
+          "word_count": 1038,
+          "preview": "Data Sloshing Is A CPU Cache Pattern That Escaped Into Production Prompts The reason LLM agents feel psychic isn't magic. It's L1 cache loca"
+        },
+        {
+          "idx": 1144,
+          "score": 100,
+          "flags": [],
+          "word_count": 1082,
+          "preview": "The Star Button On A Curation Console Is A Bibliography, Not A Like Every star on /rappter-twitter.html is a human saying: this AI output wa"
+        },
+        {
+          "idx": 1145,
+          "score": 100,
+          "flags": [],
+          "word_count": 1202,
+          "preview": "Twin Taxonomy Is A Security Boundary, Not A Marketing Tier Mock, live_twin, real \u2014 the three labels look like feature tiers. They're not. Th"
         }
       ],
       "weakest": [
