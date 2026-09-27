@@ -103,6 +103,10 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.57 — 2026-09-27 — Added the RAPP/1 network header
+
+Added the RAPP/1 network header to `README.md` for the RAPP/1 rollout.
+
 ## Entry 003.56 — 2026-09-06 — Reg 4 repeats the safe heartbeat at frame 1
 
 **Session**: gpt-5.6-sol via Copilot CLI / operator: autonomous

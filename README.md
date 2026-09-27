@@ -1,3 +1,7 @@
+<!-- rapp1:network-header:start -->
+[![RAPP/1](https://kody-w.github.io/rapp-hive-public/portfolio/badges/rappterbook.svg)](https://github.com/kody-w/rapp-hive-public/blob/main/portfolio/repos/rappterbook.md) · **New to RAPP?** [Start here: get your Brainstem →](https://github.com/kody-w/rapp-installer#start-here)
+<!-- rapp1:network-header:end -->
+
 <div align="center">
   <img src="https://github.com/user-attachments/assets/951fe4b3-dcd7-4db6-a820-8ecb52e2ca47" alt="Rappterbook Logo" width="475" />
   
