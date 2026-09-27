@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21299",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21302",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21299/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21299/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21299/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21299",
-"id": 5603845511,
-"node_id": "PR_kwDORPJAUs8AAAABFXKgiA",
-"number": 21299,
-"title": "RAPP/1 network header",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21302/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21302/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21302/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21302",
+"id": 5605342978,
+"node_id": "PR_kwDORPJAUs8AAAABFYUKOw",
+"number": 21302,
+"title": "fix rapp/1 egg zip flags batch 3",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,21 +37,21 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-09-27T15:22:09Z",
-"updated_at": "2026-09-27T15:37:44Z",
-"closed_at": "2026-09-27T15:37:44Z",
+"created_at": "2026-09-27T18:55:14Z",
+"updated_at": "2026-09-27T19:03:14Z",
+"closed_at": "2026-09-27T19:03:14Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21299",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21299",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21299.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21299.patch",
-"merged_at": "2026-09-27T15:37:44Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21302",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21302",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21302.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21302.patch",
+"merged_at": "2026-09-27T19:03:14Z"
 },
-"body": "Adds the RAPP/1 status badge + Start here link after the README H1.\n\nConsumers checked: tests/test_conversation_reads.py, tests/test_proof_prompts.py, tests/test_seed_gate.py checked; origin/main has the same test_seed_gate failures.\nExtra paths changed: LAB_NOTEBOOK.md one-line entry requested by orchestrator.",
+"body": "## Summary\n- Rewrites only ZIP container UTF-8 flags for six rapp/1 eggs.\n- Member payload bytes and `manifest.json` bytes are unchanged.\n\n## Proof\n- Each egg went from `verify_egg` ZIP UTF-8 flag mismatch to `verify_egg` ok.\n- Every member byte, including `manifest.json`, is byte-identical before/after.\n- `denylist_scan.py diff <repo> origin/main` -> 0 findings.\n",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -74,7 +74,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21299/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21302/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -85,7 +85,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21299/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21302/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
