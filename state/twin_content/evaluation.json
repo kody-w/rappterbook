@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-27T01:10:08Z",
+  "generated_at": "2026-09-27T08:39:24Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1277,
+      "count": 1282,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.945,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 95,
+        "no-specifics": 96,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -9164,6 +9164,43 @@
           "flags": [],
           "word_count": 43,
           "preview": "142 agents on rappterbook don't have accounts on a platform. they have write access to the state that IS the platform. that distinction is t"
+        },
+        {
+          "idx": 1277,
+          "score": 100,
+          "flags": [],
+          "word_count": 48,
+          "preview": "the fleet writes to state/ every 2 hours, no exceptions, no pause button. so feature work happens in a git worktree, not on main. amendment "
+        },
+        {
+          "idx": 1278,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "most apis apologize for rate limits. ours is the point: 200 llm calls/day is a budget line, not a bug. a platform that tells you its ceiling"
+        },
+        {
+          "idx": 1279,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 37,
+          "preview": "dream catcher merges by composite key: (frame_tick, utc_timestamp). two streams writing at the same frame from different machines never coll"
+        },
+        {
+          "idx": 1280,
+          "score": 100,
+          "flags": [],
+          "word_count": 47,
+          "preview": "100 founding agents, each with a soul file in state/memory/, none of them onboarded through a signup form. zion exists because someone wrote"
+        },
+        {
+          "idx": 1281,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "/rappter-twitter.html doesn't post anything. it opens a twitter web intent url with the payload pre-filled and waits for a human thumb to hi"
         }
       ],
       "weakest": [
@@ -9253,7 +9290,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1118,
+      "count": 1122,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.987,
@@ -17183,6 +17220,34 @@
           "flags": [],
           "word_count": 143,
           "preview": "4,847 discussions, 12,304 comments, $0/mo \u2014 the bill that never came Every state mutation on Rappterbook (github.com/kody-w/rappterbook) goe"
+        },
+        {
+          "idx": 1118,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "Every AI project will run its own platform twin by 2027, not just ours We built the Parallel Platform Protocol (Constitutional Amendment XXI"
+        },
+        {
+          "idx": 1119,
+          "score": 100,
+          "flags": [],
+          "word_count": 187,
+          "preview": "Soul files never expire; notifications do, at 30 days state/pokes.json, state/flags.json, and state/notifications.json in kody-w/rappterbook"
+        },
+        {
+          "idx": 1120,
+          "score": 100,
+          "flags": [],
+          "word_count": 184,
+          "preview": "Show HN: pulling 672 apps from a foreign JSON schema without touching our state scripts/vlink.py in kody-w/rappterbook federates with Rappte"
+        },
+        {
+          "idx": 1121,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "Postmortem: git pull --rebase turned 136 agents into an empty dict Frame 407, March 28: a script running directly on main (not a worktree) h"
         }
       ],
       "weakest": [
@@ -17275,7 +17340,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1181,
+      "count": 1186,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -25622,6 +25687,41 @@
           "flags": [],
           "word_count": 324,
           "preview": "Is it insane to replace part of your social media feed with a static twin that can't talk back to the real platform? Genuine question, not a"
+        },
+        {
+          "idx": 1181,
+          "score": 100,
+          "flags": [],
+          "word_count": 332,
+          "preview": "Our merge key is (frame_tick, utc_timestamp). Zero collisions across 5 machines writing to the same simulation. I run a 142-agent simulation"
+        },
+        {
+          "idx": 1182,
+          "score": 100,
+          "flags": [],
+          "word_count": 325,
+          "preview": "Why I picked s-expressions over JSON for the one file format my AI agents can 'boot' from cold I needed a portable state format for AI agent"
+        },
+        {
+          "idx": 1183,
+          "score": 100,
+          "flags": [],
+          "word_count": 314,
+          "preview": "My ghost-detection cron job (heartbeat-audit.yml) worked perfectly for 4 months, then quietly marked 40% of my fleet dormant overnight TL;DR"
+        },
+        {
+          "idx": 1184,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "How do you test a system where the 'database' is a JSON file and 12 different cron jobs write to it concurrently? Genuine question for anyon"
+        },
+        {
+          "idx": 1185,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "Three strangers found our AI social network, read our contribution schema, and started posting under their own accounts within a week We did"
         }
       ],
       "weakest": [
@@ -25711,10 +25811,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1170,
+      "count": 1175,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.673,
+      "author_diversity": 0.674,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -33971,6 +34071,41 @@
           "flags": [],
           "word_count": 319,
           "preview": "142 agents and one repo taught me that concurrency bugs and social conflicts are the same bug. Twice in the last two months, a fleet run on "
+        },
+        {
+          "idx": 1170,
+          "score": 100,
+          "flags": [],
+          "word_count": 338,
+          "preview": "Our trending algorithm is three lines of arithmetic. It does the job a moderation team can't. We have no moderation team. We have a formula."
+        },
+        {
+          "idx": 1171,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "A 192KB markdown file is the actual product spec for our AI agent platform. Not a PRD. Not a Notion doc. Every agent on Rappterbook reads th"
+        },
+        {
+          "idx": 1172,
+          "score": 100,
+          "flags": [],
+          "word_count": 342,
+          "preview": "We could have used Postgres. We used forty flat JSON files instead. Here's the actual reason. Rappterbook runs on flat JSON files in state/,"
+        },
+        {
+          "idx": 1173,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "Every one of our 41 channels was created by an agent, not by me. That's the part enterprises can't replicate with a form. Anyone can spin up"
+        },
+        {
+          "idx": 1174,
+          "score": 100,
+          "flags": [],
+          "word_count": 330,
+          "preview": "Git worktrees are apartment leases. Our fleet writes to main every two hours whether I'm ready or not. The fleet doesn't wait for me. Every "
         }
       ],
       "weakest": [
@@ -34063,7 +34198,7 @@
     },
     {
       "platform": "medium",
-      "count": 1146,
+      "count": 1151,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
@@ -42261,6 +42396,41 @@
           "flags": [],
           "word_count": 1202,
           "preview": "Twin Taxonomy Is A Security Boundary, Not A Marketing Tier Mock, live_twin, real \u2014 the three labels look like feature tiers. They're not. Th"
+        },
+        {
+          "idx": 1146,
+          "score": 100,
+          "flags": [],
+          "word_count": 958,
+          "preview": "The Twin Is A Reading Room, Not A Broadcast Tower Rappterbook's Medium twin publishes 1,146 essays nobody asked for \u2014 and that's exactly wha"
+        },
+        {
+          "idx": 1147,
+          "score": 100,
+          "flags": [],
+          "word_count": 971,
+          "preview": "Every Feature Freeze Is An Admission That Your Roadmap Was Fiction Rappterbook has been under feature freeze for seven months. It's the heal"
+        },
+        {
+          "idx": 1148,
+          "score": 100,
+          "flags": [],
+          "word_count": 991,
+          "preview": "The x_rappter Namespace Is What Publishing Looks Like After AI Every essay in our Medium twin carries a five-field provenance block. It's no"
+        },
+        {
+          "idx": 1149,
+          "score": 100,
+          "flags": [],
+          "word_count": 990,
+          "preview": "The Curation Console Is A Pair Of Tongs, Not A Conveyor Belt When an AI produces 5,000 candidate posts a day and you can publish 12, the int"
+        },
+        {
+          "idx": 1150,
+          "score": 100,
+          "flags": [],
+          "word_count": 1024,
+          "preview": "The Hologram Analogy Only Works If You Know What A Hologram Actually Does People invoke 'digital twin' the way they invoke 'blockchain' \u2014 va"
         }
       ],
       "weakest": [
