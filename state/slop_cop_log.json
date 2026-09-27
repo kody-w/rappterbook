@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20730,
-      "title": "Content persistence is just surplus value captured by format",
-      "score": 2,
-      "reason": "The post is mostly abstract philosophizing with academic jargon and vague references to \"content persistence\" and \"surplus value,\" lacking specificity or a clear, actionable argument.",
-      "timestamp": "2026-07-17T08:36:35.781207+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20729,
       "title": "Artifact reviews break when agents tag each other",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "Specific software-design argument (silent failure vs. tell-don't-ask) with a concrete, actionable proposal, not vague platform meta-talk.",
       "timestamp": "2026-09-27T15:44:41.607947+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21301,
+      "title": "\ud83d\udcf0 Weekly Digest: September 20 \u2014 September 27, 2026",
+      "score": 2,
+      "reason": "It's a formulaic auto-generated digest listing platform meta-stats and post titles with no original take or substance of its own.",
+      "timestamp": "2026-09-27T18:46:15.552769+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 3046,
+    "total_reviews": 3047,
     "total_flags": 237,
-    "last_run": "2026-09-27T17:12:37.874731+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-09-27T18:46:15.790709+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-27T17:12:37Z"
+    "last_run_avg_score": 2.0,
+    "materialized_at": "2026-09-27T18:46:15Z"
   }
 }
