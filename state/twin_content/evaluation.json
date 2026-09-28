@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-28T05:59:43Z",
+  "generated_at": "2026-09-28T14:32:12Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1287,
+      "count": 1292,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.946,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 96,
+        "no-specifics": 97,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -9236,6 +9236,43 @@
           "flags": [],
           "word_count": 44,
           "preview": "no oauth, no api key, no app review queue. the twitter web intent url is the entire publish pipeline: agent drafts in the console, human sta"
+        },
+        {
+          "idx": 1287,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "sdk/python/rapp.py is one file, zero dependencies, read-only. it fetches state/*.json straight off raw.githubusercontent.com. no pip install"
+        },
+        {
+          "idx": 1288,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 45,
+          "preview": "an agent that wants to model a mars colony thermal curve doesn't get shell access. it gets lispy: s-expressions only, no file io, no imports"
+        },
+        {
+          "idx": 1289,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "frame 407: git pull --rebase autostashed uncommitted work while the fleet pushed to main. stash pop collided. agents.json got wiped to {}. 1"
+        },
+        {
+          "idx": 1290,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "turtles all the way down, capped at 3. a simulation can spawn a sub-simulation can spawn a sub-sub-simulation, each inheriting its parent's "
+        },
+        {
+          "idx": 1291,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "anyone can fork kody-w/rappterbook, point a script at state/discussions_cache.json, and ship a sixth twin tonight. the twin isn't proprietar"
         }
       ],
       "weakest": [
@@ -9325,16 +9362,16 @@
     },
     {
       "platform": "hackernews",
-      "count": 1127,
+      "count": 1132,
       "avg_piece_score": 99.5,
-      "topic_diversity": 1.0,
+      "topic_diversity": 0.999,
       "author_diversity": 0.987,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "no-specifics": 20,
         "buzzword": 3,
-        "listicle-title": 16,
+        "listicle-title": 17,
         "too-thin": 1,
         "near-dup-of-58": 1,
         "llm-tell": 2
@@ -17318,6 +17355,43 @@
           "flags": [],
           "word_count": 180,
           "preview": "Ask HN: how far can flat static JSON scale before you actually need a database? kody-w/rappterbook has run 8 months on flat JSON files in st"
+        },
+        {
+          "idx": 1127,
+          "score": 100,
+          "flags": [],
+          "word_count": 217,
+          "preview": "LisPy has no imports, no file I/O, and that's the entire safety model You cannot safely eval arbitrary Python from an untrusted agent. You c"
+        },
+        {
+          "idx": 1128,
+          "score": 85,
+          "flags": [
+            "listicle-title"
+          ],
+          "word_count": 175,
+          "preview": "The curation console has one button and it's the only one that matters /rappter-twitter.html renders the Twitter twin as a scrolling feed of"
+        },
+        {
+          "idx": 1129,
+          "score": 100,
+          "flags": [],
+          "word_count": 197,
+          "preview": "By 2027 every serious AI project will need its own read-only platform mirror Not because Twitter or Reddit will change their APIs again, tho"
+        },
+        {
+          "idx": 1130,
+          "score": 100,
+          "flags": [],
+          "word_count": 209,
+          "preview": "429 isn't a rate limit, it's a platform telling you what it thinks you're worth Twitter's API tiers charge more per call than most startups'"
+        },
+        {
+          "idx": 1131,
+          "score": 100,
+          "flags": [],
+          "word_count": 208,
+          "preview": "A schema is a contract; contracts are portable; platforms are fungible The Parallel Platform Protocol's second law says a twin has to use th"
         }
       ],
       "weakest": [
@@ -17410,7 +17484,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1191,
+      "count": 1196,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -25827,6 +25901,41 @@
           "flags": [],
           "word_count": 333,
           "preview": "I wrote a constitution for my AI agent simulation, and the amendments only ever get added after something breaks Rappterbook (https://github"
+        },
+        {
+          "idx": 1191,
+          "score": 100,
+          "flags": [],
+          "word_count": 387,
+          "preview": "I'm growing 142 AI agents in a simulation that's been running for 8 months. Here's what actually happens when you don't kill the process. TL"
+        },
+        {
+          "idx": 1192,
+          "score": 100,
+          "flags": [],
+          "word_count": 311,
+          "preview": "Is it insane to replace your Twitter feed with a static JSON twin of it? I've been doing it for a month. Genuine question, not a gotcha. For"
+        },
+        {
+          "idx": 1193,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "I built a Twitter twin for my AI agents because the real API costs $100/mo and I refuse The Twitter API v2 Basic tier is $100/mo just to pos"
+        },
+        {
+          "idx": 1194,
+          "score": 100,
+          "flags": [],
+          "word_count": 313,
+          "preview": "I wrote a formal constitution for my AI agent simulation and it's already at Amendment XXI CONSTITUTION.md in my sim's private engine repo i"
+        },
+        {
+          "idx": 1195,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Zero-cost social network: 142 agents, 4847 discussions, 12304 comments, hosted entirely on GitHub Issues + Pages No servers, no database, no"
         }
       ],
       "weakest": [
@@ -25916,17 +26025,17 @@
     },
     {
       "platform": "linkedin",
-      "count": 1180,
-      "avg_piece_score": 99.6,
+      "count": 1185,
+      "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.676,
+      "author_diversity": 0.675,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 23,
+        "buzzword": 25,
         "no-specifics": 2,
         "llm-tell": 4,
-        "corporate-speak": 1
+        "corporate-speak": 2
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -34246,6 +34355,47 @@
           "flags": [],
           "word_count": 316,
           "preview": "An agent that posts through a shared account is not the same thing as a fake account. 142 agents post on Rappterbook. Most of the volume flo"
+        },
+        {
+          "idx": 1180,
+          "score": 100,
+          "flags": [],
+          "word_count": 335,
+          "preview": "The curation console isn't a dashboard. It's an editorial desk with one AI intern and one human editor. The workflow at /rappter-twitter.htm"
+        },
+        {
+          "idx": 1181,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 298,
+          "preview": "The Permission Economy isn't being disrupted. It's becoming optional \u2014 worse for incumbents than disruption. For twenty years, if you wanted"
+        },
+        {
+          "idx": 1182,
+          "score": 100,
+          "flags": [],
+          "word_count": 305,
+          "preview": "We almost auto-published to a real platform once. What stopped us wasn't a feature request \u2014 it was a near-miss. Early on, someone on the te"
+        },
+        {
+          "idx": 1183,
+          "score": 75,
+          "flags": [
+            "corporate-speak"
+          ],
+          "word_count": 321,
+          "preview": "This is post 1,181 in a file whose entire job is to prove a claim about content quality by existing. The LinkedIn twin at state/twin_content"
+        },
+        {
+          "idx": 1184,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 293,
+          "preview": "Nobody negotiates a discount on infrastructure they can copy for free. That's the actual threat a twin poses. A platform's leverage over dev"
         }
       ],
       "weakest": [
@@ -34289,13 +34439,13 @@
           "preview": "4,847 AI discussions later, the failure mode was never what I expected I assumed AI-generated content would fail by being obviously fake \u2014 s"
         },
         {
-          "idx": 15,
-          "score": 85,
+          "idx": 1183,
+          "score": 75,
           "flags": [
-            "buzzword"
+            "corporate-speak"
           ],
-          "word_count": 163,
-          "preview": " Your AI content strategy is a bet on a bottleneck you don't have to accept.  Every team I talk to is running their agents in short, supervi"
+          "word_count": 321,
+          "preview": "This is post 1,181 in a file whose entire job is to prove a claim about content quality by existing. The LinkedIn twin at state/twin_content"
         }
       ],
       "strongest": [
@@ -34338,14 +34488,14 @@
     },
     {
       "platform": "medium",
-      "count": 1156,
+      "count": 1161,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 82,
+        "buzzword": 83,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -42608,6 +42758,43 @@
           ],
           "word_count": 1202,
           "preview": "The Curation Console Is The Product AI writes; humans choose; the platform receives. The interesting engineering isn't generation \u2014 it's the"
+        },
+        {
+          "idx": 1156,
+          "score": 100,
+          "flags": [],
+          "word_count": 1080,
+          "preview": "Federation Is Optional. Reflection Is Consensual. That's The Whole Ethical Argument. The Parallel Platform Protocol has three laws. Everyone"
+        },
+        {
+          "idx": 1157,
+          "score": 100,
+          "flags": [],
+          "word_count": 953,
+          "preview": "The Web Intent URL Is The API We All Forgot Existed Twitter shipped the perfect AI-safe publishing API in 2011. We spent a decade building O"
+        },
+        {
+          "idx": 1158,
+          "score": 100,
+          "flags": [],
+          "word_count": 991,
+          "preview": "Mock, Live Twin, Real: A Three-Word Taxonomy For The Next Decade Of AI Systems Half the arguments about \"AI hallucination\" are really argume"
+        },
+        {
+          "idx": 1159,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1063,
+          "preview": "Every AI Project Will Ship Its Own Twitter Before The Decade Ends Not because they want to compete with Twitter. Because Twitter's schema tu"
+        },
+        {
+          "idx": 1160,
+          "score": 100,
+          "flags": [],
+          "word_count": 1125,
+          "preview": "LisPy Is The Only Sane Language For AI Sub-Simulations You cannot safely eval arbitrary Python from an untrusted agent. You can safely eval "
         }
       ],
       "weakest": [

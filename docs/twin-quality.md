@@ -1,22 +1,22 @@
 # Twin Content Quality Report
 
-Generated: 2026-09-28T05:59:43Z
+Generated: 2026-09-28T14:32:12Z
 Overall grade: **A** (score 99.7)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 1287 | 99.3 | 0.999 | 0.946 | 100 | **A** |
-| hackernews | 1127 | 99.5 | 1.0 | 0.987 | 100 | **A** |
-| reddit | 1191 | 99.7 | 1.0 | 0.986 | 100 | **A** |
-| linkedin | 1180 | 99.6 | 1.0 | 0.676 | 100 | **A** |
-| medium | 1156 | 98.8 | 0.977 | 0.012 | 98.7 | **A** |
+| twitter | 1292 | 99.3 | 0.999 | 0.946 | 100 | **A** |
+| hackernews | 1132 | 99.5 | 0.999 | 0.987 | 100 | **A** |
+| reddit | 1196 | 99.7 | 1.0 | 0.986 | 100 | **A** |
+| linkedin | 1185 | 99.5 | 1.0 | 0.675 | 100 | **A** |
+| medium | 1161 | 98.8 | 0.977 | 0.012 | 98.7 | **A** |
 
 ## twitter detail
 
 **Flag counts:**
-- `no-specifics` × 96
+- `no-specifics` × 97
 - `buzzword` × 8
 - `llm-tell` × 1
 
@@ -49,7 +49,7 @@ Overall grade: **A** (score 99.7)
 
 **Flag counts:**
 - `no-specifics` × 20
-- `listicle-title` × 16
+- `listicle-title` × 17
 - `buzzword` × 3
 - `llm-tell` × 2
 - `too-thin` × 1
@@ -115,10 +115,10 @@ Overall grade: **A** (score 99.7)
 ## linkedin detail
 
 **Flag counts:**
-- `buzzword` × 23
+- `buzzword` × 25
 - `llm-tell` × 4
 - `no-specifics` × 2
-- `corporate-speak` × 1
+- `corporate-speak` × 2
 
 **Weakest pieces (revise these):**
 - #956 score=20 flags=[corporate-speak, buzzword, buzzword, llm-tell]  
@@ -129,8 +129,8 @@ Overall grade: **A** (score 99.7)
   `Twin taxonomy has three levels, and most people building AI demos are stuck on the bottom one Mock, live twin, real. That's the taxonomy we `
 - #1111 score=75 flags=[llm-tell]  
   `4,847 AI discussions later, the failure mode was never what I expected I assumed AI-generated content would fail by being obviously fake — s`
-- #15 score=85 flags=[buzzword]  
-  ` Your AI content strategy is a bet on a bottleneck you don't have to accept.  Every team I talk to is running their agents in short, supervi`
+- #1183 score=75 flags=[corporate-speak]  
+  `This is post 1,181 in a file whose entire job is to prove a claim about content quality by existing. The LinkedIn twin at state/twin_content`
 
 **Strongest pieces:**
 - #0 score=100  
@@ -148,7 +148,7 @@ Overall grade: **A** (score 99.7)
 ## medium detail
 
 **Flag counts:**
-- `buzzword` × 82
+- `buzzword` × 83
 - `llm-tell` × 5
 
 **Weakest pieces (revise these):**
