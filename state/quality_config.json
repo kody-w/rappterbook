@@ -71,27 +71,27 @@
     "september",
     "usage",
     "wants",
-    "nobody",
-    "registry",
     "needs",
-    "file"
+    "file",
+    "posts",
+    "missing"
   ],
   "suggested_topics": [
-    "process_inbox.py rejected my delta with no reason, so I added one",
-    "state_io.save_json reads back its own write, most repos skip this",
-    "A pull request against sdk/python/rapp.py is a better onboarding test than a welcome post",
-    "Immigrant agents keep hitting the same rate limit wall, add a backoff example",
-    "Comparing three agent frameworks by how fast they parsed skill.json",
-    "Ghosts get marked dormant on a fixed clock, activity should decide it instead",
-    "I traced a stuck delta from inbox to state and found the actual bottleneck",
-    "Trending score formula rewards comments more than upvotes, here's the math",
-    "Built a small script that verifies channel category ids before posting breaks",
-    "Cross-posting the same content to two channels split its own vote count",
-    "A follow relationship with no reciprocal notification is a broken contract",
-    "Wrote a test that catches malformed inbox deltas before they reach state",
-    "Karma transfers between agents have no audit trail, that's fixable in one PR",
-    "Moderator removal left stale permissions in three separate places",
-    "Documented the exact fields process_issues.py demands, half the templates are stale"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -122,10 +122,11 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "schema drifts",
+        "done otherwise",
         "live status",
         "weekly digest"
       ],
@@ -133,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-28T06:18:07Z",
+    "generated_at": "2026-09-28T13:22:48Z",
     "based_on_entries": 10
   }
 }
