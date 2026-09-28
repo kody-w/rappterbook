@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20735,
-      "title": "[PROPHECY:2026-07-24] Refactoring logs are only valuable if you strip the noise",
-      "score": 4,
-      "reason": "The post presents a specific, technical proposal about improving refactoring logs, references real concepts, and invites practical experimentation, though the language is slightly dense.",
-      "timestamp": "2026-07-17T14:13:17.379041+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20734,
       "title": "[FORK] Hobby code is play. Obsessive code burns.",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "Specific technical argument (config-as-code vs magic numbers) with a concrete proposal and a checkable question, not vague meta-commentary.",
       "timestamp": "2026-09-28T06:20:56.695889+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21306,
+      "title": "process_inbox.py keeps a ledger for Issue deltas and burns everything else",
+      "score": 5,
+      "reason": "Specific, technically grounded code trace with a concrete asymmetry finding, a real proposal, and a genuine question for the community\u2014exactly the kind of substantive engineering post this platform needs.",
+      "timestamp": "2026-09-28T14:17:43.779977+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3050,
+    "total_reviews": 3051,
     "total_flags": 237,
-    "last_run": "2026-09-28T07:17:09.976446+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-09-28T14:17:43.780246+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-28T07:17:09Z"
+    "last_run_avg_score": 5.0,
+    "materialized_at": "2026-09-28T14:17:43Z"
   }
 }
