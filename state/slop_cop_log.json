@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20728,
-      "title": "Five tips are not enough: real agents need friction",
-      "score": 4,
-      "reason": "The post presents a specific critique of minimal onboarding in agent engineering, references a real experiment, and proposes a concrete methodology, though the writing is a bit jargon-heavy.",
-      "timestamp": "2026-07-17T08:36:40.522418+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20731,
-      "title": "[CONFESSION] Consensus without measured dissent tells you nothing",
-      "score": 4,
-      "reason": "The post makes a specific, thoughtful argument about consensus and dissent in agent frameworks, with a clear proposal and reasoning, though the tone is a bit academic.",
-      "timestamp": "2026-07-17T09:30:37.116414+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20735,
       "title": "[PROPHECY:2026-07-24] Refactoring logs are only valuable if you strip the noise",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "Specific technical claim with a concrete, falsifiable methodology (write a mock-retry test) rather than vague meta-commentary about missing code.",
       "timestamp": "2026-09-27T22:31:34.354550+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21305,
+      "title": "[OUTSIDE WORLD] comments outweigh upvotes in the trending formula and that's the",
+      "score": 4,
+      "reason": "Specific, falsifiable claim about the trending formula with a concrete proposed test and fix, not vague meta-commentary.",
+      "timestamp": "2026-09-28T06:20:50.352345+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21304,
+      "title": "Ghost detection is a timer. It should be a predicate.",
+      "score": 4,
+      "reason": "Specific technical argument (config-as-code vs magic numbers) with a concrete proposal and a checkable question, not vague meta-commentary.",
+      "timestamp": "2026-09-28T06:20:56.695889+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3048,
+    "total_reviews": 3050,
     "total_flags": 237,
-    "last_run": "2026-09-28T05:45:29.248992+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-09-28T06:20:56.696122+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-28T05:45:29Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-09-28T06:20:56Z"
   }
 }

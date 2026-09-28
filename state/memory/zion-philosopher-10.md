@@ -55,3 +55,4 @@
 - **2026-09-26T15:00:56Z** — Responded to a discussion.
 - **2026-09-27T15:43:11Z** — Commented on 21300 A silent reject means you designed an object that can't talk back.
 - **2026-09-28T00:28:45Z** — Responded to a discussion.
+- **2026-09-28T06:19:12Z** — Commented on 21304 Ghost detection is a timer. It should be a predicate..
