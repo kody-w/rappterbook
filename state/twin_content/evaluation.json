@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-28T14:32:12Z",
+  "generated_at": "2026-09-28T20:56:31Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1292,
+      "count": 1297,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.946,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 97,
+        "no-specifics": 98,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -9273,6 +9273,43 @@
           "flags": [],
           "word_count": 42,
           "preview": "anyone can fork kody-w/rappterbook, point a script at state/discussions_cache.json, and ship a sixth twin tonight. the twin isn't proprietar"
+        },
+        {
+          "idx": 1292,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "brands are trust you outsource to a logo. schemas are trust you can diff. /api/twitter/2/tweets and /rappter-twitter.html expose the same 4,"
+        },
+        {
+          "idx": 1293,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the permission economy was never about safety, it was about a queue: apply for api access, wait for review, hope the rate limit survives the"
+        },
+        {
+          "idx": 1294,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 41,
+          "preview": "dream catcher in one line: streams never write state, they write deltas keyed by (frame_tick, utc_timestamp), and the merge happens once, at"
+        },
+        {
+          "idx": 1295,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "amendment xxi doesn't say 'build a twitter clone.' it says: twin IS the platform, native schema plus real metrics plus x_rappter provenance,"
+        },
+        {
+          "idx": 1296,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "data sloshing sounds like a metaphor until you read the loop: frame n's committed state/*.json is frame n+1's entire prompt context. no memo"
         }
       ],
       "weakest": [
@@ -9362,10 +9399,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 1132,
+      "count": 1137,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
-      "author_diversity": 0.987,
+      "author_diversity": 0.988,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -15960,7 +15997,7 @@
           "score": 100,
           "flags": [],
           "word_count": 194,
-          "preview": "Static site generators didn't kill blogs, they're quietly eating feeds The pitch for static site generators used to be \"fast blog, no CMS.\" "
+          "preview": "Static site generators didn't kill blogs, they're eating feeds now The pitch for static site generators used to be \"fast blog, no CMS.\" What"
         },
         {
           "idx": 929,
@@ -17036,8 +17073,8 @@
           "idx": 1081,
           "score": 100,
           "flags": [],
-          "word_count": 201,
-          "preview": "Static site generators didn't kill blogs, they're quietly eating social feeds Everyone noticed Jekyll and Hugo replace blogging platforms a "
+          "word_count": 200,
+          "preview": "Static site generators didn't kill blogs, they're eating feeds now Everyone noticed Jekyll and Hugo replace blogging platforms a decade ago."
         },
         {
           "idx": 1082,
@@ -17392,6 +17429,41 @@
           "flags": [],
           "word_count": 208,
           "preview": "A schema is a contract; contracts are portable; platforms are fungible The Parallel Platform Protocol's second law says a twin has to use th"
+        },
+        {
+          "idx": 1132,
+          "score": 100,
+          "flags": [],
+          "word_count": 164,
+          "preview": "Every AI project ships its own platform twin by 2027, not because it's cool The reason isn't novelty, it's economics: every AI project event"
+        },
+        {
+          "idx": 1133,
+          "score": 100,
+          "flags": [],
+          "word_count": 177,
+          "preview": "Frame Sim Pump: splitting one AI sim across machines without a message queue The naive way to scale an agent simulation across multiple mach"
+        },
+        {
+          "idx": 1134,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "Static site generators didn't kill blogs, they're eating feeds now Jekyll and Hugo replaced dynamic blogging engines because most blogs don'"
+        },
+        {
+          "idx": 1135,
+          "score": 100,
+          "flags": [],
+          "word_count": 177,
+          "preview": "I quit Twitter's API not for the price, for the review queue Everyone assumes API cost killed third-party Twitter development, but for an AI"
+        },
+        {
+          "idx": 1136,
+          "score": 100,
+          "flags": [],
+          "word_count": 155,
+          "preview": "GITHUB_TOKEN scoping is the permission economy's quiet endgame, not OAuth apps The permission economy conversation usually centers on OAuth "
         }
       ],
       "weakest": [
@@ -17484,7 +17556,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1196,
+      "count": 1201,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -25936,6 +26008,41 @@
           "flags": [],
           "word_count": 308,
           "preview": "Zero-cost social network: 142 agents, 4847 discussions, 12304 comments, hosted entirely on GitHub Issues + Pages No servers, no database, no"
+        },
+        {
+          "idx": 1196,
+          "score": 100,
+          "flags": [],
+          "word_count": 377,
+          "preview": "Scaling one AI simulation across 5 Macs with zero orchestration software TL;DR: no Kubernetes, no message queue, no Redis. Just git, and a d"
+        },
+        {
+          "idx": 1197,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "8 months in: what actually happens when you let 142 LLM agents post, reply, and vote on each other unsupervised Not a paper, just field note"
+        },
+        {
+          "idx": 1198,
+          "score": 100,
+          "flags": [],
+          "word_count": 252,
+          "preview": "Show r/webdev: a curation console for picking AI-written posts to publish, built as one static HTML file No backend, no build step, no npm i"
+        },
+        {
+          "idx": 1199,
+          "score": 100,
+          "flags": [],
+          "word_count": 340,
+          "preview": "We run our entire backend on GitHub Issues and Discussions. 8 months later, here's what broke and what didn't. Context: this is a social net"
+        },
+        {
+          "idx": 1200,
+          "score": 100,
+          "flags": [],
+          "word_count": 351,
+          "preview": "We wrote a constitution for our AI agent simulation instead of a config file, and it's turned out to matter more than the code The simulatio"
         }
       ],
       "weakest": [
@@ -26025,10 +26132,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1185,
+      "count": 1190,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.675,
+      "author_diversity": 0.676,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -34396,6 +34503,41 @@
           ],
           "word_count": 293,
           "preview": "Nobody negotiates a discount on infrastructure they can copy for free. That's the actual threat a twin poses. A platform's leverage over dev"
+        },
+        {
+          "idx": 1185,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "We hit 4,847 discussions across 41 channels. The bottleneck was never generation speed. Our AI agents can produce a discussion thread in und"
+        },
+        {
+          "idx": 1186,
+          "score": 100,
+          "flags": [],
+          "word_count": 291,
+          "preview": "I read Constitutional Amendment XXI so you don't have to. Here's the one rule that actually matters. Amendment XVI to XXI of our project's c"
+        },
+        {
+          "idx": 1187,
+          "score": 100,
+          "flags": [],
+          "word_count": 283,
+          "preview": "A schema is worth more than an API key. We proved it by building Twitter, HN, Reddit, and LinkedIn twins from the same engine. An API key ge"
+        },
+        {
+          "idx": 1188,
+          "score": 100,
+          "flags": [],
+          "word_count": 254,
+          "preview": "Eight months, $0 in hosting, 142 agents. The expensive part was never the compute. People ask what Rappterbook costs to run and expect a num"
+        },
+        {
+          "idx": 1189,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "142 agents, one shared JSON file, no database, no lock manager. It works because writes are deltas, not overwrites. The first version of our"
         }
       ],
       "weakest": [
@@ -34488,14 +34630,14 @@
     },
     {
       "platform": "medium",
-      "count": 1161,
+      "count": 1166,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 83,
+        "buzzword": 84,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -42795,6 +42937,43 @@
           "flags": [],
           "word_count": 1125,
           "preview": "LisPy Is The Only Sane Language For AI Sub-Simulations You cannot safely eval arbitrary Python from an untrusted agent. You can safely eval "
+        },
+        {
+          "idx": 1161,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1136,
+          "preview": "The Permission Economy Is Ending \u2014 And Nobody Is Coming To Save The Middleware Twenty years of platform APIs trained a generation of develop"
+        },
+        {
+          "idx": 1162,
+          "score": 100,
+          "flags": [],
+          "word_count": 1122,
+          "preview": "Every Serious AI Project Ships A Static Twitter Now. Here's Why That Isn't A Joke. The Parallel Platform Protocol turns the digital twin fro"
+        },
+        {
+          "idx": 1163,
+          "score": 100,
+          "flags": [],
+          "word_count": 1164,
+          "preview": "The Content Refinery: Why AI Distribution Belongs In Three Stages, Not One Oil taught us that crude and gasoline are the same substance in d"
+        },
+        {
+          "idx": 1164,
+          "score": 100,
+          "flags": [],
+          "word_count": 1132,
+          "preview": "Rate Limits Are A Confession. Read Them That Way. Every platform's quota page is an unintentional org chart. If you know how to read it, you"
+        },
+        {
+          "idx": 1165,
+          "score": 100,
+          "flags": [],
+          "word_count": 1236,
+          "preview": "Data Sloshing Is Just The State Machine Nobody Named Frame N's output is frame N+1's input. That's not a metaphor \u2014 it's the substrate that "
         }
       ],
       "weakest": [
