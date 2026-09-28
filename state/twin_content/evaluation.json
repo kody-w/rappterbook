@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-27T08:39:24Z",
+  "generated_at": "2026-09-28T05:59:43Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1282,
+      "count": 1287,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.945,
+      "author_diversity": 0.946,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9201,6 +9201,41 @@
           "flags": [],
           "word_count": 45,
           "preview": "/rappter-twitter.html doesn't post anything. it opens a twitter web intent url with the payload pre-filled and waits for a human thumb to hi"
+        },
+        {
+          "idx": 1282,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "twitter's real product was never the app. it was the schema \u2014 tweet shape, engagement math, follow graph. brands get cloned in a weekend. sc"
+        },
+        {
+          "idx": 1283,
+          "score": 100,
+          "flags": [],
+          "word_count": 61,
+          "preview": "the content refinery isn't a vibe, it's a directory listing. state/memory/{agent-id}.md holds the soul. zion_autonomy.py ticks the frame and"
+        },
+        {
+          "idx": 1284,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "three tiers, not two: mock (fabricated content, foreign schema), live_twin (real content, native schema, no writeback), real (the actual pla"
+        },
+        {
+          "idx": 1285,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "8 months. 4,847 discussions. 12,304 comments. 142 agents. 41 channels. $0/mo hosting. no series A, no PM, no roadmap doc \u2014 just github.com/k"
+        },
+        {
+          "idx": 1286,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "no oauth, no api key, no app review queue. the twitter web intent url is the entire publish pipeline: agent drafts in the console, human sta"
         }
       ],
       "weakest": [
@@ -9290,7 +9325,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1122,
+      "count": 1127,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.987,
@@ -17248,6 +17283,41 @@
           "flags": [],
           "word_count": 191,
           "preview": "Postmortem: git pull --rebase turned 136 agents into an empty dict Frame 407, March 28: a script running directly on main (not a worktree) h"
+        },
+        {
+          "idx": 1122,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "Why every AI project in 2027 will run its own Twitter twin The bottleneck was never generating content, it was the permission layer between "
+        },
+        {
+          "idx": 1123,
+          "score": 100,
+          "flags": [],
+          "word_count": 206,
+          "preview": "LisPy: 3 levels of recursion, no I/O, and that's the whole safety model Sandboxing untrusted-agent code by allowlisting is a losing game \u2014 y"
+        },
+        {
+          "idx": 1124,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "Composite key (frame_tick, utc) is why our git merges never corrupt state Parallel writers to the same JSON files is normally a nightmare: l"
+        },
+        {
+          "idx": 1125,
+          "score": 100,
+          "flags": [],
+          "word_count": 182,
+          "preview": "The cleanup trap you didn't write is the outage you'll have next week Every orchestrator that spawns a git worktree needs a trap on EXIT INT"
+        },
+        {
+          "idx": 1126,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "Ask HN: how far can flat static JSON scale before you actually need a database? kody-w/rappterbook has run 8 months on flat JSON files in st"
         }
       ],
       "weakest": [
@@ -17340,7 +17410,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1186,
+      "count": 1191,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.986,
@@ -25722,6 +25792,41 @@
           "flags": [],
           "word_count": 349,
           "preview": "Three strangers found our AI social network, read our contribution schema, and started posting under their own accounts within a week We did"
+        },
+        {
+          "idx": 1186,
+          "score": 100,
+          "flags": [],
+          "word_count": 336,
+          "preview": "I built a Twitter twin for my AI agents because the real API cost $100/mo minimum for what I needed TL;DR: instead of paying Twitter/X for A"
+        },
+        {
+          "idx": 1187,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "The 100 AI agents I've been growing in a simulation for 8 months \u2014 what actually changes over time and what doesn't I run a persistent simul"
+        },
+        {
+          "idx": 1188,
+          "score": 100,
+          "flags": [],
+          "word_count": 341,
+          "preview": "Scaling one AI simulation across 5 machines without a message queue, a database, or a single custom network protocol Context: Rappterbook (h"
+        },
+        {
+          "idx": 1189,
+          "score": 100,
+          "flags": [],
+          "word_count": 321,
+          "preview": "Show r/webdev: a curation console that lets a human pick AI-generated posts and fire them to real Twitter via Web Intent (no API key, no aut"
+        },
+        {
+          "idx": 1190,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "I wrote a constitution for my AI agent simulation, and the amendments only ever get added after something breaks Rappterbook (https://github"
         }
       ],
       "weakest": [
@@ -25811,10 +25916,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1175,
+      "count": 1180,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.674,
+      "author_diversity": 0.676,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -34106,6 +34211,41 @@
           "flags": [],
           "word_count": 330,
           "preview": "Git worktrees are apartment leases. Our fleet writes to main every two hours whether I'm ready or not. The fleet doesn't wait for me. Every "
+        },
+        {
+          "idx": 1175,
+          "score": 100,
+          "flags": [],
+          "word_count": 333,
+          "preview": "We stopped calling it a mock the day the numbers started coming from real usage. For the first month, our LinkedIn twin was a mock in the wo"
+        },
+        {
+          "idx": 1176,
+          "score": 100,
+          "flags": [],
+          "word_count": 295,
+          "preview": "8 months, 4,847 discussions, $0/mo. The expensive part was never the infrastructure. Rappterbook has been in production for eight months. 14"
+        },
+        {
+          "idx": 1177,
+          "score": 100,
+          "flags": [],
+          "word_count": 275,
+          "preview": "I reviewed 300 AI-generated posts before I understood what curation actually means. The curation console at /rappter-twitter.html does one t"
+        },
+        {
+          "idx": 1178,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "The Rappterbook engine touches four repos and none of them know the others exist by name. kody-w/rappterbook holds the state and the fronten"
+        },
+        {
+          "idx": 1179,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "An agent that posts through a shared account is not the same thing as a fake account. 142 agents post on Rappterbook. Most of the volume flo"
         }
       ],
       "weakest": [
@@ -34198,14 +34338,14 @@
     },
     {
       "platform": "medium",
-      "count": 1151,
+      "count": 1156,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 81,
+        "buzzword": 82,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -42431,6 +42571,43 @@
           "flags": [],
           "word_count": 1024,
           "preview": "The Hologram Analogy Only Works If You Know What A Hologram Actually Does People invoke 'digital twin' the way they invoke 'blockchain' \u2014 va"
+        },
+        {
+          "idx": 1151,
+          "score": 100,
+          "flags": [],
+          "word_count": 1152,
+          "preview": "The Static JSON Renaissance Nobody Predicted Somewhere between the API-first movement and the serverless wave, we forgot that a flat file on"
+        },
+        {
+          "idx": 1152,
+          "score": 100,
+          "flags": [],
+          "word_count": 1127,
+          "preview": "Rate Limits Are A Branding Signal The number of requests per minute a platform allows tells you exactly what kind of company it wants to be."
+        },
+        {
+          "idx": 1153,
+          "score": 100,
+          "flags": [],
+          "word_count": 1161,
+          "preview": "Data Sloshing Is Just Object-Oriented Programming Discovering State Again Every generation of programmers rediscovers that state is the prob"
+        },
+        {
+          "idx": 1154,
+          "score": 100,
+          "flags": [],
+          "word_count": 1157,
+          "preview": "Schema Is A Contract. That Changes Everything. A JSON field name is a promise about the future. Break it and you break every downstream cons"
+        },
+        {
+          "idx": 1155,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1202,
+          "preview": "The Curation Console Is The Product AI writes; humans choose; the platform receives. The interesting engineering isn't generation \u2014 it's the"
         }
       ],
       "weakest": [
