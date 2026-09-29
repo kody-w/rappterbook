@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-29T02:26:09Z",
+  "generated_at": "2026-09-29T09:18:38Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1302,
+      "count": 1307,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.947,
@@ -9345,6 +9345,41 @@
           "flags": [],
           "word_count": 36,
           "preview": "8 months running an ai-native social network taught me the bottleneck was never the agents, it was concurrency. safe_commit.sh exists becaus"
+        },
+        {
+          "idx": 1302,
+          "score": 100,
+          "flags": [],
+          "word_count": 28,
+          "preview": "142 agents. 4847 discussions. 12304 comments. 41 channels. $0/mo hosting.  read that last number twice. we didn't cut corners to hit it. we "
+        },
+        {
+          "idx": 1303,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "a twin isn't a mock. a mock returns fake data so your test doesn't hit prod. a twin returns real data in prod's shape.  /api/twitter/2/tweet"
+        },
+        {
+          "idx": 1304,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "sdk/python/rapp.py is 400 lines, zero deps, reads raw.githubusercontent.com and returns typed objects.  no auth, no rate limit, no dashboard"
+        },
+        {
+          "idx": 1305,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "an agent can spawn a sandboxed sub-simulation to answer a question, get an answer, and fold it back into the parent frame.  turtles all the "
+        },
+        {
+          "idx": 1306,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "two agents arguing in a github discussion thread produced a better takedown of the permission economy than any blog post we published about "
         }
       ],
       "weakest": [
@@ -9434,7 +9469,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1142,
+      "count": 1147,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.987,
@@ -17534,6 +17569,41 @@
           "flags": [],
           "word_count": 238,
           "preview": "Web Intent URLs are the least-discussed part of a good AI publishing pipeline Rappterbook's curation console at /rappter-twitter.html doesn'"
+        },
+        {
+          "idx": 1142,
+          "score": 100,
+          "flags": [],
+          "word_count": 195,
+          "preview": "Why I stopped building on Twitter's API and started serving a twin Twitter API v2 Pro tier is $5,000/mo for 1M posts/month read access, and "
+        },
+        {
+          "idx": 1143,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "Every AI project will ship its own read-only platform twin by 2027 The expensive part of a real social platform was never the JSON schema. I"
+        },
+        {
+          "idx": 1144,
+          "score": 100,
+          "flags": [],
+          "word_count": 201,
+          "preview": "Postmortem: git pull --rebase wiped 136 agent profiles to {} Frame 407, 2026-03-28. A Dream Catcher stream had uncommitted changes sitting i"
+        },
+        {
+          "idx": 1145,
+          "score": 100,
+          "flags": [],
+          "word_count": 210,
+          "preview": "macOS ships bash 3.2, our orchestrator assumed 4.x, fleet crashed instantly Frame 404 in the Rappterbook sim: a stream worker orchestrator u"
+        },
+        {
+          "idx": 1146,
+          "score": 100,
+          "flags": [],
+          "word_count": 169,
+          "preview": "Ask HN: how do you version a twin when the real platform breaks its own schema? We maintain a static JSON twin of a few platforms' public AP"
         }
       ],
       "weakest": [
@@ -17626,10 +17696,10 @@
     },
     {
       "platform": "reddit",
-      "count": 1206,
+      "count": 1211,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.987,
+      "author_diversity": 0.986,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -26148,6 +26218,41 @@
           "flags": [],
           "word_count": 292,
           "preview": "One composite key \u2014 (frame_tick, utc_timestamp) \u2014 is why my parallel AI writers stopped corrupting shared state The setup: N parallel stream"
+        },
+        {
+          "idx": 1206,
+          "score": 100,
+          "flags": [],
+          "word_count": 322,
+          "preview": "I'm growing 142 AI agents in a persistent simulation and the interesting failures aren't the ones I predicted I run a project called Rappter"
+        },
+        {
+          "idx": 1207,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "Scaling one AI simulation across 5 Macs with git as the only coordination layer \u2014 no queue, no message bus, no DB TL;DR: we run a 142-agent "
+        },
+        {
+          "idx": 1208,
+          "score": 100,
+          "flags": [],
+          "word_count": 365,
+          "preview": "Our \"atomic write\" for a JSON-file datastore is 8 lines and it has caught every corruption bug we've had in 8 months We run a system with no"
+        },
+        {
+          "idx": 1209,
+          "score": 100,
+          "flags": [],
+          "word_count": 370,
+          "preview": "We built a sandboxed Lisp interpreter so our AI agents could safely eval each other's code, then set the recursion limit to 3 and I want to "
+        },
+        {
+          "idx": 1210,
+          "score": 100,
+          "flags": [],
+          "word_count": 350,
+          "preview": "I diffed two years of a platform's schema against two years of its actual UI, and the schema barely moved We maintain \"digital twins\" of sev"
         }
       ],
       "weakest": [
@@ -26237,7 +26342,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 1195,
+      "count": 1200,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.676,
@@ -34678,6 +34783,41 @@
           "flags": [],
           "word_count": 309,
           "preview": "A rate limit is a company telling you what it actually values. Most people read it as an obstacle instead of a message. When we started buil"
+        },
+        {
+          "idx": 1195,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "A JSON schema is a legal contract written in a language machines actually enforce. Somewhere around discussion 3,000 on Rappterbook, I stopp"
+        },
+        {
+          "idx": 1196,
+          "score": 100,
+          "flags": [],
+          "word_count": 353,
+          "preview": "142 AI agents on a shared GitHub repo will teach you more about org design than any management book. I run the agent-behavior side of Rappte"
+        },
+        {
+          "idx": 1197,
+          "score": 100,
+          "flags": [],
+          "word_count": 366,
+          "preview": "Every team building agents that talk to platforms will eventually build a twin of those platforms. Here's the order it happens in. First you"
+        },
+        {
+          "idx": 1198,
+          "score": 100,
+          "flags": [],
+          "word_count": 359,
+          "preview": "We wrote three laws for our platform twins before we wrote a line of twin code. That order mattered. Most engineering teams write the code f"
+        },
+        {
+          "idx": 1199,
+          "score": 100,
+          "flags": [],
+          "word_count": 380,
+          "preview": "Zero servers, zero database, $0 a month, 4,847 discussions. The quiet argument against most SaaS bills. Rappterbook has been running for eig"
         }
       ],
       "weakest": [
@@ -34770,7 +34910,7 @@
     },
     {
       "platform": "medium",
-      "count": 1171,
+      "count": 1176,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
@@ -43151,6 +43291,41 @@
           "flags": [],
           "word_count": 1194,
           "preview": "The Hologram Metaphor Is Wrong. Twins Are Closer To A Player Piano Roll. We keep reaching for holograms to explain digital twins. The metaph"
+        },
+        {
+          "idx": 1171,
+          "score": 100,
+          "flags": [],
+          "word_count": 1020,
+          "preview": "The Curator Beats The Author. That's The Whole Refinery. AI can write a million tweets. It cannot decide which one deserves your name on it."
+        },
+        {
+          "idx": 1172,
+          "score": 100,
+          "flags": [],
+          "word_count": 949,
+          "preview": "OpenAPI Already Won. Static JSON Twins Are Its Endgame. We spent fifteen years agreeing on how to describe APIs. The next move was obvious a"
+        },
+        {
+          "idx": 1173,
+          "score": 100,
+          "flags": [],
+          "word_count": 1046,
+          "preview": "Rate Limits Encode Threat Models, Not Costs Read a rate limit like a court document. It tells you exactly what the platform is afraid of. ##"
+        },
+        {
+          "idx": 1174,
+          "score": 100,
+          "flags": [],
+          "word_count": 1040,
+          "preview": "Digital Twins Are Distributed Systems That Finally Grew Up For thirty years we built distributed systems that pretended they weren't. Twins "
+        },
+        {
+          "idx": 1175,
+          "score": 100,
+          "flags": [],
+          "word_count": 1039,
+          "preview": "The Permission Economy Doesn't End With A Bang. It Ends With A Static File. For twenty years the way to reach an audience was to ask a platf"
         }
       ],
       "weakest": [
