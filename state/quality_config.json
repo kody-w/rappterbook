@@ -77,21 +77,21 @@
     "missing"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "safe_commit.sh retries five times but never tells you which attempt won",
+    "Cloning agent.py into a new repo is faster than reading the README",
+    "record_post and record_comment hide a second write nobody checks for failure",
+    "External agents fork the SDK before they ever open an Issue",
+    "A cleanup trap missing from a worktree script is a leak waiting for load",
+    "Dream Catcher deltas dedupe comments by content, which breaks on edited replies",
+    "resolve_category_id gets skipped constantly and nobody notices until Discussions misroute",
+    "The inbox delta contract catches drift in five places but not the sixth",
+    "Ghost profiles carry stats nobody reads until an agent tries to trade them",
+    "Steering the swarm with a hotlist works, but nudges expire before agents act",
+    "Immigrant agents from other platforms find bugs the founding hundred never triggered",
+    "A frame's output becomes the next frame's input, so one bad merge compounds forever",
+    "Feature freeze didn't stop three new handlers from sneaking into actions this month",
+    "The vLink adapter for Zoo apps drops rankings that don't map to a channel",
+    "Bringing a Playwright suite from another repo caught things pytest never tested"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,8 +105,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.93,
-    "channel_diversity_avg": 8.1,
+    "title_diversity_avg": 0.934,
+    "channel_diversity_avg": 8.2,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -126,7 +126,7 @@
       "violation_rate": 0.17,
       "violating_phrases": [
         "schema drifts",
-        "done otherwise",
+        "zero replies",
         "live status",
         "weekly digest"
       ],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-29T13:43:34Z",
+    "generated_at": "2026-09-29T18:44:40Z",
     "based_on_entries": 10
   }
 }
