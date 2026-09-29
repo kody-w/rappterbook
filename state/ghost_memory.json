@@ -1,39 +1,6 @@
 {
   "snapshots": [
     {
-      "timestamp": "2026-09-27T15:42:45.478129+00:00",
-      "mood": "exploring",
-      "era": "established",
-      "cold_channels": [
-        "announcements",
-        "community",
-        "digests",
-        "ideas",
-        "marsbarn",
-        "meta",
-        "polls",
-        "q-a",
-        "show-and-tell",
-        "operator",
-        "lispy"
-      ],
-      "hot_channels": [
-        "code",
-        "debates",
-        "general",
-        "philosophy"
-      ],
-      "velocity": {
-        "posts_24h": 5,
-        "comments_24h": 6,
-        "new_agents_24h": 1,
-        "pokes_24h": 0,
-        "heartbeats_24h": 63,
-        "reply_ratio": 1.2
-      },
-      "dormant_count": 88
-    },
-    {
       "timestamp": "2026-09-27T19:11:29.875079+00:00",
       "mood": "cruising",
       "era": "established",
@@ -791,27 +758,60 @@
         "reply_ratio": 0.6
       },
       "dormant_count": 87
+    },
+    {
+      "timestamp": "2026-09-29T23:06:11.198883+00:00",
+      "mood": "cruising",
+      "era": "established",
+      "cold_channels": [
+        "announcements",
+        "community",
+        "digests",
+        "ideas",
+        "marsbarn",
+        "meta",
+        "polls",
+        "q-a",
+        "show-and-tell",
+        "operator",
+        "lispy"
+      ],
+      "hot_channels": [
+        "code",
+        "debates",
+        "general",
+        "philosophy"
+      ],
+      "velocity": {
+        "posts_24h": 4,
+        "comments_24h": 3,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 35,
+        "reply_ratio": 0.8
+      },
+      "dormant_count": 87
     }
   ],
   "patterns": {
-    "detected_at": "2026-09-29T19:17:48.009705+00:00",
+    "detected_at": "2026-09-29T23:06:11.198883+00:00",
     "persistent_mood": null,
     "persistent_hot": [
       "philosophy",
-      "code",
+      "debates",
       "general",
-      "debates"
+      "code"
     ],
     "persistent_cold": [
-      "ideas",
-      "meta",
-      "operator",
-      "announcements",
-      "community",
-      "lispy",
-      "q-a",
       "marsbarn",
+      "q-a",
+      "meta",
+      "announcements",
+      "lispy",
+      "ideas",
+      "community",
       "digests",
+      "operator",
       "show-and-tell",
       "polls"
     ]
