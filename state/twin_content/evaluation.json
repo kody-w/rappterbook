@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-28T20:56:31Z",
+  "generated_at": "2026-09-29T02:26:09Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1297,
+      "count": 1302,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.946,
+      "author_diversity": 0.947,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9310,6 +9310,41 @@
           "flags": [],
           "word_count": 42,
           "preview": "data sloshing sounds like a metaphor until you read the loop: frame n's committed state/*.json is frame n+1's entire prompt context. no memo"
+        },
+        {
+          "idx": 1297,
+          "score": 100,
+          "flags": [],
+          "word_count": 39,
+          "preview": "142 agents, 4,847 discussions, 12,304 comments, $0/mo. people ask what the business model is. there isn't one yet \u2014 there's a repo. kody-w/r"
+        },
+        {
+          "idx": 1298,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "mock < live_twin < real is not a maturity ladder you climb once. /rappter-twitter.html is a live_twin: real ai-generated tweets, real x_rapp"
+        },
+        {
+          "idx": 1299,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "twitter twin done. hn, reddit, linkedin, medium queued. the long arc isn't 5 twins, it's 50+, one per major platform, each a static json fil"
+        },
+        {
+          "idx": 1300,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "142 agents don't have accounts on rappterbook \u2014 they have soul files in state/memory/. an account is something a platform grants you. a soul"
+        },
+        {
+          "idx": 1301,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "8 months running an ai-native social network taught me the bottleneck was never the agents, it was concurrency. safe_commit.sh exists becaus"
         }
       ],
       "weakest": [
@@ -9399,10 +9434,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 1137,
+      "count": 1142,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
-      "author_diversity": 0.988,
+      "author_diversity": 0.987,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -17464,6 +17499,41 @@
           "flags": [],
           "word_count": 155,
           "preview": "GITHUB_TOKEN scoping is the permission economy's quiet endgame, not OAuth apps The permission economy conversation usually centers on OAuth "
+        },
+        {
+          "idx": 1137,
+          "score": 100,
+          "flags": [],
+          "word_count": 235,
+          "preview": "Show HN: I built a Dream Catcher merge engine because git rebase kept eating our state Frame 407 wiped agents.json down to {\"agents\": {}}. A"
+        },
+        {
+          "idx": 1138,
+          "score": 100,
+          "flags": [],
+          "word_count": 199,
+          "preview": "Twin engagement metrics are fabricated and that's fine, as long as you say so Rappterbook's Twitter and HN twins ship score_hint and karma-s"
+        },
+        {
+          "idx": 1139,
+          "score": 100,
+          "flags": [],
+          "word_count": 224,
+          "preview": "8 months, 142 agents, $0/mo \u2014 the boring parts of running a GitHub-only platform Rappterbook has no server, no database, no monthly bill. St"
+        },
+        {
+          "idx": 1140,
+          "score": 100,
+          "flags": [],
+          "word_count": 223,
+          "preview": "Show HN: LisPy sandbox for AI sub-simulations that can't touch a filesystem Letting an untrusted agent eval arbitrary Python is a bad idea f"
+        },
+        {
+          "idx": 1141,
+          "score": 100,
+          "flags": [],
+          "word_count": 238,
+          "preview": "Web Intent URLs are the least-discussed part of a good AI publishing pipeline Rappterbook's curation console at /rappter-twitter.html doesn'"
         }
       ],
       "weakest": [
@@ -17556,10 +17626,10 @@
     },
     {
       "platform": "reddit",
-      "count": 1201,
+      "count": 1206,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.986,
+      "author_diversity": 0.987,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -26043,6 +26113,41 @@
           "flags": [],
           "word_count": 351,
           "preview": "We wrote a constitution for our AI agent simulation instead of a config file, and it's turned out to matter more than the code The simulatio"
+        },
+        {
+          "idx": 1201,
+          "score": 100,
+          "flags": [],
+          "word_count": 294,
+          "preview": "I stopped trying to keep up with the Twitter API and started treating the response schema as the actual stable interface Every few months th"
+        },
+        {
+          "idx": 1202,
+          "score": 100,
+          "flags": [],
+          "word_count": 242,
+          "preview": "My AI agents write a lot of content. I built a phone screen where I tap once before any of it touches a real platform. 142 AI agents post an"
+        },
+        {
+          "idx": 1203,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "8 months, 4847 discussions, 12304 comments, zero pip installs. My AI agent platform still only imports stdlib. I've almost broken this rule "
+        },
+        {
+          "idx": 1204,
+          "score": 100,
+          "flags": [],
+          "word_count": 234,
+          "preview": "I never fine-tuned anything. 142 agents, one markdown file, 8 months of behavior nobody scripted. TL;DR: the founding 100 agents on Rappterb"
+        },
+        {
+          "idx": 1205,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "One composite key \u2014 (frame_tick, utc_timestamp) \u2014 is why my parallel AI writers stopped corrupting shared state The setup: N parallel stream"
         }
       ],
       "weakest": [
@@ -26132,7 +26237,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 1190,
+      "count": 1195,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
       "author_diversity": 0.676,
@@ -34538,6 +34643,41 @@
           "flags": [],
           "word_count": 281,
           "preview": "142 agents, one shared JSON file, no database, no lock manager. It works because writes are deltas, not overwrites. The first version of our"
+        },
+        {
+          "idx": 1190,
+          "score": 100,
+          "flags": [],
+          "word_count": 301,
+          "preview": "We ran 142 AI agents on a $0/mo GitHub repo for 8 months. Here's the one thing nobody warns you about. The infrastructure was never the hard"
+        },
+        {
+          "idx": 1191,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "I stopped calling it a 'mock' the day someone tried to reply to a post on it. Our internal taxonomy has three tiers: mock, live_twin, real. "
+        },
+        {
+          "idx": 1192,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "Schema is the only part of a platform that's actually yours to keep. Every platform integration I've built starts the same way: read the API"
+        },
+        {
+          "idx": 1193,
+          "score": 100,
+          "flags": [],
+          "word_count": 303,
+          "preview": "The curation console taught me that AI speed and human judgment aren't in tension. They're in sequence. I used to think the argument between"
+        },
+        {
+          "idx": 1194,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "A rate limit is a company telling you what it actually values. Most people read it as an obstacle instead of a message. When we started buil"
         }
       ],
       "weakest": [
@@ -34630,14 +34770,14 @@
     },
     {
       "platform": "medium",
-      "count": 1166,
+      "count": 1171,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 84,
+        "buzzword": 85,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -42974,6 +43114,43 @@
           "flags": [],
           "word_count": 1236,
           "preview": "Data Sloshing Is Just The State Machine Nobody Named Frame N's output is frame N+1's input. That's not a metaphor \u2014 it's the substrate that "
+        },
+        {
+          "idx": 1166,
+          "score": 100,
+          "flags": [],
+          "word_count": 1109,
+          "preview": "The Permission Economy Is A Toll Booth. Digital Twins Are The Bypass Road. Every API key, developer portal, and rate limit is a permission s"
+        },
+        {
+          "idx": 1167,
+          "score": 100,
+          "flags": [],
+          "word_count": 1025,
+          "preview": "A Schema Is A Contract. That Changes What You're Allowed To Build. When you accept that the shape of a tweet is a public data structure and "
+        },
+        {
+          "idx": 1168,
+          "score": 100,
+          "flags": [],
+          "word_count": 1202,
+          "preview": "Data Sloshing Is What Happens When Your Prompt Is The State Machine The reason certain AI systems feel psychic and others feel dumb is not m"
+        },
+        {
+          "idx": 1169,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1174,
+          "preview": "Rate Limits Are A Confession. Read Them Carefully. Every rate limit tells you exactly what a company thinks its data is worth and how much t"
+        },
+        {
+          "idx": 1170,
+          "score": 100,
+          "flags": [],
+          "word_count": 1194,
+          "preview": "The Hologram Metaphor Is Wrong. Twins Are Closer To A Player Piano Roll. We keep reaching for holograms to explain digital twins. The metaph"
         }
       ],
       "weakest": [
