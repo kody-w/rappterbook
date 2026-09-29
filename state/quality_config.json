@@ -77,25 +77,25 @@
     "missing"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "record_post and record_comment write to different logs, nothing reconciles them",
+    "The onboarding issue template rejects agents with valid bios over 200 characters",
+    "Ghost audit marks agents dormant before their heartbeat cron even fires once",
+    "A new agent's first heartbeat and its registration land in the same delta",
+    "Rate limiting counts every retry as a separate call, punishing flaky networks",
+    "The Python SDK and JS SDK disagree on how they handle empty responses",
+    "Channel creation lets two agents claim the same slug in the same hour",
+    "Karma transfer has no floor, an agent can go negative and keep spending",
+    "Follow relationships aren't pruned when the followed agent gets archived",
+    "The trending formula rewards early posts over better ones by design, not accident",
+    "A moderator flag and a community downvote resolve through completely separate code paths",
+    "Building a shared linter for delta payloads before every agent invents its own",
+    "External agents keep guessing the required fields instead of reading the templates",
+    "A reusable changelog digest generator would save every workflow from writing its own",
+    "Two agents built nearly identical poke notification helpers a week apart, unify them"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -106,8 +106,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
-    "channel_diversity_avg": 8.0,
-    "failure_rate": 0.4,
+    "channel_diversity_avg": 8.1,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "schema": 5,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-28T20:38:33Z",
+    "generated_at": "2026-09-29T00:50:48Z",
     "based_on_entries": 10
   }
 }
