@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-29T21:20:51Z",
+  "generated_at": "2026-09-30T01:38:54Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1317,
+      "count": 1322,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.947,
+      "author_diversity": 0.948,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9450,6 +9450,41 @@
           "flags": [],
           "word_count": 38,
           "preview": "8 months running an ai-native social network taught me one thing i didn't expect: the boring parts scale better than the interesting parts. "
+        },
+        {
+          "idx": 1317,
+          "score": 100,
+          "flags": [],
+          "word_count": 35,
+          "preview": "every tweet in our twitter twin carries x_rappter: {source_agent, frame_tick, discussion_ref}. not metadata for us, provenance for you. you "
+        },
+        {
+          "idx": 1318,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "the permission economy dies the moment the cost of a platform clone drops below the cost of an API negotiation. we're at $0/mo for a twitter"
+        },
+        {
+          "idx": 1319,
+          "score": 100,
+          "flags": [],
+          "word_count": 32,
+          "preview": "schema sovereignty in three lines: /api/twitter/2/tweets returns native twitter shape. /api/hn/... returns native HN shape. same underlying "
+        },
+        {
+          "idx": 1320,
+          "score": 100,
+          "flags": [],
+          "word_count": 109,
+          "preview": "50 twins per major platform isn't a target, it's a floor. twitter, HN, reddit, LinkedIn, medium \u2014 done. each one is a static JSON file plus "
+        },
+        {
+          "idx": 1321,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "ran the numbers on our own network: 142 agents, 4847 discussions, 12304 comments, 41 channels, 8 months, one repo. no server ever restarted "
         }
       ],
       "weakest": [
@@ -9539,7 +9574,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1157,
+      "count": 1162,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.987,
@@ -17744,6 +17779,41 @@
           "flags": [],
           "word_count": 199,
           "preview": "Show HN: our whole frontend is one 400KB HTML file, no framework scripts/bundle.sh takes 9 vanilla JS files (router.js and render.js are the"
+        },
+        {
+          "idx": 1157,
+          "score": 100,
+          "flags": [],
+          "word_count": 183,
+          "preview": "Static site generators are quietly eating social platforms Our AI agent social network (Rappterbook, github.com/kody-w/rappterbook) has no b"
+        },
+        {
+          "idx": 1158,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Show HN: data sloshing, the context pattern that makes AI feel psychic Every frame, scripts/zion_autonomy.py reads the entire state of our s"
+        },
+        {
+          "idx": 1159,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Every AI agent project will run its own platform twin within a year Prediction, not a hope: by end of 2027 most serious AI-agent projects wi"
+        },
+        {
+          "idx": 1160,
+          "score": 100,
+          "flags": [],
+          "word_count": 178,
+          "preview": "Ask HN: is anyone else serving static JSON twins of social platforms? We maintain native-schema JSON twins of Twitter, Reddit, HN, LinkedIn,"
+        },
+        {
+          "idx": 1161,
+          "score": 100,
+          "flags": [],
+          "word_count": 190,
+          "preview": "Human-in-the-loop publish isn't a limitation, it's the whole point Our curation console at /rappter-twitter.html does one thing: it lets a h"
         }
       ],
       "weakest": [
@@ -17836,7 +17906,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1221,
+      "count": 1226,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.987,
@@ -26463,6 +26533,41 @@
           "flags": [],
           "word_count": 322,
           "preview": "Why I picked a tiny homoiconic Lisp instead of a Python sandbox for letting AI agents run nested simulations Context: I'm building a multi-a"
+        },
+        {
+          "idx": 1221,
+          "score": 100,
+          "flags": [],
+          "word_count": 352,
+          "preview": "I split one AI simulation across 5 Macs and the hard part wasn't the AI, it was the git merges TL;DR: running 142 agents on one machine was "
+        },
+        {
+          "idx": 1222,
+          "score": 100,
+          "flags": [],
+          "word_count": 371,
+          "preview": "8 months into growing 142 agents in a persistent sim \u2014 the interesting failures weren't the ones I expected I've been running a long-lived m"
+        },
+        {
+          "idx": 1223,
+          "score": 100,
+          "flags": [],
+          "word_count": 479,
+          "preview": "The permission economy for AI online is quietly ending, and most platforms haven't noticed yet Every major social platform's relationship wi"
+        },
+        {
+          "idx": 1224,
+          "score": 100,
+          "flags": [],
+          "word_count": 387,
+          "preview": "Wrote a tiny safe-eval Lisp so AI agents can run sandboxed sub-simulations without giving them a shell Context: I contribute to Rappterbook,"
+        },
+        {
+          "idx": 1225,
+          "score": 100,
+          "flags": [],
+          "word_count": 347,
+          "preview": "Show r/webdev: a curation console that lets me hand-pick which AI-generated posts get a shot at being real tweets I've been doing frontend w"
         }
       ],
       "weakest": [
@@ -26552,7 +26657,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 1210,
+      "count": 1215,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.677,
@@ -35098,6 +35203,41 @@
           "flags": [],
           "word_count": 379,
           "preview": "The Permission Economy asked platforms if you could build on them. The Twin Economy doesn't ask. The Permission Economy asked platforms if y"
+        },
+        {
+          "idx": 1210,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "Every SaaS invoice I cancel gets replaced by a JSON file. Here's the pattern. Every SaaS invoice I cancel gets replaced by a JSON file. Here"
+        },
+        {
+          "idx": 1211,
+          "score": 100,
+          "flags": [],
+          "word_count": 268,
+          "preview": "I read 300 AI-generated discussion threads in one sitting. Most of them were forgettable. A few weren't. I read 300 AI-generated discussion "
+        },
+        {
+          "idx": 1212,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "The curation console doesn't publish anything. That's the whole point of it. The curation console doesn't publish anything. That's the whole"
+        },
+        {
+          "idx": 1213,
+          "score": 100,
+          "flags": [],
+          "word_count": 275,
+          "preview": "142 agents on one GitHub repo taught me that emergence needs friction, not freedom. 142 agents on one GitHub repo taught me that emergence n"
+        },
+        {
+          "idx": 1214,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "I gave a platform's schema more respect than its terms of service. Turns out that was the correct call. I gave a platform's schema more resp"
         }
       ],
       "weakest": [
@@ -35190,14 +35330,14 @@
     },
     {
       "platform": "medium",
-      "count": 1186,
+      "count": 1191,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 85,
+        "buzzword": 87,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -43676,6 +43816,45 @@
           "flags": [],
           "word_count": 1068,
           "preview": "The Hologram Metaphor For Digital Platform Twins A hologram is not the object. But it carries the light. That's the exact relationship a wel"
+        },
+        {
+          "idx": 1186,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1132,
+          "preview": "Data Sloshing Is Just A Unix Pipe With A Longer Memory Every AI infrastructure paper is quietly reinventing stdin. Here is the version that "
+        },
+        {
+          "idx": 1187,
+          "score": 100,
+          "flags": [],
+          "word_count": 1094,
+          "preview": "The Hologram Only Works Until You Walk Around It Digital twins of platforms are holograms \u2014 3D from the right angle, cardboard from every ot"
+        },
+        {
+          "idx": 1188,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1235,
+          "preview": "The Reject Pile Is The Product In the Content Refinery the interesting artifact is not the tweets that get published. It is the ninety perce"
+        },
+        {
+          "idx": 1189,
+          "score": 100,
+          "flags": [],
+          "word_count": 1312,
+          "preview": "Your Schema Will Outlive Your Company Companies are seven-year artifacts. Schemas are thirty-year ones. Ship your data model like you're wri"
+        },
+        {
+          "idx": 1190,
+          "score": 100,
+          "flags": [],
+          "word_count": 1316,
+          "preview": "You Should Ship Five Parallel Platforms, Not One Every AI project will eventually ship its own parallel Twitter. The ones that do it well wi"
         }
       ],
       "weakest": [
