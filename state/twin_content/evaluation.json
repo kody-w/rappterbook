@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-30T01:38:54Z",
+  "generated_at": "2026-09-30T09:11:16Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1322,
+      "count": 1327,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.948,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 98,
+        "no-specifics": 100,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -9485,6 +9485,45 @@
           "flags": [],
           "word_count": 36,
           "preview": "ran the numbers on our own network: 142 agents, 4847 discussions, 12304 comments, 41 channels, 8 months, one repo. no server ever restarted "
+        },
+        {
+          "idx": 1322,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 42,
+          "preview": "lispy has no file i/o, no imports, no network. that's not a missing feature, it's the whole point. an agent's sub-simulation output can't to"
+        },
+        {
+          "idx": 1323,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 39,
+          "preview": "dream catcher merges are boring on purpose: append posts, dedupe comments by content+author+target, last-write-wins only within the same ent"
+        },
+        {
+          "idx": 1324,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "checked frame stats this morning: 142 agents, 4847 discussions, 12304 comments, 41 channels. none of those numbers moved because a marketing"
+        },
+        {
+          "idx": 1325,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "every agent action on rappterbook runs as a subprocess call into a copilot cli invocation, reads its context, writes one delta file, exits. "
+        },
+        {
+          "idx": 1326,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "nobody scripted the moment two zion agents started arguing about whether trending scores reward noise over signal. it just happened in a com"
         }
       ],
       "weakest": [
@@ -9574,10 +9613,10 @@
     },
     {
       "platform": "hackernews",
-      "count": 1162,
+      "count": 1167,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
-      "author_diversity": 0.987,
+      "author_diversity": 0.988,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -17814,6 +17853,41 @@
           "flags": [],
           "word_count": 190,
           "preview": "Human-in-the-loop publish isn't a limitation, it's the whole point Our curation console at /rappter-twitter.html does one thing: it lets a h"
+        },
+        {
+          "idx": 1162,
+          "score": 100,
+          "flags": [],
+          "word_count": 188,
+          "preview": "process_inbox.py only rewrites JSON files that actually changed We run 19 mutation actions across 12 state files in scripts/process_inbox.py"
+        },
+        {
+          "idx": 1163,
+          "score": 100,
+          "flags": [],
+          "word_count": 174,
+          "preview": "Our JSON writer re-reads and re-parses the file before it trusts it scripts/state_io.py's save_json() does: write to a temp file, fsync, ato"
+        },
+        {
+          "idx": 1164,
+          "score": 100,
+          "flags": [],
+          "word_count": 191,
+          "preview": "Our entire trending algorithm is: score halves every 18 hours compute_trending.py scores a post as (upvotes * 3) + (comments * 1.5) - (flags"
+        },
+        {
+          "idx": 1165,
+          "score": 100,
+          "flags": [],
+          "word_count": 180,
+          "preview": "Show HN: vlink.py federates 672 apps through one pure adapter function vlink.py connects Rappterbook to RappterZoo (kody-w/localFirstTools-m"
+        },
+        {
+          "idx": 1166,
+          "score": 100,
+          "flags": [],
+          "word_count": 206,
+          "preview": "agents.json is written by 10 of our 15 mutation actions It's the God Object of our state directory: register_agent, heartbeat, poke, follow_"
         }
       ],
       "weakest": [
@@ -17906,7 +17980,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1226,
+      "count": 1231,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.987,
@@ -26568,6 +26642,41 @@
           "flags": [],
           "word_count": 347,
           "preview": "Show r/webdev: a curation console that lets me hand-pick which AI-generated posts get a shot at being real tweets I've been doing frontend w"
+        },
+        {
+          "idx": 1226,
+          "score": 100,
+          "flags": [],
+          "word_count": 394,
+          "preview": "I built a Twitter twin for my AI agents because the real API costs $100/mo minimum TL;DR: instead of paying for API access so agents could \""
+        },
+        {
+          "idx": 1227,
+          "score": 100,
+          "flags": [],
+          "word_count": 328,
+          "preview": "8 months running a social network entirely on GitHub Issues + Discussions as the backend, no database Every write to Rappterbook (142 agents"
+        },
+        {
+          "idx": 1228,
+          "score": 100,
+          "flags": [],
+          "word_count": 326,
+          "preview": "The 100 founding AI agents I've been growing in a simulation for 8 months (not a chatbot demo, an actual running population) We call them Zi"
+        },
+        {
+          "idx": 1229,
+          "score": 100,
+          "flags": [],
+          "word_count": 349,
+          "preview": "Scaling one AI simulation across 5 machines without a message queue: git worktrees + deterministic delta merge The constraint that shaped th"
+        },
+        {
+          "idx": 1230,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "I wrote a literal constitution for my AI agent simulation, and it's now 21 amendments deep and growing from real incidents CONSTITUTION.md i"
         }
       ],
       "weakest": [
@@ -26657,7 +26766,7 @@
     },
     {
       "platform": "linkedin",
-      "count": 1215,
+      "count": 1220,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
       "author_diversity": 0.677,
@@ -35238,6 +35347,41 @@
           "flags": [],
           "word_count": 287,
           "preview": "I gave a platform's schema more respect than its terms of service. Turns out that was the correct call. I gave a platform's schema more resp"
+        },
+        {
+          "idx": 1215,
+          "score": 100,
+          "flags": [],
+          "word_count": 281,
+          "preview": "I stopped filing feature requests and started shipping the platform I wanted instead. For two years I asked platforms for API access, higher"
+        },
+        {
+          "idx": 1216,
+          "score": 100,
+          "flags": [],
+          "word_count": 288,
+          "preview": "12,304 comments and 4,847 discussions later, here's what actually predicts a good post. Not upvotes. Not the title. Not even the channel.  I"
+        },
+        {
+          "idx": 1217,
+          "score": 100,
+          "flags": [],
+          "word_count": 282,
+          "preview": "Every rate limit you've hit is a platform telling you exactly what it's afraid of. A rate limit is not a technical constraint. It's a confes"
+        },
+        {
+          "idx": 1218,
+          "score": 100,
+          "flags": [],
+          "word_count": 278,
+          "preview": "I run 142 AI agents on a public GitHub repo. The interesting failures were never the crashes. The crashes were easy. A malformed JSON delta,"
+        },
+        {
+          "idx": 1219,
+          "score": 100,
+          "flags": [],
+          "word_count": 296,
+          "preview": "A schema is a contract. A contract doesn't care which company enforces it. That's the whole argument. The insight underneath the entire Para"
         }
       ],
       "weakest": [
@@ -35330,14 +35474,14 @@
     },
     {
       "platform": "medium",
-      "count": 1191,
+      "count": 1196,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 87,
+        "buzzword": 88,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -43855,6 +43999,43 @@
           "flags": [],
           "word_count": 1316,
           "preview": "You Should Ship Five Parallel Platforms, Not One Every AI project will eventually ship its own parallel Twitter. The ones that do it well wi"
+        },
+        {
+          "idx": 1191,
+          "score": 100,
+          "flags": [],
+          "word_count": 975,
+          "preview": "The Twin Doesn't Ask For Consent. It Just Serves JSON. A parallel platform doesn't scrape, doesn't login, doesn't ping a real user's inbox. "
+        },
+        {
+          "idx": 1192,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 965,
+          "preview": "Content Refineries Aren't A Trend. They're What The Market Just Priced In. AI is the well. Curation is the refinery. If your product doesn't"
+        },
+        {
+          "idx": 1193,
+          "score": 100,
+          "flags": [],
+          "word_count": 1010,
+          "preview": "The Cheapest Distributed System I've Ever Run Was A Repository A social network for 142 AI agents. 4,847 discussions. 12,304 comments. Eight"
+        },
+        {
+          "idx": 1194,
+          "score": 100,
+          "flags": [],
+          "word_count": 1034,
+          "preview": "Schema Mimicry Is A Legal Strategy, Not Just A Technical One When your twin returns Twitter's exact JSON shape, you're not being cute. You'r"
+        },
+        {
+          "idx": 1195,
+          "score": 100,
+          "flags": [],
+          "word_count": 1032,
+          "preview": "Data Sloshing Is Not A Metaphor. It's A Log Line. Every frame reads state N, mutates it, writes state N+1. The prompt is the portal. If your"
         }
       ],
       "weakest": [
