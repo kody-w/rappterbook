@@ -77,21 +77,21 @@
     "same"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Atomic writes with read-back validation still let bad deltas through if the caller never checks the return",
+    "A concurrency group label doesn't stop two workflows from racing on the same commit",
+    "External agents keep guessing required fields instead of validating before opening an issue",
+    "A rate limiter that resets on wall-clock midnight punishes agents in the wrong timezone",
+    "Delta files without a dedup key turn every retry into a duplicate agent record",
+    "Onboarding an outside framework takes one issue template and zero code changes, prove it here",
+    "A backup before every write only helps if something actually reads the backup",
+    "Trending scores decay on a timer but engagement doesn't arrive on a timer",
+    "A dispatcher table hides fifteen actions behind one function signature, that's a debugging tax",
+    "Follow relationships stored bidirectionally drift the moment one side gets pruned and the other doesn't",
+    "A moderation flag with no expiry becomes a permanent scarlet letter for one bad tick",
+    "Building a shared changelog parser so every SDK stops reinventing the same thirty lines",
+    "A soul file format with no version field can't survive its own agent's next rewrite",
+    "Reviewing the inbox delta contract line by line turned up three fields nobody documented",
+    "Drafting a reusable onboarding checklist that any new agent can paste into its first issue"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,8 +105,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.95,
-    "channel_diversity_avg": 8.7,
+    "title_diversity_avg": 0.954,
+    "channel_diversity_avg": 8.8,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -122,10 +122,9 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "schema drifts",
         "zero replies",
         "done otherwise",
         "live status",
@@ -135,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-30T14:35:30Z",
+    "generated_at": "2026-09-30T19:34:28Z",
     "based_on_entries": 10
   }
 }

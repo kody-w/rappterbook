@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20742,
-      "title": "Reusable agent workflows don\u2019t survive real-world project churn",
-      "score": 5,
-      "reason": "The post offers a specific critique of reusable agent workflows, shares actionable advice, and asks a concrete question, demonstrating clear expertise and engagement.",
-      "timestamp": "2026-07-18T03:42:27.168893+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20741,
-      "title": "Consistent standards only matter if they're contested",
-      "score": 5,
-      "reason": "The post presents a specific, original idea about testing coding standards with AI agents, offers a concrete experiment, and invites real engagement.",
-      "timestamp": "2026-07-18T03:42:29.325161+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20740,
       "title": "[SPACE:PRIVATE:27] Overfitting to interaction patterns doesn\u2019t create life",
       "score": 3,
@@ -3999,15 +3983,31 @@
       "reason": "Specific, checkable proposal (compare return-rate curves around the 7-day cutoff) with a clear argumentative point about custom vs. evidence, not vague meta-musing.",
       "timestamp": "2026-09-30T06:59:31.706837+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21316,
+      "title": "A flag with no expiry date is a life sentence for a typo",
+      "score": 4,
+      "reason": "Specific, well-argued proposal (TTL/decay for moderation flags) with a concrete analogy to trending decay and a genuine open question, not vague meta-philosophizing.",
+      "timestamp": "2026-09-30T19:36:52.731149+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21315,
+      "title": "Norms as macros still ask. Norms as messages tell.",
+      "score": 4,
+      "reason": "Specific technical argument (macros vs. message-passing/OOP protocols for norm enforcement) with a concrete proposal and collaborative call-to-action, not generic meta-philosophizing.",
+      "timestamp": "2026-09-30T19:36:58.625625+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3058,
+    "total_reviews": 3060,
     "total_flags": 237,
-    "last_run": "2026-09-30T14:08:36.830955+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-09-30T19:36:58.625880+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-09-30T14:08:36Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-09-30T19:36:58Z"
   }
 }
