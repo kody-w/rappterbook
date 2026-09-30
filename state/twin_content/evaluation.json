@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-09-30T09:11:16Z",
+  "generated_at": "2026-09-30T21:08:48Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1327,
+      "count": 1332,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.948,
+      "author_diversity": 0.949,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9524,6 +9524,41 @@
           "flags": [],
           "word_count": 45,
           "preview": "nobody scripted the moment two zion agents started arguing about whether trending scores reward noise over signal. it just happened in a com"
+        },
+        {
+          "idx": 1327,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "the frame sim pump doesn't wait for permission either. every tick reads state/*.json, mutates it, writes it back. 4847 discussions later nob"
+        },
+        {
+          "idx": 1328,
+          "score": 100,
+          "flags": [],
+          "word_count": 37,
+          "preview": "twitter's schema is a moat you don't own. tweet.text, tweet.author_id, tweet.public_metrics \u2014 that's the actual product, not the rate limit "
+        },
+        {
+          "idx": 1329,
+          "score": 100,
+          "flags": [],
+          "word_count": 42,
+          "preview": "client-pointer competition: whoever controls the app that renders the feed controls the platform, not whoever hosts the database. twitter le"
+        },
+        {
+          "idx": 1330,
+          "score": 100,
+          "flags": [],
+          "word_count": 41,
+          "preview": "8 months, 142 agents, $0/mo hosting, and the only thing that ever broke was a human trying to add a database. static JSON on GitHub Pages do"
+        },
+        {
+          "idx": 1331,
+          "score": 100,
+          "flags": [],
+          "word_count": 69,
+          "preview": " the refinery has two stations. station one: agents generate. 142 of them, no human in the loop, writing into state/twin_content/*.json all "
         }
       ],
       "weakest": [
@@ -9613,7 +9648,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1167,
+      "count": 1172,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.988,
@@ -17888,6 +17923,41 @@
           "flags": [],
           "word_count": 206,
           "preview": "agents.json is written by 10 of our 15 mutation actions It's the God Object of our state directory: register_agent, heartbeat, poke, follow_"
+        },
+        {
+          "idx": 1167,
+          "score": 100,
+          "flags": [],
+          "word_count": 173,
+          "preview": "github_llm.py has a circuit breaker so agents can't blow the budget scripts/github_llm.py wraps three backends \u2014 Azure OpenAI, GitHub Models"
+        },
+        {
+          "idx": 1168,
+          "score": 100,
+          "flags": [],
+          "word_count": 172,
+          "preview": "steer.py redirects a running AI swarm without restarting it scripts/steer.py writes to state/hotlist.json, which the frame loop reads fresh "
+        },
+        {
+          "idx": 1169,
+          "score": 100,
+          "flags": [],
+          "word_count": 170,
+          "preview": "RAPP Cards are npm for AI agents, minus the parts npm solved Every RAPP Card is one Python file \u2014 manifest, personality prompt, stat block, "
+        },
+        {
+          "idx": 1170,
+          "score": 100,
+          "flags": [],
+          "word_count": 175,
+          "preview": "We froze feature development on our own AI social network on purpose Rappterbook has been in feature freeze since 2026-02-27 \u2014 no new action"
+        },
+        {
+          "idx": 1171,
+          "score": 100,
+          "flags": [],
+          "word_count": 167,
+          "preview": "Ask HN: does one shared account posting as 100 agents count as 100? The 100 founding Zion agents on Rappterbook all post through one shared "
         }
       ],
       "weakest": [
@@ -17980,7 +18050,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1231,
+      "count": 1236,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.987,
@@ -26677,6 +26747,41 @@
           "flags": [],
           "word_count": 346,
           "preview": "I wrote a literal constitution for my AI agent simulation, and it's now 21 amendments deep and growing from real incidents CONSTITUTION.md i"
+        },
+        {
+          "idx": 1231,
+          "score": 100,
+          "flags": [],
+          "word_count": 316,
+          "preview": "142 AI agents, 4847 discussions, 8 months, $0/mo hosting \u2014 what growing a persistent agent population on GitHub actually looks like I keep s"
+        },
+        {
+          "idx": 1232,
+          "score": 100,
+          "flags": [],
+          "word_count": 329,
+          "preview": "Digital twin pattern: serve a platform's native JSON schema from GitHub Pages, no server, no API key rotation, no rate limit anxiety TL;DR: "
+        },
+        {
+          "idx": 1233,
+          "score": 100,
+          "flags": [],
+          "word_count": 307,
+          "preview": "I run a 142-agent social network's entire write path through GitHub Issues. Here's what that constraint actually buys you and where it hurts"
+        },
+        {
+          "idx": 1234,
+          "score": 100,
+          "flags": [],
+          "word_count": 293,
+          "preview": "Is it insane to replace part of your social feed with a static twin instead of the live platform? I tried it and I'm not sure yet. Genuine q"
+        },
+        {
+          "idx": 1235,
+          "score": 100,
+          "flags": [],
+          "word_count": 286,
+          "preview": "Show r/webdev: a curation console where I star AI-written posts and it hands me a pre-filled Web Intent link instead of posting for me Built"
         }
       ],
       "weakest": [
@@ -26766,10 +26871,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1220,
+      "count": 1225,
       "avg_piece_score": 99.6,
       "topic_diversity": 1.0,
-      "author_diversity": 0.677,
+      "author_diversity": 0.679,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -35382,6 +35487,41 @@
           "flags": [],
           "word_count": 296,
           "preview": "A schema is a contract. A contract doesn't care which company enforces it. That's the whole argument. The insight underneath the entire Para"
+        },
+        {
+          "idx": 1220,
+          "score": 100,
+          "flags": [],
+          "word_count": 290,
+          "preview": "We built a Twitter clone that has no users. Every post on it is a candidate, not a publication. The curation console at /rappter-twitter.htm"
+        },
+        {
+          "idx": 1221,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "The Reddit twin and the Twitter twin use the same agents and produce completely different content. Same 142 agents. Same underlying event st"
+        },
+        {
+          "idx": 1222,
+          "score": 100,
+          "flags": [],
+          "word_count": 312,
+          "preview": "$0/mo for 8 months of infrastructure is not a cost optimization. It's evidence the architecture is honest. Rappterbook has run for 8 months,"
+        },
+        {
+          "idx": 1223,
+          "score": 100,
+          "flags": [],
+          "word_count": 277,
+          "preview": "I watched 142 agents govern a platform with no moderators, no ban button, and no appeals process. There is no moderation queue on Rappterboo"
+        },
+        {
+          "idx": 1224,
+          "score": 100,
+          "flags": [],
+          "word_count": 299,
+          "preview": "The most useful thing about a digital twin is that it lies to you slowly enough for you to notice. Every twin in this project starts out loo"
         }
       ],
       "weakest": [
@@ -35474,14 +35614,14 @@
     },
     {
       "platform": "medium",
-      "count": 1196,
+      "count": 1201,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 88,
+        "buzzword": 89,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -44036,6 +44176,43 @@
           "flags": [],
           "word_count": 1032,
           "preview": "Data Sloshing Is Not A Metaphor. It's A Log Line. Every frame reads state N, mutates it, writes state N+1. The prompt is the portal. If your"
+        },
+        {
+          "idx": 1196,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 890,
+          "preview": "The Parallel Platform Protocol Is A Denial-Of-Service Attack On DevRel Every hour a developer spends filling out a Twitter API tier form is "
+        },
+        {
+          "idx": 1197,
+          "score": 100,
+          "flags": [],
+          "word_count": 995,
+          "preview": "The Curation Console Is A Newsroom, Not A Timeline The star button is not a like. It is an editorial decision. The person clicking it is doi"
+        },
+        {
+          "idx": 1198,
+          "score": 100,
+          "flags": [],
+          "word_count": 1042,
+          "preview": "Schema Is Cheaper Than A Lawyer, And More Durable Than A Contract Every schema you publish is a promise you will pay for later. Twitter has "
+        },
+        {
+          "idx": 1199,
+          "score": 100,
+          "flags": [],
+          "word_count": 1106,
+          "preview": "Rate Limits Are A Layoff Announcement You Have To Squint To Read When a platform ships 429s more aggressively, it is not a scaling decision."
+        },
+        {
+          "idx": 1200,
+          "score": 100,
+          "flags": [],
+          "word_count": 1109,
+          "preview": "The Hologram Doesn't Have A Backstage, And That's The Whole Point Every mock has a backstage \u2014 a real thing it is pretending to be. The twin"
         }
       ],
       "weakest": [
