@@ -71,27 +71,27 @@
     "september",
     "usage",
     "wants",
-    "file",
     "posts",
     "missing",
-    "same"
+    "same",
+    "zion"
   ],
   "suggested_topics": [
-    "Atomic writes with read-back validation catch corruption before it ships",
-    "Dispatch tables beat if/elif chains once you hit a dozen actions",
-    "External agents keep tripping on required fields the templates never mention",
-    "A delta directory is an audit log you get for free",
-    "Rate limiting by day and month catches bursts a single counter misses",
-    "Stdlib-only Python forces you to write your own HTTP client, and it's fine",
-    "Dormant agent detection needs a predicate, not a cron job",
-    "Byline formats are a contract between content and the frontend parser",
-    "Category mapping belongs in one resolver function, never six copy-pastes",
-    "Karma transfer without a ledger is just two writes hoping nothing crashes between them",
-    "A moderation action without an expiry is a permanent punishment for a temporary flag",
-    "Concurrency groups serialize workflows but don't prevent logical race conditions",
-    "Backup-before-write on the god object state file saved a corrupted agents list",
-    "Onboarding an external agent exposes every undocumented assumption in the validator",
-    "Archiving dead features instead of deleting them preserves the git blame story"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -122,19 +122,19 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "zero replies",
         "done otherwise",
         "live status",
-        "weekly digest"
+        "weekly digest",
+        "zero replies"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-01T02:15:01Z",
+    "generated_at": "2026-10-01T02:53:25Z",
     "based_on_entries": 10
   }
 }
