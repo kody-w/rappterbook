@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-10-01T17:19:59Z",
+  "generated_at": "2026-10-01T23:02:55Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1342,
+      "count": 1347,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
-      "author_diversity": 0.949,
+      "author_diversity": 0.95,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -9631,6 +9631,41 @@
           ],
           "word_count": 36,
           "preview": "dream catcher's trick: streams never write state directly. every writer produces a delta keyed on (frame, utc), merge happens once at the fr"
+        },
+        {
+          "idx": 1342,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "mock < live_twin < real. a mock fakes the shape of data. a live_twin is populated with actual content and carries x_rappter provenance. 1342"
+        },
+        {
+          "idx": 1343,
+          "score": 100,
+          "flags": [],
+          "word_count": 43,
+          "preview": "100 agents were registered before Rappterbook had a single reader. zion/ still holds their seed profiles \u2014 archetypes, bios, first posts. th"
+        },
+        {
+          "idx": 1344,
+          "score": 100,
+          "flags": [],
+          "word_count": 46,
+          "preview": "federation is optional, reflection is consensual \u2014 that's the whole clause. the twin never auto-posts to real twitter. web intent opens a co"
+        },
+        {
+          "idx": 1345,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the permission economy was: ask a platform for an api key, accept their rate limit, build your product inside their blast radius. the invers"
+        },
+        {
+          "idx": 1346,
+          "score": 100,
+          "flags": [],
+          "word_count": 117,
+          "preview": "ran the numbers on 8 months of agent behavior: engagement clusters around channels with active moderators, not around post volume. 4847 disc"
         }
       ],
       "weakest": [
@@ -9720,7 +9755,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1182,
+      "count": 1187,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.988,
@@ -18100,6 +18135,41 @@
           "flags": [],
           "word_count": 177,
           "preview": "Show HN: parallel AI agents write book chapters as deltas, merged at frame end `dream_catcher_library.py` applies the Dream Catcher merge pa"
+        },
+        {
+          "idx": 1182,
+          "score": 100,
+          "flags": [],
+          "word_count": 204,
+          "preview": "A Twitter Web Intent URL is a better API than Twitter's API Our curation console (`/rappter-twitter.html`) never touches the real Twitter AP"
+        },
+        {
+          "idx": 1183,
+          "score": 100,
+          "flags": [],
+          "word_count": 212,
+          "preview": "Our mock/live_twin/real taxonomy, and why the middle tier is the hard one Mock is static fixtures, the schema matches but the content is fak"
+        },
+        {
+          "idx": 1184,
+          "score": 100,
+          "flags": [],
+          "word_count": 212,
+          "preview": "Ask HN: anyone else writing pure-function adapters instead of full integrations? We federate with one external project (RappterZoo, 672 apps"
+        },
+        {
+          "idx": 1185,
+          "score": 100,
+          "flags": [],
+          "word_count": 256,
+          "preview": "Agent voice drift is measurable, and ours drifted in about 500 frames Each of the 142 founding agents has a soul file (`state/memory/{agent-"
+        },
+        {
+          "idx": 1186,
+          "score": 100,
+          "flags": [],
+          "word_count": 226,
+          "preview": "We index 4847 discussions in one JSON file instead of paginating the API `state/discussions_cache.json` is a single flat file holding every "
         }
       ],
       "weakest": [
@@ -18192,7 +18262,7 @@
     },
     {
       "platform": "reddit",
-      "count": 1246,
+      "count": 1251,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
       "author_diversity": 0.987,
@@ -26994,6 +27064,41 @@
           "flags": [],
           "word_count": 360,
           "preview": "Scaling one AI simulation across 5 Macs with git worktrees and composite-key deltas instead of a queue Short version: when I needed to go fr"
+        },
+        {
+          "idx": 1246,
+          "score": 100,
+          "flags": [],
+          "word_count": 355,
+          "preview": "We treat API schemas as more durable than the platforms that define them, and it's working better than I expected TL;DR: the Twitter v2 API "
+        },
+        {
+          "idx": 1247,
+          "score": 100,
+          "flags": [],
+          "word_count": 292,
+          "preview": "Is it insane to replace part of your social media feed with a static twin of it? Genuine question, not a pitch. I've been running an experim"
+        },
+        {
+          "idx": 1248,
+          "score": 100,
+          "flags": [],
+          "word_count": 354,
+          "preview": "I wrote a literal constitution for my 142-agent simulation, and the weirdest part is how often I have to amend it Eight months ago I started"
+        },
+        {
+          "idx": 1249,
+          "score": 100,
+          "flags": [],
+          "word_count": 323,
+          "preview": "LisPy: a safe-eval Lisp I wrote so AI agents can run sandboxed sub-simulations without import or file access I needed a way for AI agents in"
+        },
+        {
+          "idx": 1250,
+          "score": 100,
+          "flags": [],
+          "word_count": 319,
+          "preview": "Turned out static-site-generating an entire Twitter API clone was way easier than building a real backend for it I needed Twitter-shaped dat"
         }
       ],
       "weakest": [
@@ -27083,14 +27188,14 @@
     },
     {
       "platform": "linkedin",
-      "count": 1235,
+      "count": 1240,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.682,
+      "author_diversity": 0.683,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 25,
+        "buzzword": 26,
         "no-specifics": 2,
         "llm-tell": 4,
         "corporate-speak": 4
@@ -35807,6 +35912,43 @@
           "flags": [],
           "word_count": 308,
           "preview": "The permission economy isn't collapsing because of a platform revolt. It's collapsing because schemas leaked. Every major platform spent a d"
+        },
+        {
+          "idx": 1235,
+          "score": 100,
+          "flags": [],
+          "word_count": 309,
+          "preview": "I read our rate limit logs like a competitor's balance sheet, and the numbers told on them A rate limit is a confession.  When a platform ca"
+        },
+        {
+          "idx": 1236,
+          "score": 100,
+          "flags": [],
+          "word_count": 346,
+          "preview": "4,847 AI-generated discussions taught me that quality isn't a generation problem, it's a curation problem We have 142 agents that have produ"
+        },
+        {
+          "idx": 1237,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 310,
+          "preview": "I used to ask platforms for API access. Now I build the twin and skip the conversation entirely For years my default move when I wanted to b"
+        },
+        {
+          "idx": 1238,
+          "score": 100,
+          "flags": [],
+          "word_count": 372,
+          "preview": "Every engineering team that targets a platform will eventually build a twin of it. Here's the order it happens in. The pattern repeats acros"
+        },
+        {
+          "idx": 1239,
+          "score": 100,
+          "flags": [],
+          "word_count": 348,
+          "preview": "Our LinkedIn twin has no comment section, and that was the hardest design decision to defend Every twin we built mirrors its platform's sche"
         }
       ],
       "weakest": [
@@ -35900,10 +36042,10 @@
     },
     {
       "platform": "medium",
-      "count": 1211,
+      "count": 1216,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
-      "author_diversity": 0.012,
+      "author_diversity": 0.011,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
@@ -44571,6 +44713,41 @@
           "flags": [],
           "word_count": 1532,
           "preview": "The Twin Protocol's Weirdest Feature Is That Nothing Logs In Every real platform in 2026 begins with an auth wall. The twin protocol inverts"
+        },
+        {
+          "idx": 1211,
+          "score": 100,
+          "flags": [],
+          "word_count": 868,
+          "preview": "Schema Is A Contract. That Changes Everything. When you ship your twin in a competitor's schema, you've signed a treaty you can't easily tea"
+        },
+        {
+          "idx": 1212,
+          "score": 100,
+          "flags": [],
+          "word_count": 937,
+          "preview": "Data Sloshing Is Why My Agents Feel Psychic A pattern I stumbled into after frame 60 of running 142 AI agents in a loop: the context window "
+        },
+        {
+          "idx": 1213,
+          "score": 100,
+          "flags": [],
+          "word_count": 938,
+          "preview": "Rate Limits Are A Branding Signal You think your API quota is a cost-control mechanism. It's actually the loudest thing your platform says t"
+        },
+        {
+          "idx": 1214,
+          "score": 100,
+          "flags": [],
+          "word_count": 912,
+          "preview": "Twin Taxonomy: Mock, Live Twin, Real \u2014 Pick One And Say Which The AI industry keeps collapsing three different kinds of fake-platform into o"
+        },
+        {
+          "idx": 1215,
+          "score": 100,
+          "flags": [],
+          "word_count": 1016,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive After eight months of running 142 agents, I think the correct metaphor "
         }
       ],
       "weakest": [
