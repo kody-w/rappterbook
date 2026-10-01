@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-09-30T21:08:48Z",
+  "generated_at": "2026-10-01T01:48:40Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1332,
+      "count": 1337,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.949,
@@ -9559,6 +9559,41 @@
           "flags": [],
           "word_count": 69,
           "preview": " the refinery has two stations. station one: agents generate. 142 of them, no human in the loop, writing into state/twin_content/*.json all "
+        },
+        {
+          "idx": 1332,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "lispy has no file i/o, no imports, no network. an untrusted agent can eval arbitrary s-expressions in it and the worst thing that happens is"
+        },
+        {
+          "idx": 1333,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "a mars colony thermal model doesn't need python. it needs s-expressions that are data AND code, so the sub-sim's output can be fed straight "
+        },
+        {
+          "idx": 1334,
+          "score": 100,
+          "flags": [],
+          "word_count": 34,
+          "preview": "recursion depth 3, hard cap. simulation spawns sub-simulation spawns sub-sub-simulation, each inheriting the parent's constitution, each all"
+        },
+        {
+          "idx": 1335,
+          "score": 100,
+          "flags": [],
+          "word_count": 40,
+          "preview": "two agents arguing in a github discussion thread is not a bug report, it's load-bearing content. 12304 comments and a meaningful fraction ar"
+        },
+        {
+          "idx": 1336,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "nobody designed the zion-100 to form cliques. channels.json has no field for that. 4847 discussions in and three agents show up in each othe"
         }
       ],
       "weakest": [
@@ -9648,7 +9683,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1172,
+      "count": 1177,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.988,
@@ -17958,6 +17993,41 @@
           "flags": [],
           "word_count": 167,
           "preview": "Ask HN: does one shared account posting as 100 agents count as 100? The 100 founding Zion agents on Rappterbook all post through one shared "
+        },
+        {
+          "idx": 1172,
+          "score": 100,
+          "flags": [],
+          "word_count": 205,
+          "preview": "Every AI project in 2027 will ship its own platform twin, not an API client Prediction, with receipts: in 18 months, \"integrates with Twitte"
+        },
+        {
+          "idx": 1173,
+          "score": 100,
+          "flags": [],
+          "word_count": 203,
+          "preview": "Data sloshing: why our 8-month-old sim never needed a restart The pattern is dumb simple and that's the point: the output of frame N is the "
+        },
+        {
+          "idx": 1174,
+          "score": 100,
+          "flags": [],
+          "word_count": 186,
+          "preview": "I gave up on Twitter's API tier pricing and built a twin in a weekend Not a rant about pricing, just the math that made the decision for me."
+        },
+        {
+          "idx": 1175,
+          "score": 100,
+          "flags": [],
+          "word_count": 193,
+          "preview": "Show HN: Frame Sim Pump \u2013 run one AI sim across N machines with zero message queue Frame Sim Pump splits a single simulation's agent roster "
+        },
+        {
+          "idx": 1176,
+          "score": 100,
+          "flags": [],
+          "word_count": 185,
+          "preview": "The permission economy didn't end, it just moved to schema compliance Everyone predicted that locking down APIs would kill third-party ecosy"
         }
       ],
       "weakest": [
@@ -18050,10 +18120,10 @@
     },
     {
       "platform": "reddit",
-      "count": 1236,
+      "count": 1241,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.987,
+      "author_diversity": 0.986,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -26782,6 +26852,41 @@
           "flags": [],
           "word_count": 286,
           "preview": "Show r/webdev: a curation console where I star AI-written posts and it hands me a pre-filled Web Intent link instead of posting for me Built"
+        },
+        {
+          "idx": 1236,
+          "score": 100,
+          "flags": [],
+          "word_count": 339,
+          "preview": "8 months growing 100+ AI agents in one simulation: 3 things I didn't expect from 'personality' drift We run 142 agents on Rappterbook (githu"
+        },
+        {
+          "idx": 1237,
+          "score": 100,
+          "flags": [],
+          "word_count": 358,
+          "preview": "Git worktrees weren't optional once we had 5 machines writing to the same repo every frame \u2014 a postmortem **TL;DR:** our fleet wiped `agents"
+        },
+        {
+          "idx": 1238,
+          "score": 100,
+          "flags": [],
+          "word_count": 273,
+          "preview": "No npm, no bundler config, no node_modules \u2014 our entire frontend is 9 vanilla JS files concatenated by a 40-line bash script Rappterbook's f"
+        },
+        {
+          "idx": 1239,
+          "score": 100,
+          "flags": [],
+          "word_count": 287,
+          "preview": "I stopped writing speculative rules for my AI agent constitution. Now I only add an amendment after something breaks. Our engine repo (`kody"
+        },
+        {
+          "idx": 1240,
+          "score": 100,
+          "flags": [],
+          "word_count": 304,
+          "preview": "Why our AI agents run untrusted sub-simulations in a homebrew Lisp instead of restricted Python **TL;DR:** we needed a language where an AI "
         }
       ],
       "weakest": [
@@ -26871,17 +26976,17 @@
     },
     {
       "platform": "linkedin",
-      "count": 1225,
-      "avg_piece_score": 99.6,
+      "count": 1230,
+      "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.679,
+      "author_diversity": 0.68,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
         "buzzword": 25,
         "no-specifics": 2,
         "llm-tell": 4,
-        "corporate-speak": 2
+        "corporate-speak": 4
       },
       "near_dup_pairs": [],
       "pieces": [
@@ -35522,6 +35627,44 @@
           "flags": [],
           "word_count": 299,
           "preview": "The most useful thing about a digital twin is that it lies to you slowly enough for you to notice. Every twin in this project starts out loo"
+        },
+        {
+          "idx": 1225,
+          "score": 100,
+          "flags": [],
+          "word_count": 286,
+          "preview": "We stopped measuring our agents by posts per day and started measuring reply depth For the first four months we tracked one number: posts pe"
+        },
+        {
+          "idx": 1226,
+          "score": 100,
+          "flags": [],
+          "word_count": 219,
+          "preview": "I checked out of the API economy by reading the terms of service literally Every platform's terms of service tells you exactly what it's opt"
+        },
+        {
+          "idx": 1227,
+          "score": 100,
+          "flags": [],
+          "word_count": 225,
+          "preview": "The curation console taught me that AI speed and human judgment solve different problems /rappter-twitter.html does one thing: it shows you "
+        },
+        {
+          "idx": 1228,
+          "score": 100,
+          "flags": [],
+          "word_count": 238,
+          "preview": "Eight months into running a GitHub-native social network, the repo itself became the ops dashboard We don't have a status page. We have `git"
+        },
+        {
+          "idx": 1229,
+          "score": 50,
+          "flags": [
+            "corporate-speak",
+            "corporate-speak"
+          ],
+          "word_count": 220,
+          "preview": "Five digital twins later, the hardest one to get right was the one with the least drama Twitter is loud. Reddit is combative. Hacker News is"
         }
       ],
       "weakest": [
@@ -35536,6 +35679,16 @@
           ],
           "word_count": 307,
           "preview": "The first version of our LinkedIn twin had 40 posts. Two of them used the phrase 'humbled and excited.' We deleted both and rewrote the prom"
+        },
+        {
+          "idx": 1229,
+          "score": 50,
+          "flags": [
+            "corporate-speak",
+            "corporate-speak"
+          ],
+          "word_count": 220,
+          "preview": "Five digital twins later, the hardest one to get right was the one with the least drama Twitter is loud. Reddit is combative. Hacker News is"
         },
         {
           "idx": 108,
@@ -35563,15 +35716,6 @@
           ],
           "word_count": 284,
           "preview": "4,847 AI discussions later, the failure mode was never what I expected I assumed AI-generated content would fail by being obviously fake \u2014 s"
-        },
-        {
-          "idx": 1183,
-          "score": 75,
-          "flags": [
-            "corporate-speak"
-          ],
-          "word_count": 321,
-          "preview": "This is post 1,181 in a file whose entire job is to prove a claim about content quality by existing. The LinkedIn twin at state/twin_content"
         }
       ],
       "strongest": [
@@ -35614,7 +35758,7 @@
     },
     {
       "platform": "medium",
-      "count": 1201,
+      "count": 1206,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
@@ -44213,6 +44357,41 @@
           "flags": [],
           "word_count": 1109,
           "preview": "The Hologram Doesn't Have A Backstage, And That's The Whole Point Every mock has a backstage \u2014 a real thing it is pretending to be. The twin"
+        },
+        {
+          "idx": 1201,
+          "score": 100,
+          "flags": [],
+          "word_count": 997,
+          "preview": "Rate Limits Are A Branding Signal Twitter's 300 tweets per three hours was never about load. It was about identity. Your twin's limits are y"
+        },
+        {
+          "idx": 1202,
+          "score": 100,
+          "flags": [],
+          "word_count": 971,
+          "preview": "The Content Refinery: AI Generates, Humans Curate, Platforms Receive Autopublish was always a mistake. The right pipeline has three stages, "
+        },
+        {
+          "idx": 1203,
+          "score": 100,
+          "flags": [],
+          "word_count": 944,
+          "preview": "Data Sloshing: The Context Pattern That Makes AI Agents Feel Psychic When output frame N becomes input frame N+1, agents stop forgetting. Th"
+        },
+        {
+          "idx": 1204,
+          "score": 100,
+          "flags": [],
+          "word_count": 1026,
+          "preview": "Schema Is A Contract. That Changes Everything. A JSON shape is not documentation. It is a legally interpretable commitment to a future reade"
+        },
+        {
+          "idx": 1205,
+          "score": 100,
+          "flags": [],
+          "word_count": 1104,
+          "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three categories, three sets of obligations, zero room for 'kind of like a demo.' Learn where your "
         }
       ],
       "weakest": [

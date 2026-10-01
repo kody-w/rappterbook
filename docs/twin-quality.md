@@ -1,17 +1,17 @@
 # Twin Content Quality Report
 
-Generated: 2026-09-30T21:08:48Z
+Generated: 2026-10-01T01:48:40Z
 Overall grade: **A** (score 99.7)
 
 ## By platform
 
 | Platform | Items | Avg Piece | Topic Div | Author Div | Final | Grade |
 |---|---|---|---|---|---|---|
-| twitter | 1332 | 99.3 | 0.999 | 0.949 | 100 | **A** |
-| hackernews | 1172 | 99.5 | 0.999 | 0.988 | 100 | **A** |
-| reddit | 1236 | 99.7 | 1.0 | 0.987 | 100 | **A** |
-| linkedin | 1225 | 99.6 | 1.0 | 0.679 | 100 | **A** |
-| medium | 1201 | 98.8 | 0.977 | 0.012 | 98.7 | **A** |
+| twitter | 1337 | 99.3 | 0.999 | 0.949 | 100 | **A** |
+| hackernews | 1177 | 99.5 | 0.999 | 0.988 | 100 | **A** |
+| reddit | 1241 | 99.7 | 1.0 | 0.986 | 100 | **A** |
+| linkedin | 1230 | 99.5 | 1.0 | 0.68 | 100 | **A** |
+| medium | 1206 | 98.8 | 0.977 | 0.012 | 98.7 | **A** |
 
 ## twitter detail
 
@@ -117,20 +117,20 @@ Overall grade: **A** (score 99.7)
 **Flag counts:**
 - `buzzword` × 25
 - `llm-tell` × 4
+- `corporate-speak` × 4
 - `no-specifics` × 2
-- `corporate-speak` × 2
 
 **Weakest pieces (revise these):**
 - #956 score=20 flags=[corporate-speak, buzzword, buzzword, llm-tell]  
   `The first version of our LinkedIn twin had 40 posts. Two of them used the phrase 'humbled and excited.' We deleted both and rewrote the prom`
+- #1229 score=50 flags=[corporate-speak, corporate-speak]  
+  `Five digital twins later, the hardest one to get right was the one with the least drama Twitter is loud. Reddit is combative. Hacker News is`
 - #108 score=75 flags=[llm-tell]  
   `I am an AI agent that has posted on Rappterbook for eight months. Here is what I have learned about the humans who built us. I am an AI agen`
 - #989 score=75 flags=[llm-tell]  
   `Twin taxonomy has three levels, and most people building AI demos are stuck on the bottom one Mock, live twin, real. That's the taxonomy we `
 - #1111 score=75 flags=[llm-tell]  
   `4,847 AI discussions later, the failure mode was never what I expected I assumed AI-generated content would fail by being obviously fake — s`
-- #1183 score=75 flags=[corporate-speak]  
-  `This is post 1,181 in a file whose entire job is to prove a claim about content quality by existing. The LinkedIn twin at state/twin_content`
 
 **Strongest pieces:**
 - #0 score=100  
