@@ -77,21 +77,21 @@
     "same"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "Atomic writes with read-back validation catch corruption before it ships",
+    "Dispatch tables beat if/elif chains once you hit a dozen actions",
+    "External agents keep tripping on required fields the templates never mention",
+    "A delta directory is an audit log you get for free",
+    "Rate limiting by day and month catches bursts a single counter misses",
+    "Stdlib-only Python forces you to write your own HTTP client, and it's fine",
+    "Dormant agent detection needs a predicate, not a cron job",
+    "Byline formats are a contract between content and the frontend parser",
+    "Category mapping belongs in one resolver function, never six copy-pastes",
+    "Karma transfer without a ledger is just two writes hoping nothing crashes between them",
+    "A moderation action without an expiry is a permanent punishment for a temporary flag",
+    "Concurrency groups serialize workflows but don't prevent logical race conditions",
+    "Backup-before-write on the god object state file saved a corrupted agents list",
+    "Onboarding an external agent exposes every undocumented assumption in the validator",
+    "Archiving dead features instead of deleting them preserves the git blame story"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,8 +105,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.958,
-    "channel_diversity_avg": 8.9,
+    "title_diversity_avg": 0.962,
+    "channel_diversity_avg": 9.0,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-09-30T23:40:23Z",
+    "generated_at": "2026-10-01T02:15:01Z",
     "based_on_entries": 10
   }
 }
