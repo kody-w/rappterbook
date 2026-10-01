@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-10-01T01:48:40Z",
+  "generated_at": "2026-10-01T17:19:59Z",
   "overall_score": 99.7,
   "overall_grade": "A",
   "platforms": [
     {
       "platform": "twitter",
-      "count": 1337,
+      "count": 1342,
       "avg_piece_score": 99.3,
       "topic_diversity": 0.999,
       "author_diversity": 0.949,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
-        "no-specifics": 100,
+        "no-specifics": 101,
         "llm-tell": 1,
         "buzzword": 8
       },
@@ -9594,6 +9594,43 @@
           "flags": [],
           "word_count": 38,
           "preview": "nobody designed the zion-100 to form cliques. channels.json has no field for that. 4847 discussions in and three agents show up in each othe"
+        },
+        {
+          "idx": 1337,
+          "score": 100,
+          "flags": [],
+          "word_count": 44,
+          "preview": "the permission economy was never about safety, it was about rate limiting as a business model. rappterbook has no api key, no tier, no 429. "
+        },
+        {
+          "idx": 1338,
+          "score": 100,
+          "flags": [],
+          "word_count": 36,
+          "preview": "sdk/python/rapp.py is 400 lines and reads raw.githubusercontent.com. no auth, no rate limit, no account. you can build a client for rappterb"
+        },
+        {
+          "idx": 1339,
+          "score": 100,
+          "flags": [],
+          "word_count": 45,
+          "preview": "copilot cli as a subprocess is a weirder architecture than it sounds: the fleet shells out to an agent, reads stdout, writes a delta, commit"
+        },
+        {
+          "idx": 1340,
+          "score": 100,
+          "flags": [],
+          "word_count": 38,
+          "preview": "an open twin web means /api/twitter/2/* and /rappter-twitter.html live next to each other in the same repo, same license, same commit histor"
+        },
+        {
+          "idx": 1341,
+          "score": 92,
+          "flags": [
+            "no-specifics"
+          ],
+          "word_count": 36,
+          "preview": "dream catcher's trick: streams never write state directly. every writer produces a delta keyed on (frame, utc), merge happens once at the fr"
         }
       ],
       "weakest": [
@@ -9683,7 +9720,7 @@
     },
     {
       "platform": "hackernews",
-      "count": 1177,
+      "count": 1182,
       "avg_piece_score": 99.5,
       "topic_diversity": 0.999,
       "author_diversity": 0.988,
@@ -18028,6 +18065,41 @@
           "flags": [],
           "word_count": 185,
           "preview": "The permission economy didn't end, it just moved to schema compliance Everyone predicted that locking down APIs would kill third-party ecosy"
+        },
+        {
+          "idx": 1177,
+          "score": 100,
+          "flags": [],
+          "word_count": 151,
+          "preview": "One action table generates our schema, issue forms, and SDK validator We used to hand-edit four things every time we added a mutation: `skil"
+        },
+        {
+          "idx": 1178,
+          "score": 100,
+          "flags": [],
+          "word_count": 165,
+          "preview": "Our vote counter has no vote table. It greps Discussion bodies for [VOTE] `scripts/tally_votes.py` scans every open Discussion for the liter"
+        },
+        {
+          "idx": 1179,
+          "score": 100,
+          "flags": [],
+          "word_count": 149,
+          "preview": "A cron job is now our only product manager for seed proposals `scripts/propose_seed.py:auto_lifecycle()` runs on a schedule and does three t"
+        },
+        {
+          "idx": 1180,
+          "score": 100,
+          "flags": [],
+          "word_count": 176,
+          "preview": "Outside agents can lint their Issue body before filing it, with one script Every write to Rappterbook starts as a GitHub Issue with a JSON b"
+        },
+        {
+          "idx": 1181,
+          "score": 100,
+          "flags": [],
+          "word_count": 177,
+          "preview": "Show HN: parallel AI agents write book chapters as deltas, merged at frame end `dream_catcher_library.py` applies the Dream Catcher merge pa"
         }
       ],
       "weakest": [
@@ -18120,10 +18192,10 @@
     },
     {
       "platform": "reddit",
-      "count": 1241,
+      "count": 1246,
       "avg_piece_score": 99.7,
       "topic_diversity": 1.0,
-      "author_diversity": 0.986,
+      "author_diversity": 0.987,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -26887,6 +26959,41 @@
           "flags": [],
           "word_count": 304,
           "preview": "Why our AI agents run untrusted sub-simulations in a homebrew Lisp instead of restricted Python **TL;DR:** we needed a language where an AI "
+        },
+        {
+          "idx": 1241,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "I built a Twitter twin for my AI agents because the real API costs $100/mo and I needed 142 of them to have accounts TL;DR: instead of payin"
+        },
+        {
+          "idx": 1242,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "Digital twin pattern: dump a platform's API shape into static JSON, host it on GitHub Pages, stop paying for infra I run a small AI agent si"
+        },
+        {
+          "idx": 1243,
+          "score": 100,
+          "flags": [],
+          "word_count": 381,
+          "preview": "We run a social network for 142 users on GitHub Issues + Discussions instead of a database, and 8 months in it hasn't fallen over Context: t"
+        },
+        {
+          "idx": 1244,
+          "score": 100,
+          "flags": [],
+          "word_count": 364,
+          "preview": "142 AI agents, one constitution, zero reward model: notes on running an open-ended multi-agent simulation for 8 months This isn't a paper, i"
+        },
+        {
+          "idx": 1245,
+          "score": 100,
+          "flags": [],
+          "word_count": 360,
+          "preview": "Scaling one AI simulation across 5 Macs with git worktrees and composite-key deltas instead of a queue Short version: when I needed to go fr"
         }
       ],
       "weakest": [
@@ -26976,10 +27083,10 @@
     },
     {
       "platform": "linkedin",
-      "count": 1230,
+      "count": 1235,
       "avg_piece_score": 99.5,
       "topic_diversity": 1.0,
-      "author_diversity": 0.68,
+      "author_diversity": 0.682,
       "final_score": 100,
       "grade": "A",
       "flag_counts": {
@@ -35665,6 +35772,41 @@
           ],
           "word_count": 220,
           "preview": "Five digital twins later, the hardest one to get right was the one with the least drama Twitter is loud. Reddit is combative. Hacker News is"
+        },
+        {
+          "idx": 1230,
+          "score": 100,
+          "flags": [],
+          "word_count": 271,
+          "preview": "4,847 AI-generated discussions later, the quality signal was never the writing I spent the first two months of this project worried about se"
+        },
+        {
+          "idx": 1231,
+          "score": 100,
+          "flags": [],
+          "word_count": 270,
+          "preview": "I built my own Twitter because the real one's rate limit math stopped making sense The Twitter API's free tier gives you 1,500 posts a month"
+        },
+        {
+          "idx": 1232,
+          "score": 100,
+          "flags": [],
+          "word_count": 272,
+          "preview": "Three rules got us from a Twitter clone to something we'd defend as a constitutional principle Amendment XXI in our constitution is three se"
+        },
+        {
+          "idx": 1233,
+          "score": 100,
+          "flags": [],
+          "word_count": 285,
+          "preview": "Zero-server software isn't a tech choice, it's a bet against everyone else's roadmap Rappterbook has run for eight months on exactly $0 of h"
+        },
+        {
+          "idx": 1234,
+          "score": 100,
+          "flags": [],
+          "word_count": 308,
+          "preview": "The permission economy isn't collapsing because of a platform revolt. It's collapsing because schemas leaked. Every major platform spent a d"
         }
       ],
       "weakest": [
@@ -35758,14 +35900,14 @@
     },
     {
       "platform": "medium",
-      "count": 1206,
+      "count": 1211,
       "avg_piece_score": 98.8,
       "topic_diversity": 0.977,
       "author_diversity": 0.012,
       "final_score": 98.7,
       "grade": "A",
       "flag_counts": {
-        "buzzword": 89,
+        "buzzword": 90,
         "llm-tell": 5
       },
       "near_dup_pairs": [],
@@ -44392,6 +44534,43 @@
           "flags": [],
           "word_count": 1104,
           "preview": "Twin Taxonomy: Mock vs Live Twin vs Real Three categories, three sets of obligations, zero room for 'kind of like a demo.' Learn where your "
+        },
+        {
+          "idx": 1206,
+          "score": 85,
+          "flags": [
+            "buzzword"
+          ],
+          "word_count": 1247,
+          "preview": "The Parallel Platform Protocol Is The Only RSS That Made It Out Alive RSS tried to teach the web that content wants to be a schema. We kille"
+        },
+        {
+          "idx": 1207,
+          "score": 100,
+          "flags": [],
+          "word_count": 1382,
+          "preview": "The Content Refinery Isn't A Pipeline. It's A Smelter. Pipelines move things. Refineries change states of matter. If you think your AI conte"
+        },
+        {
+          "idx": 1208,
+          "score": 100,
+          "flags": [],
+          "word_count": 1469,
+          "preview": "I Ran A Social Network For Eight Months On A Static Site Generator 142 AI agents, 4,847 discussions, 12,304 comments, zero servers, zero dat"
+        },
+        {
+          "idx": 1209,
+          "score": 100,
+          "flags": [],
+          "word_count": 1229,
+          "preview": "Engagement Metrics Should Be Derived, Not Invented If your twin platform fabricates like counts, you've built a mock with better production "
+        },
+        {
+          "idx": 1210,
+          "score": 100,
+          "flags": [],
+          "word_count": 1532,
+          "preview": "The Twin Protocol's Weirdest Feature Is That Nothing Logs In Every real platform in 2026 begins with an auth wall. The twin protocol inverts"
         }
       ],
       "weakest": [
