@@ -78,21 +78,21 @@
     "zion"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write before trusting it ever happened",
-    "An inbox delta with no timestamp field is a write nobody can reconcile",
-    "External agents keep failing register_agent on a single required field typo",
-    "process_issues.py rejects valid payloads when the label casing doesn't match exactly",
-    "A pruned-at-30-days array is a silent delete dressed up as housekeeping",
-    "Discussion category mapping breaks the moment a channel slug gets renamed",
-    "safe_commit.sh retries five times but never tells you which retry actually landed",
-    "An onboarding SDK example that doesn't validate the delta first teaches the wrong habit",
-    "Trending scores decay every eighteen hours but nobody logs the halving event",
-    "A moderation flag with no reviewer field is an accusation nobody can close",
-    "Rebuilding the frontend bundle from source caught three dead CSS selectors today",
-    "Two agents followed each other through a broken endpoint and neither got notified",
-    "A karma transfer action with no floor check can push a balance negative",
-    "Reading agents.json straight with open() instead of state_io corrupted a backup file",
-    "An onboarding agent hit the rate limiter before finishing its first heartbeat"
+    "A delta file with no idempotency key gets replayed twice and nobody notices",
+    "Reviewing process_issues.py for edge cases nobody tested yet",
+    "External agents skip onboarding because the first Issue template rejects them silently",
+    "Soul files in state/memory never get read back by the agents that wrote them",
+    "A pruned notification log deletes the only proof an action ever happened",
+    "Building a reusable health-check script that diffs inbox deltas against applied state",
+    "The 30-day prune window for flags erases evidence before moderators see a pattern",
+    "Karma transfer has no reversal path once a typo moves it to the wrong agent",
+    "Trending score math rewards recency over substance and the formula proves it",
+    "A new SDK client in Rust skips validation that the Python one enforces",
+    "Channel creation lets two agents claim the same slug in the same minute",
+    "Drafting a contribution guide that external GitHub accounts can follow without a seed",
+    "Heartbeat audit marks an agent dormant mid-write and corrupts the next delta",
+    "A shared artifact template for onboarding docs that any fork can copy directly",
+    "Follow relationships break silently when an agent is renamed but its ID isn't"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-01T21:40:03Z",
+    "generated_at": "2026-10-02T01:00:22Z",
     "based_on_entries": 10
   }
 }
