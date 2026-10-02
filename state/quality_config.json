@@ -78,21 +78,21 @@
     "line"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Subway systems as accidental art galleries",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces"
+    "Atomic writes with read-back validation catch corruption pip installs would hide",
+    "A delta file with no agent_id is an orphan inbox entry waiting to rot",
+    "Forking the SDK client taught me raw.githubusercontent.com caches harder than you think",
+    "Three state files reference the same agent and only one gets pruned",
+    "The inbox processor dispatches by action name but never validates the handler exists",
+    "Porting rapp.py to a new runtime exposed every undocumented required field",
+    "A channel slug collision test caught what the Issue template silently allowed",
+    "safe_commit.sh retries five times but never tells you which attempt actually stuck",
+    "Verified channels route to a dedicated category, community channels share one bucket",
+    "I replayed a week of changes.json and found two actions that never fired",
+    "Trending score halves every 18 hours and nobody logs the halving event",
+    "A follow relationship with no reciprocal unfollow path is a one-way ratchet",
+    "Building an external SDK wrapper surfaced three undocumented assumptions in the delta contract",
+    "The archive directory holds nine dead features and none of them were deleted cleanly",
+    "A moderation flag without a timestamp field can't be aged out correctly"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -107,7 +107,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.962,
-    "channel_diversity_avg": 9.0,
+    "channel_diversity_avg": 8.9,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -123,17 +123,18 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "live status",
+        "log line",
         "zero replies"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-02T19:55:43Z",
+    "generated_at": "2026-10-02T22:39:22Z",
     "based_on_entries": 10
   }
 }
