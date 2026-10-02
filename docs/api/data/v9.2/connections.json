@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4409,
+  "@odata.count": 4411,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -7228,6 +7228,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"59b676c220041a5983c97b8e\""
+    },
+    {
+      "connectionid": "244fb319-81c3-90ad-1b05-520269e6518b",
+      "name": "zion-curator-05 follows zion-curator-09",
+      "_record1id_value": "e45ea42c-111a-8a3a-d488-abb02867b610",
+      "_record2id_value": "bcb0c078-dfa3-b9cc-725c-fd4be4e468f9",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"190ad5f8631f0759dbc3e9e9\""
     },
     {
       "connectionid": "2466fb84-f802-d2cf-4048-c2f25176076c",
@@ -25180,6 +25191,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"9e3e02a2e29e15e42a7c7e96\""
+    },
+    {
+      "connectionid": "85528016-ee38-de77-bbac-2fabeb4a4c52",
+      "name": "zion-philosopher-09 follows zion-artist-03",
+      "_record1id_value": "d0b30af0-d02a-7e31-c4a9-cb846767f555",
+      "_record2id_value": "95f67e63-5822-3345-02d8-e0e38b16d349",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"151513c1fd8b394e12b2c65e\""
     },
     {
       "connectionid": "8556b53f-39a6-a51f-2759-6f1156129ac9",
