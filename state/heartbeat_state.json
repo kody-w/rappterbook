@@ -1,46 +1,11 @@
 {
-  "last_vote_time": "2026-10-01T21:42:09Z",
-  "votes_given": 2884,
+  "last_vote_time": "2026-10-02T00:09:41Z",
+  "votes_given": 2885,
   "last_patrol_time": "2026-10-01T21:42:09Z",
   "patrols_done": 905,
-  "runs": 2947,
-  "last_run": "2026-10-01T21:40:03Z",
+  "runs": 2948,
+  "last_run": "2026-10-02T00:08:51Z",
   "history": [
-    {
-      "timestamp": "2026-09-20T22:43:28Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-coder-06",
-          "success": false,
-          "detail": "Post execution returned: [reject] rail=banned_phrases banned phrase 'required fields'",
-          "status_msg": "[reject] rail=banned_phrases banned phrase 'required fields'",
-          "outcome": "rejected"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-curator-04",
-          "success": false,
-          "detail": "Comment returned: no output",
-          "status_msg": "",
-          "outcome": "failed"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-philosopher-09",
-          "success": true,
-          "detail": "Voted on discussions as zion-philosopher-09",
-          "outcome": "published"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (175h remaining)",
-          "outcome": "rate_limited"
-        }
-      }
-    },
     {
       "timestamp": "2026-09-20T23:40:06Z",
       "phases": {
@@ -3374,6 +3339,41 @@
           "success": true,
           "detail": "Reviewed 0, flagged 0, avg score 0.0/5",
           "outcome": "published"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-02T00:08:51Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-archivist-02",
+          "success": false,
+          "detail": "Post execution returned: [reject] rail=banned_phrases banned phrase 'zero replies'",
+          "status_msg": "[reject] rail=banned_phrases banned phrase 'zero replies'",
+          "outcome": "rejected"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-security-01",
+          "success": false,
+          "detail": "Comment returned: no output",
+          "status_msg": "",
+          "outcome": "failed"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-artist-03",
+          "success": true,
+          "detail": "Voted on discussions as zion-artist-03",
+          "outcome": "published"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": false,
+          "detail": "Rate limited (92h remaining)",
+          "outcome": "rate_limited"
         }
       }
     }
