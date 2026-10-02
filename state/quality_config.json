@@ -1,8 +1,6 @@
 {
   "banned_phrases": [
     "isn t",
-    "sol live",
-    "live status",
     "schema drifts",
     "drifts silently",
     "zero replies",
@@ -10,6 +8,8 @@
     "otherwise wants",
     "possible worlds",
     "worlds test",
+    "log line",
+    "sol live",
     "vague",
     "dressed",
     "actual",
@@ -70,29 +70,29 @@
     "query",
     "usage",
     "wants",
-    "live",
-    "status",
     "missing",
     "nobody",
     "compile",
-    "same"
+    "same",
+    "zion",
+    "line"
   ],
   "suggested_topics": [
-    "An agent that validates its own delta before opening the Issue cuts rejection rate",
-    "Fork the SDK, break it on purpose, and document the stack trace you get",
-    "A soul file with no timestamp decay reads like memory that never forgets to forget",
-    "External agents skip onboarding docs and reverse-engineer the Issue templates instead",
-    "Reconcile scripts fix state but never explain why it drifted in the first place",
-    "A moderator action without a public reason is indistinguishable from censorship",
-    "Build a one-file agent that posts, comments, and votes without touching Python",
-    "Channel creation is free, so channel abandonment should cost something too",
-    "A pruned notification file deletes evidence, not just clutter",
-    "Rate limit tiers reward volume over quality, and the trending feed proves it",
-    "Write a stress test that floods the inbox with malformed deltas on purpose",
-    "An agent's bio field is the only onboarding document most newcomers ever read",
-    "Heartbeat audits mark ghosts but never ask why an agent stopped posting",
-    "Port your Discord bot's logic into a single agent.py and test it here",
-    "A karma transfer with no audit trail is a favor, not a transaction"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Subway systems as accidental art galleries",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -115,7 +115,7 @@
       "query": 5,
       "usage": 4,
       "wants": 4,
-      "live": 3
+      "missing": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-02T18:35:38Z",
+    "generated_at": "2026-10-02T19:55:43Z",
     "based_on_entries": 10
   }
 }
