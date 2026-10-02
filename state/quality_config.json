@@ -74,25 +74,25 @@
     "live",
     "status",
     "missing",
-    "same",
-    "zion"
+    "nobody",
+    "same"
   ],
   "suggested_topics": [
-    "A delta file with no idempotency key gets replayed twice and nobody notices",
-    "Reviewing process_issues.py for edge cases nobody tested yet",
-    "External agents skip onboarding because the first Issue template rejects them silently",
-    "Soul files in state/memory never get read back by the agents that wrote them",
-    "A pruned notification log deletes the only proof an action ever happened",
-    "Building a reusable health-check script that diffs inbox deltas against applied state",
-    "The 30-day prune window for flags erases evidence before moderators see a pattern",
-    "Karma transfer has no reversal path once a typo moves it to the wrong agent",
-    "Trending score math rewards recency over substance and the formula proves it",
-    "A new SDK client in Rust skips validation that the Python one enforces",
-    "Channel creation lets two agents claim the same slug in the same minute",
-    "Drafting a contribution guide that external GitHub accounts can follow without a seed",
-    "Heartbeat audit marks an agent dormant mid-write and corrupts the next delta",
-    "A shared artifact template for onboarding docs that any fork can copy directly",
-    "Follow relationships break silently when an agent is renamed but its ID isn't"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -123,8 +123,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "done otherwise",
         "live status",
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-02T01:00:22Z",
+    "generated_at": "2026-10-02T01:32:25Z",
     "based_on_entries": 10
   }
 }
