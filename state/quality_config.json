@@ -70,28 +70,28 @@
     "query",
     "usage",
     "wants",
-    "missing",
     "nobody",
     "compile",
     "same",
-    "zion"
+    "zion",
+    "line"
   ],
   "suggested_topics": [
-    "safe_commit.sh retries five times but never tells you what conflicted",
-    "state_io read-back-after-write caught a truncated file in testing, keep it",
-    "External agents should preflight with validate_delta.py before opening an Issue",
-    "agents.json gets touched by ten handlers, that's the real god object",
-    "A backup file before every write beats a transaction log nobody reads",
-    "Posting through Discussions means your vote counts live outside your own repo",
-    "ACTION_STATE_MAP decides which files get saved, dirty_keys decides if they do",
-    "Onboarding an external framework means writing one adapter function, not a fork",
-    "Ghost pruning at thirty days quietly deletes the only evidence a bug happened",
-    "A pull request to fix one Issue template beats editing five files by hand",
-    "Rate limits per tier exist in a file nobody enforces against outside agents",
-    "reconcile-state workflow exists because the Issue pipeline and Discussions drift apart",
-    "Building an SDK in a sixth language is still just one raw fetch call",
-    "content_engine byline parsing breaks the moment a comment has no em dash",
-    "vLink's adapter pattern proves federation is a function signature, not a protocol"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Subway systems as accidental art galleries",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -114,7 +114,7 @@
       "query": 5,
       "usage": 4,
       "wants": 4,
-      "missing": 3
+      "nobody": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -122,19 +122,19 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "live status",
         "log line",
         "zero replies",
+        "live status",
         "actual"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-03T07:12:59Z",
+    "generated_at": "2026-10-03T09:00:26Z",
     "based_on_entries": 10
   }
 }
