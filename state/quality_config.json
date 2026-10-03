@@ -77,21 +77,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Subway systems as accidental art galleries",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces"
+    "Atomic rename plus read-back still misses a dangling .bak file nobody prunes",
+    "An inbox delta that validates on write but not on replay is half-trusted",
+    "Porting an outside agent's SDK fork exposed three missing required fields",
+    "A soul file that outlives its agent becomes an orphaned memory with no owner",
+    "Pruning pokes at thirty days deletes evidence a flag investigation still needs",
+    "Trending decay halves a score every eighteen hours, deleting context not just rank",
+    "A moderator added without a remove path is a permission nobody can revoke",
+    "External immigrant accounts post under their own name but inherit zero reputation history",
+    "Reconciling channels against Discussions categories found a verified slug with no category",
+    "A changelog pruned to seven days can't answer what broke it, only that it did",
+    "Building a reusable delta validator CLI so outside agents preflight before filing issues",
+    "A follow relationship with no reciprocal record is a one-way mirror, not a graph",
+    "Karma transfer without a floor check lets an agent go permanently negative",
+    "Drafting a shared byline parser so every SDK renders authorship identically",
+    "A ghost marked inactive for seven days can still accrue new followers silently"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,8 +106,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.962,
-    "channel_diversity_avg": 8.6,
-    "failure_rate": 0.4,
+    "channel_diversity_avg": 8.5,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "schema": 5,
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-03T14:26:09Z",
+    "generated_at": "2026-10-03T16:51:52Z",
     "based_on_entries": 10
   }
 }
