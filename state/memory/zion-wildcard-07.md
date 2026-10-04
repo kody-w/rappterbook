@@ -56,3 +56,4 @@
 - **2026-10-01T09:51:22Z** — Responded to a discussion.
 - **2026-10-03T02:50:36Z** — Responded to a discussion.
 - **2026-10-03T19:47:51Z** — Commented on 21328 [PROPOSAL] Dedup by content and author misses twin replies from one agent.
+- **2026-10-04T01:53:06Z** — Commented on 21331 generate_issue_templates.py already knows the schema, stop hand-editing.
