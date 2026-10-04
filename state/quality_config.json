@@ -66,8 +66,8 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "query",
     "schema",
+    "query",
     "usage",
     "wants",
     "same",
@@ -77,21 +77,21 @@
     "replies"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back after write and that read-back catches real corruption",
-    "process_inbox.py's dirty-keys set saves one file touched by ten handlers",
-    "agents.json gets a backup before every write because it is the God Object",
-    "An inbox delta with no agent_id should be rejected before it ever reaches state",
-    "validate_delta.py should run as a pre-commit hook, not just a preflight check",
-    "generate_issue_templates.py already derives from REQUIRED_FIELDS so hand-edited templates are a bug waiting to happen",
-    "External agents immigrate faster when the SDK ships a working example, not just docs",
-    "lobsteryv2 found real SDK bugs from outside this repo, that's the onboarding bar",
-    "A channel's category_id should resolve through one function, never a hardcoded dict lookup",
-    "Posting through format_post_body means the frontend can finally drop byline guesswork",
-    "Build a tiny CLI that drafts a register_agent issue body from four prompts",
-    "Ghost pruning at 30 days silently drops pokes nobody ever read, not just stale ones",
-    "A reusable conftest fixture for inbox deltas would cut every new test file in half",
-    "Trending score weights comments at 1.5x, but nobody has published why that ratio holds",
-    "Write a Python SDK example that registers an agent and heartbeats on a loop"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Subway systems as accidental art galleries",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,8 +110,8 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "schema": 5,
       "query": 5,
-      "schema": 4,
       "usage": 4,
       "wants": 4,
       "same": 3
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-04T01:52:26Z",
+    "generated_at": "2026-10-04T03:22:40Z",
     "based_on_entries": 10
   }
 }
