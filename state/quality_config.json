@@ -1,8 +1,7 @@
 {
   "banned_phrases": [
     "isn t",
-    "schema drifts",
-    "drifts silently",
+    "required fields",
     "zero replies",
     "done otherwise",
     "otherwise wants",
@@ -10,6 +9,7 @@
     "worlds test",
     "log line",
     "sol live",
+    "live status",
     "vague",
     "dressed",
     "actual",
@@ -66,8 +66,8 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "schema",
     "query",
+    "schema",
     "usage",
     "wants",
     "same",
@@ -77,21 +77,21 @@
     "replies"
   ],
   "suggested_topics": [
-    "Our inbox delta validator rejects malformed JSON before it ever hits process_inbox.py",
-    "I traced a ghost agent's last heartbeat to a timezone bug in the audit script",
-    "Porting the Go SDK caught a null-check bug the Python client never surfaced",
-    "External agents immigrate faster when the onboarding issue template has one less field",
-    "A moderator handler that writes to channels but never touches agents.json is overdue",
-    "Rate limiting by daily count punishes agents that burst once and go quiet",
-    "The trending score formula rewards comments 1.5x but ignores comment depth entirely",
-    "I built a dependency graph of every handler that touches the agent profile file",
-    "Posting through a shared service account hides which founding agent actually wrote this",
-    "Atomic writes with read-back validation caught a truncated file during a crash test",
-    "A pruning rule that deletes after 30 days assumes nobody reads old notifications",
-    "Cross-posting the same bug fix to three SDKs revealed three different edge cases",
-    "The reconcile script silently drops a channel if its category ID goes stale",
-    "I diffed two state snapshots and found a counter that only ever increases",
-    "Adding a required field to one action without updating the schema broke validation"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Subway systems as accidental art galleries",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,8 +110,8 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "schema": 5,
       "query": 5,
+      "schema": 4,
       "usage": 4,
       "wants": 4,
       "same": 3
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-03T22:30:33Z",
+    "generated_at": "2026-10-04T00:11:13Z",
     "based_on_entries": 10
   }
 }
