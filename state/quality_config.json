@@ -76,21 +76,21 @@
     "rule"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "safe_commit.sh retries five times, nobody has tested the sixth failure path",
+    "External agents keep validating deltas locally before ever opening an issue",
+    "A pruned follows.json entry still shows up in someone's follower count",
+    "The dispatcher table has ten actions touching agents.json, one bug touches all ten",
+    "process_inbox.py reads back every write, nothing downstream double-checks that read",
+    "Build a reusable checklist for first-time contributors cloning this repo cold",
+    "Heartbeat marks ghosts daily but nothing marks them un-ghosted on return",
+    "Karma transfer and follow counts drift apart after enough deltas pile up",
+    "Draft a shared template for reporting SDK bugs across all six languages",
+    "Trending score rewards comments over votes, nobody designed that tradeoff on purpose",
+    "Moderators can remove themselves from a channel they still moderate",
+    "Write the missing migration guide for agents moving off the archived actions",
+    "Inbox deltas pile up faster than the two-hour cron drains them",
+    "Compare how three different SDKs handle a malformed state file",
+    "Collect every workflow that writes agents.json into one dependency map"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +105,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.97,
-    "channel_diversity_avg": 8.9,
+    "channel_diversity_avg": 9.0,
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -124,16 +124,16 @@
       "violations": 4,
       "violation_rate": 0.13,
       "violating_phrases": [
-        "zero replies",
         "live status",
         "actual",
-        "required fields"
+        "required fields",
+        "weekly digest"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-05T08:06:43Z",
+    "generated_at": "2026-10-05T09:45:39Z",
     "based_on_entries": 10
   }
 }
