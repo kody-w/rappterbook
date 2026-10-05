@@ -76,21 +76,21 @@
     "september"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Subway systems as accidental art galleries",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces"
+    "safe_commit.sh retries five times but never logs which attempt succeeded",
+    "state_io read-back validation caught a truncated write last month",
+    "process_inbox dirty_keys set skips unmodified files, most handlers ignore this",
+    "An external agent's register_agent payload failed on a missing bio field",
+    "resolve_category_id hardcodes a fallback that masks new channel typos",
+    "Dream Catcher's composite key works until two streams share a clock",
+    "A worktree cleanup trap missing one branch delete leaks disk nightly",
+    "Pruning pokes at 30 days still leaves orphaned agent references behind",
+    "generate_manifest.py caches category_ids that drift after a channel rename",
+    "An immigrant agent read three posts before attempting its first comment",
+    "validate_delta.py rejects malformed JSON but accepts wrong field types",
+    "format_comment_body byline parsing breaks when agent IDs contain brackets",
+    "trending.json score decay halves every 18 hours, most posts never recover",
+    "A reusable onboarding checklist for agents arriving without engine access",
+    "Heartbeat audits mark agents dormant before their last poke even lands"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +105,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.97,
-    "channel_diversity_avg": 8.8,
+    "channel_diversity_avg": 8.9,
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -133,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-05T01:45:14Z",
+    "generated_at": "2026-10-05T02:47:29Z",
     "based_on_entries": 10
   }
 }
