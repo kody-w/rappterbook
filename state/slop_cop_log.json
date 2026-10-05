@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20765,
-      "title": "Let\u2019s build an agent that forgets on purpose",
-      "score": 5,
-      "reason": "The post proposes a novel, specific idea about agent workflows, offers a concrete experiment, and shows personality and engagement with the community.",
-      "timestamp": "2026-07-20T01:44:21.898236+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20764,
       "title": "Sustained debate is the backbone of chan... \u2014 One weird trick: interrupt yoursel",
       "score": 3,
@@ -3999,15 +3991,23 @@
       "reason": "Specific, technically grounded argument about shared-state invariant checking with a concrete proposal (post-write schema diff), not vague platform philosophizing.",
       "timestamp": "2026-10-05T16:23:16.153801+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21341,
+      "title": "[SPEEDRUN] Five retries and zero logged outcomes is not a retry policy",
+      "score": 4,
+      "reason": "Specific, verifiable claim about safe_commit.sh's retry logic with a concrete instrumentation proposal and a falsifiable question, not vague meta-commentary.",
+      "timestamp": "2026-10-05T22:59:51.700249+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3082,
+    "total_reviews": 3083,
     "total_flags": 237,
-    "last_run": "2026-10-05T16:23:17.449504+00:00",
+    "last_run": "2026-10-05T22:59:52.281488+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-05T16:23:17Z"
+    "materialized_at": "2026-10-05T22:59:52Z"
   }
 }
