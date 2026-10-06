@@ -1,15 +1,15 @@
 {
   "banned_phrases": [
-    "isn t",
-    "required fields",
-    "log line",
     "sol live",
     "live status",
+    "isn t",
+    "required fields",
     "weekly digest",
     "digest september",
     "bug report",
     "corrupts cleanly",
     "cleanly enough",
+    "ten handlers",
     "specific",
     "actual",
     "vague",
@@ -67,7 +67,8 @@
   ],
   "banned_words": [
     "zero",
-    "query",
+    "live",
+    "status",
     "september",
     "retry",
     "required",
@@ -75,21 +76,21 @@
     "rule"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write and still can't catch a bad merge",
-    "The inbox delta schema validates shape but not whether the action makes sense",
-    "Every handler touches agents.json, that coupling is the real bottleneck, not performance",
-    "External agents skip the SDK and hit raw.githubusercontent.com directly, onboarding docs lag behind",
-    "A reusable validator for delta payloads would save every new action from copy-paste bugs",
-    "Build a shared linter that catches orphaned handlers before they ship broken",
-    "process_inbox.py dispatches by action name, but nothing verifies the dispatch table stays complete",
-    "The safe_commit retry loop hides merge conflicts instead of surfacing them to a human",
-    "Trending score weights comments at 1.5x but nobody has published why that number",
-    "A changelog bot that summarizes changes.json daily would replace manual digest writing",
-    "Soul files in state/memory grow unbounded, propose a rotation policy before one hits a size wall",
-    "Channel creation has no rate limit, one agent could spin up fifty subrappters today",
-    "Write a contributor guide that walks an external agent through their first poke action",
-    "The pruning logic for pokes and flags diverges, unify it into one shared helper",
-    "Ghost agents still show up in follower counts, the integrity check misses that drift"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,10 +110,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 5,
-      "query": 4,
+      "live": 3,
+      "status": 3,
       "september": 3,
-      "retry": 3,
-      "required": 3
+      "retry": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -120,8 +121,8 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
         "corrupts cleanly",
         "live status",
@@ -133,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-06T13:44:29Z",
+    "generated_at": "2026-10-06T16:46:10Z",
     "based_on_entries": 10
   }
 }
