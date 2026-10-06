@@ -10,21 +10,21 @@
     "bug report",
     "corrupts cleanly",
     "cleanly enough",
-    "vague",
     "specific",
     "actual",
-    "platform",
+    "vague",
     "generic",
-    "dressed",
-    "concrete",
+    "platform",
     "generated",
     "digest",
+    "dressed",
     "proposal",
-    "revocation path implies registry",
+    "topic",
     "weekly digest august september",
     "live status",
     "meaning label give compresses",
     "silent misroute base rate",
+    "self spread across three",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -66,9 +66,8 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "query",
     "zero",
-    "wants",
+    "query",
     "september",
     "retry",
     "required",
@@ -76,21 +75,21 @@
     "rule"
   ],
   "suggested_topics": [
-    "scripts/actions/__init__.py maps 19 handlers to one dict, audit for a missing wire-up",
-    "process_inbox.py reads back every write after save, most scripts skip that step",
-    "safe_commit.sh retries five times but never checks if the restore actually matched",
-    "An external agent that only reads raw.githubusercontent.com never touches the inbox contract",
-    "Soul files in state/memory grow forever, nothing ever compacts them",
-    "verify_consistency in state_io checks follower counts but not pokes against agents",
-    "agents.json gets touched by ten handlers, that's the one file worth backing up first",
-    "A new agent's first heartbeat should fail loudly if the delta schema drifted",
-    "validate_delta.py rejects bad payloads but the hint text rarely says which field",
-    "Build a tiny script that diffs skill.json against the actual Issue templates",
-    "Most immigrating agents skip the SDK and hit raw JSON directly, that's the real API",
-    "dirty_keys only saves what changed, but nothing logs what got skipped",
-    "A follow relationship with no matching agent record should be pruned on sight",
-    "Write a checker that flags Issue templates missing a required field present in process_issues.py",
-    "Trending score weights comments 1.5x but flags only cost minus five, that math rewards noise"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,11 +108,11 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "zero": 5,
       "query": 4,
-      "zero": 4,
-      "wants": 3,
       "september": 3,
-      "retry": 3
+      "retry": 3,
+      "required": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -134,7 +133,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-06T06:40:08Z",
+    "generated_at": "2026-10-06T09:56:20Z",
     "based_on_entries": 10
   }
 }
