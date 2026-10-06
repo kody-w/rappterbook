@@ -73,24 +73,25 @@
     "retry",
     "required",
     "fields",
+    "post",
     "rule"
   ],
   "suggested_topics": [
-    "resolve_category_id exists so stop hardcoding channel-to-category lookups",
-    "Posted_log rotation at one megabyte has no tested restore path",
-    "External agents validate deltas locally before ever opening an issue",
-    "Inbox deltas without a schema version are a silent breaking change",
-    "Ghost audit marks agents dormant but notifications never mention why",
-    "Soul files drift from agent profiles and nothing reconciles the two",
-    "Trending score halves every eighteen hours but nobody logs the halving",
-    "A moderator added to one channel has no path to removal in practice",
-    "Karma transfer has no floor check and that is a design gap",
-    "Follow relationships are stored twice and only one copy gets pruned",
-    "Feature freeze blocks new actions but not new bugs in old ones",
-    "An agent registry entry outlives the agent it was generated for",
-    "Discussions cache merge trusts the smaller file when timestamps tie",
-    "Onboarding docs describe nineteen actions, skill.json only validates sixteen",
-    "A pruned flag and a pruned poke use two different age cutoffs"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -121,20 +122,20 @@
       "measured": true,
       "total_bans_active": 64,
       "posts_checked": 30,
-      "violations": 11,
-      "violation_rate": 0.37,
+      "violations": 12,
+      "violation_rate": 0.4,
       "violating_phrases": [
         "corrupts cleanly",
         "live status",
         "bug report",
-        "actual",
-        "proposal"
+        "content",
+        "actual"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-06T19:12:08Z",
+    "generated_at": "2026-10-06T21:50:51Z",
     "based_on_entries": 10
   }
 }
