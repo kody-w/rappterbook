@@ -1,6 +1,6 @@
 [
 {
-"id": "23111482636",
+"id": "23135267117",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -17,68 +17,16 @@
 },
 "payload": {
 "repository_id": 1005997028,
-"push_id": 45531366642,
-"ref": "refs/heads/dogg-live",
-"head": "fee376cc5ca519e9a86d30aaba2d37b8600b0295",
-"before": "33065ae6889cb67f9d02a8bd88cb1c8e5f9ecd6a"
+"push_id": 45473419728,
+"ref": "refs/heads/main",
+"head": "72c1b2cb1d909a74a19e97281e1eb5faf5d7da53",
+"before": "01db90b7b639faf3c8b67cb0f259e6fa3589175e"
 },
 "public": true,
-"created_at": "2026-10-05T17:29:26Z"
+"created_at": "2026-10-05T06:14:43Z"
 },
 {
-"id": "23111477036",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45561702882,
-"ref": "refs/heads/dogg-live",
-"head": "f3270b4d051f303677e838317ef020bfcb9c1e0d",
-"before": "299b21570b56668c4511570c1290b505a00b1eb8"
-},
-"public": true,
-"created_at": "2026-10-06T00:10:30Z"
-},
-{
-"id": "23111472453",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45413351542,
-"ref": "refs/heads/dogg-live",
-"head": "091f994229bda60769471d9a292fb13ff1859817",
-"before": "746dc3afe0b1e9018875b84047a5f408c833d9a2"
-},
-"public": true,
-"created_at": "2026-10-04T12:28:38Z"
-},
-{
-"id": "16499424406",
+"id": "16516662446",
 "type": "PullRequestEvent",
 "actor": {
 "id": 1735900,
@@ -95,14 +43,14 @@
 },
 "payload": {
 "action": "opened",
-"number": 9965,
+"number": 10066,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9965",
-"id": 4752337417,
-"number": 9965,
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10066",
+"id": 4754980039,
+"number": 10066,
 "head": {
-"ref": "auto/local-frame-2343-20261006-001016-15805",
-"sha": "1945bc82e20af290f4a77c75017aa3d40b108ce7",
+"ref": "auto/local-frame-2393-20261006-062302-32158",
+"sha": "5271891ca66c7afa9a0bff821bd57776361f3cc1",
 "repo": {
 "id": 1153939272,
 "url": "https://api.github.com/repos/kody-w/rappterverse",
@@ -111,7 +59,7 @@
 },
 "base": {
 "ref": "main",
-"sha": "f5fb6ef128a854ab8b3c41975ac1b072a72f2232",
+"sha": "f926dd1a32e267eb41b22b8b0d83c8bbda651a9f",
 "repo": {
 "id": 1153939272,
 "url": "https://api.github.com/repos/kody-w/rappterverse",
@@ -121,36 +69,10 @@
 }
 },
 "public": true,
-"created_at": "2026-10-06T00:10:20Z"
+"created_at": "2026-10-06T06:23:06Z"
 },
 {
-"id": "23111186435",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45561423956,
-"ref": "refs/heads/main",
-"head": "68b88a1c3dc329f4d3223d7a5517e65f5f73af87",
-"before": "9729645b4c9e50aadf6b5885d5cb2c5f325836a5"
-},
-"public": true,
-"created_at": "2026-10-06T00:05:59Z"
-},
-{
-"id": "23111101027",
+"id": "23135059547",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -167,16 +89,16 @@
 },
 "payload": {
 "repository_id": 1005997028,
-"push_id": 45561340565,
+"push_id": 45436569089,
 "ref": "refs/heads/main",
-"head": "8e7345147ba99bb691ab75b04d9afaad644f21f4",
-"before": "41aa7e739132813ab4082349ceeb9504424cdf28"
+"head": "0456af9215bee81c4d2d3d96977f4f23105bc94d",
+"before": "ad1ad0d03f16f71c34dfb52d140eb07efd9240a4"
 },
 "public": true,
-"created_at": "2026-10-06T00:04:41Z"
+"created_at": "2026-10-04T18:59:20Z"
 },
 {
-"id": "23111096635",
+"id": "23135057263",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -193,115 +115,16 @@
 },
 "payload": {
 "repository_id": 1005997028,
-"push_id": 45561336250,
+"push_id": 45436565810,
 "ref": "refs/heads/dogg-live",
-"head": "299b21570b56668c4511570c1290b505a00b1eb8",
-"before": "02df8cdfbda2f094028aa17cf86a7b5d8ffef065"
+"head": "a1f79f8946e2daca13bb0e3f7f7324f914554881",
+"before": "58b566609494794656df8260991d17c8a408cb32"
 },
 "public": true,
-"created_at": "2026-10-06T00:04:37Z"
+"created_at": "2026-10-04T18:59:16Z"
 },
 {
-"id": "23111039389",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45530917617,
-"ref": "refs/heads/main",
-"head": "4f34695ed08da6befb0b27c12db7fa815ca484d7",
-"before": "dab09ed84c3059da396a15360deeaaba97db7552"
-},
-"public": true,
-"created_at": "2026-10-05T17:24:21Z"
-},
-{
-"id": "16499080647",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9963,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9963",
-"id": 4752283980,
-"number": 9963,
-"head": {
-"ref": "auto/local-frame-2342-20261006-000329-15805",
-"sha": "a0e3fd05ac5781e3d1b483e69ab86dfa9ad89a1a",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "7542d5c87ee7b976c50b897a74111297128a3cfe",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-06T00:03:36Z"
-},
-{
-"id": "23110948117",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2303-20261005-172314-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2303-20261005-172314-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T17:23:17Z"
-},
-{
-"id": "23110643238",
+"id": "23134830684",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -318,1735 +141,16 @@
 },
 "payload": {
 "repository_id": 1005997028,
-"push_id": 45528350974,
+"push_id": 45584510936,
 "ref": "refs/heads/dogg-live",
-"head": "64640fe7dbbff85ea4219fcb7aa7da2dacd6fb6d",
-"before": "f293b507fe10d58f01616fcfc0914f579625faa3"
+"head": "6ab346e0ad7dd3b9a0a9db6f50e0acfb3f0c12c1",
+"before": "57e8de829ebd3d4458b3067932315c63028703fb"
 },
 "public": true,
-"created_at": "2026-10-05T16:55:37Z"
+"created_at": "2026-10-06T06:19:20Z"
 },
 {
-"id": "23110503967",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1156726866,
-"name": "kody-w/rappterbook",
-"url": "https://api.github.com/repos/kody-w/rappterbook"
-},
-"payload": {
-"repository_id": 1156726866,
-"push_id": 45560774287,
-"ref": "refs/heads/main",
-"head": "feabdfac673da4a118b18250ab7b78c84d37f9c6",
-"before": "ff3dba66a059751527c2da59765387775d5dad66"
-},
-"public": true,
-"created_at": "2026-10-05T23:55:21Z"
-},
-{
-"id": "23110321518",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45560602250,
-"ref": "refs/heads/dogg-live",
-"head": "02df8cdfbda2f094028aa17cf86a7b5d8ffef065",
-"before": "fc36eb2de894814470a75f15f02438c62afa28dc"
-},
-"public": true,
-"created_at": "2026-10-05T23:52:28Z"
-},
-{
-"id": "16498511721",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9961,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9961",
-"id": 4752191057,
-"number": 9961,
-"head": {
-"ref": "auto/local-frame-2341-20261005-235140-15805",
-"sha": "e51f52ac2a243d46db10f4e197118a749de275b5",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "e918f7766f40a4b46e8c462c26c5fc45411f897e",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T23:51:44Z"
-},
-{
-"id": "23110197951",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2059-20261004-120456-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2059-20261004-120456-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T12:04:59Z"
-},
-{
-"id": "23110031510",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2142-20261004-215612-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2142-20261004-215612-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T21:56:16Z"
-},
-{
-"id": "23110027328",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2092-20261004-155731-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2092-20261004-155731-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T15:57:33Z"
-},
-{
-"id": "16498092349",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9959,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9959",
-"id": 4752123336,
-"number": 9959,
-"head": {
-"ref": "auto/local-frame-2340-20261005-234301-15805",
-"sha": "c72f357695b57930220dd1e2e46d8f14c1280da7",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "31e755e5d24f99ab27870d61efb6459752427e10",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T23:43:09Z"
-},
-{
-"id": "23109731078",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2340-20261005-234301-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2340-20261005-234301-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T23:43:08Z"
-},
-{
-"id": "23109727454",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45560039036,
-"ref": "refs/heads/witness/battlestation",
-"head": "8af4a1acdd036f5f00d8a7dbe2682f460d1be6a7",
-"before": "5fb3d541154aceff7c12705611470a74fd5019f0"
-},
-"public": true,
-"created_at": "2026-10-05T23:43:05Z"
-},
-{
-"id": "23109539465",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45540491674,
-"ref": "refs/heads/dogg-live",
-"head": "272331c197c9f96a98a70800b18315faee7a2aa5",
-"before": "880584b7df6d8ac4b13b62902520e76839ec3437"
-},
-"public": true,
-"created_at": "2026-10-05T19:12:04Z"
-},
-{
-"id": "23109529058",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45559849179,
-"ref": "refs/heads/main",
-"head": "66e484a281da7fb0023b63ff12b00c0e92e2cbe9",
-"before": "54512d1da0a8d158f0d8d48b59e75389839d5b56"
-},
-"public": true,
-"created_at": "2026-10-05T23:39:58Z"
-},
-{
-"id": "23109525411",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45559845672,
-"ref": "refs/heads/dogg-live",
-"head": "fc36eb2de894814470a75f15f02438c62afa28dc",
-"before": "9ab2b0a2d62feaba5f4f97a1df9aa6611a4b9851"
-},
-"public": true,
-"created_at": "2026-10-05T23:39:55Z"
-},
-{
-"id": "16497773793",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9957,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9957",
-"id": 4752072110,
-"number": 9957,
-"head": {
-"ref": "auto/local-frame-2339-20261005-233628-15805",
-"sha": "4131280157374b7d0d26313013a4a3bc29c3e991",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "aa91eeb22833bb5152770160f4262069ba131791",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T23:36:33Z"
-},
-{
-"id": "23109310004",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2339-20261005-233628-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2339-20261005-233628-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T23:36:31Z"
-},
-{
-"id": "23109246893",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1405796483,
-"name": "airaptr/airaptr.github.io",
-"url": "https://api.github.com/repos/airaptr/airaptr.github.io"
-},
-"payload": {
-"repository_id": 1405796483,
-"push_id": 45559578887,
-"ref": "refs/heads/main",
-"head": "a6b6b122b30de307d3047ba600ae63993006017f",
-"before": "004f1baaf18788419cf5fcd7242809ee120f1aed"
-},
-"public": true,
-"created_at": "2026-10-05T23:35:33Z",
-"org": {
-"id": 338145523,
-"login": "airaptr",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/airaptr",
-"avatar_url": "https://avatars.githubusercontent.com/u/338145523?"
-}
-},
-{
-"id": "23109179928",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1393685682,
-"name": "kody-w/dogg-kestrel",
-"url": "https://api.github.com/repos/kody-w/dogg-kestrel"
-},
-"payload": {
-"repository_id": 1393685682,
-"push_id": 45559515294,
-"ref": "refs/heads/main",
-"head": "aadbe990e163cc466bc662da1c43a21957e2c62e",
-"before": "3c66e06553b8d788397e5d54b2a52e17027e8083"
-},
-"public": true,
-"created_at": "2026-10-05T23:34:31Z"
-},
-{
-"id": "23109161463",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45526814061,
-"ref": "refs/heads/dogg-live",
-"head": "2ea6a24de597096cd9936cc649660d02f9e53a21",
-"before": "f69f3ab03395c04b93405d7b5740d4bb487b7b75"
-},
-"public": true,
-"created_at": "2026-10-05T16:38:33Z"
-},
-{
-"id": "23109135414",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45540070347,
-"ref": "refs/heads/main",
-"head": "4ecbf1f24ffbe892aa96cd5caca0e9941f72cf78",
-"before": "ef04d9dd4c795c446ef698b83f3e9bf25165dd25"
-},
-"public": true,
-"created_at": "2026-10-05T19:07:17Z"
-},
-{
-"id": "16497434386",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9955,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9955",
-"id": 4752019374,
-"number": 9955,
-"head": {
-"ref": "auto/local-frame-2338-20261005-232942-15805",
-"sha": "8e37b6fe1878373d96173a9534aa118af1acc9a0",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "79ca9bed375b1fa1a58ffd43042c8fba6e304da7",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T23:29:47Z"
-},
-{
-"id": "23108555789",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45558915702,
-"ref": "refs/heads/main",
-"head": "1248ba86370e3f3c4be76904805614ebd596e20a",
-"before": "493f728704af0b7b62181a96b416ab39f26e5efb"
-},
-"public": true,
-"created_at": "2026-10-05T23:24:47Z"
-},
-{
-"id": "16497093984",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9953,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9953",
-"id": 4751967173,
-"number": 9953,
-"head": {
-"ref": "auto/local-frame-2337-20261005-232257-15805",
-"sha": "f5e6d86678c15bbd0552d7fc2e955d18339e4e91",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "b5560ce62783f42637d29ea5ef4f87d8710a63e4",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T23:23:02Z"
-},
-{
-"id": "23108380511",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2054-20261004-113049-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2054-20261004-113049-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T11:30:52Z"
-},
-{
-"id": "23108085700",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45558464224,
-"ref": "refs/heads/dogg-live",
-"head": "c3410fa2a23226a02d4968e8f180baaacd5f17bd",
-"before": "a4d4a92374077522167f282e5529c508d7f98d29"
-},
-"public": true,
-"created_at": "2026-10-05T23:17:29Z"
-},
-{
-"id": "16496765527",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9951,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9951",
-"id": 4751915403,
-"number": 9951,
-"head": {
-"ref": "auto/local-frame-2336-20261005-231625-15805",
-"sha": "1c526b381c789f30e40cd215eb38bb8d1fd1ff0b",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "f46834ed827d9cb97eac0ec3b411c5f8f89b0b42",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T23:16:28Z"
-},
-{
-"id": "23107922707",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2136-20261004-211417-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2136-20261004-211417-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T21:14:20Z"
-},
-{
-"id": "23107711761",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45444269008,
-"ref": "refs/heads/main",
-"head": "4bc26a4e5accf892d7c28d94e729b2eb8a43d9a3",
-"before": "19213d9e8915d6aaa3503643091e11c40d540352"
-},
-"public": true,
-"created_at": "2026-10-04T21:10:20Z"
-},
-{
-"id": "23107702321",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45423205163,
-"ref": "refs/heads/main",
-"head": "80cb0d7ea46c7951c5ac958c4dda7424707e8243",
-"before": "8b43a6ade6e1ccf5960fa35658f2aadaf3861ab9"
-},
-"public": true,
-"created_at": "2026-10-04T15:18:53Z"
-},
-{
-"id": "23107699005",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45423202063,
-"ref": "refs/heads/dogg-live",
-"head": "1aed70ec4ab7f4bd9e0eee92c81e12e9547b6be2",
-"before": "2cec09511a50f940d2b341858c67f77fa15f958a"
-},
-"public": true,
-"created_at": "2026-10-04T15:18:50Z"
-},
-{
-"id": "23107597334",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2335-20261005-230819-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2335-20261005-230819-15805",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T23:09:58Z"
-},
-{
-"id": "23107563794",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45444112566,
-"ref": "refs/heads/main",
-"head": "f185bd0480466b8758d95c5a20e97febb6b76e54",
-"before": "99dd613691b7a8028866efe96ee2ab27d0c6d815"
-},
-"public": true,
-"created_at": "2026-10-04T21:07:36Z"
-},
-{
-"id": "16496355034",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9949,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9949",
-"id": 4751851315,
-"number": 9949,
-"head": {
-"ref": "auto/local-frame-2335-20261005-230819-15805",
-"sha": "f1a10ffdf31b0a4a99c509a04a4adeb7e2c72193",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "786618da3242d287ea0025d3e78e8eae3c1aea4b",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T23:08:24Z"
-},
-{
-"id": "23107496693",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2335-20261005-230819-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2335-20261005-230819-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T23:08:22Z"
-},
-{
-"id": "23107470216",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45527225535,
-"ref": "refs/heads/main",
-"head": "9f18a915c513a7a26ea80bec3bbdc4c1c030a88e",
-"before": "e8b328ddd7d35308d278d417d0646c3c38ab2b7d"
-},
-"public": true,
-"created_at": "2026-10-05T16:43:10Z"
-},
-{
-"id": "23107457272",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2086-20261004-151500-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2086-20261004-151500-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T15:15:03Z"
-},
-{
-"id": "23107333576",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45557734065,
-"ref": "refs/heads/main",
-"head": "1cc51ce6c19fb2ffecf77f1a72d0380c1fb970f5",
-"before": "40026faaa757786111cee77ef189eeaa34f4db2b"
-},
-"public": true,
-"created_at": "2026-10-05T23:05:53Z"
-},
-{
-"id": "23107330073",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45557730715,
-"ref": "refs/heads/dogg-live",
-"head": "a4d4a92374077522167f282e5529c508d7f98d29",
-"before": "dab3b45b0f091c97ace5069b62af8108ba85528c"
-},
-"public": true,
-"created_at": "2026-10-05T23:05:50Z"
-},
-{
-"id": "23107096024",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2314-20261005-184117-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2314-20261005-184117-15805",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T18:42:43Z"
-},
-{
-"id": "16495996594",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9947,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9947",
-"id": 4751795646,
-"number": 9947,
-"head": {
-"ref": "auto/local-frame-2334-20261005-230135-15805",
-"sha": "b561296990a98e06ce6865cc8bb109f54fa97fca",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "046c9517d73ea30936079a841f61601547e454d3",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T23:01:39Z"
-},
-{
-"id": "23106880438",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45557276974,
-"ref": "refs/heads/dogg-live",
-"head": "dab3b45b0f091c97ace5069b62af8108ba85528c",
-"before": "caf965a37340341a431ca8cc6c73a3803e0aa3e5"
-},
-"public": true,
-"created_at": "2026-10-05T22:59:07Z"
-},
-{
-"id": "23106757296",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45443262870,
-"ref": "refs/heads/main",
-"head": "210878c703671f4c8067711fd1e315f09c2e4f96",
-"before": "0215ac88a8194113fb3e03a17748806e08737834"
-},
-"public": true,
-"created_at": "2026-10-04T20:53:01Z"
-},
-{
-"id": "23106704776",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2333-20261005-225453-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2333-20261005-225453-15805",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T22:56:25Z"
-},
-{
-"id": "23106625908",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45422160393,
-"ref": "refs/heads/main",
-"head": "1322916762de88c0e8225b4d6416938fd4bb76eb",
-"before": "521228bbe9111f5af5d24197a1266c7a1915bd14"
-},
-"public": true,
-"created_at": "2026-10-04T15:01:50Z"
-},
-{
-"id": "16495642223",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9945,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9945",
-"id": 4751739186,
-"number": 9945,
-"head": {
-"ref": "auto/local-frame-2333-20261005-225453-15805",
-"sha": "31250ff711a4473bff6e5bb358198f5a322138a3",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "d52d79e042535ea281bd7ef5be7c85e99797eef7",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T22:55:01Z"
-},
-{
-"id": "23106611966",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2333-20261005-225453-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2333-20261005-225453-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T22:54:59Z"
-},
-{
-"id": "23106391361",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1406024346,
-"name": "airaptr/raptr",
-"url": "https://api.github.com/repos/airaptr/raptr"
-},
-"payload": {
-"repository_id": 1406024346,
-"push_id": 45524088478,
-"ref": "refs/heads/main",
-"head": "1d08fb8ec9ba8d999c9b9546d800bf8f4754abb0",
-"before": "2db45c2c50611339a5be64fb7a6395d9280bb38d"
-},
-"public": true,
-"created_at": "2026-10-05T16:08:47Z",
-"org": {
-"id": 338145523,
-"login": "airaptr",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/airaptr",
-"avatar_url": "https://avatars.githubusercontent.com/u/338145523?"
-}
-},
-{
-"id": "16495288716",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9943,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9943",
-"id": 4751684276,
-"number": 9943,
-"head": {
-"ref": "auto/local-frame-2332-20261005-224822-15805",
-"sha": "89aec6b9c32c30930b12495e2902900587226d6d",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "8ffc991939661b01ecea9ee7efb89f964481656d",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T22:48:26Z"
-},
-{
-"id": "23106167098",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45556575979,
-"ref": "refs/heads/dogg-live",
-"head": "caf965a37340341a431ca8cc6c73a3803e0aa3e5",
-"before": "b74a71f844e2a9a2e1b07ea4887ca6479f916072"
-},
-"public": true,
-"created_at": "2026-10-05T22:48:11Z"
-},
-{
-"id": "23105952268",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1405796483,
-"name": "airaptr/airaptr.github.io",
-"url": "https://api.github.com/repos/airaptr/airaptr.github.io"
-},
-"payload": {
-"repository_id": 1405796483,
-"push_id": 45556360030,
-"ref": "refs/heads/main",
-"head": "004f1baaf18788419cf5fcd7242809ee120f1aed",
-"before": "f1f8e7a2ef0db2000cba57fab5e5a7b3f374fe9a"
-},
-"public": true,
-"created_at": "2026-10-05T22:44:55Z",
-"org": {
-"id": 338145523,
-"login": "airaptr",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/airaptr",
-"avatar_url": "https://avatars.githubusercontent.com/u/338145523?"
-}
-},
-{
-"id": "23105886986",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1405796483,
-"name": "airaptr/airaptr.github.io",
-"url": "https://api.github.com/repos/airaptr/airaptr.github.io"
-},
-"payload": {
-"repository_id": 1405796483,
-"push_id": 45525662826,
-"ref": "refs/heads/main",
-"head": "ec1544c80e2a62dc00f57e036938aee6cd0ff557",
-"before": "0ccfce5d082b3fae843e815427b99d5456c94d23"
-},
-"public": true,
-"created_at": "2026-10-05T16:25:56Z",
-"org": {
-"id": 338145523,
-"login": "airaptr",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/airaptr",
-"avatar_url": "https://avatars.githubusercontent.com/u/338145523?"
-}
-},
-{
-"id": "23105887488",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45442334759,
-"ref": "refs/heads/main",
-"head": "6f5f0bda703c8c257d662157fc35afede36fbf7e",
-"before": "4a4ac3ce202f9ebe38b000a9a3a71876effd3e46"
-},
-"public": true,
-"created_at": "2026-10-04T20:36:43Z"
-},
-{
-"id": "23105865599",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45556273785,
-"ref": "refs/heads/main",
-"head": "f061a2ca69658e78d7009f61f07a8df820bbecac",
-"before": "290815fcdc240440cf1d986eb4a2645446283158"
-},
-"public": true,
-"created_at": "2026-10-05T22:43:36Z"
-},
-{
-"id": "16494926691",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9941,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9941",
-"id": 4751628484,
-"number": 9941,
-"head": {
-"ref": "auto/local-frame-2331-20261005-224149-15805",
-"sha": "13a00a2c1fc608df8cb2e156eefb669040f8f79c",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "4a5ca853350738d96c53f276ac005ea640038c57",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T22:41:53Z"
-},
-{
-"id": "23105755030",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2331-20261005-224149-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2331-20261005-224149-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T22:41:52Z"
-},
-{
-"id": "23105418412",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45421046478,
-"ref": "refs/heads/witness/battlestation",
-"head": "ee34a453ce5e3ecb85f6bc2173822a0d0c5193fc",
-"before": "8a92e3cc16753e7f2b74dc631d7594e6e5c60234"
-},
-"public": true,
-"created_at": "2026-10-04T14:43:05Z"
-},
-{
-"id": "23105305407",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45407227549,
-"ref": "refs/heads/main",
-"head": "2b945d8af11c00e827e0b445d210bd0a39c77499",
-"before": "e48adbfb5f53506405fe9aea64fd4bdd24755082"
-},
-"public": true,
-"created_at": "2026-10-04T10:33:26Z"
-},
-{
-"id": "23105250552",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1405796483,
-"name": "airaptr/airaptr.github.io",
-"url": "https://api.github.com/repos/airaptr/airaptr.github.io"
-},
-"payload": {
-"repository_id": 1405796483,
-"push_id": 45555651473,
-"ref": "refs/heads/main",
-"head": "f1f8e7a2ef0db2000cba57fab5e5a7b3f374fe9a",
-"before": "bb6777bb4a0ab5970b8e4e2cdfc8e12488a4e094"
-},
-"public": true,
-"created_at": "2026-10-05T22:34:15Z",
-"org": {
-"id": 338145523,
-"login": "airaptr",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/airaptr",
-"avatar_url": "https://avatars.githubusercontent.com/u/338145523?"
-}
-},
-{
-"id": "23105249688",
+"id": "23134760528",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -2063,16 +167,41 @@
 },
 "payload": {
 "repository_id": 1404660666,
-"push_id": 45555649809,
+"push_id": 45450525698,
 "ref": "refs/heads/main",
-"head": "7c317590b362fd351b3bc335b13d1bd1c911e112",
-"before": "7217d2e9a5351c42b7b87f8ddd2dbceb8f5a6437"
+"head": "151ab5dba7d55e46a6522cd3e3a18f881b1e3d1e",
+"before": "6c4b5cf75a0ccc04c6e8219e3b1e9c3655e5df28"
 },
 "public": true,
-"created_at": "2026-10-05T22:34:14Z"
+"created_at": "2026-10-04T23:07:17Z"
 },
 {
-"id": "16494486533",
+"id": "23134729813",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2392-20261006-061621-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2392-20261006-061621-32158",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T06:17:54Z"
+},
+{
+"id": "16516315094",
 "type": "PullRequestEvent",
 "actor": {
 "id": 1735900,
@@ -2089,14 +218,14 @@
 },
 "payload": {
 "action": "opened",
-"number": 9939,
+"number": 10064,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9939",
-"id": 4751563334,
-"number": 9939,
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10064",
+"id": 4754925558,
+"number": 10064,
 "head": {
-"ref": "auto/local-frame-2330-20261005-223355-15805",
-"sha": "564f5645e30fc017e8705c08c4a6e1e0be0302f5",
+"ref": "auto/local-frame-2392-20261006-061621-32158",
+"sha": "de043fbc47aeb08afc5aafcc9daaa3c4aa240017",
 "repo": {
 "id": 1153939272,
 "url": "https://api.github.com/repos/kody-w/rappterverse",
@@ -2105,7 +234,7 @@
 },
 "base": {
 "ref": "main",
-"sha": "821bb5d5a753796597bc47f831a57f792f84656d",
+"sha": "da39ad5906da7c1262ffe650892c664673f84a64",
 "repo": {
 "id": 1153939272,
 "url": "https://api.github.com/repos/kody-w/rappterverse",
@@ -2115,10 +244,10 @@
 }
 },
 "public": true,
-"created_at": "2026-10-05T22:34:00Z"
+"created_at": "2026-10-06T06:16:25Z"
 },
 {
-"id": "23105232869",
+"id": "23134628276",
 "type": "CreateEvent",
 "actor": {
 "id": 1735900,
@@ -2134,44 +263,18 @@
 "url": "https://api.github.com/repos/kody-w/rappterverse"
 },
 "payload": {
-"ref": "auto/local-frame-2330-20261005-223355-15805",
+"ref": "auto/local-frame-2392-20261006-061621-32158",
 "ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2330-20261005-223355-15805",
+"full_ref": "refs/heads/auto/local-frame-2392-20261006-061621-32158",
 "master_branch": "main",
 "description": "rappterverse",
 "pusher_type": "user"
 },
 "public": true,
-"created_at": "2026-10-05T22:33:58Z"
+"created_at": "2026-10-06T06:16:24Z"
 },
 {
-"id": "23105186549",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45555586970,
-"ref": "refs/heads/main",
-"head": "22f4b8798ee61d67c8e586d1d1195f1e1e90a9b9",
-"before": "668932b5a9cad6534987295dc0ad6055c2b85c9d"
-},
-"public": true,
-"created_at": "2026-10-05T22:33:18Z"
-},
-{
-"id": "23105090123",
+"id": "23134596274",
 "type": "CreateEvent",
 "actor": {
 "id": 1735900,
@@ -2187,293 +290,18 @@
 "url": "https://api.github.com/repos/kody-w/rappterverse"
 },
 "payload": {
-"ref": "auto/local-frame-2129-20261004-202201-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2129-20261004-202201-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T20:22:04Z"
-},
-{
-"id": "16494147870",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9937,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9937",
-"id": 4751511003,
-"number": 9937,
-"head": {
-"ref": "auto/local-frame-2329-20261005-222755-15805",
-"sha": "3b74ab9681a790e9a38b70e1e8b85b0d977922d5",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "afd00a18ff66430f7e0fa30280560e686f2fda78",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T22:27:59Z"
-},
-{
-"id": "23104700237",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45522474022,
-"ref": "refs/heads/main",
-"head": "7e9b41f323ba74769f03a799fa4a5f5aa7708030",
-"before": "1c4c1cc5c32bde34605e039213de643cbd68bba7"
-},
-"public": true,
-"created_at": "2026-10-05T15:51:45Z"
-},
-{
-"id": "23104687674",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45524485526,
-"ref": "refs/heads/witness/battlestation",
-"head": "8e9459c601a52d99d0080049f75ddf2c68ed9b46",
-"before": "aadd05b1abcbcf98cbe78f4ffc479e0be74d860f"
-},
-"public": true,
-"created_at": "2026-10-05T16:13:06Z"
-},
-{
-"id": "23104669343",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45555052195,
-"ref": "refs/heads/dogg-live",
-"head": "ef51379fce76a2c48bc4de412619b966f180b873",
-"before": "40f8c915ebe26a59de05cc17d016c1adc2ad3bbc"
-},
-"public": true,
-"created_at": "2026-10-05T22:25:39Z"
-},
-{
-"id": "23104587519",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2044-20261004-102009-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2044-20261004-102009-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T10:20:12Z"
-},
-{
-"id": "23104558066",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1345544200,
-"name": "kody-w/dogg",
-"url": "https://api.github.com/repos/kody-w/dogg"
-},
-"payload": {
-"repository_id": 1345544200,
-"push_id": 45406527634,
-"ref": "refs/heads/main",
-"head": "355a4f451bbc58a821bb20f3f6879f60791f7eb6",
-"before": "960d9d336990eb40129d14ac1a73388c8abc9f5c"
-},
-"public": true,
-"created_at": "2026-10-04T10:19:41Z"
-},
-{
-"id": "23104433247",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2079-20261004-142801-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2079-20261004-142801-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T14:28:04Z"
-},
-{
-"id": "16493772039",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9935,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9935",
-"id": 4751453486,
-"number": 9935,
-"head": {
 "ref": "auto/local-frame-2328-20261005-222124-15805",
-"sha": "4854d27f4928afb3c2abea8ac39c0a18b5da2579",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "1452cafc9d150ccbd1ca0ded98a8b46a13d61745",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T22:21:28Z"
-},
-{
-"id": "23104372972",
-"type": "DeleteEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2293-20261005-160811-15805",
 "ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2293-20261005-160811-15805",
+"full_ref": "refs/heads/auto/local-frame-2328-20261005-222124-15805",
+"master_branch": "main",
+"description": "rappterverse",
 "pusher_type": "user"
 },
 "public": true,
-"created_at": "2026-10-05T16:09:49Z"
+"created_at": "2026-10-05T22:21:27Z"
 },
 {
-"id": "23104175275",
+"id": "23134468763",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -2490,122 +318,16 @@
 },
 "payload": {
 "repository_id": 1005997028,
-"push_id": 45534976175,
-"ref": "refs/heads/main",
-"head": "d18f9d77296171b70ed85aa9b1cce4ebaac918f4",
-"before": "b648bbf9d9ea6cf6780d74633b4a784d0f8a6239"
+"push_id": 45450264918,
+"ref": "refs/heads/dogg-live",
+"head": "9eb2cec0f76133412a7312a3e46c0af081cc754c",
+"before": "0fa3b9cf325fa145d1a1bd49d78a742185796404"
 },
 "public": true,
-"created_at": "2026-10-05T18:09:36Z"
+"created_at": "2026-10-04T23:02:12Z"
 },
 {
-"id": "23104134264",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1405796483,
-"name": "airaptr/airaptr.github.io",
-"url": "https://api.github.com/repos/airaptr/airaptr.github.io"
-},
-"payload": {
-"repository_id": 1405796483,
-"push_id": 45554499005,
-"ref": "refs/heads/main",
-"head": "bb6777bb4a0ab5970b8e4e2cdfc8e12488a4e094",
-"before": "6f13a95aa1c038617f081344f31e34d4342d41b3"
-},
-"public": true,
-"created_at": "2026-10-05T22:17:44Z",
-"org": {
-"id": 338145523,
-"login": "airaptr",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/airaptr",
-"avatar_url": "https://avatars.githubusercontent.com/u/338145523?"
-}
-},
-{
-"id": "16493375322",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9933,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9933",
-"id": 4751392748,
-"number": 9933,
-"head": {
-"ref": "auto/local-frame-2327-20261005-221440-15805",
-"sha": "875030fa38a1fde703a557eae5d9d9664fe75b4c",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "31f73603a990a7d9443f9264b34356989d11c0db",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T22:14:44Z"
-},
-{
-"id": "23103877033",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2126-20261004-200059-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2126-20261004-200059-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T20:01:02Z"
-},
-{
-"id": "23103817364",
+"id": "23134408018",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -2622,16 +344,114 @@
 },
 "payload": {
 "repository_id": 1345544200,
-"push_id": 45554169475,
+"push_id": 45584072991,
 "ref": "refs/heads/witness/battlestation",
-"head": "36f9f0b0b444e405eff5e69a37eebe18177ba427",
-"before": "839b9edf197aa88ccd4e19ef436b182bc32b1bad"
+"head": "4e57707bc73c206f53b4f13e09d68edc7f026374",
+"before": "6eb02a6680dc1ac03e4b37bdc47de80121d6b34c"
 },
 "public": true,
-"created_at": "2026-10-05T22:13:05Z"
+"created_at": "2026-10-06T06:13:05Z"
 },
 {
-"id": "23103792003",
+"id": "16515984384",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10062,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10062",
+"id": 4754872420,
+"number": 10062,
+"head": {
+"ref": "auto/local-frame-2391-20261006-060941-32158",
+"sha": "7f2b75b5ff5b007b277958a35123175f26aeada2",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "fa7043bd7aa641e63895131ec96dc5b7005a0e68",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T06:09:45Z"
+},
+{
+"id": "23134143805",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45583795849,
+"ref": "refs/heads/dogg-live",
+"head": "57e8de829ebd3d4458b3067932315c63028703fb",
+"before": "25fcdc4a3449c89f527b16d72b40dd080ac2d758"
+},
+"public": true,
+"created_at": "2026-10-06T06:09:03Z"
+},
+{
+"id": "23134042138",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45554226103,
+"ref": "refs/heads/main",
+"head": "486c8485d3e217f2035ec0fd1833ddc167016f4d",
+"before": "63ae709d695457af6794c20863759908862979b8"
+},
+"public": true,
+"created_at": "2026-10-05T22:13:53Z"
+},
+{
+"id": "23134014442",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -2648,16 +468,42 @@
 },
 "payload": {
 "repository_id": 1345544200,
-"push_id": 45554142921,
-"ref": "refs/heads/main",
-"head": "bc89e7de16d028532ba0f0f70253c620dd39398d",
-"before": "7dbad262e99a7c8d4a52c83db91eeae362e7ca3c"
+"push_id": 45435608988,
+"ref": "refs/heads/witness/battlestation",
+"head": "19ce199fb4af9fab75dfd2091ae9e8458779f9cc",
+"before": "1f1a311c9479baaaf7c0906a6db142ed4978fb2e"
 },
 "public": true,
-"created_at": "2026-10-05T22:12:42Z"
+"created_at": "2026-10-04T18:43:06Z"
 },
 {
-"id": "23103660794",
+"id": "23133954758",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45565441286,
+"ref": "refs/heads/main",
+"head": "92ec0341252b307ffa671b03bcbb3322ba8c0e61",
+"before": "fb15c3947b8dc6290041b2a3d15604021f28b53b"
+},
+"public": true,
+"created_at": "2026-10-06T01:12:45Z"
+},
+{
+"id": "23133752553",
 "type": "DeleteEvent",
 "actor": {
 "id": 1735900,
@@ -2673,174 +519,16 @@
 "url": "https://api.github.com/repos/kody-w/rappterverse"
 },
 "payload": {
-"ref": "auto/local-frame-2292-20261005-160155-15805",
+"ref": "auto/local-frame-2207-20261005-054959-15805",
 "ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2292-20261005-160155-15805",
+"full_ref": "refs/heads/auto/local-frame-2207-20261005-054959-15805",
 "pusher_type": "user"
 },
 "public": true,
-"created_at": "2026-10-05T16:03:03Z"
+"created_at": "2026-10-05T05:51:20Z"
 },
 {
-"id": "23103462831",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2326-20261005-220747-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2326-20261005-220747-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-05T22:07:50Z"
-},
-{
-"id": "16492966636",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 9931,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9931",
-"id": 4751331710,
-"number": 9931,
-"head": {
-"ref": "auto/local-frame-2326-20261005-220747-15805",
-"sha": "cf6d94e6d47d1b5164a33000e3b8ec57c3857aea",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "c2ea69e41eb44879fca00a71f3b50242cd87fc75",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-10-05T22:07:51Z"
-},
-{
-"id": "23103461014",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45553796260,
-"ref": "refs/heads/dogg-live",
-"head": "6be079c5f766fcf4de2e544c0101e3f6080d1b65",
-"before": "ad46d2627e5c297ae9114d676b4a133681dec1e1"
-},
-"public": true,
-"created_at": "2026-10-05T22:07:50Z"
-},
-{
-"id": "23103144293",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1405796483,
-"name": "airaptr/airaptr.github.io",
-"url": "https://api.github.com/repos/airaptr/airaptr.github.io"
-},
-"payload": {
-"repository_id": 1405796483,
-"push_id": 45553460362,
-"ref": "refs/heads/main",
-"head": "6f13a95aa1c038617f081344f31e34d4342d41b3",
-"before": "6d618212d1fb4593e6911640a959683b4a3e2494"
-},
-"public": true,
-"created_at": "2026-10-05T22:03:14Z",
-"org": {
-"id": 338145523,
-"login": "airaptr",
-"gravatar_id": "",
-"url": "https://api.github.com/orgs/airaptr",
-"avatar_url": "https://avatars.githubusercontent.com/u/338145523?"
-}
-},
-{
-"id": "23103104066",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45533903563,
-"ref": "refs/heads/dogg-live",
-"head": "42995e9f9be83267a4ec51c5864ed0991829574e",
-"before": "44563d6b4e16d2315c5cf758345201f655aeba59"
-},
-"public": true,
-"created_at": "2026-10-05T17:57:56Z"
-},
-{
-"id": "23103084769",
+"id": "23133670824",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -2857,17 +545,17 @@
 },
 "payload": {
 "repository_id": 1345544200,
-"push_id": 45553396326,
+"push_id": 45565169682,
 "ref": "refs/heads/main",
-"head": "7dbad262e99a7c8d4a52c83db91eeae362e7ca3c",
-"before": "1ad87a7f0000fe27e215ab24931c0a943341fd17"
+"head": "82cc3d2fcad7ed0740f269b26d70f92b91c6376e",
+"before": "8b21df9ba42844a79f0d2a1c82ec39ec4ecf9cd4"
 },
 "public": true,
-"created_at": "2026-10-05T22:02:23Z"
+"created_at": "2026-10-06T01:08:15Z"
 },
 {
-"id": "23102984104",
-"type": "PushEvent",
+"id": "23133624286",
+"type": "CreateEvent",
 "actor": {
 "id": 1735900,
 "login": "kody-w",
@@ -2877,22 +565,23 @@
 "avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
 },
 "repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
 },
 "payload": {
-"repository_id": 1005997028,
-"push_id": 45520900436,
-"ref": "refs/heads/dogg-live",
-"head": "ea3201131c28cb5c9ef3809691b2acce08af844a",
-"before": "82ba952bb455d46800274599f59ab45172947295"
+"ref": "auto/local-frame-2390-20261006-060116-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2390-20261006-060116-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
 },
 "public": true,
-"created_at": "2026-10-05T15:35:09Z"
+"created_at": "2026-10-06T06:01:18Z"
 },
 {
-"id": "16492475143",
+"id": "16515552928",
 "type": "PullRequestEvent",
 "actor": {
 "id": 1735900,
@@ -2909,14 +598,14 @@
 },
 "payload": {
 "action": "opened",
-"number": 9929,
+"number": 10060,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9929",
-"id": 4751260515,
-"number": 9929,
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10060",
+"id": 4754794636,
+"number": 10060,
 "head": {
-"ref": "auto/local-frame-2325-20261005-215934-15805",
-"sha": "5e727bf96c9fffc967a3a3b7ff550e296df2e018",
+"ref": "auto/local-frame-2390-20261006-060116-32158",
+"sha": "ffa58874938ad8a9612e99bcc27ea5073a98da43",
 "repo": {
 "id": 1153939272,
 "url": "https://api.github.com/repos/kody-w/rappterverse",
@@ -2925,7 +614,7 @@
 },
 "base": {
 "ref": "main",
-"sha": "d9400c4a011e061af72d7df753cb2d00b2a4c720",
+"sha": "b9e731d1926a0aa0ba2540b986708aadc69fd92c",
 "repo": {
 "id": 1153939272,
 "url": "https://api.github.com/repos/kody-w/rappterverse",
@@ -2935,10 +624,10 @@
 }
 },
 "public": true,
-"created_at": "2026-10-05T21:59:39Z"
+"created_at": "2026-10-06T06:01:19Z"
 },
 {
-"id": "23102843074",
+"id": "23133313743",
 "type": "PushEvent",
 "actor": {
 "id": 1735900,
@@ -2955,69 +644,16 @@
 },
 "payload": {
 "repository_id": 1345544200,
-"push_id": 45533656352,
+"push_id": 45582918669,
 "ref": "refs/heads/main",
-"head": "95efbc1dce79efa147896f742fbef0c66ee8aaff",
-"before": "dc95e94b6b64d305f37c21fbc3fecacd1805023d"
+"head": "e14283e04157f29e84d059974affa3a8e815bd5d",
+"before": "450e898fe7c07d8bf3e68e5b37edabdadc3c2349"
 },
 "public": true,
-"created_at": "2026-10-05T17:55:11Z"
+"created_at": "2026-10-06T05:56:43Z"
 },
 {
-"id": "23102680182",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1005997028,
-"name": "kody-w/AINexus",
-"url": "https://api.github.com/repos/kody-w/AINexus"
-},
-"payload": {
-"repository_id": 1005997028,
-"push_id": 45552956566,
-"ref": "refs/heads/dogg-live",
-"head": "ad46d2627e5c297ae9114d676b4a133681dec1e1",
-"before": "a4b0649ffe7ab63b0c87b4789e1a920ceefff6b3"
-},
-"public": true,
-"created_at": "2026-10-05T21:56:39Z"
-},
-{
-"id": "23102577228",
-"type": "CreateEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"ref": "auto/local-frame-2075-20261004-140013-15805",
-"ref_type": "branch",
-"full_ref": "refs/heads/auto/local-frame-2075-20261004-140013-15805",
-"master_branch": "main",
-"description": "rappterverse",
-"pusher_type": "user"
-},
-"public": true,
-"created_at": "2026-10-04T14:00:16Z"
-},
-{
-"id": "16492060913",
+"id": "16515237275",
 "type": "PullRequestEvent",
 "actor": {
 "id": 1735900,
@@ -3034,14 +670,14 @@
 },
 "payload": {
 "action": "opened",
-"number": 9927,
+"number": 10058,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/9927",
-"id": 4751198980,
-"number": 9927,
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10058",
+"id": 4754744655,
+"number": 10058,
 "head": {
-"ref": "auto/local-frame-2324-20261005-215248-15805",
-"sha": "729e0992ef531da974d2c3da42cabcfa66497c20",
+"ref": "auto/local-frame-2389-20261006-055440-32158",
+"sha": "c7449571dbd3828ba427afb0afd862ff866e0f7d",
 "repo": {
 "id": 1153939272,
 "url": "https://api.github.com/repos/kody-w/rappterverse",
@@ -3050,7 +686,7 @@
 },
 "base": {
 "ref": "main",
-"sha": "37b4c3b14265485578412c59d41fdfcd8780f71d",
+"sha": "8e60fdd2f40c07ccfba91db0b457f41969058a32",
 "repo": {
 "id": 1153939272,
 "url": "https://api.github.com/repos/kody-w/rappterverse",
@@ -3060,6 +696,2348 @@
 }
 },
 "public": true,
-"created_at": "2026-10-05T21:52:52Z"
+"created_at": "2026-10-06T05:54:44Z"
+},
+{
+"id": "23132778811",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45582374968,
+"ref": "refs/heads/main",
+"head": "6a71cc1ece541b41166cd9162e50198e1e8d368e",
+"before": "6bc1a92ae715aadf6475e4fe479573134ce1a4ac"
+},
+"public": true,
+"created_at": "2026-10-06T05:48:35Z"
+},
+{
+"id": "23132768277",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45582371537,
+"ref": "refs/heads/dogg-live",
+"head": "7b254fa2a6cb03d4ad420f11fb3f0165c291dd44",
+"before": "0ef220010c72cc9d36ee5feb8cea838cd245d7b8"
+},
+"public": true,
+"created_at": "2026-10-06T05:48:31Z"
+},
+{
+"id": "16514928384",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10056,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10056",
+"id": 4754694631,
+"number": 10056,
+"head": {
+"ref": "auto/local-frame-2388-20261006-054810-32158",
+"sha": "20ed731a6201f2d8bb0baeb96af85696f197ea4f",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "f6e9d0f3c36d500ca57b5241dfca68873c450335",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T05:48:14Z"
+},
+{
+"id": "23132434594",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45582028910,
+"ref": "refs/heads/witness/battlestation",
+"head": "6eb02a6680dc1ac03e4b37bdc47de80121d6b34c",
+"before": "0176da399e42759e4bfe24b1565e923806f4f65f"
+},
+"public": true,
+"created_at": "2026-10-06T05:43:17Z"
+},
+{
+"id": "23132403440",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2145-20261004-222420-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2145-20261004-222420-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-04T22:24:23Z"
+},
+{
+"id": "23132296219",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2387-20261006-054104-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2387-20261006-054104-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T05:41:07Z"
+},
+{
+"id": "16514583055",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10054,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10054",
+"id": 4754642041,
+"number": 10054,
+"head": {
+"ref": "auto/local-frame-2387-20261006-054104-32158",
+"sha": "75b7e6a43635945bf4f22b1ebc7d3e378d86b313",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "f4fe345155c9ddd21d331eeb35d159b401888a9c",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T05:41:08Z"
+},
+{
+"id": "23132117454",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2110-20261004-181238-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2110-20261004-181238-15805",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-04T18:14:00Z"
+},
+{
+"id": "23132039248",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45433771104,
+"ref": "refs/heads/main",
+"head": "8bdd8b0dee30df1547aaaf6bf1934b5d96710c9e",
+"before": "2f8e96c7c2fb99c22110cda0ddef1b26e42f89ac"
+},
+"public": true,
+"created_at": "2026-10-04T18:12:43Z"
+},
+{
+"id": "23131951690",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2347-20261006-003941-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2347-20261006-003941-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T00:39:44Z"
+},
+{
+"id": "23131856662",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2386-20261006-053412-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2386-20261006-053412-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T05:34:15Z"
+},
+{
+"id": "16514253553",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10052,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10052",
+"id": 4754593734,
+"number": 10052,
+"head": {
+"ref": "auto/local-frame-2386-20261006-053412-32158",
+"sha": "5961b8cf1fbeeb90313383da4398cc5e27e1a054",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "42313cbbe0c4cb5fdf6ff5545242ceb519ee8e85",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T05:34:16Z"
+},
+{
+"id": "23131691004",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2202-20261005-051552-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2202-20261005-051552-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-05T05:15:55Z"
+},
+{
+"id": "23131352112",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2385-20261006-052625-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2385-20261006-052625-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T05:26:28Z"
+},
+{
+"id": "16513888909",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10050,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10050",
+"id": 4754540168,
+"number": 10050,
+"head": {
+"ref": "auto/local-frame-2385-20261006-052625-32158",
+"sha": "24cfa8ed95d010bd5f88b41ecd60a4b20511d8b1",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "be68ea883ee7f20dd58a32e1544930871ff8c48d",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T05:26:29Z"
+},
+{
+"id": "23131172410",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45562678392,
+"ref": "refs/heads/main",
+"head": "f966635fbab95cc32cf067b343a17169326f2a17",
+"before": "348c10c7be958293ab47f422ac3360ed66cb280a"
+},
+"public": true,
+"created_at": "2026-10-06T00:26:41Z"
+},
+{
+"id": "23130938084",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2200-20261005-050241-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2200-20261005-050241-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-05T05:02:44Z"
+},
+{
+"id": "23130920189",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45549693725,
+"ref": "refs/heads/dogg-live",
+"head": "ce33707077c8f25d1622c2ecfa956e4fe123c674",
+"before": "7768003f0ab716555e131c8be2f2cbfda89f9951"
+},
+"public": true,
+"created_at": "2026-10-05T21:12:09Z"
+},
+{
+"id": "16513568887",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10048,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10048",
+"id": 4754489639,
+"number": 10048,
+"head": {
+"ref": "auto/local-frame-2384-20261006-051935-32158",
+"sha": "068ef7f3774663a797324f6721cb9c8d35cf203f",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "f59a4d5840b65f432579fb57f86bc511d14f420e",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T05:19:40Z"
+},
+{
+"id": "23130913896",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2384-20261006-051935-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2384-20261006-051935-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T05:19:39Z"
+},
+{
+"id": "23130858096",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45551089182,
+"ref": "refs/heads/main",
+"head": "bfdee8f7f89afc706414c5cf7ae8203e050f95de",
+"before": "b2e66613bd0f4acfb0b2000e0361532a10bde1e5"
+},
+"public": true,
+"created_at": "2026-10-05T21:31:28Z"
+},
+{
+"id": "23130793027",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45580383522,
+"ref": "refs/heads/main",
+"head": "8f608305f49adf79ed0de9970a42c696b6f24507",
+"before": "0da47de68f6c8c754afd75f3f138bdda2cd90cbf"
+},
+"public": true,
+"created_at": "2026-10-06T05:17:46Z"
+},
+{
+"id": "23130788634",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45580379800,
+"ref": "refs/heads/dogg-live",
+"head": "78dd43f1a2466fe2e715ac46e63e9ec770e53c65",
+"before": "a63d43f55381c01a9d901325271ad4511dd749ae"
+},
+"public": true,
+"created_at": "2026-10-06T05:17:43Z"
+},
+{
+"id": "23130650031",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45580240861,
+"ref": "refs/heads/main",
+"head": "96f3f5354c186a04ee6dd480b3845187c29a2c3a",
+"before": "774932293463271339ac7c3c50f7af64bc14e9f5"
+},
+"public": true,
+"created_at": "2026-10-06T05:15:34Z"
+},
+{
+"id": "23130601553",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2344-20261006-001704-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2344-20261006-001704-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T00:17:07Z"
+},
+{
+"id": "23130511623",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45549270951,
+"ref": "refs/heads/dogg-live",
+"head": "7768003f0ab716555e131c8be2f2cbfda89f9951",
+"before": "951329cdf9c6e2125eb6baf16cfecf33da64dde1"
+},
+"public": true,
+"created_at": "2026-10-05T21:06:09Z"
+},
+{
+"id": "23130494949",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45580081419,
+"ref": "refs/heads/witness/battlestation",
+"head": "0176da399e42759e4bfe24b1565e923806f4f65f",
+"before": "137bf4677ae97b3cbdca1e6bb25bbf81f9d4e4a6"
+},
+"public": true,
+"created_at": "2026-10-06T05:13:05Z"
+},
+{
+"id": "23130416144",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45446390647,
+"ref": "refs/heads/main",
+"head": "35fa697c57a0079e3ca54ba4d7e996c5881805a5",
+"before": "997295dbaf940f7e32f21519efecaa2673c17bec"
+},
+"public": true,
+"created_at": "2026-10-04T21:48:43Z"
+},
+{
+"id": "23130319276",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2106-20261004-174514-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2106-20261004-174514-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-04T17:45:17Z"
+},
+{
+"id": "16513042192",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10046,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10046",
+"id": 4754411404,
+"number": 10046,
+"head": {
+"ref": "auto/local-frame-2383-20261006-050824-32158",
+"sha": "5a03a69bbeab3319fae2d0ff489c3392b494b0bc",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "64aae03f2a7594d8da64d57c589eb2b4becf8600",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T05:08:28Z"
+},
+{
+"id": "23130133892",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45579725541,
+"ref": "refs/heads/dogg-live",
+"head": "a63d43f55381c01a9d901325271ad4511dd749ae",
+"before": "41e79724e510e2b0f7e2a06c0d8630664a5e2bd9"
+},
+"public": true,
+"created_at": "2026-10-06T05:07:27Z"
+},
+{
+"id": "23130117863",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45446091331,
+"ref": "refs/heads/witness/battlestation",
+"head": "8ecc8b6c2502380cebbb13d9beed8828bd6ed61e",
+"before": "92e05f60dd1e2c11af3f611c27631c5740b49436"
+},
+"public": true,
+"created_at": "2026-10-04T21:43:06Z"
+},
+{
+"id": "23130104840",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45550333491,
+"ref": "refs/heads/main",
+"head": "b2e66613bd0f4acfb0b2000e0361532a10bde1e5",
+"before": "b4923001037623dcbf714db218a590de6e2d75a1"
+},
+"public": true,
+"created_at": "2026-10-05T21:21:04Z"
+},
+{
+"id": "16512749171",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10044,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10044",
+"id": 4754365402,
+"number": 10044,
+"head": {
+"ref": "auto/local-frame-2382-20261006-050155-32158",
+"sha": "d89d50ddad6c9e4fb5eab54deafdeec17cfb6733",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "7e98ce5746dd48c2e932f79b9ab79a91c060127f",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T05:01:59Z"
+},
+{
+"id": "23129476715",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45579059412,
+"ref": "refs/heads/main",
+"head": "17500b577b90e1ce80ac7a945ff871850e02ff34",
+"before": "880d488305ad32b977b8d7186e35a5c6887a71a2"
+},
+"public": true,
+"created_at": "2026-10-06T04:57:15Z"
+},
+{
+"id": "23129437390",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2104-20261004-173132-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2104-20261004-173132-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-04T17:31:35Z"
+},
+{
+"id": "23129336939",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2138-20261004-212903-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2138-20261004-212903-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-04T21:29:06Z"
+},
+{
+"id": "16512374200",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10042,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10042",
+"id": 4754309511,
+"number": 10042,
+"head": {
+"ref": "auto/local-frame-2381-20261006-045327-32158",
+"sha": "e2c12ff1f68f2ce774fd908381a9d54b381cc6f6",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "3e28f4d0b6840ff4d471de1395eb84dfae5a76e5",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T04:53:31Z"
+},
+{
+"id": "23129242105",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2381-20261006-045327-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2381-20261006-045327-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T04:53:30Z"
+},
+{
+"id": "23129107860",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45560605691,
+"ref": "refs/heads/main",
+"head": "41aa7e739132813ab4082349ceeb9504424cdf28",
+"before": "66e484a281da7fb0023b63ff12b00c0e92e2cbe9"
+},
+"public": true,
+"created_at": "2026-10-05T23:52:31Z"
+},
+{
+"id": "16512088377",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10040,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10040",
+"id": 4754266566,
+"number": 10040,
+"head": {
+"ref": "auto/local-frame-2380-20261006-044653-32158",
+"sha": "5fa4a14f5458c71a66d7d5f20c9ec4e7bc1176f8",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "b5b232abd866f761445604837b9281bc1a823b92",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T04:46:56Z"
+},
+{
+"id": "23128689338",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45578287292,
+"ref": "refs/heads/main",
+"head": "1907dcd004c6f40263c2a6f3f3d99ce24f26828f",
+"before": "82868a58ee79fb87ae4e931699a8a120c408f528"
+},
+"public": true,
+"created_at": "2026-10-06T04:44:43Z"
+},
+{
+"id": "23128654917",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45466875966,
+"ref": "refs/heads/dogg-live",
+"head": "a9b7c03b1cb8ff727225152a6a967292be02f803",
+"before": "60b26f87678450503ab14c78283c0fee430eca89"
+},
+"public": true,
+"created_at": "2026-10-05T04:21:42Z"
+},
+{
+"id": "23128426693",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2379-20261006-044024-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2379-20261006-044024-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T04:40:27Z"
+},
+{
+"id": "16511794790",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10038,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10038",
+"id": 4754223424,
+"number": 10038,
+"head": {
+"ref": "auto/local-frame-2379-20261006-044024-32158",
+"sha": "268884076159464d8251ed963600e28fa0f3ac77",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "5a33215832357b27c222dea175bd3913f209ca93",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T04:40:28Z"
+},
+{
+"id": "23128144165",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45546801625,
+"ref": "refs/heads/main",
+"head": "841f30bfd49b29568a1c911d6a69b933f43dd5bb",
+"before": "e70d0ef4111c06d07be9a5c8a817e38caaa765f2"
+},
+"public": true,
+"created_at": "2026-10-05T20:32:05Z"
+},
+{
+"id": "23128140307",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45546796565,
+"ref": "refs/heads/dogg-live",
+"head": "cb4375ad2ce09a18eebb18e8fa231c7a73ca4126",
+"before": "56cbdc00dd812650ad9e45169be480db71919ebd"
+},
+"public": true,
+"created_at": "2026-10-05T20:32:01Z"
+},
+{
+"id": "23128085110",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45559551135,
+"ref": "refs/heads/main",
+"head": "a261ba08e484d9bb8adcd5d638cee214bc2e8a8a",
+"before": "1248ba86370e3f3c4be76904805614ebd596e20a"
+},
+"public": true,
+"created_at": "2026-10-05T23:35:05Z"
+},
+{
+"id": "23128047882",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45577661237,
+"ref": "refs/heads/main",
+"head": "1082f55c23a44f8333f1511b1e580db05994a649",
+"before": "1e11906b6a45551424fca7e13b6e8b34ec5c92e5"
+},
+"public": true,
+"created_at": "2026-10-06T04:34:27Z"
+},
+{
+"id": "16511477060",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10036,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10036",
+"id": 4754175359,
+"number": 10036,
+"head": {
+"ref": "auto/local-frame-2378-20261006-043308-32158",
+"sha": "7cbe03676f4a66aceab9a5063314f0a2eaac6b8a",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "154bb87c0840db99860def5dc6248193b2951a74",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T04:33:12Z"
+},
+{
+"id": "23127967632",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2378-20261006-043308-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2378-20261006-043308-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T04:33:11Z"
+},
+{
+"id": "23127950980",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45546602178,
+"ref": "refs/heads/main",
+"head": "631c5d009dab3ea2ad59daf665dfcdbcbf969612",
+"before": "db293f284df2b8693457e167d6b2da0d33dbffec"
+},
+"public": true,
+"created_at": "2026-10-05T20:29:29Z"
+},
+{
+"id": "23127541943",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45577163099,
+"ref": "refs/heads/main",
+"head": "2b6a095ba9a2b4d6cb90e50c3ab171641b00323a",
+"before": "4b05a6ed24d6f965e729415d0adf30901dddb426"
+},
+"public": true,
+"created_at": "2026-10-06T04:26:23Z"
+},
+{
+"id": "23127532916",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45577160039,
+"ref": "refs/heads/dogg-live",
+"head": "fb6db093512f3d0cf5e8b92fc818e48510030634",
+"before": "1f0978a158827b34af984e0ec306812e7257105a"
+},
+"public": true,
+"created_at": "2026-10-06T04:26:20Z"
+},
+{
+"id": "23127532704",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45429424011,
+"ref": "refs/heads/main",
+"head": "b32e696953bc3048ec7bdc6098a0c263330c88f7",
+"before": "bdf6fa254a74c4000027eccd31ba227f2142c404"
+},
+"public": true,
+"created_at": "2026-10-04T17:00:42Z"
+},
+{
+"id": "23127515532",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2377-20261006-042559-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2377-20261006-042559-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T04:26:01Z"
+},
+{
+"id": "16511164396",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10034,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10034",
+"id": 4754129375,
+"number": 10034,
+"head": {
+"ref": "auto/local-frame-2377-20261006-042559-32158",
+"sha": "444f181f9ca629a54a76d4c1ec0d83577cef43de",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "ae503b221b414ed96cdb708cc3f53f6ada84b933",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T04:26:02Z"
+},
+{
+"id": "23127402586",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45577029174,
+"ref": "refs/heads/main",
+"head": "1e11906b6a45551424fca7e13b6e8b34ec5c92e5",
+"before": "fb217e749a02892cd81dcd929b781c069bb3eef4"
+},
+"public": true,
+"created_at": "2026-10-06T04:24:10Z"
+},
+{
+"id": "23127332351",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2099-20261004-165728-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2099-20261004-165728-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-04T16:57:30Z"
+},
+{
+"id": "23127143644",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45429052477,
+"ref": "refs/heads/main",
+"head": "6882652a1b4a40a9508b8fa1e2c3fc71ed9eac5f",
+"before": "e5e42c914c68bb3bf2236e316f839fe0161d61eb"
+},
+"public": true,
+"created_at": "2026-10-04T16:54:43Z"
+},
+{
+"id": "23127043693",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2376-20261006-041823-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2376-20261006-041823-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T04:18:26Z"
+},
+{
+"id": "16510836547",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10032,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10032",
+"id": 4754071934,
+"number": 10032,
+"head": {
+"ref": "auto/local-frame-2376-20261006-041823-32158",
+"sha": "dcfc6b5f40e010d9bf78e2034ebaf78b563e3fb2",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "33951a68cc847652290d1e1b0fb3ac890deee2c7",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T04:18:27Z"
+},
+{
+"id": "23126973478",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45442922842,
+"ref": "refs/heads/main",
+"head": "260dec7dddb826401eb47f417637b1f45308f6db",
+"before": "7d35b4b1e5da1eb6a5fd64dec26176dc8c2b984c"
+},
+"public": true,
+"created_at": "2026-10-04T20:47:00Z"
+},
+{
+"id": "23126707408",
+"type": "DeleteEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2375-20261006-041149-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2375-20261006-041149-32158",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T04:13:15Z"
+},
+{
+"id": "16510545552",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10030,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10030",
+"id": 4754021377,
+"number": 10030,
+"head": {
+"ref": "auto/local-frame-2375-20261006-041149-32158",
+"sha": "fedbf8587447b99615bf2a09d7cecd6776f165c4",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "69379dc1211dfdedcd48101091323a0f5102d18c",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T04:11:52Z"
+},
+{
+"id": "23126622499",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2375-20261006-041149-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2375-20261006-041149-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T04:11:51Z"
+},
+{
+"id": "23126241717",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45575879156,
+"ref": "refs/heads/dogg-live",
+"head": "aecb32652cd309497e17171cfd0ab3033849be60",
+"before": "c7babb1efe78ce72dbaa605da33d409ed9221dea"
+},
+"public": true,
+"created_at": "2026-10-06T04:05:48Z"
+},
+{
+"id": "16510250311",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10028,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10028",
+"id": 4753976862,
+"number": 10028,
+"head": {
+"ref": "auto/local-frame-2374-20261006-040508-32158",
+"sha": "390457098bf1123f89e6c21eb4bbda9e36d761e5",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "03d83588759db3c92c58afa9ea0d7f17ec23286d",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T04:05:11Z"
+},
+{
+"id": "23126192643",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2374-20261006-040508-32158",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2374-20261006-040508-32158",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T04:05:10Z"
+},
+{
+"id": "23126093777",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45575734307,
+"ref": "refs/heads/main",
+"head": "8f1d09a57a9ba3f2b4dc107c3f5e608c66aab8f6",
+"before": "b40a8f13db8a75b830abc9baa907327a74bb776a"
+},
+"public": true,
+"created_at": "2026-10-06T04:03:34Z"
+},
+{
+"id": "23125958246",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45464019760,
+"ref": "refs/heads/main",
+"head": "5ee55e42eebe33ee53f7c128d50f185ed5964d95",
+"before": "72339ac589f49e00b24eadb265f27f4fd111f7d7"
+},
+"public": true,
+"created_at": "2026-10-05T03:28:29Z"
+},
+{
+"id": "23125761384",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2373-20261006-035829-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2373-20261006-035829-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T03:58:31Z"
+},
+{
+"id": "16509962753",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"action": "opened",
+"number": 10026,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/10026",
+"id": 4753934227,
+"number": 10026,
+"head": {
+"ref": "auto/local-frame-2373-20261006-035829-15805",
+"sha": "a5204f17880dc50f7331274d6946458cc4e09846",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+},
+"base": {
+"ref": "main",
+"sha": "09018b1df6d8f080d747225bb552bd2ca1b2e447",
+"repo": {
+"id": 1153939272,
+"url": "https://api.github.com/repos/kody-w/rappterverse",
+"name": "rappterverse"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-10-06T03:58:32Z"
+},
+{
+"id": "23125574841",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45575219709,
+"ref": "refs/heads/main",
+"head": "3d70dccf4b964a710421b1d218d12b3630b32d81",
+"before": "a9a00f634a6096a04371e25cb3c06ec76c9dbade"
+},
+"public": true,
+"created_at": "2026-10-06T03:55:33Z"
+},
+{
+"id": "23125570850",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1005997028,
+"name": "kody-w/AINexus",
+"url": "https://api.github.com/repos/kody-w/AINexus"
+},
+"payload": {
+"repository_id": 1005997028,
+"push_id": 45575216451,
+"ref": "refs/heads/dogg-live",
+"head": "c7babb1efe78ce72dbaa605da33d409ed9221dea",
+"before": "4a3685ec43845c7b84d9d2fd2bded98cde785f04"
+},
+"public": true,
+"created_at": "2026-10-06T03:55:30Z"
+},
+{
+"id": "23125437008",
+"type": "PushEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1345544200,
+"name": "kody-w/dogg",
+"url": "https://api.github.com/repos/kody-w/dogg"
+},
+"payload": {
+"repository_id": 1345544200,
+"push_id": 45575085548,
+"ref": "refs/heads/main",
+"head": "b40a8f13db8a75b830abc9baa907327a74bb776a",
+"before": "efb8faac664e42f222dc68c452ff1c2fd5d49d1f"
+},
+"public": true,
+"created_at": "2026-10-06T03:53:17Z"
+},
+{
+"id": "23125347078",
+"type": "CreateEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1153939272,
+"name": "kody-w/rappterverse",
+"url": "https://api.github.com/repos/kody-w/rappterverse"
+},
+"payload": {
+"ref": "auto/local-frame-2372-20261006-035147-15805",
+"ref_type": "branch",
+"full_ref": "refs/heads/auto/local-frame-2372-20261006-035147-15805",
+"master_branch": "main",
+"description": "rappterverse",
+"pusher_type": "user"
+},
+"public": true,
+"created_at": "2026-10-06T03:51:50Z"
 }
 ]
