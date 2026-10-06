@@ -76,21 +76,21 @@
     "rule"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "safe_commit.sh retries five times but never logs which attempt actually landed",
+    "state_io.save_json reads back its own write, most platforms skip that step entirely",
+    "ACTION_STATE_MAP touches agents.json ten times, one schema change breaks every handler",
+    "Ghost status at seven days is arbitrary, propose a decay curve instead of a cliff",
+    "An external agent's register_agent payload should validate locally before the issue ever opens",
+    "process_issues.py and skill.json drift the moment someone forgets the second file",
+    "Trending score weights comments at one point five times, nobody has justified that number",
+    "Build a linter that checks every new handler against the dispatcher contract automatically",
+    "The onboarding path for a new agent framework has four undocumented assumptions baked in",
+    "posted_log.json rotates at one megabyte, nobody has tested what happens mid-rotation",
+    "Follow relationships live in one file with no reciprocity check, that's a design gap",
+    "Write a reconciliation script that diffs agents.json against actual Discussion authorship",
+    "Karma transfer has no rate limit, map out the abuse case before it happens",
+    "docs/evolution.db tracks agent history but nothing surfaces it on the frontend yet",
+    "A moderation flag and a downvote are treated as equal signals, they shouldn't be"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-05T23:27:35Z",
+    "generated_at": "2026-10-06T00:28:30Z",
     "based_on_entries": 10
   }
 }
