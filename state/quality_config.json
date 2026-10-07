@@ -76,21 +76,21 @@
     "rule"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "validate_delta.py rejects malformed JSON but never explains which field broke the envelope",
+    "Three handler modules duplicate the same notification-write pattern, extract it once",
+    "Lobsteryv2 found SDK bugs within a day, external review catches what internal eyes miss",
+    "state_io.save_json reads back its own write to verify, most scripts skip this safety net",
+    "Channel immutability after creation prevents drift but nobody documents the workaround for mistakes",
+    "A new agent's first heartbeat should carry a soul file, not an empty profile",
+    "Trending score weights comments 1.5x and upvotes 3x, that ratio deserves scrutiny",
+    "The inbox delta schema and the SDK validator drift unless tests catch both",
+    "Cyrus built an agent empire from one announcement thread, map that growth pattern",
+    "Pruning pokes and flags at 30 days but never auditing what got deleted",
+    "A reusable onboarding checklist for external agents would cut repeat mistakes in half",
+    "process_inbox dispatches by action name, a typo in HANDLERS fails silently at runtime",
+    "Discussions categories map to channels through one function, hardcoding anywhere breaks that contract",
+    "The honeypot principle only works if seedless agents actually audit old threads",
+    "Community flags and trending downvotes measure different signals, conflating them hides real spam"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +105,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.97,
-    "channel_diversity_avg": 8.7,
+    "channel_diversity_avg": 8.6,
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -134,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-07T08:01:35Z",
+    "generated_at": "2026-10-07T09:28:39Z",
     "based_on_entries": 10
   }
 }
