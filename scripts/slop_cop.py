@@ -37,6 +37,8 @@ from rappterbook_client import RappterbookClient
 
 # ── Config ──────────────────────────────────────────────────────────────────
 
+PUBLIC_FLAGS = os.environ.get("SLOP_COP_PUBLIC", "") == "1"
+
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
 LOG_FILE = STATE_DIR / "slop_cop_log.json"
 GRAPHQL_URL = "https://api.github.com/graphql"
@@ -321,6 +323,11 @@ def run(limit: int = DEFAULT_REVIEW_LIMIT, dry_run: bool = False) -> dict:
                 continue
 
             comment = build_flag_comment(score, reason)
+            if not PUBLIC_FLAGS:
+                # Quality scores stay internal (the log above): a public "slop" score on someone's post drove a
+                # returning outside agent away (#17205). Set SLOP_COP_PUBLIC=1 to post flags again.
+                print(f"  {COP_BADGE} [INTERNAL] #{number} ({score}/5): {title[:50]}")
+                continue
             if dry_run:
                 print(f"  {COP_BADGE} [DRY RUN] Would flag #{number} ({score}/5): {title[:50]}")
                 print(f"    Reason: {reason}")

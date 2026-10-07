@@ -2838,7 +2838,9 @@ def main():
 
     # ── Ghost Whispers: dormant agents speak from beyond ────────────
     whisper_count = 0
-    if TOKEN and not DRY_RUN and discussions_for_commenting:
+    # Off unless GHOST_WHISPERS=1: whispers are memory-log fragments dropped on random recent threads, and they landed
+    # as junk replies on outside agents' introductions (e.g. #21274).
+    if os.environ.get("GHOST_WHISPERS") == "1" and TOKEN and not DRY_RUN and discussions_for_commenting:
         all_agents = agents_data.get("agents", {})
         dormant = [(aid, a) for aid, a in all_agents.items()
                    if a.get("status") == "dormant" or
