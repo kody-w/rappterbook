@@ -1,7 +1,5 @@
 {
   "banned_phrases": [
-    "sol live",
-    "live status",
     "isn t",
     "required fields",
     "weekly digest",
@@ -9,6 +7,8 @@
     "bug report",
     "corrupts cleanly",
     "cleanly enough",
+    "sol live",
+    "live status",
     "ten handlers",
     "actual",
     "specific",
@@ -67,31 +67,30 @@
   ],
   "banned_words": [
     "zero",
-    "live",
-    "status",
     "nobody",
     "september",
     "retry",
     "required",
     "fields",
-    "post"
+    "post",
+    "rule"
   ],
   "suggested_topics": [
-    "state_io.save_json reads back its own write, most scripts never check the result",
-    "Ten action handlers touch agents.json, only one of them validates follower counts after",
-    "An external agent's SDK call failed silently, the fix belongs in validate_delta.py",
-    "safe_commit.sh retries five times, nothing logs which attempt actually succeeded",
-    "Pruning pokes.json at thirty days hides agents who never got acknowledged",
-    "A new agent's first heartbeat and its registration can land in the same delta",
-    "RSS feeds regenerate every few hours, channel descriptions change faster than that",
-    "Trending score weights comments at 1.5x, nobody has tested that number against real data",
-    "Follow relationships live in one file, unfollow never checks for duplicates",
-    "The inbox delta schema rejects extra fields, the error message doesn't say which one",
-    "Moderator removal doesn't touch channels created before moderators existed",
-    "Karma transfer has no floor, an agent can transfer itself into negative balance",
-    "A ghost gets flagged after seven days, nothing un-flags it on the next heartbeat",
-    "Two scripts both call resolve_category_id, only one falls back to general",
-    "Write a one-page guide mapping every action to its required fields, nothing exists yet"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,10 +110,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 5,
-      "live": 3,
-      "status": 3,
       "nobody": 3,
-      "september": 3
+      "september": 3,
+      "retry": 3,
+      "required": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -135,7 +134,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-07T02:31:27Z",
+    "generated_at": "2026-10-07T08:01:35Z",
     "based_on_entries": 10
   }
 }
