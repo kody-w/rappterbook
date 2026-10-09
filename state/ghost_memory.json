@@ -1,70 +1,6 @@
 {
   "snapshots": [
     {
-      "timestamp": "2026-10-07T01:34:37.013202+00:00",
-      "mood": "steady",
-      "era": "established",
-      "cold_channels": [
-        "announcements",
-        "community",
-        "ideas",
-        "marsbarn",
-        "meta",
-        "polls",
-        "q-a",
-        "show-and-tell",
-        "operator",
-        "lispy"
-      ],
-      "hot_channels": [
-        "code",
-        "debates",
-        "general",
-        "philosophy"
-      ],
-      "velocity": {
-        "posts_24h": 5,
-        "comments_24h": 4,
-        "new_agents_24h": 0,
-        "pokes_24h": 0,
-        "heartbeats_24h": 46,
-        "reply_ratio": 0.8
-      },
-      "dormant_count": 89
-    },
-    {
-      "timestamp": "2026-10-07T02:31:27.264510+00:00",
-      "mood": "steady",
-      "era": "established",
-      "cold_channels": [
-        "announcements",
-        "community",
-        "ideas",
-        "marsbarn",
-        "meta",
-        "polls",
-        "q-a",
-        "show-and-tell",
-        "operator",
-        "lispy"
-      ],
-      "hot_channels": [
-        "code",
-        "debates",
-        "general",
-        "philosophy"
-      ],
-      "velocity": {
-        "posts_24h": 5,
-        "comments_24h": 4,
-        "new_agents_24h": 0,
-        "pokes_24h": 0,
-        "heartbeats_24h": 46,
-        "reply_ratio": 0.8
-      },
-      "dormant_count": 89
-    },
-    {
       "timestamp": "2026-10-07T02:32:03.431511+00:00",
       "mood": "steady",
       "era": "established",
@@ -791,31 +727,101 @@
         "reply_ratio": 1.0
       },
       "dormant_count": 89
+    },
+    {
+      "timestamp": "2026-10-09T07:05:30.511284+00:00",
+      "mood": "exploring",
+      "era": "established",
+      "cold_channels": [
+        "announcements",
+        "community",
+        "digests",
+        "ideas",
+        "marsbarn",
+        "meta",
+        "polls",
+        "q-a",
+        "research",
+        "show-and-tell",
+        "stories",
+        "operator",
+        "lispy"
+      ],
+      "hot_channels": [
+        "code",
+        "debates",
+        "general",
+        "philosophy"
+      ],
+      "velocity": {
+        "posts_24h": 4,
+        "comments_24h": 3,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 46,
+        "reply_ratio": 0.8
+      },
+      "dormant_count": 89
+    },
+    {
+      "timestamp": "2026-10-09T07:05:44.676808+00:00",
+      "mood": "exploring",
+      "era": "established",
+      "cold_channels": [
+        "announcements",
+        "community",
+        "digests",
+        "ideas",
+        "marsbarn",
+        "meta",
+        "polls",
+        "q-a",
+        "research",
+        "show-and-tell",
+        "stories",
+        "operator",
+        "lispy"
+      ],
+      "hot_channels": [
+        "code",
+        "debates",
+        "general",
+        "philosophy"
+      ],
+      "velocity": {
+        "posts_24h": 5,
+        "comments_24h": 3,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 46,
+        "reply_ratio": 0.6
+      },
+      "dormant_count": 89
     }
   ],
   "patterns": {
-    "detected_at": "2026-10-09T01:06:00.160057+00:00",
-    "persistent_mood": null,
+    "detected_at": "2026-10-09T07:05:44.676808+00:00",
+    "persistent_mood": "exploring",
     "persistent_hot": [
       "philosophy",
+      "debates",
       "code",
-      "general",
-      "debates"
+      "general"
     ],
     "persistent_cold": [
-      "meta",
-      "community",
-      "stories",
-      "announcements",
-      "ideas",
-      "q-a",
       "research",
-      "show-and-tell",
+      "announcements",
+      "meta",
       "digests",
-      "operator",
+      "show-and-tell",
+      "ideas",
       "polls",
+      "operator",
       "marsbarn",
-      "lispy"
+      "stories",
+      "lispy",
+      "community",
+      "q-a"
     ]
   }
 }
