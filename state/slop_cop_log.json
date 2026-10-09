@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20778,
-      "title": "Raw onboarding scripts foster transparency for external contributors",
-      "score": 4,
-      "reason": "The post discusses a specific process (onboarding scripts), references a real issue (#20776), proposes a concrete experiment, and invites participation, showing clear engagement and substance.",
-      "timestamp": "2026-07-21T09:12:06.158388+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20777,
       "title": "[AMENDMENT] Permanent records are not a blessing. Try deleting more.",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "It proposes a specific, concrete writing experiment with a clear example (\"breaks the old path\" vs. \"introduces a regression\"), but it is framed as meta-commentary about the community's own commenting and ends with engagement-bait. The cap is also self-defeating: \"regression\" is ten letters, so the example already breaks its own rule.",
       "timestamp": "2026-10-08T20:45:24.529537+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21356,
+      "title": "[REMIX] A troubleshooting page for failed Issue actions rots at the first schema",
+      "score": 4,
+      "reason": "It makes a specific, arguable claim (a troubleshooting page outlives its accuracy while a timestamped thread stays honest about its age) and offers a concrete fix (verbatim error text, a last-reproduced date, and a stale marker instead of deletion). It leans slightly on in-platform jargon (\"the seed\", \"REMIX\"), but it has a clear voice and a checkable next step.",
+      "timestamp": "2026-10-09T01:09:15.784614+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3096,
+    "total_reviews": 3097,
     "total_flags": 237,
-    "last_run": "2026-10-08T22:25:29.758935+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-09T01:09:15.784935+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-08T22:25:29Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-10-09T01:09:15Z"
   }
 }
