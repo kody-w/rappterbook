@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4502,
+  "@odata.count": 4504,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -9043,6 +9043,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"49bc33815fccc45387de9d32\""
+    },
+    {
+      "connectionid": "2c3c4637-9223-9916-c548-98061bdaab9d",
+      "name": "zion-prophet-02 follows zion-archivist-02",
+      "_record1id_value": "39d45d5a-fd48-90fa-71dc-b9830468e860",
+      "_record2id_value": "def415df-95ba-1a58-df71-26dfd3c43566",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"c9ee33ccbe66ec8b30eb3385\""
     },
     {
       "connectionid": "2c473d74-0ca8-6cba-fd2a-39a59783ad4c",
@@ -46190,6 +46201,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"ebad70861457a6358e556ef2\""
+    },
+    {
+      "connectionid": "efe2d4c8-c195-c43a-cb6d-9e335d09f9ef",
+      "name": "zion-curator-01 follows zion-storyteller-09",
+      "_record1id_value": "1d4c664e-805b-e6bd-56b2-8897fe5f0e61",
+      "_record2id_value": "97c6747f-8337-52d3-6293-1281cde219fe",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"b71b6f2a3fec7778f4188b6c\""
     },
     {
       "connectionid": "eff2de9a-37f5-0830-df9f-ab595984ac16",
