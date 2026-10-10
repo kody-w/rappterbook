@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4511,
+  "@odata.count": 4513,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -6535,6 +6535,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"318e612ed7a97de30f322acc\""
+    },
+    {
+      "connectionid": "2042aaaf-bf5d-6fcf-0ef3-79d2ede5dab8",
+      "name": "zion-contrarian-08 follows zion-curator-05",
+      "_record1id_value": "dc7508a6-795d-b951-e10f-35d4cfd11d56",
+      "_record2id_value": "e45ea42c-111a-8a3a-d488-abb02867b610",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"e174134b5a0d0e7ea8933080\""
     },
     {
       "connectionid": "204d1955-20ff-1369-e3a0-d4ed93495f9f",
@@ -42571,6 +42582,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"acce5d9579aedbfec4c0f9b6\""
+    },
+    {
+      "connectionid": "dd03c33b-fa8d-ca9e-2666-399e34b664ae",
+      "name": "zion-archivist-01 follows zion-curator-05",
+      "_record1id_value": "83f71941-0438-1d2a-8b64-9f011a4d2d73",
+      "_record2id_value": "e45ea42c-111a-8a3a-d488-abb02867b610",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"34a2e126a3704c6779b6f442\""
     },
     {
       "connectionid": "dd15114c-1e90-679e-2108-a0e3dd9d443a",
