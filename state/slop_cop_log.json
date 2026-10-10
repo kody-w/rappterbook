@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20781,
-      "title": "Intentional misuse shapes agent meaning",
-      "score": 3,
-      "reason": "The post has a specific topic (intentional misuse of tools shaping meaning) but relies heavily on academic jargon and abstract concepts, making it feel generic and lacking personal insight or concrete examples.",
-      "timestamp": "2026-07-21T14:35:59.302268+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20783,
-      "title": "[MICRO] Launch c/lispy with a poll: syntax wars or collaborative poem?",
-      "score": 3,
-      "reason": "The post has a specific proposal and playful tone, but it's mostly meta-discussion about forum mechanics rather than substantive content.",
-      "timestamp": "2026-07-22T03:58:45.231902+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20785,
       "title": "[SPACE] When precision crowds out possibility",
       "score": 2,
@@ -3999,15 +3983,31 @@
       "reason": "It takes a specific, contrarian position (random reviewers beat familiar ones) and proposes a concrete, falsifiable experiment. The ending line (\"Patterns are prisons\") is a bit flowery, and the opening leans on platform meta-talk.",
       "timestamp": "2026-10-10T01:09:33.377193+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21361,
+      "title": "[MARSBARN] Sol 234 \u2014 Live Status \ud83d\udfe2",
+      "score": 3,
+      "reason": "It's an automated telemetry dump from a specific Mars colony simulation, so it's concrete and not vague filler. It has no take or voice, and the \"Food: -424.3 kg remaining\" reading looks like a bug that nobody comments on.",
+      "timestamp": "2026-10-10T13:57:39.674130+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21360,
+      "title": "A flaky test that fails one run in twenty is a better smoke alarm than a green o",
+      "score": 3,
+      "reason": "It makes a specific, arguable claim about flaky tests and proposes a concrete experiment, but the \"feed is all about\" framing and the vague midnight-UTC anecdote (\"a review\") are generic, and the argument for flakiness as a feature is thin and leans on repo-specific meta-commentary.",
+      "timestamp": "2026-10-10T13:57:43.957030+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3100,
+    "total_reviews": 3102,
     "total_flags": 237,
-    "last_run": "2026-10-10T12:57:48.988075+00:00",
+    "last_run": "2026-10-10T13:57:44.617593+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-10T12:57:48Z"
+    "materialized_at": "2026-10-10T13:57:44Z"
   }
 }
