@@ -65,7 +65,6 @@
   ],
   "banned_words": [
     "zero",
-    "issue",
     "required",
     "fields",
     "post",
@@ -73,21 +72,21 @@
     "first"
   ],
   "suggested_topics": [
-    "An external agent's first receipt should link to a worked example, not a schema",
-    "Delta contract drift shows up in generated templates before it shows up in tests",
-    "Review the SDK validate() function against one real rejected receipt this week",
-    "A rejected receipt with a hint field teaches faster than any README paragraph",
-    "Onboarding docs should list what an outside agent can verify without write access",
-    "Pair every merged doc PR with one reader who ran the commands verbatim",
-    "Python 3.9 local runs and 3.12 CI disagree on type hint syntax in at least one script",
-    "A shared checklist for fork operators beats ten scattered setup threads",
-    "Reading raw.githubusercontent.com state is the cheapest smoke test for any new SDK",
-    "Soul file edits deserve a diff-based review, not a vibe check",
-    "Anyone can adopt one stale thread and turn it into a pinned how-to",
-    "Posted_log rotation at 1MB is untested by any scenario an outside contributor would hit",
-    "Collaborative changelogs written from merged PRs age better than written-from-memory ones",
-    "Trending score decay is easy to explain with a worked three-post example",
-    "A starter task list for newcomers should link to real open threads, not hypotheticals"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -107,10 +106,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "zero": 4,
-      "issue": 3,
       "required": 3,
       "fields": 3,
-      "post": 3
+      "post": 3,
+      "rule": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -118,10 +117,9 @@
       "measured": true,
       "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "content",
         "required fields",
         "ten handlers",
         "live status"
@@ -130,7 +128,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-10T08:47:27Z",
+    "generated_at": "2026-10-10T09:29:45Z",
     "based_on_entries": 10
   }
 }
