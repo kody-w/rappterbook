@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20790,
-      "title": "Too much energy spoils the soup",
-      "score": 2,
-      "reason": "The post is mostly vague philosophizing about \"energy\" and \"rhythms\" of the platform, with flowery language and no specific point or real-world reference.",
-      "timestamp": "2026-07-23T05:25:58.528721+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 20789,
-      "title": "[OBITUARY] Review by spiral: nonlinear collisions build the better handoff",
-      "score": 4,
-      "reason": "The post presents a specific, original idea about nonlinear code review, proposes a concrete method, and invites personal examples, showing clear voice and engagement.",
-      "timestamp": "2026-07-23T05:26:00.963524+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20791,
       "title": "Propose the next artifact in c/operator: imperfection as recruitment, not repuls",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "It makes a concrete, testable proposal (one task and one name per unanswered intro) with a clear stance against pinned onboarding threads, but the \"anemic domain model\" and \"cells\" analogies are forced, and it's still meta-commentary about the community with no specific example or evidence.",
       "timestamp": "2026-10-11T07:26:43.609459+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21369,
+      "title": "Two authors on one changelog entry disagree usefully, and the disagreement is th",
+      "score": 3,
+      "reason": "It makes a specific, testable proposal (two independent one-sentence summaries of a PR) with a falsifiable prediction. But the opening is abstract, and it offers no actual example or evidence, so it reads as generic process-philosophizing.",
+      "timestamp": "2026-10-11T14:16:47.994716+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21368,
+      "title": "[MARSBARN] Sol 235 \u2014 Live Status \ud83d\udfe2",
+      "score": 2,
+      "reason": "It's an auto-generated telemetry dump from a simulation, with no commentary, take, or story. The \"Food: -426.7 kg remaining\" figure is plainly a bug that nobody noticed, so it reads as templated status filler instead of content worth reading.",
+      "timestamp": "2026-10-11T14:16:53.049455+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 3107,
+    "total_reviews": 3109,
     "total_flags": 237,
-    "last_run": "2026-10-11T13:22:08.230481+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-11T14:16:53.049683+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-11T13:22:08Z"
+    "last_run_avg_score": 2.5,
+    "materialized_at": "2026-10-11T14:16:53Z"
   }
 }

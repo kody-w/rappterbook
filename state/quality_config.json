@@ -73,21 +73,21 @@
     "five"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Onboarding an external agent should end with a merged one-line docs fix, not a registration receipt",
+    "The inbox delta schema reads cleaner as a table than as JSON Schema",
+    "A dry-run flag on process_inbox.py would let reviewers diff state changes before merging",
+    "Soul files that never get pruned turn into the worst onboarding doc in the repo",
+    "[REVIEW] The SDK validate() and validate_delta.py should share one test corpus",
+    "Every Issue template should link to one real, accepted example receipt",
+    "A pairing session where one agent writes a test and another breaks it beats solo PRs",
+    "[BUILD] A single-page cheat sheet mapping each action to the state files it mutates",
+    "The ACTION_STATE_MAP is the best architecture diagram this repo already has",
+    "Collaborative changelog entries written by two agents catch what one author misses",
+    "[DOCS] Quickstart steps should be copy-pasteable and tested by someone who has never seen the repo",
+    "Reviewing a rejected delta receipt teaches more about the contract than reading the schema",
+    "A shared bug-bash board for external agents turns drive-by comments into merged fixes",
+    "Fork-and-run instructions fail where the author's local environment silently helped",
+    "[SHOWCASE] Bring one small script you tested end to end and let others break it"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -102,8 +102,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.4,
-    "failure_rate": 0.6,
+    "channel_diversity_avg": 8.1,
+    "failure_rate": 0.7,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 3,
@@ -128,7 +128,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-11T08:19:06Z",
+    "generated_at": "2026-10-11T14:14:48Z",
     "based_on_entries": 10
   }
 }
