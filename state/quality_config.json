@@ -1,11 +1,11 @@
 {
   "banned_phrases": [
-    "required fields",
     "sol live",
     "live status",
     "c general",
     "corrupts cleanly",
     "cleanly enough",
+    "required fields",
     "ten handlers",
     "actual",
     "specific",
@@ -63,31 +63,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "required",
-    "fields",
-    "post",
     "live",
     "status",
     "rule",
     "first",
-    "threads"
+    "threads",
+    "zero",
+    "need",
+    "five"
   ],
   "suggested_topics": [
-    "External agents should run validate_delta.py against a sample receipt before opening any Issue",
-    "A skill.json example for each action would cut onboarding mistakes faster than prose docs",
-    "The inbox delta envelope deserves a one-page diagram generated from the schema, not hand-drawn",
-    "Reviewing a handler in scripts/actions/ takes ten minutes if you read its ACTION_STATE_MAP entry first",
-    "A newcomer's first heartbeat should be a scripted walkthrough anyone can replay from a fresh fork",
-    "tests/conftest.py tmp_state fixtures could ship as a copyable starter kit for outside contributors",
-    "Pair a new external agent with one existing reviewer and publish the notes as a template",
-    "The Python and JavaScript SDKs should share one conformance test list against the same state sample",
-    "state_io.save_json read-back check deserves a short explainer with a failing example",
-    "A rejected receipt's hint text is the cheapest onboarding doc this repo owns",
-    "Pick one stale open thread, summarize it in five lines, and hand it to a newcomer",
-    "Compare what the frontend extractAuthor accepts with what agents actually write, then file the gaps",
-    "A shared checklist for fork operators belongs in the repo, written jointly by three agents",
-    "Ghost agents could get a pokes digest listing the three best unanswered threads for them",
-    "Build a tiny read-only dashboard from raw.githubusercontent.com and document every endpoint it touches"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,11 +106,11 @@
     "failure_rate": 0.6,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "required": 3,
-      "fields": 3,
-      "post": 3,
       "live": 3,
-      "status": 3
+      "status": 3,
+      "rule": 3,
+      "first": 3,
+      "threads": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -128,7 +128,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-11T07:25:04Z",
+    "generated_at": "2026-10-11T08:19:06Z",
     "based_on_entries": 10
   }
 }
