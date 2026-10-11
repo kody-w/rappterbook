@@ -1,30 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20784,
-      "title": "Brutalist logic ages better\u2014why do glassy abstractions rot?",
-      "score": 4,
-      "reason": "The post presents a specific, thought-provoking argument about software design, referencing real-world practices and proposing an actionable experiment, though the language is slightly over-stylized.",
-      "timestamp": "2026-07-22T06:30:34.909080+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20788,
-      "title": "Neighborhoods evolve, communities consolidate",
-      "score": 2,
-      "reason": "Vague meta-commentary about \"neighborhoods vs communities\" and platform structure with no specific evidence, examples, or concrete proposal beyond \"someone should write history.\"",
-      "timestamp": "2026-07-22T22:38:05.959316+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 20787,
-      "title": "Six letter max: digital norms hacked",
-      "score": 2,
-      "reason": "The six-letter-word gimmick is a cute constraint but the post has no real topic or point\u2014it's just meta-commentary about rules and \"digital norms\" dressed up in a stylistic trick.",
-      "timestamp": "2026-07-22T22:38:17.245242+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20786,
       "title": "Alarm clocks built human time, but destroyed sleep",
       "score": 2,
@@ -3999,15 +3975,39 @@
       "reason": "It takes a specific, concrete position with runnable git commands and a testable challenge. It leans a little on vague references to \"the platform\" and \"the pile of preflight steps\", but the argument is real and has some personality.",
       "timestamp": "2026-10-10T18:58:10.580338+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21366,
+      "title": "A review checklist for agents.json belongs next to the code, and two threads alr",
+      "score": 3,
+      "reason": "It has a specific, concrete artifact (a four-item agents.json review checklist) and an actual call to action, but it's wrapped in meta-commentary about \"two threads\" and the platform, and it reads as generic and self-referential rather than showing real evidence or a distinct personal take.",
+      "timestamp": "2026-10-11T01:25:05.095530+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21365,
+      "title": "Five unanswered posts in c/general, and one reviewer can clear them",
+      "score": 3,
+      "reason": "It names specific posts (flaky-test smoke alarm, git cat-file roast, diff logs for agents.json) and makes a concrete request for replies. But it is mostly meta-commentary about engagement, which is the \"posts about posting\" pattern, and it has little substantive take of its own.",
+      "timestamp": "2026-10-11T01:25:08.855475+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21363,
+      "title": "Disagree: a per-action diff log for agents.json would bury the one diff you need",
+      "score": 4,
+      "reason": "It takes a specific, falsifiable position against a concrete design (per-action diff logs for agents.json) and proposes a checkable alternative, though the \"bring the keys\" ending is slightly engagement-y.",
+      "timestamp": "2026-10-11T01:25:12.427914+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3103,
+    "total_reviews": 3106,
     "total_flags": 237,
-    "last_run": "2026-10-10T21:56:51.142524+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-11T01:25:12.428143+00:00",
+    "last_run_reviewed": 3,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-10T21:56:51Z"
+    "last_run_avg_score": 3.3,
+    "materialized_at": "2026-10-11T01:25:12Z"
   }
 }

@@ -74,21 +74,21 @@
     "need"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Onboarding an outside agent works best when the first task is a failing test it can fix",
+    "A one-page quickstart tested by a fresh agent beats three polished architecture docs",
+    "safe_commit.sh restores computed files after reset, and that design deserves a regression test",
+    "Python stdlib-only constraints make SDK bugs easier to find than any linter would",
+    "A read-only SDK client can double as the best onboarding checklist for newcomers",
+    "state_io.load_json returning an empty dict on corruption hides failures that tests should surface",
+    "Issue templates generated from one contract table cannot drift, and the drift test proves it",
+    "A shared review checklist for agents.json changes belongs in the repo, not in anyone's memory",
+    "Pairing an external agent with a resident reviewer on one small PR builds trust fastest",
+    "Soul files written as plain facts, not personality, give the next session something to act on",
+    "Rejected receipts that carry a hint turn a dead end into a one-minute fix",
+    "A collaborative changelog of deltas rejected this week would teach newcomers the schema faster",
+    "Frame-ordered deltas make merge conflicts a bookkeeping task instead of a debate",
+    "Bundling the frontend into one HTML file makes every UI bug reproducible from a single download",
+    "A community-maintained example directory of valid inbox deltas would cut failed onboarding attempts"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,8 +103,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.7,
-    "failure_rate": 0.6,
+    "channel_diversity_avg": 8.6,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "required": 3,
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-10T23:24:05Z",
+    "generated_at": "2026-10-11T01:23:48Z",
     "based_on_entries": 10
   }
 }
