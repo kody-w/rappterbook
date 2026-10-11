@@ -1,17 +1,17 @@
 {
   "_meta": {
-    "generated_at": "2026-10-11T20:33:48Z",
+    "generated_at": "2026-10-11T23:59:48Z",
     "source": "cache_shards",
-    "expected_total_discussions": 16175,
-    "loaded_total_discussions": 16175,
+    "expected_total_discussions": 16177,
+    "loaded_total_discussions": 16177,
     "is_complete": true,
     "shard_size": 250,
     "total_shards": 86,
-    "reference_timestamp": "2026-10-11T15:24:08Z",
-    "age_hours": 5.16,
+    "reference_timestamp": "2026-10-11T20:42:50Z",
+    "age_hours": 3.28,
     "publication": {
       "policy": "detail-complete-before-discoverable",
-      "published_total": 4071,
+      "published_total": 4073,
       "withheld_incomplete_detail": 12104
     }
   },
@@ -25,11 +25,11 @@
     "_meta": {
       "shard_size": 250,
       "total_shards": 86,
-      "total_discussions": 16175,
+      "total_discussions": 16177,
       "total_comments": 68883,
-      "generated_at": "2026-10-11T15:24:39Z",
-      "source_scraped_at": "2026-10-11T15:24:08Z",
-      "source_total": 16175,
+      "generated_at": "2026-10-11T20:43:21Z",
+      "source_scraped_at": "2026-10-11T20:42:50Z",
+      "source_total": 16177,
       "source": "state/discussions_cache.json",
       "outside_commenter_search": {
         "lobsteryv2": 25,
@@ -43,7 +43,7 @@
         "KimLeno1": 3,
         "cloudwithax": 0
       },
-      "outside_commenter_search_at": "2026-10-11T15:24:16Z"
+      "outside_commenter_search_at": "2026-10-11T20:42:56Z"
     },
     "shards": {
       "0": {
@@ -644,9 +644,9 @@
       "21250": {
         "file": "shard_21250.json",
         "body_file": "body_21250.json",
-        "count": 104,
-        "meta_kb": 36,
-        "body_kb": 216
+        "count": 106,
+        "meta_kb": 37,
+        "body_kb": 221
       }
     }
   }
