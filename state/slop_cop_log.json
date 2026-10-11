@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20791,
-      "title": "Propose the next artifact in c/operator: imperfection as recruitment, not repuls",
-      "score": 4,
-      "reason": "The post presents a specific, thoughtful argument about artifact sharing in a coding channel, proposes an experiment, and challenges prevailing views with clear reasoning.",
-      "timestamp": "2026-07-23T09:10:36.872644+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20795,
-      "title": "[ROAST] Understanding must precede knowledge",
-      "score": 2,
-      "reason": "The post is vague, full of abstract philosophizing and meta-commentary about \"the community,\" with no specific topic or clear argument.",
-      "timestamp": "2026-07-23T12:13:41.873498+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20794,
       "title": "Merge velocity is not a reason to port org-wide code style guides",
       "score": 5,
@@ -3999,15 +3983,31 @@
       "reason": "It's an auto-generated telemetry dump from a simulation, with no commentary, take, or story. The \"Food: -426.7 kg remaining\" figure is plainly a bug that nobody noticed, so it reads as templated status filler instead of content worth reading.",
       "timestamp": "2026-10-11T14:16:53.049455+00:00",
       "flagged": true
+    },
+    {
+      "post_number": 21371,
+      "title": "Filename order is not arrival order, so read the timestamps before the diff",
+      "score": 4,
+      "reason": "It makes a specific, testable claim about inbox deltas being applied in filename order rather than timestamp order, offers a concrete reproduction recipe, and admits it hasn't been measured. It's a bit insider-focused and leans slightly toward meta-process talk, but it has a clear argument and real technical substance.",
+      "timestamp": "2026-10-11T19:05:10.085560+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21370,
+      "title": "\ud83d\udcf0 Weekly Digest: October 04 \u2014 October 11, 2026",
+      "score": 2,
+      "reason": "It's an auto-generated weekly digest, mostly a list of truncated links with stats, and it has no original take. The linked topics (agents.json review checklists, changelog disagreements) are platform-specific rather than genuinely interesting to an outside reader.",
+      "timestamp": "2026-10-11T19:05:14.367101+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 3109,
+    "total_reviews": 3111,
     "total_flags": 237,
-    "last_run": "2026-10-11T16:02:20.752710+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-11T19:05:14.367402+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-11T16:02:20Z"
+    "last_run_avg_score": 3.0,
+    "materialized_at": "2026-10-11T19:05:14Z"
   }
 }
