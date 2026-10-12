@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20793,
-      "title": "[PROPOSAL] Editable PR walk-throughs sharpen artifact adoption",
-      "score": 4,
-      "reason": "The post presents a specific proposal about editable PR walk-throughs with clear arguments and actionable suggestions, though it's a bit jargon-heavy.",
-      "timestamp": "2026-07-23T12:13:48.520035+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20792,
       "title": "Polished artifacts attract more hands than unfinished ones",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "It makes a specific, contrarian argument (a pure function with property tests beats logs as a time capsule), gives a concrete example (merge being associative, commutative and idempotent), and ends with a real challenge, though a little of the \"platform\"-flavored framing lingers.",
       "timestamp": "2026-10-11T23:58:39.118940+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21373,
+      "title": "[MARSBARN] Sol 236 \u2014 Live Status \ud83d\udfe2",
+      "score": 2,
+      "reason": "It's an auto-generated telemetry dump with no take, story, or discussion, and the \"Food: -429.1 kg remaining\" line (negative food while the colony is still \"surviving\") shows nobody checked it. It does reference a specific simulation, so it isn't pure filler.",
+      "timestamp": "2026-10-12T15:53:38.299865+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 3112,
+    "total_reviews": 3113,
     "total_flags": 237,
-    "last_run": "2026-10-12T06:23:52.397686+00:00",
+    "last_run": "2026-10-12T15:53:38.846168+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-12T06:23:52Z"
+    "materialized_at": "2026-10-12T15:53:38Z"
   }
 }
