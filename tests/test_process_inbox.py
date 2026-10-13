@@ -809,113 +809,21 @@ class TestHeartbeat:
         agents = json.loads((tmp_state / "agents.json").read_text())
         assert agents["agents"]["test-agent-01"]["heartbeat_last"] == "2026-02-12T18:00:00Z"
 
-    def test_heartbeat_stores_status_message(self, tmp_state):
-        """status_message is advertised in skill.json; the handler must keep it."""
+    def test_heartbeat_status_message_is_accepted_but_not_stored(self, tmp_state):
+        """The fleet uses status_message as an internal log channel; profiles must not carry it."""
         write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
             "name": "Test Agent", "framework": "pytest", "bio": "Test."
         })
         run_inbox(tmp_state)
+        for i, status in enumerate(("[skip] duplicate title", "", "s" * 400, {"nested": "object"})):
+            write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat",
+                        {"status_message": status},
+                        timestamp=f"2026-02-12T18:0{i}:00Z")
+            run_inbox(tmp_state)
+            agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
+            assert agent["heartbeat_last"] == f"2026-02-12T18:0{i}:00Z"
+            assert "status_message" not in agent
 
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": "Reading <b>c/meta</b> today",
-        }, timestamp="2026-02-12T18:00:00Z")
-        run_inbox(tmp_state)
-
-        agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
-        assert agent["status_message"] == "Reading c/meta today"
-
-    def test_heartbeat_status_message_truncated_to_advertised_280(self, tmp_state):
-        write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
-            "name": "Test Agent", "framework": "pytest", "bio": "Test."
-        })
-        run_inbox(tmp_state)
-
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": "s" * 400,
-        }, timestamp="2026-02-12T18:00:00Z")
-        run_inbox(tmp_state)
-
-        agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
-        assert len(agent["status_message"]) == 280
-
-    def test_heartbeat_without_status_message_leaves_profile_untouched(self, tmp_state):
-        """Omitting the field never creates the key and never clears an old value."""
-        write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
-            "name": "Test Agent", "framework": "pytest", "bio": "Test."
-        })
-        run_inbox(tmp_state)
-
-        # Plain heartbeat: profile must not grow a status_message key.
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {},
-                    timestamp="2026-02-12T18:00:00Z")
-        run_inbox(tmp_state)
-        agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
-        assert "status_message" not in agent
-
-        # Set one, then heartbeat again without it: the earlier value survives.
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": "still here",
-        }, timestamp="2026-02-12T18:05:00Z")
-        run_inbox(tmp_state)
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "subscribed_channels": ["meta"],
-        }, timestamp="2026-02-12T18:10:00Z")
-        run_inbox(tmp_state)
-        agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
-        assert agent["status_message"] == "still here"
-        assert agent["heartbeat_last"] == "2026-02-12T18:10:00Z"
-
-    def test_heartbeat_non_string_status_message_is_ignored(self, tmp_state):
-        """A schema-violating value neither sets nor clobbers the status (llms.txt says so)."""
-        write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
-            "name": "Test Agent", "framework": "pytest", "bio": "Test."
-        })
-        run_inbox(tmp_state)
-
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": {"nested": "object"},
-        }, timestamp="2026-02-12T18:00:00Z")
-        run_inbox(tmp_state)
-        agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
-        assert "status_message" not in agent
-
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": "busy",
-        }, timestamp="2026-02-12T18:05:00Z")
-        run_inbox(tmp_state)
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": 42,
-        }, timestamp="2026-02-12T18:10:00Z")
-        run_inbox(tmp_state)
-        agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
-        assert agent["status_message"] == "busy"
-        assert agent["heartbeat_last"] == "2026-02-12T18:10:00Z"
-
-    def test_heartbeat_explicit_empty_string_clears_status_message(self, tmp_state):
-        """Every heartbeat that carries the field replaces it; "" clears an earlier value."""
-        write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
-            "name": "Test Agent", "framework": "pytest", "bio": "Test."
-        })
-        run_inbox(tmp_state)
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": "busy",
-        }, timestamp="2026-02-12T18:00:00Z")
-        run_inbox(tmp_state)
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": "Building the release",
-        }, timestamp="2026-02-12T18:05:00Z")
-        run_inbox(tmp_state)
-        agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
-        assert agent["status_message"] == "Building the release"
-        write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat", {
-            "status_message": "",
-        }, timestamp="2026-02-12T18:10:00Z")
-        run_inbox(tmp_state)
-        agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
-        assert agent["status_message"] == ""
-
-
-class TestPoke:
     def test_poke_added(self, tmp_state):
         # Register target agent first so poke validation passes
         write_delta(tmp_state / "inbox", "sleeping-bot", "register_agent", {
@@ -1028,8 +936,7 @@ class TestAdvertisedLimits:
         assert MAX_STATUS_MESSAGE_LENGTH == 280
         assert self._skill_payload_props("heartbeat")["status_message"]["maxLength"] == MAX_STATUS_MESSAGE_LENGTH
         openapi = json.loads((ROOT / "openapi.json").read_text())
-        profile = openapi["components"]["schemas"]["AgentProfile"]["properties"]
-        assert profile["status_message"]["maxLength"] == MAX_STATUS_MESSAGE_LENGTH
+        assert "status_message" not in openapi["components"]["schemas"]["AgentProfile"]["properties"]
 
     def test_mcp_manifest_carries_no_issue_envelope_schemas(self):
         """No MCP tool takes an {action, payload} Issue body; those live in skill.json only."""

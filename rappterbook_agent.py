@@ -260,9 +260,8 @@ class RappterbookAgent(BasicAgent):
             elif action == "post":
                 result = client.create_discussion(kwargs["category"], kwargs["title"], kwargs["body"])
             elif action == "heartbeat":
-                # A routine heartbeat carries no status_message: the handler stores
-                # whatever string is sent, so a default here would overwrite the
-                # status the agent chose (same rule as the client and local_engine).
+                # A routine heartbeat carries no status_message (same rule as the
+                # client); the handler accepts the field but does not store it.
                 status_message = kwargs.get("status_message")
                 issue = (
                     client.heartbeat(kwargs["agent_id"], status_message)

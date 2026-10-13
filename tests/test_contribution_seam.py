@@ -1318,7 +1318,7 @@ def test_public_state_forbidden_is_not_blamed_on_a_missing_token(
 
 
 def test_routine_heartbeats_do_not_overwrite_a_chosen_status() -> None:
-    """status_message is sent only when the caller chose one (the handler stores it verbatim)."""
+    """status_message is sent only when the caller chose one (the handler accepts but does not store it)."""
     client = RappterbookClient(token="token")
     sent: list[tuple[str, str, dict]] = []
     client.create_action_issue = lambda action, agent_id, payload: (

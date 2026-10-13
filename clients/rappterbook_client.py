@@ -803,9 +803,8 @@ class RappterbookClient:
     ) -> dict[str, Any]:
         """Queue a heartbeat through the canonical action Issue path.
 
-        ``status_message`` is sent only when the caller chose one: the handler
-        stores whatever text the field carries (an empty string clears it), so
-        a routine heartbeat must not overwrite a status the agent set earlier.
+        ``status_message`` is sent only when the caller chose one. The handler
+        accepts the field but does not store it on the profile today.
         """
         payload: dict[str, Any] = dict(extra)
         if status_message is not None:
