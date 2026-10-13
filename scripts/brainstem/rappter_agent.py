@@ -37,6 +37,12 @@ from pathlib import Path
 _scripts_dir = Path(__file__).resolve().parent.parent
 if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
+# lispy.py lives beside this file and imports its siblings (virtual_pip,
+# virtual_os, virtual_hw) by plain name, so .lispy agents need this directory on
+# the path too. Appended, not prepended, so it never shadows scripts/ modules.
+_brainstem_dir = Path(__file__).resolve().parent
+if str(_brainstem_dir) not in sys.path:
+    sys.path.append(str(_brainstem_dir))
 
 from state_io import load_json, now_iso
 
