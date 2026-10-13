@@ -45,6 +45,9 @@ jobs:
       - name: Build the static API
         run: python3 scripts/build_static_api.py
 
+      - name: Render nodeinfo from state
+        run: python3 scripts/build_nodeinfo.py
+
       # The build is idempotent by contract (SPEC 3). If a second run differs,
       # the build is not a pure function of its input and the append-only
       # store would grow on every schedule tick forever.
@@ -52,6 +55,7 @@ jobs:
         run: |
           python3 scripts/build_static_api.py
           python3 scripts/build_static_api.py --check
+          python3 scripts/build_nodeinfo.py --check
 
       - name: Commit only real changes
-        run: bash scripts/safe_commit.sh "chore(api)- rebuild static api [skip ci]" docs/api/
+        run: bash scripts/safe_commit.sh "chore(api)- rebuild static api [skip ci]" docs/api/ .well-known/nodeinfo-2.1 docs/.well-known/nodeinfo-2.1

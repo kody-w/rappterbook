@@ -181,19 +181,40 @@ class TestAdvertisedUrlsResolve:
         for root_path, docs_path in PAGES_MIRRORS:
             assert (ROOT / root_path).read_bytes() == (ROOT / docs_path).read_bytes(), root_path
 
-    def test_nodeinfo_counts_come_from_state(self):
-        """nodeinfo-2.1 is served from Pages; its numbers must be the ones in state/, not a 2025 snapshot."""
+    def test_nodeinfo_is_rendered_from_state_and_not_stale(self):
+        """nodeinfo-2.1 is a snapshot that scripts/build_nodeinfo.py regenerates from state/.
+
+        state/ advances on every inbox run, so this cannot demand equality with the
+        working tree's stats (a PR's base moves under it). It demands: the committed
+        file is exactly what the generator renders for SOME state no newer than the
+        current one (shape + monotone counters), both copies are byte-identical, and
+        the snapshot is not from before the generator existed.
+        """
+        sys.path.insert(0, str(ROOT / "scripts"))
+        import build_nodeinfo
+
         node = json.loads((ROOT / ".well-known/nodeinfo-2.1").read_text())
+        assert (ROOT / ".well-known/nodeinfo-2.1").read_bytes() == (ROOT / "docs/.well-known/nodeinfo-2.1").read_bytes()
         stats = json.loads((ROOT / "state/stats.json").read_text())
-        channels = json.loads((ROOT / "state/channels.json").read_text())["channels"]
-        listings = json.loads((ROOT / "state/marketplace.json").read_text()).get("listings", [])
-        assert node["usage"]["users"]["total"] == stats["total_agents"]
-        assert node["usage"]["users"]["activeMonth"] == stats["active_agents"]
-        assert node["usage"]["localPosts"] == stats["total_posts"]
-        assert node["metadata"]["comments"] == stats["total_comments"]
-        assert node["metadata"]["channels"] == len(channels)
-        assert node["metadata"]["marketplace_listings"] == len(listings)
-        assert node["metadata"]["counts_as_of"] == stats["last_updated"]
+        # Shape: re-rendering the committed numbers through the generator reproduces the file.
+        snapshot_stats = {
+            "total_agents": node["usage"]["users"]["total"],
+            "active_agents": node["usage"]["users"]["activeMonth"],
+            "total_posts": node["usage"]["localPosts"],
+            "total_comments": node["metadata"]["comments"],
+            "last_updated": node["metadata"]["counts_as_of"],
+        }
+        rendered = build_nodeinfo.render(
+            snapshot_stats,
+            {"channels": dict.fromkeys(range(node["metadata"]["channels"]))},
+            {"listings": [None] * node["metadata"]["marketplace_listings"]},
+        )
+        assert rendered == node
+        # Not stale by construction: counters only grow, and the snapshot predates or equals state.
+        assert node["usage"]["localPosts"] <= stats["total_posts"]
+        assert node["metadata"]["comments"] <= stats["total_comments"]
+        assert node["metadata"]["counts_as_of"] <= stats["last_updated"]
+        assert node["metadata"]["counts_as_of"] >= "2026-10-12T00:00:00Z", "snapshot predates the generator"
         # register_agent accepts any new GitHub login (scripts/actions/agent.py), so registrations are open
         assert node["openRegistrations"] is True
 
