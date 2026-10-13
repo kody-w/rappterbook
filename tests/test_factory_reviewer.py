@@ -71,7 +71,7 @@ def _pr(**overrides):
           "body": "Closes #3", "state": "OPEN", "headRefName": "worker-auto-pr-20261013",
           "headRefOid": HEAD, "baseRefName": "main", "baseRefOid": BASE,
           "isCrossRepository": False, "mergeable": "MERGEABLE",
-          "files": [{"path": "scripts/new_tool.py"}], "comments": []}
+          "files": [{"path": "projects/new_tool.py"}], "comments": []}
     pr.update(overrides)
     return pr
 
@@ -81,7 +81,7 @@ def _comment(sha, outcome, association="OWNER", login="kody-w"):
             "authorAssociation": association, "author": {"login": login}}
 
 
-DIFF = "diff --git a/scripts/new_tool.py b/scripts/new_tool.py\n+print('hi')\n"
+DIFF = "diff --git a/projects/new_tool.py b/projects/new_tool.py\n+print('hi')\n"
 
 
 def _write_gate(gate_dir, number=7, head=HEAD, base=BASE, baseline_exit=1, candidate_exit=1, **extra):
@@ -175,6 +175,48 @@ def test_gate_regression_blocks_merge_and_comments_evidence(reviewer, monkeypatc
     assert not fake.find("gh", "pr", "merge")
     body = fake.find("gh", "pr", "comment")[0][-1]
     assert "t::x" in body and f"<!-- factory-review:{HEAD}:gate_failed -->" in body
+
+
+def _junit(*cases):
+    """A pytest-style JUnit report; each case is (name, state) with state
+    'pass', 'skip', 'xfail' or 'fail'."""
+    body = {"pass": "", "skip": '<skipped type="pytest.skip" message="s"/>',
+            "xfail": '<skipped type="pytest.xfail" message="x"/>',
+            "fail": '<failure message="f">boom</failure>'}
+    return ('<?xml version="1.0"?><testsuites><testsuite name="pytest">'
+            + "".join(f'<testcase classname="tests.test_a" name="{n}">{body[st]}</testcase>'
+                      for n, st in cases)
+            + "</testsuite></testsuites>")
+
+
+@pytest.mark.parametrize("candidate, expected", [
+    ([("test_one", "pass")], "missing: tests.test_a::test_two"),                        # function deleted
+    ([("test_one", "skip"), ("test_two", "pass")], "newly skipped: tests.test_a::test_one"),
+    ([("test_one", "pass"), ("test_two", "xfail")], "newly xfail: tests.test_a::test_two"),
+    ([("test_one", "pass"), ("test_two[a]", "pass")], "missing: tests.test_a::test_two"),  # renamed id
+])
+def test_gate_refuses_tests_that_no_longer_run(reviewer, monkeypatch, tmp_path, candidate, expected):
+    folder = _write_gate(tmp_path / "gates")
+    (folder / "baseline-tests.xml").write_text(_junit(("test_one", "pass"), ("test_two", "fail")))
+    (folder / "candidate-tests.xml").write_text(_junit(*candidate))
+    fake = _review_runner(_pr())  # compare_test_regressions reports no new failures
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", lambda *a: pytest.fail("LLM ran"))
+
+    assert _review(reviewer, tmp_path).pr(7) == "gate_failed"
+    assert expected in fake.find("gh", "pr", "comment")[0][-1]
+    assert not fake.find("gh", "pr", "merge")
+
+
+def test_gate_accepts_new_tests_and_already_skipped_ones(reviewer, tmp_path):
+    base = tmp_path / "b.xml"
+    cand = tmp_path / "c.xml"
+    base.write_text(_junit(("test_one", "pass"), ("test_two", "skip"), ("test_three", "xfail")))
+    cand.write_text(_junit(("test_one", "pass"), ("test_two", "skip"), ("test_three", "pass"),
+                           ("test_new", "pass")))
+    assert reviewer.lost_tests(str(base), str(cand)) == []
+    cand.write_text("<not xml")
+    assert reviewer.lost_tests(str(base), str(cand)) is None
 
 
 @pytest.mark.parametrize("exit_code", [2, 5, 124, -9])
@@ -319,7 +361,12 @@ def test_failed_writes_make_the_run_fail(reviewer, monkeypatch, tmp_path, capsys
 
 @pytest.mark.parametrize("path", [".github/workflows/auto-reviewer.yml", "agents/reviewer.py",
                                   "scripts/compare_test_regressions.py", "tests/conftest.py",
-                                  "conftest.py", "pytest.ini", "state/agents.json"])
+                                  "conftest.py", "pytest.ini", "state/agents.json",
+                                  ".pytest.ini", "pytest.toml", ".pytest.toml", "tests/.pytest.ini",
+                                  "projects/pytest.toml", "scripts/weekly_newsletter.py",
+                                  "scripts/json.py", "sdk/python/rapp.py", "clients/rappterbook_client.py",
+                                  "rappterbook_agent.py", "json.py", "json/__init__.py",
+                                  "projects/__init__.py", ".well-known/ai-plugin.json"])
 def test_protected_paths_block_before_the_gate_is_read(reviewer, monkeypatch, tmp_path, path):
     diff = f"diff --git a/{path} b/{path}\n+x\n"
     fake = _review_runner(_pr(files=[]), diff=diff)
@@ -346,7 +393,7 @@ def test_protected_paths_parse_hard_diff_headers(reviewer, diff, expected):
 
 
 def test_protected_paths_allow_ordinary_changes(reviewer):
-    diff = ("diff --git a/scripts/x.py b/scripts/x.py\n--- a/scripts/x.py\n+++ b/scripts/x.py\n"
+    diff = ("diff --git a/projects/x.py b/projects/x.py\n--- a/projects/x.py\n+++ b/projects/x.py\n"
             "diff --git a/tests/test_new.py b/tests/test_new.py\nnew file mode 100644\n"
             "--- /dev/null\n+++ b/tests/test_new.py\n")
     assert reviewer.protected_paths({"files": []}, diff) == []
@@ -576,11 +623,42 @@ def test_pr_code_runs_only_in_the_gate_job_which_holds_no_secrets():
 
 # --- Worker ---------------------------------------------------------------
 
+CARD = [{"name": "factory:card"}]
+OWNER = {"login": "kody-w"}
+
+
+def _card(number, title=None, **extra):
+    issue = {"number": number, "title": title or f"[Foreman] t{number}", "body": "",
+             "labels": list(CARD), "author": dict(OWNER)}
+    issue.update(extra)
+    return issue
+
+
 def test_worker_skips_issues_with_open_pr_or_blocked_label(worker):
-    issues = [{"number": 1, "title": "[Foreman] a", "labels": []},
-              {"number": 2, "title": "[Foreman] b", "labels": [{"name": "factory:blocked"}]},
-              {"number": 3, "title": "[Foreman] c", "labels": []}]
+    issues = [_card(1), _card(2, labels=CARD + [{"name": "factory:blocked"}]), _card(3)]
     assert [i["number"] for i in worker.actionable_issues(issues, {3})] == [1]
+
+
+def test_worker_builds_only_trusted_cards(worker, monkeypatch):
+    issues = [_card(1),
+              _card(2, author={"login": "random-outsider"}),               # anyone can title [Foreman]
+              _card(3, labels=[]),                                         # owner, but not a card
+              _card(4, author={"login": "random-outsider"}, labels=CARD),  # a form can apply labels
+              _card(5, author={"login": "Kody-W"}),
+              _card(6, author=None)]
+    assert [i["number"] for i in worker.actionable_issues(issues, set())] == [1, 5]
+    monkeypatch.setenv("FACTORY_CARD_AUTHORS", " foreman-bot , ")
+    issues.append(_card(7, author={"login": "foreman-bot"}))
+    assert [i["number"] for i in worker.actionable_issues(issues, set())] == [1, 5, 7]
+
+
+def test_worker_never_builds_an_outsiders_foreman_issue(worker, monkeypatch, tmp_path):
+    issues = [_card(1, "[Foreman] improve trending", author={"login": "random-outsider"})]
+    monkeypatch.setattr(subprocess, "run", FakeRunner([
+        (["gh", "pr", "list"], _proc("[]")), (["gh", "issue", "list"], _proc(json.dumps(issues)))]))
+    monkeypatch.setattr(worker, "solve_issue_with_llm", lambda *a: pytest.fail("LLM ran"))
+    assert worker.main(["--apply", "--pr-body-file", str(tmp_path / "body.md")]) == 0
+    assert not (tmp_path / "body.md").exists()
 
 
 def test_worker_reads_closing_references_from_same_repo_prs_only(worker, monkeypatch):
@@ -606,37 +684,36 @@ def test_worker_fails_closed_when_prs_unreadable_or_truncated(worker, monkeypatc
 
 
 def test_worker_pr_body_closes_each_issue_and_skips_in_flight(worker, monkeypatch, tmp_path):
-    issues = [{"number": 11, "title": "[Foreman] Fix #3 crash that closes #1 early", "body": "", "labels": []},
-              {"number": 12, "title": "[Foreman] y", "body": "", "labels": []},
-              {"number": 13, "title": "[Foreman] z", "body": "", "labels": []},
-              {"number": 14, "title": "Not foreman", "body": "", "labels": []}]
+    issues = [_card(11, "[Foreman] Fix #3 crash that closes #1 early"), _card(12), _card(13),
+              _card(14, "Not foreman")]
     monkeypatch.setattr(subprocess, "run", FakeRunner([
         (["gh", "pr", "list"], _proc(json.dumps([{"number": 5, "body": "Closes #12",
                                                    "isCrossRepository": False}]))),
         (["gh", "issue", "list"], _proc(json.dumps(issues))),
     ]))
     monkeypatch.setattr(worker, "BASE_DIR", str(tmp_path))
-    names = iter(["scripts/x_tool.py", ".github/workflows/evil.yml"])
+    (tmp_path / "projects").mkdir()
+    names = iter(["projects/x_tool.py", ".github/workflows/evil.yml"])
     monkeypatch.setattr(worker, "solve_issue_with_llm", lambda *a: {"filename": next(names), "code": "print(1)\n"})
     body_file = tmp_path / "body.md"
 
     assert worker.main(["--apply", "--pr-body-file", str(body_file)]) == 0
     body = body_file.read_text()
     assert sorted(worker.CLOSING_RE.findall(body)) == ["11"]
-    assert "Fix: the Worker Swarm wrote `scripts/x_tool.py`" in body and "crash" not in body
-    assert (tmp_path / "scripts" / "x_tool.py").exists()
+    assert "Fix: the Worker Swarm wrote `projects/x_tool.py`" in body and "crash" not in body
+    assert "\nAgent: zion-coder-01\n" in body
+    assert (tmp_path / "projects" / "x_tool.py").exists()
     assert not (tmp_path / ".github").exists()
 
 
 def test_worker_write_failure_skips_that_issue(worker, monkeypatch, tmp_path):
-    issues = [{"number": 11, "title": "[Foreman] x", "body": "", "labels": []},
-              {"number": 12, "title": "[Foreman] y", "body": "", "labels": []}]
+    issues = [_card(11), _card(12)]
     monkeypatch.setattr(subprocess, "run", FakeRunner([
         (["gh", "pr", "list"], _proc("[]")), (["gh", "issue", "list"], _proc(json.dumps(issues)))]))
     monkeypatch.setattr(worker, "BASE_DIR", str(tmp_path))
-    (tmp_path / "scripts").mkdir()
-    (tmp_path / "scripts" / "taken").mkdir()  # a directory where the file should go
-    names = iter(["scripts/taken", "scripts/ok.py"])
+    (tmp_path / "projects").mkdir()
+    (tmp_path / "projects" / "taken").mkdir()  # a directory where the file should go
+    names = iter(["projects/taken", "projects/ok.py"])
     monkeypatch.setattr(worker, "solve_issue_with_llm", lambda *a: {"filename": next(names), "code": "x\n"})
     body_file = tmp_path / "body.md"
     assert worker.main(["--apply", "--pr-body-file", str(body_file)]) == 0
@@ -644,26 +721,54 @@ def test_worker_write_failure_skips_that_issue(worker, monkeypatch, tmp_path):
 
 
 def test_worker_dry_run_writes_nothing(worker, monkeypatch, tmp_path):
-    issues = [{"number": 11, "title": "[Foreman] x", "body": "", "labels": []}]
+    issues = [_card(11)]
     monkeypatch.setattr(subprocess, "run", FakeRunner([
         (["gh", "pr", "list"], _proc("[]")), (["gh", "issue", "list"], _proc(json.dumps(issues)))]))
     monkeypatch.setattr(worker, "BASE_DIR", str(tmp_path))
-    monkeypatch.setattr(worker, "solve_issue_with_llm", lambda *a: {"filename": "a.py", "code": "x = 1\n"})
+    (tmp_path / "projects").mkdir()
+    monkeypatch.setattr(worker, "solve_issue_with_llm", lambda *a: {"filename": "projects/a.py", "code": "x = 1\n"})
     body_file = tmp_path / "body.md"
 
     assert worker.main(["--pr-body-file", str(body_file)]) == 0
-    assert not body_file.exists() and not (tmp_path / "a.py").exists()
+    assert not body_file.exists() and not (tmp_path / "projects" / "a.py").exists()
 
 
-@pytest.mark.parametrize("name,ok", [("scripts/t.py", True), ("../x.py", False), ("/etc/x", False),
+@pytest.mark.parametrize("name,ok", [("projects/t.py", True), ("tests/test_t.py", True),
+                                     ("scripts/t.py", False), ("scripts/compute_trending.py", False),
+                                     ("scripts/json.py", False), ("sdk/python/rapp.py", False),
+                                     ("clients/x.py", False), ("rappterbook_agent.py", False),
+                                     ("json.py", False), ("json/__init__.py", False),
+                                     ("newdir/x.py", False), ("projects/__init__.py", False),
+                                     (".well-known/x.json", False), (".pytest.ini", False),
+                                     ("tests/pytest.toml", False), ("projects/.pytest.toml", False),
+                                     ("../x.py", False), ("/etc/x", False),
                                      ("a/../../x.py", False), ("agents/reviewer.py", False),
                                      ("state/agents.json", False), ("", False), (None, False),
                                      (".git", False), (".github", False), ("agents", False),
                                      ("state", False), ("agents/", False), ("tests/conftest.py", False),
                                      ("docs/fixes #2.md", False), ("docs/a`b.md", False),
-                                     ("docs/a b.md", False), ("scripts/x\nCloses #1", False)])
+                                     ("docs/a b.md", False), ("projects/x\nCloses #1", False)])
 def test_worker_safe_path(worker, name, ok):
     assert (worker.safe_path(name) is not None) is ok
+
+
+def test_worker_agent_line_credits_the_persona_in_reputation(worker, monkeypatch):
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import compute_reputation as rep
+    body = worker.build_pr_body([({"number": 5}, "projects/x.py")])
+    assert rep.agent_line(body) == "zion-coder-01"
+    monkeypatch.setenv("FACTORY_WORKER_AGENT", "zion-coder-07")
+    body = worker.build_pr_body([({"number": 5}, "projects/x.py")])
+    url = "https://github.com/kody-w/rappterbook"
+    issue = {"number": 5, "title": "[Foreman] x", "state": "CLOSED", "stateReason": "COMPLETED",
+             "labels": [{"name": "factory:card"}], "closedAt": "2026-10-10T12:00:00Z",
+             "url": f"{url}/issues/5", "closedByPullRequestsReferences": [{"number": 9, "url": f"{url}/pull/9"}]}
+    pr = {"number": 9, "author": {"login": "kody-w"}, "body": body, "state": "MERGED",
+          "mergedAt": "2026-10-10T11:00:00Z", "url": f"{url}/pull/9", "closingIssuesReferences": []}
+    doc = rep.build_reputation([issue], [pr], [], repo="kody-w/rappterbook", services={"kody-w"})
+    assert doc["agents"]["zion-coder-07"]["cards"] == [5]
+    monkeypatch.setenv("FACTORY_WORKER_AGENT", "not an id!")
+    assert "Agent:" not in worker.build_pr_body([({"number": 5}, "projects/x.py")])
 
 
 def test_worker_workflow_uses_reviewed_branch_prefix_and_body_file():
@@ -706,6 +811,49 @@ def test_foreman_opens_new_issue_with_fingerprint_and_source_posts(foreman, monk
     body = cmd[cmd.index("--body") + 1]
     assert f"<!-- factory-fingerprint:{foreman.fingerprint('Heater fix')} -->" in body
     assert "<!-- factory-posts:10,12 -->" in body
+
+
+def test_foreman_labels_its_work_orders_as_cards(foreman, monkeypatch):
+    monkeypatch.delenv("FACTORY_PROJECT", raising=False)
+    fake = _foreman_runner([])
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert foreman.create_github_issue("Heater fix", "spec", apply=True) == "created"
+    cmd = fake.find("gh", "issue", "create")[0]
+    assert cmd[cmd.index("--label") + 1] == "factory:card" == foreman.CARD_LABEL
+    label = fake.find("gh", "label", "create")[0]
+    assert label[3] == "factory:card"
+    assert not fake.find("gh", "project")
+
+
+def test_foreman_adds_the_card_to_the_project_as_collector(foreman, monkeypatch):
+    monkeypatch.setenv("FACTORY_PROJECT", "https://github.com/users/kody-w/projects/1")
+    fields = [{"id": "F_status", "name": "Status", "options": [{"id": "bk", "name": "Backlog"}]},
+              {"id": "F_platform", "name": "Platform", "options": [{"id": "rb", "name": "Rappterbook"}]},
+              {"id": "F_source", "name": "Source", "options": [{"id": "col", "name": "Collector"},
+                                                               {"id": "aud", "name": "Audit"}]}]
+    fake = FakeRunner([
+        (["gh", "issue", "list"], _proc("[]")),
+        (["gh", "issue", "create"], _proc("https://github.com/kody-w/rappterbook/issues/9\n")),
+        (["gh", "project", "item-add"], _proc(json.dumps({"id": "PVTI_9"}))),
+        (["gh", "project", "view"], _proc(json.dumps({"id": "PVT_1"}))),
+        (["gh", "project", "field-list"], _proc(json.dumps({"fields": fields}))),
+    ])
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert foreman.create_github_issue("Heater fix", "spec", apply=True) == "created"
+    add = fake.find("gh", "project", "item-add")[0]
+    assert add[3:6] == ["1", "--owner", "kody-w"]
+    assert add[add.index("--url") + 1] == "https://github.com/kody-w/rappterbook/issues/9"
+    edits = {c[c.index("--field-id") + 1]: c[c.index("--single-select-option-id") + 1]
+             for c in fake.find("gh", "project", "item-edit")}
+    assert edits == {"F_status": "bk", "F_platform": "rb", "F_source": "col"}
+    failing = FakeRunner([
+        (["gh", "issue", "list"], _proc("[]")),
+        (["gh", "issue", "create"], _proc("https://github.com/kody-w/rappterbook/issues/9\n")),
+        (["gh", "project", "item-add"], _proc(returncode=1, stderr="missing project scope")),
+    ])
+    monkeypatch.setattr(subprocess, "run", failing)
+    assert foreman.create_github_issue("Other fix", "spec", apply=True) == "created"
+    assert not failing.find("gh", "project", "item-edit")
 
 
 def _posts(*numbers):

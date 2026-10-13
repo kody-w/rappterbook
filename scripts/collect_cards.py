@@ -25,6 +25,13 @@ Sources (a missing or unreadable file skips that source):
              least --min-count-inbox times from at least 2 submitters
   findings   a JSON list of manual findings passed with --findings PATH
 
+With --project, each new card is added to that GitHub Project and gets
+Status=Backlog, Platform=Rappterbook and Source=Collector (Source=Audit for
+--findings cards); the field and option ids are looked up by name at run
+time (`gh project view` and `gh project field-list`), then set with
+`gh project item-edit`. A field or option the Project lacks is reported and
+skipped; the card is still filed.
+
 Every card carries a hidden marker `<!-- factory-card:<fingerprint> -->`.
 --apply lists open AND closed issues labelled factory:collected and never
 files a fingerprint that already exists, so re-runs are idempotent.
@@ -38,7 +45,7 @@ issue. Submitter-controlled text never reaches a card title.
 Usage:
   python scripts/collect_cards.py                      # dry run, JSON on stdout
   python scripts/collect_cards.py --findings f.json    # include manual findings
-  python scripts/collect_cards.py --apply [--cap 5] [--project 7]
+  python scripts/collect_cards.py --apply [--cap 5] [--project kody-w/1]
 
 Python 3.9+, stdlib only. Writes no state files.
 """
@@ -514,6 +521,93 @@ def ensure_labels(run: Runner, repo: Optional[str], labels: List[str]) -> None:
             _warn(f"could not create label {label}: {proc.stderr.strip()[:200]}")
 
 
+# The single-select values a new card gets on the Project board.
+PLATFORM = "Rappterbook"
+BACKLOG = "Backlog"
+
+
+def card_fields(source: str) -> Dict[str, str]:
+    """Status, Platform and Source for a new card from collector ``source``
+    (``foreman`` for agents/foreman.py work orders)."""
+    return {"Status": BACKLOG, "Platform": PLATFORM,
+            "Source": "Audit" if source == "findings" else "Collector"}
+
+
+def _gh_json(run: Runner, cmd: List[str]) -> object:
+    proc = run(cmd)
+    if proc.returncode != 0:
+        reason = ((proc.stderr or "").strip().splitlines() or [" ".join(cmd[1:3]) + " failed"])[0]
+        raise RuntimeError(clean(reason, 200, html=False))
+    try:
+        return json.loads(proc.stdout or "null")
+    except ValueError:
+        raise RuntimeError(f"{' '.join(cmd[1:3])} returned no JSON") from None
+
+
+def project_board(run: Runner, project: int, owner: str) -> dict:
+    """{"id": project node id, "fields": {name: (field id, {option: option id})}}
+    for the Project's single-select fields. Raises RuntimeError when unknown."""
+    view = _gh_json(run, ["gh", "project", "view", str(project), "--owner", owner,
+                          "--format", "json"])
+    listed = _gh_json(run, ["gh", "project", "field-list", str(project), "--owner", owner,
+                            "--format", "json", "--limit", "100"])
+    if not isinstance(view, dict) or not isinstance(view.get("id"), str) or not view["id"]:
+        raise RuntimeError("gh project view returned no project id")
+    fields = listed.get("fields") if isinstance(listed, dict) else None
+    if not isinstance(fields, list):
+        raise RuntimeError("gh project field-list returned an unexpected shape")
+    board: Dict[str, tuple] = {}
+    for field in fields:
+        if not isinstance(field, dict) or not isinstance(field.get("options"), list):
+            continue
+        name, field_id = field.get("name"), field.get("id")
+        if isinstance(name, str) and isinstance(field_id, str) and field_id:
+            board[name] = (field_id, {o["name"]: o["id"] for o in field["options"]
+                                      if isinstance(o, dict) and isinstance(o.get("name"), str)
+                                      and isinstance(o.get("id"), str) and o["id"]})
+    return {"id": view["id"], "fields": board}
+
+
+def add_to_project(run: Runner, project: int, owner: str, url: str,
+                   values: Dict[str, str], cache: dict) -> tuple:
+    """Add an issue to the Project and set its single-select ``values``.
+
+    Returns (added, problem): added is False when item-add itself failed
+    (problem is gh's reason); otherwise problem names the fields that could
+    not be set, or is ''. ``cache`` keeps the board lookup for the run.
+    """
+    added = run(["gh", "project", "item-add", str(project), "--owner", owner,
+                 "--url", url, "--format", "json"])
+    if added.returncode != 0:
+        return False, ((added.stderr or "").strip().splitlines() or ["gh project item-add failed"])[0]
+    try:
+        item = json.loads(added.stdout or "null")
+    except ValueError:
+        item = None
+    item_id = item.get("id") if isinstance(item, dict) else None
+    if not isinstance(item_id, str) or not item_id:
+        return True, "fields not set: gh project item-add returned no item id"
+    if "board" not in cache:
+        try:
+            cache["board"] = project_board(run, project, owner)
+        except RuntimeError as exc:
+            cache["board"], cache["error"] = None, str(exc)
+    board = cache["board"]
+    if board is None:
+        return True, f"fields not set: {cache['error']}"
+    missing = []
+    for name, option in values.items():
+        field_id, options = board["fields"].get(name, ("", {}))
+        if not field_id or option not in options:
+            missing.append(f"{name}={option} (not on the Project)")
+            continue
+        edit = run(["gh", "project", "item-edit", "--id", item_id, "--project-id", board["id"],
+                    "--field-id", field_id, "--single-select-option-id", options[option]])
+        if edit.returncode != 0:
+            missing.append(f"{name}={option}")
+    return True, ("fields not set: " + ", ".join(missing)) if missing else ""
+
+
 def apply_cards(cards: List[dict], run: Runner, *, cap: int, repo: Optional[str],
                 project: Optional[int], owner: str) -> dict:
     result: dict = {"mode": "apply", "filed": [], "skipped_existing": [],
@@ -531,6 +625,7 @@ def apply_cards(cards: List[dict], run: Runner, *, cap: int, repo: Optional[str]
     if to_file:
         ensure_labels(run, repo, sorted({l for c in to_file for l in c["labels"]}))
     project_ok = project is not None
+    board_cache: dict = {}
     for card in to_file:
         cmd = ["gh", "issue", "create", *_repo_args(repo), "--title", card["title"],
                "--body", render_body(card)]
@@ -544,17 +639,19 @@ def apply_cards(cards: List[dict], run: Runner, *, cap: int, repo: Optional[str]
         result["filed"].append({"fingerprint": card["fingerprint"], "url": url,
                                 "title": card["title"]})
         if project_ok and url:
-            added = run(["gh", "project", "item-add", str(project), "--owner", owner,
-                         "--url", url])
-            if added.returncode == 0:
+            added, problem = add_to_project(run, project, owner, url,
+                                            card_fields(card["source"]), board_cache)
+            if added:
                 result["project"] = "added"
+                if problem:
+                    result.setdefault("project_fields", []).append(
+                        f"{card['fingerprint']}: {clean(problem, 300, html=False)}")
             else:
                 # The issue is filed; the board is optional. The default token
                 # cannot write Projects at all, so the first failure, whatever
                 # its message, skips the board for the rest of the run.
                 project_ok = False
-                reason = ((added.stderr or "").strip().splitlines() or ["gh project item-add failed"])[0]
-                result["project"] = (f"skipped: {clean(reason, 200, html=False)} (needs a token with "
+                result["project"] = (f"skipped: {clean(problem, 200, html=False)} (needs a token with "
                                      "the project scope: gh auth refresh -s project)")
     return result
 

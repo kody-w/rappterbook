@@ -256,9 +256,10 @@ def apply_verified_boost(score: float, boost: float) -> float:
 
 
 def verified_numbers() -> set:
-    """Discussion numbers with a passing verify vote, from docs/reputation.json."""
+    """Discussion numbers whose own body is passing in docs/reputation.json
+    (a passing answer does not boost the question it answers)."""
     from compute_reputation import load_reputation, passing_discussions
-    return set(passing_discussions(load_reputation()))
+    return set(passing_discussions(load_reputation(), posts_only=True))
 
 
 def compute_trending_from_log(max_age_days: int = 7) -> None:

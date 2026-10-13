@@ -14,6 +14,13 @@ Dedupe, against every [Foreman] issue, open or closed:
   existing one is skipped.
 If the listing cannot be read, or may be truncated, nothing is opened.
 Issues are opened only with --apply; the default is a dry run.
+
+Every work order is labelled CARD_LABEL: agents/worker.py builds only
+labelled [Foreman] issues opened by a trusted author. When FACTORY_PROJECT
+is set (owner/number, a number, or a project URL) the issue is also added to
+that Project with Status=Backlog, Platform=Rappterbook and Source=Collector,
+using scripts/collect_cards.py's run-time field lookup; a Project failure
+is reported and never undoes the issue.
 """
 
 import argparse
@@ -26,10 +33,13 @@ import sys
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'sdk', 'python'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 from rapp import Rapp  # noqa: E402
+import collect_cards  # noqa: E402
 
 REPO = os.getenv("GITHUB_REPOSITORY", "kody-w/rappterbook")
 TITLE_PREFIX = "[Foreman] "
+CARD_LABEL = "factory:card"
 FINGERPRINT_RE = re.compile(r"<!-- factory-fingerprint:([0-9a-f]{16}) -->")
 POSTS_RE = re.compile(r"<!-- factory-posts:([0-9]+(?:,[0-9]+)*) -->")
 PREFIX_RE = re.compile(r"^(?:\s*\[\s*foreman\s*\]\s*)+", re.IGNORECASE)
@@ -151,14 +161,44 @@ def create_github_issue(title, body, apply, existing=None, source_posts=()):
         print(f"[DRY RUN] Would open issue: {TITLE_PREFIX}{title}")
         return "dry_run"
     print(f"Opening Issue: {title}...")
+    label = subprocess.run(
+        ["gh", "label", "create", CARD_LABEL, "--repo", REPO, "--color", "0e8a16",
+         "--description", "Factory work order the Worker may build (agents/foreman.py)"],
+        capture_output=True, text=True, check=False)
+    if label.returncode != 0 and "already exists" not in (label.stderr or ""):
+        print(f"Could not create label {CARD_LABEL}: {(label.stderr or '').strip()}")
     result = subprocess.run(
         ["gh", "issue", "create", "--repo", REPO, "--title", f"{TITLE_PREFIX}{title}",
-         "--body", full_body], capture_output=True, text=True, check=False)
+         "--body", full_body, "--label", CARD_LABEL], capture_output=True, text=True, check=False)
     if result.returncode != 0:
         print(f"Failed to open issue: {result.stderr.strip()}")
         return "error"
-    print(f"Successfully tracked: {result.stdout.strip()}")
+    url = (result.stdout.strip().splitlines() or [""])[-1]
+    print(f"Successfully tracked: {url}")
+    add_to_board(url)
     return "created"
+
+
+def _gh(cmd):
+    return subprocess.run(cmd, capture_output=True, text=True, check=False)
+
+
+def add_to_board(url):
+    """Add a new work order to FACTORY_PROJECT with Source=Collector. Returns
+    'added', 'added (<fields not set>)', 'skipped: <reason>' or None (no Project)."""
+    value = os.getenv("FACTORY_PROJECT", "").strip()
+    if not value or not url.startswith("https://github.com/"):
+        return None
+    ref = collect_cards.project_ref(value)
+    if ref is None:
+        print(f"Ignoring FACTORY_PROJECT={value!r}: expected NUMBER, OWNER/NUMBER or a project URL.")
+        return None
+    owner, number = ref[0] or REPO.split("/")[0], ref[1]
+    added, problem = collect_cards.add_to_project(_gh, number, owner, url,
+                                                  collect_cards.card_fields("foreman"), {})
+    outcome = ("added" + (f" ({problem})" if problem else "")) if added else f"skipped: {problem}"
+    print(f"Project {owner}/{number}: {outcome}")
+    return outcome
 
 
 def main(argv=None):

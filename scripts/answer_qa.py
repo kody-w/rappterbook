@@ -352,6 +352,11 @@ def _container_state(name: str, run) -> Optional[dict]:
     started_at = state.get("StartedAt")
     if type(exit_code) is not int or not isinstance(started_at, str):  # noqa: E721 - no bools
         return None
+    if state.get("Running") is not False:
+        return None  # still running (or unknown): its exit code is not a result yet
+    finished_at = state.get("FinishedAt")
+    if not isinstance(finished_at, str) or not finished_at or finished_at.startswith("0001-01-01"):
+        return None
     started = bool(started_at) and not started_at.startswith("0001-01-01") and not state.get("Error")
     return {"exit_code": exit_code, "started": started}
 
@@ -750,11 +755,14 @@ def is_platform_login(login: object) -> bool:
     return isinstance(login, str) and login.strip().lower() in PLATFORM_LOGINS
 
 
-def already_posted(replies: list, mark: str) -> bool:
+def already_posted(replies: list, mark: str, runtime: Optional[str] = None) -> bool:
     """True when the workflow's own account already replied with this marker on its first line.
 
     Only ``github-actions`` / ``github-actions[bot]`` counts: another app
     installed on the repository posting the marker cannot suppress a result.
+    With ``runtime``, the earlier reply must also have run in that runtime:
+    the marker binds the code bytes, not the environment line, so an answer
+    whose runtime changed is run and recorded again.
     """
     for reply in replies:
         if not isinstance(reply, dict):
@@ -762,7 +770,11 @@ def already_posted(replies: list, mark: str) -> bool:
         body = reply.get("body") or ""
         login = ((reply.get("author") or {}).get("login")) or ""
         if is_platform_login(login) and isinstance(body, str) and body.split("\n", 1)[0].strip() == mark:
-            return True
+            if runtime is None:
+                return True
+            rec = verifications.parse_comment(body)
+            if rec is not None and str(rec.get("environment") or "").split("/", 1)[0] == runtime:
+                return True
     return False
 
 
@@ -914,7 +926,7 @@ def cmd_record(args, *, gql: Callable = None) -> int:
     mark = marker(comment["id"], result["content_id"])
     top_id = comment["reply_to"] or comment["id"]
     try:
-        if already_posted(_thread_replies(top_id, gql), mark):
+        if already_posted(_thread_replies(top_id, gql), mark, result["runtime"]):
             print("answer-qa: already recorded; nothing to do")
             return 0
     except RuntimeError as exc:

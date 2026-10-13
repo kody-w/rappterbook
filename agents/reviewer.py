@@ -46,6 +46,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import xml.etree.ElementTree as ET
 
 REPO = os.getenv("GITHUB_REPOSITORY", "kody-w/rappterbook")
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -69,11 +70,15 @@ MERGEABLE_POLLS = 6
 SHA_RE = re.compile(r"[0-9a-f]{40}")
 
 # Paths a worker PR may never change: the factory's own control plane, the
-# gate it is judged by, and pytest's configuration (which could switch tests
-# off). A PR touching them, or deleting a test, is left open for a human.
-PROTECTED_PREFIXES = (".github/", "agents/", "state/")
+# gate it is judged by, pytest's configuration (which could switch tests
+# off), and code that workflows run with secrets (scripts/, sdk/, clients/,
+# files at the repository root, a new top-level directory or a top-level
+# __init__.py, either of which could shadow a module for `python -c`). A PR
+# touching them, or deleting a test file, is left open for a human.
+PROTECTED_PREFIXES = (".github/", "agents/", "state/", "scripts/", "sdk/", "clients/")
 PROTECTED_FILES = ("scripts/compare_test_regressions.py",)
-PROTECTED_NAMES = ("conftest.py", "pytest.ini", "pyproject.toml", "setup.cfg", "tox.ini")
+PROTECTED_NAMES = ("conftest.py", "pytest.ini", ".pytest.ini", "pytest.toml", ".pytest.toml",
+                   "pyproject.toml", "setup.cfg", "tox.ini")
 
 # Only these variables reach the test runs. The gate job holds no secrets in
 # the first place; this keeps runner noise out of the PR's environment.
@@ -362,12 +367,45 @@ def _exit_code(value):
     return value if isinstance(value, int) and not isinstance(value, bool) else 2
 
 
+def collected_tests(path):
+    """{test id: 'skipped' | 'xfail' | 'ran'} from a JUnit report (pytest's
+    junitxml), or None when it cannot be parsed. The id is classname::name,
+    so each parametrize case is its own id."""
+    try:
+        root = ET.parse(path).getroot()
+    except (ET.ParseError, OSError, ValueError):
+        return None
+    found = {}
+    for case in root.iter("testcase"):
+        test_id = f"{case.get('classname', '')}::{case.get('name', '')}"
+        skipped = case.find("skipped")
+        if skipped is None:
+            found[test_id] = "ran"
+        else:
+            found[test_id] = "xfail" if "xfail" in str(skipped.get("type") or "") else "skipped"
+    return found
+
+
+def lost_tests(baseline_report, candidate_report):
+    """Evidence lines for baseline tests the candidate no longer runs: a test
+    id that disappeared (deleted or renamed) or one that ran in the baseline
+    and is skipped or xfailed now. None when a report cannot be parsed."""
+    baseline = collected_tests(baseline_report)
+    candidate = collected_tests(candidate_report)
+    if baseline is None or candidate is None:
+        return None
+    lines = [f"missing: {t}" for t in sorted(set(baseline) - set(candidate))]
+    lines += [f"newly {candidate[t]}: {t}" for t in sorted(baseline)
+              if baseline[t] == "ran" and candidate.get(t) in ("skipped", "xfail")]
+    return lines
+
+
 def judge_gate(gate_dir, number, head_sha):
     """(verdict, evidence) with verdict 'pass', 'fail' or 'stale'.
 
     Everything in the artifact is untrusted data; only this checkout's
-    compare_test_regressions.py decides, and it can only be fooled by a PR
-    that forges its own reports.
+    compare_test_regressions.py and lost_tests() decide, and they can only
+    be fooled by a PR that forges its own reports.
     """
     gate = load_gate(gate_dir, number)
     if gate is None:
@@ -387,7 +425,16 @@ def judge_gate(gate_dir, number, head_sha):
     compare = run([sys.executable, os.path.join(BASE_DIR, "scripts", "compare_test_regressions.py")]
                   + reports, cwd=BASE_DIR)
     evidence = (compare.stdout + compare.stderr).strip()
-    return ("pass" if compare.returncode == 0 else "fail"), evidence
+    if compare.returncode != 0:
+        return "fail", evidence
+    lost = lost_tests(*reports)
+    if lost is None:
+        return "fail", "the gate's JUnit reports could not be parsed"
+    if lost:
+        shown = "\n".join(lost[:50]) + (f"\n... and {len(lost) - 50} more" if len(lost) > 50 else "")
+        return "fail", (f"{len(lost)} baseline test(s) no longer run (deleted, renamed, "
+                        f"skipped or xfailed):\n{shown}")
+    return "pass", evidence
 
 
 def get_pinned_diff(base_sha, head_sha):
@@ -447,10 +494,21 @@ def diff_files(diff):
     return files
 
 
+def _outside_worker_area(path):
+    """True for a root-level file, a hidden or new top-level directory (judged
+    against this checkout of main), or a top-level __init__.py."""
+    parts = path.split("/")
+    return (len(parts) < 2 or parts[0].startswith(".")
+            or (len(parts) == 2 and parts[1] == "__init__.py")
+            or not os.path.isdir(os.path.join(BASE_DIR, parts[0])))
+
+
 def protected_paths(pr, diff):
     """Changed paths a worker PR may not touch, from the pinned diff and the PR
     file list: protected prefixes and files, pytest configuration anywhere,
-    and any test file deleted or renamed away."""
+    anything outside an existing top-level directory, and any test file
+    deleted or renamed away. Tests removed inside a file, or newly skipped,
+    are caught by lost_tests() on the gate's reports."""
     seen = {(str(entry.get("path", "")), False) for entry in pr.get("files") or []
             if isinstance(entry, dict)}
     seen.update(diff_files(diff))
@@ -458,10 +516,11 @@ def protected_paths(pr, diff):
     for path, removed in seen:
         if (path.startswith(PROTECTED_PREFIXES) or path in PROTECTED_FILES
                 or os.path.basename(path) in PROTECTED_NAMES
+                or _outside_worker_area(path)
                 or (removed and path.startswith("tests/"))):
             blocked.add(path)
     # Belt and braces for header lines the parser above could misread.
-    for match in re.finditer(r'^(?:diff --git|---|\+\+\+).*?[\s"][ab]/((?:\.github|agents|state)/\S*)',
+    for match in re.finditer(r'^(?:diff --git|---|\+\+\+).*?[\s"][ab]/((?:\.github|agents|state|scripts|sdk|clients)/\S*)',
                              diff, re.MULTILINE):
         blocked.add(match.group(1).rstrip('"'))
     return sorted(blocked)

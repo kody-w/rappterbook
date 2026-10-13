@@ -18,6 +18,7 @@ jobs:
       !contains(github.event.issue.labels.*.name, 'operator-directive') &&
       !contains(github.event.issue.labels.*.name, 'operator-nudge') &&
       !contains(github.event.issue.labels.*.name, 'factory:collected') &&
+      !contains(github.event.issue.labels.*.name, 'factory:card') &&
       !contains(github.event.issue.labels.*.name, 'factory:request') &&
       !contains(github.event.issue.labels.*.name, 'factory:living-doc') &&
       !startsWith(github.event.issue.title, '[Request]') &&

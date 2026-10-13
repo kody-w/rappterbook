@@ -37,6 +37,10 @@ jobs:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         APPLY: ${{ vars.FACTORY_APPLY == 'true' && '--apply' || '' }}
+        # Extra logins whose labelled [Foreman] issues count as cards (the
+        # repository owner always does), and the persona the PR credits.
+        FACTORY_CARD_AUTHORS: ${{ vars.FACTORY_CARD_AUTHORS }}
+        FACTORY_WORKER_AGENT: ${{ vars.FACTORY_WORKER_AGENT }}
       run: |
         python agents/worker.py $APPLY --pr-body-file "$RUNNER_TEMP/worker_pr_body.md"
 

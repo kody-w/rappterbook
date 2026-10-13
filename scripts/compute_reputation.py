@@ -19,8 +19,10 @@ checked*, not how much it has posted.
   logins (rule 7: they speak for many personas), and never by the content's
   own author or byline (``verifications.record`` rejects self-verification).
   The one automation exception is an answer-qa platform reply, counted under
-  ``rappterbook-sandbox`` when it binds to the extracted code of the answer
-  its marker names (``_platform_target``). One live vote per verifier per
+  ``rappterbook-sandbox`` when it binds to the extracted code (and runtime)
+  of the answer its marker names (``_platform_target``); a human comment
+  from a login spelled ``rappterbook-sandbox`` is dropped, so no account can
+  vote under the platform's key. One live vote per verifier per
   subject across all discussions. Credit goes to the byline persona when a
   service login posted the content, otherwise to the author login. A
   subject's score is the Wilson lower bound, as in ``verifications.score``;
@@ -74,8 +76,10 @@ TIMELINE_CHUNK = 50
 MAX_TITLE = 120
 UNATTRIBUTED = "(unattributed)"
 FOREMAN_TITLE_PREFIX = "[Foreman]"
-# Distinct human verifiers whose pass makes a subject "passing" without a
-# platform (rappterbook-sandbox) pass: one account vouching alone is not enough.
+# Distinct human verifiers (never the content's owner) whose pass makes a
+# subject "passing". A platform (rappterbook-sandbox) pass only says the
+# author's own code exited 0, so it is reported but never counts toward
+# passing; one account vouching alone is not enough either.
 MIN_HUMAN_PASSES = 2
 SHIPPED_REASONS = ("COMPLETED", "")
 
@@ -356,8 +360,24 @@ def _ts_key(value: object) -> str:
 
 
 def _incomplete(disc: dict) -> bool:
-    """The cached snapshot says it is missing comments or reply bodies."""
-    return disc.get("comments_complete") is False or disc.get("reply_bodies_complete") is False
+    """The cached snapshot is missing comments or reply bodies, or is stale.
+
+    The freshness rule is hydrate_public_comments.needs_hydration's: a
+    discussion with comments counts as complete only when comments_complete
+    is true, the top-level count matches comment_count and the comments were
+    hydrated at the discussion's current updated_at. A newer fail vote that
+    is not in the cache must not leave a subject passing.
+    """
+    if disc.get("comments_complete") is False or disc.get("reply_bodies_complete") is False:
+        return True
+    total = _int(disc.get("comment_count")) or 0
+    if total <= 0:
+        return False
+    return not (disc.get("comments_complete") is True
+                and _int(disc.get("top_level_comment_count")) == total
+                and bool(disc.get("updated_at"))
+                and disc.get("comments_hydrated_updated_at") == disc.get("updated_at")
+                and isinstance(disc.get("comments"), list))
 
 
 def _platform_target(disc_number: int, reply: dict, rec: dict, by_id: Dict[str, dict],
@@ -380,6 +400,10 @@ def _platform_target(disc_number: int, reply: dict, rec: dict, by_id: Dict[str, 
         return None
     parsed = answer_qa.extract(answer["body"])
     if not parsed.get("runnable") or parsed["content_id"] != code_cid or rec.get("subject") != code_cid:
+        return None
+    # The vote is for the runtime it ran in: an answer whose environment line
+    # changed since (python-3.11 -> node-20) no longer carries that result.
+    if str(rec.get("environment") or "").split("/", 1)[0] != parsed["runtime"]:
         return None
     owners, agent = _content_owner(_login(answer.get("author_login") or answer.get("author")),
                                    answer["body"], services)
@@ -467,7 +491,10 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
         if rec["subject"] not in meta[number]["subjects"]:
             counters["dropped_unbound"] += 1
             continue
-        if not login or is_automation_login(login):
+        if not login or is_automation_login(login) \
+                or login.strip().lower() == answer_qa.PLATFORM_VERIFIER.lower():
+            # The platform's key is reserved: a human login spelled like it
+            # must not vote as the sandbox.
             counters["dropped_automation"] += 1
             continue
         if login.lower() in services:
@@ -520,8 +547,7 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
             "score": result["score"],
             "hidden": result["hidden"],
             "incomplete": is_incomplete,
-            "passing": is_passing(result, human_passes=human_passes,
-                                  platform_pass=bool(platform_vote and platform_vote["passed"]))
+            "passing": is_passing(result, human_passes=human_passes)
             and not is_incomplete,
             "last_pass_at": pass_times[-1] if pass_times else "",
         })
@@ -531,15 +557,17 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
     return {"rows": rows, "counters": counters, "ledger": ledger}
 
 
-def is_passing(result: dict, *, human_passes: Optional[int] = None, platform_pass: bool = False) -> bool:
-    """A subject passes when passes outnumber fails, it is not hidden, and the
-    passes are corroborated: a platform (rappterbook-sandbox) pass, or at
-    least MIN_HUMAN_PASSES distinct human verifiers voting pass. One account
-    vouching alone is not enough to rank or to be listed."""
+def is_passing(result: dict, *, human_passes: Optional[int] = None) -> bool:
+    """A subject passes when passes outnumber fails, it is not hidden, and at
+    least MIN_HUMAN_PASSES distinct human verifiers voted pass. Human
+    verifiers never include the content's owner (record() refuses
+    self-votes). A platform (rappterbook-sandbox) pass only says the author's
+    own code exited 0 -- `true` passes -- so it never ranks or lists a
+    subject; neither does one account vouching alone."""
     if result.get("hidden") or result.get("pass_count", 0) <= result.get("fail_count", 0):
         return False
     humans = result.get("pass_count", 0) if human_passes is None else human_passes
-    return platform_pass or humans >= MIN_HUMAN_PASSES
+    return humans >= MIN_HUMAN_PASSES
 
 
 def wilson(passes: int, n: int) -> float:
@@ -626,8 +654,9 @@ def build_reputation(issues: Iterable[dict], prs: Iterable[dict], discussions: I
                             "answer-qa platform replies, counted as rappterbook-sandbox; an agent's score "
                             "is the 95% Wilson lower bound over distinct verifiers",
             "passing": "pass votes outnumber fail votes, the subject is not hidden, its snapshot is "
-                       "complete, and either the platform (rappterbook-sandbox) voted pass or at least "
-                       f"{MIN_HUMAN_PASSES} distinct human verifiers did",
+                       f"complete and fresh, and at least {MIN_HUMAN_PASSES} distinct human verifiers "
+                       "other than its owner voted pass; a platform (rappterbook-sandbox) pass is "
+                       "reported but never counts toward passing",
             "qa_bounces": "factory issues reopened or labelled factory:bounced",
         },
         "totals": {
@@ -691,16 +720,20 @@ def load_reputation(path: Optional[object] = None) -> dict:
 
 
 def passing_discussions(doc: dict, start: Optional[datetime] = None,
-                        end: Optional[datetime] = None) -> Dict[int, dict]:
+                        end: Optional[datetime] = None, *, posts_only: bool = False) -> Dict[int, dict]:
     """Discussion number -> best passing verified row (post body or an answer).
 
     With ``start``/``end``, rows whose last pass is outside the window are
     dropped *before* the best row per discussion is chosen, so a recent pass
-    on a lower-scoring subject is not hidden by an older, higher one.
+    on a lower-scoring subject is not hidden by an older, higher one. With
+    ``posts_only`` (the trending boost), only the discussion's own body
+    counts: a passing answer says nothing about the question it answers.
     """
     out: Dict[int, dict] = {}
     for row in _list(doc.get("verified")):
         if not isinstance(row, dict) or row.get("passing") is not True or row.get("hidden"):
+            continue
+        if posts_only and row.get("target") != "post":
             continue
         number = _int(row.get("discussion"))
         if number is None:

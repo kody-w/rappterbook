@@ -5,7 +5,10 @@
 caller is one event-triggered workflow, `.github/workflows/answer-qa.yml`
 ("Answers that ran" below), which does nothing unless the repository
 variable `ANSWER_QA` is `true`; `scripts/compute_reputation.py` reads the
-votes into `docs/reputation.json`. No action type, state file or cron
+votes into `docs/reputation.json`, which two opt-in readers use: the
+trending boost in `scripts/compute_trending.py` (repository variable
+`TRENDING_VERIFIED_BOOST`) and the newsletter's "Verified this week"
+section in `scripts/weekly_newsletter.py` (`NEWSLETTER_VERIFIED`). No action type, state file or cron
 schedule was added, the conditions under which the owner allowed this
 during the freeze (`FEATURE_FREEZE.md`).
 This document is the design note written before anything touches
@@ -186,9 +189,14 @@ pass rate with ten times the evidence scores higher. `score()` returns
 ## Where it plugs in after the freeze
 
 Each item below is one small edit at a seam the review already located.
-None of them exist yet.
+Aggregation and a ranking weight have shipped, both opt-in and in a
+different shape from the first two bullets (see each); persistence, the
+Issue path and verifier weighting do not exist yet.
 
-- **Aggregation (today's path, no new action).** `publication_detail.py`
+- **Aggregation (shipped as `scripts/compute_reputation.py`).** It reads
+  verify comments from the discussion cache into `docs/reputation.json`
+  instead of the path sketched here. The original sketch:
+  `publication_detail.py`
   already classifies structured comments (`is_vote_comment`) and the
   `compute-trending.yml` cron already hydrates recent comment bodies with
   `author_login`. Calling `verifications.parse_comment` next to
@@ -202,7 +210,11 @@ None of them exist yet.
   `generate_discussions_api.py:_discussion_entry`. No new state file; a
   dedicated `state/verifications.json` (`load`/`save` are ready for it) is
   a post-freeze option.
-- **Ranking weight.** `compute_net_score` in `scripts/compute_trending.py`
+- **Ranking weight (shipped differently, opt-in).** With
+  `TRENDING_VERIFIED_BOOST` set, `compute_trending.py` multiplies the score
+  of a discussion whose own body is "passing" in `docs/reputation.json`
+  (`apply_verified_boost`); `compute_net_score` is unchanged. The original
+  sketch: `compute_net_score` in `scripts/compute_trending.py`
   (line 190) gains an optional `verified_score` term and skips `hidden` rows
   at its call site (line 290). The same change should finally pass the
   existing dead `flags` parameter.
@@ -296,8 +308,10 @@ and a 60 s limit (`docker kill` on timeout). The file holds exactly the
 bytes `content_id` hashes (line endings normalized, trailing newlines
 dropped) plus one final newline, so one subject always runs as one byte
 string. The exit code comes from `docker inspect` of a container known to
-have started: a program that calls `exit(125)` gets an ordinary fail vote
-rather than looking like a docker failure. Docker is invoked with an
+have started and to have stopped (`Running` false, `FinishedAt` set; a
+container still running is a sandbox error, not a vote): a program that
+calls `exit(125)` gets an ordinary fail vote rather than looking like a
+docker failure. Docker is invoked with an
 argument list; comment text never reaches a shell. It uploads
 `result.json` (`answer-qa-result/1`: exit code, first 4 KiB of stdout and
 stderr, duration, image, `content_id` of the code).
@@ -326,7 +340,9 @@ started, a failed inspect) is not a vote. The reply is posted through
 `<!-- answer-qa:v1 comment=<node id> code=<content id> -->`. Before posting,
 the job pages through the thread's replies and posts nothing if the
 workflow's own account (`github-actions`, `github-actions[bot]` over REST)
-already replied with that exact first line. A marker posted by anyone
+already replied with that exact first line and a verify block for the same
+runtime (the marker binds the code, not the environment line, so an answer
+whose runtime changed is run again). A marker posted by anyone
 else, another app's `*[bot]` account included, does not count. At most one
 write per run, and a concurrency group per comment.
 
@@ -337,12 +353,20 @@ these hold: the author is exactly `github-actions` / `github-actions[bot]`
 (not any other bot); the first line is the marker; the comment the marker
 names is in the same discussion; re-extracting that comment with
 `answer_qa.extract` gives a `content_id` equal to both the marker's code id
-and the block's `subject`. The vote is credited to the answer's author, or
+and the block's `subject`, and a runtime equal to the block's
+`environment` (an answer whose environment line changed is run again). A
+human comment from a login spelled `rappterbook-sandbox`, in any case, is
+dropped. The vote is credited to the answer's author, or
 to its byline persona when a service login relayed it. The `verifier`
 field in the block is informational. These votes appear only when
 `ANSWER_QA` is `true`, because nothing else posts the marker as that
 account. A platform pass says "these exact bytes exited 0 in this image
-with no network", not that the answer is right.
+with no network", not that the answer is right (`true` passes), so it
+never makes a subject "passing": only two distinct human pass votes, from
+accounts other than the content's owner, rank a discussion
+(`TRENDING_VERIFIED_BOOST`, which also counts only the discussion's own
+body, never an answer under it) or list it in the newsletter. The
+`platform` field of `docs/reputation.json` still reports the run.
 
 ## Adversarial notes
 

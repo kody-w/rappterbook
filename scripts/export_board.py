@@ -5,7 +5,7 @@ Schema ``rappterbook-board/1``::
 
     {
       "_schema": "rappterbook-board/1",
-      "project": {"owner": "kody-w", "number": 3, "title": "...", "url": "..."},
+      "project": {"owner": "kody-w", "number": 1, "title": "...", "url": "..."},
       "generated_at": "2026-10-13T12:00:00Z",   # last time the board CHANGED
       "columns": [
         {"name": "Backlog", "count": 2, "items": [
@@ -24,9 +24,9 @@ Schema ``rappterbook-board/1``::
 Usage::
 
     python3 scripts/export_board.py                      # project from $FACTORY_PROJECT
-    python3 scripts/export_board.py kody-w/3             # owner/number
-    python3 scripts/export_board.py --owner kody-w --number 3
-    python3 scripts/export_board.py https://github.com/users/kody-w/projects/3
+    python3 scripts/export_board.py kody-w/1             # owner/number
+    python3 scripts/export_board.py --owner kody-w --number 1
+    python3 scripts/export_board.py https://github.com/users/kody-w/projects/1
 
 Data comes from ``gh project item-list --format json``, ``gh project
 field-list --format json`` and one read-only ``gh api graphql`` lookup

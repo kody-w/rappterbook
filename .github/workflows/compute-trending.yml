@@ -70,9 +70,12 @@ jobs:
       # docs/reputation.json feeds two opt-in readers: the trending boost
       # (repo variable TRENDING_VERIFIED_BOOST) and the newsletter's
       # 'Verified this week' section (NEWSLETTER_VERIFIED == 'true'). It is
-      # built only when one of them is set, so default runs are unchanged,
-      # and a failure here leaves trending to run without the boost.
+      # built only when one of them is set, so default runs are unchanged.
+      # The previous run's file is still in the checkout, so when this step
+      # fails, trending is pointed at a path that does not exist and runs
+      # without the boost; the newsletter keeps reading the last committed file.
       - name: Compute reputation from verified work
+        id: reputation
         if: ${{ vars.TRENDING_VERIFIED_BOOST != '' || vars.NEWSLETTER_VERIFIED == 'true' }}
         continue-on-error: true
         env:
@@ -82,6 +85,7 @@ jobs:
       - name: Compute trending
         env:
           TRENDING_VERIFIED_BOOST: ${{ vars.TRENDING_VERIFIED_BOOST }}
+          REPUTATION_JSON: ${{ steps.reputation.outcome == 'success' && 'docs/reputation.json' || 'docs/reputation.json.unavailable' }}
         run: python scripts/compute_trending.py
 
       - name: Compute analytics

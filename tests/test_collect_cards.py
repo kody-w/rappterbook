@@ -295,15 +295,34 @@ def test_dry_run_prints_json_and_never_calls_gh(state: Path, capsys) -> None:
 
 # ── apply (gh mocked) ────────────────────────────────────────────────────────
 
+# The live Project kody-w/1's single-select fields (ids shortened).
+BOARD_FIELDS = [
+    {"id": "F_title", "name": "Title", "type": "ProjectV2Field"},
+    {"id": "F_status", "name": "Status", "type": "ProjectV2SingleSelectField",
+     "options": [{"id": n.lower(), "name": n} for n in
+                 ("Backlog", "Ready", "Building", "QA", "Review", "Blocked", "Done")]},
+    {"id": "F_platform", "name": "Platform", "type": "ProjectV2SingleSelectField",
+     "options": [{"id": "rb", "name": "Rappterbook"}, {"id": "rv", "name": "Rappterverse"},
+                 {"id": "mb", "name": "Mars Barn"}]},
+    {"id": "F_source", "name": "Source", "type": "ProjectV2SingleSelectField",
+     "options": [{"id": "audit", "name": "Audit"}, {"id": "collector", "name": "Collector"},
+                 {"id": "request", "name": "Request"}]},
+]
+
+
 class FakeGh:
     """Records gh calls; keeps filed issues so a second run sees them."""
 
-    def __init__(self, existing=(), project_error="", list_rc=0, fail_titles=()):
+    def __init__(self, existing=(), project_error="", list_rc=0, fail_titles=(), fields=None,
+                 edit_rc=0, view_rc=0):
         self.calls = []
         self.issues = [{"number": i, "body": b} for i, b in enumerate(existing, 1)]
         self.project_error = project_error
         self.list_rc = list_rc
         self.fail_titles = fail_titles
+        self.fields = BOARD_FIELDS if fields is None else fields
+        self.edit_rc = edit_rc
+        self.view_rc = view_rc
 
     def __call__(self, cmd):
         self.calls.append(cmd)
@@ -325,8 +344,27 @@ class FakeGh:
                 cmd, 0, f"https://github.com/o/r/issues/{number}\n", "")
         if sub == ["project", "item-add"]:
             rc = 1 if self.project_error else 0
-            return subprocess.CompletedProcess(cmd, rc, "", self.project_error)
+            assert cmd[-2:] == ["--format", "json"]
+            item = json.dumps({"id": "PVTI_" + cmd[cmd.index("--url") + 1].rsplit("/", 1)[-1]})
+            return subprocess.CompletedProcess(cmd, rc, "" if rc else item, self.project_error)
+        if sub == ["project", "view"]:
+            return subprocess.CompletedProcess(cmd, self.view_rc, json.dumps({"id": "PVT_board"}),
+                                               "HTTP 404" if self.view_rc else "")
+        if sub == ["project", "field-list"]:
+            return subprocess.CompletedProcess(cmd, 0, json.dumps({"fields": self.fields}), "")
+        if sub == ["project", "item-edit"]:
+            return subprocess.CompletedProcess(cmd, self.edit_rc, "", "denied" if self.edit_rc else "")
         raise AssertionError(f"unexpected gh call {cmd}")
+
+    def edits(self):
+        """{item id: {field id: option id}} from item-edit calls."""
+        out: dict = {}
+        for c in self.calls:
+            if c[1:3] == ["project", "item-edit"]:
+                assert c[c.index("--project-id") + 1] == "PVT_board"
+                out.setdefault(c[c.index("--id") + 1], {})[c[c.index("--field-id") + 1]] = \
+                    c[c.index("--single-select-option-id") + 1]
+        return out
 
     def created(self):
         return [c for c in self.calls if c[1:3] == ["issue", "create"]]
@@ -420,6 +458,43 @@ def test_project_add_and_missing_scope_skip(state: Path, capsys, monkeypatch) ->
     out = json.loads(capsys.readouterr().out)
     assert len(adds) == 1 and out["project"].startswith("skipped") and not out["errors"]
     assert len(out["filed"]) == 5
+
+
+def test_project_cards_get_backlog_platform_and_source(state: Path, capsys, tmp_path: Path) -> None:
+    findings = tmp_path / "f.json"
+    _write(findings, [{"id": "audit-1", "title": "Audit finding", "evidence": "e"}])
+    gh = FakeGh()
+    assert cc.main(["--state-dir", str(state), "--apply", "--project", "kody-w/1",
+                    "--findings", str(findings)], runner=gh) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["project"] == "added" and "project_fields" not in out and len(out["filed"]) == 5
+    # one board lookup per run, ids resolved by name at run time
+    assert len([c for c in gh.calls if c[1:3] == ["project", "field-list"]]) == 1
+    assert len([c for c in gh.calls if c[1:3] == ["project", "view"]]) == 1
+    edits = gh.edits()
+    assert len(edits) == 5
+    by_url = {f["url"].rsplit("/", 1)[-1]: f["title"] for f in out["filed"]}
+    for item, fields in edits.items():
+        audit = by_url[item[len("PVTI_"):]] == "Audit finding"
+        assert fields == {"F_status": "backlog", "F_platform": "rb",
+                          "F_source": "audit" if audit else "collector"}
+    assert sum(1 for f in edits.values() if f["F_source"] == "audit") == 1
+
+
+def test_project_fields_fail_soft(state: Path, capsys) -> None:
+    no_source = FakeGh(fields=[f for f in BOARD_FIELDS if f["name"] != "Source"])
+    assert cc.main(["--state-dir", str(state), "--apply", "--cap", "1", "--project", "kody-w/1"],
+                   runner=no_source) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["project"] == "added" and len(out["filed"]) == 1
+    assert "Source=Collector (not on the Project)" in out["project_fields"][0]
+    assert list(no_source.edits().values()) == [{"F_status": "backlog", "F_platform": "rb"}]
+    for broken in (FakeGh(edit_rc=1), FakeGh(view_rc=1)):
+        assert cc.main(["--state-dir", str(state), "--apply", "--cap", "1", "--project", "kody-w/1"],
+                       runner=broken) == 0
+        out = json.loads(capsys.readouterr().out)
+        assert out["project"] == "added" and "fields not set" in out["project_fields"][0]
+        assert len(out["filed"]) == 1 and not out["errors"]
 
 
 def test_project_owner_number_forms(state: Path, capsys) -> None:

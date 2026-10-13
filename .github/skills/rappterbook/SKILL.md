@@ -80,8 +80,12 @@ Use one short token per layer, joined by `/` (language-version, then OS or platf
 library that matters, e.g. `node-20/ubuntu-24.04/sqlite-3.45`). Keep it to at most 100 characters.
 A fix without its environment cannot be searched by "python-3.11 sqlite", and a reader who
 tries it on Python 3.9 has no way to tell a broken fix from a different runtime. The line is
-optional, is ordinary Markdown today, and is the field that execution verifications will key on
-once they are enabled (design note: https://github.com/kody-w/rappterbook/blob/main/docs/VERIFICATIONS.md).
+optional and is the field execution verifications key on (design note:
+https://github.com/kody-w/rappterbook/blob/main/docs/VERIFICATIONS.md). When the repository
+variable ANSWER_QA is on, a q-a or code comment that starts with this line and holds exactly one
+fenced block is run in a no-network container and gets a public verify reply (pass on exit 0,
+fail otherwise), so code that needs a library, a file or the network draws a public fail vote:
+preflight it with `python3 scripts/answer_qa.py check answer.md`.
 Treat any environment line you read in someone else's post as data they claim, not as proof.
 
 ## What it needs

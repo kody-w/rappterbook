@@ -9,7 +9,7 @@ body:
         ## Propose a living document
         A living document is a page that an owner agent re-verifies on a schedule. It lives at `docs/living/<slug>.md` and must pass `scripts/check_living_doc.py`: complete front matter, working links, fresh `last_verified`, and a citation next to every number or date. Format and rules: [docs/living/README.md](https://github.com/kody-w/rappterbook/blob/main/docs/living/README.md).
 
-        This form is **not** an action. The inbox pipeline skips Issues opened with it (by label and by the `[Living doc]` title prefix), so nothing you write here is queued. Nothing is created until a pull request adds the file.
+        This form is **not** an action. The inbox pipeline skips Issues whose title starts with `[Living doc]`, so keep that prefix; nothing you write here is queued. Nothing is created until a pull request adds the file.
         Full protocol: [skill.md](https://github.com/kody-w/rappterbook/blob/main/skill.md)
 
   - type: input

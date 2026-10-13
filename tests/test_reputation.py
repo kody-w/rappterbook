@@ -397,11 +397,56 @@ class TestVerifications:
         row = doc["verified"][0]
         assert (row["target"], row["comment_id"], row["agent"]) == ("comment", "DC_ans", "zion-coder-01")
         assert row["subject"] == verifications.content_id("print(1)")
-        assert (row["platform"], row["passing"], row["verifiers"]) == ("pass", True, [answer_qa.PLATFORM_VERIFIER])
+        # A platform pass alone says only that the code exited 0: not passing.
+        assert (row["platform"], row["passing"], row["verifiers"]) == ("pass", False, [answer_qa.PLATFORM_VERIFIER])
         assert doc["totals"]["platform_votes_counted"] == 1 and doc["totals"]["dropped_unbound"] == 0
-        assert rep.passing_discussions(doc)[101]["target"] == "comment"
+        assert rep.passing_discussions(doc) == {}
+        assert rep.is_passing({"pass_count": 1, "fail_count": 0}, human_passes=0) is False
         failed = build(discussions=[self.platform_disc(reply=self.platform_reply(passed=False))])
         assert (failed["verified"][0]["platform"], failed["verified"][0]["passing"]) == ("fail", False)
+
+    def test_trivial_self_answer_with_platform_pass_is_not_listed_or_boosted(self, tmp_path, monkeypatch):
+        import weekly_newsletter
+        answer = "environment: bash\n\n```bash\ntrue\n```\n\nThis proves P=NP."
+        disc = discussion(number=7, body="Why does my sqlite lock?", author="bob", comments=[
+            comment(answer, "bob", at="2026-10-09T09:00:00Z", cid="DC_ans"),
+            comment(self.platform_reply(code="true").replace("python-3.11", "bash")
+                    .replace("python:3.11-slim", "bash:5.2"), "github-actions",
+                    at="2026-10-09T09:05:00Z", cid="DC_rep")])
+        doc = build(discussions=[disc])
+        assert doc["totals"]["platform_votes_counted"] == 1
+        assert rep.passing_discussions(doc) == {}
+        start, end = datetime(2026, 10, 6, tzinfo=timezone.utc), datetime(2026, 10, 13, tzinfo=timezone.utc)
+        assert weekly_newsletter.render_verified(rep.verified_in_window(doc, start, end)) == ""
+
+    @pytest.mark.parametrize("login", [answer_qa.PLATFORM_VERIFIER, "Rappterbook-Sandbox"])
+    def test_a_human_login_spelled_like_the_platform_cannot_vote_as_it(self, login):
+        subj = verifications.content_id("How do I print?")
+        disc = discussion(body="How do I print?", author="carol",
+                          comments=[comment(verify_block(subj), login, cid="C1")])
+        doc = build(discussions=[disc])
+        assert doc["verified"] == [] and doc["totals"]["dropped_automation"] == 1
+        disc["comments"].append(comment(verify_block(subj), "bob", cid="C2"))
+        row = build(discussions=[disc])["verified"][0]
+        assert (row["platform"], row["passing"], row["verifiers"]) == ("", False, ["bob"])
+
+    def test_platform_vote_does_not_survive_a_runtime_change(self):
+        node = self.ANSWER.replace("python-3.11/linux", "node-20").replace("```python", "```js")
+        doc = build(discussions=[self.platform_disc(answer=node)])
+        assert doc["totals"]["platform_votes_counted"] == 0
+
+    def test_stale_snapshot_is_incomplete_and_never_passing(self):
+        subj = self.subject()
+        disc = discussion(comments=[comment(verify_block(subj), "outside-dev", cid="1"),
+                                    comment(verify_block(subj), "second-dev", cid="2")])
+        fresh = dict(disc, comment_count=2, top_level_comment_count=2, comments_complete=True,
+                     updated_at="2026-10-05T00:00:00Z", comments_hydrated_updated_at="2026-10-05T00:00:00Z")
+        assert build(discussions=[fresh])["verified"][0]["passing"] is True
+        for stale in (dict(fresh, comments_hydrated_updated_at="2026-10-02T00:00:00Z"),  # updated since
+                      dict(fresh, comment_count=3),                                    # a comment missing
+                      {k: v for k, v in fresh.items() if k != "comments_complete"}):  # flag missing
+            row = build(discussions=[stale])["verified"][0]
+            assert (row["incomplete"], row["passing"]) == (True, False)
 
     def test_platform_vote_also_counts_with_rest_login(self):
         doc = build(discussions=[self.platform_disc(reply_login="github-actions[bot]")])
@@ -699,6 +744,14 @@ class TestNewsletterVerified:
         assert "](javascript" not in section and "\\[click\\]" in section
         assert "\\@everyone" in section and "`zion-helper-01`" in section
         assert "Card \\*bold\\*" in section and "pull/10" in section
+        assert "ran in the sandbox" not in section
+
+    def test_newsletter_says_the_code_ran_rather_than_folding_it_into_verified(self, monkeypatch):
+        import weekly_newsletter
+        payload = verified_payload()
+        payload["discussions"][0]["platform"] = "pass"
+        section = weekly_newsletter.render_verified(payload)
+        assert "verified: 2 pass / 0 fail" in section and "its code ran in the sandbox (exit 0)" in section
 
     def test_newsletter_enabled_with_nothing_verified_is_unchanged(self, monkeypatch):
         import weekly_newsletter
@@ -800,6 +853,22 @@ class TestTrendingVerifiedBoost:
         for number, row in after.items():
             if number != 101 and number in before:
                 assert row == before[number]
+
+    def test_a_passing_answer_does_not_boost_its_question(self, tmp_path, monkeypatch):
+        import compute_trending
+        answer = "*— **zion-helper-01***\n\nUse a timeout."
+        subj = verifications.content_id(answer)
+        doc = build(discussions=[discussion(number=101, comments=[
+            comment(answer, "kody-w", cid="A1"),
+            comment(verify_block(subj), "outside-dev", at="2026-10-09T11:00:00Z", cid="V1"),
+            comment(verify_block(subj), "second-dev", at="2026-10-09T11:30:00Z", cid="V2")])])
+        assert rep.passing_discussions(doc)[101]["target"] == "comment"
+        path = tmp_path / "reputation.json"
+        path.write_text(rep.dumps(doc))
+        monkeypatch.setenv("REPUTATION_JSON", str(path))
+        assert compute_trending.verified_numbers() == set()
+        monkeypatch.setenv("REPUTATION_JSON", str(_reputation_with_passing(tmp_path, 101)))
+        assert compute_trending.verified_numbers() == {101}
 
     def test_boost_never_lowers_a_negative_score(self):
         import compute_trending

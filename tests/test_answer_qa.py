@@ -260,7 +260,8 @@ _STARTED = "2026-10-13T00:00:01.5Z"
 _NEVER = "0001-01-01T00:00:00Z"
 
 
-def _fake_run(calls, exit_code=0, started_at=_STARTED, error="", create_rc=0, inspect_rc=0, seen=None):
+def _fake_run(calls, exit_code=0, started_at=_STARTED, error="", create_rc=0, inspect_rc=0, seen=None,
+              running=False, finished_at="2026-10-13T00:00:02Z"):
     """Mocked subprocess.run for pull / create / inspect / kill / rm."""
     def run(cmd, **kwargs):
         calls.append(cmd)
@@ -271,7 +272,8 @@ def _fake_run(calls, exit_code=0, started_at=_STARTED, error="", create_rc=0, in
                 seen["mount"] = mount
             return subprocess.CompletedProcess(cmd, create_rc)
         if cmd[:2] == ["docker", "inspect"]:
-            state = {"ExitCode": exit_code, "StartedAt": started_at, "Error": error, "OOMKilled": False}
+            state = {"ExitCode": exit_code, "StartedAt": started_at, "Error": error, "OOMKilled": False,
+                     "Running": running, "FinishedAt": finished_at}
             return subprocess.CompletedProcess(cmd, inspect_rc, stdout=json.dumps(state).encode())
         return subprocess.CompletedProcess(cmd, 0)
     return run
@@ -343,6 +345,9 @@ def test_execute_program_exit_125_is_a_fail_vote():
     {"create_rc": 125},                                  # docker create failed
     {"inspect_rc": 1},                                   # inspect failed
     {"exit_code": -1},                                   # impossible exit code
+    {"running": True, "exit_code": 0},                   # attach returned early: still running
+    {"finished_at": _NEVER, "exit_code": 0},             # never finished
+    {"finished_at": None, "exit_code": 0},               # no FinishedAt at all
 ])
 def test_execute_sandbox_failure_is_error_not_vote(run_kwargs):
     calls = []
@@ -617,6 +622,16 @@ def test_marker_from_a_human_or_not_on_first_line_does_not_block(tmp_path):
     gh = FakeGitHub(replies=replies)
     assert aq.cmd_record(_record_args(_write(tmp_path, _result())), gql=gh) == 0
     assert len(gh.posts) == 1
+
+
+def test_a_reply_for_another_runtime_does_not_block_a_rerun():
+    mark = aq.marker("DC_abc", v.content_id("print('hello')"))
+    old = aq.render_reply(_result())  # ran as python-3.11
+    replies = [{"body": old, "author": {"login": "github-actions[bot]"}}]
+    assert aq.already_posted(replies, mark, "python-3.11")
+    assert not aq.already_posted(replies, mark, "python-3.12")
+    assert not aq.already_posted([{"body": mark + "\nno block", "author": {"login": "github-actions"}}],
+                                 mark, "python-3.11")
 
 
 def test_marker_from_another_bot_does_not_block(tmp_path):

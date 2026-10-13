@@ -11,17 +11,24 @@ writes per run. No action, state file or schedule was added for it
 
 | Column | What is in it |
 | --- | --- |
-| Backlog | New cards: `[Foreman] ...` issues and `factory:collected` issues |
-| Ready | Cards a person has triaged and wants built |
-| Building | An open same-repo PR claims the card (`Closes #N`); Worker PRs are `worker-auto-pr-*` |
-| QA | The Reviewer is running the regression gate on that PR |
+| Backlog | New cards: `[Foreman] ...` work orders and `factory:collected` issues |
+| Ready | Cards a person has triaged and wants built (for people: the Worker does not read Status) |
+| Building | Work in progress: an open same-repo PR claims the card (`Closes #N`); Worker PRs are `worker-auto-pr-*` |
+| QA | The PR is in the Reviewer's regression gate |
 | Review | The gate passed; the Reviewer's LLM review is pending or failed |
-| Blocked | Labelled `factory:blocked`: the Worker skips it until a person removes the label |
+| Blocked | Waiting on a person; label the issue `factory:blocked` too, so the Worker skips it |
 | Done | Closed, normally by the merged PR's `Closes #N` |
 
-The columns are the Status field of an optional GitHub Project.
-`scripts/export_board.py` publishes it to `docs/board.html` when the
-`FACTORY_PROJECT` variable is set.
+The columns are the Status field of the GitHub Project
+[RAPP Factory](https://github.com/users/kody-w/projects/1) (`kody-w/1`;
+fields Status, Platform, Source, Agent, Acceptance, Verification,
+Iterations). The collector and the Foreman add each new card with
+Status=Backlog, Platform=Rappterbook and Source=Collector (Audit for
+`--findings` cards). After that, **a person moves cards between
+columns**: no lane sets Status, and the Worker does not read it, so a
+card's column can lag behind its issue or PR. `scripts/export_board.py`
+publishes the Project to `docs/board.html` when the `FACTORY_PROJECT`
+variable is set.
 
 ## Lanes
 
@@ -30,15 +37,24 @@ The columns are the Status field of an optional GitHub Project.
   came from; later runs only show the LLM newer posts, and skip the LLM when
   there are none, so a reworded title cannot reopen the same work. It also
   skips titles that match an existing `[Foreman]` issue, open or closed.
+  Every work order is labelled `factory:card`.
   `scripts/collect_cards.py` (a step in glitch-report.yml) turns signals
   the repo already writes into `factory:collected` issues.
 - **Build**: `agents/worker.py` (auto-worker.yml) takes open `[Foreman]`
-  issues that no open same-repo PR closes and that have no `factory:blocked`
-  label. Fork PRs do not count as claims, since anyone can open one. A
-  collected card reaches the Worker only when a person retitles it
-  `[Foreman] ...`, or someone fixes it by hand. The Worker's PR body has
-  one `Closes #N` per issue it built and a `Fix:` line; issue titles stay
-  out of it.
+  issues that are labelled `factory:card`, were opened by a trusted author
+  (the repository owner, whose token the Foreman uses, or a login in
+  `FACTORY_CARD_AUTHORS`), are not claimed by an open same-repo PR and have
+  no `factory:blocked` label. Anyone can title an issue `[Foreman] ...`, and
+  an issue form can apply labels for anyone, so neither the title nor the
+  label alone is enough. Fork PRs do not count as claims. The Worker does
+  not read the Project's Status: Foreman work orders are built as soon as
+  they are filed, without a person moving them to Ready. A collected card
+  (or a reader request) reaches the Worker only when a trusted author files
+  it as a labelled `[Foreman] ...` issue, or someone fixes it by hand. The
+  Worker's PR body has one `Closes #N` per issue it built, a `Fix:` line
+  and an `Agent: <id>` line (`FACTORY_WORKER_AGENT`, default
+  `zion-coder-01`) that `scripts/compute_reputation.py` credits; issue
+  titles stay out of it.
 - **QA and Review**: `agents/reviewer.py` (auto-reviewer.yml) acts only on
   same-repo `worker-auto-pr-*` PRs.
 - **Retro**: `scripts/factory_retro.py` records each closed card in
@@ -64,12 +80,20 @@ auto-reviewer.yml runs three jobs, all from main's copy of the code:
 The review job merges a Worker PR only when all of these hold:
 
 1. main's `scripts/compare_test_regressions.py`, the comparison from
-   run-tests.yml, finds no new failures in the gate's reports, and both
-   pytest runs completed (exit 0 or 1).
+   run-tests.yml, finds no new failures in the gate's reports, both
+   pytest runs completed (exit 0 or 1), and every test id in the baseline
+   report (`classname::name`, one per parametrize case) is still in the
+   candidate report and, if it ran in the baseline, is not skipped or
+   xfailed in the candidate.
 2. The diff, fetched pinned to the PR's base and head SHAs, leaves
-   `.github/`, `agents/`, `state/`, `scripts/compare_test_regressions.py`
-   and pytest's configuration (`conftest.py`, `pytest.ini`,
-   `pyproject.toml`, `setup.cfg`, `tox.ini`) untouched, and deletes no test.
+   `.github/`, `agents/`, `state/`, `scripts/`, `sdk/`, `clients/`
+   (code that workflows run with secrets), files at the repository root,
+   new or hidden top-level directories, top-level `__init__.py` files and
+   pytest's configuration (`conftest.py`, `pytest.ini`, `.pytest.ini`,
+   `pytest.toml`, `.pytest.toml`, `pyproject.toml`, `setup.cfg`,
+   `tox.ini`, at any depth) untouched, and deletes or renames away no file
+   under `tests/`. The Worker refuses to write these paths in the first
+   place.
 3. The LLM approves that same diff.
 4. Read again just before merging, the PR is still an open same-repo Worker
    PR into main at the gated head, and main has moved since the gate only
@@ -134,7 +158,7 @@ process-issues.yml ignores issues labelled `factory:collected` in any case.
 ```sh
 python scripts/collect_cards.py                          # dry run: cards as JSON
 python scripts/collect_cards.py --findings findings.json # include manual findings
-python scripts/collect_cards.py --apply --cap 5 --project kody-w/3
+python scripts/collect_cards.py --apply --cap 5 --project kody-w/1
 ```
 
 ## Turning it on
@@ -145,7 +169,10 @@ you set it.
 | Setting | Effect |
 | --- | --- |
 | `FACTORY_APPLY=true` | Foreman, Worker and Reviewer write: they open issues and PRs and merge. Without it they run dry. |
+| `FACTORY_CARD_AUTHORS=login,...` | Extra logins (besides the repository owner) whose `factory:card` `[Foreman]` issues the Worker builds. Set it when the Foreman's `GH_TOKEN` belongs to another account. |
+| `FACTORY_WORKER_AGENT=<agent id>` | The persona named in the Worker PR's `Agent:` line (default `zion-coder-01`). |
 | `COLLECT_CARDS=true` | The glitch-report workflow runs the collector with `--apply` after the daily report (5 cards per run at most) |
-| `FACTORY_PROJECT=owner/number` | The collector adds new cards to that Project, and the static API workflow exports the board. A value the collector cannot parse is reported and ignored; the cards are still filed. |
-| secret `COLLECT_CARDS_TOKEN` | Token for the collector (issues write, plus the `project` scope to add cards to the Project). Without it the default token files the issues; the first Project failure, whatever its message, makes the collector report `skipped: <reason>` and stop trying the board for that run. |
+| `FACTORY_PROJECT=owner/number` | The live board is `kody-w/1`. The collector and the Foreman add new cards to that Project (Status, Platform and Source set), and the static API workflow exports the board. A value they cannot parse is reported and ignored; the cards are still filed. |
+| `FACTORY_BOARD_REPOS=owner/name,...` | Repositories whose items the board export publishes (default: this repository). The Project's Platform field also covers Rappterverse and Mars Barn; their items are dropped from `docs/board.json` unless their repositories are listed here. |
+| secret `COLLECT_CARDS_TOKEN` | Token for the collector (issues write, plus the `project` scope to add cards to the Project and set their fields). The Foreman uses `GH_TOKEN`, which needs the same scope for the board. Without it the default token files the issues; the first Project failure, whatever its message, makes the collector report `skipped: <reason>` and stop trying the board for that run. |
 | secret `FACTORY_PROJECT_TOKEN` | `read:project` token for the board export |
