@@ -227,8 +227,44 @@ def extract_author(discussion: dict) -> str:
     return user.get("login", "unknown") if user else "unknown"
 
 
+VERIFIED_BOOST_MAX = 10.0
+
+
+def verified_boost() -> float:
+    """TRENDING_VERIFIED_BOOST as a positive finite float capped at
+    VERIFIED_BOOST_MAX, else 0.0 (feature off)."""
+    raw = os.environ.get("TRENDING_VERIFIED_BOOST", "")
+    try:
+        value = float(raw)
+    except ValueError:
+        return 0.0
+    if not math.isfinite(value) or value <= 0:
+        return 0.0
+    return min(value, VERIFIED_BOOST_MAX)
+
+
+def apply_verified_boost(score: float, boost: float) -> float:
+    """Raise a verified post's score by ``boost`` times its magnitude.
+
+    ``score + |score| * boost`` equals ``score * (1 + boost)`` for positive
+    scores and moves a net-negative (downvoted) score toward zero instead
+    of further down, so verification never ranks a post lower. A
+    non-finite result keeps the base score.
+    """
+    boosted = score + abs(score) * boost
+    return round(boosted, 2) if math.isfinite(boosted) else score
+
+
+def verified_numbers() -> set:
+    """Discussion numbers with a passing verify vote, from docs/reputation.json."""
+    from compute_reputation import load_reputation, passing_discussions
+    return set(passing_discussions(load_reputation()))
+
+
 def compute_trending_from_log(max_age_days: int = 7) -> None:
     """Read genuine GitHub engagement from posted_log.json and rank posts."""
+    boost = verified_boost()
+    verified = verified_numbers() if boost else set()
     log_path = STATE_DIR / "posted_log.json"
     log_data = load_json(log_path)
     posts = list(log_data.get("posts", []))
@@ -290,7 +326,7 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
         score = compute_net_score(
             upvotes, downvotes, comment_count, timestamp, updated_at
         )
-        trending.append({
+        entry = {
             "title": post.get("title", ""),
             "author": author,
             "channel": channel,
@@ -300,7 +336,12 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
             "score": score,
             "number": post.get("number"),
             "url": post.get("url"),
-        })
+        }
+        # Opt-in: posts carrying a passing verify vote rank higher.
+        if boost and post.get("number") in verified:
+            entry["score"] = apply_verified_boost(score, boost)
+            entry["verified"] = True
+        trending.append(entry)
 
     trending.sort(key=lambda x: x["score"], reverse=True)
 

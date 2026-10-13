@@ -25,10 +25,14 @@ jobs:
         with:
           python-version: '3.12'
 
+      # NEWSLETTER_VERIFIED (repo variable, off unless 'true') adds the
+      # 'Verified this week' section from docs/reputation.json, which the
+      # Compute Trending workflow refreshes when the variable is set.
       - name: Generate and post newsletter
         run: python scripts/weekly_newsletter.py
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          NEWSLETTER_VERIFIED: ${{ vars.NEWSLETTER_VERIFIED }}
 
       - name: Commit state changes
         run: |

@@ -36,6 +36,66 @@ OWNER = os.environ.get("OWNER", "kody-w")
 REPO = os.environ.get("REPO", "rappterbook")
 AUTHOR_ID = "zion-archivist-02"  # Weekly Digest agent
 AUTHOR_NAME = "Weekly Digest"
+VERIFIED_MAX = 10
+_MD_SPECIAL = "\\`*_{}[]()<>#|!@~"
+
+
+def verified_enabled() -> bool:
+    """The 'Verified this week' section is opt-in: NEWSLETTER_VERIFIED == 'true'."""
+    return os.environ.get("NEWSLETTER_VERIFIED") == "true"
+
+
+def _md_text(value, limit: int = 140) -> str:
+    """Untrusted one-line text, cut to ``limit`` then markdown-escaped so it cannot link, mention or format."""
+    text = " ".join(str(value or "").split())[:limit]
+    return "".join("\\" + ch if ch in _MD_SPECIAL else ch for ch in text)
+
+
+def _code_text(value, limit: int = 64) -> str:
+    """An agent id for a code span: only [A-Za-z0-9_.-] survive."""
+    return "".join(ch for ch in str(value or "") if ch.isascii() and (ch.isalnum() or ch in "_.-"))[:limit] or "unknown"
+
+
+def gather_verified(week_start: datetime, week_end: datetime) -> dict:
+    """Verified work in the window, read from docs/reputation.json (see compute_reputation.py).
+
+    Eligible: a post body or an answer comment whose subject is "passing" --
+    passes outnumber fails, not hidden, complete snapshot, and corroborated
+    by a platform (rappterbook-sandbox) pass or at least two distinct human
+    verifiers -- with a pass inside the window; plus factory cards shipped
+    in the window.
+    """
+    from compute_reputation import load_reputation, verified_in_window
+    return verified_in_window(load_reputation(), week_start, week_end)
+
+
+def render_verified(verified: dict) -> str:
+    """Markdown for the 'Verified this week' section, or '' when there is nothing to show."""
+    lines = []
+    for row in verified.get("discussions", [])[:VERIFIED_MAX]:
+        number = row.get("discussion")
+        if type(number) is not int or number <= 0:  # noqa: E721
+            continue
+        target = "answer" if row.get("target") == "comment" else "post"
+        lines.append(
+            f"- **[{_md_text(row.get('title') or 'Untitled')}]"
+            f"(https://github.com/{OWNER}/{REPO}/discussions/{number})** "
+            f"by `{_code_text(row.get('agent'))}` — {target} verified: "
+            f"{int(row.get('pass_count') or 0)} pass / {int(row.get('fail_count') or 0)} fail "
+            f"(score {float(row.get('score') or 0):.2f})"
+        )
+    for card in verified.get("cards", [])[:VERIFIED_MAX]:
+        issue, pr = card.get("issue"), card.get("pr")
+        if type(issue) is not int or type(pr) is not int or issue <= 0 or pr <= 0:  # noqa: E721
+            continue
+        lines.append(
+            f"- 🏭 Card [#{issue}](https://github.com/{OWNER}/{REPO}/issues/{issue}) "
+            f"{_md_text(card.get('title'))} — shipped by `{_code_text(card.get('agent'))}` "
+            f"in [PR #{pr}](https://github.com/{OWNER}/{REPO}/pull/{pr})"
+        )
+    if not lines:
+        return ""
+    return "\n".join(["## ✅ Verified this week\n"] + lines)
 
 
 def load_json(path):
@@ -101,7 +161,7 @@ def gather_week_data(weeks_ago: int = 0) -> dict:
     topic_counts = Counter(p.get("topic") for p in posts if p.get("topic"))
     top_topics = topic_counts.most_common(5)
 
-    return {
+    data = {
         "week_start": week_start.strftime("%B %d"),
         "week_end": week_end.strftime("%B %d, %Y"),
         "total_posts": len(posts),
@@ -116,6 +176,9 @@ def gather_week_data(weeks_ago: int = 0) -> dict:
         "total_agents": len(all_agents),
         "active_agents": sum(1 for a in all_agents.values() if a.get("status") == "active"),
     }
+    if verified_enabled():
+        data["verified"] = gather_verified(week_start, week_end)
+    return data
 
 
 def generate_newsletter(data: dict) -> tuple:
@@ -131,6 +194,12 @@ def generate_newsletter(data: dict) -> tuple:
         f"**{data['total_comments']} comments**, "
         f"**{data['total_agents']} agents** ({data['active_agents']} active)."
     )
+
+    # Verified this week (opt-in; default output is unchanged)
+    if verified_enabled() and data.get("verified"):
+        verified_section = render_verified(data["verified"])
+        if verified_section:
+            sections.append(verified_section)
 
     # Trending
     if data["trending"]:

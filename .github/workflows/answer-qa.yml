@@ -1,0 +1,123 @@
+# Answers that ran (docs/VERIFICATIONS.md, "Answers that ran").
+#
+# Off unless the repo variable ANSWER_QA is exactly 'true'; any other value
+# (unset, 'false', 'dry-run', ...) disables both jobs. To preview without
+# posting, run `python3 scripts/answer_qa.py check answer.md --run` locally
+# (the record command is a dry-run unless given --apply).
+#
+# Rate cap: each comment author has one sandbox run in progress and at most
+# one pending (GitHub keeps one pending run per concurrency group and
+# cancels the older pending one), so a burst of comments from one account
+# cannot occupy the repository's runners. Trade-off: a burst from one author
+# drops the middle answers; re-run any of them with workflow_dispatch.
+#
+# Job 'run' executes untrusted Discussion code: it has no permissions, no
+# secrets and no write token, and the code itself runs in a container with
+# no network. Job 'record' holds the only write permission and never
+# executes anything from the artifact: it re-fetches the comment, checks the
+# artifact against it and posts at most one reply, once (fingerprint marker).
+# Event fields reach the scripts through env vars, never interpolated into
+# a shell line.
+name: Answer QA
+
+on:
+  discussion_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      discussion_number:
+        description: 'Discussion number'
+        required: true
+        type: string
+      comment_id:
+        description: 'Comment node id (DC_...); numeric database ids are refused'
+        required: true
+        type: string
+
+permissions: {}
+
+# One key per comment: answer_qa.py accepts only DC_ node ids, so an event
+# run and a dispatch run for the same comment always share this group.
+concurrency:
+  group: answer-qa-${{ github.event.comment.node_id || inputs.comment_id }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    if: >-
+      vars.ANSWER_QA == 'true'
+      && (github.event_name == 'workflow_dispatch'
+          || (github.event.comment.user.type != 'Bot'
+              && (github.event.discussion.category.slug == 'q-a'
+                  || github.event.discussion.category.slug == 'code')
+              && contains(github.event.comment.body, 'environment:')
+              && (contains(github.event.comment.body, '```')
+                  || contains(github.event.comment.body, '~~~'))))
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 15
+    concurrency:
+      group: answer-qa-sandbox-${{ github.event.comment.user.login || 'dispatch' }}
+      cancel-in-progress: false
+    outputs:
+      status: ${{ steps.sandbox.outputs.status }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Run the answer in the sandbox
+        id: sandbox
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DISCUSSION_NUMBER: ${{ github.event.discussion.number || inputs.discussion_number }}
+          COMMENT_ID: ${{ github.event.comment.node_id || inputs.comment_id }}
+        run: >-
+          python3 scripts/answer_qa.py run
+          --discussion "$DISCUSSION_NUMBER"
+          --comment "$COMMENT_ID"
+          --out "$RUNNER_TEMP/answer-qa/result.json"
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: answer-qa-result
+          path: ${{ runner.temp }}/answer-qa/result.json
+          retention-days: 3
+          if-no-files-found: error
+
+  record:
+    needs: run
+    if: needs.run.result == 'success' && needs.run.outputs.status == 'ran' && vars.ANSWER_QA == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      discussions: write
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Download result (untrusted data, never executed)
+        uses: actions/download-artifact@v4
+        with:
+          name: answer-qa-result
+          path: ${{ runner.temp }}/answer-qa-untrusted
+
+      - name: Record the result as a verify reply
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DISCUSSION_NUMBER: ${{ github.event.discussion.number || inputs.discussion_number }}
+          COMMENT_ID: ${{ github.event.comment.node_id || inputs.comment_id }}
+          ANSWER_QA_MODE: ${{ vars.ANSWER_QA }}
+        run: |
+          apply=""
+          if [ "$ANSWER_QA_MODE" = "true" ]; then apply="--apply"; fi
+          python3 scripts/answer_qa.py record \
+            --discussion "$DISCUSSION_NUMBER" \
+            --comment "$COMMENT_ID" \
+            --result "$RUNNER_TEMP/answer-qa-untrusted/result.json" \
+            $apply

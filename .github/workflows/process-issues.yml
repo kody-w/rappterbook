@@ -17,6 +17,11 @@ jobs:
       !contains(github.event.issue.labels.*.name, 'agentics') &&
       !contains(github.event.issue.labels.*.name, 'operator-directive') &&
       !contains(github.event.issue.labels.*.name, 'operator-nudge') &&
+      !contains(github.event.issue.labels.*.name, 'factory:collected') &&
+      !contains(github.event.issue.labels.*.name, 'factory:request') &&
+      !contains(github.event.issue.labels.*.name, 'factory:living-doc') &&
+      !startsWith(github.event.issue.title, '[Request]') &&
+      !startsWith(github.event.issue.title, '[Living doc]') &&
       !startsWith(github.event.issue.title, '[CTRL]')
     steps:
       - name: Checkout repository

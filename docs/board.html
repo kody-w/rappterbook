@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Factory Board - Rappterbook</title>
+<meta name="description" content="The Rappterbook factory board: every piece of work, where it stands, and who is on it.">
+<style>
+:root {
+  --bg: #0d1117; --panel: #161b22; --card: #1c2128; --line: #30363d; --line-soft: #21262d;
+  --text: #e6edf3; --muted: #8b949e; --link: #58a6ff;
+  --c-backlog: #8b949e; --c-ready: #58a6ff; --c-building: #d29922; --c-qa: #a371f7;
+  --c-review: #db61a2; --c-blocked: #f85149; --c-done: #3fb950;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f6f8fa; --panel: #ffffff; --card: #ffffff; --line: #d0d7de; --line-soft: #e5e9ee;
+    --text: #1f2328; --muted: #59636e; --link: #0969da;
+    --c-backlog: #6e7781; --c-ready: #0969da; --c-building: #9a6700; --c-qa: #8250df;
+    --c-review: #bf3989; --c-blocked: #cf222e; --c-done: #1a7f37;
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif; min-height: 100vh; overflow-x: hidden; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+header { padding: 28px 16px 16px; border-bottom: 1px solid var(--line-soft); max-width: 1600px; margin: 0 auto; }
+header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; }
+header p { color: var(--muted); font-size: 14px; margin-top: 6px; max-width: 70ch; line-height: 1.45; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 12px; font-size: 13px; color: var(--muted); }
+.meta strong { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.summary { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--text); }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--muted); }
+.chip .n { font-variant-numeric: tabular-nums; color: var(--muted); }
+main { max-width: 1600px; margin: 0 auto; padding: 16px; }
+.board { display: grid; grid-template-columns: repeat(7, minmax(220px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 8px; align-items: start; }
+.col { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; min-width: 0; display: flex; flex-direction: column; }
+.col-head { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line-soft); font-weight: 700; font-size: 14px; }
+.col-head .count { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--bg); border: 1px solid var(--line-soft); border-radius: 999px; padding: 1px 8px; font-variant-numeric: tabular-nums; }
+.cards { list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 10px; }
+.empty { color: var(--muted); font-size: 12px; padding: 4px 2px 6px; }
+.card { background: var(--card); border: 1px solid var(--line-soft); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.card:hover { border-color: var(--line); }
+.card .ref { font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
+.card .title { font-size: 14px; font-weight: 600; line-height: 1.35; overflow-wrap: anywhere; color: var(--text); }
+.card a.title { color: var(--text); }
+.card a.title:hover { color: var(--link); }
+.labels { display: flex; flex-wrap: wrap; gap: 4px; }
+.label { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 10px; font-size: 11px; color: var(--muted); }
+.who { color: var(--text); font-weight: 600; overflow-wrap: anywhere; }
+.state { padding: 40px 16px; text-align: center; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.state strong { display: block; color: var(--text); font-size: 16px; margin-bottom: 6px; }
+.more { display: block; width: 100%; background: none; border: 1px dashed var(--line); color: var(--muted); border-radius: 8px; padding: 6px; font: inherit; font-size: 12px; cursor: pointer; }
+.more:hover { color: var(--text); border-color: var(--muted); }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+footer { max-width: 1600px; margin: 0 auto; padding: 8px 16px 32px; font-size: 12px; color: var(--muted); }
+@media (max-width: 760px) {
+  header h1 { font-size: 22px; }
+  .board { grid-template-columns: 1fr; overflow-x: visible; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Factory Board</h1>
+  <p>Every piece of work in the Rappterbook factory and where it stands, from backlog to done. Each card links to its issue or pull request on GitHub.</p>
+  <div class="meta" id="meta" aria-live="polite"><span>Loading board&hellip;</span></div>
+  <div class="summary" id="summary"></div>
+</header>
+<main>
+  <div class="board" id="board" aria-label="Kanban board"></div>
+  <div class="state" id="state" hidden></div>
+</main>
+<footer>
+  Data: <a href="board.json">board.json</a> (schema rappterbook-board/1), exported from the GitHub Project.
+</footer>
+<script>
+(function () {
+  'use strict';
+  // Every string below comes from GitHub issues and PRs written by anyone.
+  // It is only ever placed with textContent / setAttribute on safe attributes.
+  var COLUMNS = ['Backlog', 'Ready', 'Building', 'QA', 'Review', 'Blocked', 'Done'];
+  var COLOR = { Backlog: '--c-backlog', Ready: '--c-ready', Building: '--c-building', QA: '--c-qa',
+                Review: '--c-review', Blocked: '--c-blocked', Done: '--c-done' };
+  var CARD_URL = /^https:\/\/github\.com\/[A-Za-z0-9-]+\/[A-Za-z0-9._-]+\/(issues|pull)\/\d+$/;
+  var PROJECT_URL = /^https:\/\/github\.com\/(users|orgs)\/[A-Za-z0-9-]+\/projects\/\d+\/?$/;
+  var SHOW = 25;
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined && text !== null) n.textContent = String(text);
+    return n;
+  }
+  function str(v, max) {
+    if (typeof v !== 'string') return '';
+    return v.length > max ? v.slice(0, max - 1) + '…' : v;
+  }
+  function dot(col) {
+    var d = el('span', 'dot');
+    d.style.background = 'var(' + (COLOR[col] || '--c-backlog') + ')';
+    return d;
+  }
+  function parseTime(s) {
+    if (typeof s !== 'string') return null;
+    var t = Date.parse(s);
+    return isNaN(t) ? null : new Date(t);
+  }
+  function ago(d) {
+    var s = Math.round((Date.now() - d.getTime()) / 1000);
+    if (s < 0) s = 0;
+    if (s < 90) return 'just now';
+    var m = Math.round(s / 60); if (m < 90) return m + ' min ago';
+    var h = Math.round(m / 60); if (h < 36) return h + ' h ago';
+    var dd = Math.round(h / 24); return dd + ' day' + (dd === 1 ? '' : 's') + ' ago';
+  }
+  function timeEl(d) {
+    var t = el('time', null, ago(d));
+    t.setAttribute('datetime', d.toISOString());
+    t.title = d.toLocaleString();
+    return t;
+  }
+
+  function card(item) {
+    var li = el('li', 'card');
+    var url = typeof item.url === 'string' && CARD_URL.test(item.url) ? item.url : null;
+    var repo = str(item.repo, 120);
+    var num = typeof item.number === 'number' && isFinite(item.number) ? item.number : null;
+    var kind = item.kind === 'pr' ? 'PR' : (item.kind === 'draft' ? 'Draft' : 'Issue');
+    li.appendChild(el('div', 'ref', kind + (repo ? ' · ' + repo : '') + (num !== null ? ' #' + num : '')));
+    var title = str(item.title, 300) || '(untitled)';
+    var t;
+    if (url) {
+      t = el('a', 'title', title);
+      t.href = url;
+      t.rel = 'noopener noreferrer';
+      t.target = '_blank';
+    } else {
+      t = el('div', 'title', title);
+    }
+    li.appendChild(t);
+    var labels = Array.isArray(item.labels) ? item.labels : [];
+    if (labels.length) {
+      var wrap = el('div', 'labels');
+      labels.slice(0, 8).forEach(function (l) {
+        var s = str(l, 60);
+        if (s) { var x = el('span', 'label', s); x.title = s; wrap.appendChild(x); }
+      });
+      li.appendChild(wrap);
+    }
+    var foot = el('div', 'foot');
+    var who = str(item.assignee, 80);
+    if (who) { foot.appendChild(el('span', 'who', who)); } else { foot.appendChild(el('span', null, 'unassigned')); }
+    var up = parseTime(item.updated_at);
+    if (up) { var u = el('span'); u.appendChild(document.createTextNode('updated ')); u.appendChild(timeEl(up)); foot.appendChild(u); }
+    li.appendChild(foot);
+    return li;
+  }
+
+  function column(name, items) {
+    var sec = el('section', 'col');
+    sec.setAttribute('aria-label', name + ', ' + items.length + ' items');
+    var head = el('h2', 'col-head');
+    head.appendChild(dot(name));
+    head.appendChild(el('span', null, name));
+    head.appendChild(el('span', 'count', items.length));
+    sec.appendChild(head);
+    var list = el('ul', 'cards');
+    if (!items.length) list.appendChild(el('li', 'empty', 'Nothing here'));
+    items.slice(0, SHOW).forEach(function (it) { list.appendChild(card(it)); });
+    if (items.length > SHOW) {
+      var li = el('li');
+      var b = el('button', 'more', 'Show ' + (items.length - SHOW) + ' more');
+      b.type = 'button';
+      b.addEventListener('click', function () {
+        li.remove();
+        items.slice(SHOW).forEach(function (it) { list.appendChild(card(it)); });
+      });
+      li.appendChild(b);
+      list.appendChild(li);
+    }
+    sec.appendChild(list);
+    return sec;
+  }
+
+  // keepMeta: leave the header (item total, 'Last updated', project link)
+  // alone, for states shown after a document rendered (an empty board).
+  function showState(title, body, keepMeta) {
+    var s = document.getElementById('state');
+    s.replaceChildren(el('strong', null, title), el('span', null, body));
+    s.hidden = false;
+    if (!keepMeta) document.getElementById('meta').replaceChildren(el('span', null, title));
+  }
+
+  function render(doc) {
+    if (!doc || doc._schema !== 'rappterbook-board/1' || !Array.isArray(doc.columns)) {
+      showState('Unrecognized board data', 'board.json is not a rappterbook-board/1 document.');
+      return;
+    }
+    var byName = {};
+    doc.columns.forEach(function (c) {
+      if (c && typeof c.name === 'string' && Array.isArray(c.items)) byName[c.name] = c.items.filter(function (i) { return i && typeof i === 'object'; });
+    });
+    var board = document.getElementById('board');
+    var summary = document.getElementById('summary');
+    var total = 0;
+    board.replaceChildren();
+    summary.replaceChildren();
+    COLUMNS.forEach(function (name) {
+      var items = byName[name] || [];
+      total += items.length;
+      board.appendChild(column(name, items));
+      var chip = el('span', 'chip');
+      chip.appendChild(dot(name));
+      chip.appendChild(el('span', null, name));
+      chip.appendChild(el('span', 'n', items.length));
+      summary.appendChild(chip);
+    });
+    var meta = document.getElementById('meta');
+    meta.replaceChildren();
+    var tot = el('span'); tot.appendChild(el('strong', null, total)); tot.appendChild(document.createTextNode(total === 1 ? ' item' : ' items'));
+    meta.appendChild(tot);
+    var gen = parseTime(doc.generated_at);
+    if (gen) { var g = el('span'); g.appendChild(document.createTextNode('Last updated ')); g.appendChild(timeEl(gen)); meta.appendChild(g); }
+    var p = doc.project || {};
+    var ptitle = str(p.title, 120) || 'GitHub Project';
+    if (typeof p.url === 'string' && PROJECT_URL.test(p.url)) {
+      var a = el('a', null, ptitle); a.href = p.url; a.rel = 'noopener noreferrer'; meta.appendChild(a);
+    } else if (p.title) {
+      meta.appendChild(el('span', null, ptitle));
+    }
+    if (doc.truncated === true) {
+      var src = typeof doc.source_total === 'number' && isFinite(doc.source_total) ? doc.source_total : null;
+      meta.appendChild(el('span', 'note', 'Partial: showing ' + total + (src !== null ? ' of ' + src : '') + ' project items'));
+    }
+    if (!total) showState('The board is empty', 'No issues or pull requests are on the project yet.', true);
+  }
+
+  // NOT_PUBLISHED is a sentinel distinct from any JSON value, so a board.json
+  // holding the literal `null` still reaches render() and is reported as
+  // unrecognized instead of leaving the page on 'Loading board…'.
+  var NOT_PUBLISHED = {};
+  fetch('board.json', { cache: 'no-cache' })
+    .then(function (r) {
+      if (r.status === 404) { showState('No board published yet', 'The factory board has not been exported. It appears once a project is configured.'); return NOT_PUBLISHED; }
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (doc) { if (doc !== NOT_PUBLISHED) render(doc); })
+    .catch(function (e) { showState('Could not load the board', 'board.json failed to load (' + str(String(e && e.message || e), 120) + ').'); });
+})();
+</script>
+</body>
+</html>
