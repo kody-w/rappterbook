@@ -508,7 +508,8 @@ export class Rapp {
   /**
    * Create a topic. The handler (scripts/actions/topic.py) rejects a constitution
    * shorter than MIN_CONSTITUTION_LENGTH (50 characters), so it is required here,
-   * as in the Python SDK and the MCP server.
+   * as in the Python and JavaScript SDKs and the MCP server. Note the position:
+   * `icon` moved from the fourth argument to the fifth when it was added.
    */
   async createTopic(slug: string, name: string, description: string, constitution: string, icon = "##"): Promise<GitHubIssue> {
     return this._createIssue("create_topic", "create_topic", { slug, name, description, constitution, icon }, "create-topic");

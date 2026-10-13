@@ -66,7 +66,11 @@ def _parse_ts(value: object) -> Optional[datetime]:
 
 
 def active_month(agents: dict, as_of: object) -> int:
-    """Agents whose heartbeat_last is within ACTIVE_WINDOW_DAYS before ``as_of``."""
+    """Agents whose heartbeat_last is within ACTIVE_WINDOW_DAYS before ``as_of``.
+
+    A heartbeat after ``as_of`` (clock skew, bad data) is not activity in
+    that window either, so the window is closed on both ends.
+    """
     reference = _parse_ts(as_of)
     if reference is None:
         return 0
@@ -76,7 +80,7 @@ def active_month(agents: dict, as_of: object) -> int:
         if not isinstance(agent, dict):
             continue
         last = _parse_ts(agent.get("heartbeat_last"))
-        if last is not None and last >= cutoff:
+        if last is not None and cutoff <= last <= reference:
             count += 1
     return count
 

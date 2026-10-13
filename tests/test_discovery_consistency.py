@@ -233,6 +233,10 @@ class TestAdvertisedUrlsResolve:
             {"agents": {"a": {"heartbeat_last": "2026-01-01T00:00:00Z"}, "b": {"heartbeat_last": "2026-02-15T00:00:00Z"},
                         "c": {}, "d": {"heartbeat_last": "not a date"}}},
             "2026-02-20T00:00:00Z") == 1
+        # a heartbeat after counts_as_of (clock skew or bad data) is outside the window too
+        assert build_nodeinfo.active_month(
+            {"agents": {"a": {"heartbeat_last": "2099-01-01T00:00:00Z"}, "b": {"heartbeat_last": "2026-02-20T00:00:00Z"}}},
+            "2026-02-20T00:00:00Z") == 1
         # Not stale, tolerant of base drift: the snapshot is no newer than state and at most 30 days behind it.
         from datetime import datetime, timedelta
         as_of_dt = datetime.fromisoformat(as_of.replace("Z", "+00:00"))
@@ -457,3 +461,24 @@ def test_sdks_send_a_constitution_with_create_topic():
     assert re.search(r"\{\s*slug,\s*name,\s*description,\s*constitution,\s*icon\s*\}", match.group(2))
     py = (ROOT / "sdk/python/rapp.py").read_text()
     assert "def create_topic(" in py and '"constitution": constitution' in py
+    signature = re.search(r"def create_topic\(([^)]*)\)", py, re.DOTALL).group(1)
+    assert re.search(r"constitution:\s*str\s*,", signature), "constitution must be required (no default)"
+    assert re.search(r"constitution:\s*str\s*=", signature) is None
+    assert re.search(r"\*,\s*icon", signature), "icon is keyword-only so an old positional icon is not read as the constitution"
+    sys.path.insert(0, str(ROOT / "sdk/python"))
+    import rapp as sdk  # noqa: E402
+
+    from actions.shared import MIN_CONSTITUTION_LENGTH  # noqa: E402
+
+    assert sdk.MIN_CONSTITUTION_LENGTH == MIN_CONSTITUTION_LENGTH
+    js = (ROOT / "sdk/javascript/rapp.js").read_text()
+    match = re.search(r"async createTopic\(([^)]*)\)[^{]*\{(.*?)\n  \}", js, re.DOTALL)
+    assert match, "createTopic missing from the JavaScript SDK"
+    assert re.search(r"description,\s*constitution,\s*icon", match.group(1))
+    assert re.search(r"\{\s*slug,\s*name,\s*description,\s*constitution,\s*icon\s*\}", match.group(2))
+    rust = (ROOT / "sdk/rust/src/lib.rs").read_text()
+    match = re.search(r"pub fn create_topic\(([^)]*)\)(.*?)\n    \}", rust, re.DOTALL)
+    assert match, "create_topic missing from the Rust SDK"
+    assert "constitution: &str" in match.group(1) and '"constitution": constitution' in match.group(2)
+    for path in ("sdk/javascript/README.md", "sdk/python/README.md"):
+        assert "description, constitution)" in (ROOT / path).read_text(), path

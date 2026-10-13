@@ -97,6 +97,11 @@ _HTML_TYPE_7_RE = re.compile(
     r"(?:\s*=\s*(?:[^\s\"'=<>`]+|'[^']*'|\"[^\"]*\"))?)*\s*/?>|</[A-Za-z][A-Za-z0-9-]*\s*>)\s*$"
 )
 _HTML_RAW_OPEN_RE = re.compile(r"^ {0,3}<(script|pre|style|textarea)(?=[\s>]|$)", re.IGNORECASE)
+# Lines after which the next line is NOT paragraph continuation text: an ATX
+# heading, a thematic break or a setext underline. Every other non-blank line
+# that opens no fence and no HTML block is paragraph text (a list item's or a
+# quote's text included: the next line is then a lazy continuation).
+_PARAGRAPH_ENDER_RE = re.compile(r"^ {0,3}(?:#{1,6}(?:[ \t]|$)|(?:\*[ \t]*){3,}$|(?:-[ \t]*){3,}$|(?:_[ \t]*){3,}$|=+[ \t]*$)")
 _HTML_RAW_CLOSERS = ("</pre>", "</script>", "</style>", "</textarea>")
 _MAX_INT_DIGITS = 100
 # C0 controls except tab/newline, DEL, and C1 controls (U+0080-U+009F).
@@ -196,8 +201,18 @@ def _json_depth(raw: str) -> int:
     return max_depth
 
 
+def _finite_float(text: str) -> float:
+    # ``1e999`` is valid JSON text that float() turns into inf; the literal
+    # Infinity is caught by parse_constant, the overflow only here (same hook
+    # as scripts/ake_bridge.py, so both libraries reject the same bodies).
+    value = float(text)
+    if not math.isfinite(value):
+        raise ValueError(f"non-finite number {text}")
+    return value
+
+
 def _loads_strict(raw: str):
-    """json.loads that rejects duplicate keys, NaN/Infinity, huge ints and too-deep nesting."""
+    """json.loads that rejects duplicate keys, NaN/Infinity (literal or by overflow), huge ints and too-deep nesting."""
     if _json_depth(raw) > MAX_JSON_DEPTH:
         raise ValueError("JSON nested too deeply")
     try:
@@ -205,6 +220,7 @@ def _loads_strict(raw: str):
             raw,
             object_pairs_hook=_reject_duplicate_keys,
             parse_constant=_reject_constant,
+            parse_float=_finite_float,
             parse_int=_bounded_int,
         )
     except RecursionError as exc:
@@ -605,9 +621,12 @@ def _fenced_blocks(body: str):
     closer; a line starting with a block-level tag (``<div>``, ``<details>``,
     ``</p>``, ...; CommonMark type 6) or consisting of one complete tag
     (``<prefix>``; type 7) opens a block that ends at the next blank line. A
-    line that merely begins with inline HTML (``<b>Result</b> on my box:``)
-    is paragraph text, and a fence right after it is a code block, as GitHub
-    renders it. An unterminated fence is not a block.
+    type 7 start cannot interrupt a paragraph, so one complete tag on the
+    line right after prose (``some text`` / ``<span>``) is paragraph text and
+    the fence after it is a code block, as GitHub renders it; the same tag
+    after a blank line, a heading or a thematic break opens a block. A line
+    that merely begins with inline HTML (``<b>Result</b> on my box:``) is
+    paragraph text too. An unterminated fence is not a block.
 
     Containers are not modelled: a fence line indented up to 3 spaces is seen
     whether or not it sits inside a list item or after a blockquote marker's
@@ -627,6 +646,7 @@ def _fenced_blocks(body: str):
     buffer: list = []
     html_closers: tuple = ()   # inside an HTML block that ends at one of these
     html_until_blank = False   # inside an HTML block that ends at a blank line
+    in_paragraph = False       # the previous line was paragraph text (type 7 cannot interrupt it)
     for line in lines:
         if open_fence:
             stripped = line.strip(" \t")
@@ -650,24 +670,36 @@ def _fenced_blocks(body: str):
             if not line.strip(" \t"):
                 html_until_blank = False
             continue
-        if _indent_columns(line) > 3:
+        if not line.strip(" \t"):
+            in_paragraph = False
             continue
-        if _html_block_opens(line):
+        if _indent_columns(line) > 3:
+            continue  # indented code, or a continuation line of the open paragraph: the flag stands
+        if _html_block_opens(line, in_paragraph=in_paragraph):
             html_closers, html_until_blank = _html_block_end(line)
+            in_paragraph = False
             continue
         match = _FENCE_OPEN_RE.match(line)
         if match:
             fence, rest = match.groups()
             info_string = rest.strip()
             if fence[0] == "`" and "`" in info_string:
+                in_paragraph = True  # not a fence: ordinary text
                 continue  # backtick fence info strings may not contain backticks
             open_fence = fence
             info = info_string.split()[0].lower() if info_string else ""
             buffer = []
+            in_paragraph = False
+            continue
+        in_paragraph = not _PARAGRAPH_ENDER_RE.match(line)
 
 
-def _html_block_opens(line: str) -> bool:
-    """CommonMark HTML block start conditions 1-7, not merely "starts with a tag"."""
+def _html_block_opens(line: str, *, in_paragraph: bool = False) -> bool:
+    """CommonMark HTML block start conditions 1-7, not merely "starts with a tag".
+
+    Conditions 1-6 may interrupt a paragraph; condition 7 (one complete tag
+    alone on the line) may not, so it is ignored while ``in_paragraph``.
+    """
     if not _HTML_BLOCK_START_RE.match(line):
         return False
     if _HTML_TYPE_1_5_RE.match(line):
@@ -675,7 +707,7 @@ def _html_block_opens(line: str) -> bool:
     match = _HTML_TYPE_6_RE.match(line)
     if match and match.group(1).lower() in _HTML_TYPE_6_TAGS:
         return True
-    return bool(_HTML_TYPE_7_RE.match(line))
+    return not in_paragraph and bool(_HTML_TYPE_7_RE.match(line))
 
 
 def _html_block_end(line: str) -> tuple:

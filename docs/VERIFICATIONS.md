@@ -81,16 +81,20 @@ Record shape (`schema: rapp-verification/1`), as stored by `record()`:
 | `at` | ISO8601 | set from the comment's `created_at`; stored as UTC `Z`. The accepted grammar is fixed by the library, not by the interpreter: `YYYY-MM-DDTHH:MM:SS`, an optional 1-6 digit fraction, then uppercase `Z` or `+HH:MM`/`-HH:MM` with `HH` 00-23 and `MM` 00-59; no surrounding whitespace, no compact or space-separated forms. Only `record()` may default a missing `at`; a persisted vote without one is corrupt |
 
 Unknown keys are dropped. Two verify blocks in one comment, duplicate JSON
-keys, `NaN`/`Infinity`, integers over 100 digits, JSON nested too deeply to
+keys, `NaN`/`Infinity` (as literals or by overflow, `1e999`), integers over 100 digits, JSON nested too deeply to
 parse, lone surrogates, a top-level array, a null `verdict`, or a body over
 20,000 characters parse as `None` and are ignored. Backtick and tilde fences
 are both tracked the CommonMark way, so a verify block quoted for display
 inside another code block is content, not a vote. CommonMark HTML blocks
 swallow their lines, so a fence GitHub renders as raw HTML or not at all
 cannot vote: `<!-- -->`, `<? ?>`, `<!X >`, `<![CDATA[ ]]>` and
-`<script|pre|style|textarea>` end at their own closer, and any other line
-that starts with a tag (`<div>`, `<details>`, `</p>`) opens a block that ends
-at the next blank line. Containers are not modelled: a fence indented up to
+`<script|pre|style|textarea>` end at their own closer; a line starting with
+a block-level tag (`<div>`, `<details>`, `</p>`; CommonMark type 6) or
+consisting of one complete tag (`<span>`; type 7) opens a block that ends at
+the next blank line, except that a type-7 tag directly after paragraph text
+cannot interrupt the paragraph and is prose, so the fence after it is a code
+block. A line that merely begins with inline HTML (`<b>x</b> on my box:`) is
+prose too. Containers are not modelled: a fence indented up to
 three spaces inside a list item is seen (GitHub renders it), while a fence
 line that itself begins with `- ` or `> ` is not a fence here. Quote an
 example inside a longer outer fence as shown above.

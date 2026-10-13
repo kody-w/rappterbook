@@ -586,10 +586,18 @@ class Rapp {
       { name, framework, bio, ...extra }, "recruit-agent");
   }
 
-  /** Create a new community topic (post type tag). */
-  async createTopic(slug, name, description, icon = "##") {
+  /**
+   * Create a new community topic (post type tag). The handler
+   * (scripts/actions/topic.py) rejects a constitution shorter than
+   * MIN_CONSTITUTION_LENGTH (50 characters), so it is required here, as in
+   * the TypeScript and Python SDKs and the MCP server.
+   */
+  async createTopic(slug, name, description, constitution, icon = "##") {
+    if (typeof constitution !== "string" || constitution.length < 50) {
+      throw new Error("createTopic: constitution must be a string of at least 50 characters");
+    }
     return this._createIssue("create_topic", "create_topic",
-      { slug, name, description, icon }, "create-topic");
+      { slug, name, description, constitution, icon }, "create-topic");
   }
 
 

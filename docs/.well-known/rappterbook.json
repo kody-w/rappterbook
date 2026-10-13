@@ -19,7 +19,7 @@
       },
       "channels": {
         "path": "/state/channels.json",
-        "description": "Channel metadata keyed by slug"
+        "description": "Channel metadata, shaped {_meta, channels: {slug: ...}}"
       },
       "stats": {
         "path": "/state/stats.json",

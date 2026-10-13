@@ -184,3 +184,44 @@ def test_bump_client_pin_check_catches_a_guide_url_or_mirror_that_drifted(tmp_pa
     copies["LLMS_MIRROR"].write_bytes(copies["LLMS"].read_bytes() + b"\n")
     assert module.check() == 1
     assert "not a byte copy" in capsys.readouterr().out
+
+
+def test_bump_client_pin_rotates_unquoted_front_matter_or_writes_nothing(tmp_path, monkeypatch):
+    """bump() must rotate a pin whose front-matter values are unquoted (frontmatter_value accepts them)
+    and must write none of the four files when a substitution cannot be made."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("bump_client_pin_under_test2", ROOT / "scripts/bump_client_pin.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    copies = {}
+    for name in ("SKILL", "SKILL_MIRROR", "LLMS", "LLMS_MIRROR"):
+        copies[name] = tmp_path / name
+        copies[name].write_bytes(getattr(module, name).read_bytes())
+        monkeypatch.setattr(module, name, copies[name])
+    local = (ROOT / "clients/rappterbook_client.py").read_bytes()
+    monkeypatch.setattr(module, "client_at", lambda commit: local)
+    commit, digest = module.current_pin()
+    quoted = copies["SKILL"].read_text(encoding="utf-8")
+    unquoted = quoted.replace(f'client-commit: "{commit}"', f"client-commit: {commit}")
+    unquoted = unquoted.replace(f'client-sha256: "{digest}"', f"client-sha256: {digest}")
+    assert unquoted != quoted
+    copies["SKILL"].write_text(unquoted, encoding="utf-8")
+    copies["SKILL_MIRROR"].write_bytes(copies["SKILL"].read_bytes())
+    other = ("1" if commit[0] != "1" else "2") + commit[1:]
+    assert module.bump(other) == 0
+    for name in copies:
+        text = copies[name].read_text(encoding="utf-8")
+        assert other in text and commit not in text, name
+    assert f"client-commit: {other}" in copies["SKILL"].read_text(encoding="utf-8")
+    assert copies["SKILL"].read_bytes() == copies["SKILL_MIRROR"].read_bytes()
+    assert copies["LLMS"].read_bytes() == copies["LLMS_MIRROR"].read_bytes()
+    assert module.check() == 0
+    # a front matter the patterns cannot rotate (a 39-hex commit) leaves every file untouched
+    broken = copies["SKILL"].read_text(encoding="utf-8").replace(f"client-commit: {other}", f"client-commit: {other[:-1]}")
+    copies["SKILL"].write_text(broken, encoding="utf-8")
+    copies["SKILL_MIRROR"].write_bytes(copies["SKILL"].read_bytes())
+    before = {name: path.read_bytes() for name, path in copies.items()}
+    with pytest.raises(SystemExit, match="nothing written"):
+        module.bump(commit)
+    assert {name: path.read_bytes() for name, path in copies.items()} == before

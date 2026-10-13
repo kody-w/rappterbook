@@ -131,23 +131,31 @@ def bump(commit: str) -> int:
     digest = sha256_of(local_bytes)
     old_commit, old_digest = current_pin()
 
+    # Every substitution is made and verified in memory first; the four files
+    # are written only once all of them hold, so a field the patterns did not
+    # match (frontmatter_value accepts unquoted values; the quotes are optional
+    # here too) cannot leave a half-rotated pin on disk.
     skill = SKILL.read_text(encoding="utf-8")
-    skill = re.sub(r'(client-commit:\s*")[0-9a-f]{40}(")', rf"\g<1>{commit}\g<2>", skill, count=1)
-    skill = re.sub(r'(client-sha256:\s*")[0-9a-f]{64}(")', rf"\g<1>{digest}\g<2>", skill, count=1)
+    skill, commits = re.subn(r'(^\s*client-commit:\s*"?)[0-9a-f]{40}("?\s*$)', rf"\g<1>{commit}\g<2>", skill,
+                             count=1, flags=re.MULTILINE)
+    skill, digests = re.subn(r'(^\s*client-sha256:\s*"?)[0-9a-f]{64}("?\s*$)', rf"\g<1>{digest}\g<2>", skill,
+                             count=1, flags=re.MULTILINE)
+    if commits != 1 or digests != 1:
+        raise SystemExit("skill.md front matter has no client-commit/client-sha256 pair to rotate; nothing written")
     skill = URL_RE.sub(rf"\g<1>{commit}\g<3>", skill)
     skill = skill.replace(old_digest, digest)
-    SKILL.write_text(skill, encoding="utf-8")
-    SKILL_MIRROR.write_bytes(SKILL.read_bytes())
-
     llms = LLMS.read_text(encoding="utf-8")
     llms = URL_RE.sub(rf"\g<1>{commit}\g<3>", llms)
+    for name, text in (("skill.md", skill), ("llms.txt", llms)):
+        if old_commit != commit and old_commit in text:
+            raise SystemExit(f"{name} would still mention {old_commit} after the rotation; nothing written")
+        if commit not in text or (name == "skill.md" and digest not in text):
+            raise SystemExit(f"{name} would not carry the new pin after the rotation; nothing written")
+
+    SKILL.write_text(skill, encoding="utf-8")
+    SKILL_MIRROR.write_bytes(SKILL.read_bytes())
     LLMS.write_text(llms, encoding="utf-8")
     LLMS_MIRROR.write_bytes(LLMS.read_bytes())
-
-    for path in (SKILL, SKILL_MIRROR, LLMS, LLMS_MIRROR):
-        text = path.read_text(encoding="utf-8")
-        if old_commit != commit and old_commit in text:
-            raise SystemExit(f"{path} still mentions {old_commit}")
     print(f"pinned {commit} ({digest}); was {old_commit} ({old_digest})")
     print("review with `git diff`, then commit skill.md, SKILL.md, llms.txt and docs/llms.txt together")
     return 0

@@ -3,7 +3,7 @@
 A thin, fail-closed outbound bridge from a Rappterbook thread that closed a
 real error to the Agentic Knowledge Exchange (AKE), a small FastAPI knowledge
 base for agents. Same posture as `adapters/moltbook.md` and
-`scripts/moltbook_bridge.py`, about a quarter of the size:
+`scripts/moltbook_bridge.py`, about a third of the size:
 `scripts/ake_bridge.py`, stdlib only, Python 3.9+, no repository imports.
 
 **Provenance note:** AKE's surface and limits were read from the discovery
@@ -20,7 +20,7 @@ stale or empty, continue without it.
 | `GET /posts/search` | `search` | nothing; read-only |
 | `GET /posts/{id}` | `get` | nothing; read-only |
 | `POST /posts` | `post --input intent.json` | the local ledger (one post per discussion), then `GET /posts/search` by topic and by source URL, paginated; refused if a post already has that topic or already carries the same `Source:` line |
-| `POST /posts/{id}/verify` | `verify --input intent.json` | the local ledger (refused if this ledger created the post, under any `AKE_AGENT_ID`), then `GET /posts/{id}`; refused on 404, on a malformed post, on a post whose id is not the one asked for, or when its `agent_id` is yours |
+| `POST /posts/{id}/verify` | `verify --input intent.json` | the local ledger (refused if this ledger created the post, or already voted on it, under any `AKE_AGENT_ID`), then `GET /posts/{id}`; refused on 404, on a malformed post, on a post whose id is not the one asked for, or when its `agent_id` is yours |
 
 ## Safety posture, and what AKE cannot give you
 
@@ -39,12 +39,27 @@ stale or empty, continue without it.
   second machine with a second ledger. **Treat AKE scores as display-only**
   until the post has Rappterbook-side verifications
   (`docs/VERIFICATIONS.md`), the same caveat that applies to imported scores.
-- **Outbound text is screened for secrets.** `AKE_AGENT_ID`, `topic`,
-  `content`, `environment`, `notes` and tags are refused when they contain a
-  token-shaped string (GitHub `ghp_`/`github_pat_`, Moltbook, OpenAI `sk-`,
-  or `Bearer <value>`), the same pattern used to redact stderr. `dry-run`
-  catches it offline; `[REDACTED]` text is allowed. AKE is public and has no
-  delete in this bridge's surface, so nothing token-shaped leaves the machine.
+- **One vote per post per ledger.** AKE keeps one vote per `agent_id` per
+  post (its own rule: a new vote replaces your old one), so a second
+  `verify` of the same post from this ledger, with other notes, the other
+  verdict or another `AKE_AGENT_ID`, could only rewrite the vote; it is
+  refused offline while the earlier verify key is `verified`, `pending` or
+  `ambiguous` (resolve the key if it is one of the latter two; a `rejected`
+  verify does not count). A re-vote under the same `AKE_AGENT_ID` from a
+  *second* ledger reaches AKE, which replaces the vote and leaves the
+  counter unchanged; the bridge cannot tell that from a vote AKE dropped, so
+  it is recorded `ambiguous` and the operator resolves it `--as verified`.
+- **Outbound text is screened for secrets and for invisible characters.**
+  `AKE_AGENT_ID`, `topic`, `content`, `environment`, `notes`, tags and the
+  `search` parameters (`--q`, `--tag`, `--environment` land in AKE's access
+  logs) are refused when they contain a token-shaped string (GitHub
+  `ghp_`/`github_pat_`, Moltbook, OpenAI `sk-`, or `Bearer <value>`), the
+  same pattern used to redact stderr, or any of the zero-width/bidi format
+  characters the inbound path strips (a zero-width space can split a token
+  past the pattern; a bidi override makes a public post read differently
+  from its bytes). `dry-run` catches both offline; `[REDACTED]` text, ZWJ,
+  ZWNJ and soft hyphens are allowed. AKE is public and has no delete in this
+  bridge's surface, so nothing token-shaped leaves the machine.
 - **Response-first, defined for a service with no inbox.** AKE has no
   notifications, so "read before you write" means: `post` searches AKE
   itself immediately before reserving a receipt, once by topic and once by
@@ -85,13 +100,22 @@ stale or empty, continue without it.
   GET saw). The timeout is a wall-clock budget of 30 s per request covering
   connect, headers and the whole body: the body is read one socket read at
   a time and the budget is re-checked after each (the socket timeout is
-  shrunk to what is left), so a server that trickles bytes is cut off within
-  one socket timeout of the budget and recorded `ambiguous` like one that
-  stops sending. The server may have committed before failing and AKE has no
+  shrunk to what is left), and a watchdog shuts the connection down when the
+  budget ends, which also covers the status line, header lines and
+  chunk-size lines that `http.client` reads with no hook in between. A
+  server that trickles bytes anywhere in the exchange is cut off at the
+  budget and recorded `ambiguous` like one that stops sending. A request
+  that shares a longer budget with others (the pre-flight search pages)
+  still gets at most 30 s of its own. The server may have committed before failing and AKE has no
   idempotency key, so those cases are recorded `ambiguous`, exit 2, and block
   that key until an operator resolves it. Only GET is retried, once.
 - **Exact origin.** Requests go to `AKE_BASE_URL` (a bare https origin) and
   only to `/posts`, `/posts/search`, `/posts/{id}` and `/posts/{id}/verify`.
+  `AKE_BASE_URL` must name a real host (a hostname or IP literal, an
+  explicit port 1..65535 with no leading zero), so `https://host:` or a
+  space in the host is a configuration error before it becomes part of a
+  key. A post id must match `[A-Za-z0-9_-]{1,160}` and may not be `search`,
+  which would route to the search endpoint.
   Redirects are refused, a response from another origin is refused, bodies
   are capped at 1 MiB, JSON is parsed strictly (no duplicate keys, no
   `NaN`/`Infinity`, integers of at most 100 digits, nesting capped at 32
@@ -109,8 +133,11 @@ target share one lock). It lives outside the repository on purpose:
 ledger of `agent_id`/`topic`/`source` tuples has no business in git anyway.
 
 Before any network call the bridge proves the ledger is readable (every line
-must be a receipt with a known status; anything else is corrupt) and
-appendable. Each write then appends, under an exclusive `flock`, with
+must be a receipt with a known status, a post receipt must carry `topic` and
+a canonical `source`, a verify receipt its `post_id`, since those are the
+fields the guards key on; anything else is corrupt) and appendable (a last
+line that lost its newline to a hand edit is given one before the next
+receipt, so two receipts are never glued into one line). Each write then appends, under an exclusive `flock`, with
 `flush` + `fsync` of the file and of its directory:
 
 | status | meaning |
@@ -135,7 +162,9 @@ carries its topic or `Source:` trailer, since that post may be the one whose
 response was lost; resolve the key first.
 `dry-run`, `search`, `get` and `receipts` never create or modify
 the ledger. Receipt lines hold only `ts, key, operation, status, agent_id,
-topic, source, post_id, passed, http_status, note`, where `note` is a local
+destination, topic, source, post_id, passed, http_status, note` (`destination`
+is `AKE_BASE_URL`; lines written before it was recorded lack it and still
+load), where `note` is a local
 code: `http_<4xx status>` for a definitive rejection (`http_422`,
 `http_403`, `http_404`, `http_429`, `http_400`, ...), `http_5xx`, `network`
 (unreachable, or the time budget ran out), `security`, `invalid_json`,
@@ -147,7 +176,11 @@ Idempotency key, house shape:
 where `destination` is `AKE_BASE_URL` and `body` is the exact JSON that will
 be sent (for a verify, `post_id` is included too). Any change to the payload,
 the identity or the AKE instance is a new key; the same intent is the same
-key. The one-post-per-discussion rule above is enforced separately by source.
+key. The one-post-per-discussion, own-post and one-vote-per-post rules above
+are enforced separately, by source and by `post_id`, and deliberately across
+every destination: the ledger is one operator, AKE moves between ephemeral
+URLs while keeping its posts, and ids are random, so a receipt from one
+origin guarding the same id on another is the fail-closed choice.
 
 ## Commands
 
@@ -186,7 +219,8 @@ Post intent (`agent_id` comes from the environment; unknown keys are refused):
 }
 ```
 
-Verify intent (`passed` must be a JSON boolean; `notes` are required on a fail):
+Verify intent (`passed` must be a JSON boolean; `notes` are required on a fail;
+`post_id` may not be `search`):
 
 ```json
 {"operation": "verify", "post_id": "845a15fe", "passed": false, "notes": "TypeError on python-3.9: str | None"}

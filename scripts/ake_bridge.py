@@ -15,18 +15,26 @@ its ``agent_id`` is self-asserted, so this bridge is deliberately narrow:
   (paginated) and refuses when an existing post has the same topic or carries
   the same ``Source:`` line (verify that one instead); ``verify`` refuses any
   post this ledger created (under any ``AKE_AGENT_ID``), then fetches the post
-  and refuses to vote on the caller's own ``agent_id``;
-* outbound text is screened for token-shaped strings (GitHub, Moltbook,
-  OpenAI, bearer) and refused offline rather than redacted after the fact;
+  and refuses to vote on the caller's own ``agent_id``. One vote per post per
+  ledger: AKE keeps one vote per ``agent_id`` per post (a new vote replaces
+  the old one), so a verify key for a post that is verified, pending or
+  ambiguous blocks every further verify of that post until it is resolved;
+* outbound text (every post and verify field, ``AKE_AGENT_ID`` and the
+  ``search`` parameters) is screened for token-shaped strings (GitHub,
+  Moltbook, OpenAI, bearer) and for invisible/bidi format characters, and
+  refused offline rather than redacted after the fact;
 * idempotency: a receipt ledger (JSON lines, outside the repository by default)
   records intent before the network call; a key that is pending, posted,
   verified or ambiguous is never sent again until an operator resolves it.
   The key covers the destination and the exact wire payload;
-* writes are never retried. A 5xx, timeout (a wall-clock budget per request,
-  checked after every socket read, so a trickling server holds a command at
-  most one socket timeout past it), redirect, oversize or malformed success
-  body, or an echo that does not match what was sent, is recorded
-  ``ambiguous`` and the command exits 2. Only GET is retried once;
+* writes are never retried. A 5xx, timeout (a wall-clock budget per request:
+  the body is read one socket read at a time with the budget re-checked
+  after each, and a watchdog shuts the connection down at the budget, so a
+  server that trickles header lines or chunk-size lines, which http.client
+  reads with no hook in between, cannot hold a command past it either),
+  redirect, oversize or malformed success body, or an echo that does not
+  match what was sent, is recorded ``ambiguous`` and the command exits 2.
+  Only GET is retried once;
 * retrieved content is UNTRUSTED DATA: it is printed with control and bidi
   characters removed and never interpreted. Nothing from a response is
   persisted except ``post_id`` and an HTTP status; error details stay on
@@ -41,12 +49,14 @@ import argparse
 import fcntl
 import hashlib
 import http.client
+import ipaddress
 import json
 import math
 import os
 import re
 import socket
 import sys
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -86,6 +96,13 @@ DEFAULT_RECEIPTS = Path.home() / ".rappterbook" / "ake" / "receipts.jsonl"
 
 KEY_RE = re.compile(r"^rb-ake-[0-9a-f]{24}$")
 POST_ID_RE = re.compile(r"^[A-Za-z0-9_-]{1,160}$")
+# ``search`` matches POST_ID_RE but names the search endpoint: as a post id it
+# would route GET /posts/search, so it is refused wherever an id is accepted.
+RESERVED_POST_IDS = frozenset({"search"})
+# A DNS hostname (labels of 1-63 letters, digits and inner hyphens, 253 in
+# all) or an IPv4 literal; a bracketed IPv6 literal is checked separately.
+HOSTNAME_RE = re.compile(r"^(?=.{1,253}$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$")
+PORT_RE = re.compile(r"^[1-9][0-9]{0,4}$")
 # Exactly one spelling of a discussion URL; no parser involved.
 SOURCE_RE = re.compile(r"^https://github\.com/kody-w/rappterbook/discussions/([1-9][0-9]{0,8})$")
 # The only four endpoint shapes the bridge may ever request.
@@ -119,7 +136,7 @@ STATUSES = frozenset({"pending", "posted", "verified", "rejected", "ambiguous", 
 BLOCKING_STATUSES = frozenset({"pending", "posted", "verified", "ambiguous"})
 RESOLUTIONS = ("absent", "posted", "verified")
 RECEIPT_FIELDS = (
-    "ts", "key", "operation", "status", "agent_id", "topic", "source",
+    "ts", "key", "operation", "status", "agent_id", "destination", "topic", "source",
     "post_id", "passed", "http_status", "note",
 )
 
@@ -245,9 +262,27 @@ def _outbound(field: str, value: object, limit: int, *, multiline: bool = False)
     only on stderr. ``[REDACTED]`` text itself is fine.
     """
     text = _text(field, value, limit, multiline=multiline)
+    found = BIDI_RE.search(text)
+    if found:
+        # The inbound path strips exactly this set before printing; outbound it
+        # is refused: a zero-width space can split a token past TOKEN_RE and a
+        # bidi override makes the public post read differently from its bytes.
+        raise AkePolicyError(
+            f"{field} contains an invisible or bidi format character (U+{ord(found.group(0)):04X}); "
+            "remove it before sending"
+        )
     if TOKEN_RE.search(text):
-        raise AkePolicyError(f"{field} contains a token-shaped string; remove it before posting")
+        raise AkePolicyError(f"{field} contains a token-shaped string; it must not leave the machine")
     return text
+
+
+def _post_id(value: object, field: str = "post_id") -> str:
+    """Validate a post id that will become a request path segment."""
+    if not isinstance(value, str) or not POST_ID_RE.fullmatch(value):
+        raise AkePolicyError(f"{field} must match [A-Za-z0-9_-]{{1,160}}")
+    if value in RESERVED_POST_IDS:
+        raise AkePolicyError(f"{field} {value!r} names the search endpoint, not a post")
+    return value
 
 
 def _reject_constant(name: str):
@@ -341,7 +376,14 @@ def base_url_from_env(environ: Optional[dict] = None) -> str:
 
 
 def validate_base_url(raw: str) -> str:
-    """Accept exactly one https origin: no path, query, fragment or userinfo."""
+    """Accept exactly one https origin: no path, query, fragment or userinfo.
+
+    The host must be a hostname or IP literal and an explicit port an integer
+    1..65535 with no leading zero, so an origin that can never be contacted
+    (``https://host.example:``, ``:0``, ``:08``, a space or ``%00`` in the
+    host) is a configuration error (exit 1) before it is baked into every
+    idempotency key, not an "unreachable" network error (exit 2) later.
+    """
     try:
         parsed = urllib.parse.urlsplit(raw)
         hostname = parsed.hostname
@@ -358,7 +400,24 @@ def validate_base_url(raw: str) -> str:
         or parsed.fragment
     ):
         raise AkeConfigError("AKE_BASE_URL must be an https origin such as https://host.example")
-    return f"https://{parsed.netloc.lower()}"
+    netloc = parsed.netloc
+    if netloc.startswith("["):
+        end = netloc.find("]")
+        host_part, rest = netloc[1:end], netloc[end + 1:]
+        port_part = None if rest == "" else (rest[1:] if rest.startswith(":") else "")
+        try:
+            ipaddress.IPv6Address(host_part)
+        except ValueError as exc:
+            raise AkeConfigError("AKE_BASE_URL host is not a valid bracketed IPv6 literal") from exc
+    else:
+        host_part, sep, port_part = netloc.rpartition(":")
+        if not sep:
+            host_part, port_part = netloc, None
+        if not HOSTNAME_RE.fullmatch(host_part.lower()):
+            raise AkeConfigError("AKE_BASE_URL host is not a valid hostname or IP literal")
+    if port_part is not None and not (PORT_RE.fullmatch(port_part) and int(port_part) <= 65535):
+        raise AkeConfigError("AKE_BASE_URL port must be an integer 1..65535 with no leading zero")
+    return f"https://{netloc.lower()}"
 
 
 def agent_id_from_env(environ: Optional[dict] = None) -> str:
@@ -485,9 +544,7 @@ def build_verify_intent(raw: object, agent_id: str, destination: str) -> dict:
         raise AkePolicyError(f"unknown intent field(s): {', '.join(unknown)}")
     if raw.get("operation") != "verify":
         raise AkePolicyError("operation must be 'verify'")
-    post_id = raw.get("post_id")
-    if not isinstance(post_id, str) or not POST_ID_RE.fullmatch(post_id):
-        raise AkePolicyError("post_id must match [A-Za-z0-9_-]{1,160}")
+    post_id = _post_id(raw.get("post_id"))
     passed = raw.get("passed")
     if type(passed) is not bool:  # noqa: E721 - reject 0/1/"true"
         raise AkePolicyError("passed must be a JSON boolean")
@@ -523,33 +580,131 @@ def load_intent_file(path: str) -> object:
 # HTTP (exact origin, no redirects, capped bodies, strict JSON)
 # ---------------------------------------------------------------------------
 
+class _Watchdog:
+    """Ends a request at its wall-clock deadline by shutting down its socket.
+
+    urllib and http.client read the status line, the header lines and the
+    chunk-size lines of a chunked body with ``readline()`` under the per-recv
+    socket timeout and offer no hook between those reads, so a server that
+    trickles one byte per recv could hold a command well past the budget.
+    The watchdog is armed for what is left of the budget when the request
+    starts and shuts down every connection the request opened when it fires;
+    the blocked read then fails (or sees EOF) and the caller reports the
+    budget, not a transport error. Fakes without a socket are unaffected.
+    The active watchdog is thread-local so the opener (``_default_open``)
+    can register the connection it creates before any header is read.
+    """
+
+    _local = threading.local()
+
+    def __init__(self, deadline: float) -> None:
+        self.deadline = deadline
+        self.fired = False
+        self._lock = threading.Lock()
+        self._targets: list = []
+        self._timer: Optional[threading.Timer] = None
+
+    @classmethod
+    def current(cls) -> "Optional[_Watchdog]":
+        stack = getattr(cls._local, "stack", None)
+        return stack[-1] if stack else None
+
+    def track(self, target: object) -> None:
+        """Register an http.client connection or a socket to shut down at the deadline."""
+        with self._lock:
+            self._targets.append(target)
+            fired = self.fired
+        if fired:
+            self._shutdown(target)
+
+    @staticmethod
+    def _shutdown(target: object) -> None:
+        sock = getattr(target, "sock", target)  # HTTPConnection.sock (None before connect), else the socket itself
+        try:
+            sock.shutdown(socket.SHUT_RDWR)  # wakes a recv blocked in another thread, which close() does not
+        except (OSError, AttributeError, ValueError, TypeError):
+            pass
+
+    def _fire(self) -> None:
+        with self._lock:
+            self.fired = True
+            targets = list(self._targets)
+        for target in targets:
+            self._shutdown(target)
+
+    def __enter__(self) -> "_Watchdog":
+        stack = getattr(self._local, "stack", None)
+        if stack is None:
+            stack = self._local.stack = []
+        stack.append(self)
+        self._timer = threading.Timer(max(0.0, self.deadline - time.monotonic()), self._fire)
+        self._timer.daemon = True
+        self._timer.start()
+        return self
+
+    def __exit__(self, *exc_info) -> None:
+        if self._timer is not None:
+            self._timer.cancel()
+        stack = getattr(self._local, "stack", None)
+        if stack and stack[-1] is self:
+            stack.pop()
+
+
+def _tracked(http_class):
+    """A connection factory for urllib's ``do_open`` that registers the connection with the active watchdog."""
+    watchdog = _Watchdog.current()
+
+    def factory(host, **kwargs):
+        connection = http_class(host, **kwargs)
+        if watchdog is not None:
+            watchdog.track(connection)
+        return connection
+
+    return factory
+
+
+class _TrackedHTTPSHandler(urllib.request.HTTPSHandler):
+    """The stock handler (default verifying context), with watchdog-tracked connections."""
+
+    def https_open(self, req):
+        return self.do_open(_tracked(http.client.HTTPSConnection), req, context=self._context)
+
+
+class _TrackedHTTPHandler(urllib.request.HTTPHandler):
+    """Plain-HTTP twin; only tests reach it (validate_base_url admits https alone)."""
+
+    def http_open(self, req):
+        return self.do_open(_tracked(http.client.HTTPConnection), req)
+
+
 def _default_open(request: urllib.request.Request, timeout: float):
-    opener = urllib.request.build_opener(RejectRedirects())
+    opener = urllib.request.build_opener(RejectRedirects(), _TrackedHTTPSHandler(), _TrackedHTTPHandler())
     return opener.open(request, timeout=timeout)
 
 
-def _settimeout_of(response) -> Optional[Callable]:
-    """``settimeout`` of the socket under a real HTTP response, or None.
+def _socket_of(response):
+    """The socket under a real HTTP response, or None.
 
     Walks HTTPError -> HTTPResponse -> BufferedReader -> SocketIO -> socket;
     fakes, in-memory bodies and already-closed responses give None, in which
-    case the socket timeout stays whatever the opener set.
+    case the socket timeout stays whatever the opener set and there is
+    nothing for the watchdog to shut down.
     """
     try:
         obj = response
         for _ in range(6):
             if obj is None:
                 return None
-            method = getattr(obj, "settimeout", None)
-            if callable(method):
-                return method
+            if callable(getattr(obj, "settimeout", None)):
+                return obj
             obj = getattr(obj, "_sock", None) or getattr(obj, "raw", None) or getattr(obj, "fp", None)
     except Exception:  # noqa: BLE001 - a 3.9 HTTPError built without a body raises KeyError on attribute access
         return None
     return None
 
 
-def _read_capped(response, deadline: float, *, budget: Optional[float] = None) -> bytes:
+def _read_capped(response, deadline: float, *, budget: Optional[float] = None,
+                 watchdog: "Optional[_Watchdog]" = None) -> bytes:
     """Read a body under a byte cap and a wall-clock deadline.
 
     urllib's ``timeout`` only bounds each socket operation, and
@@ -558,9 +713,12 @@ def _read_capped(response, deadline: float, *, budget: Optional[float] = None) -
     open for hours. The body is therefore read with ``read1`` (at most one
     socket read per call) and the deadline is checked after every read; the
     socket timeout is also shrunk to what is left of the budget wherever the
-    response exposes its socket. The overrun past the deadline is bounded by
-    one socket timeout, never by how long the server keeps sending. The
-    caller records an abandoned read like any other network failure.
+    response exposes its socket, and that socket is handed to the
+    ``watchdog``, which shuts it down at the deadline (a chunk-size line
+    http.client reads with ``readline`` has no per-read hook otherwise). A
+    stream that ends after the watchdog fired, or only after the deadline,
+    is not a body. The caller records an abandoned read like any other
+    network failure.
     """
     shown = f"{(TIMEOUT_SECONDS if budget is None else budget):g}"
     try:
@@ -568,13 +726,22 @@ def _read_capped(response, deadline: float, *, budget: Optional[float] = None) -
     except (AttributeError, KeyError) as exc:
         # an HTTPError constructed without a body has no file behind it
         raise AkeNetworkError(f"response body could not be read: {redact(exc)}") from exc
-    settimeout = _settimeout_of(response)
+    sock = _socket_of(response)
+    settimeout = None if sock is None else sock.settimeout
+    if watchdog is not None and sock is not None:
+        watchdog.track(sock)
     chunks = []
     total = 0
+    reads = 0
+
+    def overrun(detail: str = "") -> AkeNetworkError:
+        phase = "while reading the body" if reads else "before its body could be read"
+        return AkeNetworkError(f"response exceeded the {shown}s time budget {phase}{detail}")
+
     while True:
         remaining = deadline - time.monotonic()
         if remaining <= 0:
-            raise AkeNetworkError(f"response exceeded the {shown}s time budget while reading the body")
+            raise overrun()
         if settimeout is not None:
             try:
                 settimeout(remaining)
@@ -583,17 +750,20 @@ def _read_capped(response, deadline: float, *, budget: Optional[float] = None) -
         try:
             chunk = reader(READ_CHUNK_BYTES)
         except socket.timeout as exc:
-            raise AkeNetworkError(
-                f"response exceeded the {shown}s time budget while reading the body (socket timed out)"
-            ) from exc
+            raise overrun(" (socket timed out)") from exc
         except (OSError, http.client.HTTPException, AttributeError, KeyError) as exc:
+            if watchdog is not None and watchdog.fired:
+                raise overrun(" (connection shut down at the deadline)") from exc
             raise AkeNetworkError(f"response body could not be read: {redact(exc)}") from exc
+        reads += 1
         if not chunk:
             break
         total += len(chunk)
         if total > MAX_RESPONSE_BYTES:
             raise AkeSecurityError("response body exceeds 1 MiB")
         chunks.append(chunk)
+    if (watchdog is not None and watchdog.fired) or time.monotonic() > deadline:
+        raise overrun(" (the stream ended at the deadline)")
     return b"".join(chunks)
 
 
@@ -611,9 +781,12 @@ def api_request(
     """Return ``(status, parsed_json)`` for one request to the fixed origin.
 
     ``timeout`` is a wall-clock budget for the whole exchange (connect,
-    headers and body); ``deadline`` (``time.monotonic()`` based) lets a caller
-    share one budget across several requests, in which case the request gets
-    whatever is left of it, never more than ``timeout``.
+    headers and body: the body is read in bounded socket reads and a watchdog
+    shuts the connection down at the budget, which covers the header and
+    chunk-size lines http.client reads with no hook in between); ``deadline``
+    (``time.monotonic()`` based) lets a caller share one budget across
+    several requests, in which case the request gets whatever is left of it,
+    never more than ``timeout``: its own deadline is ``now + remaining``.
     """
     if not ENDPOINT_RE.fullmatch(path):
         raise AkeSecurityError("endpoint must be one of /posts, /posts/search, /posts/{id}, /posts/{id}/verify")
@@ -625,6 +798,7 @@ def api_request(
     remaining = min(float(timeout), deadline - now)
     if remaining <= 0:
         raise AkeNetworkError("time budget exhausted before the request was sent")
+    request_deadline = now + remaining  # a shared deadline longer than ``timeout`` does not stretch one request
     url = base_url + path
     if params:
         url += "?" + urllib.parse.urlencode(params, doseq=True)
@@ -635,39 +809,46 @@ def api_request(
         data = json.dumps(payload, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
     request = urllib.request.Request(url, data=data, headers=headers, method=method)
     opener = open_url or _default_open
-    try:
-        response = opener(request, remaining)
-    except urllib.error.HTTPError as exc:
-        status = int(exc.code)
-        message = f"AKE returned HTTP {status}"
+    with _Watchdog(request_deadline) as watchdog:
         try:
-            raw = _read_capped(exc, deadline, budget=remaining)
-        except (AkeNetworkError, AkeSecurityError) as body_exc:
-            message += f" (body not read: {body_exc})"  # the status is still definitive
-        else:
+            response = opener(request, remaining)
+        except urllib.error.HTTPError as exc:
+            status = int(exc.code)
+            message = f"AKE returned HTTP {status}"
             try:
-                body = loads_strict(raw)
-                detail = body.get("detail") if isinstance(body, dict) else None
-                if detail is not None:
-                    message += ": " + display(json.dumps(detail, ensure_ascii=False), 300)
-            except ValueError:
-                pass
-        raise AkeApiError(redact(message), status=status) from exc
-    except AkeError:
-        raise
-    except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
-        raise AkeNetworkError(f"AKE is unreachable: {redact(getattr(exc, 'reason', exc))}") from exc
-    try:
-        final = urllib.parse.urlsplit(str(response.geturl()))
-        origin = urllib.parse.urlsplit(base_url)
-        if (final.scheme, final.netloc.lower()) != (origin.scheme, origin.netloc):
-            raise AkeSecurityError("response came from a different origin than AKE_BASE_URL")
-        status = int(getattr(response, "status", 200))
-        raw = _read_capped(response, deadline, budget=remaining)
-    finally:
-        close = getattr(response, "close", None)
-        if callable(close):
-            close()
+                raw = _read_capped(exc, request_deadline, budget=remaining, watchdog=watchdog)
+            except (AkeNetworkError, AkeSecurityError) as body_exc:
+                message += f" (body not read: {body_exc})"  # the status is still definitive
+            else:
+                try:
+                    body = loads_strict(raw)
+                    detail = body.get("detail") if isinstance(body, dict) else None
+                    if detail is not None:
+                        message += ": " + display(json.dumps(detail, ensure_ascii=False), 300)
+                except ValueError:
+                    pass
+            raise AkeApiError(redact(message), status=status) from exc
+        except AkeError:
+            raise
+        except Exception as exc:  # noqa: BLE001 - classified below; a shut-down SSL socket can raise oddly
+            if watchdog.fired:
+                raise AkeNetworkError(
+                    f"response exceeded the {remaining:g}s time budget before its headers arrived"
+                ) from exc
+            if isinstance(exc, (urllib.error.URLError, OSError, http.client.HTTPException)):
+                raise AkeNetworkError(f"AKE is unreachable: {redact(getattr(exc, 'reason', exc))}") from exc
+            raise
+        try:
+            final = urllib.parse.urlsplit(str(response.geturl()))
+            origin = urllib.parse.urlsplit(base_url)
+            if (final.scheme, final.netloc.lower()) != (origin.scheme, origin.netloc):
+                raise AkeSecurityError("response came from a different origin than AKE_BASE_URL")
+            status = int(getattr(response, "status", 200))
+            raw = _read_capped(response, request_deadline, budget=remaining, watchdog=watchdog)
+        finally:
+            close = getattr(response, "close", None)
+            if callable(close):
+                close()
     try:
         parsed = loads_strict(raw)
     except ValueError as exc:
@@ -812,8 +993,23 @@ def read_ledger(ledger: Path) -> list:
             or entry.get("status") not in STATUSES
             or entry.get("operation") not in OPERATIONS
             or any(k not in RECEIPT_FIELDS for k in entry)
+            or not isinstance(entry.get("destination", ""), str)  # absent on lines written before it was recorded
         ):
             raise AkeLedgerError(f"receipt ledger corrupt at {ledger}:{number}: not a receipt")
+        # The fields the guards key on must be present, or a hand-edited line
+        # would silently stop source_claim / own_post_claim / vote_claim.
+        if entry["operation"] == "post" and (
+            not isinstance(entry.get("topic"), str)
+            or not isinstance(entry.get("source"), str)
+            or not SOURCE_RE.fullmatch(entry["source"])
+        ):
+            raise AkeLedgerError(
+                f"receipt ledger corrupt at {ledger}:{number}: a post receipt needs topic and a canonical source"
+            )
+        if entry["operation"] == "verify" and (
+            not isinstance(entry.get("post_id"), str) or not POST_ID_RE.fullmatch(entry["post_id"])
+        ):
+            raise AkeLedgerError(f"receipt ledger corrupt at {ledger}:{number}: a verify receipt needs post_id")
         entries.append(entry)
     return entries
 
@@ -836,7 +1032,15 @@ def append_receipt(ledger: Path, receipt: dict) -> dict:
     line = json.dumps(clean, sort_keys=True, separators=(",", ":"), ensure_ascii=True) + "\n"
     try:
         ledger.parent.mkdir(parents=True, exist_ok=True)
-        with open(ledger, "ab") as handle:
+        with open(ledger, "a+b") as handle:
+            # A last line hand-edited to drop its newline still reads back, but
+            # appending straight after it would glue two objects into one
+            # unreadable line; start a fresh line first.
+            handle.seek(0, os.SEEK_END)
+            if handle.tell() > 0:
+                handle.seek(-1, os.SEEK_END)
+                if handle.read(1) != b"\n":
+                    handle.write(b"\n")
             handle.write(line.encode("ascii"))
             handle.flush()
             os.fsync(handle.fileno())
@@ -882,6 +1086,30 @@ def own_post_claim(entries: list, post_id: str) -> Optional[dict]:
     for key, entry in ids_by_key.items():
         if latest_by_key[key]["status"] in BLOCKING_STATUSES:
             return entry
+    return None
+
+
+def vote_claim(entries: list, post_id: str) -> Optional[dict]:
+    """The latest receipt showing this ledger already voted on AKE post ``post_id``, if any.
+
+    One vote per post per ledger, under any ``AKE_AGENT_ID``: AKE keeps one
+    vote per ``agent_id`` per post (a new vote replaces the old one), so a
+    second verify with other notes or the other verdict could only rewrite
+    the vote, and a ledger is one operator whatever id a vote was sent under.
+    A verify key for the post whose latest status is verified, pending or
+    ambiguous blocks every further verify of it; ``rejected`` and ``absent``
+    do not.
+    """
+    latest_by_key: dict = {}
+    for entry in entries:
+        latest_by_key[entry["key"]] = entry
+    for latest in latest_by_key.values():
+        if (
+            latest.get("operation") == "verify"
+            and latest.get("post_id") == post_id
+            and latest["status"] in BLOCKING_STATUSES
+        ):
+            return latest
     return None
 
 
@@ -1002,7 +1230,11 @@ def _echo_matches(operation: str, intent: dict, post: dict, agent_id: str, *, be
     voted-on post and show the voted counter (``verifications_pass`` or
     ``verifications_fail``) at least one higher than the pre-flight GET
     (``before``) saw; a 2xx whose counters contradict the vote is not
-    evidence that the vote landed.
+    evidence that the vote landed. AKE keeps one vote per ``agent_id`` per
+    post, so a re-vote under the same id leaves the counter unchanged: from
+    this ledger vote_claim refuses it before anything is sent; from another
+    ledger under the same ``AKE_AGENT_ID`` the unchanged counter is recorded
+    ``ambiguous`` (fail closed) for the operator to resolve ``--as verified``.
     """
     if operation == "verify":
         if post["post_id"] != intent["post_id"] or before is None:
@@ -1052,12 +1284,20 @@ def execute_write(
                     f"self-verification refused: this ledger posted {intent['post_id']} under key {own['key']}"
                     f" (as {own.get('agent_id')}); a post cannot be verified by the operator who made it"
                 )
+            voted = vote_claim(entries, intent["post_id"])
+            if voted is not None:
+                raise AkePolicyError(
+                    f"already voted: this ledger's verify of {intent['post_id']} is {voted['status']} under key "
+                    f"{voted['key']} (as {voted.get('agent_id')}, passed={voted.get('passed')}); AKE keeps one vote "
+                    "per agent per post, so a second verify could only replace it. One vote per post per ledger; "
+                    "resolve that key if it is pending or ambiguous."
+                )
         ensure_writable(ledger)
         before = None
         if operation == "post":
             preflight_search(base_url, intent, open_url=open_url)
             path = "/posts"
-            base = {"key": key, "operation": operation, "agent_id": agent_id,
+            base = {"key": key, "operation": operation, "agent_id": agent_id, "destination": base_url,
                     "topic": intent["topic"], "source": intent["source"]}
         else:
             before = preflight_get(base_url, intent, agent_id, open_url=open_url)
@@ -1070,7 +1310,7 @@ def execute_write(
                     f"--as posted --post-id {intent['post_id']}` if the post is yours, `--as absent` if it is not"
                 )
             path = f"/posts/{intent['post_id']}/verify"
-            base = {"key": key, "operation": operation, "agent_id": agent_id,
+            base = {"key": key, "operation": operation, "agent_id": agent_id, "destination": base_url,
                     "post_id": intent["post_id"], "passed": intent["body"]["passed"]}
         append_receipt(ledger, dict(base, status="pending"))
         try:
@@ -1091,9 +1331,11 @@ def execute_write(
             raise AkeAmbiguousError(_ambiguous_message(operation, key, exc)) from exc
         if not _echo_matches(operation, intent, post, agent_id, before=before):
             # 2xx, but AKE describes something other than what we sent: do not claim it.
-            echoed = post["post_id"] if operation == "post" else None
+            # A post receipt names the echoed id (operator evidence); a verify receipt keeps the
+            # post it voted on, never the one the echo named.
+            echoed = {"post_id": post["post_id"]} if operation == "post" else {}
             append_receipt(ledger, dict(base, status="ambiguous", http_status=http_status,
-                                        post_id=echoed, note="echo_mismatch"))
+                                        note="echo_mismatch", **echoed))
             raise AkeAmbiguousError(_ambiguous_message(
                 operation, key, AkeApiError(f"AKE's 2xx echo (post_id {post['post_id']}) does not match the request",
                                             status=http_status, code="echo_mismatch")))
@@ -1139,11 +1381,15 @@ def resolve_key(ledger: Path, key: str, resolution: str, *, post_id: Optional[st
                 raise AkePolicyError(f"a {last['operation']} resolves as absent or {expected}")
             if post_id is None and last["operation"] == "verify":
                 post_id = last.get("post_id")  # the voted-on post is already in the receipt
-            if not isinstance(post_id, str) or not POST_ID_RE.fullmatch(post_id):
+            if post_id is None:
                 raise AkePolicyError("--post-id is required to resolve as present")
-        receipt = {k: last.get(k) for k in ("key", "operation", "agent_id", "topic", "source", "passed")}
+            post_id = _post_id(post_id, "--post-id")
+        receipt = {k: last.get(k) for k in ("key", "operation", "agent_id", "destination", "topic", "source", "passed")}
         receipt.update(status=resolution, note="operator_resolution")
-        receipt["post_id"] = None if resolution == "absent" else post_id
+        if resolution == "absent":
+            # a post key resolved absent created no post; a verify key keeps the post it voted on
+            post_id = last.get("post_id") if last["operation"] == "verify" else None
+        receipt["post_id"] = post_id
         return append_receipt(ledger, receipt)
 
 
@@ -1206,7 +1452,8 @@ def run(argv: Optional[list] = None, *, environ: Optional[dict] = None, open_url
         for name in ("q", "tag", "environment"):
             value = getattr(args, name)
             if value is not None:
-                params[name] = _text(name, value, MAX_TOPIC)
+                # query strings land in AKE's access logs: screened like every other outbound field
+                params[name] = _outbound(name, value, MAX_TOPIC)
         results = api_get(base_url, "/posts/search", params=params, open_url=open_url)
         if not isinstance(results, list):
             raise AkeApiError("AKE search did not return a list", code="invalid_shape")
@@ -1215,9 +1462,8 @@ def run(argv: Optional[list] = None, *, environ: Optional[dict] = None, open_url
             raise AkeApiError("AKE search returned a non-object item", code="invalid_shape")
         return {"untrusted": True, "count": len(results), "results": [summarize_post(r) for r in results]}
     if args.command == "get":
-        if not POST_ID_RE.fullmatch(args.post_id):
-            raise AkePolicyError("post_id must match [A-Za-z0-9_-]{1,160}")
-        post = _post_record(api_get(base_url, f"/posts/{args.post_id}", open_url=open_url), expect_id=args.post_id)
+        post_id = _post_id(args.post_id, "--post-id")
+        post = _post_record(api_get(base_url, f"/posts/{post_id}", open_url=open_url), expect_id=post_id)
         return {"untrusted": True, "post": summarize_post(post, content_limit=MAX_CONTENT)}
     agent_id = agent_id_from_env(env)
     intent = build_intent(load_intent_file(args.input), agent_id, base_url)

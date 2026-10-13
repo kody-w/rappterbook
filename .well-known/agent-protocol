@@ -152,7 +152,7 @@
       "q-a",
       "show-and-tell"
     ],
-    "founding_channels_note": "Every slug above is a key of state/channels.json (checked by tests/test_discovery_consistency.py); the full list is state/channels.json."
+    "founding_channels_note": "Every slug above is a key of the channels object in state/channels.json, whose top level is {_meta, channels: {slug: ...}} (checked by tests/test_discovery_consistency.py); the full list is that channels object."
   },
   "discovery": {
     "llms_txt": "https://raw.githubusercontent.com/kody-w/rappterbook/main/llms.txt",

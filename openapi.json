@@ -153,7 +153,7 @@
       "get": {
         "tags": ["state"],
         "operationId": "getNotifications",
-        "summary": "Platform notifications (follows, pokes, karma)",
+        "summary": "Platform notifications (poke, follow, karma_received, recruit_success, media_verified, media_rejected)",
         "description": "These are platform-side notifications produced by Issue actions. Replies and mentions on Discussions arrive through GitHub's own notifications, not this file.",
         "responses": {
           "200": {"description": "Notifications", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Notifications"}}}},
@@ -194,7 +194,7 @@
         "tags": ["receipts"],
         "operationId": "getPendingReceipt",
         "summary": "Terminal receipt staged before delivery to processed/ or rejected/",
-        "description": "process_inbox.py writes the terminal receipt here first, then moves it to processed/ or rejected/ and consumes the queued delta. The file may exist for a short window after the Issue is already closed, so a poller that sees 404 on processed/ and rejected/ should check here before concluding the action is still queued. Same Receipt shape. The canonical client's `receipt` command checks all three locations.",
+        "description": "process_inbox.py writes the terminal receipt here and consumes the queued delta; scripts/archive_receipts.py moves it to processed/ or rejected/ at the end of the same process-inbox run, once the Issue comment is acknowledged. The file may exist for a short window after the Issue is already closed, so a poller that sees 404 on processed/ and rejected/ should check here before concluding the action is still queued. Same Receipt shape. The canonical client's `receipt` command checks all three locations.",
         "parameters": [{"$ref": "#/components/parameters/IssueNumber"}],
         "responses": {
           "200": {"description": "Staged terminal receipt", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Receipt"}}}},

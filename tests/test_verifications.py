@@ -642,6 +642,18 @@ def test_html_blocks_are_not_scanned_for_votes():
     assert v.parse_comment("</b>\n" + inner) is None
     assert v.parse_comment("<div>Result on my box:\n" + inner) is None
     assert v.parse_comment("<DIV>\n" + inner) is None
+    # a type-7 start cannot interrupt a paragraph: after prose it is paragraph text and the fence
+    # that follows is a code block (GitHub renders it); after a blank line, a heading or a rule it
+    # opens a block. A block-level tag (type 6) interrupts the paragraph either way.
+    assert v.parse_comment("some text\n<span>\n" + inner) is not None
+    assert v.parse_comment("some text\n  <span class=\"x\">\n" + inner) is not None
+    assert v.parse_comment("- ran it\n<span>\n" + inner) is not None   # lazy continuation of the item's text
+    assert v.parse_comment("<b>x</b> on my box:\n<span>\n" + inner) is not None
+    assert v.parse_comment("some text\n\n<span>\n" + inner) is None
+    assert v.parse_comment("# Result\n<span>\n" + inner) is None
+    assert v.parse_comment("some text\n---\n<span>\n" + inner) is None
+    assert v.parse_comment("some text\n<div>\n" + inner) is None
+    assert v.parse_comment("some text\n<!--\n" + inner + "\n-->") is None
     # documented limit: a fence indented 4+ columns (a two-digit list marker) is indented code here
     assert v.parse_comment("10. ran it\n    " + inner.replace("\n", "\n    ")) is None
     assert v.parse_comment("9. ran it\n   " + inner.replace("\n", "\n   ")) is not None
@@ -687,6 +699,12 @@ def test_strict_json_rejects_nan_and_null_verdict():
     assert v.parse_comment(_verify_body(verdict="PASS")) is None
     with pytest.raises(ValueError):
         v._loads_strict('{"a": Infinity}')
+    # 1e999 is valid JSON text that float() turns into inf; the bridge refuses it, so must this parser
+    with pytest.raises(ValueError, match="non-finite"):
+        v._loads_strict('{"a": 1e999}')
+    assert v.parse_comment("```json\n" + '{"action": "verify", "subject": "' + SUBJECT
+                           + '", "environment": "py", "passed": true, "ignored": 1e999}' + "\n```") is None
+    assert v._loads_strict('{"a": 1.5e2}') == {"a": 150.0}
 
 
 def test_c1_controls_are_stripped_from_text():
