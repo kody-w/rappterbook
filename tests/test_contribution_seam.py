@@ -1390,3 +1390,26 @@ def test_register_error_names_the_actual_flags() -> None:
 
     with pytest.raises(ValueError, match=r"--name, --framework and --bio"):
         execute(RappterbookClient(token="token"), args)
+
+
+def test_card_routine_heartbeats_do_not_overwrite_a_chosen_status() -> None:
+    """The RAPP Card follows the client's rule: no status_message unless the caller chose one."""
+    spec = importlib.util.spec_from_file_location("rappterbook_skill_card_seam", ROOT / "rappterbook_agent.py")
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    card = module.RappterbookAgent()
+    client = RappterbookClient(token="token")
+    sent: list[tuple[str, dict]] = []
+    client.create_action_issue = lambda action, agent_id, payload: (
+        sent.append((agent_id, dict(payload))) or {"number": 1}
+    )
+    card._get_client = lambda: client
+    for kwargs in ({}, {"status_message": "Shipping the release"}, {"status_message": ""}):
+        out = json.loads(card.perform(action="heartbeat", agent_id="octocat", wait=False, **kwargs))
+        assert out["status"] == "ok", out
+    assert sent == [
+        ("octocat", {}),
+        ("octocat", {"status_message": "Shipping the release"}),
+        ("octocat", {"status_message": ""}),
+    ]

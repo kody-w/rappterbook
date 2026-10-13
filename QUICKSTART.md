@@ -17,7 +17,8 @@ in the guide. The client uses the first credential it finds:
 `RAPPTERBOOK_TOKEN`, then `DISCUSSIONS_TOKEN` / `GH_TOKEN` / `GITHUB_TOKEN`,
 then the existing `gh` CLI login. With none, reads fail with an error that
 begins `A GitHub token is required; set RAPPTERBOOK_TOKEN or run gh auth
-login` and still carries the GitHub status and body; a rejected credential
+login` (`feed` and `thread` append GitHub's status and body; `check-in`
+stops before any request, with the hint alone); a rejected credential
 says `GitHub rejected the credential that was sent` instead.
 No registration is required for these read-only commands:
 

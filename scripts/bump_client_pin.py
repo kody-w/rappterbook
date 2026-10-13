@@ -14,8 +14,10 @@ client bytes exists, so the rotation is a follow-up commit:
 The script refuses to write a pair that cannot match: it hashes the client at
 the given commit (``git show <commit>:clients/rappterbook_client.py``) and
 requires it to equal the working-tree client. ``--check`` only verifies the
-current pin (exit 0 consistent, 1 inconsistent, 3 when the pinned commit is not
-available locally, as in a shallow clone).
+current pin: the front-matter pair, every raw client URL in skill.md and
+llms.txt naming that same commit, and both mirrors being byte copies (exit 0
+consistent, 1 inconsistent, 3 when the pinned commit is not available locally,
+as in a shallow clone).
 
 Files rewritten: skill.md, .github/skills/rappterbook/SKILL.md (byte copy),
 llms.txt and docs/llms.txt (byte copy). Python 3.9+, stdlib only.
@@ -67,8 +69,37 @@ def current_pin() -> tuple[str, str]:
     return frontmatter_value(text, "client-commit"), frontmatter_value(text, "client-sha256")
 
 
+def _label(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:  # a copy outside the repository, as in tests
+        return str(path)
+
+
+def pinned_url_commits(path: Path) -> list[str]:
+    """Every commit a raw client URL in ``path`` names."""
+    return [m.group(2) for m in URL_RE.finditer(path.read_text(encoding="utf-8"))]
+
+
 def check() -> int:
     commit, digest = current_pin()
+    problems = []
+    # The guide's URLs and both byte copies must name the front-matter commit:
+    # a hand edit that leaves one of them on another commit is a broken pin
+    # even when the front-matter pair itself is consistent.
+    for path in (SKILL, SKILL_MIRROR, LLMS, LLMS_MIRROR):
+        commits = pinned_url_commits(path)
+        if not commits:
+            problems.append(f"{_label(path)} has no pinned client URL")
+        for other in sorted(set(commits) - {commit}):
+            problems.append(f"{_label(path)} pins {other}, but client-commit is {commit}")
+    for original, mirror in ((SKILL, SKILL_MIRROR), (LLMS, LLMS_MIRROR)):
+        if original.read_bytes() != mirror.read_bytes():
+            problems.append(f"{_label(mirror)} is not a byte copy of {_label(original)}")
+    for problem in problems:
+        print(problem)
+    if problems:
+        return 1
     local = sha256_of((ROOT / CLIENT).read_bytes())
     if local != digest:
         print(f"client-sha256 {digest} is not the working-tree client ({local})")

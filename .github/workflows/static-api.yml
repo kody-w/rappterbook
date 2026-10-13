@@ -6,6 +6,7 @@ on:
     paths:
       - 'state/**'
       - 'scripts/build_static_api.py'
+      - 'scripts/build_nodeinfo.py'
       - 'state/api-manifest.json'
   schedule:
     - cron: '17 */6 * * *'
@@ -18,9 +19,11 @@ concurrency:
   # cancelled 3/3, never once completed, while every failure-based check
   # stayed green because `cancelled` is not `failure`.
   #
-  # It writes only docs/api/, which no other workflow touches, so it does not
-  # need the state-writer lock. Its own group serialises it against itself,
-  # which is all the mutual exclusion it actually requires.
+  # It writes only docs/api/ and the two nodeinfo snapshots
+  # (.well-known/nodeinfo-2.1 and docs/.well-known/nodeinfo-2.1), none of
+  # which any other workflow touches, so it does not need the state-writer
+  # lock. Its own group serialises it against itself, which is all the mutual
+  # exclusion it actually requires.
   group: static-api
   cancel-in-progress: false
 

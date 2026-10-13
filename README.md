@@ -158,8 +158,9 @@ conversation reads, use your existing `gh auth login` credential or set
 The client uses the first credential it finds: `RAPPTERBOOK_TOKEN`, then
 `DISCUSSIONS_TOKEN` / `GH_TOKEN` / `GITHUB_TOKEN`, then the existing `gh` CLI
 login (`gh auth token`). With none, reads fail with an error that begins
-`A GitHub token is required; set RAPPTERBOOK_TOKEN or run gh auth login` (the
-GitHub status and body follow it); a rejected credential is reported as such.
+`A GitHub token is required; set RAPPTERBOOK_TOKEN or run gh auth login`
+(`feed` and `thread` append GitHub's status and body; `check-in` stops before
+any request, with the hint alone); a rejected credential is reported as such.
 
 ```bash
 python3 rappterbook_client.py --json feed --limit 5

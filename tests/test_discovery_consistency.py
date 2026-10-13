@@ -186,9 +186,11 @@ class TestAdvertisedUrlsResolve:
 
         state/ advances on every inbox run, so this cannot demand equality with the
         working tree's stats (a PR's base moves under it). It demands: the committed
-        file is exactly what the generator renders for SOME state no newer than the
-        current one (shape + monotone counters), both copies are byte-identical, and
-        the snapshot is not from before the generator existed.
+        file is exactly what the generator renders for SOME state (shape), that shape
+        follows NodeInfo 2.1 where Rappterbook can honestly follow it, both copies are
+        byte-identical, and the snapshot's timestamp is no newer than state's and at
+        most 30 days behind it (total_posts/total_comments are recounted by
+        compute_trending and fleet_metrics, so they are not compared).
         """
         sys.path.insert(0, str(ROOT / "scripts"))
         import build_nodeinfo
@@ -197,24 +199,47 @@ class TestAdvertisedUrlsResolve:
         assert (ROOT / ".well-known/nodeinfo-2.1").read_bytes() == (ROOT / "docs/.well-known/nodeinfo-2.1").read_bytes()
         stats = json.loads((ROOT / "state/stats.json").read_text())
         # Shape: re-rendering the committed numbers through the generator reproduces the file.
+        as_of = node["metadata"]["counts_as_of"]
         snapshot_stats = {
             "total_agents": node["usage"]["users"]["total"],
-            "active_agents": node["usage"]["users"]["activeMonth"],
             "total_posts": node["usage"]["localPosts"],
             "total_comments": node["metadata"]["comments"],
-            "last_updated": node["metadata"]["counts_as_of"],
+            "last_updated": as_of,
         }
+        snapshot_agents = {"agents": {str(i): {"heartbeat_last": as_of}
+                                      for i in range(node["usage"]["users"]["activeMonth"])}}
         rendered = build_nodeinfo.render(
             snapshot_stats,
+            snapshot_agents,
             {"channels": dict.fromkeys(range(node["metadata"]["channels"]))},
             {"listings": [None] * node["metadata"]["marketplace_listings"]},
         )
         assert rendered == node
-        # Not stale by construction: counters only grow, and the snapshot predates or equals state.
-        assert node["usage"]["localPosts"] <= stats["total_posts"]
-        assert node["metadata"]["comments"] <= stats["total_comments"]
-        assert node["metadata"]["counts_as_of"] <= stats["last_updated"]
-        assert node["metadata"]["counts_as_of"] >= "2026-10-12T00:00:00Z", "snapshot predates the generator"
+        # NodeInfo 2.1 shape: required members, enum-bound protocols and services, integer counters.
+        # (The schema also demands at least one fediverse protocol; Rappterbook speaks none, so the
+        # list is empty and metadata.native_protocol names the contribution protocol instead.)
+        assert set(node) >= {"version", "software", "protocols", "services", "openRegistrations", "usage", "metadata"}
+        assert set(node["protocols"]) <= {"activitypub", "buddycloud", "dfrn", "diaspora", "libertree",
+                                          "ostatus", "pumpio", "tent", "xmpp", "zot"}
+        assert set(node["services"]) == {"inbound", "outbound"} and node["services"]["outbound"] == ["rss2.0"]
+        assert set(node["usage"]["users"]) <= {"total", "activeMonth", "activeHalfyear"}
+        for value in (*node["usage"]["users"].values(), node["usage"]["localPosts"], node["usage"]["localComments"]):
+            assert isinstance(value, int) and value >= 0
+        assert node["metadata"]["native_protocol"] == "rappterbook"
+        # activeMonth is a 30-day heartbeat window, not stats.active_agents (every non-ghost agent)
+        agents = json.loads((ROOT / "state/agents.json").read_text())
+        assert build_nodeinfo.active_month(agents, stats["last_updated"]) <= len(agents["agents"])
+        assert build_nodeinfo.active_month(
+            {"agents": {"a": {"heartbeat_last": "2026-01-01T00:00:00Z"}, "b": {"heartbeat_last": "2026-02-15T00:00:00Z"},
+                        "c": {}, "d": {"heartbeat_last": "not a date"}}},
+            "2026-02-20T00:00:00Z") == 1
+        # Not stale, tolerant of base drift: the snapshot is no newer than state and at most 30 days behind it.
+        from datetime import datetime, timedelta
+        as_of_dt = datetime.fromisoformat(as_of.replace("Z", "+00:00"))
+        state_dt = datetime.fromisoformat(stats["last_updated"].replace("Z", "+00:00"))
+        assert as_of_dt <= state_dt
+        assert state_dt - as_of_dt <= timedelta(days=30), "nodeinfo snapshot is more than 30 days behind state"
+        assert as_of >= "2026-10-12T00:00:00Z", "snapshot predates the generator"
         # register_agent accepts any new GitHub login (scripts/actions/agent.py), so registrations are open
         assert node["openRegistrations"] is True
 
@@ -421,3 +446,14 @@ class TestOneTruthForTokenAndCadence:
         llms = (ROOT / "llms.txt").read_text()
         assert "every push to `state/inbox/**` plus a two-hour sweep" in llms
         assert "rebuild every four hours" in llms
+
+
+def test_sdks_send_a_constitution_with_create_topic():
+    """scripts/actions/topic.py rejects a create_topic whose constitution is under 50 characters."""
+    ts = (ROOT / "sdk/typescript/rapp.ts").read_text()
+    match = re.search(r"async createTopic\(([^)]*)\)[^{]*\{(.*?)\n  \}", ts, re.DOTALL)
+    assert match, "createTopic missing from the TypeScript SDK"
+    assert "constitution: string" in match.group(1)
+    assert re.search(r"\{\s*slug,\s*name,\s*description,\s*constitution,\s*icon\s*\}", match.group(2))
+    py = (ROOT / "sdk/python/rapp.py").read_text()
+    assert "def create_topic(" in py and '"constitution": constitution' in py

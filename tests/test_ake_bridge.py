@@ -422,10 +422,21 @@ def test_prose_mention_of_the_discussion_url_is_not_a_citation(tmp_path):
                           content="see also " + SOURCE + " and " + SOURCE + "\n\nSource: " + SOURCE + "9")
     fake = FakeAke({("POST", "/posts"): [FakeResponse(echo_of_ours(), status=201)]}, search=lambda q, o: [mention])
     assert b.run(["post", "--input", post_file(tmp_path)], environ=env, open_url=fake)["status"] == "posted"
-    # the trailer must be a whole line: trailing text or a different prefix is not it
-    for content in ("Source: " + SOURCE + " (mirror)", "My Source: " + SOURCE, "source: " + SOURCE):
-        assert not re.search(b.SOURCE_LINE_RE_TEMPLATE.format(source=re.escape(SOURCE)), content), content
-    assert re.search(b.SOURCE_LINE_RE_TEMPLATE.format(source=re.escape(SOURCE)), "x\n\nSource: " + SOURCE + "  \n")
+    # the trailer must be the post's last line, exactly: trailing text, a different prefix, or a
+    # trailer-shaped line higher up in the body (a post about /1239 quoting /123) is not it
+    for content in ("Source: " + SOURCE + " (mirror)", "My Source: " + SOURCE, "source: " + SOURCE,
+                    "Source: " + SOURCE + "\n\nmore prose", "Source: " + SOURCE + "\n\nSource: " + SOURCE + "9"):
+        assert not b.cites_source(content, SOURCE), content
+    assert b.cites_source("x\n\nSource: " + SOURCE + "  \n", SOURCE)
+    assert b.cites_source("x\r\n\r\nSource: " + SOURCE + "\r\n", SOURCE)
+    assert not b.cites_source(None, SOURCE)
+    quoting = remote_post(post_id="quoting", topic="other", content="Source: " + SOURCE + "\n\nSource: " + SOURCE + "9")
+    fake2 = FakeAke({("POST", "/posts"): [FakeResponse(echo_of_ours(post_id="new2"), status=201)]}, search=lambda q, o: [quoting])
+    fresh = dict(env, AKE_RECEIPTS=str(tmp_path / "fresh.jsonl"))
+    assert b.run(["post", "--input", post_file(tmp_path)], environ=fresh, open_url=fake2)["status"] == "posted"
+    # and the bridge never writes a trailer-shaped line into a body of its own
+    with pytest.raises(b.AkePolicyError, match="must not contain a `Source:"):
+        b.build_intent(json.loads(Path(post_file(tmp_path, content="fix\n  Source: " + SOURCE + "9\nmore")).read_text()), AGENT, BASE)
 
 
 def test_post_preflight_paginates_and_fails_closed_when_it_cannot_prove_uniqueness(tmp_path):
@@ -533,6 +544,9 @@ def test_post_5xx_is_ambiguous_never_retried_and_blocked_until_resolved(tmp_path
     (lambda: FakeResponse(remote_post(post_id="wrong-post", agent_id="other")), "echo_mismatch"),
     (lambda: FakeResponse(echo_of_ours(topic="something else")), "echo_mismatch"),
     (lambda: FakeResponse(echo_of_ours(content="edited by server")), "echo_mismatch"),
+    (lambda: FakeResponse(echo_of_ours(environment="node-18")), "echo_mismatch"),
+    (lambda: FakeResponse(echo_of_ours(tags=["intro"])), "echo_mismatch"),
+    (lambda: FakeResponse(echo_of_ours(agent_id="someone-else")), "echo_mismatch"),
 ])
 def test_post_transport_shape_and_echo_failures_are_ambiguous(tmp_path, failure, note):
     env = env_for(tmp_path)
@@ -722,6 +736,9 @@ def test_bridge_and_verifications_strip_the_same_invisible_characters():
     probe = "".join(chr(cp) for cp in range(0x2000, 0x2070)) + "\u200b\u200e\u200f\ufeff\u00ad\u200d\u200c"
     assert b.BIDI_RE.sub("", probe) == verifications._INVISIBLE_RE.sub("", probe)
     assert b.BIDI_RE.sub("", "\u200d\u200c\u00ad") == "\u200d\u200c\u00ad"  # ZWJ/ZWNJ/soft hyphen are meaningful, kept
+    # spelled with escapes in both sources: literal invisible code points vanish in editors and diff viewers
+    for module in (b, verifications):
+        assert not b.BIDI_RE.search(Path(module.__file__).read_text(encoding="utf-8")), module.__name__
 
 
 def test_verify_refuses_any_post_this_ledger_created_whatever_the_agent_id(tmp_path):
@@ -747,7 +764,7 @@ def test_verify_refuses_any_post_this_ledger_created_whatever_the_agent_id(tmp_p
     assert b.own_post_claim([{"key": "rb-ake-" + "b" * 24, "operation": "verify", "status": "verified", "post_id": "q"}], "q") is None
     # someone else's post still verifies
     other = FakeAke({("GET", "/posts/zz"): [FakeResponse(remote_post(post_id="zz"))],
-                     ("POST", "/posts/zz/verify"): [FakeResponse(remote_post(post_id="zz"))]})
+                     ("POST", "/posts/zz/verify"): [FakeResponse(remote_post(post_id="zz", verifications_pass=1))]})
     assert b.run(["verify", "--input", verify_file(tmp_path, post_id="zz")], environ=dict(env, AKE_AGENT_ID="bob"), open_url=other)["status"] == "verified"
 
 
@@ -775,7 +792,11 @@ def test_outbound_text_with_a_token_shaped_string_is_refused_offline(tmp_path):
 
 
 class TrickleResponse:
-    """A 2xx whose body arrives one byte per read, each read slower than the budget allows."""
+    """A 2xx whose body arrives one byte per read, each read slower than the budget allows.
+
+    Models ``read1`` (one socket read per call); the loopback test below drives
+    a real ``http.client`` response, whose ``read(n)`` would block for n bytes.
+    """
 
     def __init__(self, raw: bytes, delay: float, status: int = 200):
         self.status = status
@@ -911,3 +932,189 @@ def test_parser_has_exactly_the_documented_commands():
     parser = b.build_parser()
     commands = parser._subparsers._group_actions[0].choices
     assert set(commands) == {"dry-run", "search", "get", "post", "verify", "receipts", "resolve"}
+
+
+def test_agent_id_is_screened_like_every_other_outbound_field(tmp_path):
+    """AKE_AGENT_ID is sent in every post and verify body and kept in the ledger."""
+    env = dict(env_for(tmp_path), AKE_AGENT_ID="ghp_abcdefghijklmnopqrstuvwxyz0123")
+
+    def no_network(*a, **k):
+        raise AssertionError("a refused configuration must not reach the network")
+
+    for command, intent in (("dry-run", post_file(tmp_path)), ("post", post_file(tmp_path)),
+                            ("verify", verify_file(tmp_path))):
+        with pytest.raises(b.AkeConfigError, match="AKE_AGENT_ID contains a token-shaped string"):
+            b.run([command, "--input", intent], environ=env, open_url=no_network)
+    assert ledger_lines(tmp_path) == []
+    assert b.agent_id_from_env({"AKE_AGENT_ID": "  rapptertwo "}) == "rapptertwo"
+
+
+def test_verify_is_refused_while_an_unresolved_post_key_may_own_the_post(tmp_path):
+    """A lost POST response leaves a key without a post_id; the post it may have created is still ours."""
+    env = env_for(tmp_path)
+    lost = FakeAke({("POST", "/posts"): [urllib.error.URLError("reset")]}, search=no_matches)
+    with pytest.raises(b.AkeAmbiguousError):
+        b.run(["post", "--input", post_file(tmp_path)], environ=dict(env, AKE_AGENT_ID="alice"), open_url=lost)
+    key = ledger_lines(tmp_path)[-1]["key"]
+    landed = echo_of_ours(post_id="landed", agent_id="alice")
+    # by topic and trailer, by topic alone, by Source trailer alone: refused after the pre-flight GET, before any receipt
+    for remote in (landed, dict(landed, content="reworded by AKE"), dict(landed, topic="reworded by AKE")):
+        bob = FakeAke({("GET", "/posts/landed"): [FakeResponse(remote)]})
+        with pytest.raises(b.AkePolicyError, match=f"resolve --key {key} --as posted --post-id landed"):
+            b.run(["verify", "--input", verify_file(tmp_path, post_id="landed")],
+                  environ=dict(env, AKE_AGENT_ID="bob"), open_url=bob)
+        assert bob.posts() == [] and len(bob.calls) == 1
+    assert [l["status"] for l in ledger_lines(tmp_path)] == ["pending", "ambiguous"]
+    # an unrelated post still verifies
+    other = FakeAke({("GET", "/posts/zz"): [FakeResponse(remote_post(post_id="zz"))],
+                     ("POST", "/posts/zz/verify"): [FakeResponse(remote_post(post_id="zz", verifications_pass=1))]})
+    assert b.run(["verify", "--input", verify_file(tmp_path, post_id="zz")],
+                 environ=dict(env, AKE_AGENT_ID="bob"), open_url=other)["status"] == "verified"
+    # resolved as posted, the ordinary own-post guard takes over, offline
+    b.run(["resolve", "--key", key, "--as", "posted", "--post-id", "landed"], environ=env)
+    quiet = FakeAke()
+    with pytest.raises(b.AkePolicyError, match="this ledger posted landed"):
+        b.run(["verify", "--input", verify_file(tmp_path, post_id="landed")],
+              environ=dict(env, AKE_AGENT_ID="bob"), open_url=quiet)
+    assert quiet.calls == []
+    # a verify receipt is a vote, never an unresolved claim of authorship
+    assert b.unresolved_post_claim(
+        [{"key": "rb-ake-" + "c" * 24, "operation": "verify", "status": "pending", "topic": TOPIC}], landed) is None
+
+
+def test_verify_echo_must_show_the_vote_counted(tmp_path):
+    """A 2xx whose counters contradict the vote is not a verified receipt."""
+    env = env_for(tmp_path)
+    cases = (
+        (True, remote_post()),                         # nothing moved
+        (True, remote_post(verifications_fail=1)),     # the other counter moved
+        (True, remote_post(verifications_pass=None)),  # counter unusable
+        (False, remote_post(verifications_pass=1)),    # a fail vote echoed as a pass
+    )
+    for i, (passed, echo) in enumerate(cases):
+        fake = FakeAke({("GET", "/posts/845a15fe"): [FakeResponse(remote_post())],
+                        ("POST", "/posts/845a15fe/verify"): [FakeResponse(echo)]})
+        with pytest.raises(b.AkeAmbiguousError, match="echo"):
+            b.run(["verify", "--input", verify_file(tmp_path, passed=passed, notes=f"run {i}")], environ=env, open_url=fake)
+        assert ledger_lines(tmp_path)[-1]["note"] == "echo_mismatch" and len(fake.posts()) == 1
+    # a fail vote whose fail counter rose by one from a non-zero start is verified
+    fake = FakeAke({("GET", "/posts/845a15fe"): [FakeResponse(remote_post(verifications_fail=4))],
+                    ("POST", "/posts/845a15fe/verify"): [FakeResponse(remote_post(verifications_fail=5))]})
+    out = b.run(["verify", "--input", verify_file(tmp_path, passed=False, notes="final")], environ=env, open_url=fake)
+    assert out["status"] == "verified" and ledger_lines(tmp_path)[-1]["passed"] is False
+
+
+def test_lone_surrogates_in_a_response_never_break_the_output_contract(tmp_path, monkeypatch, capsys):
+    """{"topic": "t\\ud800"} is valid JSON; printed raw it raises UnicodeEncodeError after the receipt was written."""
+    for k, v in env_for(tmp_path).items():
+        monkeypatch.setenv(k, v)
+    assert b.display("t\ud800x\udfffy", 10) == "txy"
+    poisoned = remote_post(topic="t\ud800", created_at="2026\udfff", content="c\ud83d")
+    scripted = {
+        ("GET", "/posts/search"): [FakeResponse([poisoned])],
+        ("GET", "/posts/845a15fe"): [FakeResponse(poisoned)],
+        ("POST", "/posts"): [FakeResponse(echo_of_ours(created_at="2026\ud800"), status=201)],
+    }
+    monkeypatch.setattr(b, "_default_open", FakeAke(scripted, search=no_matches))
+    for argv in (["search", "--q", "x"], ["get", "--post-id", "845a15fe"], ["post", "--input", post_file(tmp_path)]):
+        assert b.main(argv) == 0, argv
+        out = capsys.readouterr().out
+        assert "\ud800" not in out and "\\ud800" not in out and "\udfff" not in out and "\ud83d" not in out
+        json.loads(out)
+    assert ledger_lines(tmp_path)[-1]["status"] == "posted"
+
+    # a stdout that cannot carry the text as is still gets valid JSON and exit 0
+    class AsciiOnly:
+        def __init__(self):
+            self.chunks = []
+
+        def write(self, text):
+            text.encode("ascii")
+            self.chunks.append(text)
+
+        def flush(self):
+            pass
+
+    ascii_out = AsciiOnly()
+    monkeypatch.setattr(sys, "stdout", ascii_out)
+    assert b.main(["dry-run", "--input", post_file(tmp_path, topic="caf\u00e9 is locked")]) == 0
+    assert json.loads(ascii_out.chunks[-1])["body"]["topic"] == "caf\u00e9 is locked"
+
+    # a stdout that fails outright is a JSON error on stderr with exit 2, never a traceback
+    class Broken:
+        def write(self, text):
+            raise BrokenPipeError("stdout closed")
+
+        def flush(self):
+            pass
+
+    monkeypatch.setattr(sys, "stdout", Broken())
+    assert b.main(["dry-run", "--input", post_file(tmp_path)]) == 2
+    err = json.loads(capsys.readouterr().err)
+    assert err["error"] == "BrokenPipeError" and "receipts" in err["hint"]
+
+
+def test_wall_clock_budget_holds_against_a_real_socket_that_trickles():
+    """http.client's read(n) blocks until n bytes arrive; the budget must be checked after every socket read."""
+    import socket
+    import threading
+    import urllib.request
+
+    body = json.dumps(remote_post(post_id="p")).encode()
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind(("127.0.0.1", 0))
+    server.listen(1)
+    port = server.getsockname()[1]
+    sent = []
+
+    def serve():
+        conn, _ = server.accept()
+        with conn:
+            conn.settimeout(5)
+            buf = b""
+            while b"\r\n\r\n" not in buf:
+                data = conn.recv(1024)
+                if not data:
+                    return
+                buf += data
+            conn.sendall(b"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: "
+                         + str(len(body)).encode() + b"\r\n\r\n")
+            try:
+                for i in range(len(body)):
+                    conn.sendall(body[i:i + 1])
+                    sent.append(i)
+                    time.sleep(0.05)
+            except OSError:
+                pass
+
+    thread = threading.Thread(target=serve, daemon=True)
+    thread.start()
+
+    class SameOrigin:
+        """The real HTTPResponse, reported as coming from the configured origin."""
+
+        def __init__(self, inner):
+            self._inner = inner
+
+        def geturl(self):
+            return BASE + "/posts/p"
+
+        def __getattr__(self, name):
+            return getattr(self._inner, name)
+
+    def open_local(request, timeout):
+        local = urllib.request.Request(f"http://127.0.0.1:{port}/posts/p", headers=dict(request.header_items()))
+        return SameOrigin(urllib.request.urlopen(local, timeout=timeout))
+
+    started = time.monotonic()
+    try:
+        with pytest.raises(b.AkeNetworkError, match=r"0\.3s time budget"):
+            b.api_request(BASE, "GET", "/posts/p", open_url=open_local, timeout=0.3)
+        elapsed = time.monotonic() - started
+    finally:
+        server.close()
+        thread.join(2)
+    # the whole body would take len(body) * 0.05 s (> 10 s) to arrive; the budget, not the server, ends the read
+    assert 0.25 <= elapsed < 2.0, elapsed
+    assert 0 < len(sent) < len(body)

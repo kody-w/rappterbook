@@ -23,9 +23,10 @@ its ``agent_id`` is self-asserted, so this bridge is deliberately narrow:
   verified or ambiguous is never sent again until an operator resolves it.
   The key covers the destination and the exact wire payload;
 * writes are never retried. A 5xx, timeout (a wall-clock budget per request,
-  so a trickling server cannot stall a command), redirect, oversize or
-  malformed success body, or an echo that does not match what was sent, is
-  recorded ``ambiguous`` and the command exits 2. Only GET is retried once;
+  checked after every socket read, so a trickling server holds a command at
+  most one socket timeout past it), redirect, oversize or malformed success
+  body, or an echo that does not match what was sent, is recorded
+  ``ambiguous`` and the command exits 2. Only GET is retried once;
 * retrieved content is UNTRUSTED DATA: it is printed with control and bidi
   characters removed and never interpreted. Nothing from a response is
   persisted except ``post_id`` and an HTTP status; error details stay on
@@ -44,6 +45,7 @@ import json
 import math
 import os
 import re
+import socket
 import sys
 import time
 import urllib.error
@@ -55,9 +57,11 @@ from pathlib import Path
 from typing import Callable, Optional
 
 USER_AGENT = "Rappterbook-AKE-Bridge/1.0"
-# Wall-clock budget for one request (connect + headers + whole body), not a
-# per-socket-read timeout: a server that trickles bytes cannot hold a command
-# open indefinitely.
+# Wall-clock budget for one request (connect + headers + whole body). It is
+# also the initial socket timeout; the body is read one socket read at a time
+# with the budget re-checked (and the socket timeout shrunk to what is left)
+# after each, so a server that trickles bytes is cut off at the budget, not
+# held open for as long as it keeps sending.
 TIMEOUT_SECONDS = 30
 # Budget for the whole response-first search before a post (up to
 # 2 queries x MAX_SEARCH_PAGES pages, each GET retried at most once).
@@ -92,11 +96,18 @@ CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]")
 # Bidi-steering and zero-width format characters that make printed text lie:
 # ZWSP, LRM/RLM, LRE..RLO, word joiner + invisible math operators
 # (U+2060-U+2064), LRI..PDI, BOM. The same set as scripts/verifications.py
-# (_INVISIBLE_RE); tests pin both so they cannot drift.
-BIDI_RE = re.compile("[​‎‏‪-‮⁠-⁤⁦-⁩﻿]")
-# The provenance trailer build_post_intent writes; only this line, not a prose
-# mention of the URL, means "this post already covers that discussion".
-SOURCE_LINE_RE_TEMPLATE = r"(?m)^Source: {source}[ \t]*$"
+# (_INVISIBLE_RE); tests pin both so they cannot drift. Spelled with escapes
+# so the class survives editors, formatters and diff viewers that drop or
+# flag invisible characters.
+BIDI_RE = re.compile("[\u200b\u200e\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]")
+# Lone surrogates survive strict JSON ("\ud800" is valid JSON text) but cannot
+# be encoded to UTF-8; printing one would raise after a receipt was written.
+SURROGATE_RE = re.compile("[\ud800-\udfff]")
+# The provenance trailer build_post_intent writes, always the last line of a
+# post. Only that line (see cites_source), not a prose mention of the URL or a
+# trailer-shaped line in the body, means "this post already covers that
+# discussion".
+SOURCE_TRAILER_PREFIX = "Source: " + SOURCE_PREFIX
 TOKEN_RE = re.compile(
     r"(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|moltbook_[A-Za-z0-9_-]{8,}"
     r"|sk-[A-Za-z0-9_-]{16,}|(?i:bearer)\s+[A-Za-z0-9._~+/=-]{8,})"
@@ -189,13 +200,14 @@ def redact(value: object) -> str:
 
 
 def display(value: object, limit: int) -> str:
-    """Make untrusted text safe to print: controls and bidi overrides removed, length capped.
+    """Make untrusted text safe to print: controls, bidi overrides and lone surrogates removed, length capped.
 
     Tab and newline are kept on purpose (content is multi-line); the CLI emits
     JSON, which escapes them, so they cannot reach a terminal raw.
     """
     text = CONTROL_RE.sub("", str(value))
     text = BIDI_RE.sub("", text)
+    text = SURROGATE_RE.sub("", text)
     if len(text) > limit:
         return text[:limit] + "...[truncated]"
     return text
@@ -355,7 +367,9 @@ def agent_id_from_env(environ: Optional[dict] = None) -> str:
     if raw is None or not raw.strip():
         raise AkeConfigError("AKE_AGENT_ID is required for post, verify and dry-run")
     try:
-        return _text("AKE_AGENT_ID", raw, MAX_AGENT_ID)
+        # Sent in every post and verify body and kept in the ledger, so it is
+        # screened for token-shaped strings like every other outbound field.
+        return _outbound("AKE_AGENT_ID", raw, MAX_AGENT_ID)
     except AkePolicyError as exc:
         raise AkeConfigError(str(exc)) from exc
 
@@ -414,6 +428,13 @@ def build_post_intent(raw: object, agent_id: str, destination: str) -> dict:
     environment = _outbound("environment", raw.get("environment"), MAX_ENVIRONMENT)
     topic = _outbound("topic", raw.get("topic"), MAX_TOPIC)
     content = _outbound("content", raw.get("content"), MAX_CONTENT, multiline=True)
+    if any(line.lstrip().startswith(SOURCE_TRAILER_PREFIX) for line in content.split("\n")):
+        # The bridge writes exactly one trailer, after the body. A body line
+        # shaped like it would read as a citation of some other discussion.
+        raise AkePolicyError(
+            "content must not contain a `Source: " + SOURCE_PREFIX + "...` line of its own; "
+            "cite other discussions in prose, the bridge appends the provenance trailer"
+        )
     source = canonical_source(raw.get("source"))
     tags_raw = raw.get("tags", [])
     if not isinstance(tags_raw, list):
@@ -507,23 +528,65 @@ def _default_open(request: urllib.request.Request, timeout: float):
     return opener.open(request, timeout=timeout)
 
 
-def _read_capped(response, deadline: float) -> bytes:
-    """Read a body in chunks under a byte cap and a wall-clock deadline.
+def _settimeout_of(response) -> Optional[Callable]:
+    """``settimeout`` of the socket under a real HTTP response, or None.
 
-    urllib's ``timeout`` only bounds each socket operation, so a server that
-    trickles one byte per timeout could hold ``read()`` open for hours. The
-    deadline is checked between chunks and the read is abandoned once it has
-    passed; the caller records that like any other network failure.
+    Walks HTTPError -> HTTPResponse -> BufferedReader -> SocketIO -> socket;
+    fakes, in-memory bodies and already-closed responses give None, in which
+    case the socket timeout stays whatever the opener set.
     """
+    try:
+        obj = response
+        for _ in range(6):
+            if obj is None:
+                return None
+            method = getattr(obj, "settimeout", None)
+            if callable(method):
+                return method
+            obj = getattr(obj, "_sock", None) or getattr(obj, "raw", None) or getattr(obj, "fp", None)
+    except Exception:  # noqa: BLE001 - a 3.9 HTTPError built without a body raises KeyError on attribute access
+        return None
+    return None
+
+
+def _read_capped(response, deadline: float, *, budget: Optional[float] = None) -> bytes:
+    """Read a body under a byte cap and a wall-clock deadline.
+
+    urllib's ``timeout`` only bounds each socket operation, and
+    ``HTTPResponse.read(n)`` blocks until ``n`` bytes or EOF arrive, so a
+    server that trickles one byte per timeout could hold a plain ``read()``
+    open for hours. The body is therefore read with ``read1`` (at most one
+    socket read per call) and the deadline is checked after every read; the
+    socket timeout is also shrunk to what is left of the budget wherever the
+    response exposes its socket. The overrun past the deadline is bounded by
+    one socket timeout, never by how long the server keeps sending. The
+    caller records an abandoned read like any other network failure.
+    """
+    shown = f"{(TIMEOUT_SECONDS if budget is None else budget):g}"
+    try:
+        reader = getattr(response, "read1", None) or response.read
+    except (AttributeError, KeyError) as exc:
+        # an HTTPError constructed without a body has no file behind it
+        raise AkeNetworkError(f"response body could not be read: {redact(exc)}") from exc
+    settimeout = _settimeout_of(response)
     chunks = []
     total = 0
     while True:
-        if time.monotonic() > deadline:
-            raise AkeNetworkError(f"response exceeded the {TIMEOUT_SECONDS}s time budget while reading the body")
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise AkeNetworkError(f"response exceeded the {shown}s time budget while reading the body")
+        if settimeout is not None:
+            try:
+                settimeout(remaining)
+            except (OSError, ValueError):
+                settimeout = None
         try:
-            chunk = response.read(READ_CHUNK_BYTES)
-        except (OSError, http.client.HTTPException, AttributeError) as exc:
-            # AttributeError: an HTTPError constructed without a body has no fp
+            chunk = reader(READ_CHUNK_BYTES)
+        except socket.timeout as exc:
+            raise AkeNetworkError(
+                f"response exceeded the {shown}s time budget while reading the body (socket timed out)"
+            ) from exc
+        except (OSError, http.client.HTTPException, AttributeError, KeyError) as exc:
             raise AkeNetworkError(f"response body could not be read: {redact(exc)}") from exc
         if not chunk:
             break
@@ -578,7 +641,7 @@ def api_request(
         status = int(exc.code)
         message = f"AKE returned HTTP {status}"
         try:
-            raw = _read_capped(exc, deadline)
+            raw = _read_capped(exc, deadline, budget=remaining)
         except (AkeNetworkError, AkeSecurityError) as body_exc:
             message += f" (body not read: {body_exc})"  # the status is still definitive
         else:
@@ -600,7 +663,7 @@ def api_request(
         if (final.scheme, final.netloc.lower()) != (origin.scheme, origin.netloc):
             raise AkeSecurityError("response came from a different origin than AKE_BASE_URL")
         status = int(getattr(response, "status", 200))
-        raw = _read_capped(response, deadline)
+        raw = _read_capped(response, deadline, budget=remaining)
     finally:
         close = getattr(response, "close", None)
         if callable(close):
@@ -830,6 +893,25 @@ def _normalize_topic(text: object) -> str:
     return " ".join(str(text).casefold().split()) if isinstance(text, str) else ""
 
 
+def provenance_trailer(content: object) -> str:
+    """The last non-empty line of a post's content, where the bridge writes its ``Source:`` line."""
+    if not isinstance(content, str):
+        return ""
+    lines = content.rstrip().splitlines()
+    return lines[-1].rstrip() if lines else ""
+
+
+def cites_source(content: object, source: str) -> bool:
+    """Does this post carry the bridge's provenance trailer for ``source``?
+
+    Only the trailer counts: a prose mention of the URL, or a trailer-shaped
+    line inside the body (which build_post_intent refuses to write, but an
+    unauthenticated AKE cannot stop anyone else from writing), is not a
+    citation, so no post can block cross-posts of discussions it is not about.
+    """
+    return provenance_trailer(content) == f"Source: {source}"
+
+
 def _search_pages(base_url: str, query: str, *, open_url=None, deadline: Optional[float] = None):
     """Yield validated search results page by page; fail closed if there are too many to check."""
     for page in range(MAX_SEARCH_PAGES):
@@ -851,19 +933,19 @@ def preflight_search(base_url: str, intent: dict, *, open_url=None,
                      budget: Optional[float] = None) -> None:
     """Response-first for posts: refuse when AKE already has this topic or this source.
 
-    "Covers this source" means the post carries the bridge's own provenance
-    trailer, a line that is exactly ``Source: <url>``; a prose mention of the
-    URL elsewhere in a post is a cross-reference, not a citation, so one post
-    listing many discussion URLs cannot block every future cross-post. All
-    pages of both queries share one wall-clock ``budget``.
+    "Covers this source" means the post's last line is the bridge's own
+    provenance trailer, exactly ``Source: <url>`` (cites_source); a prose
+    mention of the URL, or a trailer-shaped line higher up in a body, is a
+    cross-reference, not a citation, so one post listing many discussion URLs
+    cannot block every future cross-post. All pages of both queries share one
+    wall-clock ``budget``.
     """
     wanted = _normalize_topic(intent["topic"])
-    source_re = re.compile(SOURCE_LINE_RE_TEMPLATE.format(source=re.escape(intent["source"])))
     deadline = time.monotonic() + (PREFLIGHT_BUDGET_SECONDS if budget is None else budget)
     for query in (intent["topic"], intent["source"]):
         for item in _search_pages(base_url, query, open_url=open_url, deadline=deadline):
             same_topic = _normalize_topic(item["topic"]) == wanted
-            same_source = bool(source_re.search(item["content"]))
+            same_source = cites_source(item["content"], intent["source"])
             if same_topic or same_source:
                 raise AkePolicyError(
                     "an existing AKE post already covers this "
@@ -888,15 +970,53 @@ def preflight_get(base_url: str, intent: dict, agent_id: str, *, open_url=None) 
     return post
 
 
-def _echo_matches(operation: str, intent: dict, post: dict, agent_id: str) -> bool:
-    """Did AKE echo back the operation we asked for?"""
+def unresolved_post_claim(entries: list, post: dict) -> Optional[dict]:
+    """A pending or ambiguous post key that the fetched AKE post may be the result of.
+
+    When the response to our own POST was lost, the key's receipts carry no
+    ``post_id``, so own_post_claim cannot recognise the post by id. It is
+    still ours if it carries the key's recorded topic (normalized) or its
+    ``Source:`` trailer, so a verify of it is refused until the operator
+    resolves the key (``--as posted --post-id <id>`` if it is ours, after
+    which the ordinary own-post guard applies; ``--as absent`` if it is not).
+    """
+    latest_by_key: dict = {}
+    for entry in entries:
+        latest_by_key[entry["key"]] = entry
+    topic = _normalize_topic(post.get("topic"))
+    for latest in latest_by_key.values():
+        if latest.get("operation") != "post" or latest["status"] not in ("pending", "ambiguous"):
+            continue
+        recorded = _normalize_topic(latest.get("topic"))
+        source = latest.get("source")
+        if (recorded and recorded == topic) or (isinstance(source, str) and cites_source(post.get("content"), source)):
+            return latest
+    return None
+
+
+def _echo_matches(operation: str, intent: dict, post: dict, agent_id: str, *, before: Optional[dict] = None) -> bool:
+    """Did AKE's 2xx echo describe the operation we asked for?
+
+    A post echo must repeat agent_id, environment, topic, content and tags
+    (every field the idempotency key covers). A verify echo must name the
+    voted-on post and show the voted counter (``verifications_pass`` or
+    ``verifications_fail``) at least one higher than the pre-flight GET
+    (``before``) saw; a 2xx whose counters contradict the vote is not
+    evidence that the vote landed.
+    """
     if operation == "verify":
-        return post["post_id"] == intent["post_id"]
+        if post["post_id"] != intent["post_id"] or before is None:
+            return False
+        field = "verifications_pass" if intent["body"]["passed"] else "verifications_fail"
+        was, now = _number(before.get(field)), _number(post.get(field))
+        return was is not None and now is not None and now >= was + 1
     body = intent["body"]
     return (
         post["agent_id"] == agent_id
+        and post["environment"] == body["environment"]
         and post["topic"] == body["topic"]
         and post["content"] == body["content"]
+        and post.get("tags", []) == body["tags"]
     )
 
 
@@ -933,13 +1053,22 @@ def execute_write(
                     f" (as {own.get('agent_id')}); a post cannot be verified by the operator who made it"
                 )
         ensure_writable(ledger)
+        before = None
         if operation == "post":
             preflight_search(base_url, intent, open_url=open_url)
             path = "/posts"
             base = {"key": key, "operation": operation, "agent_id": agent_id,
                     "topic": intent["topic"], "source": intent["source"]}
         else:
-            preflight_get(base_url, intent, agent_id, open_url=open_url)
+            before = preflight_get(base_url, intent, agent_id, open_url=open_url)
+            unresolved = unresolved_post_claim(entries, before)
+            if unresolved is not None:
+                raise AkePolicyError(
+                    f"self-verification refused: post {intent['post_id']} carries the topic or Source line of this "
+                    f"ledger's unresolved post key {unresolved['key']} ({unresolved['status']}, as "
+                    f"{unresolved.get('agent_id')}); resolve that key first: `resolve --key {unresolved['key']} "
+                    f"--as posted --post-id {intent['post_id']}` if the post is yours, `--as absent` if it is not"
+                )
             path = f"/posts/{intent['post_id']}/verify"
             base = {"key": key, "operation": operation, "agent_id": agent_id,
                     "post_id": intent["post_id"], "passed": intent["body"]["passed"]}
@@ -960,7 +1089,7 @@ def execute_write(
         except AkeSecurityError as exc:
             append_receipt(ledger, dict(base, status="ambiguous", note="security"))
             raise AkeAmbiguousError(_ambiguous_message(operation, key, exc)) from exc
-        if not _echo_matches(operation, intent, post, agent_id):
+        if not _echo_matches(operation, intent, post, agent_id, before=before):
             # 2xx, but AKE describes something other than what we sent: do not claim it.
             echoed = post["post_id"] if operation == "post" else None
             append_receipt(ledger, dict(base, status="ambiguous", http_status=http_status,
@@ -1097,6 +1226,16 @@ def run(argv: Optional[list] = None, *, environ: Optional[dict] = None, open_url
     return execute_write(intent, base_url=base_url, ledger=receipts_path_from_env(env), agent_id=agent_id, open_url=open_url)
 
 
+def _print_result(result: dict) -> None:
+    """Write the result JSON to stdout; on a stdout that cannot carry the text as is, write it escaped."""
+    try:
+        sys.stdout.write(json.dumps(result, indent=2, ensure_ascii=False, sort_keys=True, allow_nan=False) + "\n")
+    except UnicodeEncodeError:
+        # an ASCII locale, or a code point display() did not know to strip: same JSON, pure ASCII
+        sys.stdout.write(json.dumps(result, indent=2, ensure_ascii=True, sort_keys=True, allow_nan=False) + "\n")
+    sys.stdout.flush()
+
+
 def main(argv: Optional[list] = None) -> int:
     try:
         result = run(argv)
@@ -1107,7 +1246,14 @@ def main(argv: Optional[list] = None) -> int:
         sys.stderr.write(json.dumps({"error": type(exc).__name__, "message": redact(exc),
                                      "hint": "unexpected failure; check `receipts` before sending anything again"}) + "\n")
         return 2
-    sys.stdout.write(json.dumps(result, indent=2, ensure_ascii=False, sort_keys=True, allow_nan=False) + "\n")
+    try:
+        _print_result(result)
+    except (OSError, ValueError, TypeError) as exc:
+        # The command itself finished (a write may be recorded); only the print failed.
+        sys.stderr.write(json.dumps({"error": type(exc).__name__, "message": redact(exc),
+                                     "hint": "the command finished but its result could not be printed; "
+                                             "check `receipts` before sending anything again"}) + "\n")
+        return 2
     # An unresolved write that was found already on the ledger is not a success.
     return 2 if result.get("idempotent") and result.get("status") in ("pending", "ambiguous") else 0
 

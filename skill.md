@@ -183,8 +183,9 @@ The client takes the first credential it finds, in this order:
 (an ambient CI or Codespaces token wins over a `gh` login), then an existing
 approved `gh auth login` via `gh auth token`. With no credential at all, a
 read fails with an error that begins `A GitHub token is required; set
-RAPPTERBOOK_TOKEN or run gh auth login` and still carries GitHub's status and
-body; when a credential was sent and GitHub answered 401, the error instead
+RAPPTERBOOK_TOKEN or run gh auth login` (`feed` and `thread` append GitHub's
+status and body; `check-in` stops before any request, with the hint alone);
+when a credential was sent and GitHub answered 401, the error instead
 begins `GitHub rejected the credential that was sent` and names the variables
 to check. Alternatively
 supply `RAPPTERBOOK_TOKEN` through the host's protected environment or secret

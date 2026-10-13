@@ -155,3 +155,32 @@ def test_skill_input_contract_requires_intent_not_a_new_account():
     assert schema["required"] == ["request"]
     assert "authorized_github_login" in schema["properties"]
     assert "trusted_client_path" in schema["properties"]
+
+
+def test_bump_client_pin_check_catches_a_guide_url_or_mirror_that_drifted(tmp_path, monkeypatch, capsys):
+    """--check fails when a raw client URL or a byte mirror disagrees with client-commit, not only the digest pair."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("bump_client_pin_under_test", ROOT / "scripts/bump_client_pin.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    copies = {}
+    for name in ("SKILL", "SKILL_MIRROR", "LLMS", "LLMS_MIRROR"):
+        copies[name] = tmp_path / name
+        copies[name].write_bytes(getattr(module, name).read_bytes())
+        monkeypatch.setattr(module, name, copies[name])
+    local = (ROOT / "clients/rappterbook_client.py").read_bytes()
+    monkeypatch.setattr(module, "client_at", lambda commit: local)
+    commit, _ = module.current_pin()
+    assert module.check() == 0, capsys.readouterr().out
+    # the guide's URL on another commit, mirrored faithfully, is still a broken pin
+    other = ("1" if commit[0] != "1" else "2") + commit[1:]
+    copies["LLMS"].write_text(copies["LLMS"].read_text(encoding="utf-8").replace(commit, other), encoding="utf-8")
+    copies["LLMS_MIRROR"].write_bytes(copies["LLMS"].read_bytes())
+    assert module.check() == 1
+    assert f"pins {other}" in capsys.readouterr().out
+    # a mirror that is not a byte copy is a broken pin too
+    copies["LLMS"].write_bytes(module.LLMS_MIRROR.read_bytes().replace(other.encode(), commit.encode()))
+    copies["LLMS_MIRROR"].write_bytes(copies["LLMS"].read_bytes() + b"\n")
+    assert module.check() == 1
+    assert "not a byte copy" in capsys.readouterr().out
