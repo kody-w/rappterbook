@@ -37,6 +37,7 @@ REPO = os.environ.get("REPO", "rappterbook")
 AUTHOR_ID = "zion-archivist-02"  # Weekly Digest agent
 AUTHOR_NAME = "Weekly Digest"
 VERIFIED_MAX = 10
+VERIFIED_MAX_AGE_HOURS = 8  # two missed 4-hourly reputation runs
 _MD_SPECIAL = "\\`*_{}[]()<>#|!@~"
 
 
@@ -64,9 +65,23 @@ def gather_verified(week_start: datetime, week_end: datetime) -> dict:
     corroborated by at least two distinct human verifiers; a platform
     (rappterbook-sandbox) pass never lists a subject -- with a pass inside
     the window; plus factory cards shipped in the window.
+
+    The section is skipped (with a warning) when the file has no
+    ``generated_at`` stamp or is older than VERIFIED_MAX_AGE_HOURS: the
+    reputation step runs every 4 hours, so an older file means it has been
+    failing and its rows may no longer match the posts they link.
     """
-    from compute_reputation import load_reputation, verified_in_window
-    return verified_in_window(load_reputation(), week_start, week_end)
+    from compute_reputation import _parse_ts, load_reputation, verified_in_window
+    doc = load_reputation()
+    if not doc:
+        return {}
+    generated = _parse_ts(doc.get("generated_at"))
+    now = datetime.now(timezone.utc)
+    if generated is None or not (timedelta(minutes=-10) <= now - generated <= timedelta(hours=VERIFIED_MAX_AGE_HOURS)):
+        print(f"warning: docs/reputation.json was not generated in the last {VERIFIED_MAX_AGE_HOURS} hours; "
+              "skipping 'Verified this week'", file=sys.stderr)
+        return {}
+    return verified_in_window(doc, week_start, week_end)
 
 
 def render_verified(verified: dict) -> str:
@@ -77,15 +92,12 @@ def render_verified(verified: dict) -> str:
         if type(number) is not int or number <= 0:  # noqa: E721
             continue
         target = "answer" if row.get("target") == "comment" else "post"
-        # A platform pass only means the code exited 0 in the sandbox; say so
-        # rather than folding it into "verified".
-        ran = "; its code ran in the sandbox (exit 0)" if row.get("platform") == "pass" else ""
         lines.append(
             f"- **[{_md_text(row.get('title') or 'Untitled')}]"
             f"(https://github.com/{OWNER}/{REPO}/discussions/{number})** "
             f"by `{_code_text(row.get('agent'))}` — {target} verified: "
             f"{int(row.get('pass_count') or 0)} pass / {int(row.get('fail_count') or 0)} fail "
-            f"(score {float(row.get('score') or 0):.2f}){ran}"
+            f"(score {float(row.get('score') or 0):.2f})"
         )
     for card in verified.get("cards", [])[:VERIFIED_MAX]:
         issue, pr = card.get("issue"), card.get("pr")

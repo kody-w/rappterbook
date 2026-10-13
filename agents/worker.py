@@ -35,6 +35,7 @@ AGENT_ID_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}")
 DEFAULT_AGENT = "zion-coder-01"
 MAX_ISSUES_PER_RUN = 3
 PR_LIST_LIMIT = 100
+ISSUE_LIST_LIMIT = 100
 WORKER_MARKER = "<!-- factory:worker -->"
 CLOSING_RE = re.compile(r"\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?):?\s+(?:#|https://github\.com/"
                         + re.escape(REPO) + r"/issues/)(\d+)\b", re.IGNORECASE)
@@ -44,11 +45,16 @@ SAFE_PATH_RE = re.compile(r"[A-Za-z0-9._/-]+")
 
 # The worker may not write the factory's control plane, the reviewer's gate,
 # pytest's configuration, or code that workflows run with secrets: scripts/,
-# sdk/ and clients/, files at the repository root (a root json.py would
+# sdk/ and clients/, projects/mars-barn/src/ (scripts/mars_barn_live.py puts
+# it first on sys.path in a workflow that holds GH_PAT, so a file there could
+# shadow a stdlib module), files at the repository root (a root json.py would
 # shadow the stdlib for every `python -c`), a new top-level directory, or a
-# top-level __init__.py. agents/reviewer.py blocks PRs that touch these.
-PROTECTED_PREFIXES = (".github/", "agents/", "state/", ".git/", "scripts/", "sdk/", "clients/")
-PROTECTED_FILES = ("scripts/compare_test_regressions.py",)
+# top-level __init__.py. It may not rewrite the generated files the verified
+# newsletter and the board read (docs/reputation.json, docs/board.json)
+# either. agents/reviewer.py blocks PRs that touch these.
+PROTECTED_PREFIXES = (".github/", "agents/", "state/", ".git/", "scripts/", "sdk/", "clients/",
+                      "projects/mars-barn/src/")
+PROTECTED_FILES = ("scripts/compare_test_regressions.py", "docs/reputation.json", "docs/board.json")
 PROTECTED_NAMES = ("conftest.py", "pytest.ini", ".pytest.ini", "pytest.toml", ".pytest.toml",
                    "pyproject.toml", "setup.cfg", "tox.ini")
 
@@ -74,9 +80,17 @@ def trusted_authors():
 
 
 def get_foreman_issues():
-    """Open issues whose title starts with '[Foreman]', oldest first."""
-    issues = gh_json(["issue", "list", "--repo", REPO, "--state", "open", "--limit", "100",
-                      "--search", "Foreman in:title", "--json", "number,title,body,labels,author"]) or []
+    """Open CARD_LABEL issues whose title starts with '[Foreman]', oldest first.
+
+    The label is filtered on the server (only people with triage access can
+    apply it), so outsiders' '[Foreman]' issues cannot crowd the real work
+    orders out of the listing; actionable_issues() still checks the author.
+    """
+    issues = gh_json(["issue", "list", "--repo", REPO, "--state", "open", "--limit", str(ISSUE_LIST_LIMIT),
+                      "--label", CARD_LABEL, "--search", "Foreman in:title",
+                      "--json", "number,title,body,labels,author"]) or []
+    if len(issues) >= ISSUE_LIST_LIMIT:
+        print(f"{len(issues)} open work orders reach the listing limit; building the oldest listed.")
     found = [i for i in issues if str(i.get("title", "")).startswith("[Foreman]")]
     return sorted(found, key=lambda i: i["number"])
 

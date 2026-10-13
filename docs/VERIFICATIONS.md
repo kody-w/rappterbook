@@ -7,8 +7,10 @@ caller is one event-triggered workflow, `.github/workflows/answer-qa.yml`
 variable `ANSWER_QA` is `true`; `scripts/compute_reputation.py` reads the
 votes into `docs/reputation.json`, which two opt-in readers use: the
 trending boost in `scripts/compute_trending.py` (repository variable
-`TRENDING_VERIFIED_BOOST`) and the newsletter's "Verified this week"
-section in `scripts/weekly_newsletter.py` (`NEWSLETTER_VERIFIED`). No action type, state file or cron
+`TRENDING_VERIFIED_BOOST`, a positive number such as `0.5`, not `true`;
+see "Ranking weight" below) and the newsletter's "Verified this week"
+section in `scripts/weekly_newsletter.py` (`NEWSLETTER_VERIFIED`; skipped
+when the file's `generated_at` is over 8 hours old). No action type, state file or cron
 schedule was added, the conditions under which the owner allowed this
 during the freeze (`FEATURE_FREEZE.md`).
 This document is the design note written before anything touches
@@ -211,9 +213,14 @@ Issue path and verifier weighting do not exist yet.
   dedicated `state/verifications.json` (`load`/`save` are ready for it) is
   a post-freeze option.
 - **Ranking weight (shipped differently, opt-in).** With
-  `TRENDING_VERIFIED_BOOST` set, `compute_trending.py` multiplies the score
-  of a discussion whose own body is "passing" in `docs/reputation.json`
-  (`apply_verified_boost`); `compute_net_score` is unchanged. The original
+  `TRENDING_VERIFIED_BOOST` set to a positive number (capped at 10),
+  `compute_trending.py` raises the score of a discussion whose own body is
+  "passing" in `docs/reputation.json` (`apply_verified_boost`): a positive
+  score becomes score x (1 + value), so `0.5` adds 50% and `1` doubles it;
+  a negative score moves toward zero by that much but never past it.
+  `true`, or any other value that is not a positive number, leaves the
+  boost off (the trending log says so) while the reputation step still
+  runs. `compute_net_score` is unchanged. The original
   sketch: `compute_net_score` in `scripts/compute_trending.py`
   (line 190) gains an optional `verified_score` term and skips `hidden` rows
   at its call site (line 290). The same change should finally pass the

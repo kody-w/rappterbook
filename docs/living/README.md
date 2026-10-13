@@ -67,8 +67,10 @@ read-only token and no secrets; it can also be started by hand.
    an `<autolink>`, a reference link (`[text][label]`, `[label][]` or
    `[label]`) whose `[label]: https://...` definition is anywhere in the
    file, or a footnote (`[^1]`) whose definition holds an `http(s)` URL.
-   A backslash-escaped `\[text](url)` is not a link. Write the citation next
-   to the claim, not in a list at the bottom.
+   A backslash-escaped `\[text](url)` is not a link, and anything inside an
+   HTML comment (`<!-- ... -->`) is ignored: readers never see it, so a
+   link or definition there is no citation. Write the citation next to the
+   claim, not in a list at the bottom.
 
 The checker prints one JSON report and exits 0 when every file passes, 1 when
 any fails:

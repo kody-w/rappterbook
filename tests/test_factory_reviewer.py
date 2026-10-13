@@ -366,7 +366,9 @@ def test_failed_writes_make_the_run_fail(reviewer, monkeypatch, tmp_path, capsys
                                   "projects/pytest.toml", "scripts/weekly_newsletter.py",
                                   "scripts/json.py", "sdk/python/rapp.py", "clients/rappterbook_client.py",
                                   "rappterbook_agent.py", "json.py", "json/__init__.py",
-                                  "projects/__init__.py", ".well-known/ai-plugin.json"])
+                                  "projects/__init__.py", ".well-known/ai-plugin.json",
+                                  "projects/mars-barn/src/stringprep.py", "projects/mars-barn/src",
+                                  "docs/reputation.json", "docs/board.json"])
 def test_protected_paths_block_before_the_gate_is_read(reviewer, monkeypatch, tmp_path, path):
     diff = f"diff --git a/{path} b/{path}\n+x\n"
     fake = _review_runner(_pr(files=[]), diff=diff)
@@ -747,9 +749,28 @@ def test_worker_dry_run_writes_nothing(worker, monkeypatch, tmp_path):
                                      (".git", False), (".github", False), ("agents", False),
                                      ("state", False), ("agents/", False), ("tests/conftest.py", False),
                                      ("docs/fixes #2.md", False), ("docs/a`b.md", False),
-                                     ("docs/a b.md", False), ("projects/x\nCloses #1", False)])
+                                     ("docs/a b.md", False), ("projects/x\nCloses #1", False),
+                                     ("projects/mars-barn/src/stringprep.py", False),
+                                     ("projects/mars-barn/src", False), ("projects/mars-barn/x.py", True),
+                                     ("docs/reputation.json", False), ("docs/board.json", False)])
 def test_worker_safe_path(worker, name, ok):
     assert (worker.safe_path(name) is not None) is ok
+
+
+def test_every_repo_dir_a_secret_script_puts_on_sys_path_is_protected(worker, reviewer):
+    """scripts/ run with secrets; a directory they prepend to sys.path can
+    shadow a stdlib module, so the Worker may not write there."""
+    import re
+    pattern = re.compile(r"sys\.path\.insert\(\s*0\s*,\s*str\(\s*(?:ROOT|REPO|REPO_ROOT)((?:\s*/\s*[\"'][^\"']+[\"'])+)")
+    found = set()
+    for path in sorted((ROOT / "scripts").rglob("*.py")):
+        for match in pattern.finditer(path.read_text(encoding="utf-8", errors="replace")):
+            found.add("/".join(re.findall(r"[\"']([^\"']+)[\"']", match.group(1))))
+    assert "projects/mars-barn/src" in found
+    for directory in found:
+        probe = f"{directory}/stringprep.py"
+        assert worker.safe_path(probe) is None, directory
+        assert reviewer.protected_paths({"files": [{"path": probe}]}, "") == [probe], directory
 
 
 def test_worker_agent_line_credits_the_persona_in_reputation(worker, monkeypatch):
@@ -779,6 +800,8 @@ def test_worker_workflow_uses_reviewed_branch_prefix_and_body_file():
 # --- Foreman --------------------------------------------------------------
 
 def _foreman_runner(existing):
+    """Existing issues are the owner's labelled work orders unless they say otherwise."""
+    existing = [dict({"labels": list(CARD), "author": dict(OWNER)}, **i) for i in existing]
     return FakeRunner([(["gh", "issue", "list"], _proc(json.dumps(existing))),
                        (["gh", "issue", "create"], _proc("https://github.com/x/y/issues/9\n"))])
 
@@ -878,6 +901,33 @@ def test_foreman_never_resends_posts_a_work_order_came_from(foreman, monkeypatch
     assert [p["number"] for p in sent[0]] == [8]
     body = fake.find("gh", "issue", "create")[0]
     assert "<!-- factory-posts:8 -->" in body[body.index("--body") + 1]
+
+
+def test_foreman_dedupe_ignores_issues_that_are_not_trusted_work_orders(foreman, monkeypatch):
+    claim = "x\n<!-- factory-posts:" + ",".join(str(n) for n in range(1, 20001)) + " -->"
+    fp = foreman.fingerprint("Heater fix")
+    spoofs = [{"number": 1, "title": "[Foreman] Heater fix", "state": "OPEN", "author": {"login": "outsider"},
+               "body": f"{claim}\n<!-- factory-fingerprint:{fp} -->"},
+              {"number": 2, "title": "[Foreman] Heater fix", "state": "CLOSED", "labels": [],
+               "body": claim}]
+    fake = _foreman_runner(spoofs)
+    monkeypatch.setattr(subprocess, "run", fake)
+    used = foreman.existing_work_orders()
+    assert used == (set(), set(), set())
+    listing = fake.find("gh", "issue", "list")[0]
+    assert listing[listing.index("--label") + 1] == foreman.CARD_LABEL and "author" in listing[-1]
+    assert [p["number"] for p in foreman.fresh_posts(_posts(*range(15000, 15010)), used[2])] == list(range(15005, 15010))
+    assert foreman.create_github_issue("Heater fix", "spec", apply=True) == "created"
+    monkeypatch.setenv("FACTORY_CARD_AUTHORS", "outsider")
+    assert foreman.create_github_issue("Heater fix", "spec", apply=True) == "duplicate"
+
+
+def test_worker_lists_only_labelled_cards(worker, monkeypatch):
+    fake = FakeRunner([(["gh", "issue", "list"], _proc(json.dumps([_card(1)])))])
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert [i["number"] for i in worker.get_foreman_issues()] == [1]
+    listing = fake.find("gh", "issue", "list")[0]
+    assert listing[listing.index("--label") + 1] == worker.CARD_LABEL
 
 
 def test_foreman_dry_run_and_unreadable_issues_never_create(foreman, monkeypatch):

@@ -113,8 +113,15 @@ class TestCards:
         assert rep.agent_line("Agent: `zion-x_1`") == "zion-x_1"
 
     def test_closing_issues_reference_path(self):
-        doc = build([issue(2)], [pr(11, author="bob", closes=[2])])
+        unfetched = issue(2)
+        del unfetched["closedByPullRequestsReferences"]
+        doc = build([unfetched], [pr(11, author="bob", closes=[2])])
         assert [c["issue"] for c in doc["shipped_cards"]] == [2]
+
+    def test_fetched_empty_references_mean_no_closing_pr(self):
+        # closed by hand: a PR that later says "Closes #2" did not ship it
+        doc = build([issue(2)], [pr(11, author="bob", closes=[2])])
+        assert doc["shipped_cards"] == []
 
     def test_unmerged_pr_does_not_ship(self):
         doc = build([issue(1, closers=[10])], [pr(10, merged=False)])
@@ -746,12 +753,40 @@ class TestNewsletterVerified:
         assert "Card \\*bold\\*" in section and "pull/10" in section
         assert "ran in the sandbox" not in section
 
-    def test_newsletter_says_the_code_ran_rather_than_folding_it_into_verified(self, monkeypatch):
+    def test_newsletter_never_claims_the_code_ran(self, monkeypatch):
         import weekly_newsletter
         payload = verified_payload()
         payload["discussions"][0]["platform"] = "pass"
         section = weekly_newsletter.render_verified(payload)
-        assert "verified: 2 pass / 0 fail" in section and "its code ran in the sandbox (exit 0)" in section
+        assert "verified: 2 pass / 0 fail" in section and "sandbox" not in section
+
+    def test_newsletter_skips_a_stale_or_unstamped_reputation_file(self, monkeypatch, tmp_path, capsys):
+        import weekly_newsletter
+        from datetime import timedelta
+        path = _reputation_with_passing(tmp_path, 101)
+        monkeypatch.setenv("REPUTATION_JSON", str(path))
+        doc = json.loads(path.read_text())
+        now = datetime.now(timezone.utc)
+        start, end = now - timedelta(days=3650), now + timedelta(days=1)
+        stamp = lambda t: t.strftime("%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
+        for generated, listed in ((None, False), (stamp(now - timedelta(hours=9)), False),
+                                  (stamp(now + timedelta(hours=1)), False),
+                                  (stamp(now - timedelta(hours=3)), True)):
+            doc.pop("generated_at", None)
+            if generated:
+                doc["generated_at"] = generated
+            path.write_text(rep.dumps(doc))
+            got = weekly_newsletter.gather_verified(start, end)
+            assert bool(got.get("discussions")) is listed, generated
+            if not listed:
+                assert "skipping 'Verified this week'" in capsys.readouterr().err
+
+    def test_main_stamps_generated_at(self, tmp_path):
+        fixture = tmp_path / "in.json"
+        fixture.write_text(json.dumps({"issues": [], "pull_requests": [], "discussions": []}))
+        out = tmp_path / "rep.json"
+        assert rep.main(["--input", str(fixture), "--out", str(out), "--repo", REPO]) == 0
+        assert rep._parse_ts(json.loads(out.read_text())["generated_at"]) is not None
 
     def test_newsletter_enabled_with_nothing_verified_is_unchanged(self, monkeypatch):
         import weekly_newsletter
@@ -766,7 +801,9 @@ class TestNewsletterVerified:
         import weekly_newsletter
         issues, prs, discs = sample_inputs()
         path = tmp_path / "reputation.json"
-        path.write_text(rep.dumps(build(issues, prs, discs)))
+        doc = build(issues, prs, discs)
+        doc["generated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        path.write_text(rep.dumps(doc))
         monkeypatch.setenv("REPUTATION_JSON", str(path))
         start = datetime(2026, 10, 6, tzinfo=timezone.utc)
         end = datetime(2026, 10, 13, tzinfo=timezone.utc)
@@ -875,6 +912,21 @@ class TestTrendingVerifiedBoost:
         assert compute_trending.apply_verified_boost(-3.0, 1.0) == 0.0
         assert compute_trending.apply_verified_boost(-5.86, 0.5) > -5.86
         assert compute_trending.apply_verified_boost(4.0, 1.5) == 10.0
+
+    def test_boost_never_turns_a_negative_score_positive(self):
+        import compute_trending
+        assert compute_trending.apply_verified_boost(-100.0, 10.0) == 0.0
+        assert compute_trending.apply_verified_boost(-5.0, 2.0) == 0.0
+        assert compute_trending.apply_verified_boost(-54.0, compute_trending.VERIFIED_BOOST_MAX) == 0.0
+
+    def test_boost_value_must_be_a_number(self, monkeypatch, capsys):
+        import compute_trending
+        monkeypatch.setenv("TRENDING_VERIFIED_BOOST", "true")
+        assert compute_trending.verified_boost() == 0.0
+        assert "not a positive number" in capsys.readouterr().err
+        monkeypatch.setenv("TRENDING_VERIFIED_BOOST", "0.5")
+        assert compute_trending.verified_boost() == 0.5
+        assert compute_trending.apply_verified_boost(10.0, 0.5) == 15.0
 
     def test_huge_boost_is_capped_and_stays_finite(self, monkeypatch):
         import compute_trending

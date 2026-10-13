@@ -68,12 +68,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
       # docs/reputation.json feeds two opt-in readers: the trending boost
-      # (repo variable TRENDING_VERIFIED_BOOST) and the newsletter's
+      # (repo variable TRENDING_VERIFIED_BOOST: a positive number capped at 10;
+      # a verified post's score becomes score * (1 + value), so 0.5 adds 50%;
+      # 'true' or any non-number leaves the boost off) and the newsletter's
       # 'Verified this week' section (NEWSLETTER_VERIFIED == 'true'). It is
       # built only when one of them is set, so default runs are unchanged.
       # The previous run's file is still in the checkout, so when this step
       # fails, trending is pointed at a path that does not exist and runs
-      # without the boost; the newsletter keeps reading the last committed file.
+      # without the boost; the newsletter reads the last committed file and
+      # skips its section once that file's generated_at is over 8 hours old.
       - name: Compute reputation from verified work
         id: reputation
         if: ${{ vars.TRENDING_VERIFIED_BOOST != '' || vars.NEWSLETTER_VERIFIED == 'true' }}

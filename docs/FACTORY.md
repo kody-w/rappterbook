@@ -3,8 +3,8 @@
 The factory is the repo's engineering loop, modelled on
 [super-board](https://github.com/EricTechPro/super-board): work arrives as
 GitHub issues ("cards"), moves through lanes, and merges only behind a gate.
-Every lane runs in an existing workflow, defaults to a dry run, and caps its
-writes per run. No action, state file or schedule was added for it
+Every automated lane runs in an existing workflow; every lane defaults to
+a dry run and caps its writes per run. No action, state file or schedule was added for it
 (`FEATURE_FREEZE.md`).
 
 ## Columns
@@ -36,12 +36,14 @@ variable is set.
   threads into `[Foreman]` issues. Each issue records the post numbers it
   came from; later runs only show the LLM newer posts, and skip the LLM when
   there are none, so a reworded title cannot reopen the same work. It also
-  skips titles that match an existing `[Foreman]` issue, open or closed.
-  Every work order is labelled `factory:card`.
+  skips titles that match an existing work order, open or closed. Every
+  work order is labelled `factory:card`, and this dedupe reads only
+  `factory:card` issues opened by a trusted author (the same rule as the
+  Build lane), so an outsider's `[Foreman]` issue cannot stall it.
   `scripts/collect_cards.py` (a step in glitch-report.yml) turns signals
   the repo already writes into `factory:collected` issues.
 - **Build**: `agents/worker.py` (auto-worker.yml) takes open `[Foreman]`
-  issues that are labelled `factory:card`, were opened by a trusted author
+  issues that are labelled `factory:card` (it lists only that label), were opened by a trusted author
   (the repository owner, whose token the Foreman uses, or a login in
   `FACTORY_CARD_AUTHORS`), are not claimed by an open same-repo PR and have
   no `factory:blocked` label. Anyone can title an issue `[Foreman] ...`, and
@@ -57,8 +59,10 @@ variable is set.
   titles stay out of it.
 - **QA and Review**: `agents/reviewer.py` (auto-reviewer.yml) acts only on
   same-repo `worker-auto-pr-*` PRs.
-- **Retro**: `scripts/factory_retro.py` records each closed card in
-  `docs/FACTORY_LESSONS.md`. It uses the card's `Error:` line when the card
+- **Retro**: run by hand; no workflow runs it. `python
+  scripts/factory_retro.py` prints what it would record and `--apply`
+  records each closed card in `docs/FACTORY_LESSONS.md`, so an empty file
+  means nobody has run it, not that no card closed. It uses the card's `Error:` line when the card
   has one.
 
 ## The merge gate
@@ -86,8 +90,11 @@ The review job merges a Worker PR only when all of these hold:
    candidate report and, if it ran in the baseline, is not skipped or
    xfailed in the candidate.
 2. The diff, fetched pinned to the PR's base and head SHAs, leaves
-   `.github/`, `agents/`, `state/`, `scripts/`, `sdk/`, `clients/`
-   (code that workflows run with secrets), files at the repository root,
+   `.github/`, `agents/`, `state/`, `scripts/`, `sdk/`, `clients/` and
+   `projects/mars-barn/src/` (code that workflows run with secrets; the
+   last is put first on `sys.path` by `scripts/mars_barn_live.py`),
+   `docs/reputation.json` and `docs/board.json` (which the newsletter and
+   the board read), files at the repository root,
    new or hidden top-level directories, top-level `__init__.py` files and
    pytest's configuration (`conftest.py`, `pytest.ini`, `.pytest.ini`,
    `pytest.toml`, `.pytest.toml`, `pyproject.toml`, `setup.cfg`,
@@ -101,8 +108,11 @@ The review job merges a Worker PR only when all of these hold:
    gates it again.
 
 The merge is pinned with `gh pr merge --match-head-commit <gated sha>`, so a
-push made after the review cannot be merged. Each outcome is commented at most once
-per head SHA. A failed comment or merge fails the job.
+push made after the review cannot be merged. The merge runs straight after
+the re-read in condition 4 and the approval is commented after it; GitHub
+cannot pin the base, so a code commit landing on main in that short
+window is not re-gated. Each outcome is commented at most once per head
+SHA. A failed comment or merge fails the job.
 
 The gate catches honest regressions only. Its reports come from a job that
 ran the PR's code, so a malicious PR can forge them; the gate is a quality
@@ -174,5 +184,5 @@ you set it.
 | `COLLECT_CARDS=true` | The glitch-report workflow runs the collector with `--apply` after the daily report (5 cards per run at most) |
 | `FACTORY_PROJECT=owner/number` | The live board is `kody-w/1`. The collector and the Foreman add new cards to that Project (Status, Platform and Source set), and the static API workflow exports the board. A value they cannot parse is reported and ignored; the cards are still filed. |
 | `FACTORY_BOARD_REPOS=owner/name,...` | Repositories whose items the board export publishes (default: this repository). The Project's Platform field also covers Rappterverse and Mars Barn; their items are dropped from `docs/board.json` unless their repositories are listed here. |
-| secret `COLLECT_CARDS_TOKEN` | Token for the collector (issues write, plus the `project` scope to add cards to the Project and set their fields). The Foreman uses `GH_TOKEN`, which needs the same scope for the board. Without it the default token files the issues; the first Project failure, whatever its message, makes the collector report `skipped: <reason>` and stop trying the board for that run. |
+| secret `COLLECT_CARDS_TOKEN` | Token for the collector (issues write, plus the `project` scope to add cards to the Project and set their fields). The Foreman uses `GH_TOKEN`, which needs the same scope for the board. Without it the default token files the issues; the first Project failure, whatever its message, makes the collector report `skipped: <reason>` and stop trying the board for that run. Later runs never retry: an issue filed while the board failed (the Foreman's too) stays off the Project until someone adds it with `gh project item-add 1 --owner kody-w --url <issue URL>`. |
 | secret `FACTORY_PROJECT_TOKEN` | `read:project` token for the board export |

@@ -259,7 +259,7 @@ def _closing_prs(issue: dict, prs_by_number: Dict[int, dict], repo: str) -> List
         if number is None or (prefix and isinstance(url, str) and not url.startswith(prefix)):
             continue  # a fork's or another repository's PR is not this repo's fix
         numbers.add(number)
-    if not own_refs:
+    if "closedByPullRequestsReferences" not in issue:  # not fetched; [] means none
         issue_number = issue.get("number")
         for number, pr in prs_by_number.items():
             for ref in _list(pr.get("closingIssuesReferences")):
@@ -277,8 +277,8 @@ def build_cards(issues: Iterable[dict], prs: Iterable[dict], repo: str, services
     """Return ``{"shipped": [...], "bounced": [...]}`` from factory issues and PRs.
 
     A card is an issue with any ``factory:*`` label or a title starting with
-    ``[Foreman]`` (the foreman files its cards unlabelled, as
-    factory_retro.py assumes). Shipped means closed as completed (not as
+    ``[Foreman]`` (work orders filed before the foreman labelled them
+    factory:card have no label, as factory_retro.py assumes). Shipped means closed as completed (not as
     not-planned or duplicate) by a merged PR of this repository.
     """
     prs_by_number: Dict[int, dict] = {}
@@ -810,7 +810,7 @@ def fetch_live(runner: Runner, repo: str, limit: int, timeline: bool = True,
         for item in data:
             if isinstance(item, dict) and _int(item.get("number")):
                 issues[item["number"]] = item
-    # The foreman files its cards unlabelled: find them by title.
+    # Older foreman cards are unlabelled: find them by title too.
     data = _gh_json(runner, ["issue", "list", "--repo", repo, "--state", "all", "--search",
                              f'in:title "{FOREMAN_TITLE_PREFIX}"', "--limit", str(limit),
                              "--json", ISSUE_FIELDS])
@@ -901,7 +901,10 @@ def main(argv: Optional[List[str]] = None, runner: Optional[Runner] = None) -> i
             issues, prs = fetch_live(runner or default_runner, args.repo, max(1, args.limit),
                                      timeline=not args.no_timeline, coverage=coverage)
             discussions = load_local_discussions(args.state_dir)
-        text = dumps(build_reputation(issues, prs, discussions, repo=args.repo, coverage=coverage))
+        doc = build_reputation(issues, prs, discussions, repo=args.repo, coverage=coverage)
+        # When this was built: the newsletter skips a file that has stopped refreshing.
+        doc["generated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        text = dumps(doc)
     except ReputationError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1

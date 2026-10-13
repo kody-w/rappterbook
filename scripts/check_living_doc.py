@@ -91,6 +91,7 @@ LIST_ITEM = re.compile(r"^\s*(?:[-*+]|\d{1,9}[.)])\s+")
 SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"'(\[*_])")
 DIGIT = re.compile(r"\d")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+HTML_COMMENT = re.compile(r"<!--.*?-->", re.S)
 
 Fetcher = Callable[[str], int]
 
@@ -427,6 +428,13 @@ def _has_citation(paragraph: str, refs: Optional[Dict[str, bool]] = None) -> boo
     return any(re.search(r"https?://", m.group("text")) for m in FOOTNOTE_DEF.finditer(text))
 
 
+def strip_html_comments(body: str) -> str:
+    """Drop ``<!-- ... -->`` comments, which readers never see, keeping each
+    comment's line breaks so line numbers stay right: a link or reference
+    definition inside one is no citation and no checked link."""
+    return HTML_COMMENT.sub(lambda m: "\n" * m.group(0).count("\n"), body)
+
+
 def check_citations(body: str, first_line: int) -> List[Dict[str, object]]:
     """Rule 4: numeric/date sentences need a citation link in their paragraph."""
     errors = []
@@ -653,6 +661,7 @@ def check_text(
     checked: List[str] = []
     try:
         meta, body, first_line, errors = split_front_matter(text)
+        body = strip_html_comments(body)
         if meta is not None:
             errors += check_front_matter(meta)
             errors += check_freshness(meta, today)

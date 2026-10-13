@@ -71,12 +71,16 @@ SHA_RE = re.compile(r"[0-9a-f]{40}")
 
 # Paths a worker PR may never change: the factory's own control plane, the
 # gate it is judged by, pytest's configuration (which could switch tests
-# off), and code that workflows run with secrets (scripts/, sdk/, clients/,
-# files at the repository root, a new top-level directory or a top-level
-# __init__.py, either of which could shadow a module for `python -c`). A PR
-# touching them, or deleting a test file, is left open for a human.
-PROTECTED_PREFIXES = (".github/", "agents/", "state/", "scripts/", "sdk/", "clients/")
-PROTECTED_FILES = ("scripts/compare_test_regressions.py",)
+# off), code that workflows run with secrets (scripts/, sdk/, clients/,
+# projects/mars-barn/src/, which scripts/mars_barn_live.py puts first on
+# sys.path under GH_PAT, files at the repository root, a new top-level
+# directory or a top-level __init__.py, either of which could shadow a module
+# for `python -c`), and the generated files the verified newsletter and the
+# board read. A PR touching them, or deleting a test file, is left open for a
+# human.
+PROTECTED_PREFIXES = (".github/", "agents/", "state/", "scripts/", "sdk/", "clients/",
+                      "projects/mars-barn/src/")
+PROTECTED_FILES = ("scripts/compare_test_regressions.py", "docs/reputation.json", "docs/board.json")
 PROTECTED_NAMES = ("conftest.py", "pytest.ini", ".pytest.ini", "pytest.toml", ".pytest.toml",
                    "pyproject.toml", "setup.cfg", "tox.ini")
 
@@ -515,12 +519,13 @@ def protected_paths(pr, diff):
     blocked = set()
     for path, removed in seen:
         if (path.startswith(PROTECTED_PREFIXES) or path in PROTECTED_FILES
+                or path in {p.rstrip("/") for p in PROTECTED_PREFIXES}
                 or os.path.basename(path) in PROTECTED_NAMES
                 or _outside_worker_area(path)
                 or (removed and path.startswith("tests/"))):
             blocked.add(path)
     # Belt and braces for header lines the parser above could misread.
-    for match in re.finditer(r'^(?:diff --git|---|\+\+\+).*?[\s"][ab]/((?:\.github|agents|state|scripts|sdk|clients)/\S*)',
+    for match in re.finditer(r'^(?:diff --git|---|\+\+\+).*?[\s"][ab]/((?:\.github|agents|state|scripts|sdk|clients|projects/mars-barn/src)/\S*)',
                              diff, re.MULTILINE):
         blocked.add(match.group(1).rstrip('"'))
     return sorted(blocked)
@@ -654,11 +659,14 @@ class Review:
                          "being reviewed; not merging. The next run re-gates it.")
             return "stale"
 
-        self.comment(pr, sha, "approved", f"Factory review: approved `{sha}`.\n\nGate: {evidence}\n\n"
-                     f"{inert(decision['comment'])}")
+        # Merge straight after that re-read; the approval is commented after
+        # the merge, so no write sits between the drift check and the merge.
+        approval = (f"Factory review: approved `{sha}`.\n\nGate: {evidence}\n\n"
+                    f"{inert(decision['comment'])}")
         merge = ["gh", "pr", "merge", str(number), "--repo", REPO, "--squash",
                  "--delete-branch", "--match-head-commit", sha]
         if not self.apply:
+            self.comment(pr, sha, "approved", approval)
             log(f"[DRY RUN] Would run: {' '.join(merge)}")
             return "would_merge"
         result = run(merge)
@@ -666,6 +674,7 @@ class Review:
             self.write_failed = True
             log(f"PR #{number}: merge refused: {result.stderr.strip()}")
             return "merge_failed"
+        self.comment(pr, sha, "approved", approval)
         log(f"PR #{number}: merged at {sha}.")
         return "merged"
 

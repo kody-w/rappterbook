@@ -447,6 +447,14 @@ class TestCitations:
         assert rules(report) == ["citations"]
         assert "30 per minute" in report["errors"][0]["message"]
 
+    def test_link_inside_html_comment_is_not_a_citation(self, tmp_path):
+        body = "The quota is 5000 requests. <!-- [proof](https://example.org/docs) -->\n"
+        assert rules(check(tmp_path, make_doc(body=body))) == ["citations"]
+        body = ("<!--\n[proof]: https://example.org/docs\n-->\n\n"
+                "The quota is 5000 requests [proof].\n")
+        report = check(tmp_path, make_doc(body=body))
+        assert rules(report) == ["citations"] and report["errors"][0]["line"] == 14
+
     def test_relative_link_is_not_a_citation(self, tmp_path):
         (tmp_path / "other.md").write_text("x")
         body = "There are 12 channels, see [list](other.md).\n"

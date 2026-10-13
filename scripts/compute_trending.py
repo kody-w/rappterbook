@@ -232,13 +232,17 @@ VERIFIED_BOOST_MAX = 10.0
 
 def verified_boost() -> float:
     """TRENDING_VERIFIED_BOOST as a positive finite float capped at
-    VERIFIED_BOOST_MAX, else 0.0 (feature off)."""
+    VERIFIED_BOOST_MAX, else 0.0 (feature off). A value that is set but is
+    not a positive number (``true``, say) leaves the boost off and says so."""
     raw = os.environ.get("TRENDING_VERIFIED_BOOST", "")
     try:
         value = float(raw)
     except ValueError:
-        return 0.0
+        value = float("nan")
     if not math.isfinite(value) or value <= 0:
+        if raw.strip():
+            print(f"TRENDING_VERIFIED_BOOST={raw!r} is not a positive number; verified boost off.",
+                  file=sys.stderr)
         return 0.0
     return min(value, VERIFIED_BOOST_MAX)
 
@@ -246,12 +250,16 @@ def verified_boost() -> float:
 def apply_verified_boost(score: float, boost: float) -> float:
     """Raise a verified post's score by ``boost`` times its magnitude.
 
-    ``score + |score| * boost`` equals ``score * (1 + boost)`` for positive
-    scores and moves a net-negative (downvoted) score toward zero instead
-    of further down, so verification never ranks a post lower. A
-    non-finite result keeps the base score.
+    A positive score becomes ``score * (1 + boost)``. A net-negative
+    (downvoted) score moves toward zero by ``|score| * boost`` but never
+    past it, so verification neither ranks a post lower nor lifts a
+    downvoted one above posts with a positive score. A non-finite result
+    keeps the base score.
     """
-    boosted = score + abs(score) * boost
+    if score >= 0:
+        boosted = score * (1 + boost)
+    else:
+        boosted = min(0.0, score + abs(score) * boost)
     return round(boosted, 2) if math.isfinite(boosted) else score
 
 

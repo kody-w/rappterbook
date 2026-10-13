@@ -5,7 +5,10 @@ The Foreman monitors `r/code`. When it detects a problem or idea that requires
 engineering work, it synthesizes the thread into a structured GitHub Issue
 ready for the Worker swarm to pick up.
 
-Dedupe, against every [Foreman] issue, open or closed:
+Dedupe, against every work order, open or closed: a [Foreman] issue
+labelled CARD_LABEL and opened by a trusted author (the same rule the Worker
+applies: the repository owner plus FACTORY_CARD_AUTHORS). Anyone can title
+an issue [Foreman], so other issues never feed the dedupe:
 - by source: each issue records the r/code post numbers it was drawn from
   (`<!-- factory-posts:... -->`). Only newer posts are sent to the LLM, and
   when there are none the LLM is not called at all, so rewording cannot
@@ -62,16 +65,27 @@ def fingerprint(title):
     return hashlib.sha256(normalize_title(title).encode("utf-8")).hexdigest()[:16]
 
 
+def trusted_authors():
+    """Logins whose work orders count: the repository owner (whose token the
+    Foreman uses) plus FACTORY_CARD_AUTHORS. Same rule as agents/worker.py."""
+    extra = os.getenv("FACTORY_CARD_AUTHORS", "")
+    logins = {REPO.split("/")[0]} | {x for x in extra.split(",")}
+    return {x.strip().lower() for x in logins if x.strip()}
+
+
 def existing_work_orders():
-    """(normalized titles, fingerprints, source post numbers) of [Foreman]
-    issues, open and closed.
+    """(normalized titles, fingerprints, source post numbers) of work orders,
+    open and closed: [Foreman] issues labelled CARD_LABEL and opened by a
+    trusted author. Only people with triage access can apply that label, so
+    an outsider's issues can neither fill the listing nor feed the dedupe.
 
     Returns None when GitHub cannot be read or the listing reaches LIST_LIMIT
     (older matches could be missing), so the caller fails closed.
     """
     result = subprocess.run(
         ["gh", "issue", "list", "--repo", REPO, "--state", "all", "--limit", str(LIST_LIMIT),
-         "--search", "Foreman in:title", "--json", "number,title,body,state"],
+         "--label", CARD_LABEL, "--search", "Foreman in:title",
+         "--json", "number,title,body,state,author,labels"],
         capture_output=True, text=True, check=False)
     if result.returncode != 0:
         print(f"gh issue list failed: {result.stderr.strip()}")
@@ -85,9 +99,14 @@ def existing_work_orders():
     if len(issues) >= LIST_LIMIT:
         print(f"{len(issues)} [Foreman] issues reach the listing limit; dedupe would be incomplete.")
         return None
+    trusted = trusted_authors()
     titles, prints, posts = set(), set(), set()
     for issue in issues:
         if not isinstance(issue, dict) or not str(issue.get("title", "")).startswith(TITLE_PREFIX.strip()):
+            continue
+        labels = {str(l.get("name", "")) for l in issue.get("labels") or [] if isinstance(l, dict)}
+        author = issue.get("author") if isinstance(issue.get("author"), dict) else {}
+        if CARD_LABEL not in labels or str(author.get("login") or "").strip().lower() not in trusted:
             continue
         body = str(issue.get("body") or "")
         titles.add(normalize_title(issue["title"]))
