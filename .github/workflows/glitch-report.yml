@@ -11,6 +11,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   report:
@@ -30,3 +31,16 @@ jobs:
       - name: Commit report
         run: |
           bash scripts/safe_commit.sh "chore: daily glitch report [skip ci]" state/glitch_report.json state/glitch_history.json
+
+      # Backlog collector (docs/FACTORY.md). Off unless the repo variable
+      # COLLECT_CARDS is 'true'. Files at most 5 deduplicated issues per run;
+      # FACTORY_PROJECT (owner/number, as for the board export) also adds them
+      # to that Project when COLLECT_CARDS_TOKEN has the project scope; with
+      # the default token that part is skipped and the issues are still filed.
+      - name: Collect Backlog cards
+        if: ${{ vars.COLLECT_CARDS == 'true' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.COLLECT_CARDS_TOKEN || github.token }}
+          FACTORY_PROJECT: ${{ vars.FACTORY_PROJECT }}
+        run: python scripts/collect_cards.py --apply ${FACTORY_PROJECT:+--project "$FACTORY_PROJECT"}

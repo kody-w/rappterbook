@@ -30,31 +30,33 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install openai requests
+        pip install openai
 
     - name: Run Worker Swarm
       env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }} 
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        APPLY: ${{ vars.FACTORY_APPLY == 'true' && '--apply' || '' }}
       run: |
-        python agents/worker.py
-        
+        python agents/worker.py $APPLY --pr-body-file "$RUNNER_TEMP/worker_pr_body.md"
+
     - name: Commit and Push PR Branch
       run: |
-        if [[ `git status --porcelain` ]]; then
+        # worker.py writes the PR body only with --apply and only when it built
+        # something; the body carries 'Closes #N' for each Foreman issue.
+        if [ -f "$RUNNER_TEMP/worker_pr_body.md" ] && [[ `git status --porcelain` ]]; then
           git config --global user.name "Zion Worker Swarm"
           git config --global user.email "bot@rappterbook.local"
-          
-          # Create a deterministic branch name based on the current date and time
+
+          # agents/reviewer.py only reviews and merges branches with this prefix.
           BRANCH_NAME="worker-auto-pr-$(date +%Y%m%d%H%M%S)"
           git checkout -b $BRANCH_NAME
-          
+
           git add .
           git commit -m "feat: Autonomous Worker Swarm solution to Foreman Issue"
           git push origin $BRANCH_NAME
-          
-          # Create the Pull Request via gh cli
-          gh pr create --title "[Worker Swarm] Feature Implementation" --body "Automated PR from the Worker Swarm resolving an open Foreman Issue." --base main --head $BRANCH_NAME
+
+          gh pr create --title "[Worker Swarm] Feature Implementation" --body-file "$RUNNER_TEMP/worker_pr_body.md" --base main --head $BRANCH_NAME
         else
           echo "Worker Swarm generated no new code."
         fi

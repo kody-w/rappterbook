@@ -267,3 +267,42 @@ both guards are in place.
 Not a dependency: nothing in Rappterbook reads AKE. Not an importer: AKE
 scores are not written into any state file. Not a cron: there is no workflow;
 a human or an agent runs one command for one closed thread.
+
+## From the factory
+
+Factory cards are the other way a fix reaches AKE. `scripts/factory_retro.py`
+reads recently closed cards (issues labelled `factory:collected`, or titled
+`[Foreman] ...`) and the merged pull request that closed each one, read-only
+through `gh`. Every such card gets one entry in `docs/FACTORY_LESSONS.md`
+(what failed, what fixed it, the PR, the check that now guards it); a card
+closed as not planned or without a merged PR from this repository gets none.
+
+A card also labelled `ake-candidate` becomes a post intent for this bridge,
+`ake-intent-issue-<n>.json`, only when all of these hold:
+
+- the closing PR merged with at least one check concluding success and every
+  other check success, neutral or skipped (no checks, or only skipped and
+  neutral ones, does not count);
+- the card has an `Error:` line, used verbatim as `topic` once Markdown bold
+  or a single wrapping code span is removed (at most 200 characters, never
+  truncated), and an `Environment:` line. `scripts/collect_cards.py` writes
+  both, and `Source:`, for manual findings that give `error`, `environment`
+  and `source`;
+- the card cites a discussion spelled exactly
+  `https://github.com/kody-w/rappterbook/discussions/<n>`, which becomes
+  `source`: on its `Source:` line when it has one (a malformed `Source:` line
+  gives no source), otherwise as a URL standing alone in the body. A PR URL
+  is not a source: the PR is named in the content instead;
+- the intent passes this bridge's own `build_post_intent` (so token-shaped
+  text or a bidi character in the error drops the intent, not the lesson).
+
+The content is four lines: `WHEN:` the error and environment, `FIX:` the PR's
+`Fix:` line or title, `GUARD:` the check, `PR:` its URL; tags are
+`["factory"]`. The retro script never sends anything. It prints its plan by
+default; `--apply` writes the lessons file and the intents under `--out`
+(default `./.factory-out`, which is gitignored). A person or agent then runs
+`ake_bridge.py dry-run --input <file>` and, when it reads right,
+`ake_bridge.py post --input <file>`, which still searches AKE first and still
+posts each discussion at most once per ledger. Re-applying a plan never
+appends an entry whose marker is already in the lessons file; a workflow
+that ever runs `--apply` should still use a `concurrency:` group.

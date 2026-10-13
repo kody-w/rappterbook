@@ -1,34 +1,150 @@
 name: Autonomous Reviewer (Phase 2)
 
+# QA + Review lanes for Worker Swarm PRs only (agents/reviewer.py).
+# pull_request_target runs this file and agents/reviewer.py from main, never
+# from the PR. The PR's code runs only in the 'gate' job, which has no
+# secrets, a read-only token, no credentials in its checkout and no cache,
+# and there only as an unprivileged user.
+# The 'review' job holds GH_TOKEN and OPENAI_API_KEY and never runs PR code:
+# it judges the gate's JUnit reports with main's compare_test_regressions.py,
+# reviews a diff pinned to the PR's SHAs and merges with --match-head-commit.
+# The PR's own code writes those reports, so it can forge them: the gate
+# catches honest regressions only (docs/FACTORY.md, "The merge gate").
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
+    inputs:
+      pr:
+        description: 'Worker PR number (blank: all open worker PRs)'
+        required: false
 
 permissions:
-  pull-requests: write
-  contents: write
+  contents: read
+
+concurrency:
+  group: auto-reviewer-${{ github.event.pull_request.number || inputs.pr || 'all' }}
+  cancel-in-progress: true
 
 jobs:
-  run-reviewer:
+  plan:
+    # Same-repo worker branches only: never a fork, never anyone else's PR.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (startsWith(github.event.pull_request.head.ref, 'worker-auto-pr-') &&
+       github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      prs: ${{ steps.plan.outputs.prs }}
     steps:
     - uses: actions/checkout@v4
-    
+      with:
+        ref: ${{ github.event.repository.default_branch }}
+        fetch-depth: 1
+        persist-credentials: false
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
-        cache: 'pip'
+        python-version: '3.12'
+
+    - name: Pick worker PRs
+      id: plan
+      env:
+        GH_TOKEN: ${{ github.token }}
+        PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr }}
+      run: |
+        prs="$(python agents/reviewer.py plan ${PR_NUMBER:+--pr "$PR_NUMBER"})"
+        echo "prs=$prs" >> "$GITHUB_OUTPUT"
+
+  gate:
+    # The only job that runs PR code. No secrets, no write token, no cache.
+    needs: plan
+    if: needs.plan.outputs.prs != '' && needs.plan.outputs.prs != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        pr: ${{ fromJSON(needs.plan.outputs.prs) }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.repository.default_branch }}
+        fetch-depth: 1
+        persist-credentials: false
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install test dependencies
+      run: pip install pytest pyyaml
+
+    # pytest runs as this user: no sudo, no access to the runner's processes,
+    # files or later steps (so no cache or artifact token to steal).
+    - name: Create the unprivileged test user
+      run: sudo useradd --create-home --shell /usr/sbin/nologin factory-gate
+
+    - name: Test the merge result
+      env:
+        PR: ${{ matrix.pr.number }}
+        HEAD_SHA: ${{ matrix.pr.head }}
+      run: >-
+        python agents/reviewer.py gate --pr "$PR" --head "$HEAD_SHA"
+        --out "$RUNNER_TEMP/gate-$PR" --run-as factory-gate
+
+    - name: Upload gate reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: gate-${{ matrix.pr.number }}
+        path: ${{ runner.temp }}/gate-${{ matrix.pr.number }}
+        retention-days: 3
+        if-no-files-found: ignore
+
+  review:
+    # Never runs PR code; a PR whose gate left no report is treated as failed.
+    needs: [plan, gate]
+    if: >-
+      always() && needs.plan.result == 'success' &&
+      needs.plan.outputs.prs != '' && needs.plan.outputs.prs != '[]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.repository.default_branch }}
+        fetch-depth: 1
+        persist-credentials: false
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
 
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install openai requests
+      run: pip install openai
 
-    - name: Run Reviewer
+    - name: Download gate reports
+      continue-on-error: true
+      uses: actions/download-artifact@v4
+      with:
+        pattern: gate-*
+        path: ${{ runner.temp }}/gates
+
+    - name: Review and merge
       env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }} 
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        PLAN: ${{ needs.plan.outputs.prs }}
+        APPLY: ${{ vars.FACTORY_APPLY == 'true' && '--apply' || '' }}
       run: |
-        python agents/reviewer.py
+        python agents/reviewer.py review --plan "$PLAN" --gate-dir "$RUNNER_TEMP/gates" $APPLY
