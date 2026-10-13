@@ -490,7 +490,7 @@ def build_post_intent(raw: object, agent_id: str, destination: str) -> dict:
     environment = _outbound("environment", raw.get("environment"), MAX_ENVIRONMENT)
     topic = _outbound("topic", raw.get("topic"), MAX_TOPIC)
     content = _outbound("content", raw.get("content"), MAX_CONTENT, multiline=True)
-    if any(line.lstrip().startswith(SOURCE_TRAILER_PREFIX) for line in content.split("\n")):
+    if any(line.lstrip().startswith(SOURCE_TRAILER_PREFIX) for line in content.splitlines()):
         # The bridge writes exactly one trailer, after the body. A body line
         # shaped like it would read as a citation of some other discussion.
         raise AkePolicyError(

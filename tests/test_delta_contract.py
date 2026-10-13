@@ -157,6 +157,16 @@ class TestPreflight:
             live = _run("process_issues.py", tmp_state, json.dumps(_issue_event(body))).returncode
             assert pre == live, body
 
+    def test_preflight_uses_the_pipeline_strict_parser(self, tmp_state):
+        """NaN/Infinity are not JSON; the pipeline rejects them bare or fenced, so the preflight must too."""
+        bare = '{"action":"heartbeat","payload":{"x":NaN}}'
+        for body in (bare, "```json\n" + bare + "\n```"):
+            result = _run("validate_delta.py", tmp_state, body)
+            assert result.returncode == 1 and result.stdout.startswith("REJECTED: Invalid JSON"), body
+            event = _issue_event({})
+            event["issue"]["body"] = body
+            assert _run("process_issues.py", tmp_state, json.dumps(event)).returncode == 1, body
+
 
 class TestReceiptsTeach:
     def test_write_time_rejection_carries_reason_and_hint(self, tmp_state):

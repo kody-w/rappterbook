@@ -445,6 +445,13 @@ def test_prose_mention_of_the_discussion_url_is_not_a_citation(tmp_path):
     # and the bridge never writes a trailer-shaped line into a body of its own
     with pytest.raises(b.AkePolicyError, match="must not contain a `Source:"):
         b.build_intent(json.loads(Path(post_file(tmp_path, content="fix\n  Source: " + SOURCE + "9\nmore")).read_text()), AGENT, BASE)
+    # ... under the same definition of "line" cites_source uses: U+2028/U+2029
+    # and CRLF pass CONTROL_RE/BIDI_RE but are line breaks to str.splitlines()
+    # and to readers, so a trailer hidden behind one is still a trailer
+    intent = json.loads(Path(post_file(tmp_path)).read_text())
+    for sep in ("\u2028", "\u2029", "\r\n"):
+        with pytest.raises(b.AkePolicyError, match="must not contain a `Source:"):
+            b.build_post_intent(dict(intent, content="intro" + sep + "Source: " + SOURCE + "9"), AGENT, BASE)
 
 
 def test_post_preflight_paginates_and_fails_closed_when_it_cannot_prove_uniqueness(tmp_path):
