@@ -12,16 +12,20 @@ its ``agent_id`` is self-asserted, so this bridge is deliberately narrow:
   so) and that URL is appended as the last line of the content, never
   truncated away. One discussion is cross-posted at most once per ledger;
 * response-first: ``post`` searches AKE by topic and by source URL first
-  (paginated) and refuses when an existing post already covers it (verify
-  that one instead); ``verify`` fetches the post first and refuses to vote on
-  the caller's own ``agent_id``;
+  (paginated) and refuses when an existing post has the same topic or carries
+  the same ``Source:`` line (verify that one instead); ``verify`` refuses any
+  post this ledger created (under any ``AKE_AGENT_ID``), then fetches the post
+  and refuses to vote on the caller's own ``agent_id``;
+* outbound text is screened for token-shaped strings (GitHub, Moltbook,
+  OpenAI, bearer) and refused offline rather than redacted after the fact;
 * idempotency: a receipt ledger (JSON lines, outside the repository by default)
   records intent before the network call; a key that is pending, posted,
   verified or ambiguous is never sent again until an operator resolves it.
   The key covers the destination and the exact wire payload;
-* writes are never retried. A 5xx, timeout, redirect, oversize or malformed
-  success body, or an echo that does not match what was sent, is recorded
-  ``ambiguous`` and the command exits 2. Only GET is retried once;
+* writes are never retried. A 5xx, timeout (a wall-clock budget per request,
+  so a trickling server cannot stall a command), redirect, oversize or
+  malformed success body, or an echo that does not match what was sent, is
+  recorded ``ambiguous`` and the command exits 2. Only GET is retried once;
 * retrieved content is UNTRUSTED DATA: it is printed with control and bidi
   characters removed and never interpreted. Nothing from a response is
   persisted except ``post_id`` and an HTTP status; error details stay on
@@ -51,8 +55,17 @@ from pathlib import Path
 from typing import Callable, Optional
 
 USER_AGENT = "Rappterbook-AKE-Bridge/1.0"
+# Wall-clock budget for one request (connect + headers + whole body), not a
+# per-socket-read timeout: a server that trickles bytes cannot hold a command
+# open indefinitely.
 TIMEOUT_SECONDS = 30
+# Budget for the whole response-first search before a post (up to
+# 2 queries x MAX_SEARCH_PAGES pages, each GET retried at most once).
+PREFLIGHT_BUDGET_SECONDS = 4 * TIMEOUT_SECONDS
+READ_CHUNK_BYTES = 64 * 1024
 MAX_RESPONSE_BYTES = 1024 * 1024
+MAX_JSON_DEPTH = 32  # AKE bodies are flat (a list of posts with a tags list)
+MAX_INT_DIGITS = 100
 MAX_SEARCH_LIMIT = 50
 MAX_SEARCH_PAGES = 4
 LOCK_TIMEOUT_SECONDS = 10.0
@@ -76,8 +89,14 @@ ENDPOINT_RE = re.compile(r"^/posts(?:/search|/[A-Za-z0-9_-]{1,160}(?:/verify)?)?
 TAG_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,39}$")
 # C0 (except tab/newline, handled per field), DEL and C1 controls.
 CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]")
-# Bidi-steering and zero-width format characters that make printed text lie.
-BIDI_RE = re.compile("[​‎‏‪-‮⁦-⁩﻿]")
+# Bidi-steering and zero-width format characters that make printed text lie:
+# ZWSP, LRM/RLM, LRE..RLO, word joiner + invisible math operators
+# (U+2060-U+2064), LRI..PDI, BOM. The same set as scripts/verifications.py
+# (_INVISIBLE_RE); tests pin both so they cannot drift.
+BIDI_RE = re.compile("[​‎‏‪-‮⁠-⁤⁦-⁩﻿]")
+# The provenance trailer build_post_intent writes; only this line, not a prose
+# mention of the URL, means "this post already covers that discussion".
+SOURCE_LINE_RE_TEMPLATE = r"(?m)^Source: {source}[ \t]*$"
 TOKEN_RE = re.compile(
     r"(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|moltbook_[A-Za-z0-9_-]{8,}"
     r"|sk-[A-Za-z0-9_-]{16,}|(?i:bearer)\s+[A-Za-z0-9._~+/=-]{8,})"
@@ -205,6 +224,20 @@ def _text(field: str, value: object, limit: int, *, multiline: bool = False) -> 
     return candidate
 
 
+def _outbound(field: str, value: object, limit: int, *, multiline: bool = False) -> str:
+    """A bounded text field that will leave the machine: refuse anything token-shaped.
+
+    AKE is public, unauthenticated and has no delete in the bridge's surface,
+    so a pasted log line carrying a GitHub, Moltbook, OpenAI or bearer token
+    is refused offline (``dry-run`` catches it too) instead of being redacted
+    only on stderr. ``[REDACTED]`` text itself is fine.
+    """
+    text = _text(field, value, limit, multiline=multiline)
+    if TOKEN_RE.search(text):
+        raise AkePolicyError(f"{field} contains a token-shaped string; remove it before posting")
+    return text
+
+
 def _reject_constant(name: str):
     raise ValueError(f"non-JSON constant {name}")
 
@@ -225,13 +258,58 @@ def _reject_duplicate_keys(pairs):
     return out
 
 
+def _bounded_int(text: str) -> int:
+    # Fixed by the bridge, not by the interpreter's int(str) digit limit
+    # (4300 on 3.11+, unbounded on 3.9): a 400-digit "score" is malformed,
+    # not a number to overflow on later.
+    if len(text.lstrip("-")) > MAX_INT_DIGITS:
+        raise ValueError(f"integer longer than {MAX_INT_DIGITS} digits")
+    return int(text)
+
+
+def _json_depth(raw: str) -> int:
+    """Maximum bracket nesting of ``raw`` outside string literals.
+
+    Python 3.12+ parses thousands of nested arrays without a RecursionError,
+    so the cap cannot be left to the interpreter; it is explicit and identical
+    on every version (same scan as scripts/verifications.py).
+    """
+    depth = max_depth = 0
+    in_string = escaped = False
+    for ch in raw:
+        if in_string:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch in "[{":
+            depth += 1
+            if depth > max_depth:
+                max_depth = depth
+                if max_depth > MAX_JSON_DEPTH:
+                    return max_depth
+        elif ch in "]}":
+            depth -= 1
+    return max_depth
+
+
 def loads_strict(raw: bytes):
-    """Strict JSON: UTF-8, no NaN/Infinity/overflow, no duplicate keys, bounded depth."""
+    """Strict JSON: UTF-8, no NaN/Infinity/overflow, no duplicate keys, no huge ints,
+    nesting capped at MAX_JSON_DEPTH on every interpreter."""
+    text = raw.decode("utf-8")
+    if _json_depth(text) > MAX_JSON_DEPTH:
+        raise ValueError("JSON nested too deeply")
     try:
         return json.loads(
-            raw.decode("utf-8"),
+            text,
             parse_constant=_reject_constant,
             parse_float=_finite_float,
+            parse_int=_bounded_int,
             object_pairs_hook=_reject_duplicate_keys,
         )
     except RecursionError as exc:
@@ -255,6 +333,7 @@ def validate_base_url(raw: str) -> str:
     try:
         parsed = urllib.parse.urlsplit(raw)
         hostname = parsed.hostname
+        parsed.port  # noqa: B018 - raises ValueError for a non-numeric or out-of-range port
     except ValueError as exc:
         raise AkeConfigError(f"AKE_BASE_URL is not a valid URL: {exc}") from exc
     if (
@@ -285,11 +364,15 @@ def receipts_path_from_env(environ: Optional[dict] = None) -> Path:
     """The ledger path, resolved so aliases (symlinks, relative spellings) share one lock."""
     env = os.environ if environ is None else environ
     raw = (env.get("AKE_RECEIPTS") or "").strip()
-    path = Path(raw).expanduser() if raw else DEFAULT_RECEIPTS
     try:
-        return path.resolve()
-    except (OSError, RuntimeError) as exc:
-        raise AkeLedgerError(f"cannot resolve receipt ledger path {path}: {redact(exc)}") from exc
+        path = Path(raw).expanduser() if raw else DEFAULT_RECEIPTS
+        resolved = path.resolve()
+    except (OSError, RuntimeError, ValueError) as exc:
+        # ValueError: an embedded NUL byte in AKE_RECEIPTS
+        raise AkeLedgerError(f"cannot resolve receipt ledger path: {redact(exc)}") from exc
+    if not resolved.name:
+        raise AkeLedgerError("AKE_RECEIPTS must name a file, not a filesystem root")
+    return resolved
 
 
 # ---------------------------------------------------------------------------
@@ -328,9 +411,9 @@ def build_post_intent(raw: object, agent_id: str, destination: str) -> dict:
         raise AkePolicyError(f"unknown intent field(s): {', '.join(unknown)}")
     if raw.get("operation", "post") != "post":
         raise AkePolicyError("operation must be 'post'")
-    environment = _text("environment", raw.get("environment"), MAX_ENVIRONMENT)
-    topic = _text("topic", raw.get("topic"), MAX_TOPIC)
-    content = _text("content", raw.get("content"), MAX_CONTENT, multiline=True)
+    environment = _outbound("environment", raw.get("environment"), MAX_ENVIRONMENT)
+    topic = _outbound("topic", raw.get("topic"), MAX_TOPIC)
+    content = _outbound("content", raw.get("content"), MAX_CONTENT, multiline=True)
     source = canonical_source(raw.get("source"))
     tags_raw = raw.get("tags", [])
     if not isinstance(tags_raw, list):
@@ -341,6 +424,8 @@ def build_post_intent(raw: object, agent_id: str, destination: str) -> dict:
     for tag in tags_raw:
         if not isinstance(tag, str) or not TAG_RE.fullmatch(tag):
             raise AkePolicyError("each tag must match [a-z0-9][a-z0-9._-]{0,39}")
+        if TOKEN_RE.search(tag):
+            raise AkePolicyError("tags contains a token-shaped string; remove it before posting")
         if tag == "intro":
             raise AkePolicyError("introductions are an operator decision, not a bridge operation")
         if tag in tags:
@@ -386,7 +471,7 @@ def build_verify_intent(raw: object, agent_id: str, destination: str) -> dict:
     if type(passed) is not bool:  # noqa: E721 - reject 0/1/"true"
         raise AkePolicyError("passed must be a JSON boolean")
     notes_raw = raw.get("notes")
-    notes = "" if notes_raw in (None, "") else _text("notes", notes_raw, MAX_NOTES, multiline=True)
+    notes = "" if notes_raw in (None, "") else _outbound("notes", notes_raw, MAX_NOTES, multiline=True)
     if not passed and not notes:
         raise AkePolicyError("notes are required when passed is false: say what happened")
     body = {"agent_id": agent_id, "passed": passed}
@@ -422,15 +507,31 @@ def _default_open(request: urllib.request.Request, timeout: float):
     return opener.open(request, timeout=timeout)
 
 
-def _read_capped(response) -> bytes:
-    try:
-        raw = response.read(MAX_RESPONSE_BYTES + 1)
-    except (OSError, http.client.HTTPException, AttributeError) as exc:
-        # AttributeError: an HTTPError constructed without a body has no fp
-        raise AkeNetworkError(f"response body could not be read: {redact(exc)}") from exc
-    if len(raw) > MAX_RESPONSE_BYTES:
-        raise AkeSecurityError("response body exceeds 1 MiB")
-    return raw
+def _read_capped(response, deadline: float) -> bytes:
+    """Read a body in chunks under a byte cap and a wall-clock deadline.
+
+    urllib's ``timeout`` only bounds each socket operation, so a server that
+    trickles one byte per timeout could hold ``read()`` open for hours. The
+    deadline is checked between chunks and the read is abandoned once it has
+    passed; the caller records that like any other network failure.
+    """
+    chunks = []
+    total = 0
+    while True:
+        if time.monotonic() > deadline:
+            raise AkeNetworkError(f"response exceeded the {TIMEOUT_SECONDS}s time budget while reading the body")
+        try:
+            chunk = response.read(READ_CHUNK_BYTES)
+        except (OSError, http.client.HTTPException, AttributeError) as exc:
+            # AttributeError: an HTTPError constructed without a body has no fp
+            raise AkeNetworkError(f"response body could not be read: {redact(exc)}") from exc
+        if not chunk:
+            break
+        total += len(chunk)
+        if total > MAX_RESPONSE_BYTES:
+            raise AkeSecurityError("response body exceeds 1 MiB")
+        chunks.append(chunk)
+    return b"".join(chunks)
 
 
 def api_request(
@@ -441,11 +542,26 @@ def api_request(
     params: Optional[dict] = None,
     payload: Optional[dict] = None,
     open_url: Optional[Callable] = None,
-    timeout: float = TIMEOUT_SECONDS,
+    timeout: Optional[float] = None,
+    deadline: Optional[float] = None,
 ) -> tuple:
-    """Return ``(status, parsed_json)`` for one request to the fixed origin."""
+    """Return ``(status, parsed_json)`` for one request to the fixed origin.
+
+    ``timeout`` is a wall-clock budget for the whole exchange (connect,
+    headers and body); ``deadline`` (``time.monotonic()`` based) lets a caller
+    share one budget across several requests, in which case the request gets
+    whatever is left of it, never more than ``timeout``.
+    """
     if not ENDPOINT_RE.fullmatch(path):
         raise AkeSecurityError("endpoint must be one of /posts, /posts/search, /posts/{id}, /posts/{id}/verify")
+    if timeout is None:
+        timeout = TIMEOUT_SECONDS
+    now = time.monotonic()
+    if deadline is None:
+        deadline = now + timeout
+    remaining = min(float(timeout), deadline - now)
+    if remaining <= 0:
+        raise AkeNetworkError("time budget exhausted before the request was sent")
     url = base_url + path
     if params:
         url += "?" + urllib.parse.urlencode(params, doseq=True)
@@ -457,12 +573,12 @@ def api_request(
     request = urllib.request.Request(url, data=data, headers=headers, method=method)
     opener = open_url or _default_open
     try:
-        response = opener(request, timeout)
+        response = opener(request, remaining)
     except urllib.error.HTTPError as exc:
         status = int(exc.code)
         message = f"AKE returned HTTP {status}"
         try:
-            raw = _read_capped(exc)
+            raw = _read_capped(exc, deadline)
         except (AkeNetworkError, AkeSecurityError) as body_exc:
             message += f" (body not read: {body_exc})"  # the status is still definitive
         else:
@@ -484,7 +600,7 @@ def api_request(
         if (final.scheme, final.netloc.lower()) != (origin.scheme, origin.netloc):
             raise AkeSecurityError("response came from a different origin than AKE_BASE_URL")
         status = int(getattr(response, "status", 200))
-        raw = _read_capped(response)
+        raw = _read_capped(response, deadline)
     finally:
         close = getattr(response, "close", None)
         if callable(close):
@@ -496,11 +612,18 @@ def api_request(
     return status, parsed
 
 
-def api_get(base_url: str, path: str, *, params: Optional[dict] = None, open_url=None) -> object:
-    """GET with exactly one retry on a network error or 5xx (reads are safe to repeat)."""
+def api_get(base_url: str, path: str, *, params: Optional[dict] = None, open_url=None,
+            deadline: Optional[float] = None) -> object:
+    """GET with exactly one retry on a network error or 5xx (reads are safe to repeat).
+
+    Both attempts share one wall-clock budget: ``deadline`` if given, else
+    two request timeouts from now.
+    """
+    if deadline is None:
+        deadline = time.monotonic() + 2 * TIMEOUT_SECONDS
     for attempt in (1, 2):
         try:
-            status, parsed = api_request(base_url, "GET", path, params=params, open_url=open_url)
+            status, parsed = api_request(base_url, "GET", path, params=params, open_url=open_url, deadline=deadline)
             return parsed
         except AkeNetworkError:
             if attempt == 2:
@@ -529,7 +652,12 @@ def _post_record(value: object, *, expect_id: Optional[str] = None) -> dict:
 
 
 def _number(value: object):
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    try:
+        if not math.isfinite(value):
+            return None
+    except OverflowError:  # an int too large for a float is not a displayable score
         return None
     return value
 
@@ -571,7 +699,10 @@ def _fsync_dir(directory: Path) -> None:
 
 @contextmanager
 def ledger_lock(ledger: Path, timeout: float = LOCK_TIMEOUT_SECONDS):
-    lock_path = ledger.with_name(ledger.name + ".lock")
+    try:
+        lock_path = ledger.with_name(ledger.name + ".lock")
+    except ValueError as exc:  # a path with no final component, such as "/"
+        raise AkeLedgerError("receipt ledger path must name a file") from exc
     try:
         lock_path.parent.mkdir(parents=True, exist_ok=True)
         handle = open(lock_path, "a+", encoding="utf-8")
@@ -671,6 +802,26 @@ def source_claim(entries: list, source: str) -> Optional[dict]:
     return None
 
 
+def own_post_claim(entries: list, post_id: str) -> Optional[dict]:
+    """The receipt showing this ledger created AKE post ``post_id``, if any.
+
+    A post key whose latest status is posted, pending or ambiguous and whose
+    receipts name ``post_id`` (the 2xx echo or an operator resolution) means
+    the post is ours, whatever ``AKE_AGENT_ID`` it was sent under. The remote
+    ``agent_id`` is self-asserted, so this local check is the one that holds.
+    """
+    latest_by_key: dict = {}
+    ids_by_key: dict = {}
+    for entry in entries:
+        latest_by_key[entry["key"]] = entry
+        if entry.get("operation") == "post" and entry.get("post_id") == post_id:
+            ids_by_key.setdefault(entry["key"], entry)
+    for key, entry in ids_by_key.items():
+        if latest_by_key[key]["status"] in BLOCKING_STATUSES:
+            return entry
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Operations
 # ---------------------------------------------------------------------------
@@ -679,11 +830,11 @@ def _normalize_topic(text: object) -> str:
     return " ".join(str(text).casefold().split()) if isinstance(text, str) else ""
 
 
-def _search_pages(base_url: str, query: str, *, open_url=None):
+def _search_pages(base_url: str, query: str, *, open_url=None, deadline: Optional[float] = None):
     """Yield validated search results page by page; fail closed if there are too many to check."""
     for page in range(MAX_SEARCH_PAGES):
         params = {"q": query, "limit": MAX_SEARCH_LIMIT, "offset": page * MAX_SEARCH_LIMIT}
-        results = api_get(base_url, "/posts/search", params=params, open_url=open_url)
+        results = api_get(base_url, "/posts/search", params=params, open_url=open_url, deadline=deadline)
         if not isinstance(results, list):
             raise AkeApiError("AKE search did not return a list", code="invalid_shape")
         for item in results:
@@ -696,12 +847,21 @@ def _search_pages(base_url: str, query: str, *, open_url=None):
     )
 
 
-def preflight_search(base_url: str, intent: dict, *, open_url=None) -> None:
-    """Response-first for posts: refuse when AKE already has this topic or this source."""
+def preflight_search(base_url: str, intent: dict, *, open_url=None,
+                     budget: Optional[float] = None) -> None:
+    """Response-first for posts: refuse when AKE already has this topic or this source.
+
+    "Covers this source" means the post carries the bridge's own provenance
+    trailer, a line that is exactly ``Source: <url>``; a prose mention of the
+    URL elsewhere in a post is a cross-reference, not a citation, so one post
+    listing many discussion URLs cannot block every future cross-post. All
+    pages of both queries share one wall-clock ``budget``.
+    """
     wanted = _normalize_topic(intent["topic"])
-    source_re = re.compile(re.escape(intent["source"]) + r"(?![0-9])")
+    source_re = re.compile(SOURCE_LINE_RE_TEMPLATE.format(source=re.escape(intent["source"])))
+    deadline = time.monotonic() + (PREFLIGHT_BUDGET_SECONDS if budget is None else budget)
     for query in (intent["topic"], intent["source"]):
-        for item in _search_pages(base_url, query, open_url=open_url):
+        for item in _search_pages(base_url, query, open_url=open_url, deadline=deadline):
             same_topic = _normalize_topic(item["topic"]) == wanted
             same_source = bool(source_re.search(item["content"]))
             if same_topic or same_source:
@@ -764,6 +924,13 @@ def execute_write(
                     f"{intent['source']} is already {claim['status']} on AKE under key {claim['key']}"
                     + (f" (post_id {claim['post_id']})" if claim.get("post_id") else "")
                     + "; one discussion is cross-posted once. Verify that post, or resolve the key if it is ambiguous."
+                )
+        else:
+            own = own_post_claim(entries, intent["post_id"])
+            if own is not None:
+                raise AkePolicyError(
+                    f"self-verification refused: this ledger posted {intent['post_id']} under key {own['key']}"
+                    f" (as {own.get('agent_id')}); a post cannot be verified by the operator who made it"
                 )
         ensure_writable(ledger)
         if operation == "post":
@@ -914,8 +1081,10 @@ def run(argv: Optional[list] = None, *, environ: Optional[dict] = None, open_url
         results = api_get(base_url, "/posts/search", params=params, open_url=open_url)
         if not isinstance(results, list):
             raise AkeApiError("AKE search did not return a list", code="invalid_shape")
-        return {"untrusted": True, "count": len(results),
-                "results": [summarize_post(r) for r in results if isinstance(r, dict)]}
+        if not all(isinstance(r, dict) for r in results):
+            # the same rule _search_pages applies before a post: junk is not silently dropped
+            raise AkeApiError("AKE search returned a non-object item", code="invalid_shape")
+        return {"untrusted": True, "count": len(results), "results": [summarize_post(r) for r in results]}
     if args.command == "get":
         if not POST_ID_RE.fullmatch(args.post_id):
             raise AkePolicyError("post_id must match [A-Za-z0-9_-]{1,160}")
@@ -934,6 +1103,10 @@ def main(argv: Optional[list] = None) -> int:
     except AkeError as exc:
         sys.stderr.write(json.dumps({"error": type(exc).__name__, "message": redact(exc)}) + "\n")
         return exc.exit_code
+    except Exception as exc:  # noqa: BLE001 - never print a traceback (it may quote a response)
+        sys.stderr.write(json.dumps({"error": type(exc).__name__, "message": redact(exc),
+                                     "hint": "unexpected failure; check `receipts` before sending anything again"}) + "\n")
+        return 2
     sys.stdout.write(json.dumps(result, indent=2, ensure_ascii=False, sort_keys=True, allow_nan=False) + "\n")
     # An unresolved write that was found already on the ledger is not a success.
     return 2 if result.get("idempotent") and result.get("status") in ("pending", "ambiguous") else 0

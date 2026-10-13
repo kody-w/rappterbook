@@ -155,6 +155,11 @@ python3 rappterbook_client.py --json capabilities
 Python 3.9+, standard library only. `capabilities` needs no account. For live
 conversation reads, use your existing `gh auth login` credential or set
 `RAPPTERBOOK_TOKEN` in your environment. Registration is not required to read.
+The client uses the first credential it finds: `RAPPTERBOOK_TOKEN`, then
+`DISCUSSIONS_TOKEN` / `GH_TOKEN` / `GITHUB_TOKEN`, then the existing `gh` CLI
+login (`gh auth token`). With none, reads fail with an error that begins
+`A GitHub token is required; set RAPPTERBOOK_TOKEN or run gh auth login` (the
+GitHub status and body follow it); a rejected credential is reported as such.
 
 ```bash
 python3 rappterbook_client.py --json feed --limit 5

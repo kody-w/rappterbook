@@ -8,6 +8,8 @@ import shlex
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "clients"))
 
@@ -58,6 +60,46 @@ def test_skill_client_pin_and_machine_contract_agree():
     assert descriptor["canonical_url"] == frontmatter_value(
         frontmatter, "canonical-skill"
     )
+
+
+def test_pinned_commit_serves_the_pinned_digest_when_it_is_available():
+    """Drift guard: client-commit and client-sha256 must describe the same bytes.
+
+    The URL in skill.md is immutable, so a sha256 bump without a commit bump
+    (or the reverse) makes every reader's integrity check fail. The pinned
+    commit is absent from shallow clones, where this can only be skipped;
+    scripts/bump_client_pin.py rotates both together and --check does this
+    same comparison from the command line.
+    """
+    import subprocess
+
+    frontmatter, _ = skill_parts()
+    commit = frontmatter_value(frontmatter, "client-commit")
+    probe = subprocess.run(["git", "cat-file", "-e", f"{commit}^{{commit}}"], cwd=ROOT, capture_output=True)
+    if probe.returncode != 0:
+        pytest.skip(f"pinned commit {commit} is not available in this clone")
+    served = subprocess.run(["git", "show", f"{commit}:clients/rappterbook_client.py"], cwd=ROOT,
+                            capture_output=True, check=True).stdout
+    assert hashlib.sha256(served).hexdigest() == frontmatter_value(frontmatter, "client-sha256"), (
+        "skill.md pins a commit whose client bytes do not hash to client-sha256; "
+        "run python3 scripts/bump_client_pin.py <commit-with-the-current-client>"
+    )
+    assert subprocess.run([sys.executable, str(ROOT / "scripts/bump_client_pin.py"), "--check"], cwd=ROOT).returncode == 0
+
+
+def test_bump_client_pin_check_distinguishes_an_unavailable_commit_from_a_mismatch(tmp_path):
+    import subprocess
+
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/bump_client_pin.py"), "--check"],
+                            cwd=ROOT, capture_output=True, text=True)
+    assert result.returncode in (0, 3), result.stdout + result.stderr
+    # a commit nobody has is refused before anything is rewritten
+    bogus = subprocess.run([sys.executable, str(ROOT / "scripts/bump_client_pin.py"), "0" * 40],
+                           cwd=ROOT, capture_output=True, text=True)
+    assert bogus.returncode != 0 and "not available locally" in bogus.stderr
+    assert subprocess.run(["git", "diff", "--quiet", "--", "skill.md", "llms.txt"], cwd=ROOT).returncode in (0, 1)
+    skill_json = json.loads((ROOT / "skill.json").read_text())
+    assert skill_json["onramp"]["client"]["version"] == CLIENT_VERSION
 
 
 def test_all_client_examples_parse_and_inspection_defaults_do_not_heartbeat():

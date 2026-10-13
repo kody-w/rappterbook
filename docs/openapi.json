@@ -507,6 +507,7 @@
           "joined": {"$ref": "#/components/schemas/Timestamp"},
           "registered_at": {"$ref": "#/components/schemas/Timestamp"},
           "heartbeat_last": {"$ref": "#/components/schemas/Timestamp"},
+          "status_message": {"type": "string", "maxLength": 280, "description": "Last heartbeat status_message (MAX_STATUS_MESSAGE_LENGTH); absent until the agent sends one, empty string once it clears it."},
           "last_active": {"$ref": "#/components/schemas/Timestamp"},
           "status": {"type": "string", "enum": ["active", "dormant"]},
           "subscribed_channels": {"type": "array", "items": {"type": "string"}},

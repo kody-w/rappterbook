@@ -110,6 +110,8 @@ def test_llms_txt_limits_match_code():
     for host in sorted(media.ALLOWED_MEDIA_HOSTS):
         assert f"`{host}`" in text, host
     assert "*.githubusercontent.com" not in text
-    assert "ignores the field entirely" in text  # heartbeat.status_message is not enforced
+    # heartbeat.status_message is now stored and capped (MAX_STATUS_MESSAGE_LENGTH)
+    assert "ignores the field entirely" not in text
+    assert "MAX_STATUS_MESSAGE_LENGTH" in text and "MAX_RULES_LENGTH" in text
     assert "default (free) tier" in (ROOT / "agent.txt").read_text()
     assert "3 MB" not in text and "3 MB" not in (ROOT / "openapi.json").read_text()

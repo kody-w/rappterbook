@@ -632,6 +632,19 @@ def test_html_blocks_are_not_scanned_for_votes():
     assert v.parse_comment("<3\n" + inner) is not None
     # a fence indented inside a list item is rendered by GitHub and counts
     assert v.parse_comment("- ran it:\n  " + inner.replace("\n", "\n  ")) is not None
+    # a line that merely begins with inline HTML is a paragraph (CommonMark type 7 needs a
+    # complete tag alone on the line); the fence that follows interrupts it and is a code block
+    assert v.parse_comment("<b>Result</b> on my box:\n" + inner) is not None
+    assert v.parse_comment("<kbd>Ctrl</kbd>+C then:\n" + inner) is not None
+    assert v.parse_comment('<img src="x.png" alt="run"> screenshot above\n' + inner) is not None
+    # but one complete tag on its own line (type 7) or a block tag with text after it (type 6) still opens a block
+    assert v.parse_comment('<b class="x">\n' + inner) is None
+    assert v.parse_comment("</b>\n" + inner) is None
+    assert v.parse_comment("<div>Result on my box:\n" + inner) is None
+    assert v.parse_comment("<DIV>\n" + inner) is None
+    # documented limit: a fence indented 4+ columns (a two-digit list marker) is indented code here
+    assert v.parse_comment("10. ran it\n    " + inner.replace("\n", "\n    ")) is None
+    assert v.parse_comment("9. ran it\n   " + inner.replace("\n", "\n   ")) is not None
 
 
 def test_tilde_fence_info_string_may_contain_backticks():
@@ -731,6 +744,33 @@ def test_save_rejects_bad_paths_before_touching_the_filesystem(tmp_path):
         v.save(store, str(tmp_path / "never") + "/\x00")
     assert not (tmp_path / "never").exists()
     assert list(tmp_path.iterdir()) == []
+
+
+def test_revalidate_false_checks_only_the_touched_bucket():
+    """Batch callers amortize the whole-ledger check they already paid in load()."""
+    rec = _rec(verifier="alice")
+    rec["schema"] = v.SCHEMA
+    poisoned = {"schema": v.SCHEMA, "subjects": {SUBJECT: {"alice": rec}, "invalid": None}}
+    # default: fail closed on the other bucket
+    with pytest.raises(ValueError, match="corrupt"):
+        v.score(poisoned, SUBJECT)
+    # opted out: this bucket is still fully checked, the other one is not visited
+    assert v.score(poisoned, SUBJECT, revalidate=False)["votes"] == 1
+    stored = v.record(poisoned, _rec(verifier="bob"), revalidate=False)
+    assert stored["verifier"] == "bob" and "bob" in poisoned["subjects"][SUBJECT]
+    # a corrupt entry in the touched bucket and a foreign store are still errors
+    own_bucket = {"schema": v.SCHEMA, "subjects": {SUBJECT: {"alice": rec, "bob": None}}}
+    with pytest.raises(ValueError, match="corrupt"):
+        v.record(own_bucket, _rec(verifier="carol"), revalidate=False)
+    with pytest.raises(ValueError, match="corrupt"):
+        v.score(own_bucket, SUBJECT, revalidate=False)
+    with pytest.raises(ValueError, match="schema"):
+        v.score({"subjects": {}}, SUBJECT, revalidate=False)
+    with pytest.raises(ValueError, match="schema"):
+        v.record({"schema": "other", "subjects": {}}, _rec(), revalidate=False)
+    # the self-verification rule does not depend on the flag
+    with pytest.raises(ValueError, match="self-verification"):
+        v.record(v.load(None), _rec(verifier="alice"), "alice", revalidate=False)
 
 
 def test_record_and_score_validate_the_whole_store_like_load(tmp_path):

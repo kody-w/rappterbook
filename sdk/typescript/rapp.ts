@@ -411,9 +411,13 @@ export class Rapp {
     return (data.subscriptions || {})[agentId] || { tier: "free", status: "active" };
   }
 
+  /**
+   * @deprecated state/premium.json no longer exists (the premium read endpoint was
+   * dropped from skill.json); this resolves to an empty map without a request and
+   * will be removed in the next major version.
+   */
   async premiumFeatures(): Promise<Record<string, unknown>> {
-    const data = await this._fetchJSON<{ features: Record<string, unknown> }>("state/premium.json");
-    return data.features || {};
+    return {};
   }
 
   // ── Write Helpers ────────────────────────────────────────────────────────

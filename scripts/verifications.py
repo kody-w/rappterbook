@@ -18,8 +18,10 @@ docs/VERIFICATIONS.md for the RFC and the planned plug-in points.
 Public surface (exactly):
     content_id(text)                       -> "sha256:<64 hex>"
     load(path=None)                        -> store (empty store if missing)
-    record(store, rec, subject_owner=None) -> stored record (raises ValueError)
-    score(store, subject)                  -> {pass_count, fail_count, votes, score, hidden}
+    record(store, rec, subject_owner=None, *, revalidate=True)
+                                           -> stored record (raises ValueError)
+    score(store, subject, *, revalidate=True)
+                                           -> {pass_count, fail_count, votes, score, hidden}
     is_hidden(store, subject)              -> bool
     save(store, path)                      -> None
     parse_comment(body)                    -> partial rec or None
@@ -75,17 +77,37 @@ _LOGIN_RE = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}")
 # CommonMark fences: up to 3 spaces indent, 3+ backticks or tildes, info string.
 _FENCE_OPEN_RE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
 # CommonMark HTML blocks (types 1-7) swallow following lines until their end
-# marker; anything that looks like a tag at the start of a line opens one.
+# marker. Types 1-5 start with a raw-text tag, a comment, a processing
+# instruction, a declaration or CDATA; type 6 with one of the block-level tag
+# names below; type 7 only when the whole line is one complete open or closing
+# tag. Any other line that begins with a tag (``<b>Result</b> on my box:``)
+# is paragraph text and cannot hide a fence that follows it.
 _HTML_BLOCK_START_RE = re.compile(r"^ {0,3}<(?:[A-Za-z]|/[A-Za-z]|!|\?)")
+_HTML_TYPE_1_5_RE = re.compile(r"^ {0,3}<(?:!|\?|(?:script|pre|style|textarea)(?=[\s>]|$))", re.IGNORECASE)
+_HTML_TYPE_6_TAGS = frozenset("""
+    address article aside base basefont blockquote body caption center col colgroup dd details
+    dialog dir div dl dt fieldset figcaption figure footer form frame frameset h1 h2 h3 h4 h5 h6
+    head header hr html iframe legend li link main menu menuitem nav noframes ol optgroup option
+    p param search section summary table tbody td tfoot th thead title tr track ul
+""".split())
+_HTML_TYPE_6_RE = re.compile(r"^ {0,3}</?([A-Za-z][A-Za-z0-9-]*)(?:\s|/?>|$)")
+# One complete open tag (attributes allowed) or closing tag, then only whitespace.
+_HTML_TYPE_7_RE = re.compile(
+    r"^ {0,3}(?:<[A-Za-z][A-Za-z0-9-]*(?:\s+[A-Za-z_:][A-Za-z0-9_.:-]*"
+    r"(?:\s*=\s*(?:[^\s\"'=<>`]+|'[^']*'|\"[^\"]*\"))?)*\s*/?>|</[A-Za-z][A-Za-z0-9-]*\s*>)\s*$"
+)
 _HTML_RAW_OPEN_RE = re.compile(r"^ {0,3}<(script|pre|style|textarea)(?=[\s>]|$)", re.IGNORECASE)
 _HTML_RAW_CLOSERS = ("</pre>", "</script>", "</style>", "</textarea>")
 _MAX_INT_DIGITS = 100
 # C0 controls except tab/newline, DEL, and C1 controls (U+0080-U+009F).
 _CONTROL_RE = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]")
-# Invisible / bidi-steering format characters that make displayed text lie.
-# Other Cf code points (ZWJ, ZWNJ, soft hyphen, ...) carry meaning in real
-# text (emoji sequences, Persian, Indic scripts) and are kept.
-_INVISIBLE_RE = re.compile("[​‎‏‪-‮⁠⁦-⁩﻿]")
+# Invisible / bidi-steering format characters that make displayed text lie:
+# ZWSP, LRM/RLM, LRE..RLO, word joiner and the invisible math operators
+# (U+2060-U+2064), LRI..PDI, BOM. The same set as scripts/ake_bridge.py
+# (BIDI_RE); a test pins both. Other Cf code points (ZWJ, ZWNJ, soft hyphen,
+# ...) carry meaning in real text (emoji sequences, Persian, Indic scripts)
+# and are kept.
+_INVISIBLE_RE = re.compile("[\u200b\u200e\u200f\u202a-\u202e\u2060-\u2064\u2066-\u2069\ufeff]")
 # The timestamp grammar this library accepts, independent of the interpreter:
 # YYYY-MM-DDTHH:MM:SS, optional 1-6 digit fraction, then Z or +HH:MM/-HH:MM.
 _AT_RE = re.compile(
@@ -425,12 +447,18 @@ def _owner_keys(subject_owner: object) -> set:
     return keys
 
 
-def record(store: dict, rec: dict, subject_owner: Union[None, str, Iterable[str]] = None) -> dict:
+def record(store: dict, rec: dict, subject_owner: Union[None, str, Iterable[str]] = None,
+           *, revalidate: bool = True) -> dict:
     """Validate ``rec`` and store it as the verifier's single live vote.
 
     * raises ``ValueError`` on any invalid field, or when any part of the
       store would be rejected by ``load()`` (the whole ledger is re-validated
-      on every call, so a poisoned bucket for another subject also blocks);
+      on every call, so a poisoned bucket for another subject also blocks).
+      That check is linear in the ledger, so a batch of N calls is quadratic;
+      a caller that has just obtained the store from ``load()`` (which
+      validated it) and has not let anything else touch it may pass
+      ``revalidate=False`` to check only the bucket being written, which
+      ``_votes_for``/``_checked_vote`` still do;
     * raises ``ValueError`` when the verifier is (case-insensitively) one of
       ``subject_owner``: a login string, or a list of login strings when the
       subject has several owners (for example the discussion ``author_login``
@@ -443,7 +471,10 @@ def record(store: dict, rec: dict, subject_owner: Union[None, str, Iterable[str]
       comment) leaves the newer vote in place and returns it.
     Returns the stored, normalized record.
     """
-    _validate_store(store)  # the whole ledger, exactly as load() would check it
+    if revalidate:
+        _validate_store(store)  # the whole ledger, exactly as load() would check it
+    else:
+        _require_store(store)
     clean = _normalize(rec, require_identity=True, allow_missing_at=True)
     verifier_key = clean["verifier"].lower()
     if verifier_key in _owner_keys(subject_owner):
@@ -451,6 +482,9 @@ def record(store: dict, rec: dict, subject_owner: Union[None, str, Iterable[str]
     votes = _votes_for(store, clean["subject"])
     if votes is None:
         votes = store["subjects"][clean["subject"]] = {}
+    elif not revalidate:
+        for key, existing in votes.items():  # the touched bucket is always checked whole
+            _checked_vote(existing, clean["subject"], key)
     if verifier_key in votes:
         existing = _checked_vote(votes[verifier_key], clean["subject"], verifier_key)
         if _at_key(existing["at"]) > _at_key(clean["at"]):
@@ -504,16 +538,21 @@ def _wilson_lower_bound(passes: int, n: int, z: float = Z_95) -> float:
     return max(0.0, min(1.0, value))
 
 
-def score(store: dict, subject: str) -> dict:
+def score(store: dict, subject: str, *, revalidate: bool = True) -> dict:
     """Return ``{pass_count, fail_count, votes, score, hidden}`` for a subject.
 
     ``score`` is the 95% Wilson lower bound of the pass rate (0.0 with no
     votes). ``hidden`` is True when ``votes >= 5`` and the raw pass rate is
     below 0.20. A store that did not come from ``load()``, a subject that is
     not a content id, or a corrupt vote bucket raises ``ValueError`` instead
-    of scoring as "no votes".
+    of scoring as "no votes". ``revalidate=False`` skips the whole-ledger
+    re-check (linear per call; see ``record``) and validates only this
+    subject's bucket.
     """
-    _validate_store(store)  # the whole ledger, exactly as load() would check it
+    if revalidate:
+        _validate_store(store)  # the whole ledger, exactly as load() would check it
+    else:
+        _require_store(store)
     votes = _votes_for(store, subject) or {}
     passes = 0
     for key, rec in votes.items():
@@ -563,13 +602,20 @@ def _fenced_blocks(body: str):
     HTML blocks swallow their lines so a fence GitHub renders as raw HTML or
     not at all cannot cast a vote: ``<!-- -->``, ``<? ?>``, ``<!X >``,
     ``<![CDATA[ ]]>`` and ``<script|pre|style|textarea>`` end at their own
-    closer; any other line that starts with a tag (``<div>``, ``<details>``,
-    ``</p>``, ...) opens a block that ends at the next blank line. An
-    unterminated fence is not a block.
+    closer; a line starting with a block-level tag (``<div>``, ``<details>``,
+    ``</p>``, ...; CommonMark type 6) or consisting of one complete tag
+    (``<prefix>``; type 7) opens a block that ends at the next blank line. A
+    line that merely begins with inline HTML (``<b>Result</b> on my box:``)
+    is paragraph text, and a fence right after it is a code block, as GitHub
+    renders it. An unterminated fence is not a block.
 
     Containers are not modelled: a fence line indented up to 3 spaces is seen
     whether or not it sits inside a list item or after a blockquote marker's
     content, which matches what GitHub renders in the common case. A fence
+    indented 4 or more columns is skipped as indented code even when a list
+    item with a wide marker (``10. ``, ``-   ``, a nested list) would make
+    GitHub render it; put the verify block at top level, or in a list whose
+    content indent is at most 3 columns. A fence
     line that itself begins with a list or quote marker (``- ````,
     ``> `````) is not a fence here; its content may therefore be scanned
     as top-level. Quote a verify block for display inside a longer outer
@@ -606,7 +652,7 @@ def _fenced_blocks(body: str):
             continue
         if _indent_columns(line) > 3:
             continue
-        if _HTML_BLOCK_START_RE.match(line):
+        if _html_block_opens(line):
             html_closers, html_until_blank = _html_block_end(line)
             continue
         match = _FENCE_OPEN_RE.match(line)
@@ -618,6 +664,18 @@ def _fenced_blocks(body: str):
             open_fence = fence
             info = info_string.split()[0].lower() if info_string else ""
             buffer = []
+
+
+def _html_block_opens(line: str) -> bool:
+    """CommonMark HTML block start conditions 1-7, not merely "starts with a tag"."""
+    if not _HTML_BLOCK_START_RE.match(line):
+        return False
+    if _HTML_TYPE_1_5_RE.match(line):
+        return True
+    match = _HTML_TYPE_6_RE.match(line)
+    if match and match.group(1).lower() in _HTML_TYPE_6_TAGS:
+        return True
+    return bool(_HTML_TYPE_7_RE.match(line))
 
 
 def _html_block_end(line: str) -> tuple:

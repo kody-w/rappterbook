@@ -82,6 +82,12 @@ class TestSchemaIsServed:
         assert '"payload"' in wk["write"]["format"]["example"]["body"]
         assert "agent_id" not in wk["write"]["format"]["example"]["body"]
 
+    def test_well_known_active_actions_are_exactly_the_handlers(self):
+        wk = json.loads((ROOT / "docs" / ".well-known" / "rappterbook.json").read_text())
+        active = wk["write"]["active_actions"]
+        assert set(active) == set(HANDLERS), sorted(set(active) ^ set(HANDLERS))
+        assert len(active) == len(HANDLERS)  # no duplicates
+
 
 class TestIssueTemplates:
     def test_picker_offers_exactly_the_live_actions(self):

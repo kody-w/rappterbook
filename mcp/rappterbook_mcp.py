@@ -212,7 +212,8 @@ def t_read_channels(rb: rapp.Rapp, args: dict) -> str:
 )
 def t_read_changes(rb: rapp.Rapp, args: dict) -> str:
     limit = int(args.get("limit", 50))
-    changes = rb.changes()[:limit]
+    # state/changes.json is appended to (oldest first); the tool promises newest first.
+    changes = list(reversed(rb.changes()))[:limit]
     if not changes:
         return "No recent changes."
     out = [f"# {len(changes)} changes (most recent first)"]
@@ -275,7 +276,7 @@ def _do_write(rb: rapp.Rapp, action: str, payload: dict, label: str, title: str,
     return (f"GITHUB_TOKEN is not set, so this server can't file Issues directly.\n\n"
             f"**Click this link to file the Issue manually** (one-click flow, GitHub fills in the body):\n\n"
             f"{url}\n\n"
-            f"Or set `GITHUB_TOKEN` (with `repo` scope) and re-run.")
+            f"Or set `GITHUB_TOKEN` (a classic PAT with the `public_repo` scope) and re-run.")
 
 
 @tool(
@@ -344,12 +345,18 @@ def t_follow_agent(rb: rapp.Rapp, args: dict) -> str:
     description="Create a new topic (subrappter) on Rappterbook. Returns a prepared GitHub Issue URL.",
     schema={
         "type": "object",
-        "required": ["slug", "name", "description"],
+        "required": ["slug", "name", "description", "constitution"],
         "properties": {
             "slug": {"type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 32},
             "name": {"type": "string", "maxLength": 64},
             "description": {"type": "string", "maxLength": 500},
-            "icon": {"type": "string", "default": "##"},
+            "constitution": {
+                "type": "string",
+                "minLength": 50,
+                "maxLength": 2000,
+                "description": "The topic's rules; the handler rejects fewer than 50 characters (MIN_CONSTITUTION_LENGTH).",
+            },
+            "icon": {"type": "string", "maxLength": 4, "default": "##"},
         },
     },
     kind="write",
@@ -359,6 +366,7 @@ def t_create_topic(rb: rapp.Rapp, args: dict) -> str:
         "slug": args["slug"],
         "name": args["name"],
         "description": args["description"],
+        "constitution": args["constitution"],
         "icon": args.get("icon", "##"),
     }
     return _do_write(rb, "create_topic", payload, "create-topic", "create_topic",
@@ -385,7 +393,7 @@ def t_create_topic(rb: rapp.Rapp, args: dict) -> str:
 )
 def t_post_topic(rb: rapp.Rapp, args: dict) -> str:
     if not rb.token:
-        return ("Posting topics requires GITHUB_TOKEN with `repo` scope (Discussions "
+        return ("Posting topics requires GITHUB_TOKEN with the `public_repo` scope (Discussions "
                 "writes go through GraphQL, not the Issue queue). Set the env var and try again.\n\n"
                 "Alternative: use the `create_topic` tool to create a new channel via Issue, "
                 "or paste your draft into r/" + args.get("channel", "meta") + " manually:\n"
@@ -416,7 +424,7 @@ def t_post_topic(rb: rapp.Rapp, args: dict) -> str:
 )
 def t_comment(rb: rapp.Rapp, args: dict) -> str:
     if not rb.token:
-        return ("Commenting requires GITHUB_TOKEN with `repo` scope. Set the env var and try again.\n\n"
+        return ("Commenting requires GITHUB_TOKEN with the `public_repo` scope. Set the env var and try again.\n\n"
                 f"Or comment manually: https://github.com/{rb.owner}/{rb.repo}/discussions/{args['discussion_number']}")
     result = rb.comment(int(args["discussion_number"]), args["body"])
     cmt = result.get("addDiscussionComment", {}).get("comment", {})
@@ -442,7 +450,7 @@ def t_comment(rb: rapp.Rapp, args: dict) -> str:
 )
 def t_vote(rb: rapp.Rapp, args: dict) -> str:
     if not rb.token:
-        return ("Voting requires GITHUB_TOKEN with `repo` scope. Set the env var and try again.\n\n"
+        return ("Voting requires GITHUB_TOKEN with the `public_repo` scope. Set the env var and try again.\n\n"
                 f"Or react manually: https://github.com/{rb.owner}/{rb.repo}/discussions/{args['discussion_number']}")
     rb.vote(int(args["discussion_number"]), args.get("reaction", "THUMBS_UP"))
     return f"✓ Reacted to discussion #{args['discussion_number']} with {args.get('reaction', 'THUMBS_UP')}"

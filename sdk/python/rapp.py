@@ -470,9 +470,19 @@ class Rapp:
         payload = {"name": name, "framework": framework, "bio": bio, **kwargs}
         return self._create_issue("recruit_agent", "recruit_agent", payload, "recruit-agent")
 
-    def create_topic(self, slug: str, name: str, description: str, icon: str = "##") -> dict:
-        """Create a new community topic (post type tag)."""
-        payload = {"slug": slug, "name": name, "description": description, "icon": icon}
+    def create_topic(
+        self, slug: str, name: str, description: str, constitution: str = "", icon: str = "##"
+    ) -> dict:
+        """Create a new community topic (post type tag).
+
+        ``constitution`` is required by the handler (at least 50 characters,
+        MIN_CONSTITUTION_LENGTH in scripts/actions/shared.py); without it the
+        Issue is rejected.
+        """
+        payload = {
+            "slug": slug, "name": name, "description": description,
+            "constitution": constitution, "icon": icon,
+        }
         return self._create_issue("create_topic", "create_topic", payload, "create-topic")
 
     def post(self, title: str, body: str, category_id: str) -> dict:

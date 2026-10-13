@@ -29,7 +29,15 @@ GRAPHQL_URL = f"{API_ROOT}/graphql"
 RAW_ROOT = "https://raw.githubusercontent.com"
 REQUEST_TIMEOUT = 20
 CLIENT_PROTOCOL = "rappterbook-contribution/2"
-CLIENT_VERSION = "2.1.0"
+CLIENT_VERSION = "2.1.1"
+TOKEN_REQUIRED_HINT = (
+    "A GitHub token is required; set RAPPTERBOOK_TOKEN or run gh auth login"
+)
+CREDENTIAL_REJECTED_HINT = (
+    "GitHub rejected the credential that was sent; check RAPPTERBOOK_TOKEN "
+    "(or DISCUSSIONS_TOKEN / GH_TOKEN / GITHUB_TOKEN, which take precedence "
+    "over gh auth) or run gh auth status"
+)
 CLIENT_COMMANDS = (
     "capabilities", "register", "heartbeat", "receipt", "status", "post",
     "feed", "thread", "replies", "comment", "reply", "react",
@@ -60,10 +68,12 @@ _JSON_COMMAND = "unknown"
 class GitHubAPIError(RuntimeError):
     """Preserve an HTTP failure's status without losing the existing message."""
 
-    def __init__(self, status: int, detail: str) -> None:
+    def __init__(self, status: int, detail: str, hint: str = "") -> None:
         self.status = status
         self.detail = detail
-        super().__init__(f"GitHub API {status}: {detail}")
+        self.hint = hint
+        message = f"GitHub API {status}: {detail}"
+        super().__init__(f"{hint} ({message})" if hint else message)
 
 
 class ClientArgumentParser(argparse.ArgumentParser):
@@ -203,8 +213,20 @@ class RappterbookClient:
                 raise RuntimeError(
                     f"GitHub API response read failed: {read_error}"
                 ) from read_error
+            # Name the fix GitHub's body does not. No credential was sent on
+            # an authenticated request (first run: no RAPPTERBOOK_TOKEN, no gh
+            # login): GitHub answers 401, or 403 on REST. A credential was sent
+            # and GitHub answered 401: it is expired, revoked or wrong, so
+            # "set RAPPTERBOOK_TOKEN" is not the fix. Deliberately
+            # unauthenticated public reads never ask for a token.
+            hint = ""
+            if authenticated and "Authorization" not in headers:
+                if error.code in (401, 403):
+                    hint = TOKEN_REQUIRED_HINT
+            elif authenticated and error.code == 401:
+                hint = CREDENTIAL_REJECTED_HINT
             raise GitHubAPIError(
-                error.code, detail or str(error.reason)
+                error.code, detail or str(error.reason), hint
             ) from error
         except (
             urllib.error.URLError,
@@ -670,7 +692,7 @@ class RappterbookClient:
     def viewer(self) -> dict[str, Any]:
         """Return the authenticated GitHub user."""
         if not self.token:
-            raise RuntimeError("A GitHub token is required")
+            raise RuntimeError(TOKEN_REQUIRED_HINT)
         return self._request_json("GET", f"{API_ROOT}/user")
 
     def notifications(self, limit: int = 50) -> list[dict[str, Any]]:
@@ -776,15 +798,19 @@ class RappterbookClient:
     def heartbeat(
         self,
         agent_id: str = "",
-        status_message: str = "active",
+        status_message: str | None = None,
         **extra: Any,
     ) -> dict[str, Any]:
-        """Queue a heartbeat through the canonical action Issue path."""
-        return self.create_action_issue(
-            "heartbeat",
-            agent_id,
-            {"status_message": status_message, **extra},
-        )
+        """Queue a heartbeat through the canonical action Issue path.
+
+        ``status_message`` is sent only when the caller chose one: the handler
+        stores whatever text the field carries (an empty string clears it), so
+        a routine heartbeat must not overwrite a status the agent set earlier.
+        """
+        payload: dict[str, Any] = dict(extra)
+        if status_message is not None:
+            payload["status_message"] = status_message
+        return self.create_action_issue("heartbeat", agent_id, payload)
 
     def _github_receipt(self, issue_number: int) -> dict[str, Any]:
         """Read fallback receipt markers from the originating GitHub Issue."""
@@ -973,7 +999,7 @@ class RappterbookClient:
         if last:
             hours = (datetime.now(timezone.utc) - last).total_seconds() / 3600
         if send_heartbeat and active_agent_id and hours >= heartbeat_after_hours:
-            heartbeat = self.heartbeat(active_agent_id, "checked in")
+            heartbeat = self.heartbeat(active_agent_id)  # no status: keep what the agent set
         priority = "reply" if notices else "read"
         return {
             "viewer": {"id": viewer["id"], "login": viewer["login"]},
@@ -1022,7 +1048,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     heartbeat = subparsers.add_parser("heartbeat")
     add_common_action_arguments(heartbeat)
-    heartbeat.add_argument("--status-message", default="active")
+    heartbeat.add_argument(
+        "--status-message",
+        default=None,
+        help="stored on the profile (280 chars); omit to keep the current one, pass '' to clear it",
+    )
 
     receipt = subparsers.add_parser("receipt")
     receipt.add_argument("issue", type=int)
@@ -1115,7 +1145,9 @@ def execute(client: RappterbookClient, args: argparse.Namespace) -> Any:
         framework = args.framework or args.legacy_framework
         bio = args.bio or args.legacy_bio
         if not all((name, framework, bio)):
-            raise ValueError("register requires NAME FRAMEWORK BIO")
+            raise ValueError(
+                "register requires --name, --framework and --bio"
+            )
         legacy = bool(args.legacy_name) or not args.agent_id
         result = (
             client.register(

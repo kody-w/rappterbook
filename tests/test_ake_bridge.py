@@ -5,7 +5,9 @@ import hashlib
 import io
 import json
 import os
+import re
 import sys
+import time
 import urllib.error
 import urllib.parse
 from email.message import Message
@@ -258,7 +260,7 @@ def test_verify_intent_body_is_minimal_and_keyed_on_content():
 
 @pytest.mark.parametrize("raw", [
     "http://ake.example", "https://ake.example/api", "https://u:p@ake.example", "https://ake.example?x=1",
-    "https://ake.example#f", "ake.example", "https://[::1", "",
+    "https://ake.example#f", "ake.example", "https://[::1", "", "https://ake.example:abc", "https://ake.example:99999",
 ])
 def test_base_url_must_be_a_bare_https_origin(raw):
     with pytest.raises(b.AkeConfigError):
@@ -270,9 +272,20 @@ def test_strict_json_rejects_nan_overflow_duplicates_and_depth():
     for bad in (b'{"a": NaN}', b'{"a": Infinity}', b'{"a": 1e309}', b'{"a": -1e999}', b'{"a": 1, "a": 2}'):
         with pytest.raises(ValueError):
             b.loads_strict(bad)
+    # the depth cap is the bridge's own, identical on every interpreter (3.12+ parses
+    # thousands of levels without a RecursionError), and ignores brackets inside strings
+    at_cap = b"[" * b.MAX_JSON_DEPTH + b"0" + b"]" * b.MAX_JSON_DEPTH
+    assert b.loads_strict(at_cap) is not None
     with pytest.raises(ValueError, match="deeply"):
-        b.loads_strict(b"[" * 100000 + b"]" * 100000)
+        b.loads_strict(b"[" + at_cap + b"]")
+    with pytest.raises(ValueError, match="deeply"):
+        b.loads_strict(b"[" * 1100 + b"]" * 1100)
+    assert b.loads_strict(b'{"notes": "' + b"[" * 60 + b'"}') == {"notes": "[" * 60}
+    # huge ints are malformed, not numbers to overflow on later
+    with pytest.raises(ValueError, match="digits"):
+        b.loads_strict(b'{"score": ' + b"9" * 400 + b"}")
     assert b.loads_strict(b'{"a": [1, 2.5]}') == {"a": [1, 2.5]}
+    assert b.MAX_JSON_DEPTH == 32 and b.MAX_INT_DIGITS == 100
 
 
 # ---------------------------------------------------------------------------
@@ -305,18 +318,24 @@ def test_dry_run_prints_exact_bytes_and_touches_neither_network_nor_ledger(tmp_p
 
 def test_search_output_is_allowlisted_and_control_stripped(tmp_path):
     fake = FakeAke({("GET", "/posts/search"): [FakeResponse([
-        remote_post(topic="hi\x1b[31m there‮", content="x" * 900, tags=["a", {"b": 1}], score="9", extra="dropped"),
-        "not-an-object",
+        remote_post(topic="hi\x1b[31m there‮⁠", content="x" * 900, tags=["a", {"b": 1}], score="9", extra="dropped"),
+        remote_post(post_id="big", score=1.5, verifications_pass=3),
     ])]})
     out = b.run(["search", "--q", "sqlite", "--limit", "5"], environ=env_for(tmp_path), open_url=fake)
-    assert out["untrusted"] is True and out["count"] == 2 and len(out["results"]) == 1
+    assert out["untrusted"] is True and out["count"] == 2 and len(out["results"]) == 2
     row = out["results"][0]
     assert row["topic"] == "hi[31m there" and row["content"].endswith("...[truncated]")
     assert row["score"] is None and "extra" not in row
+    assert out["results"][1]["score"] == 1.5 and out["results"][1]["verifications_pass"] == 3
     assert fake.calls[0][3] == {"q": "sqlite", "limit": "5", "offset": "0"}
     assert not (tmp_path / "ledger").exists()
     with pytest.raises(b.AkePolicyError):
         b.run(["search", "--limit", "51"], environ=env_for(tmp_path), open_url=fake)
+    # a non-object item is invalid_shape (the rule _search_pages applies), never silently dropped
+    junk = FakeAke({("GET", "/posts/search"): [FakeResponse([1, "x", remote_post()])]})
+    with pytest.raises(b.AkeApiError, match="non-object") as info:
+        b.run(["search", "--q", "sqlite"], environ=env_for(tmp_path), open_url=junk)
+    assert info.value.code == "invalid_shape"
 
 
 def test_get_retries_once_on_5xx_but_not_on_4xx_and_binds_the_id(tmp_path):
@@ -379,7 +398,7 @@ def test_post_searches_topic_and_source_and_refuses_duplicates_without_reserving
     assert fake.searches()[0]["q"] == TOPIC
 
     def by_source(q, offset):
-        return [remote_post(post_id="dup2", topic="different", content="see " + SOURCE + " for details")] if q == SOURCE else []
+        return [remote_post(post_id="dup2", topic="different", content="other fix\n\nSource: " + SOURCE)] if q == SOURCE else []
 
     fake2 = FakeAke(search=by_source)
     with pytest.raises(b.AkePolicyError, match="dup2"):
@@ -387,9 +406,26 @@ def test_post_searches_topic_and_source_and_refuses_duplicates_without_reserving
     assert [s["q"] for s in fake2.searches()] == [TOPIC, SOURCE]
     assert fake2.posts() == [] and ledger_lines(tmp_path) == []
     # a longer discussion number is a different discussion, not a substring match
-    neighbour = remote_post(post_id="n", topic="other", content="see " + SOURCE + "4")
+    neighbour = remote_post(post_id="n", topic="other", content="fix\n\nSource: " + SOURCE + "4")
     fake3 = FakeAke({("POST", "/posts"): [FakeResponse(echo_of_ours(), status=201)]}, search=lambda q, o: [neighbour])
     assert b.run(["post", "--input", post_file(tmp_path)], environ=env, open_url=fake3)["status"] == "posted"
+
+
+def test_prose_mention_of_the_discussion_url_is_not_a_citation(tmp_path):
+    """Only the bridge's own `Source: <url>` trailer marks a post as covering a discussion.
+
+    Otherwise one post listing hundreds of discussion URLs (AKE has no auth) would
+    block every future cross-post, and the refusal would point agents at it.
+    """
+    env = env_for(tmp_path)
+    mention = remote_post(post_id="poison", topic="index of fixes",
+                          content="see also " + SOURCE + " and " + SOURCE + "\n\nSource: " + SOURCE + "9")
+    fake = FakeAke({("POST", "/posts"): [FakeResponse(echo_of_ours(), status=201)]}, search=lambda q, o: [mention])
+    assert b.run(["post", "--input", post_file(tmp_path)], environ=env, open_url=fake)["status"] == "posted"
+    # the trailer must be a whole line: trailing text or a different prefix is not it
+    for content in ("Source: " + SOURCE + " (mirror)", "My Source: " + SOURCE, "source: " + SOURCE):
+        assert not re.search(b.SOURCE_LINE_RE_TEMPLATE.format(source=re.escape(SOURCE)), content), content
+    assert re.search(b.SOURCE_LINE_RE_TEMPLATE.format(source=re.escape(SOURCE)), "x\n\nSource: " + SOURCE + "  \n")
 
 
 def test_post_preflight_paginates_and_fails_closed_when_it_cannot_prove_uniqueness(tmp_path):
@@ -675,7 +711,168 @@ def test_resolve_verify_defaults_to_the_voted_post_id_and_display_strips_bidi(tm
     out = b.run(["resolve", "--key", key, "--as", "verified"], environ=env)
     assert out["receipt"]["post_id"] == "845a15fe" and out["receipt"]["status"] == "verified"
     assert b.display("a‮b​c\x9bd\x1b[31m", 10) == "abcd[31m"
+    assert b.display("a\u2060b\u2061c\u2064d\u2066e\ufeff", 10) == "abcde"  # word joiner, invisible operators, LRI, BOM
     assert b.display("line\nbreak\ttab", 20) == "line\nbreak\ttab"
+
+
+def test_bridge_and_verifications_strip_the_same_invisible_characters():
+    """The two libraries share one threat model; the character class must not drift."""
+    import verifications  # noqa: E402 - scripts/ is already on sys.path
+
+    probe = "".join(chr(cp) for cp in range(0x2000, 0x2070)) + "\u200b\u200e\u200f\ufeff\u00ad\u200d\u200c"
+    assert b.BIDI_RE.sub("", probe) == verifications._INVISIBLE_RE.sub("", probe)
+    assert b.BIDI_RE.sub("", "\u200d\u200c\u00ad") == "\u200d\u200c\u00ad"  # ZWJ/ZWNJ/soft hyphen are meaningful, kept
+
+
+def test_verify_refuses_any_post_this_ledger_created_whatever_the_agent_id(tmp_path):
+    """The remote agent_id is self-asserted; the local ledger is the check that holds."""
+    env = env_for(tmp_path)
+    fake = FakeAke({("POST", "/posts"): [FakeResponse(echo_of_ours(post_id="p1", agent_id="alice"), status=201)]},
+                   search=no_matches)
+    posted = b.run(["post", "--input", post_file(tmp_path)], environ=dict(env, AKE_AGENT_ID="alice"), open_url=fake)
+    assert posted["status"] == "posted" and posted["post_id"] == "p1"
+    # same ledger, a different AKE_AGENT_ID: refused before any network call
+    bob = FakeAke()
+    with pytest.raises(b.AkePolicyError, match="self-verification refused: this ledger posted p1") as info:
+        b.run(["verify", "--input", verify_file(tmp_path, post_id="p1")], environ=dict(env, AKE_AGENT_ID="bob"), open_url=bob)
+    assert "alice" in str(info.value) and bob.calls == []
+    assert [l["status"] for l in ledger_lines(tmp_path)] == ["pending", "posted"]
+    # an ambiguous post whose echo named the id is ours too, until it is resolved absent
+    assert b.own_post_claim([{"key": "rb-ake-" + "a" * 24, "operation": "post", "status": "ambiguous", "post_id": "q"}], "q")
+    assert b.own_post_claim([
+        {"key": "rb-ake-" + "a" * 24, "operation": "post", "status": "ambiguous", "post_id": "q"},
+        {"key": "rb-ake-" + "a" * 24, "operation": "post", "status": "absent", "post_id": None},
+    ], "q") is None
+    # a verify receipt naming the post is a vote, not a claim of authorship
+    assert b.own_post_claim([{"key": "rb-ake-" + "b" * 24, "operation": "verify", "status": "verified", "post_id": "q"}], "q") is None
+    # someone else's post still verifies
+    other = FakeAke({("GET", "/posts/zz"): [FakeResponse(remote_post(post_id="zz"))],
+                     ("POST", "/posts/zz/verify"): [FakeResponse(remote_post(post_id="zz"))]})
+    assert b.run(["verify", "--input", verify_file(tmp_path, post_id="zz")], environ=dict(env, AKE_AGENT_ID="bob"), open_url=other)["status"] == "verified"
+
+
+def test_outbound_text_with_a_token_shaped_string_is_refused_offline(tmp_path):
+    env = env_for(tmp_path)
+
+    def no_network(*a, **k):
+        raise AssertionError("a refused intent must not reach the network")
+
+    for field, value in (("content", "log: ghp_ABCDEFGHIJKLMNOPQRSTUVWXYZ123456 failed"),
+                         ("topic", "Bearer abcdefghijklmnop rejected"),
+                         ("environment", "sk-abcdefghijklmnopqrstuvwxyz")):
+        with pytest.raises(b.AkePolicyError, match=f"{field} contains a token-shaped string"):
+            b.run(["dry-run", "--input", post_file(tmp_path, **{field: value})], environ=env, open_url=no_network)
+        with pytest.raises(b.AkePolicyError, match="token-shaped"):
+            b.run(["post", "--input", post_file(tmp_path, **{field: value})], environ=env, open_url=no_network)
+    with pytest.raises(b.AkePolicyError, match="tags contains a token-shaped string"):
+        b.run(["dry-run", "--input", post_file(tmp_path, tags=["ghp_abcdefghijklmnopqrstuvwxyz0123"])], environ=env, open_url=no_network)
+    with pytest.raises(b.AkePolicyError, match="notes contains a token-shaped string"):
+        b.run(["dry-run", "--input", verify_file(tmp_path, notes="moltbook_sk_abcdefghijk0123456789")], environ=env, open_url=no_network)
+    assert ledger_lines(tmp_path) == []
+    # redacted text is allowed: that is what a careful operator pastes
+    out = b.run(["dry-run", "--input", post_file(tmp_path, content="token [REDACTED] was rejected")], environ=env, open_url=no_network)
+    assert "[REDACTED]" in out["body"]["content"]
+
+
+class TrickleResponse:
+    """A 2xx whose body arrives one byte per read, each read slower than the budget allows."""
+
+    def __init__(self, raw: bytes, delay: float, status: int = 200):
+        self.status = status
+        self._buf = io.BytesIO(raw)
+        self.delay = delay
+        self.reads = 0
+
+    def geturl(self):
+        return BASE + "/posts"
+
+    def read(self, n=-1):
+        self.reads += 1
+        time.sleep(self.delay)
+        return self._buf.read(1)
+
+    def close(self):
+        pass
+
+
+def test_timeout_is_a_wall_clock_budget_not_a_per_read_timeout(tmp_path, monkeypatch):
+    """A server that trickles bytes slower than the socket timeout cannot stall a command."""
+    trickle = TrickleResponse(json.dumps(echo_of_ours()).encode(), delay=0.02)
+    started = time.monotonic()
+    with pytest.raises(b.AkeNetworkError, match="time budget"):
+        b.api_request(BASE, "GET", "/posts/search", open_url=lambda req, t: trickle, timeout=0.1)
+    assert time.monotonic() - started < 2.0 and 1 < trickle.reads < 20
+    # the socket timeout handed to the opener is never more than what is left of the budget
+    seen = []
+
+    def record(req, t):
+        seen.append(t)
+        return FakeResponse(remote_post(post_id="p"))
+
+    deadline = time.monotonic() + 0.5
+    b.api_request(BASE, "GET", "/posts/p", open_url=record, deadline=deadline)
+    assert 0 < seen[0] <= 0.5
+    with pytest.raises(b.AkeNetworkError, match="budget exhausted"):
+        b.api_request(BASE, "GET", "/posts/p", open_url=record, deadline=time.monotonic() - 1)
+    assert len(seen) == 1
+    # a write whose echo trickles past the budget is ambiguous (network), never retried
+    env = env_for(tmp_path)
+    slow_echo = TrickleResponse(json.dumps(echo_of_ours()).encode(), delay=0.02, status=201)
+    fake = FakeAke({("POST", "/posts"): [slow_echo]}, search=no_matches)
+    intent = b.build_intent(json.loads(Path(post_file(tmp_path)).read_text()), AGENT, BASE)
+    monkeypatch.setattr(b, "TIMEOUT_SECONDS", 0.1)
+    with pytest.raises(b.AkeAmbiguousError, match="time budget"):
+        b.execute_write(intent, base_url=BASE, ledger=Path(env["AKE_RECEIPTS"]), agent_id=AGENT, open_url=fake)
+    assert [l["status"] for l in ledger_lines(tmp_path)] == ["pending", "ambiguous"]
+    assert ledger_lines(tmp_path)[-1]["note"] == "network" and len(fake.posts()) == 1
+    assert b.PREFLIGHT_BUDGET_SECONDS >= b.TIMEOUT_SECONDS
+
+
+def test_preflight_search_shares_one_budget_across_pages(monkeypatch, tmp_path):
+    env = env_for(tmp_path)
+    unrelated = [remote_post(post_id=f"u{i}", topic=f"other {i}") for i in range(b.MAX_SEARCH_LIMIT)]
+    endless = FakeAke(search=lambda q, o: unrelated)
+    monkeypatch.setattr(b, "PREFLIGHT_BUDGET_SECONDS", 0.0)
+    with pytest.raises(b.AkeNetworkError, match="budget exhausted"):
+        b.run(["post", "--input", post_file(tmp_path)], environ=env, open_url=endless)
+    assert endless.posts() == [] and ledger_lines(tmp_path) == []
+
+
+def test_operator_config_errors_are_ledger_errors_not_tracebacks(tmp_path, monkeypatch, capsys):
+    with pytest.raises(b.AkeLedgerError, match="cannot resolve"):
+        b.receipts_path_from_env({"AKE_RECEIPTS": "a\0b"})
+    with pytest.raises(b.AkeLedgerError, match="must name a file"):
+        b.receipts_path_from_env({"AKE_RECEIPTS": "/"})
+    with pytest.raises(b.AkeLedgerError, match="must name a file"):
+        with b.ledger_lock(Path("/")):
+            pass
+    for k, v in env_for(tmp_path).items():
+        monkeypatch.setenv(k, v)
+    monkeypatch.setenv("AKE_RECEIPTS", "/")
+    assert b.main(["resolve", "--key", "rb-ake-" + "0" * 24, "--as", "absent"]) == 2
+    assert json.loads(capsys.readouterr().err)["error"] == "AkeLedgerError"
+    # anything else unexpected is a redacted JSON error with exit 2, never a traceback
+
+    def boom(argv):
+        raise KeyError("ghp_abcdefghijklmnopqrstuvwxyz0123")
+
+    monkeypatch.setattr(b, "run", boom)
+    assert b.main(["receipts"]) == 2
+    err = json.loads(capsys.readouterr().err)
+    assert err["error"] == "KeyError" and "ghp_" not in err["message"] and "receipts" in err["hint"]
+
+
+def test_huge_int_in_a_2xx_echo_is_invalid_json_and_the_write_is_ambiguous(tmp_path):
+    """A 400-digit score must not turn an accepted write into a traceback with no post_id on stdout."""
+    env = env_for(tmp_path)
+    raw = json.dumps(echo_of_ours()).replace('"score": 0.0', '"score": ' + "9" * 400).encode()
+    assert b"9" * 400 in raw
+    fake = FakeAke({("POST", "/posts"): [FakeResponse(None, raw=raw, status=201)]}, search=no_matches)
+    with pytest.raises(b.AkeAmbiguousError):
+        b.run(["post", "--input", post_file(tmp_path)], environ=env, open_url=fake)
+    assert ledger_lines(tmp_path)[-1]["note"] == "invalid_json"
+    # and a huge int that reaches summarize_post by another route is displayed as None
+    assert b.summarize_post(remote_post(score=10 ** 400))["score"] is None
 
 
 # ---------------------------------------------------------------------------

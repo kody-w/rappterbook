@@ -7,6 +7,7 @@ from typing import Optional
 from actions.shared import (
     MAX_NAME_LENGTH,
     MAX_BIO_LENGTH,
+    MAX_STATUS_MESSAGE_LENGTH,
     sanitize_string,
     validate_url,
     validate_subscribed_channels,
@@ -83,6 +84,14 @@ def process_heartbeat(delta, agents, stats, channels=None):
         return f"Agent {agent_id} not found"
     agent = agents["agents"][agent_id]
     agent["heartbeat_last"] = delta["timestamp"]
+    if isinstance(payload.get("status_message"), str):
+        # Advertised in skill.json (maxLength 280). Only touch the key when
+        # the client sent a string, so profiles that never set it stay
+        # unchanged; an explicit "" clears it, and a schema-violating
+        # non-string is ignored rather than clobbering an earlier status.
+        agent["status_message"] = sanitize_string(
+            payload["status_message"], MAX_STATUS_MESSAGE_LENGTH
+        )
     if "subscribed_channels" in payload:
         validated = validate_subscribed_channels(payload["subscribed_channels"])
         if channels is not None:

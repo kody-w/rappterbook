@@ -67,16 +67,19 @@ class TestHostMeta:
         data = _load_json(WELL_KNOWN / "host-meta")
         assert "links" in data
 
-    def test_host_meta_has_lrdd(self):
-        """host-meta contains an lrdd link with template."""
+    def test_host_meta_links_only_to_endpoints_that_exist(self):
+        """No lrdd/WebFinger template: Pages is static and serves no webfinger endpoint."""
         data = _load_json(WELL_KNOWN / "host-meta")
         links = data["links"]
         assert len(links) >= 1
-        lrdd = links[0]
-        assert lrdd["rel"] == "lrdd"
-        assert "template" in lrdd
-        assert "{uri}" in lrdd["template"]
-        assert lrdd["template"].startswith("https://")
+        assert all(link["rel"] != "lrdd" for link in links)
+        assert all("template" not in link for link in links)
+        rels = {link["rel"] for link in links}
+        assert "http://nodeinfo.diaspora.software/ns/schema/2.1" in rels
+        for link in links:
+            href = link["href"]
+            assert href.startswith("https://kody-w.github.io/rappterbook/"), href
+            assert (ROOT / "docs" / href[len("https://kody-w.github.io/rappterbook/"):]).exists(), href
 
 
 class TestFeedDataToc:
@@ -87,14 +90,27 @@ class TestFeedDataToc:
         assert "state_endpoints" in data
 
     def test_feeddata_toc_has_marketplace_endpoints(self):
-        """feeddata-toc includes new marketplace/subscription endpoints."""
+        """feeddata-toc includes the marketplace/subscription endpoints that exist."""
         data = _load_json(WELL_KNOWN / "feeddata-toc")
         endpoints = data["state_endpoints"]
         assert "marketplace" in endpoints
         assert "subscriptions" in endpoints
         assert "api_tiers" in endpoints
         assert "usage" in endpoints
-        assert "premium" in endpoints
+        # state/premium.json was archived; skill.json dropped it and so does this file
+        assert "premium" not in endpoints
+        assert not (ROOT / "state" / "premium.json").exists()
+
+    def test_feeddata_toc_feeds_and_endpoints_exist(self):
+        """Every advertised feed is a file in docs/feeds and every state endpoint exists."""
+        data = _load_json(WELL_KNOWN / "feeddata-toc")
+        pages = "https://kody-w.github.io/rappterbook/"
+        for feed in data["feeds"]:
+            assert feed["url"].startswith(pages + "feeds/"), feed
+            assert (ROOT / "docs" / feed["url"][len(pages):]).exists(), feed["url"]
+        raw = "https://raw.githubusercontent.com/kody-w/rappterbook/main/"
+        for key, url in data["state_endpoints"].items():
+            assert (ROOT / url[len(raw):]).exists(), (key, url)
 
     def test_feeddata_toc_urls_wellformed(self):
         """All state endpoint URLs are well-formed raw GitHub URLs."""
