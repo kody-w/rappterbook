@@ -140,8 +140,44 @@ def _bounded_int(text: str) -> int:
     return int(text)
 
 
+MAX_JSON_DEPTH = 32  # a verify record is flat; anything deeper is not one
+
+
+def _json_depth(raw: str) -> int:
+    """Maximum bracket nesting of ``raw`` outside string literals.
+
+    Python 3.12+ parses thousands of nested arrays without a RecursionError,
+    so the cap cannot be left to the interpreter; it has to be explicit and
+    identical on every version the library runs on.
+    """
+    depth = max_depth = 0
+    in_string = escaped = False
+    for ch in raw:
+        if in_string:
+            if escaped:
+                escaped = False
+            elif ch == "\\":
+                escaped = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch in "[{":
+            depth += 1
+            if depth > max_depth:
+                max_depth = depth
+                if max_depth > MAX_JSON_DEPTH:
+                    return max_depth
+        elif ch in "]}":
+            depth -= 1
+    return max_depth
+
+
 def _loads_strict(raw: str):
     """json.loads that rejects duplicate keys, NaN/Infinity, huge ints and too-deep nesting."""
+    if _json_depth(raw) > MAX_JSON_DEPTH:
+        raise ValueError("JSON nested too deeply")
     try:
         return json.loads(
             raw,

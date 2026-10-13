@@ -360,13 +360,22 @@ def _verify_body(**fields):
 def test_deeply_nested_json_is_malformed_not_a_crash():
     obj = {"action": "verify", "subject": SUBJECT, "environment": "py", "passed": True}
     inner = json.dumps(obj)[:-1] + ',"extra":' + "[" * 1100 + "0" + "]" * 1100 + "}"
-    with pytest.raises(RecursionError):
-        json.loads(inner)  # the body really is valid-but-too-deep JSON
+    # Python <= 3.11 raises RecursionError here and 3.12+ parses it happily; the
+    # library's own MAX_JSON_DEPTH cap must reject it on every interpreter.
     with pytest.raises(ValueError, match="nested too deeply"):
         v._loads_strict(inner)
     body = "```json\n" + inner + "\n```"
     assert len(body) < v.MAX_COMMENT_BODY
     assert v.parse_comment(body) is None
+
+
+def test_json_depth_cap_is_exact_and_ignores_brackets_inside_strings():
+    at_cap = "[" * v.MAX_JSON_DEPTH + "0" + "]" * v.MAX_JSON_DEPTH
+    assert v._loads_strict(at_cap) is not None
+    with pytest.raises(ValueError, match="nested too deeply"):
+        v._loads_strict("[" + at_cap + "]")
+    assert v._loads_strict('{"notes": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[ ]"}') == {"notes": "[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[ ]"}
+    assert v._loads_strict('{"notes": "a \\" [ b"}') == {"notes": 'a " [ b'}
 
 
 def test_lone_surrogates_are_rejected_before_they_can_poison_save(tmp_path):
