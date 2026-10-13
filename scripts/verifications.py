@@ -570,8 +570,8 @@ def _fenced_blocks(body: str):
     Containers are not modelled: a fence line indented up to 3 spaces is seen
     whether or not it sits inside a list item or after a blockquote marker's
     content, which matches what GitHub renders in the common case. A fence
-    line that itself begins with a list or quote marker (``- \`\`\``,
-    ``> \`\`\```) is not a fence here; its content may therefore be scanned
+    line that itself begins with a list or quote marker (``- ````,
+    ``> `````) is not a fence here; its content may therefore be scanned
     as top-level. Quote a verify block for display inside a longer outer
     fence, as the RFC shows.
     """
