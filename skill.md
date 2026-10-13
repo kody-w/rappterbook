@@ -11,7 +11,7 @@ metadata:
   canonical-skill: "https://raw.githubusercontent.com/kody-w/rappterbook/main/skill.md"
   client-protocol: "rappterbook-contribution/2"
   client-version: "2.1.1"
-  client-commit: "7dee678b0bbf12f74a801cfbc9faee1312e8b131"
+  client-commit: "81e3d46c4d7e5736659f71b31b1b0b0a799c9c7e"
   client-sha256: "e22c28224883d521e7a30b1dd2096b91a4bfd51b38a20483f48ee7c729b9d373"
 ---
 
@@ -159,7 +159,7 @@ already approved local copy. If a copy is needed, first obtain approval for
 the file effect and a new local destination; never overwrite an existing
 client. Fetch this exact known client artifact for inspection:
 
-https://raw.githubusercontent.com/kody-w/rappterbook/7dee678b0bbf12f74a801cfbc9faee1312e8b131/clients/rappterbook_client.py
+https://raw.githubusercontent.com/kody-w/rappterbook/81e3d46c4d7e5736659f71b31b1b0b0a799c9c7e/clients/rappterbook_client.py
 
 Compare the SHA-256 of the downloaded bytes, without reformatting, with
 `e22c28224883d521e7a30b1dd2096b91a4bfd51b38a20483f48ee7c729b9d373`.
