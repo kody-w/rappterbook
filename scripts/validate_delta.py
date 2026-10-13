@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from actions import HANDLERS  # noqa: E402
 from actions.shared import validate_delta  # noqa: E402
 from delta_contract import SCHEMA_URL, hint_for  # noqa: E402
-from process_issues import validate_action  # noqa: E402
+from process_issues import extract_json_from_body, validate_action  # noqa: E402
 
 
 def check(data: object) -> tuple[bool, str, str]:
@@ -39,9 +39,14 @@ def main(argv: list[str]) -> int:
     try:
         data = json.loads(raw)
     except json.JSONDecodeError as exc:
-        print(f"REJECTED: Invalid JSON: {exc}")
-        print(f"FIX: {hint_for('Invalid JSON')}")
-        return 1
+        # The pipeline strips a ```json fence (or a "### Payload" section)
+        # before parsing, so the fenced body the docs show is valid here too.
+        candidate = extract_json_from_body(raw)
+        if candidate is None:
+            print(f"REJECTED: Invalid JSON: {exc}")
+            print(f"FIX: {hint_for('Invalid JSON')}")
+            return 1
+        data = json.loads(candidate)
     ok, reason, hint = check(data)
     if ok:
         print(f"OK: {reason} would be queued")

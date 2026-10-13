@@ -738,6 +738,66 @@ def test_resolve_verify_defaults_to_the_voted_post_id_and_display_strips_bidi(tm
     assert b.display("line\nbreak\ttab", 20) == "line\nbreak\ttab"
 
 
+def test_resolve_verify_refuses_another_post_id_so_the_vote_guard_stays_on_the_voted_post(tmp_path):
+    """vote_claim keys on the latest receipt's post_id; a resolution must not move it."""
+    env = env_for(tmp_path)
+    fake = FakeAke({("GET", "/posts/845a15fe"): [FakeResponse(remote_post())],
+                    ("POST", "/posts/845a15fe/verify"): [urllib.error.URLError("reset")]})
+    with pytest.raises(b.AkeAmbiguousError) as info:
+        b.run(["verify", "--input", verify_file(tmp_path)], environ=env, open_url=fake)
+    # the operator message no longer invites a --post-id for a verify key
+    assert "`--as verified` to close it" in str(info.value) and "--post-id <id>" not in str(info.value)
+    key = ledger_lines(tmp_path)[-1]["key"]
+    with pytest.raises(b.AkePolicyError, match=r"post it voted on \(845a15fe\); --post-id other1 does not match"):
+        b.run(["resolve", "--key", key, "--as", "verified", "--post-id", "other1"], environ=env)
+    assert ledger_lines(tmp_path)[-1]["status"] == "ambiguous"  # nothing appended
+    entries = b.read_ledger(Path(env["AKE_RECEIPTS"]))
+    assert b.vote_claim(entries, "845a15fe")["key"] == key
+    never = FakeAke()
+    with pytest.raises(b.AkePolicyError, match="already voted"):  # a new key for the same post: the vote guard
+        b.run(["verify", "--input", verify_file(tmp_path, notes="ran it again")], environ=env, open_url=never)
+    assert never.calls == []
+    # the matching id is accepted, like omitting it
+    out = b.run(["resolve", "--key", key, "--as", "verified", "--post-id", "845a15fe"], environ=env)
+    assert out["receipt"]["post_id"] == "845a15fe" and out["receipt"]["status"] == "verified"
+    assert b.vote_claim(b.read_ledger(Path(env["AKE_RECEIPTS"])), "845a15fe")["status"] == "verified"
+
+
+def test_ledger_names_the_line_when_status_or_operation_is_not_a_string(tmp_path):
+    """A hand-edited unhashable status is a corrupt line with a number, not a TypeError from `in frozenset`."""
+    env = env_for(tmp_path)
+    ledger = Path(env["AKE_RECEIPTS"])
+    ledger.parent.mkdir(parents=True)
+    good = {"key": "rb-ake-" + "0" * 24, "operation": "post", "status": "posted", "agent_id": AGENT,
+            "topic": TOPIC, "source": SOURCE, "post_id": "p"}
+    for bad in (dict(good, status=["posted"]), dict(good, status={"posted": 1}), dict(good, operation=["post"])):
+        ledger.write_text(json.dumps(good) + "\n" + json.dumps(bad) + "\n")
+        with pytest.raises(b.AkeLedgerError, match=r"receipts\.jsonl:2: not a receipt"):
+            b.run(["receipts"], environ=env)
+        never = FakeAke()
+        with pytest.raises(b.AkeLedgerError, match=r"receipts\.jsonl:2: not a receipt"):
+            b.run(["post", "--input", post_file(tmp_path)], environ=env, open_url=never)
+        assert never.calls == []
+
+
+def test_preflight_search_queries_the_topic_with_whitespace_collapsed(tmp_path):
+    """The comparison collapses whitespace; the query must too, or a doubled space hides the duplicate."""
+    env = env_for(tmp_path)
+    seen = []
+
+    def substring_backend(q, offset):
+        seen.append(q)
+        return [remote_post(post_id="dup", topic=TOPIC)] if offset == 0 and q in TOPIC else []
+
+    fake = FakeAke(search=substring_backend)
+    doubled = TOPIC.replace(": ", ":  ")
+    assert doubled != TOPIC
+    with pytest.raises(b.AkePolicyError, match="already covers this topic"):
+        b.run(["post", "--input", post_file(tmp_path, topic=doubled)], environ=env, open_url=fake)
+    assert seen == [TOPIC] and fake.calls[0][3]["q"] == TOPIC
+    assert all(call[0] == "GET" for call in fake.calls)  # nothing was posted
+
+
 def test_bridge_and_verifications_strip_the_same_invisible_characters():
     """The two libraries share one threat model; the character class must not drift."""
     import verifications  # noqa: E402 - scripts/ is already on sys.path
@@ -1390,3 +1450,44 @@ def test_wall_clock_budget_holds_while_headers_or_chunk_sizes_trickle(phase, scr
     assert 0.25 <= elapsed < 1.5, (phase, elapsed, str(info.value))
     assert 0 < len(sent) < len(trickled), phase
     assert "unreachable" not in str(info.value) and "could not be read" not in str(info.value)
+
+
+def test_wall_clock_budget_holds_when_name_resolution_stalls(monkeypatch):
+    """getaddrinfo runs before any socket exists; the socket connect() finally makes is shut down at once."""
+    import socket
+    import urllib.request
+
+    sent = []
+
+    def serve(conn):
+        for c in b"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n":
+            conn.sendall(bytes([c]))
+            sent.append(c)
+            time.sleep(0.05)
+        conn.sendall(b"\r\n")
+
+    server, thread = _trickle_server(serve)
+    port = server.getsockname()[1]
+    real_getaddrinfo = socket.getaddrinfo
+
+    def slow_getaddrinfo(*args, **kwargs):
+        time.sleep(0.6)  # longer than the budget, and not bounded by any socket timeout
+        return real_getaddrinfo(*args, **kwargs)
+
+    monkeypatch.setattr(socket, "getaddrinfo", slow_getaddrinfo)
+
+    def open_local(request, timeout):
+        local = urllib.request.Request(f"http://127.0.0.1:{port}/posts/p", headers=dict(request.header_items()))
+        return _SameOrigin(b._default_open(local, timeout))
+
+    started = time.monotonic()
+    try:
+        with pytest.raises(b.AkeNetworkError, match=r"0\.3s time budget") as info:
+            b.api_request(BASE, "GET", "/posts/p", open_url=open_local, timeout=0.3)
+        elapsed = time.monotonic() - started
+    finally:
+        server.close()
+        thread.join(3)
+    assert 0.55 <= elapsed < 1.5, (elapsed, str(info.value))
+    assert sent == []  # the request never left: the late socket was shut down before the head was sent
+    assert "unreachable" not in str(info.value)

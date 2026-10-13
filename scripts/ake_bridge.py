@@ -71,7 +71,10 @@ USER_AGENT = "Rappterbook-AKE-Bridge/1.0"
 # also the initial socket timeout; the body is read one socket read at a time
 # with the budget re-checked (and the socket timeout shrunk to what is left)
 # after each, so a server that trickles bytes is cut off at the budget, not
-# held open for as long as it keeps sending.
+# held open for as long as it keeps sending. Name resolution is the one step
+# outside it: getaddrinfo runs before any socket exists and cannot be
+# interrupted, so a stalled resolver holds the command past the budget; the
+# socket it finally yields is shut down at once and nothing is sent on it.
 TIMEOUT_SECONDS = 30
 # Budget for the whole response-first search before a post (up to
 # 2 queries x MAX_SEARCH_PAGES pages, each GET retried at most once).
@@ -658,6 +661,16 @@ def _tracked(http_class):
         connection = http_class(host, **kwargs)
         if watchdog is not None:
             watchdog.track(connection)
+            original_connect = connection.connect
+
+            def connect():
+                # connection.sock is None until here; name resolution inside connect()
+                # is not bounded by the socket timeout, so the deadline may already have
+                # passed, in which case track() shuts the new socket down at once.
+                original_connect()
+                watchdog.track(connection.sock)
+
+            connection.connect = connect
         return connection
 
     return factory
@@ -990,8 +1003,8 @@ def read_ledger(ledger: Path) -> list:
             not isinstance(entry, dict)
             or not isinstance(entry.get("key"), str)
             or not KEY_RE.fullmatch(entry["key"])
-            or entry.get("status") not in STATUSES
-            or entry.get("operation") not in OPERATIONS
+            or not isinstance(entry.get("status"), str) or entry["status"] not in STATUSES
+            or not isinstance(entry.get("operation"), str) or entry["operation"] not in OPERATIONS
             or any(k not in RECEIPT_FIELDS for k in entry)
             or not isinstance(entry.get("destination", ""), str)  # absent on lines written before it was recorded
         ):
@@ -1169,8 +1182,11 @@ def preflight_search(base_url: str, intent: dict, *, open_url=None,
     wall-clock ``budget``.
     """
     wanted = _normalize_topic(intent["topic"])
+    # the query is whitespace-collapsed like the comparison, so a doubled space in the
+    # intent cannot miss the single-spaced post the bridge would call a duplicate
+    topic_query = " ".join(intent["topic"].split())
     deadline = time.monotonic() + (PREFLIGHT_BUDGET_SECONDS if budget is None else budget)
-    for query in (intent["topic"], intent["source"]):
+    for query in (topic_query, intent["source"]):
         for item in _search_pages(base_url, query, open_url=open_url, deadline=deadline):
             same_topic = _normalize_topic(item["topic"]) == wanted
             same_source = cites_source(item["content"], intent["source"])
@@ -1353,11 +1369,11 @@ def execute_write(
 
 
 def _ambiguous_message(operation: str, key: str, exc: Exception) -> str:
+    close = "--as posted --post-id <id>" if operation == "post" else "--as verified"  # a verify keeps its post
     return (
         f"the {operation} may or may not have reached AKE ({exc}). Key {key} is now ambiguous and "
         "will not be sent again. Run `search` (or `get`) to look for it, then "
-        f"`resolve --key {key} --as absent` to allow a resend or `--as "
-        f"{'posted' if operation == 'post' else 'verified'} --post-id <id>` to close it."
+        f"`resolve --key {key} --as absent` to allow a resend or `{close}` to close it."
     )
 
 
@@ -1379,8 +1395,16 @@ def resolve_key(ledger: Path, key: str, resolution: str, *, post_id: Optional[st
         if resolution != "absent":
             if resolution != expected:
                 raise AkePolicyError(f"a {last['operation']} resolves as absent or {expected}")
-            if post_id is None and last["operation"] == "verify":
-                post_id = last.get("post_id")  # the voted-on post is already in the receipt
+            if last["operation"] == "verify":
+                voted = last.get("post_id")  # the voted-on post is already in the receipt
+                if post_id is not None and post_id != voted:
+                    # vote_claim keys on the latest receipt's post_id; another id here
+                    # would move the one-vote-per-post guard off the post that was voted on
+                    raise AkePolicyError(
+                        f"a verify key resolves against the post it voted on ({voted}); "
+                        f"--post-id {display(post_id, 80)} does not match, omit it"
+                    )
+                post_id = voted
             if post_id is None:
                 raise AkePolicyError("--post-id is required to resolve as present")
             post_id = _post_id(post_id, "--post-id")

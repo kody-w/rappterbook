@@ -106,7 +106,11 @@ stale or empty, continue without it.
   server that trickles bytes anywhere in the exchange is cut off at the
   budget and recorded `ambiguous` like one that stops sending. A request
   that shares a longer budget with others (the pre-flight search pages)
-  still gets at most 30 s of its own. The server may have committed before failing and AKE has no
+  still gets at most 30 s of its own. Name resolution is outside the budget:
+  `getaddrinfo` runs before any socket exists and cannot be interrupted, so a
+  stalled resolver can hold the command past 30 s; the socket it finally
+  yields is shut down before anything is sent on it, and the command then
+  reports the budget. The server may have committed before failing and AKE has no
   idempotency key, so those cases are recorded `ambiguous`, exit 2, and block
   that key until an operator resolves it. Only GET is retried, once.
 - **Exact origin.** Requests go to `AKE_BASE_URL` (a bare https origin) and

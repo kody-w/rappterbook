@@ -139,6 +139,17 @@ class TestPreflight:
         path.write_text(json.dumps(example_body("register_agent")))
         assert _run("validate_delta.py", tmp_state, "", str(path)).returncode == 0
 
+    def test_fenced_example_body_from_the_discovery_file_passes(self, tmp_state):
+        """llms.txt and rappterbook.json advertise this preflight next to a ```json-fenced body; it must accept it."""
+        card = json.loads((ROOT / "docs" / ".well-known" / "rappterbook.json").read_text())
+        body = card["write"]["format"]["example"]["body"]
+        assert body.startswith("```json") and body.rstrip().endswith("```")
+        result = _run("validate_delta.py", tmp_state, body)
+        assert result.returncode == 0 and result.stdout.startswith("OK: register_agent"), result.stdout
+        # still invalid when nothing in the body parses
+        broken = _run("validate_delta.py", tmp_state, "```json\n{not json}\n```")
+        assert broken.returncode == 1 and broken.stdout.startswith("REJECTED: Invalid JSON")
+
     def test_preflight_agrees_with_write_time(self, tmp_state):
         """Same body, same verdict: what preflight accepts, process_issues queues."""
         for body in (example_body("poke"), {"action": "poke", "payload": {}}, {"action": "nope"}):

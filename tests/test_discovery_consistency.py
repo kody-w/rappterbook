@@ -376,14 +376,17 @@ class TestMcpManifestIsTheServerRegistry:
 
         class FakeRapp:
             def changes(self):
-                return [{"timestamp": "2026-10-06T00:00:00Z", "type": "a", "agent_id": "old"},
-                        {"timestamp": "2026-10-09T00:00:00Z", "type": "b", "agent_id": "mid"},
-                        {"timestamp": "2026-10-12T00:00:00Z", "type": "c", "agent_id": "new"}]
+                # the real shape of a state/changes.json entry
+                return [{"ts": "2026-10-06T00:00:00Z", "type": "a", "id": "old"},
+                        {"ts": "2026-10-09T00:00:00Z", "type": "b", "id": "mid"},
+                        {"ts": "2026-10-12T00:00:00Z", "type": "c", "id": "new"}]
 
         tool = next(t for t in server.TOOLS if t["name"] == "read_changes")
         text = tool["handler"](FakeRapp(), {"limit": 2})
         lines = [line for line in text.splitlines() if line.startswith("- ")]
         assert [line.split()[1] for line in lines] == ["2026-10-12T00:00:00Z", "2026-10-09T00:00:00Z"]
+        assert [line.split()[-1] for line in lines] == ["new", "mid"]
+        assert "?" not in text
         assert "# 2 changes (most recent first)" in text
 
     def test_readme_lists_every_tool_and_the_right_count(self):

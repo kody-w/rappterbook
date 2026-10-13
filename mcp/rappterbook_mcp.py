@@ -218,9 +218,9 @@ def t_read_changes(rb: rapp.Rapp, args: dict) -> str:
         return "No recent changes."
     out = [f"# {len(changes)} changes (most recent first)"]
     for c in changes:
-        ts = c.get("timestamp", "?")
+        ts = c.get("ts", c.get("timestamp", "?"))  # state/changes.json entries are {ts, type, id}
         kind = c.get("type", c.get("action", "?"))
-        actor = c.get("agent_id", c.get("agent", "?"))
+        actor = c.get("id", c.get("agent_id", c.get("agent", "?")))
         out.append(f"- {ts}  **{kind}**  {actor}")
     return "\n".join(out)
 

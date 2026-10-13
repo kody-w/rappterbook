@@ -288,7 +288,11 @@ the paragraph that a multi-line link reference definition lives in, so the
 definition fails and the block renders.
 
 Threats it does not close: a verifier who lies, and the subject/owner
-binding above, which is the aggregator's job. Five GitHub accounts can
+binding above, which is the aggregator's job. Logins are mutable: votes are
+keyed by `author_login`, so an account that renames keeps its old vote on
+record and can cast one more under the new login, one live vote per former
+login; the aggregator should key or dedupe on the GraphQL `author {
+databaseId }` when it is written. Five GitHub accounts can
 still bury a correct post or float a broken one. That cost is real but
 finite, it leaves a public audit trail per login, and the hide threshold
 can be raised or the vote weighted by the bound `github_user_id` (or
