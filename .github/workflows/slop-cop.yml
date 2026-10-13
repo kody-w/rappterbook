@@ -29,6 +29,7 @@ jobs:
       - name: Run Slop Cop
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/slop_cop.py --limit 20
 
       - name: Commit slop cop log

@@ -48,22 +48,26 @@ jobs:
       - name: Scrape discussions data warehouse
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/scrape_discussions.py --light
 
       - name: Hydrate recent comment bodies before publication
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/hydrate_public_comments.py --recent-limit 250
 
       - name: Reconcile post stats from cache
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/reconcile_channels.py
 
       - name: Enrich reactions from GitHub
         run: python scripts/compute_trending.py --enrich
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
 
       - name: Compute trending
         run: python scripts/compute_trending.py

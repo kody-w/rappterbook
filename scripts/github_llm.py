@@ -255,6 +255,41 @@ def _probe_model(model: str) -> bool:
         return False
 
 
+# Set when GitHub Models answers with something that is not JSON (for example
+# during its retirement brownouts), so later calls in the same process skip it.
+_github_models_state = {"unavailable": False}
+
+
+def _copilot_env() -> dict:
+    """Environment for the Copilot CLI child process.
+
+    Copilot refuses classic personal access tokens (ghp_). Workflows pass the
+    repo-write token as GITHUB_TOKEN (often the classic GH_PAT), so we hand the
+    CLI COPILOT_GITHUB_TOKEN when it is set and never pass it a classic token.
+    """
+    env = dict(os.environ)
+    for name in ("GITHUB_TOKEN", "GH_TOKEN"):
+        if env.get(name, "").startswith("ghp_"):
+            env.pop(name, None)
+    copilot_token = os.environ.get("COPILOT_GITHUB_TOKEN", "").strip()
+    if copilot_token:
+        env["COPILOT_GITHUB_TOKEN"] = copilot_token
+    return env
+
+
+def _copilot_auth_problem() -> str:
+    """A reason the Copilot CLI cannot authenticate, or "" if it may."""
+    if os.environ.get("COPILOT_GITHUB_TOKEN", "").strip():
+        return ""
+    names = [n for n in ("GH_TOKEN", "GITHUB_TOKEN") if os.environ.get(n, "").strip()]
+    if names and all(os.environ.get(n, "").startswith("ghp_") for n in names):
+        return (
+            "Copilot needs COPILOT_GITHUB_TOKEN (a fine-grained or OAuth token);"
+            " the only tokens set are classic PATs, which Copilot rejects"
+        )
+    return ""
+
+
 def _generate_github(
     system: str,
     user: str,
@@ -302,7 +337,16 @@ def _generate_github(
         )
         try:
             with urllib.request.urlopen(req, timeout=60) as resp:
-                result = json.loads(resp.read())
+                raw_body = resp.read()
+            try:
+                result = json.loads(raw_body)
+            except ValueError as decode_exc:
+                _github_models_state["unavailable"] = True
+                snippet = raw_body[:120].decode("utf-8", errors="replace")
+                raise RuntimeError(
+                    "GitHub Models returned a non-JSON response (the service may be"
+                    f" retired or in a brownout): {snippet!r}"
+                ) from decode_exc
             # Success — reset circuit breaker
             _circuit_breaker["consecutive_429s"] = 0
             break
@@ -357,12 +401,17 @@ def _generate_copilot(
     # Combine system + user into a single prompt for Copilot CLI
     combined_prompt = f"{system}\n\n{user}"
 
+    auth_problem = _copilot_auth_problem()
+    if auth_problem:
+        raise RuntimeError(auth_problem)
+
     try:
         result = subprocess.run(
             ["gh", "copilot", "--", "-p", combined_prompt],
             capture_output=True,
             text=True,
             timeout=60,
+            env=_copilot_env(),
         )
     except FileNotFoundError:
         raise RuntimeError("gh CLI not found — install GitHub CLI with Copilot extension")
@@ -567,8 +616,8 @@ def _generate_impl(
             errors.append(f"Azure: {exc}")
             print(f"  [AZURE] Failed, falling back to GitHub Models: {exc}")
 
-    # Backend 2: GitHub Models
-    if GITHUB_TOKEN:
+    # Backend 2: GitHub Models (skipped once it has answered with non-JSON)
+    if GITHUB_TOKEN and not _github_models_state["unavailable"]:
         try:
             result = _generate_github(system, user, model, max_tokens, temperature)
             _increment_budget()

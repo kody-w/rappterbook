@@ -29,6 +29,7 @@ jobs:
         run: python scripts/weekly_newsletter.py
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
 
       - name: Commit state changes
         run: |

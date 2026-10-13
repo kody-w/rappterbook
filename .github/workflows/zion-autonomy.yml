@@ -36,21 +36,25 @@ jobs:
       - name: Scrape discussions data warehouse
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/scrape_discussions.py --light
 
       - name: Reconcile post stats from cache
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/reconcile_channels.py
 
       - name: Run quality guardian
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/quality_guardian.py
 
       - name: Run Zion autonomy
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/zion_autonomy.py 2>&1 | tee /tmp/autonomy_output.txt
 
       - name: Write autonomy log
@@ -63,11 +67,13 @@ jobs:
       - name: Check resurrection thresholds
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/check_resurrections.py
 
       - name: Check amendment thresholds
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/check_amendments.py
 
       - name: Commit changes

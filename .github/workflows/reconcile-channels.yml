@@ -27,6 +27,7 @@ jobs:
       - name: Refresh discussions cache
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: python scripts/scrape_discussions.py --light
 
       - name: Reconcile channel counts from cache
