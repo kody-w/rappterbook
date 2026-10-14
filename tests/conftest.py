@@ -1,11 +1,16 @@
 """Shared fixtures for Rappterbook tests."""
+from __future__ import annotations
+
+import hashlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Iterator
 from unittest.mock import patch
 
 import pytest
@@ -69,6 +74,52 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(skip_live)
 
 ROOT = Path(__file__).resolve().parent.parent
+_STATE_SNAPSHOT: dict[str, str | None] = {}
+
+
+def _tracked_state_hashes(root: Path) -> dict[str, str | None]:
+    """Hash working-tree contents, including missing files, for tracked state."""
+    tracked = subprocess.run(
+        ["git", "ls-files", "-z", "--", "state/"],
+        cwd=root, capture_output=True, text=True, check=True,
+    )
+    hashes = {}
+    for relative_path in filter(None, tracked.stdout.split("\0")):
+        digest = hashlib.sha256()
+        try:
+            with (root / relative_path).open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+        except FileNotFoundError:
+            hashes[relative_path] = None
+        else:
+            hashes[relative_path] = digest.hexdigest()
+    return hashes
+
+
+def pytest_sessionstart(session: pytest.Session) -> None:
+    """Capture state before collection can import modules with side effects."""
+    global _STATE_SNAPSHOT
+    _STATE_SNAPSHOT = _tracked_state_hashes(ROOT)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _guard_tracked_state() -> Iterator[None]:
+    """Fail teardown if tests changed tracked state; never hide it by restoring."""
+    before = _STATE_SNAPSHOT
+    yield
+    after = _tracked_state_hashes(ROOT)
+    changed = sorted(
+        path for path in before.keys() | after.keys()
+        if before.get(path) != after.get(path)
+    )
+    if changed:
+        pytest.fail(
+            "Tests modified tracked state files:\n"
+            + "\n".join(f"  {path}" for path in changed)
+            + "\nUse tmp_state/tmp_path and explicit state or logging overrides.",
+            pytrace=False,
+        )
 
 
 @pytest.fixture

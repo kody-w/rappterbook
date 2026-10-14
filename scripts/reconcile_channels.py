@@ -4,16 +4,15 @@ from __future__ import annotations
 
 Prefers discussions_cache.json (fresh scrape output) and falls back to
 state/cache_shards/ when the live cache file is absent.
-Maps each discussion to a channel using title-tag extraction (with category
-slug fallback), and updates post_count in channels.json. Also refreshes
-stats.json and pulse.json.
+Synchronizes posted_log before counting verified categories by channel and
+unverified subrappters by topic, using the consistency checker's shared rule.
+Also refreshes stats.json and pulse.json.
 
 Usage:
     python scripts/reconcile_channels.py          # live mode
     python scripts/reconcile_channels.py --dry-run # print only
 """
 import argparse
-import json
 import os
 import re
 import sys
@@ -21,7 +20,13 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-from state_io import recompute_agent_counts, title_to_topic_slug
+from state_io import (
+    channel_post_counts,
+    load_json,
+    recompute_agent_counts,
+    save_json,
+    title_to_topic_slug,
+)
 from cache_shard_loader import load_authoritative_discussions
 from compute_rappterbook_datascience import collect_outside_activity, identity_rows
 from outside_identity import (
@@ -121,59 +126,29 @@ def build_channel_counts(
     discussions: list[dict],
     channels_data: dict,
     verified_category_slugs: set[str],
+    posted_log: dict | None = None,
 ) -> Counter:
-    """Count each discussion once. Resolution order:
-    1. posted_log.json explicit channel assignment (authoritative)
-    2. Title tag matches an unverified channel slug
-    3. Discussion category matches a verified channel
+    """Count the synchronized log, including posts newer than the cache.
+
+    Explicit logged assignments win. Without a log entry, use the same
+    category/topic inference as backfill, never an exclusive topic override.
     """
-    channel_counts: Counter = Counter()
-    topic_channels = {
-        slug for slug, channel in channels_data.get("channels", {}).items()
-        if not channel.get("verified", True)
+    posts = list((posted_log or {}).get("posts", []))
+    seen_numbers = {
+        post["number"] for post in posts if isinstance(post.get("number"), int)
     }
-    # Build an override map from posted_log — explicit channel assignments win
-    posted_log_path = STATE_DIR / "posted_log.json"
-    channel_overrides: dict[int, str] = {}
-    try:
-        posted_log = load_json(posted_log_path)
-        for p in posted_log.get("posts", []):
-            num = p.get("number")
-            ch = p.get("channel")
-            if num and ch:
-                channel_overrides[num] = ch
-    except Exception:
-        pass
-
-    all_channel_slugs = set(channels_data.get("channels", {}).keys())
-    seen_numbers: set[int] = set()
-
     for discussion in discussions:
-        num = discussion.get("number")
-        if isinstance(num, int):
-            seen_numbers.add(num)
-        # Priority 1: explicit channel override from posted_log
-        if isinstance(num, int) and num in channel_overrides:
-            ch = channel_overrides[num]
-            if ch in all_channel_slugs:
-                channel_counts[ch] += 1
-                continue
-
-        category_slug = discussion.get("category", {}).get("slug", "general")
-        topic = title_to_topic_slug(discussion.get("title", ""), channels_data)
-        if topic and topic in topic_channels:
-            channel_counts[topic] += 1
-        elif category_slug in verified_category_slugs:
-            channel_counts[category_slug] += 1
-
-    # Catch posts in posted_log that aren't yet in discussions cache
-    # (fresh posts between cache refreshes). Only count if channel is valid.
-    if seen_numbers:
-        for num, ch in channel_overrides.items():
-            if num not in seen_numbers and ch in all_channel_slugs:
-                channel_counts[ch] += 1
-
-    return channel_counts
+        number = discussion.get("number")
+        if isinstance(number, int) and number in seen_numbers:
+            continue
+        posts.append(discussion_to_posted_log_entry(discussion, channels_data))
+        if isinstance(number, int):
+            seen_numbers.add(number)
+    counting_channels = dict(channels_data.get("channels", {}))
+    for slug in verified_category_slugs:
+        counting_channels.setdefault(slug, {"verified": True})
+    counts = channel_post_counts(posts, {"channels": counting_channels})
+    return Counter({slug: count for slug, count in counts.items() if count})
 
 
 def ensure_verified_channels(
@@ -506,29 +481,6 @@ def reconcile_external_profiles(
     return {"created": len(created), "updated": updated}
 
 
-# ── State I/O ─────────────────────────────────────────────────────────────────
-
-def load_json(path: Path) -> dict:
-    """Load JSON file, return {} on missing/corrupt."""
-    try:
-        with open(path) as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
-
-
-def save_json(path: Path, data: dict) -> None:
-    """Atomic JSON write with read-back verification."""
-    tmp = path.with_suffix(".tmp")
-    with open(tmp, "w") as f:
-        json.dump(data, f, indent=2)
-        f.flush()
-        os.fsync(f.fileno())
-    os.replace(tmp, path)
-    with open(path) as f:
-        json.load(f)  # verify
-
-
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -585,10 +537,14 @@ def main() -> None:
     channels = load_json(channels_path)
     manifest = load_manifest()
     verified_category_slugs = get_verified_category_slugs(manifest)
+    log_path = STATE_DIR / "posted_log.json"
+    log = load_json(log_path)
+    sync_summary = sync_posted_log_from_discussions(log, discussions, channels)
     channel_counts = build_channel_counts(
         discussions,
         channels,
         verified_category_slugs,
+        log,
     )
     auto_added = ensure_verified_channels(channels, manifest, channel_counts)
     ch_data = channels.get("channels", {})
@@ -614,7 +570,6 @@ def main() -> None:
 
     # SHRINK GUARD: posted_log is authoritative for total_posts/comments.
     # If the cache-based count is lower than posted_log, use posted_log.
-    log = load_json(STATE_DIR / "posted_log.json")
     log_posts = log.get("posts", [])
     posted_lookup = {
         post.get("number"): post
@@ -684,13 +639,7 @@ def main() -> None:
     save_json(stats_path, stats)
     save_json(pulse_path, pulse)
 
-    # ── Sync posted_log.json from live Discussions ──
-    # This ensures the frontend and autonomy loop see all posts,
-    # including ones created directly via GraphQL (seeded content).
-    log_path = STATE_DIR / "posted_log.json"
-    existing_log = load_json(log_path)
-    sync_summary = sync_posted_log_from_discussions(existing_log, discussions, channels)
-    log_meta = existing_log.setdefault("_meta", {})
+    log_meta = log.setdefault("_meta", {})
     log_meta["authoritative_source"] = source_name
     log_meta["authoritative_total_posts"] = int(expected_total or len(discussions))
     authoritative_comments = source_meta.get("comment_total")
@@ -701,7 +650,7 @@ def main() -> None:
         )
     log_meta["authoritative_total_comments"] = int(authoritative_comments)
     log_meta["authoritative_refreshed_at"] = source_meta.get("reference_timestamp")
-    save_json(log_path, existing_log)
+    save_json(log_path, log)
 
     print(f"\nUpdated {updated} channel post counts")
     print(
@@ -709,7 +658,7 @@ def main() -> None:
         f"{sync_summary['added']} new posts, "
         f"{sync_summary['topics_backfilled']} topics, "
         f"{sync_summary['channels_normalized']} channels normalized "
-        f"({len(existing_log.get('posts', []))} total)"
+        f"({len(log.get('posts', []))} total)"
     )
     print(
         f"Stats: {stats['total_posts']} posts, "

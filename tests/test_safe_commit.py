@@ -5,6 +5,8 @@ import shutil
 import subprocess
 from pathlib import Path
 
+import pytest
+
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -186,3 +188,110 @@ def test_explicit_local_preference_keeps_recomputed_state(tmp_path):
         "main:state/value.json",
     )
     assert json.loads(payload.stdout)["value"] == 2
+
+
+def reconcile_conflict_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
+    """Prepare local-only clones with a cached post and a newer remote post."""
+    origin, seed = tmp_path / "origin.git", tmp_path / "seed"
+    git(tmp_path, "init", "--bare", str(origin))
+    git(tmp_path, "init", "-b", "main", str(seed))
+    git(seed, "config", "user.name", "fixture")
+    git(seed, "config", "user.email", "fixture@users.noreply.github.com")
+    (seed / "scripts").mkdir()
+    (seed / "state").mkdir()
+    (seed / "docs").mkdir()
+    shutil.copy2(ROOT / "scripts/safe_commit.sh", seed / "scripts")
+    (seed / "scripts/state_io.py").write_text('print("State consistency OK")\n')
+    (seed / "scripts/reconcile_channels.py").write_text(
+        "import json, sys\nfrom pathlib import Path\n"
+        "assert sys.argv[1:] == ['--require-authoritative']\n"
+        "state = Path('state')\n"
+        "posts = json.loads((state / 'posted_log.json').read_text())['posts']\n"
+        "cached = json.loads((state / 'discussions_cache.json').read_text())['posts']\n"
+        "posts = sorted(set(posts + cached))\n"
+        "(state / 'posted_log.json').write_text(json.dumps({'posts': posts}))\n"
+        "(state / 'channels.json').write_text(json.dumps({'post_count': len(posts)}))\n"
+    )
+    for filename, payload in {
+        "state/posted_log.json": {"posts": [1]},
+        "state/channels.json": {"post_count": 1},
+        "state/stats.json": {}, "state/agents.json": {}, "docs/pulse.json": {},
+    }.items():
+        (seed / filename).write_text(json.dumps(payload))
+    (seed / ".gitignore").write_text("state/discussions_cache.json\n")
+    git(seed, "add", ".")
+    git(seed, "commit", "-m", "fixture root")
+    git(seed, "remote", "add", "origin", str(origin))
+    git(seed, "push", "-u", "origin", "main")
+    worker, concurrent = tmp_path / "worker", tmp_path / "concurrent"
+    for clone in (worker, concurrent):
+        git(tmp_path, "clone", "--branch", "main", origin.as_uri(), str(clone))
+        git(clone, "config", "user.name", "fixture")
+        git(clone, "config", "user.email", "fixture@users.noreply.github.com")
+    return origin, worker, concurrent
+
+
+@pytest.mark.parametrize("conflicting", [False, True], ids=["clean-rebase", "conflict"])
+def test_reconcile_after_rebase_preserves_remote_and_cached_posts(
+    tmp_path: Path, conflicting: bool
+) -> None:
+    """A successful retry must publish the repair, not silently discard it."""
+    origin, worker, concurrent = reconcile_conflict_fixture(tmp_path)
+    (worker / "state/discussions_cache.json").write_text('{"posts": [1, 2]}')
+    if conflicting:
+        (worker / "state/posted_log.json").write_text('{"posts": [1, 2]}')
+        (worker / "state/channels.json").write_text('{"post_count": 2}')
+    else:
+        (worker / "docs/pulse.json").write_text('{"changed": true}')
+    (concurrent / "state/posted_log.json").write_text('{"posts": [1, 3]}')
+    (concurrent / "state/channels.json").write_text('{"post_count": 99}')
+    git(concurrent, "add", "state/posted_log.json", "state/channels.json")
+    git(concurrent, "commit", "-m", "newer remote state")
+    git(concurrent, "push", "origin", "main")
+    env = os.environ.copy()
+    env["SAFE_COMMIT_RECONCILE_CHANNELS"] = "true"
+
+    run(
+        ["bash", "scripts/safe_commit.sh", "reconciled counts",
+         "state/posted_log.json", "state/channels.json", "state/stats.json",
+         "state/agents.json", "docs/pulse.json"],
+        worker, env=env,
+    )
+
+    for filename, expected in {
+        "posted_log.json": {"posts": [1, 2, 3]},
+        "channels.json": {"post_count": 3},
+    }.items():
+        published = git(
+            tmp_path, "--git-dir", str(origin), "show", f"main:state/{filename}",
+        )
+        assert json.loads(published.stdout) == expected
+
+
+def test_failed_recompute_does_not_publish_a_success(tmp_path: Path) -> None:
+    """A failed post-rebase rebuild must stop before the retrying push."""
+    origin, worker, concurrent = reconcile_conflict_fixture(tmp_path)
+    (worker / "state/channels.json").write_text('{"post_count": 2}')
+    (worker / "scripts/reconcile_channels.py").write_text(
+        "raise SystemExit('incomplete authoritative corpus')\n",
+    )
+    (concurrent / "state/channels.json").write_text('{"post_count": 3}')
+    git(concurrent, "add", "state/channels.json")
+    git(concurrent, "commit", "-m", "newer remote state")
+    git(concurrent, "push", "origin", "main")
+    env = os.environ.copy()
+    env["SAFE_COMMIT_RECONCILE_CHANNELS"] = "true"
+
+    with pytest.raises(subprocess.CalledProcessError) as failure:
+        run(
+            ["bash", "scripts/safe_commit.sh", "reconciled counts",
+             "state/channels.json"],
+            worker, env=env,
+        )
+
+    assert "incomplete authoritative corpus" in failure.value.stderr
+    assert "Push succeeded" not in failure.value.stdout
+    published = git(
+        tmp_path, "--git-dir", str(origin), "show", "main:state/channels.json",
+    )
+    assert json.loads(published.stdout) == {"post_count": 3}

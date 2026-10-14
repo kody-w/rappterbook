@@ -364,7 +364,7 @@ class TestSmartFallback:
 class TestGhostComments:
     """generate_comment should accept and use platform context."""
 
-    def test_generate_comment_accepts_platform_context(self):
+    def test_generate_comment_accepts_platform_context(self, tmp_state):
         """generate_comment should accept a platform_context kwarg without error."""
         from content_engine import generate_comment
         context = "Platform mood: buzzing. 45 posts in last 24h. c/philosophy is hot."
@@ -374,11 +374,12 @@ class TestGhostComments:
             discussion={"number": 1, "title": "Test", "id": "abc", "body": "Test body"},
             dry_run=True,
             platform_context=context,
+            state_dir=str(tmp_state),
         )
         assert comment["author"] == "zion-philosopher-01"
         assert comment["body"]  # should produce something
 
-    def test_generate_comment_works_without_platform_context(self):
+    def test_generate_comment_works_without_platform_context(self, tmp_state):
         """Backward compatible: should still work without platform_context."""
         from content_engine import generate_comment
         comment = generate_comment(
@@ -386,6 +387,7 @@ class TestGhostComments:
             commenter_arch="coder",
             discussion={"number": 2, "title": "Test2", "id": "def", "body": "Code review"},
             dry_run=True,
+            state_dir=str(tmp_state),
         )
         assert comment["author"] == "zion-coder-01"
 

@@ -4,8 +4,10 @@
 # Usage: bash scripts/safe_commit.sh "commit message" file1 file2 ...
 #
 # Handles the case where another workflow pushed while this one ran.
-# Disjoint commits are rebased and retried. Same-file conflicts fail closed
-# so stale whole-file snapshots can never replace newer remote state.
+# Disjoint commits are rebased and retried. State conflicts keep newer remote
+# data unless the caller explicitly owns a recomputed output.
+# SAFE_COMMIT_RECONCILE_CHANNELS=true rebuilds the channel roll-up after each
+# rebase, retaining remote posts and backfilling cached posts before retrying.
 
 set -euo pipefail
 
@@ -43,6 +45,19 @@ prefer_local_file() {
     *" $1 "*) return 0 ;;
     *) return 1 ;;
   esac
+}
+
+reconcile_after_rebase() {
+  if [ "${SAFE_COMMIT_RECONCILE_CHANNELS:-false}" != "true" ]; then
+    return
+  fi
+  echo "Recomputing channel roll-up against rebased state..."
+  python3 scripts/reconcile_channels.py --require-authoritative
+  git add -- state/channels.json state/stats.json state/agents.json \
+    state/posted_log.json docs/pulse.json
+  if ! git diff --staged --quiet; then
+    git commit -m "$COMMIT_MSG"
+  fi
 }
 
 git config user.name "rappterbook-bot"
@@ -108,6 +123,7 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
   # unstaged changes" — which is not a conflict, but the branch below treated
   # it as one and failed the whole workflow on the first concurrent push.
   if git rebase --autostash origin/main; then
+    reconcile_after_rebase
     echo "Rebase succeeded, retrying push..."
     continue
   fi
@@ -145,6 +161,7 @@ for attempt in $(seq 1 $MAX_ATTEMPTS); do
   done <<< "$CONFLICTED_FILES"
   echo "::warning::State rebase conflict auto-resolved with explicit file policy"
   GIT_EDITOR=true git rebase --continue
+  reconcile_after_rebase
   echo "Conflict resolved, retrying push..."
 done
 

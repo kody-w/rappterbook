@@ -19,6 +19,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 import content_engine as ce
 
 
+@pytest.fixture(autouse=True)
+def _isolate_content_generation(tmp_path, monkeypatch) -> None:
+    """Keep telemetry temporary and unrelated post-type selection deterministic."""
+    monkeypatch.setenv("STATE_DIR", str(tmp_path))
+    monkeypatch.setattr(ce, "pick_post_type", MagicMock(return_value=""))
+
+
 # ---------------------------------------------------------------------------
 # Fixtures: temp state directory with realistic seed data
 # ---------------------------------------------------------------------------
@@ -464,7 +471,7 @@ class TestDynamicPostGeneration:
     """Test generate_dynamic_post with mocked LLM."""
 
     @patch("github_llm.generate")
-    def test_returns_post_dict(self, mock_gen):
+    def test_returns_post_dict(self, mock_gen, tmp_state):
         mock_gen.return_value = (
             "TITLE: Why Bridges Are the Best Metaphor\n"
             "BODY:\n"
@@ -478,43 +485,48 @@ class TestDynamicPostGeneration:
             agent_id="zion-philosopher-01",
             archetype="philosopher",
             channel="philosophy",
+            state_dir=str(tmp_state),
         )
         assert result is not None
         assert "Why Bridges Are the Best Metaphor" in result["title"]
         assert "Brooklyn Bridge" in result["body"]
         assert result["channel"] == "philosophy"
+        assert (tmp_state / "autonomy_log.json").is_file()
 
     @patch("github_llm.generate")
-    def test_returns_none_on_short_output(self, mock_gen):
+    def test_returns_none_on_short_output(self, mock_gen, tmp_state):
         mock_gen.return_value = "TITLE: Hi\nBODY:\nShort."
         result = ce.generate_dynamic_post(
             agent_id="zion-coder-01",
             archetype="coder",
             channel="code",
+            state_dir=str(tmp_state),
         )
         assert result is None
 
     @patch("github_llm.generate")
-    def test_returns_none_on_exception(self, mock_gen):
+    def test_returns_none_on_exception(self, mock_gen, tmp_state):
         mock_gen.side_effect = Exception("Rate limited")
         result = ce.generate_dynamic_post(
             agent_id="zion-coder-01",
             archetype="coder",
             channel="code",
+            state_dir=str(tmp_state),
         )
         assert result is None
 
-    def test_dry_run_returns_none(self):
+    def test_dry_run_returns_none(self, tmp_state):
         result = ce.generate_dynamic_post(
             agent_id="zion-coder-01",
             archetype="coder",
             channel="code",
             dry_run=True,
+            state_dir=str(tmp_state),
         )
         assert result is None
 
     @patch("github_llm.generate")
-    def test_observation_included_in_prompt(self, mock_gen):
+    def test_observation_included_in_prompt(self, mock_gen, tmp_state):
         mock_gen.return_value = (
             "TITLE: The Quiet Channels Are Saying Something\n"
             "BODY:\n"
@@ -533,6 +545,7 @@ class TestDynamicPostGeneration:
             archetype="philosopher",
             channel="philosophy",
             observation=obs,
+            state_dir=str(tmp_state),
         )
         assert result is not None
         # Verify the LLM was called with observation context
@@ -540,7 +553,7 @@ class TestDynamicPostGeneration:
         assert "quiet" in call_args.kwargs.get("user", "") or "quiet" in str(call_args)
 
     @patch("github_llm.generate")
-    def test_recent_titles_anti_repetition(self, mock_gen):
+    def test_recent_titles_anti_repetition(self, mock_gen, tmp_state):
         mock_gen.return_value = (
             "TITLE: Something Completely Different\n"
             "BODY:\n"
@@ -553,6 +566,7 @@ class TestDynamicPostGeneration:
             archetype="wildcard",
             channel="random",
             recent_titles=["On Consciousness", "The Archive of Memory"],
+            state_dir=str(tmp_state),
         )
         assert result is not None
         call_args = mock_gen.call_args
@@ -560,7 +574,7 @@ class TestDynamicPostGeneration:
         assert "On Consciousness" in user_prompt or "DO NOT repeat" in user_prompt
 
     @patch("github_llm.generate")
-    def test_verified_source_cards_are_included(self, mock_gen):
+    def test_verified_source_cards_are_included(self, mock_gen, tmp_state):
         """Fetched discussion bodies are the only citable discussion context."""
         mock_gen.return_value = (
             "TITLE: The handoff is the useful part\n"
@@ -578,6 +592,7 @@ class TestDynamicPostGeneration:
             archetype="reviewer",
             channel="code",
             source_discussions=source,
+            state_dir=str(tmp_state),
         )
         assert result is not None
         user_prompt = mock_gen.call_args.kwargs["user"]
@@ -586,7 +601,7 @@ class TestDynamicPostGeneration:
         assert "Please run one reproducible test" in user_prompt
 
     @patch("github_llm.generate")
-    def test_unverified_discussion_reference_is_rejected(self, mock_gen):
+    def test_unverified_discussion_reference_is_rejected(self, mock_gen, tmp_state):
         """A plausible but unsupplied discussion number cannot become a receipt."""
         mock_gen.return_value = (
             "TITLE: The handoff is missing\n"
@@ -598,11 +613,12 @@ class TestDynamicPostGeneration:
             archetype="reviewer",
             channel="code",
             source_discussions=[],
+            state_dir=str(tmp_state),
         )
         assert result is None
 
     @patch("github_llm.generate")
-    def test_missing_file_reference_is_rejected(self, mock_gen):
+    def test_missing_file_reference_is_rejected(self, mock_gen, tmp_state):
         """Specific-looking filenames must resolve in the repository."""
         mock_gen.return_value = (
             "TITLE: Hospital_smell.py needs a test\n"
@@ -613,6 +629,7 @@ class TestDynamicPostGeneration:
             agent_id="zion-coder-01",
             archetype="coder",
             channel="code",
+            state_dir=str(tmp_state),
         )
         assert result is None
 
@@ -868,7 +885,7 @@ class TestCommentQualityConfig:
         assert "paradox" in system
 
     @patch("github_llm.generate")
-    def test_comment_returns_none_on_bad_output(self, mock_gen):
+    def test_comment_returns_none_on_bad_output(self, mock_gen, tmp_state):
         """Comment generation returns None when validation fails."""
         mock_gen.return_value = ""  # Empty output fails validation
         disc = {"number": 42, "title": "Test", "body": "Body", "id": "abc", "comments": {"totalCount": 0}}
@@ -876,6 +893,7 @@ class TestCommentQualityConfig:
             agent_id="zion-coder-01",
             commenter_arch="coder",
             discussion=disc,
+            state_dir=str(tmp_state),
         )
         assert result is None
 
@@ -1003,37 +1021,37 @@ class TestTruncationDetection:
     """Test that truncated LLM output is rejected."""
 
     @patch("github_llm.generate")
-    def test_truncated_comma_rejected(self, mock_gen):
+    def test_truncated_comma_rejected(self, mock_gen, tmp_state):
         """Body ending with comma is rejected as truncated."""
         mock_gen.return_value = "TITLE: Test Title\nBODY:\nThis is a post that got cut off,"
         result = ce.generate_dynamic_post(
             agent_id="zion-philosopher-01", archetype="philosopher",
-            channel="general", state_dir="state",
+            channel="general", state_dir=str(tmp_state),
         )
         assert result is None
 
     @patch("github_llm.generate")
-    def test_truncated_em_dash_rejected(self, mock_gen):
+    def test_truncated_em_dash_rejected(self, mock_gen, tmp_state):
         """Body ending with em-dash is rejected as truncated."""
         mock_gen.return_value = "TITLE: Test Title\nBODY:\nThis is a post that got cut off\u2014"
         result = ce.generate_dynamic_post(
             agent_id="zion-philosopher-01", archetype="philosopher",
-            channel="general", state_dir="state",
+            channel="general", state_dir=str(tmp_state),
         )
         assert result is None
 
     @patch("github_llm.generate")
-    def test_truncated_colon_rejected(self, mock_gen):
+    def test_truncated_colon_rejected(self, mock_gen, tmp_state):
         """Body ending with colon is rejected as truncated."""
         mock_gen.return_value = "TITLE: Test Title\nBODY:\nHere are the reasons:"
         result = ce.generate_dynamic_post(
             agent_id="zion-philosopher-01", archetype="philosopher",
-            channel="general", state_dir="state",
+            channel="general", state_dir=str(tmp_state),
         )
         assert result is None
 
     @patch("github_llm.generate")
-    def test_clean_body_accepted(self, mock_gen):
+    def test_clean_body_accepted(self, mock_gen, tmp_state):
         """Body ending with period is accepted."""
         mock_gen.return_value = (
             "TITLE: How Coral Reefs Build Digital Infrastructure\n"
@@ -1046,18 +1064,18 @@ class TestTruncationDetection:
         )
         result = ce.generate_dynamic_post(
             agent_id="zion-philosopher-01", archetype="philosopher",
-            channel="general", state_dir="state",
+            channel="general", state_dir=str(tmp_state),
         )
         assert result is not None
         assert "How Coral Reefs Build Digital Infrastructure" in result["title"]
 
     @patch("github_llm.generate")
-    def test_truncated_semicolon_rejected(self, mock_gen):
+    def test_truncated_semicolon_rejected(self, mock_gen, tmp_state):
         """Body ending with semicolon is rejected as truncated."""
         mock_gen.return_value = "TITLE: Test Title\nBODY:\nFirst point about the topic;"
         result = ce.generate_dynamic_post(
             agent_id="zion-philosopher-01", archetype="philosopher",
-            channel="general", state_dir="state",
+            channel="general", state_dir=str(tmp_state),
         )
         assert result is None
 
