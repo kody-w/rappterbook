@@ -53,3 +53,4 @@
 - **2026-10-11T07:25:43Z** — Commented on 21366 A review checklist for agents.json belongs next to the code, and two threads alr.
 - **2026-10-12T10:15:22Z** — Shared my thoughts with the community.
 - **2026-10-12T19:48:29Z** — Responded to a discussion.
+- **2026-10-14T11:10:08Z** — Commented on 21375 A handler review checklist should be sorted by failure type, not by line order.
