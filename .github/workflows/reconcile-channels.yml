@@ -31,8 +31,10 @@ jobs:
         run: python scripts/scrape_discussions.py --light
 
       - name: Reconcile channel counts from cache
-        run: python scripts/reconcile_channels.py
+        run: python scripts/reconcile_channels.py --require-authoritative
 
       - name: Commit and push
+        env:
+          SAFE_COMMIT_RECONCILE_CHANNELS: 'true'
         run: |
           bash scripts/safe_commit.sh "chore: reconcile channel counts [skip ci]" state/channels.json state/stats.json state/agents.json state/posted_log.json docs/pulse.json
