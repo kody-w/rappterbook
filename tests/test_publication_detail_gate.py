@@ -3,8 +3,11 @@ from __future__ import annotations
 
 from unittest import mock
 
+from cache_shard_loader import load_cache_shards
 import hydrate_public_comments
 from publication_detail import comment_summary, detail_status, partition_publishable
+from shard_cache import shard_cache
+from state_io import save_json
 
 
 def test_detail_requires_body_and_complete_counted_comments():
@@ -62,7 +65,8 @@ def test_hydrator_marks_complete_snapshot_and_skips_current_copy():
         "comment_count": 2,
     }]
     snapshot = {
-        "comments": [{"body": "A"}, {"body": "B"}],
+        "comments": [{"body": "A", "last_edited_at": None}, {"body": "B", "last_edited_at": None}],
+        "last_edited_at": None,
         "top_level_comment_count": 2,
         "comments_complete": True,
         "reply_bodies_complete": True,
@@ -83,12 +87,56 @@ def test_hydrator_marks_complete_snapshot_and_skips_current_copy():
     assert hydrate_public_comments.needs_hydration(discussions[0]) is False
 
 
+def test_hydrator_refreshes_legacy_snapshots_without_edit_times():
+    discussion = {
+        "number": 9, "comment_count": 1, "top_level_comment_count": 1,
+        "comments": [{"body": "Answer", "last_edited_at": None}],
+        "comments_complete": True, "updated_at": "2026-10-10T00:00:00Z",
+        "comments_hydrated_updated_at": "2026-10-10T00:00:00Z",
+    }
+    assert hydrate_public_comments.needs_hydration(discussion) is True
+    discussion["last_edited_at"] = None
+    assert hydrate_public_comments.needs_hydration(discussion) is False
+    del discussion["comments"][0]["last_edited_at"]
+    assert hydrate_public_comments.needs_hydration(discussion) is True
+
+
+def test_hydration_preserves_body_edit_times_through_cache_shards(tmp_path):
+    edited = "2026-10-09T00:00:00Z"
+    response = {"data": {"repository": {"discussion": {
+        "updatedAt": "2026-10-10T00:00:00Z", "lastEditedAt": None,
+        "comments": {
+            "totalCount": 1, "pageInfo": {"hasNextPage": False},
+            "nodes": [{
+                "id": "answer", "body": "Answer", "createdAt": "2026-10-08T00:00:00Z",
+                "lastEditedAt": edited, "author": {"login": "bob"},
+                "replies": {"totalCount": 1, "nodes": [{
+                    "id": "vote", "body": "Ran it", "createdAt": "2026-10-10T00:00:00Z",
+                    "lastEditedAt": None, "author": {"login": "carol"},
+                }]},
+            }],
+        },
+    }}}}
+    with mock.patch.object(hydrate_public_comments, "graphql", return_value=response) as fetch:
+        snapshot = hydrate_public_comments.fetch_snapshot(9, "token")
+    assert fetch.call_args.args[0].count("lastEditedAt") == 3
+    assert snapshot["last_edited_at"] is None
+    assert [c["last_edited_at"] for c in snapshot["comments"]] == [edited, None]
+    discussion = dict(snapshot, number=9, body="Question", comment_count=1)
+    save_json(tmp_path / "discussions_cache.json", {"discussions": [discussion]})
+    shard_cache(str(tmp_path))
+    discussions, _ = load_cache_shards(tmp_path, include_body=True)
+    assert discussions[0]["last_edited_at"] is None
+    assert [c["last_edited_at"] for c in discussions[0]["comments"]] == [edited, None]
+
+
 def test_reply_truncation_keeps_snapshot_withheld():
     response = {
         "data": {
             "repository": {
                 "discussion": {
                     "updatedAt": "2026-08-15T01:00:00Z",
+                    "lastEditedAt": None,
                     "comments": {
                         "totalCount": 1,
                         "pageInfo": {"hasNextPage": False, "endCursor": None},
@@ -96,6 +144,7 @@ def test_reply_truncation_keeps_snapshot_withheld():
                             "id": "top",
                             "body": "Top",
                             "createdAt": "2026-08-15T00:00:00Z",
+                            "lastEditedAt": None,
                             "author": {"login": "octocat"},
                             "replies": {
                                 "totalCount": 2,
@@ -103,6 +152,7 @@ def test_reply_truncation_keeps_snapshot_withheld():
                                     "id": "reply-1",
                                     "body": "Only one fetched",
                                     "createdAt": "2026-08-15T00:01:00Z",
+                                    "lastEditedAt": None,
                                     "author": {"login": "octocat"},
                                 }],
                             },

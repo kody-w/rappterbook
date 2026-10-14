@@ -608,6 +608,39 @@ def test_reviewer_workflow_runs_trusted_code_on_worker_branches_only():
         assert all("cache" not in (step.get("with") or {}) for step in job["steps"])
 
 
+def test_scheduled_review_retries_stale_worker_pr(reviewer, monkeypatch, tmp_path):
+    """A docs update during the gate must not strand an unchanged worker head."""
+    workflow = _workflow()
+    triggers = workflow.get("on", workflow.get(True))
+    assert triggers.get("schedule") == [{"cron": "0 */3 * * *"}]
+    assert "github.event_name == 'schedule' ||" in workflow["jobs"]["plan"]["if"]
+    step = next(s for s in workflow["jobs"]["plan"]["steps"] if s.get("id") == "plan")
+    assert step["env"]["PR_NUMBER"] == "${{ github.event.pull_request.number || inputs.pr }}"
+    assert "reviewer.py plan" in step["run"]
+    _write_gate(tmp_path / "gates")
+    fresh = _pr(baseRefOid=NEWER_BASE)
+    drift = {"status": "ahead", "files": [{"filename": "state/posted_log.json"},
+                                         {"filename": "docs/feeds/all.xml"}]}
+    fake = _review_runner(_pr(), fresh=fresh, drift=drift)
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "stale"
+    assert not fake.find("gh", "pr", "merge")
+
+    fresh["comments"] = [_comment(HEAD, "stale")]
+    prs = [fresh, _pr(number=8), _pr(number=9, isCrossRepository=True),
+           _pr(number=10, headRefName="human-change"),
+           _pr(number=11, comments=[_comment(HEAD, "blocked")])]
+    monkeypatch.setattr(subprocess, "run", _plan_runner(prs))
+    assert reviewer.plan_prs() == [{"number": 7, "head": HEAD}, {"number": 8, "head": HEAD}]
+    _write_gate(tmp_path / "gates", base=NEWER_BASE)
+    fake = _review_runner(fresh)
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert _review(reviewer, tmp_path).pr(7) == "merged"
+    merge = fake.find("gh", "pr", "merge")[0]
+    assert merge[merge.index("--match-head-commit") + 1] == HEAD
+
+
 def test_pr_code_runs_only_in_the_gate_job_which_holds_no_secrets():
     jobs = _workflow()["jobs"]
     gate, review, plan = jobs["gate"], jobs["review"], jobs["plan"]
@@ -901,6 +934,54 @@ def test_foreman_never_resends_posts_a_work_order_came_from(foreman, monkeypatch
     assert [p["number"] for p in sent[0]] == [8]
     body = fake.find("gh", "issue", "create")[0]
     assert "<!-- factory-posts:8 -->" in body[body.index("--body") + 1]
+
+
+@pytest.mark.parametrize("state", ["OPEN", "CLOSED"])
+def test_foreman_workflow_dedupes_bot_authored_work_orders(foreman, monkeypatch, state):
+    """The Foreman must receive the same configured bot trust as the Worker."""
+    workflow = yaml.safe_load((ROOT / ".github/workflows/auto-foreman.yml").read_text())
+    step = next(s for s in workflow["jobs"]["run-foreman"]["steps"] if s.get("name") == "Run Foreman")
+    assert step["env"].get("FACTORY_CARD_AUTHORS") == "${{ vars.FACTORY_CARD_AUTHORS }}"
+    monkeypatch.setenv("FACTORY_CARD_AUTHORS", "rappter-bot")
+    fake = _foreman_runner([{
+        "number": 7, "title": "[Foreman] Fix heater", "state": state,
+        "author": {"login": "rappter-bot"},
+        "body": "<!-- factory-posts:100,101,102,103,104 -->",
+    }])
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(foreman, "Rapp",
+                        lambda **k: SimpleNamespace(posts=lambda channel: _posts(100, 101, 102, 103, 104)))
+    monkeypatch.setattr(foreman, "evaluate_thread_for_issue", lambda posts: pytest.fail("used posts sent to LLM"))
+    assert foreman.main(["--apply"]) == 0
+    assert not fake.find("gh", "issue", "create")
+    assert foreman.create_github_issue("FIX HEATER!", "spec", apply=True, source_posts=[200]) == "duplicate"
+    listing = fake.find("gh", "issue", "list")[0]
+    assert listing[listing.index("--state") + 1] == "all"
+
+
+@pytest.mark.parametrize("state", ["OPEN", "CLOSED"])
+def test_foreman_dedupes_reworded_work_orders_by_source_posts(foreman, monkeypatch, state):
+    fake = _foreman_runner([{
+        "number": 7, "title": "[Foreman] Fix heater", "state": state,
+        "body": "<!-- factory-posts:100,101 -->",
+    }])
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert foreman.create_github_issue("Repair the heating controller", "spec", apply=True,
+                                      source_posts=[101, 100, 101]) == "duplicate"
+    assert not fake.find("gh", "issue", "create")
+
+
+def test_foreman_drops_used_posts_from_new_work_order_sources(foreman, monkeypatch):
+    fake = _foreman_runner([{
+        "number": 7, "title": "[Foreman] Fix heater", "state": "CLOSED",
+        "body": "<!-- factory-posts:100,101 -->",
+    }])
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert foreman.create_github_issue("Fix the new thermostat", "spec", apply=True,
+                                      source_posts=[100, 102]) == "created"
+    cmd = fake.find("gh", "issue", "create")[0]
+    assert "<!-- factory-posts:102 -->" in cmd[cmd.index("--body") + 1]
+    assert "<!-- factory-posts:100,102 -->" not in cmd[cmd.index("--body") + 1]
 
 
 def test_foreman_dedupe_ignores_issues_that_are_not_trusted_work_orders(foreman, monkeypatch):

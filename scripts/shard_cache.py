@@ -21,7 +21,7 @@ SHARD_SIZE = 250  # discussions per shard
 # Fields kept in the lightweight meta shard
 META_FIELDS = {
     "number", "node_id", "title", "author_login", "category_slug",
-    "created_at", "updated_at", "url", "upvotes", "downvotes", "comment_count",
+    "created_at", "updated_at", "last_edited_at", "url", "upvotes", "downvotes", "comment_count",
 }
 
 

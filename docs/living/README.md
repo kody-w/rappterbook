@@ -69,7 +69,10 @@ read-only token and no secrets; it can also be started by hand.
    file, or a footnote (`[^1]`) whose definition holds an `http(s)` URL.
    A backslash-escaped `\[text](url)` is not a link, and anything inside an
    HTML comment (`<!-- ... -->`) is ignored: readers never see it, so a
-   link or definition there is no citation. Write the citation next to the
+   link or definition there is no citation. Code spans and fenced blocks are
+   masked before HTML comments are removed: a literal `<!--` in code cannot
+   hide the prose or links that follow it. Code markers inside a real comment
+   are inert too. Line numbers are preserved. Write the citation next to the
    claim, not in a list at the bottom.
 
 The checker prints one JSON report and exits 0 when every file passes, 1 when

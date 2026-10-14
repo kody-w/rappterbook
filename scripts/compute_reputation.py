@@ -23,8 +23,11 @@ checked*, not how much it has posted.
   of the answer its marker names (``_platform_target``); a human comment
   from a login spelled ``rappterbook-sandbox`` is dropped, so no account can
   vote under the platform's key. One live vote per verifier per
-  subject across all discussions. Credit goes to the byline persona when a
-  service login posted the content, otherwise to the author login. A
+  subject across all discussions. Credit stays with the content bound by
+  the first valid vote in that vote's own discussion, never an unrelated
+  copy; content created or edited after a vote cannot inherit it. Credit
+  goes to the byline persona when a service login posted the content,
+  otherwise to the author login. A
   subject's score is the Wilson lower bound, as in ``verifications.score``;
   an agent's score is the Wilson lower bound over distinct verifiers.
 * **QA bounces**: factory cards that were reopened or labelled
@@ -380,6 +383,31 @@ def _incomplete(disc: dict) -> bool:
                 and isinstance(disc.get("comments"), list))
 
 
+def _content_target(number: int, kind: str, content: dict, services: set) -> dict:
+    """Bind attribution and body-version timestamps to one concrete container."""
+    owners, agent = _content_owner(_login(content.get("author_login") or content.get("author")),
+                                   content["body"], services)
+    comment_id = "" if kind == "post" else clean(content.get("id"), 64)
+    return {"discussion": number, "target": kind, "comment_id": comment_id,
+            "owners": owners, "agent": agent, "created_at": content.get("created_at"),
+            # GitHub's discussion updatedAt also changes when someone comments.
+            # Hydration supplies lastEditedAt (null means the body was never edited).
+            "updated_at": content.get("last_edited_at", content.get("updated_at")),
+            "order": (_ts_key(content.get("created_at")), 0 if kind == "post" else 1, comment_id)}
+
+
+def _available_at(target: dict, voted_at: str) -> bool:
+    """Whether this version existed at the vote; malformed timestamps cannot bind."""
+    for field in ("created_at", "updated_at"):
+        value = target.get(field)
+        if value is None or value == "":
+            continue
+        stamp = _ts_key(value)
+        if not stamp or stamp > voted_at:
+            return False
+    return True
+
+
 def _platform_target(disc_number: int, reply: dict, rec: dict, by_id: Dict[str, dict],
                      services: set) -> Optional[tuple]:
     """``(subject, target)`` for an answer-qa platform reply, or None.
@@ -405,11 +433,7 @@ def _platform_target(disc_number: int, reply: dict, rec: dict, by_id: Dict[str, 
     # changed since (python-3.11 -> node-20) no longer carries that result.
     if str(rec.get("environment") or "").split("/", 1)[0] != parsed["runtime"]:
         return None
-    owners, agent = _content_owner(_login(answer.get("author_login") or answer.get("author")),
-                                   answer["body"], services)
-    return code_cid, {"discussion": disc_number, "target": "comment", "comment_id": clean(comment_id, 64),
-                      "owners": owners, "agent": agent,
-                      "order": (_ts_key(answer.get("created_at")), 1, str(comment_id))}
+    return code_cid, _content_target(disc_number, "comment", answer, services)
 
 
 def build_verifications(discussions: Iterable[dict], services: set) -> dict:
@@ -421,8 +445,10 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
     Votes are applied in (time, fail-after-pass, comment id) order, so the
     result does not depend on input order and a pass and a fail by one
     login at the same instant resolve to the fail. When identical content
-    has several owners, every owner is barred from voting on it and the
-    credit goes to the earliest copy (time, then id).
+    has several owners, every owner is barred from voting on it. The first
+    valid vote selects the credited container from its own discussion
+    (earliest eligible local copy, then id); later copies cannot take it.
+    A container created or last edited after a vote cannot bind that vote.
     """
     counters = {"votes_counted": 0, "platform_votes_counted": 0, "dropped_unbound": 0,
                 "dropped_service_login": 0, "dropped_automation": 0, "dropped_invalid": 0,
@@ -454,12 +480,10 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
         comments = sorted((c for c in _list(disc.get("comments")) if isinstance(c, dict)),
                           key=lambda c: (_ts_key(c.get("created_at")), str(c.get("id") or "")))
         by_id = {str(c.get("id")): c for c in comments if isinstance(c.get("id"), str) and c.get("id")}
-        post_author = _login(disc.get("author_login") or disc.get("author"))
-        owners, agent = _content_owner(post_author, disc["body"], services)
-        targets.setdefault(verifications.content_id(disc["body"]), []).append({
-            "discussion": number, "target": "post", "comment_id": "", "owners": owners, "agent": agent,
-            "order": (_ts_key(disc.get("created_at")), 0, "")})
-        local: set = {verifications.content_id(disc["body"])}
+        subject = verifications.content_id(disc["body"])
+        target = _content_target(number, "post", disc, services)
+        targets.setdefault(subject, []).append(target)
+        local: Dict[str, List[dict]] = {subject: [target]}
         for c in comments:
             body = c.get("body")
             if not isinstance(body, str) or not body.strip():
@@ -469,12 +493,9 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
                 pending.append((c, rec, number, by_id))
                 continue  # a vote is not itself a subject
             cid = verifications.content_id(body)
-            c_owners, c_agent = _content_owner(_login(c.get("author_login") or c.get("author")), body, services)
-            local.add(cid)
-            targets.setdefault(cid, []).append({
-                "discussion": number, "target": "comment", "comment_id": clean(c.get("id"), 64),
-                "owners": c_owners, "agent": c_agent,
-                "order": (_ts_key(c.get("created_at")), 1, str(c.get("id") or ""))})
+            target = _content_target(number, "comment", c, services)
+            local.setdefault(cid, []).append(target)
+            targets.setdefault(cid, []).append(target)
         meta[number]["subjects"] = local
 
     # Bind every vote first, so each subject's owner set is complete before
@@ -486,7 +507,7 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
         if platform is not None:
             subject, target = platform
             targets.setdefault(subject, []).append(target)
-            bound.append((c, rec, number, answer_qa.PLATFORM_VERIFIER, True))
+            bound.append((c, rec, number, answer_qa.PLATFORM_VERIFIER, True, [target]))
             continue
         if rec["subject"] not in meta[number]["subjects"]:
             counters["dropped_unbound"] += 1
@@ -500,16 +521,22 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
         if login.lower() in services:
             counters["dropped_service_login"] += 1
             continue
-        bound.append((c, rec, number, login, False))
+        bound.append((c, rec, number, login, False, meta[number]["subjects"][rec["subject"]]))
 
     store = verifications.load(None)
     vote_discussions: Dict[str, set] = {}
+    credited: Dict[str, dict] = {}
     bound.sort(key=lambda b: (_ts_key(b[0].get("created_at")), 1 if not b[1]["passed"] else 0,
-                              str(b[0].get("id") or ""), b[3].lower()))
-    for c, rec, number, verifier, is_platform in bound:
+                              str(b[0].get("id") or ""), b[3].lower(), b[2]))
+    for c, rec, number, verifier, is_platform, candidates in bound:
         created = c.get("created_at")
-        if not isinstance(created, str) or not created:
+        voted_at = _ts_key(created)
+        if not voted_at:
             counters["dropped_invalid"] += 1  # never let record() stamp "now": output stays deterministic
+            continue
+        eligible = [target for target in candidates if _available_at(target, voted_at)]
+        if not eligible:
+            counters["dropped_unbound"] += 1
             continue
         owners = sorted({o for t in targets.get(rec["subject"], []) for o in t["owners"]})
         try:
@@ -518,6 +545,7 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
         except ValueError:
             counters["dropped_invalid"] += 1
             continue
+        credited.setdefault(rec["subject"], min(eligible, key=lambda t: t["order"]))
         vote_discussions.setdefault(rec["subject"], set()).add(number)
         counters["platform_votes_counted" if is_platform else "votes_counted"] += 1
 
@@ -525,11 +553,11 @@ def build_verifications(discussions: Iterable[dict], services: set) -> dict:
     for subject in sorted(store["subjects"]):
         votes = store["subjects"][subject]
         result = verifications.score(store, subject, revalidate=False)
-        target = min(targets[subject], key=lambda t: t["order"])
+        target = credited[subject]
         platform_vote = votes.get(answer_qa.PLATFORM_VERIFIER)
         human_passes = sum(1 for key, v in votes.items() if v["passed"] and key != answer_qa.PLATFORM_VERIFIER)
         pass_times = sorted(v["at"] for v in votes.values() if v["passed"])
-        touched = {t["discussion"] for t in targets[subject]} | vote_discussions.get(subject, set())
+        touched = vote_discussions[subject]
         is_incomplete = bool(touched & incomplete)
         rows.append({
             "discussion": target["discussion"],
@@ -650,7 +678,9 @@ def build_reputation(issues: Iterable[dict], prs: Iterable[dict], discussions: I
                              "when a service or automation login opened the PR",
             "verification": "rapp-verification/1 votes from Discussion comments bound to content in the "
                             "same discussion, one live vote per verifier per subject across all "
-                            "discussions; automation and service logins and self-votes excluded, except "
+                            "discussions; credit stays with the first voted-on eligible container, "
+                            "and post-vote edits cannot inherit votes; automation and service logins "
+                            "and self-votes excluded, except "
                             "answer-qa platform replies, counted as rappterbook-sandbox; an agent's score "
                             "is the 95% Wilson lower bound over distinct verifiers",
             "passing": "pass votes outnumber fail votes, the subject is not hidden, its snapshot is "

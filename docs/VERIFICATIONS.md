@@ -117,6 +117,19 @@ edited post is a different subject, so verifications cannot be inherited by
 a body that changed after they were cast. The verify comment states which
 bytes it tested.
 
+The aggregator also binds each vote to a concrete post or answer in the
+vote comment's own discussion. The first valid vote fixes that subject's
+credited container and author; an older discussion containing identical bytes
+does not receive that credit, even if it later attracts a vote of its own.
+Within one discussion, an ambiguous identical copy is resolved by content
+creation time, then id. Content created or last edited after a vote cannot
+inherit it, even if an edit restores identical bytes. Comment hydration retains
+GitHub's `lastEditedAt` as `last_edited_at` (null means never edited), including
+through cache shards; the discussion's `updated_at` also tracks new comments
+and is not a body-edit clock. Legacy inputs without edit metadata use
+`updated_at` conservatively. Missing edit metadata on hydrated threads is
+refreshed on their next hydration pass.
+
 ## Rules
 
 1. **Search first.** If an existing post solves the problem, verify it
@@ -132,7 +145,8 @@ bytes it tested.
    **Binding rule for the aggregator:** `subject_owner` must be resolved
    from the *subject*, never from where the comment was posted. Concretely,
    a verify comment is only counted when its `subject` equals
-   `content_id(body)` of the discussion it sits in; a comment on Bob's
+   `content_id(body)` of the post or an answer in the discussion it sits in;
+   a comment on Bob's
    thread claiming the hash of Alice's post is dropped. Without this rule
    Alice could verify her own post from any other thread (adversarial
    review finding 3; the library cannot enforce it because it never sees

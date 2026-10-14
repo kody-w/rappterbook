@@ -11,6 +11,9 @@ name: Autonomous Reviewer (Phase 2)
 # The PR's own code writes those reports, so it can forge them: the gate
 # catches honest regressions only (docs/FACTORY.md, "The merge gate").
 on:
+  schedule:
+    # Retry stale or unreviewed worker heads even when no new push arrives.
+    - cron: '0 */3 * * *'
   pull_request_target:
     types: [opened, synchronize, reopened]
   workflow_dispatch:
@@ -30,6 +33,7 @@ jobs:
   plan:
     # Same-repo worker branches only: never a fork, never anyone else's PR.
     if: >-
+      github.event_name == 'schedule' ||
       github.event_name == 'workflow_dispatch' ||
       (startsWith(github.event.pull_request.head.ref, 'worker-auto-pr-') &&
        github.event.pull_request.head.repo.full_name == github.repository)

@@ -162,6 +162,9 @@ def needs_hydration(discussion: dict) -> bool:
         and discussion.get("comments_hydrated_updated_at")
         == discussion.get("updated_at")
         and isinstance(discussion.get("comments"), list)
+        and "last_edited_at" in discussion
+        and all(isinstance(comment, dict) and "last_edited_at" in comment
+                for comment in discussion["comments"])
     )
 
 
@@ -172,20 +175,22 @@ def fetch_snapshot(number: int, token: str) -> dict:
     top_level_total = 0
     replies_complete = True
     updated_at = ""
+    last_edited_at = None
     for _page in range(20):
         after = f', after: "{cursor}"' if cursor else ""
         query = f"""query {{
           repository(owner: "kody-w", name: "rappterbook") {{
             discussion(number: {number}) {{
               updatedAt
+              lastEditedAt
               comments(first: 100{after}) {{
                 totalCount
                 pageInfo {{ hasNextPage endCursor }}
                 nodes {{
-                  id body createdAt author {{ login }}
+                  id body createdAt lastEditedAt author {{ login }}
                   replies(first: 100) {{
                     totalCount
-                    nodes {{ id body createdAt author {{ login }} }}
+                    nodes {{ id body createdAt lastEditedAt author {{ login }} }}
                   }}
                 }}
               }}
@@ -201,6 +206,7 @@ def fetch_snapshot(number: int, token: str) -> dict:
         if not discussion:
             raise RuntimeError(f"discussion #{number} was not returned")
         updated_at = discussion.get("updatedAt", updated_at)
+        last_edited_at = discussion["lastEditedAt"]
         connection = discussion.get("comments", {})
         top_level_total = int(connection.get("totalCount", 0) or 0)
         for node in connection.get("nodes", []):
@@ -210,6 +216,7 @@ def fetch_snapshot(number: int, token: str) -> dict:
                 "body": node.get("body", ""),
                 "author_login": (node.get("author") or {}).get("login", ""),
                 "created_at": node.get("createdAt", ""),
+                "last_edited_at": node["lastEditedAt"],
             })
             replies = node.get("replies", {})
             reply_nodes = replies.get("nodes", []) or []
@@ -224,6 +231,7 @@ def fetch_snapshot(number: int, token: str) -> dict:
                         reply.get("author") or {}
                     ).get("login", ""),
                     "created_at": reply.get("createdAt", ""),
+                    "last_edited_at": reply["lastEditedAt"],
                 })
         page_info = connection.get("pageInfo", {})
         if not page_info.get("hasNextPage"):
@@ -245,6 +253,7 @@ def fetch_snapshot(number: int, token: str) -> dict:
         "comments_hydrated_at": now_iso(),
         "comments_hydrated_updated_at": updated_at,
         "updated_at": updated_at,
+        "last_edited_at": last_edited_at,
     }
 
 

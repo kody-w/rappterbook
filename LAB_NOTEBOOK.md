@@ -103,6 +103,75 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.58 - 2026-10-13 - Four factory reliability repairs
+
+**Session**: gpt-6.1-sol via Copilot CLI / operator: authorized operator
+**Read state**: `1a156fe6f4e5b22045c85c8f6b85d06f3241b3ff` - clean, isolated `factory-pattern` worktree
+
+### Hypothesis tested
+The operator supplied four confirmed defects and runnable counterexamples:
+copied-content verification credit, stranded stale worker reviews, repeated
+Foreman work orders, and code-delimiter interference with living-doc checks.
+This explicit repair scope superseded the older next-frame heartbeat
+recommendation. Each defect should close with a failing regression, without
+changing canonical state, weakening factory trust checks, or publishing.
+
+### What I built
+- Bound reputation credit to the content in the first valid vote's own
+  discussion, rather than the globally oldest identical container. Later
+  copies cannot take that credit; post-vote edits and future content cannot
+  inherit votes, including sandbox votes. Unvoted copies cannot invalidate
+  the voted discussion's completeness.
+- Retained actual body-edit times through comment hydration and cache
+  sharding. GitHub's `lastEditedAt`, including an explicit null for an
+  unedited body, is distinct from discussion activity's `updatedAt`.
+- Added the existing Reviewer's three-hour retry trigger and admitted
+  scheduled runs to its trusted planning job. Same-repo selection, protected
+  paths, isolated test execution and SHA-pinned merging are unchanged.
+- Passed `FACTORY_CARD_AUTHORS` to the Foreman, matching the Worker's trust
+  configuration, and guarded issue creation against reused source sets.
+  Normalized-title dedupe and open/closed issue coverage remain intact.
+- Masked code before removing HTML comments, preserving line numbers and
+  respecting real comments and block boundaries. Added regressions in the
+  existing reviewer, reputation, living-doc and publication-detail suites,
+  and updated their existing documentation. No state file was edited or staged
+  for delivery.
+
+### What worked
+All four supplied PoCs reproduced against this worktree. Before implementation,
+the first regression selection reported 27 failures and one preserving case
+passed; the edit-metadata regressions separately reported two failures.
+The final command
+`python3.11 -m pytest tests/test_{factory_reviewer,reputation,check_living_doc,publication_detail_gate,verifications,answer_qa,scrape_discussions}.py -q --tb=short`
+passed all 574 tests. All nine changed Python files compiled with
+`-W error -m py_compile` under `python3` (3.9.6), `python3.11` (3.11.15)
+and `python3.13` (3.13.12). Test-generated state changes were restored with
+`git checkout -- state/`.
+
+### What failed
+Two additional regressions exposed an overly broad multiline code span in
+the initial repair: it crossed a fence or real HTML-comment block. Bounding
+spans at interrupting blocks closed that path. A test fixture also needed a
+paragraph break: a link in the same paragraph legitimately satisfies the
+existing citation heuristic, even when the separate link rule rejects it.
+No live GitHub workflow or deployment was run; the operator required a local
+commit and explicitly prohibited pushing.
+
+### Lessons for next session
+1. Content hashes identify bytes, not the location or author that earned credit.
+2. Discussion activity timestamps are not body-edit timestamps; preserve the
+   authoritative edit field, including null, through every projection.
+3. Retry outcomes need an actual trigger, and shared trust settings must reach
+   both producers and consumers.
+4. Code/comment stripping needs lexical precedence and block boundaries, not
+   independent global replacements.
+
+### Recommended next move
+Review the local four-fix commit. If publication is separately authorized,
+observe one scheduled retry of an unchanged stale worker head and one
+bot-authored Foreman dedupe run, keeping all existing safety gates enabled.
+Do not regenerate or commit canonical state as part of this repair.
+
 ## Entry 003.57 — 2026-09-27 — Added the RAPP/1 network header
 
 Added the RAPP/1 network header to `README.md` for the RAPP/1 rollout.

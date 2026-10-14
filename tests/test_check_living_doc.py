@@ -455,6 +455,50 @@ class TestCitations:
         report = check(tmp_path, make_doc(body=body))
         assert rules(report) == ["citations"] and report["errors"][0]["line"] == 14
 
+    @pytest.mark.parametrize("opener,closer", [
+        ("Use `<!--`.", "End with `-->`."),
+        ("Use ``<!-- with a `backtick` ``.", "End with ``-->``."),
+        ("Use `a multiline\nliteral <!-- example`.", "End with `-->`."),
+        ("```html\n<!-- example\n```", "```html\n-->\n```"),
+        ("~~~html\n<!-- example\n~~~", "~~~html\n-->\n~~~"),
+        ("````html\n<!-- example\n```\n````", "```html\n-->\n```"),
+    ])
+    def test_code_comment_openers_do_not_hide_claims_or_dead_links(self, tmp_path, opener, closer):
+        claim = "The quota is 5000 requests per hour."
+        body = f"{opener}\n\n{claim}\n\nSee [docs](https://example.org/gone).\n\n{closer}\n"
+        text = make_doc(body=body)
+        calls = []
+
+        def fetch(url):
+            calls.append(url)
+            return 404 if url.endswith("/gone") else 200
+
+        report = check(tmp_path, text, fetcher=fetch)
+        assert rules(report) == ["links", "citations"]
+        assert calls == [SOURCE, "https://example.org/gone"]
+        assert report["errors"][1]["line"] == text.splitlines().index(claim) + 1
+        assert "5000" in report["errors"][1]["message"]
+
+    def test_code_markers_inside_real_html_comments_do_not_hide_following_prose(self, tmp_path):
+        body = ("<!--\nAn unmatched ` and a fence:\n```html\n"
+                "Hidden 9000 and [hidden](https://example.org/hidden).\n-->\n\n"
+                "Visible quota is 5000.\n\nSee [gone](https://example.org/gone).\n")
+        report = check(tmp_path, make_doc(body=body),
+                       fetcher=lambda url: 404 if url.endswith("/gone") else 200)
+        assert rules(report) == ["links", "citations"]
+        assert report["checked_urls"] == [SOURCE, "https://example.org/gone"]
+        assert "5000" in report["errors"][1]["message"]
+
+    @pytest.mark.parametrize("block", ["```html\n<!--\n```", "<!--\nHidden example.\n-->"])
+    def test_inline_code_does_not_cross_block_boundaries(self, tmp_path, block):
+        body = (f"Unmatched ` inline opener\n{block}\nVisible quota is 5000.\n\n"
+                "See [gone](https://example.org/gone).\n"
+                "```html\n-->\n```\nFinal ` token\n")
+        report = check(tmp_path, make_doc(body=body),
+                       fetcher=lambda url: 404 if url.endswith("/gone") else 200)
+        assert rules(report) == ["links", "citations"]
+        assert report["checked_urls"] == [SOURCE, "https://example.org/gone"]
+
     def test_relative_link_is_not_a_citation(self, tmp_path):
         (tmp_path / "other.md").write_text("x")
         body = "There are 12 channels, see [list](other.md).\n"

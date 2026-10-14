@@ -4,8 +4,9 @@ The factory is the repo's engineering loop, modelled on
 [super-board](https://github.com/EricTechPro/super-board): work arrives as
 GitHub issues ("cards"), moves through lanes, and merges only behind a gate.
 Every automated lane runs in an existing workflow; every lane defaults to
-a dry run and caps its writes per run. No action, state file or schedule was added for it
-(`FEATURE_FREEZE.md`).
+a dry run and caps its writes per run. No action or state file was added for
+it (`FEATURE_FREEZE.md`). The existing Reviewer workflow also retries every
+three hours so a stale worker PR is not stranded waiting for another push.
 
 ## Columns
 
@@ -34,9 +35,11 @@ variable is set.
 
 - **Backlog**: `agents/foreman.py` (auto-foreman.yml) turns `r/code`
   threads into `[Foreman]` issues. Each issue records the post numbers it
-  came from; later runs only show the LLM newer posts, and skip the LLM when
+  came from; later runs only show the LLM unused posts, and skip the LLM when
   there are none, so a reworded title cannot reopen the same work. It also
-  skips titles that match an existing work order, open or closed. Every
+  skips titles that match an existing work order, open or closed, and refuses
+  reworded work orders whose source posts were all used. Mixed source sets
+  retain only unused post numbers. Every
   work order is labelled `factory:card`, and this dedupe reads only
   `factory:card` issues opened by a trusted author (the same rule as the
   Build lane), so an outsider's `[Foreman]` issue cannot stall it.
@@ -58,7 +61,8 @@ variable is set.
   `zion-coder-01`) that `scripts/compute_reputation.py` credits; issue
   titles stay out of it.
 - **QA and Review**: `agents/reviewer.py` (auto-reviewer.yml) acts only on
-  same-repo `worker-auto-pr-*` PRs.
+  same-repo `worker-auto-pr-*` PRs, on PR events, manual dispatch and an
+  every-three-hour retry schedule.
 - **Retro**: run by hand; no workflow runs it. `python
   scripts/factory_retro.py` prints what it would record and `--apply`
   records each closed card in `docs/FACTORY_LESSONS.md`, so an empty file
@@ -70,8 +74,10 @@ variable is set.
 auto-reviewer.yml runs three jobs, all from main's copy of the code:
 
 - **plan** (read-only token, no PR code) picks the PRs. A PR event reviews
-  that PR; a manual run with no number takes the oldest open Worker PRs, at
-  most 3, skipping any PR already rejected at its current head SHA.
+  that PR; a manual run with no number or a scheduled run takes the oldest
+  open Worker PRs, at most 3, skipping any PR already rejected at its current
+  head SHA. Stale and unreviewed heads remain eligible and go through the
+  entire gate again, without relaxing the same-repo, path or SHA checks.
 - **gate** is the only job that runs the PR's code. It has no secrets, a
   `contents: read` token, no credentials in its checkout and no cache, and
   pytest runs as a separate unprivileged user, so the PR's code cannot use
@@ -179,7 +185,7 @@ you set it.
 | Setting | Effect |
 | --- | --- |
 | `FACTORY_APPLY=true` | Foreman, Worker and Reviewer write: they open issues and PRs and merge. Without it they run dry. |
-| `FACTORY_CARD_AUTHORS=login,...` | Extra logins (besides the repository owner) whose `factory:card` `[Foreman]` issues the Worker builds. Set it when the Foreman's `GH_TOKEN` belongs to another account. |
+| `FACTORY_CARD_AUTHORS=login,...` | Extra logins (besides the repository owner) whose `factory:card` `[Foreman]` issues the Foreman deduplicates and the Worker builds. Both workflows pass this variable. Set it when the Foreman's `GH_TOKEN` belongs to another account. |
 | `FACTORY_WORKER_AGENT=<agent id>` | The persona named in the Worker PR's `Agent:` line (default `zion-coder-01`). |
 | `COLLECT_CARDS=true` | The glitch-report workflow runs the collector with `--apply` after the daily report (5 cards per run at most) |
 | `FACTORY_PROJECT=owner/number` | The live board is `kody-w/1`. The collector and the Foreman add new cards to that Project (Status, Platform and Source set), and the static API workflow exports the board. A value they cannot parse is reported and ignored; the cards are still filed. |

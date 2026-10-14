@@ -152,7 +152,7 @@ def evaluate_thread_for_issue(posts):
 
 
 def create_github_issue(title, body, apply, existing=None, source_posts=()):
-    """Open a [Foreman] issue unless one with the same title/fingerprint exists.
+    """Open a [Foreman] issue unless its title or all its source posts were used.
 
     `source_posts` are the r/code post numbers the issue was drawn from; they
     go into the body marker so later runs never send those posts again.
@@ -163,6 +163,11 @@ def create_github_issue(title, body, apply, existing=None, source_posts=()):
     if existing is None:
         print("Could not list existing work orders; not opening an issue.")
         return "error"
+    numbers = sorted({int(n) for n in source_posts})
+    unused = [n for n in numbers if n not in existing[2]]
+    if numbers and not unused:
+        print("Duplicate source posts; not opening another work order.")
+        return "duplicate"
     titles, prints = existing[0], existing[1]
     title = strip_prefix(title)
     if not normalize_title(title):
@@ -173,9 +178,8 @@ def create_github_issue(title, body, apply, existing=None, source_posts=()):
         print(f"Duplicate work order, not opening: {title}")
         return "duplicate"
     full_body = f"{body}\n\n<!-- factory-fingerprint:{fp} -->\n"
-    numbers = sorted({int(n) for n in source_posts})
-    if numbers:
-        full_body += f"<!-- factory-posts:{','.join(str(n) for n in numbers)} -->\n"
+    if unused:
+        full_body += f"<!-- factory-posts:{','.join(str(n) for n in unused)} -->\n"
     if not apply:
         print(f"[DRY RUN] Would open issue: {TITLE_PREFIX}{title}")
         return "dry_run"

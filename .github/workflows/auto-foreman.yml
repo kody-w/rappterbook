@@ -37,6 +37,7 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }} # Needs repo scope
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        FACTORY_CARD_AUTHORS: ${{ vars.FACTORY_CARD_AUTHORS }}
         APPLY: ${{ vars.FACTORY_APPLY == 'true' && '--apply' || '' }}
         # Optional: add each new work order to this Project (needs the project scope).
         FACTORY_PROJECT: ${{ vars.FACTORY_PROJECT }}

@@ -84,8 +84,11 @@ REFERENCE_USE = re.compile(r"(?<!\\)\[(?P<text>[^\]]*)\]\[(?P<label>[^\]]*)\]")
 FOOTNOTE_USE = re.compile(r"\[\^(?P<label>[^\]]+)\](?!:)")
 SHORTCUT_USE = re.compile(r"(?<![\\\]])\[(?P<label>[^\]^][^\]]*)\](?![\[(:])")
 BARE_URL = re.compile(r"https?://[^\s<>()\]]+")
-INLINE_CODE = re.compile(r"`[^`]*`")
+# A code span cannot cross a paragraph or an interrupting block opener.
+_INLINE_BOUNDARY = r"\n(?:[ \t]*\n| {0,3}(?:`{3,}|~{3,}|<!--|#{1,6}[ \t]|[-+*][ \t]|1[.)][ \t]|>))"
+INLINE_CODE = re.compile(r"(?<!`)(`+)(?!`)(?:(?!" + _INLINE_BOUNDARY + r").)*?(?<!`)\1(?!`)", re.S)
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
+CODE_TOKEN = re.compile(r"<!--|^ {0,3}(?:`{3,}|~{3,})|`+", re.M)
 HEADING = re.compile(r"^\s{0,3}#{1,6}(\s|$)")
 LIST_ITEM = re.compile(r"^\s*(?:[-*+]|\d{1,9}[.)])\s+")
 SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"'(\[*_])")
@@ -428,6 +431,54 @@ def _has_citation(paragraph: str, refs: Optional[Dict[str, bool]] = None) -> boo
     return any(re.search(r"https?://", m.group("text")) for m in FOOTNOTE_DEF.finditer(text))
 
 
+def _fence_end(body: str, start: int, fence: str) -> int:
+    """Find an equal-or-longer matching closing fence, or consume through EOF."""
+    closing = re.compile(r"^ {0,3}" + re.escape(fence) + re.escape(fence[0]) + r"*[ \t]*\r?$", re.M)
+    match = closing.search(body, start)
+    return match.end() if match else len(body)
+
+
+def strip_code(body: str) -> str:
+    """Mask code before removing HTML comments, preserving lines and columns.
+
+    Real comments are opaque here: backticks inside them cannot start code
+    that masks visible prose after their closer.
+    """
+    parts: List[str] = []
+    position = 0
+    while True:
+        token = CODE_TOKEN.search(body, position)
+        if token is None:
+            break
+        start = token.start()
+        parts.append(body[position:start])
+        if token.group() == "<!--":
+            close = body.find("-->", token.end())
+            position = len(body) if close < 0 else close + 3
+            parts.append(body[start:position])
+            continue
+        line_end = body.find("\n", start)
+        line_end = len(body) if line_end < 0 else line_end
+        fence = FENCE.match(body[start:line_end]) if start == 0 or body[start - 1] == "\n" else None
+        if fence and not (fence.group(1)[0] == "`" and "`" in fence.group(2)):
+            end = _fence_end(body, min(line_end + 1, len(body)), fence.group(1))
+        else:
+            code_start = start + len(token.group()) - len(token.group().lstrip(" "))
+            prefix = body[:code_start]
+            escaped = (len(prefix) - len(prefix.rstrip("\\"))) % 2
+            span = None if escaped else INLINE_CODE.match(body, code_start)
+            if span is None:
+                parts.append(token.group())
+                position = token.end()
+                continue
+            parts.append(body[start:code_start])
+            start, end = code_start, span.end()
+        parts.append(re.sub(r"[^\r\n]", " ", body[start:end]))
+        position = end
+    parts.append(body[position:])
+    return "".join(parts)
+
+
 def strip_html_comments(body: str) -> str:
     """Drop ``<!-- ... -->`` comments, which readers never see, keeping each
     comment's line breaks so line numbers stay right: a link or reference
@@ -661,7 +712,7 @@ def check_text(
     checked: List[str] = []
     try:
         meta, body, first_line, errors = split_front_matter(text)
-        body = strip_html_comments(body)
+        body = strip_html_comments(strip_code(body))
         if meta is not None:
             errors += check_front_matter(meta)
             errors += check_freshness(meta, today)

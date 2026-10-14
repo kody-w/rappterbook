@@ -302,6 +302,104 @@ class TestVerifications:
         assert (row["agent"], row["comment_id"], row["pass_count"]) == ("early", "A", 1)
         assert doc["totals"]["dropped_invalid"] == 1  # 'late' owns a copy: self-vote
 
+    def voted_content(self, kind="comment"):
+        """A post or answer with two independent votes, as in the credit-theft PoC."""
+        body = "environment: python-3.11\n\n```python\nprint(sum(range(10)))\n```"
+        subject = verifications.content_id(body)
+        votes = [
+            comment(verify_block(subject), "carol", at="2026-10-10T00:00:00Z", cid="V1"),
+            comment(verify_block(subject), "dave", at="2026-10-10T01:00:00Z", cid="V2"),
+        ]
+        answer = comment(body, "bob", at="2026-10-09T00:00:00Z", cid="DC_ans")
+        disc = discussion(number=200, body=body if kind == "post" else "How do I sum 0..9?",
+                          author="bob" if kind == "post" else "asker",
+                          comments=votes if kind == "post" else [answer] + votes)
+        disc["created_at"] = "2026-10-08T00:00:00Z"
+        return disc, disc if kind == "post" else answer, subject
+
+    @pytest.mark.parametrize("kind", ["post", "comment"])
+    @pytest.mark.parametrize("copy_kind", ["post", "comment"])
+    def test_copied_content_keeps_credit_in_the_voted_discussion(self, kind, copy_kind, tmp_path, monkeypatch):
+        import compute_trending
+        import weekly_newsletter
+        victim, target, subject = self.voted_content(kind)
+        copy = comment(target["body"], "mallory", at="2026-01-01T00:00:00Z", cid="DC_copy")
+        copy["updated_at"] = "2026-10-12T00:00:00Z"
+        attacker = discussion(number=50, body=copy["body"] if copy_kind == "post" else "Old question",
+                              author="mallory", comments=[] if copy_kind == "post" else [copy])
+        attacker.update(created_at=copy["created_at"], updated_at=copy["updated_at"])
+        for discs in ([victim, attacker], [attacker, victim]):
+            doc = build(discussions=discs)
+            row = doc["verified"][0]
+            assert (row["subject"], row["discussion"], row["target"], row["agent"], row["passing"]) == \
+                (subject, 200, kind, "bob", True)
+            assert row["comment_id"] == ("" if kind == "post" else "DC_ans")
+            assert "mallory" not in doc["agents"]
+            path = tmp_path / "reputation.json"
+            path.write_text(rep.dumps(doc))
+            monkeypatch.setenv("REPUTATION_JSON", str(path))
+            assert compute_trending.verified_numbers() == ({200} if kind == "post" else set())
+            window = rep.verified_in_window(doc, datetime(2026, 10, 6, tzinfo=timezone.utc),
+                                            datetime(2026, 10, 13, tzinfo=timezone.utc))
+            assert [(r["discussion"], r["agent"]) for r in window["discussions"]] == [(200, "bob")]
+            rendered = weekly_newsletter.render_verified(window)
+            assert victim["url"] in rendered and attacker["url"] not in rendered
+
+    def test_later_votes_on_an_old_copy_cannot_reassign_existing_credit(self):
+        victim, target, subject = self.voted_content()
+        attacker = discussion(number=50, body=target["body"], author="mallory", comments=[
+            comment(verify_block(subject), "eve", at="2026-10-12T00:00:00Z", cid="V3")])
+        attacker["created_at"] = "2026-01-01T00:00:00Z"
+        for discs in ([victim, attacker], [attacker, victim]):
+            row = build(discussions=discs)["verified"][0]
+            assert (row["discussion"], row["target"], row["agent"], row["votes"]) == (200, "comment", "bob", 3)
+
+    @pytest.mark.parametrize("kind", ["post", "comment"])
+    @pytest.mark.parametrize("field", ["created_at", "updated_at", "last_edited_at"])
+    def test_votes_do_not_credit_content_added_or_edited_after_the_vote(self, kind, field):
+        disc, target, subject = self.voted_content(kind)
+        target[field] = "2026-10-11T00:00:00Z"
+        doc = build(discussions=[disc])
+        assert doc["verified"] == [] and doc["totals"]["dropped_unbound"] == 2
+        disc["comments"] += [
+            comment(verify_block(subject), "carol", at="2026-10-12T00:00:00Z", cid="V3"),
+            comment(verify_block(subject), "dave", at="2026-10-12T01:00:00Z", cid="V4"),
+        ]
+        row = build(discussions=[disc])["verified"][0]
+        assert (row["agent"], row["pass_count"], row["passing"]) == ("bob", 2, True)
+
+    def test_thread_activity_is_not_a_post_body_edit(self):
+        disc, target, subject = self.voted_content("post")
+        disc.update(updated_at="2026-10-12T00:00:00Z", last_edited_at=None,
+                    comment_count=2, top_level_comment_count=2, comments_complete=True,
+                    comments_hydrated_updated_at="2026-10-12T00:00:00Z")
+        row = build(discussions=[disc])["verified"][0]
+        assert (row["subject"], row["passing"]) == (subject, True)
+        target["last_edited_at"] = "2026-10-11T00:00:00Z"
+        assert build(discussions=[disc])["verified"] == []
+
+    @pytest.mark.parametrize("updated,passes", [
+        ("2026-10-10T00:00:00Z", 2),
+        ("2026-10-10T02:00:00+02:00", 2),
+        ("2026-10-10T00:00:00.000001Z", 1),
+        ("invalid timestamp", 0),
+    ])
+    def test_edit_time_binding_compares_instants_inclusively(self, updated, passes):
+        disc, target, _ = self.voted_content()
+        target["updated_at"] = updated
+        doc = build(discussions=[disc])
+        assert doc["totals"]["votes_counted"] == passes
+        assert doc["totals"]["dropped_unbound"] == 2 - passes
+        assert bool(rep.passing_discussions(doc)) is (passes == 2)
+
+    def test_unvoted_copy_cannot_make_the_voted_snapshot_incomplete(self):
+        victim, target, subject = self.voted_content()
+        copy = discussion(number=50, body=target["body"], author="mallory")
+        copy["comments_complete"] = False
+        row = build(discussions=[victim, copy])["verified"][0]
+        assert (row["subject"], row["discussion"], row["incomplete"], row["passing"]) == \
+            (subject, 200, False, True)
+
     def test_incomplete_snapshot_is_never_passing(self):
         disc = discussion(comments=[comment(verify_block(self.subject()), "outside-dev", cid="1"),
                                     comment(verify_block(self.subject()), "second-dev", cid="2")])
@@ -441,6 +539,19 @@ class TestVerifications:
         node = self.ANSWER.replace("python-3.11/linux", "node-20").replace("```python", "```js")
         doc = build(discussions=[self.platform_disc(answer=node)])
         assert doc["totals"]["platform_votes_counted"] == 0
+
+    def test_platform_credit_stays_with_the_named_voted_answer(self):
+        copy = discussion(number=50, body="print(1)", author="mallory")
+        copy["created_at"] = "2026-01-01T00:00:00Z"
+        row = build(discussions=[self.platform_disc(), copy])["verified"][0]
+        assert (row["discussion"], row["target"], row["comment_id"], row["agent"]) == \
+            (101, "comment", "DC_ans", "zion-coder-01")
+
+    def test_platform_vote_does_not_survive_an_answer_edit_with_identical_code(self):
+        disc = self.platform_disc()
+        disc["comments"][0]["updated_at"] = "2026-10-09T09:06:00Z"
+        doc = build(discussions=[disc])
+        assert doc["totals"]["platform_votes_counted"] == 0 and doc["verified"] == []
 
     def test_stale_snapshot_is_incomplete_and_never_passing(self):
         subj = self.subject()
