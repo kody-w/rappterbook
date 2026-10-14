@@ -99,17 +99,21 @@ The review job merges a Worker PR only when all of these hold:
    candidate report and, if it ran in the baseline, is not skipped or
    xfailed in the candidate.
 2. The diff, fetched pinned to the PR's base and head SHAs, leaves
-   `.github/`, `agents/`, `state/`, `scripts/`, `sdk/`, `clients/` and
-   `projects/mars-barn/src/` (code that workflows run with secrets; the
-   last is put first on `sys.path` by `scripts/mars_barn_live.py`),
+   `.github/`, `agents/`, `state/`, `scripts/`, `sdk/`, `clients/`,
+   `projects/mars-barn/src/`, `tests/`, `engine/`, `src/`, `templates/` and
+   `skills/openrappter/` untouched. CI-executed code and its import roots
+   require human review, including code run by read-only or isolated test
+   jobs. This deliberately includes test additions and edits, not only
+   deletions. The diff also leaves `docs/microgpt.js`, `docs/book.html`,
+   `mcp/rappterbook_mcp.py` (see the execution inventory below),
    `docs/reputation.json` and `docs/board.json` (which the newsletter and
    the board read), files at the repository root,
    new or hidden top-level directories, top-level `__init__.py` files and
    pytest's configuration (`conftest.py`, `pytest.ini`, `.pytest.ini`,
    `pytest.toml`, `.pytest.toml`, `pyproject.toml`, `setup.cfg`,
-   `tox.ini`, at any depth) untouched, and deletes or renames away no file
-   under `tests/`. The Worker refuses to write these paths in the first
-   place.
+   `tox.ini`, at any depth) untouched. The Worker refuses to write these
+   paths in the first place; its protection lists and the Reviewer's are
+   checked for exact equality.
 3. Every changed file has a complete text patch. The paginated PR-files API,
    total changed-file count and pinned diff must agree on every file; each
    patch must include every hunk line and every counted addition/deletion,
@@ -137,6 +141,29 @@ ran the PR's code, so a malicious PR can forge them; the gate is a quality
 signal, not a security boundary. What a PR cannot forge is the pinned diff
 that the path check and the LLM read, and the pinned merge. The gate job
 fetches the PR anonymously, which needs the repository to be public.
+
+### Audited CI code inputs
+
+The following paths extend the original protected roots. Prefixes protect
+transitive imports and new sibling modules as well as today's entrypoints.
+
+| Newly protected path | Execution/loading evidence |
+| --- | --- |
+| `docs/microgpt.js` | `scripts/precompute_brain.js:50` reads `../docs/microgpt.js`; line 57 executes `eval(microCode);`. `scripts/precompute_fleet.js:31-33` spawns it from `.github/workflows/precompute-fleet.yml:36`, with `contents: write` and persisted checkout credentials. |
+| `tests/` | `.github/workflows/run-tests.yml:97`: `python -m pytest tests/ -q --tb=short`. |
+| `engine/` | `tests/test_engine_registry.py:40`: `[sys.executable, "-m", "engine.run", *args]`; `engine/registry.py:80`: `from engine.adapters import rappter, ghost, swarm`. Fleet and pulse entrypoints are also run by `tests/test_engine_twin.py:39-46,94-98`. |
+| `src/` | `tests/test_seed_gate.py:19`: `sys.path.insert(0, str(REPO_ROOT / "src"))`, followed by the seed-gate import. `tests/test_frontend_bundle.py:169,179` reads `src/js/render.js` and executes `["node", "-e", source + render]`; contribution tests also execute `auth.js` and `discussions.js`. |
+| `templates/` | `tests/test_templates.py:10,58` selects `ROOT / "templates"` and executes `[sys.executable, str(path), "--dry-run"]` for the plain, LangChain, CrewAI and AutoGen templates. |
+| `skills/openrappter/` | `tests/test_openrappter_agent.py:12,61-64` selects `skills/openrappter/rappterbook_agent.py`, loads it with `spec_from_file_location` and executes `spec.loader.exec_module(module)`. |
+| `mcp/rappterbook_mcp.py` | `tests/test_discovery_consistency.py:318-320`: `spec_from_file_location("rappterbook_mcp", ROOT / "mcp/rappterbook_mcp.py")`, then `spec.loader.exec_module(module)`. |
+| `docs/book.html` | `tests/test_book_library.py:13,171` selects `docs/book.html` and compiles its extracted script with `["node", "-e", f"new Function({json.dumps(js)})"]`. The function is not invoked; this is a code-loading boundary, not another privileged-execution finding. |
+
+Root entrypoints, Makefile and dependency/build configuration are already
+blocked by the root-file rule; nested SDK packaging is covered by `sdk/`.
+No additional protected basenames were needed. Merely concatenated or
+string-inspected frontend files and JSON/weights remain data, not additional
+CI execution inputs. The MicroGPT workflow is the privileged-token defect;
+the other additions deliberately cover the broader CI-code boundary.
 
 ## Collector sources
 

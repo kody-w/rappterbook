@@ -76,16 +76,18 @@ HUNK_RE = re.compile(r"@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@.*")
 
 # Paths a worker PR may never change: the factory's own control plane, the
 # gate it is judged by, pytest's configuration (which could switch tests
-# off), code that workflows run with secrets (scripts/, sdk/, clients/,
-# projects/mars-barn/src/, which scripts/mars_barn_live.py puts first on
-# sys.path under GH_PAT, files at the repository root, a new top-level
-# directory or a top-level __init__.py, either of which could shadow a module
-# for `python -c`), and the generated files the verified newsletter and the
-# board read. A PR touching them, or deleting a test file, is left open for a
-# human.
-PROTECTED_PREFIXES = (".github/", "agents/", "state/", "scripts/", "sdk/", "clients/",
-                      "projects/mars-barn/src/")
-PROTECTED_FILES = ("scripts/compare_test_regressions.py", "docs/reputation.json", "docs/board.json")
+# off), and all code CI executes or compiles, including the test suite and
+# its imports. Import roots need prefix protection against sibling-module
+# shadowing (projects/mars-barn/src/ is prepended under GH_PAT). Root files,
+# new/hidden top-level directories and top-level __init__.py files are also
+# blocked below. The generated files the verified newsletter and board read
+# remain protected. A PR touching any of these is left open for a human.
+# Keep these lists identical to agents/worker.py.
+PROTECTED_PREFIXES = (".github/", "agents/", "state/", ".git/", "scripts/", "sdk/", "clients/",
+                      "projects/mars-barn/src/", "tests/", "engine/", "src/", "templates/",
+                      "skills/openrappter/")
+PROTECTED_FILES = ("scripts/compare_test_regressions.py", "docs/reputation.json", "docs/board.json",
+                   "docs/microgpt.js", "docs/book.html", "mcp/rappterbook_mcp.py")
 PROTECTED_NAMES = ("conftest.py", "pytest.ini", ".pytest.ini", "pytest.toml", ".pytest.toml",
                    "pyproject.toml", "setup.cfg", "tox.ini")
 
@@ -518,10 +520,9 @@ def _outside_worker_area(path):
 
 def protected_paths(pr, diff):
     """Changed paths a worker PR may not touch, from the pinned diff and the PR
-    file list: protected prefixes and files, pytest configuration anywhere,
-    anything outside an existing top-level directory, and any test file
-    deleted or renamed away. Tests removed inside a file, or newly skipped,
-    are caught by lost_tests() on the gate's reports."""
+    file list: CI code and import roots (including tests), protected data,
+    pytest configuration anywhere, and anything outside an existing
+    top-level directory."""
     seen = {(str(entry.get("path", "")), False) for entry in pr.get("files") or []
             if isinstance(entry, dict)}
     seen.update(diff_files(diff))
@@ -534,7 +535,8 @@ def protected_paths(pr, diff):
                 or (removed and path.startswith("tests/"))):
             blocked.add(path)
     # Belt and braces for header lines the parser above could misread.
-    for match in re.finditer(r'^(?:diff --git|---|\+\+\+).*?[\s"][ab]/((?:\.github|agents|state|scripts|sdk|clients|projects/mars-barn/src)/\S*)',
+    prefix_pattern = "|".join(re.escape(prefix) for prefix in PROTECTED_PREFIXES)
+    for match in re.finditer(r'^(?:diff --git|---|\+\+\+).*?[\s"][ab]/((?:' + prefix_pattern + r')\S*)',
                              diff, re.MULTILINE):
         blocked.add(match.group(1).rstrip('"'))
     return sorted(blocked)

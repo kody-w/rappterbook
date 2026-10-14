@@ -20,6 +20,19 @@ BASE = "b" * 40
 MERGE = "c" * 40
 NEWER_BASE = "d" * 40
 BLOB = "e" * 40
+CI_CODE_PREFIXES = ("tests/", "engine/", "src/", "templates/", "skills/openrappter/")
+CI_CODE_PATHS = (
+    "docs/microgpt.js", "docs/book.html", "mcp/rappterbook_mcp.py",
+    "tests/test_factory_reviewer.py",
+    "engine/run.py", "engine/registry.py", "engine/loops/pulse.py",
+    "engine/fleet/run_frame.py", "engine/fleet/build_prompt.py",
+    "engine/adapters/rappter.py", "engine/adapters/ghost.py", "engine/adapters/swarm.py",
+    "engine/adapters/__init__.py", "engine/fleet/__init__.py", "engine/loops/__init__.py",
+    "src/seed_gate.py", "src/js/auth.js", "src/js/discussions.js", "src/js/render.js",
+    "templates/plain_agent.py", "templates/langchain_agent.py",
+    "templates/crewai_agent.py", "templates/autogen_agent.py",
+    "skills/openrappter/rappterbook_agent.py",
+)
 
 
 def _load(name):
@@ -664,9 +677,55 @@ def test_protected_paths_parse_hard_diff_headers(reviewer, diff, expected):
 
 def test_protected_paths_allow_ordinary_changes(reviewer):
     diff = ("diff --git a/projects/x.py b/projects/x.py\n--- a/projects/x.py\n+++ b/projects/x.py\n"
-            "diff --git a/tests/test_new.py b/tests/test_new.py\nnew file mode 100644\n"
-            "--- /dev/null\n+++ b/tests/test_new.py\n")
+            "diff --git a/docs/new_page.html b/docs/new_page.html\nnew file mode 100644\n"
+            "--- /dev/null\n+++ b/docs/new_page.html\n")
     assert reviewer.protected_paths({"files": []}, diff) == []
+
+
+@pytest.mark.parametrize("path", CI_CODE_PATHS)
+@pytest.mark.parametrize("lane", ["reviewer", "worker"])
+def test_ci_code_paths_are_protected(reviewer, worker, path: str, lane: str) -> None:
+    """CI code must be refused even when it lives outside protected prefixes."""
+    if lane == "worker":
+        assert worker.safe_path(path) is None
+        assert worker.safe_path("docs/../" + path) is None
+        return
+    assert reviewer.protected_paths({"files": [{"path": path}]}, "") == [path]
+    diff = f"diff --git a/{path} b/{path}\n--- a/{path}\n+++ b/{path}\n"
+    assert reviewer.protected_paths({"files": []}, diff) == [path]
+    rename = (f"diff --git a/{path} b/projects/ordinary.txt\nsimilarity index 100%\n"
+              f"rename from {path}\nrename to projects/ordinary.txt\n")
+    assert reviewer.protected_paths({"files": []}, rename) == [path]
+
+
+@pytest.mark.parametrize("path", CI_CODE_PATHS)
+def test_ci_code_pr_is_blocked_before_gate_or_model(reviewer, monkeypatch, tmp_path, path: str) -> None:
+    """A worker PR cannot rely on a passing gate or model to change CI code."""
+    diff = DIFF.replace("projects/new_tool.py", path)
+    fake = _review_runner(_pr(files=[{"path": path}]), diff=diff, files=[_file(path)])
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "judge_gate", lambda *a: pytest.fail("gate read"))
+    monkeypatch.setattr(reviewer, "evaluate_diff", lambda *a: pytest.fail("LLM ran"))
+
+    assert _review(reviewer, tmp_path).pr(7) == "blocked"
+    assert not fake.find("gh", "pr", "merge")
+
+
+def test_factory_protection_lists_stay_in_sync(reviewer, worker) -> None:
+    """Both lanes must agree on every protected prefix, exact path and basename."""
+    assert reviewer.PROTECTED_PREFIXES == worker.PROTECTED_PREFIXES
+    assert reviewer.PROTECTED_FILES == worker.PROTECTED_FILES
+    assert reviewer.PROTECTED_NAMES == worker.PROTECTED_NAMES
+
+
+@pytest.mark.parametrize("prefix", CI_CODE_PREFIXES)
+def test_ci_import_roots_refuse_sibling_modules(reviewer, worker, prefix: str) -> None:
+    """Protect executed directories, not only today's known module filenames."""
+    assert prefix in reviewer.PROTECTED_PREFIXES
+    assert prefix in worker.PROTECTED_PREFIXES
+    for path in (prefix.rstrip("/"), prefix + "json.py", prefix + "nested/test_ci.py"):
+        assert worker.safe_path(path) is None
+        assert reviewer.protected_paths({"files": [{"path": path}]}, "") == [path]
 
 
 def test_llm_garbage_is_not_an_approval(reviewer, monkeypatch):
@@ -1036,7 +1095,8 @@ def test_worker_dry_run_writes_nothing(worker, monkeypatch, tmp_path):
     assert not body_file.exists() and not (tmp_path / "projects" / "a.py").exists()
 
 
-@pytest.mark.parametrize("name,ok", [("projects/t.py", True), ("tests/test_t.py", True),
+@pytest.mark.parametrize("name,ok", [("projects/t.py", True), ("tests/test_t.py", False),
+                                     ("docs/new_page.html", True), ("docs/ordinary.js", True),
                                      ("scripts/t.py", False), ("scripts/compute_trending.py", False),
                                      ("scripts/json.py", False), ("sdk/python/rapp.py", False),
                                      ("clients/x.py", False), ("rappterbook_agent.py", False),
@@ -1056,6 +1116,27 @@ def test_worker_dry_run_writes_nothing(worker, monkeypatch, tmp_path):
                                      ("docs/reputation.json", False), ("docs/board.json", False)])
 def test_worker_safe_path(worker, name, ok):
     assert (worker.safe_path(name) is not None) is ok
+
+
+@pytest.mark.parametrize("path", CI_CODE_PATHS)
+def test_worker_does_not_write_ci_code(worker, monkeypatch, tmp_path, path: str) -> None:
+    """A trusted card still cannot make the Worker write a protected CI input."""
+    issues = [_card(11)]
+    monkeypatch.setattr(subprocess, "run", FakeRunner([
+        (["gh", "pr", "list"], _proc("[]")),
+        (["gh", "issue", "list"], _proc(json.dumps(issues))),
+    ]))
+    monkeypatch.setattr(worker, "BASE_DIR", str(tmp_path))
+    target = tmp_path / path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text("original\n")
+    monkeypatch.setattr(worker, "solve_issue_with_llm",
+                        lambda *a: {"filename": path, "code": "replacement\n"})
+    body_file = tmp_path / "body.md"
+
+    assert worker.main(["--apply", "--pr-body-file", str(body_file)]) == 0
+    assert target.read_text() == "original\n"
+    assert not body_file.exists()
 
 
 def test_every_repo_dir_a_secret_script_puts_on_sys_path_is_protected(worker, reviewer):

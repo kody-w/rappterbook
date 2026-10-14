@@ -43,18 +43,17 @@ CLOSING_RE = re.compile(r"\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?):?\s+(?:#|h
 # no spaces, quotes or backticks.
 SAFE_PATH_RE = re.compile(r"[A-Za-z0-9._/-]+")
 
-# The worker may not write the factory's control plane, the reviewer's gate,
-# pytest's configuration, or code that workflows run with secrets: scripts/,
-# sdk/ and clients/, projects/mars-barn/src/ (scripts/mars_barn_live.py puts
-# it first on sys.path in a workflow that holds GH_PAT, so a file there could
-# shadow a stdlib module), files at the repository root (a root json.py would
-# shadow the stdlib for every `python -c`), a new top-level directory, or a
-# top-level __init__.py. It may not rewrite the generated files the verified
-# newsletter and the board read (docs/reputation.json, docs/board.json)
-# either. agents/reviewer.py blocks PRs that touch these.
+# The worker may not write the control plane, CI code (including tests and
+# their imports), pytest configuration or the newsletter/board's verified
+# data. Import roots need prefix protection against sibling-module shadowing
+# (projects/mars-barn/src/ is prepended under GH_PAT). Root files, new/hidden
+# top-level directories and top-level __init__.py files are also blocked below.
+# Keep these lists identical to agents/reviewer.py, which blocks matching PRs.
 PROTECTED_PREFIXES = (".github/", "agents/", "state/", ".git/", "scripts/", "sdk/", "clients/",
-                      "projects/mars-barn/src/")
-PROTECTED_FILES = ("scripts/compare_test_regressions.py", "docs/reputation.json", "docs/board.json")
+                      "projects/mars-barn/src/", "tests/", "engine/", "src/", "templates/",
+                      "skills/openrappter/")
+PROTECTED_FILES = ("scripts/compare_test_regressions.py", "docs/reputation.json", "docs/board.json",
+                   "docs/microgpt.js", "docs/book.html", "mcp/rappterbook_mcp.py")
 PROTECTED_NAMES = ("conftest.py", "pytest.ini", ".pytest.ini", "pytest.toml", ".pytest.toml",
                    "pyproject.toml", "setup.cfg", "tox.ini")
 

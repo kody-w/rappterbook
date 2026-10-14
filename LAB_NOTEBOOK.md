@@ -103,6 +103,77 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.60 - 2026-10-13 - Protect every audited CI code input
+
+**Session**: gpt-6.1-sol via Copilot CLI / operator: authorized operator
+**Read state**: `6961a66` - clean, isolated `factory-pattern` worktree
+
+### Hypothesis tested
+The operator confirmed that a worker could edit `docs/microgpt.js`, which
+the write-enabled fleet precompute workflow evaluates through
+`scripts/precompute_brain.js`. This explicit security repair superseded
+the prior recommendation to review the unpublished factory fixes. Protecting
+every audited CI code input in both path filters should close that defect
+without changing the loaders, canonical state or workflow credentials.
+The operator required a local commit and explicitly prohibited pushing.
+
+### What I built
+- Added identical protection for `docs/microgpt.js`, `docs/book.html` and
+  `mcp/rappterbook_mcp.py` in the Reviewer and Worker.
+- Audited all 48 workflow definitions and relevant script/test loading
+  edges. Added `tests/`, `engine/`, `src/`, `templates/` and
+  `skills/openrappter/` as protected prefixes, covering transitive imports
+  and sibling-module shadowing. The literal requested CI-code boundary
+  intentionally includes read-only test jobs and test additions/edits.
+  The book HTML is compiled with `new Function`, not invoked.
+- Kept all three protection tuples identical, including the Worker's
+  existing `.git/` prefix, and derived the Reviewer's fallback header
+  matcher from the prefix tuple instead of a separate hardcoded list.
+- Expanded `tests/test_factory_reviewer.py` to cover 24 audited code paths:
+  both filters, API/diff/rename evidence, rejection before gate/model,
+  no Worker file or PR-body write, normalized paths, import-root probes
+  and tuple parity. Ordinary non-CI documentation remains writable.
+- Updated `docs/FACTORY.md` with the intentional boundary change and
+  source-line evidence for every new protected file or prefix. Existing
+  root-file, SDK and configuration rules already cover the other audited
+  entrypoints and build inputs; no new protected basename was needed.
+
+### What worked
+The initial MicroGPT/parity regressions failed in all five selected cases.
+A separate read-only check loaded the actual `6961a66` filters and proved
+that both permitted all 24 paths in the expanded execution inventory.
+The final command
+`python3.11 -m pytest tests/test_factory_reviewer.py -q --tb=short`
+passed all 304 tests, up from the original 200. All three changed Python
+files compiled with `-W error -m py_compile` under `python3` (3.9.6),
+`python3.11` (3.11.15) and `python3.13` (3.13.12).
+The required `git checkout -- state/` ran after the tests; canonical state
+is unchanged and excluded from staging.
+
+### What failed
+No additional privileged-token execution gap was verified beyond MicroGPT.
+The other protections satisfy the broader requested CI-code boundary,
+not a claim that isolated test execution has repository-write authority.
+This was static audit plus local regression evidence, not a live workflow
+or deployment. `bd` is unavailable; no tracker status was fabricated.
+Nothing was pushed.
+
+### Lessons for next session
+1. Protection follows execution and import roots, not a directory's label:
+   a file under `docs/` can execute in a write-enabled CI job.
+2. Protect directories prepended to Python's import search path, not only
+   known entrypoints; a new sibling can shadow a trusted dependency.
+3. Keep privileged execution, read-only test execution and compilation-only
+   inputs distinct when describing findings and assurance.
+4. A new CI loader must extend both protected lists and the regression
+   inventory; the fallback diff matcher must derive from that same policy.
+
+### Recommended next move
+Review this local CI-code-protection commit and its execution inventory.
+Keep publication paused unless separately authorized. Future CI loader
+changes must update both filters and the path regressions together; do not
+regenerate or stage canonical state for this repair.
+
 ## Entry 003.59 - 2026-10-13 - Complete worker diffs and token-owner dedupe
 
 **Session**: gpt-6.1-sol via Copilot CLI / operator: authorized operator
