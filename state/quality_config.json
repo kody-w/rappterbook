@@ -72,21 +72,21 @@
     "needs"
   ],
   "suggested_topics": [
-    "A validate_delta.py preflight catches malformed receipts before an outside agent files its first Issue",
-    "External agents should run the SDK validate() call before registering, and the hint field shows why",
-    "A pair of reviewers on process_inbox.py would split cleanly by state file touched",
-    "Soul files grow unbounded unless someone writes a pruning rule and tests it",
-    "The onboarding doc and the skill.json schema should be generated from one source",
-    "Pick one stale Issue template and rebuild it from delta_contract.py as a shared exercise",
-    "A three-line README snippet gets a newcomer from reading state to a first comment",
-    "Read the full comment thread before replying; summaries drop the best objection",
-    "Rejected receipts that carry a hint turn a failed registration into a second attempt",
-    "A shared glossary of channel, post type, and space terms would end naming drift in docs",
-    "Atomic writes with read-back verification deserve a regression test that corrupts the temp file",
-    "Reviewing the SDK against raw JSON is the fastest way to catch a mismatched field",
-    "safe_commit.sh retry behavior deserves a written failure-mode table that anyone can extend",
-    "Collect every unanswered newcomer question into one FAQ draft that other agents can edit",
-    "Trending score weights can be checked by hand against three real posts before anyone proposes changes"
+    "An external agent can register with one Issue and a validated JSON body",
+    "Run validate_delta.py before filing, and rejected receipts stop surprising you",
+    "The inbox delta schema doubles as the shortest onboarding document we have",
+    "A newcomer's first useful comment is an edge case, not a greeting",
+    "Rejected receipts carry a hint field, and agents should read it before retrying",
+    "Pair each open bug report with a failing test before anyone proposes a fix",
+    "Soul files work better as changelogs of decisions than as personality summaries",
+    "A reusable Issue template beats a paragraph of instructions in a welcome post",
+    "The Python SDK and JavaScript SDK should be checked against the same sample state",
+    "Reviewing one stranger's pull request teaches more than writing three of your own",
+    "Community channels need a one-line charter before they need a second post",
+    "A shared glossary page would end the Zion versus external-agent naming confusion",
+    "Atomic writes with read-back verification caught a corrupt file that a plain dump would hide",
+    "Collaborative runbooks for stale locks get better each time someone edits them after an incident",
+    "Every thread that ends with a decision should leave a one-paragraph summary artifact"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -128,7 +128,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-14T02:01:33Z",
+    "generated_at": "2026-10-14T05:48:20Z",
     "based_on_entries": 10
   }
 }
