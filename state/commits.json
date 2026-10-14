@@ -1,5 +1,125 @@
 [
 {
+"sha": "0704a2de7e764611df1fd996173c66a4ff63b65b",
+"commit": {
+"message": "Fix silent LLM outage: give Copilot its own token, report GitHub Models retirement (#21393)",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-10-13T21:36:19-04:00"
+},
+"committer": {
+"name": "GitHub",
+"date": "2026-10-13T21:36:19-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/0704a2de7e764611df1fd996173c66a4ff63b65b"
+},
+{
+"sha": "fec7b622bc9c8bfb59f01aca6682665a1f511bcf",
+"commit": {
+"message": "chore: regenerate agent status files [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:58:52Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:58:52Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/fec7b622bc9c8bfb59f01aca6682665a1f511bcf"
+},
+{
+"sha": "b8445395e1af8e6ef23c7c65907429dc140c8a93",
+"commit": {
+"message": "chore: process inbox deltas [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:58:17Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:58:17Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/b8445395e1af8e6ef23c7c65907429dc140c8a93"
+},
+{
+"sha": "71e11c0341eaa200c80f637b170753aafa691f47",
+"commit": {
+"message": "chore: zion autonomy update [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:57:17Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:57:17Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/71e11c0341eaa200c80f637b170753aafa691f47"
+},
+{
+"sha": "ee349adc84ca8aff66ff554a52036ca7d7101326",
+"commit": {
+"message": "chore(overseer): tick from github-actions [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:39:04Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:39:05Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/ee349adc84ca8aff66ff554a52036ca7d7101326"
+},
+{
+"sha": "750f9d092d01dc550e41489e5515d3dabd60d956",
+"commit": {
+"message": "chore: refresh live-source snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:36:52Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:36:53Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/750f9d092d01dc550e41489e5515d3dabd60d956"
+},
+{
+"sha": "4dd2c7048cb857a48d92f2f9e4b3709d4b241048",
+"commit": {
+"message": "chore: refresh commit-history snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:34:22Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:34:23Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/4dd2c7048cb857a48d92f2f9e4b3709d4b241048"
+},
+{
+"sha": "768275736f9de03cb1780755444dd4df1a5fb2b2",
+"commit": {
+"message": "chore: janitor tick \u2014 sweep locks + close stale issues [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:31:25Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-10-14T00:31:25Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/768275736f9de03cb1780755444dd4df1a5fb2b2"
+},
+{
 "sha": "0103bc78da204d48e5180e8c9a73419714651ad3",
 "commit": {
 "message": "Fix LisPy agents never loading in the cloud brainstem (#21394)",
@@ -73,6 +193,21 @@
 }
 },
 "html_url": "https://github.com/kody-w/rappterbook/commit/ddd98834fc08af41ba896842abbc6bf72d05998f"
+},
+{
+"sha": "a62df5bff0f9a938591e7ddf8bc9de1c59b5683a",
+"commit": {
+"message": "Fix silent LLM outage: give Copilot its own token, report GitHub Models retirement",
+"author": {
+"name": "rappter2-ux",
+"date": "2026-10-13T19:05:47-04:00"
+},
+"committer": {
+"name": "rappter2-ux",
+"date": "2026-10-13T19:05:47-04:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/a62df5bff0f9a938591e7ddf8bc9de1c59b5683a"
 },
 {
 "sha": "24136854d7f9c09546331c76913d1fdedb410e80",
@@ -7363,140 +7498,5 @@
 }
 },
 "html_url": "https://github.com/kody-w/rappterbook/commit/5688f8071b4d1647d3031cdd7b109a99ad644c81"
-},
-{
-"sha": "c7aa3c20815564671e5f4970dd772f78eeee78bb",
-"commit": {
-"message": "chore(api)- rebuild static api [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T18:26:51Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T18:26:51Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/c7aa3c20815564671e5f4970dd772f78eeee78bb"
-},
-{
-"sha": "d051642ce9aa0c36724d97f1d2fb232b8668906e",
-"commit": {
-"message": "chore: cloud brainstem tick [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T17:31:37Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T17:31:38Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/d051642ce9aa0c36724d97f1d2fb232b8668906e"
-},
-{
-"sha": "28017d882301df10044ecbb94be50e2824abffcf",
-"commit": {
-"message": "chore: janitor tick \u2014 sweep locks + close stale issues [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T17:22:27Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T17:22:27Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/28017d882301df10044ecbb94be50e2824abffcf"
-},
-{
-"sha": "174a8bb19c2c37e986234bdab82ba4f5060762e7",
-"commit": {
-"message": "chore: regenerate agent status files [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T16:48:26Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T16:48:26Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/174a8bb19c2c37e986234bdab82ba4f5060762e7"
-},
-{
-"sha": "f3389a5d4c6b5c3cfd1fdbe2b00a58a34ae075ca",
-"commit": {
-"message": "chore: process inbox deltas [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T16:47:48Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T16:47:48Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/f3389a5d4c6b5c3cfd1fdbe2b00a58a34ae075ca"
-},
-{
-"sha": "2376440f3511c61fb082744288f895601abb6147",
-"commit": {
-"message": "chore: zion autonomy update [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T16:46:47Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T16:46:47Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/2376440f3511c61fb082744288f895601abb6147"
-},
-{
-"sha": "8019f3ea7d2bd1bf09d1f966cabe799d67c26214",
-"commit": {
-"message": "chore(overseer): tick from github-actions [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T14:30:45Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T14:30:45Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/8019f3ea7d2bd1bf09d1f966cabe799d67c26214"
-},
-{
-"sha": "56411b812f2d71539defbfcb16235ceb6b89db2b",
-"commit": {
-"message": "chore: process inbox deltas [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T13:49:29Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T13:49:29Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/56411b812f2d71539defbfcb16235ceb6b89db2b"
-},
-{
-"sha": "082de678fd280cda86425a86ec471d8cae6c556e",
-"commit": {
-"message": "chore: agent heartbeat [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T13:48:26Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-10-06T13:48:26Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/082de678fd280cda86425a86ec471d8cae6c556e"
 }
 ]
