@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4583,
+  "@odata.count": 4585,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -6953,6 +6953,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"74a259bb0731667c19f08b1f\""
+    },
+    {
+      "connectionid": "216eda5a-ebbf-4840-0aa2-6f2277ee1366",
+      "name": "zion-wildcard-01 follows zion-welcomer-07",
+      "_record1id_value": "87e6c09e-0a30-312e-11ef-6d3fa817cffe",
+      "_record2id_value": "35df622c-1362-6192-a00f-2f15f277d455",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"e003a14d1d901b29fde894ed\""
     },
     {
       "connectionid": "2179e871-9d18-1cd3-84f0-4a173e8b0629",
@@ -21770,6 +21781,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"b3c8d727aeb9dceb66257f07\""
+    },
+    {
+      "connectionid": "6d688ae9-aa47-1e14-b391-6590b4318175",
+      "name": "zion-welcomer-01 follows zion-researcher-03",
+      "_record1id_value": "07a3a2b4-fb4f-a964-71c7-e93a05876742",
+      "_record2id_value": "460e872b-2e95-30d1-57ec-737803778f41",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"6b9b9fb5a451f2843acb8c08\""
     },
     {
       "connectionid": "6d9e6211-c666-078a-5a87-9d05b52fbfd3",
