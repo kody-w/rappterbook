@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21391",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21394",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21391/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21391/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21391/events",
-"html_url": "https://github.com/kody-w/rappterbook/issues/21391",
-"id": 5835323918,
-"node_id": "I_kwDORPJAUs8AAAABW8_6Dg",
-"number": 21391,
-"title": "Autonomy: rail 'grounded_references' rejected 5 generations",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21394/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21394/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21394/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21394",
+"id": 5839085723,
+"node_id": "PR_kwDORPJAUs8AAAABIR5-7g",
+"number": 21394,
+"title": "Fix LisPy agents never loading in the cloud brainstem",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -31,56 +31,50 @@
 "user_view_type": "public",
 "site_admin": false
 },
-"labels": [
-{
-"id": 12671781448,
-"node_id": "LA_kwDORPJAUs8AAAAC80wKSA",
-"url": "https://api.github.com/repos/kody-w/rappterbook/labels/factory:collected",
-"name": "factory:collected",
-"color": "0E8A16",
-"default": false,
-"description": "",
-"archived_at": null,
-"archived_by": null
-},
-{
-"id": 12671782446,
-"node_id": "LA_kwDORPJAUs8AAAAC80wOLg",
-"url": "https://api.github.com/repos/kody-w/rappterbook/labels/source:autonomy",
-"name": "source:autonomy",
-"color": "C5DEF5",
-"default": false,
-"description": "",
-"archived_at": null,
-"archived_by": null
-}
-],
-"state": "open",
+"labels": [],
+"state": "closed",
 "locked": false,
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-10-13T18:08:50Z",
-"updated_at": "2026-10-13T18:08:50Z",
-"closed_at": null,
+"created_at": "2026-10-13T23:07:22Z",
+"updated_at": "2026-10-14T00:26:55Z",
+"closed_at": "2026-10-14T00:26:55Z",
 "assignee": null,
 "author_association": "OWNER",
 "active_lock_reason": null,
-"sub_issues_summary": {
-"total": 0,
-"completed": 0,
-"percent_completed": 0
+"draft": false,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21394",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21394",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21394.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21394.patch",
+"merged_at": "2026-10-14T00:26:55Z"
 },
-"issue_dependencies_summary": {
-"blocked_by": 0,
-"total_blocked_by": 0,
-"blocking": 0,
-"total_blocking": 0
+"body": "## The problem\nEvery cloud brainstem tick logs `[LISPY] Failed to load <name>.lispy: No module named 'lispy'`. None of the `.lispy` agents load. `scripts/brainstem/rappter_agent.py` adds `scripts/` to `sys.path`, but `lispy.py` lives in `scripts/brainstem/` and imports `virtual_pip`, `virtual_os` and `virtual_hw` by plain name.\n\n## The fix\n- `scripts/brainstem/` is appended to `sys.path` in `rappter_agent.py`. Appending rather than prepending means it never shadows `scripts/` modules.\n- After the fix, 15 of 15 `.lispy` agents load. Before, none did.\n- `tests/test_lispy_agent_loading.py` checks this in a fresh interpreter. It fails on main and passes here.\n\n## Verification\n- The brainstem integration, packages, organism reflex and new tests all pass.\n- `-W error` compiles cleanly on Python 3.9, 3.11 and 3.13.\n- No `state/` changes.\n\nIndependent of #21393; either can merge first.\n\n\ud83e\udd16 Generated with [Claude Code](https://claude.com/claude-code)",
+"closed_by": {
+"login": "kody-w",
+"id": 1735900,
+"node_id": "MDQ6VXNlcjE3MzU5MDA=",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"html_url": "https://github.com/kody-w",
+"followers_url": "https://api.github.com/users/kody-w/followers",
+"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
+"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
+"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
+"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
+"organizations_url": "https://api.github.com/users/kody-w/orgs",
+"repos_url": "https://api.github.com/users/kody-w/repos",
+"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
+"received_events_url": "https://api.github.com/users/kody-w/received_events",
+"type": "User",
+"user_view_type": "public",
+"site_admin": false
 },
-"body": "Collected by `scripts/collect_cards.py` from the **autonomy** source. Backlog card: triage it to Ready or close it (see docs/FACTORY.md).\n\nError: missing file actions/topic.py\n\n## Evidence\n- state/autonomy_log.json outcomes: 5 `rejected` records (rail `grounded_references`) across 4 agents, 2026-09-07T06:15:59Z to 2026-09-27T06:02:13Z\n- 2026-09-27T06:02:13Z zion-philosopher-09: missing file actions/topic.py\n- 2026-09-25T21:11:41Z zion-coder-07: missing file delta.json, submit.sh, validate_payload.py\n- 2026-09-15T05:43:10Z zion-coder-12: missing file moderation_overrides.json\n\n## Proposed acceptance check\nEach sampled rejection by rail `grounded_references` is a true positive, or the false positive is fixed and covered by a test.\n\n<!-- factory-card:b0e1f2869c4c395a -->\n",
-"closed_by": null,
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21391/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21394/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -91,9 +85,8 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21391/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21394/timeline",
 "performed_via_github_app": null,
-"state_reason": null,
-"pinned_comment": null
+"state_reason": null
 }
 ]
