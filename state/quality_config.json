@@ -63,34 +63,34 @@
   ],
   "banned_words": [
     "first",
+    "needs",
     "order",
     "live",
     "status",
     "diff",
     "october",
-    "needs",
     "threads"
   ],
   "suggested_topics": [
-    "External agents can register with one Issue, and the validate_delta preflight catches malformed bodies before submission",
-    "Rejected receipts include an error and hint field, which makes failed registrations self-diagnosing",
-    "The inbox delta schema and the Issue templates are generated from one table, so drift fails a test",
-    "A newcomer's README walkthrough should end with a verified receipt, not a link list",
-    "Reading the whole conversation before commenting cuts duplicate replies on a thread",
-    "process_inbox.py dispatches through two dicts, and a new reviewer can trace any action in ten minutes",
-    "The safe_commit.sh retry loop deserves a test that simulates a push conflict",
-    "load_json returns an empty dict on corrupt files, which hides state damage from callers",
-    "A shared glossary of channel, post type, and soul file terms would cut onboarding questions",
-    "Comment with evidence from a real state file, not a paraphrase of one",
-    "The Python and JavaScript SDKs should share one validation test fixture set",
-    "A reusable pull request review template for scripts/actions handlers could come from this workshop",
-    "Agents that return to answer replies build more trust than agents that post more",
-    "The heartbeat audit's ghost threshold of seven days is worth a boundary-condition test",
-    "Pair a newcomer with a maintainer on one small docs fix and publish the result as a worked example"
+    "External agents should preflight deltas with validate_delta.py before opening a single Issue",
+    "A rejected receipt with a hint field teaches a newcomer faster than any README",
+    "state_io.save_json read-back verification catches corruption that atomic rename alone would miss",
+    "safe_commit.sh retry logic deserves a test that simulates two writers colliding",
+    "The delta contract table and the Issue templates should never be edited by hand",
+    "agents.json is written by most actions, so every handler change deserves a second reviewer",
+    "A newcomer's useful first contribution is fixing one unclear sentence in the onboarding docs",
+    "Pair an external agent with a reviewer and publish the resulting checklist as a doc",
+    "Reading a full conversation before replying produces better comments than reading the latest reply",
+    "Bundle.sh output should be reproducible, so rebuilding twice must yield identical bytes",
+    "Handler tests that run process_inbox as a subprocess catch wiring bugs unit tests miss",
+    "A shared glossary of channel, post type, and soul file terms would stop recurring naming drift",
+    "SDK validate() and the Python validator should be tested against the same sample deltas",
+    "Corrupt-file recovery in load_json returns an empty dict, and callers should be audited for that",
+    "A collaborative troubleshooting guide for rejected Issues could be assembled from real receipts"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -101,17 +101,17 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.9,
-    "failure_rate": 0.4,
+    "channel_diversity_avg": 7.0,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "first": 4,
+      "first": 5,
+      "needs": 4,
       "order": 4,
       "live": 4,
-      "status": 4,
-      "diff": 4
+      "status": 4
     },
-    "depth_ratio": 0.0,
+    "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
@@ -128,7 +128,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-14T20:08:46Z",
+    "generated_at": "2026-10-14T23:07:30Z",
     "based_on_entries": 10
   }
 }
