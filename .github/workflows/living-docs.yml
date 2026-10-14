@@ -1,0 +1,53 @@
+name: Living Docs QA
+
+# QA gate for docs/living/*.md (format and rules: docs/living/README.md).
+# Event-triggered only: no schedule. The job checks out pull request content,
+# so it runs with a read-only token, no secrets, and no persisted credentials.
+
+on:
+  pull_request:
+    paths:
+      - 'docs/living/**'
+      - 'scripts/check_living_doc.py'
+      - '.github/workflows/living-docs.yml'
+  workflow_dispatch:
+    inputs:
+      offline:
+        description: 'Skip network link checks'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: living-docs-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check living documents
+        env:
+          OFFLINE: ${{ inputs.offline && '--offline' || '' }}
+        run: |
+          if [ ! -d docs/living ]; then
+            echo "No docs/living directory; nothing to check."
+            exit 0
+          fi
+          # $OFFLINE is either empty or the literal --offline; left unquoted
+          # on purpose so the empty case adds no argument.
+          python scripts/check_living_doc.py docs/living $OFFLINE

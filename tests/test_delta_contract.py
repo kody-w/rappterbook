@@ -91,7 +91,10 @@ class TestSchemaIsServed:
 
 class TestIssueTemplates:
     def test_picker_offers_exactly_the_live_actions(self):
-        offered = {p.stem for p in TEMPLATE_DIR.glob("*.yml")} - {"config", "inject-seed", "prompt-remix"}
+        # request and living_doc are reader intake forms, not actions: the
+        # inbox pipeline skips them (process-issues.yml and process_issues.py).
+        non_actions = {"config", "inject-seed", "prompt-remix", "request", "living_doc"}
+        offered = {p.stem for p in TEMPLATE_DIR.glob("*.yml")} - non_actions
         assert offered == set(HANDLERS)
 
     def test_checked_in_templates_match_generator(self):

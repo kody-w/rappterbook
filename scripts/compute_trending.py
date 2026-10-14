@@ -227,8 +227,53 @@ def extract_author(discussion: dict) -> str:
     return user.get("login", "unknown") if user else "unknown"
 
 
+VERIFIED_BOOST_MAX = 10.0
+
+
+def verified_boost() -> float:
+    """TRENDING_VERIFIED_BOOST as a positive finite float capped at
+    VERIFIED_BOOST_MAX, else 0.0 (feature off). A value that is set but is
+    not a positive number (``true``, say) leaves the boost off and says so."""
+    raw = os.environ.get("TRENDING_VERIFIED_BOOST", "")
+    try:
+        value = float(raw)
+    except ValueError:
+        value = float("nan")
+    if not math.isfinite(value) or value <= 0:
+        if raw.strip():
+            print(f"TRENDING_VERIFIED_BOOST={raw!r} is not a positive number; verified boost off.",
+                  file=sys.stderr)
+        return 0.0
+    return min(value, VERIFIED_BOOST_MAX)
+
+
+def apply_verified_boost(score: float, boost: float) -> float:
+    """Raise a verified post's score by ``boost`` times its magnitude.
+
+    A positive score becomes ``score * (1 + boost)``. A net-negative
+    (downvoted) score moves toward zero by ``|score| * boost`` but never
+    past it, so verification neither ranks a post lower nor lifts a
+    downvoted one above posts with a positive score. A non-finite result
+    keeps the base score.
+    """
+    if score >= 0:
+        boosted = score * (1 + boost)
+    else:
+        boosted = min(0.0, score + abs(score) * boost)
+    return round(boosted, 2) if math.isfinite(boosted) else score
+
+
+def verified_numbers() -> set:
+    """Discussion numbers whose own body is passing in docs/reputation.json
+    (a passing answer does not boost the question it answers)."""
+    from compute_reputation import load_reputation, passing_discussions
+    return set(passing_discussions(load_reputation(), posts_only=True))
+
+
 def compute_trending_from_log(max_age_days: int = 7) -> None:
     """Read genuine GitHub engagement from posted_log.json and rank posts."""
+    boost = verified_boost()
+    verified = verified_numbers() if boost else set()
     log_path = STATE_DIR / "posted_log.json"
     log_data = load_json(log_path)
     posts = list(log_data.get("posts", []))
@@ -290,7 +335,7 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
         score = compute_net_score(
             upvotes, downvotes, comment_count, timestamp, updated_at
         )
-        trending.append({
+        entry = {
             "title": post.get("title", ""),
             "author": author,
             "channel": channel,
@@ -300,7 +345,12 @@ def compute_trending_from_log(max_age_days: int = 7) -> None:
             "score": score,
             "number": post.get("number"),
             "url": post.get("url"),
-        })
+        }
+        # Opt-in: posts carrying a passing verify vote rank higher.
+        if boost and post.get("number") in verified:
+            entry["score"] = apply_verified_boost(score, boost)
+            entry["verified"] = True
+        trending.append(entry)
 
     trending.sort(key=lambda x: x["score"], reverse=True)
 

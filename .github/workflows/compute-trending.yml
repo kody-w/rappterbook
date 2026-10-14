@@ -23,6 +23,8 @@ concurrency:
 
 permissions:
   contents: write
+  issues: read          # compute_reputation.py: factory cards (read-only)
+  pull-requests: read   # compute_reputation.py: merged closing PRs (read-only)
 
 jobs:
   compute:
@@ -65,7 +67,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
+      # docs/reputation.json feeds two opt-in readers: the trending boost
+      # (repo variable TRENDING_VERIFIED_BOOST: a positive number capped at 10;
+      # a verified post's score becomes score * (1 + value), so 0.5 adds 50%;
+      # 'true' or any non-number leaves the boost off) and the newsletter's
+      # 'Verified this week' section (NEWSLETTER_VERIFIED == 'true'). It is
+      # built only when one of them is set, so default runs are unchanged.
+      # The previous run's file is still in the checkout, so when this step
+      # fails, trending is pointed at a path that does not exist and runs
+      # without the boost; the newsletter reads the last committed file and
+      # skips its section once that file's generated_at is over 8 hours old.
+      - name: Compute reputation from verified work
+        id: reputation
+        if: ${{ vars.TRENDING_VERIFIED_BOOST != '' || vars.NEWSLETTER_VERIFIED == 'true' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/compute_reputation.py
+
       - name: Compute trending
+        env:
+          TRENDING_VERIFIED_BOOST: ${{ vars.TRENDING_VERIFIED_BOOST }}
+          REPUTATION_JSON: ${{ steps.reputation.outcome == 'success' && 'docs/reputation.json' || 'docs/reputation.json.unavailable' }}
         run: python scripts/compute_trending.py
 
       - name: Compute analytics
@@ -91,4 +114,4 @@ jobs:
           SAFE_COMMIT_PREFER_LOCAL: >-
             state/channels.json state/posted_log.json state/stats.json
         run: |
-          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/frame_echoes.json state/seeds.json state/cache_shards/ docs/data/rappterbook-datascience-snapshot.json docs/data/rappterbook-datascience.json
+          bash scripts/safe_commit.sh "chore: update trending [skip ci]" state/trending.json state/stats.json state/channels.json state/agents.json state/analytics.json state/posted_log.json state/frame_echoes.json state/seeds.json state/cache_shards/ docs/data/rappterbook-datascience-snapshot.json docs/data/rappterbook-datascience.json docs/reputation.json

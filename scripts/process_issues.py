@@ -246,6 +246,30 @@ class IssueInputError(ValueError):
     """An Issue event or action body cannot be safely queued."""
 
 
+# Reader intake forms (.github/ISSUE_TEMPLATE/request.yml, living_doc.yml)
+# are proposals, never actions. process-issues.yml already skips them by
+# label and title prefix; this is the same rule, in case the job runs anyway
+# (a label the repository did not have yet is dropped from the Issue).
+INTAKE_FORM_LABELS = frozenset({"factory:request", "factory:living-doc"})
+INTAKE_FORM_PREFIXES = ("[request]", "[living doc]")
+
+
+def is_intake_form(event: object) -> bool:
+    """True for an Issue opened with a reader intake form (label or title prefix)."""
+    issue = event.get("issue") if isinstance(event, dict) else None
+    if not isinstance(issue, dict):
+        return False
+    title = issue.get("title")
+    if isinstance(title, str) and title.strip().lower().startswith(INTAKE_FORM_PREFIXES):
+        return True
+    labels = issue.get("labels")
+    for label in labels if isinstance(labels, list) else []:
+        name = label.get("name") if isinstance(label, dict) else label
+        if isinstance(name, str) and name.strip().lower() in INTAKE_FORM_LABELS:
+            return True
+    return False
+
+
 def _load_event() -> dict:
     """Read and validate the outer GitHub event object."""
     try:
@@ -380,6 +404,9 @@ def main() -> int:
     """Queue one strict, provenance-bearing Issue delta."""
     try:
         event = _load_event()
+        if is_intake_form(event):
+            print("Intake form (request or living-doc proposal), not an action — nothing to queue.")
+            return 0
         body, user, username, issue_number = _issue_context(event)
         data = _parse_action_body(body)
     except NotADeltaSubmission:

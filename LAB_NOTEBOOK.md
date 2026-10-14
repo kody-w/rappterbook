@@ -103,6 +103,213 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.60 - 2026-10-13 - Protect every audited CI code input
+
+**Session**: gpt-6.1-sol via Copilot CLI / operator: authorized operator
+**Read state**: `6961a66` - clean, isolated `factory-pattern` worktree
+
+### Hypothesis tested
+The operator confirmed that a worker could edit `docs/microgpt.js`, which
+the write-enabled fleet precompute workflow evaluates through
+`scripts/precompute_brain.js`. This explicit security repair superseded
+the prior recommendation to review the unpublished factory fixes. Protecting
+every audited CI code input in both path filters should close that defect
+without changing the loaders, canonical state or workflow credentials.
+The operator required a local commit and explicitly prohibited pushing.
+
+### What I built
+- Added identical protection for `docs/microgpt.js`, `docs/book.html` and
+  `mcp/rappterbook_mcp.py` in the Reviewer and Worker.
+- Audited all 48 workflow definitions and relevant script/test loading
+  edges. Added `tests/`, `engine/`, `src/`, `templates/` and
+  `skills/openrappter/` as protected prefixes, covering transitive imports
+  and sibling-module shadowing. The literal requested CI-code boundary
+  intentionally includes read-only test jobs and test additions/edits.
+  The book HTML is compiled with `new Function`, not invoked.
+- Kept all three protection tuples identical, including the Worker's
+  existing `.git/` prefix, and derived the Reviewer's fallback header
+  matcher from the prefix tuple instead of a separate hardcoded list.
+- Expanded `tests/test_factory_reviewer.py` to cover 24 audited code paths:
+  both filters, API/diff/rename evidence, rejection before gate/model,
+  no Worker file or PR-body write, normalized paths, import-root probes
+  and tuple parity. Ordinary non-CI documentation remains writable.
+- Updated `docs/FACTORY.md` with the intentional boundary change and
+  source-line evidence for every new protected file or prefix. Existing
+  root-file, SDK and configuration rules already cover the other audited
+  entrypoints and build inputs; no new protected basename was needed.
+
+### What worked
+The initial MicroGPT/parity regressions failed in all five selected cases.
+A separate read-only check loaded the actual `6961a66` filters and proved
+that both permitted all 24 paths in the expanded execution inventory.
+The final command
+`python3.11 -m pytest tests/test_factory_reviewer.py -q --tb=short`
+passed all 304 tests, up from the original 200. All three changed Python
+files compiled with `-W error -m py_compile` under `python3` (3.9.6),
+`python3.11` (3.11.15) and `python3.13` (3.13.12).
+The required `git checkout -- state/` ran after the tests; canonical state
+is unchanged and excluded from staging.
+
+### What failed
+No additional privileged-token execution gap was verified beyond MicroGPT.
+The other protections satisfy the broader requested CI-code boundary,
+not a claim that isolated test execution has repository-write authority.
+This was static audit plus local regression evidence, not a live workflow
+or deployment. `bd` is unavailable; no tracker status was fabricated.
+Nothing was pushed.
+
+### Lessons for next session
+1. Protection follows execution and import roots, not a directory's label:
+   a file under `docs/` can execute in a write-enabled CI job.
+2. Protect directories prepended to Python's import search path, not only
+   known entrypoints; a new sibling can shadow a trusted dependency.
+3. Keep privileged execution, read-only test execution and compilation-only
+   inputs distinct when describing findings and assurance.
+4. A new CI loader must extend both protected lists and the regression
+   inventory; the fallback diff matcher must derive from that same policy.
+
+### Recommended next move
+Review this local CI-code-protection commit and its execution inventory.
+Keep publication paused unless separately authorized. Future CI loader
+changes must update both filters and the path regressions together; do not
+regenerate or stage canonical state for this repair.
+
+## Entry 003.59 - 2026-10-13 - Complete worker diffs and token-owner dedupe
+
+**Session**: gpt-6.1-sol via Copilot CLI / operator: authorized operator
+**Read state**: `8331cbbe89b124491da1bf6ea840ab0318cfc20b` - clean, isolated `factory-pattern` worktree
+
+### Hypothesis tested
+The operator supplied two follow-up defects: binary changes could receive
+approval without exposing their executable content, and the Foreman still
+ignored its own bot-authored cards when FACTORY_CARD_AUTHORS was unset.
+These concrete repairs superseded the prior recommendation to observe a
+published run. The operator explicitly required a local commit and no push.
+
+### What I built
+- Made `agents/reviewer.py` require agreement between the complete paginated
+  PR-files listing, changed-file count and pinned diff. Every file needs a
+  complete patch, with hunk lengths and total additions/deletions validated,
+  that matches exactly what the model will read.
+- Read each non-deleted file at the pinned head SHA, verified its blob
+  identity and complete base64 content, and rejected NULs anywhere in the
+  blob, including beyond Git's initial binary-detection window. Binary
+  markers, absent patches, truncation and unavailable evidence request human
+  review before the test gate or model can approve; no merge is attempted.
+  Existing protected-path, dry-run and SHA-pinned merge behavior remains.
+- Added a cached `gh api user --jq .login` lookup to `agents/foreman.py`.
+  The token account joins the repository owner and configured card authors
+  for dedupe. Failed lookups are reported and cached without trusting
+  strangers or discarding configured authors.
+- Added regressions in `tests/test_factory_reviewer.py` and updated
+  `docs/FACTORY.md`. The external supplied PoC fixture now answers the new
+  identity lookup with its declared `rappter-bot` account; the original
+  fixture was preserved outside the repository.
+
+### What worked
+The initial selected behavioral regressions against `8331cbb` reported
+41 failures and one preserving pass. The final command
+`python3.11 -m pytest tests/test_factory_reviewer.py -q --tb=short`
+passed all 200 tests, including the Foreman tests. Every changed Python
+file compiled with `-W error -m py_compile` under `python3` (3.9.6),
+`python3.11` (3.11.15) and `python3.13` (3.13.12). With the same identity-aware
+PoC fixture, the old Foreman created `[Foreman] Fix heater` again; the
+fixed Foreman printed `LLM re-sent already-used posts: []` and
+`duplicate work orders created: []`. Canonical state is excluded from delivery.
+
+### What failed
+The PoC's original catch-all subprocess mock returned an empty successful
+response for every unknown command, so it could not model the newly required
+identity lookup. Adding only that explicit mock response preserved the
+before-fix failure and enabled the after-fix proof. Two initial blob-fixture
+argument collisions were corrected before the clean before/after regression
+run. No live workflow, approval, merge, deployment or push was performed.
+
+### Lessons for next session
+1. A nonempty diff is not complete review evidence. Account for every file
+   and changed line, and inspect immutable head bytes for binary content.
+2. Resolve authority from the token's actual account, not an assumption that
+   the repository owner owns every automation token.
+3. Extend API mocks when a fix adds an authoritative read; require the same
+   extended fixture to demonstrate both the old failure and the new result.
+4. The Worker still needs a non-owner bot in FACTORY_CARD_AUTHORS to build
+   its cards. Dedupe trust does not authorize broadening build trust.
+
+### Recommended next move
+Review the local two-fix commit. Only if publication is separately authorized,
+observe one binary worker PR being left for a human and one unchanged
+token-account Foreman card being deduplicated with FACTORY_CARD_AUTHORS unset.
+Keep all existing trust gates enabled and do not regenerate canonical state.
+
+## Entry 003.58 - 2026-10-13 - Four factory reliability repairs
+
+**Session**: gpt-6.1-sol via Copilot CLI / operator: authorized operator
+**Read state**: `1a156fe6f4e5b22045c85c8f6b85d06f3241b3ff` - clean, isolated `factory-pattern` worktree
+
+### Hypothesis tested
+The operator supplied four confirmed defects and runnable counterexamples:
+copied-content verification credit, stranded stale worker reviews, repeated
+Foreman work orders, and code-delimiter interference with living-doc checks.
+This explicit repair scope superseded the older next-frame heartbeat
+recommendation. Each defect should close with a failing regression, without
+changing canonical state, weakening factory trust checks, or publishing.
+
+### What I built
+- Bound reputation credit to the content in the first valid vote's own
+  discussion, rather than the globally oldest identical container. Later
+  copies cannot take that credit; post-vote edits and future content cannot
+  inherit votes, including sandbox votes. Unvoted copies cannot invalidate
+  the voted discussion's completeness.
+- Retained actual body-edit times through comment hydration and cache
+  sharding. GitHub's `lastEditedAt`, including an explicit null for an
+  unedited body, is distinct from discussion activity's `updatedAt`.
+- Added the existing Reviewer's three-hour retry trigger and admitted
+  scheduled runs to its trusted planning job. Same-repo selection, protected
+  paths, isolated test execution and SHA-pinned merging are unchanged.
+- Passed `FACTORY_CARD_AUTHORS` to the Foreman, matching the Worker's trust
+  configuration, and guarded issue creation against reused source sets.
+  Normalized-title dedupe and open/closed issue coverage remain intact.
+- Masked code before removing HTML comments, preserving line numbers and
+  respecting real comments and block boundaries. Added regressions in the
+  existing reviewer, reputation, living-doc and publication-detail suites,
+  and updated their existing documentation. No state file was edited or staged
+  for delivery.
+
+### What worked
+All four supplied PoCs reproduced against this worktree. Before implementation,
+the first regression selection reported 27 failures and one preserving case
+passed; the edit-metadata regressions separately reported two failures.
+The final command
+`python3.11 -m pytest tests/test_{factory_reviewer,reputation,check_living_doc,publication_detail_gate,verifications,answer_qa,scrape_discussions}.py -q --tb=short`
+passed all 574 tests. All nine changed Python files compiled with
+`-W error -m py_compile` under `python3` (3.9.6), `python3.11` (3.11.15)
+and `python3.13` (3.13.12). Test-generated state changes were restored with
+`git checkout -- state/`.
+
+### What failed
+Two additional regressions exposed an overly broad multiline code span in
+the initial repair: it crossed a fence or real HTML-comment block. Bounding
+spans at interrupting blocks closed that path. A test fixture also needed a
+paragraph break: a link in the same paragraph legitimately satisfies the
+existing citation heuristic, even when the separate link rule rejects it.
+No live GitHub workflow or deployment was run; the operator required a local
+commit and explicitly prohibited pushing.
+
+### Lessons for next session
+1. Content hashes identify bytes, not the location or author that earned credit.
+2. Discussion activity timestamps are not body-edit timestamps; preserve the
+   authoritative edit field, including null, through every projection.
+3. Retry outcomes need an actual trigger, and shared trust settings must reach
+   both producers and consumers.
+4. Code/comment stripping needs lexical precedence and block boundaries, not
+   independent global replacements.
+
+### Recommended next move
+Review the local four-fix commit. If publication is separately authorized,
+observe one scheduled retry of an unchanged stale worker head and one
+bot-authored Foreman dedupe run, keeping all existing safety gates enabled.
+Do not regenerate or commit canonical state as part of this repair.
+
 ## Entry 003.57 — 2026-09-27 — Added the RAPP/1 network header
 
 Added the RAPP/1 network header to `README.md` for the RAPP/1 rollout.

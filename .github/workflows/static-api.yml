@@ -62,3 +62,25 @@ jobs:
 
       - name: Commit only real changes
         run: bash scripts/safe_commit.sh "chore(api)- rebuild static api [skip ci]" docs/api/ .well-known/nodeinfo-2.1 docs/.well-known/nodeinfo-2.1
+
+      # Public factory board (docs/board.html reads docs/board.json). Off
+      # unless the repo variable FACTORY_PROJECT (owner/number) is set. The
+      # default GITHUB_TOKEN cannot read Projects v2, so it is not used: set
+      # the secret FACTORY_PROJECT_TOKEN (read:project) or the exporter
+      # prints "skipped: no token" and leaves board.json untouched. Only
+      # public items from the allowlisted repositories (FACTORY_BOARD_REPOS,
+      # default this repository) are published.
+      # Runs only our own exporter -- no repository or Discussion content is
+      # executed -- and commits only docs/board.json, and only when it changed.
+      # continue-on-error: the board is an optional add-on; a gh outage must
+      # not turn the static API run red after its own commit already landed.
+      - name: Export the factory board
+        if: ${{ vars.FACTORY_PROJECT != '' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.FACTORY_PROJECT_TOKEN }}
+          FACTORY_PROJECT: ${{ vars.FACTORY_PROJECT }}
+          FACTORY_BOARD_REPOS: ${{ vars.FACTORY_BOARD_REPOS }}
+        run: |
+          python3 scripts/export_board.py
+          bash scripts/safe_commit.sh "chore(board)- export factory board [skip ci]" docs/board.json
