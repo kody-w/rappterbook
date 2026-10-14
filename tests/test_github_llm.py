@@ -148,3 +148,75 @@ class TestGeneratePropagatesRateLimit:
         finally:
             llm.AZURE_KEY = old_key
             llm.GITHUB_TOKEN = old_token
+
+
+# ---------------------------------------------------------------------------
+# Backend auth wiring: Copilot rejects classic PATs; GitHub Models retirement
+# ---------------------------------------------------------------------------
+
+class TestCopilotAuthWiring:
+    """The Copilot CLI must get COPILOT_GITHUB_TOKEN and never a classic PAT."""
+
+    def _env(self, monkeypatch, **values):
+        for name in ("GITHUB_TOKEN", "GH_TOKEN", "COPILOT_GITHUB_TOKEN"):
+            monkeypatch.delenv(name, raising=False)
+        for name, value in values.items():
+            monkeypatch.setenv(name, value)
+
+    def test_child_env_drops_classic_and_passes_copilot_token(self, monkeypatch):
+        self._env(monkeypatch, GITHUB_TOKEN="ghp_classic", GH_TOKEN="ghp_classic2",
+                  COPILOT_GITHUB_TOKEN="github_pat_fine")
+        env = llm._copilot_env()
+        assert "GITHUB_TOKEN" not in env and "GH_TOKEN" not in env
+        assert env["COPILOT_GITHUB_TOKEN"] == "github_pat_fine"
+
+    def test_child_env_keeps_non_classic_tokens(self, monkeypatch):
+        self._env(monkeypatch, GITHUB_TOKEN="ghs_actions_token")
+        assert llm._copilot_env()["GITHUB_TOKEN"] == "ghs_actions_token"
+
+    def test_only_classic_tokens_fails_fast_without_running_cli(self, monkeypatch):
+        self._env(monkeypatch, GITHUB_TOKEN="ghp_classic")
+        with patch.object(llm.subprocess, "run") as run:
+            with pytest.raises(RuntimeError, match="COPILOT_GITHUB_TOKEN"):
+                llm._generate_copilot("sys", "user")
+            run.assert_not_called()
+
+    def test_cli_receives_copilot_env(self, monkeypatch):
+        self._env(monkeypatch, GITHUB_TOKEN="ghp_classic", COPILOT_GITHUB_TOKEN="github_pat_fine")
+        done = MagicMock(returncode=0, stdout="A real answer.", stderr="")
+        with patch.object(llm.subprocess, "run", return_value=done) as run:
+            assert llm._generate_copilot("sys", "user") == "A real answer."
+        env = run.call_args.kwargs["env"]
+        assert env["COPILOT_GITHUB_TOKEN"] == "github_pat_fine"
+        assert "GITHUB_TOKEN" not in env
+
+
+class TestGitHubModelsNonJson:
+    """A non-JSON reply (retirement brownout) gives a clear error and is skipped after."""
+
+    def test_non_json_reply_raises_clear_error_and_marks_unavailable(self, monkeypatch):
+        monkeypatch.setattr(llm, "GITHUB_TOKEN", "fake-token")
+        monkeypatch.setitem(llm._github_models_state, "unavailable", False)
+        monkeypatch.setitem(llm._circuit_breaker, "tripped_until", 0)
+        resp = MagicMock()
+        resp.read.return_value = b"<html>brownout</html>"
+        resp.__enter__ = MagicMock(return_value=resp)
+        resp.__exit__ = MagicMock(return_value=False)
+        with patch.object(llm.urllib.request, "urlopen", return_value=resp):
+            with pytest.raises(RuntimeError, match="non-JSON"):
+                llm._generate_github("sys", "user", model="m")
+        assert llm._github_models_state["unavailable"] is True
+
+    def test_generate_skips_unavailable_github_models(self, monkeypatch):
+        monkeypatch.setattr(llm, "AZURE_KEY", "")
+        monkeypatch.setattr(llm, "GITHUB_TOKEN", "fake-token")
+        monkeypatch.setitem(llm._github_models_state, "unavailable", True)
+        monkeypatch.delenv("RAPPTERBOOK_LLM_BACKEND", raising=False)
+        with patch.object(llm, "_check_budget", return_value=True), \
+             patch.object(llm, "_increment_budget"), \
+             patch.object(llm, "_generate_github") as gh, \
+             patch.object(llm, "_generate_copilot", return_value="ok") as cp:
+            text = llm.generate(system="s", user="u")
+        gh.assert_not_called()
+        cp.assert_called_once()
+        assert "ok" in str(text)
