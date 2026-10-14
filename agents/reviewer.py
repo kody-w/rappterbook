@@ -22,8 +22,9 @@ three jobs, so the PR's own code never runs where a secret is:
   review  Secrets, a fresh checkout of main, no PR code. Per PR it compares the
           two reports with that checkout's scripts/compare_test_regressions.py
           (the same comparison as run-tests.yml), reads the diff pinned to the
-          PR's base...head SHAs, blocks protected paths, asks the LLM, re-reads
-          the PR, and merges with gh pr merge --match-head-commit <head>.
+          PR's base...head SHAs, blocks protected paths, requires complete text
+          patches and NUL-free pinned head blobs, asks the LLM, re-reads the PR,
+          and merges with gh pr merge --match-head-commit <head>.
 
 The gate's reports and gate.json are produced in a job that ran the PR's code,
 so a malicious PR can forge them. The gate catches honest regressions only; it
@@ -37,6 +38,7 @@ posted once.
 """
 
 import argparse
+import base64
 import json
 import os
 import re
@@ -47,6 +49,7 @@ import sys
 import tempfile
 import time
 import xml.etree.ElementTree as ET
+from urllib.parse import quote
 
 REPO = os.getenv("GITHUB_REPOSITORY", "kody-w/rappterbook")
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -58,7 +61,8 @@ BASE_BRANCH = "main"
 REVIEW_MARKER = "<!-- factory-review:{sha}:{outcome} -->"
 MARKER_RE = re.compile(r"<!-- factory-review:([0-9a-f]{40}):([a-z_]+) -->")
 # Verdicts that stand until the head changes: batch runs do not re-review them.
-FINAL_OUTCOMES = frozenset({"blocked", "too_large", "conflict", "gate_failed", "changes_requested"})
+FINAL_OUTCOMES = frozenset({"blocked", "too_large", "conflict", "gate_failed",
+                            "changes_requested", "human_review"})
 TRUSTED_ASSOCIATIONS = frozenset({"OWNER", "MEMBER", "COLLABORATOR"})
 TRUSTED_BOTS = frozenset({"github-actions", "github-actions[bot]"})
 MAX_PRS_PER_RUN = 3
@@ -68,6 +72,7 @@ MAX_REPORT_BYTES = 50 * 1024 * 1024
 TEST_TIMEOUT_SECONDS = 1800
 MERGEABLE_POLLS = 6
 SHA_RE = re.compile(r"[0-9a-f]{40}")
+HUNK_RE = re.compile(r"@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@.*")
 
 # Paths a worker PR may never change: the factory's own control plane, the
 # gate it is judged by, pytest's configuration (which could switch tests
@@ -125,7 +130,7 @@ def inert(text):
 # --- PR metadata ----------------------------------------------------------
 
 PR_FIELDS = ("number,title,body,state,headRefName,headRefOid,baseRefName,"
-             "baseRefOid,isCrossRepository,mergeable,files,comments")
+             "baseRefOid,isCrossRepository,mergeable,changedFiles,files,comments")
 
 
 def get_pr(number):
@@ -443,8 +448,12 @@ def judge_gate(gate_dir, number, head_sha):
 
 def get_pinned_diff(base_sha, head_sha):
     """The diff of head since its merge base with base, pinned to both SHAs."""
-    result = run(["gh", "api", "-H", "Accept: application/vnd.github.diff",
-                  f"repos/{REPO}/compare/{base_sha}...{head_sha}"])
+    try:
+        result = run(["gh", "api", "-H", "Accept: application/vnd.github.diff",
+                      f"repos/{REPO}/compare/{base_sha}...{head_sha}"])
+    except (OSError, UnicodeError, subprocess.TimeoutExpired) as exc:
+        log(f"Could not read the pinned text diff: {exc}")
+        return ""
     return result.stdout if result.returncode == 0 else ""
 
 
@@ -529,6 +538,120 @@ def protected_paths(pr, diff):
                              diff, re.MULTILINE):
         blocked.add(match.group(1).rstrip('"'))
     return sorted(blocked)
+
+
+def complete_patch(patch: object, additions: object, deletions: object) -> bool:
+    """Require every hunk and every changed line GitHub counted, not just a prefix."""
+    if not isinstance(patch, str) or not patch or "\0" in patch:
+        return False
+    if any(not isinstance(count, int) or isinstance(count, bool) or count < 0
+           for count in (additions, deletions)):
+        return False
+    added, removed, hunks = 0, 0, 0
+    remaining = None
+    for line in patch.rstrip("\n").split("\n"):
+        match = HUNK_RE.fullmatch(line)
+        if match:
+            if remaining is not None and remaining != [0, 0]:
+                return False
+            remaining = [int(match[2] or 1), int(match[4] or 1)]
+            hunks += 1
+        elif line == "\\ No newline at end of file":
+            if remaining is None:
+                return False
+        elif remaining is None or not line or line[0] not in " +-":
+            return False
+        else:
+            remaining[0] -= line[0] in " -"
+            remaining[1] -= line[0] in " +"
+            added += line[0] == "+"
+            removed += line[0] == "-"
+            if min(remaining) < 0:
+                return False
+    return hunks > 0 and remaining == [0, 0] and (added, removed) == (additions, deletions)
+
+
+def head_blob_problem(filename: str, head: str, blob_sha: str) -> str:
+    """Inspect the entire file at the pinned head without checking out or running it."""
+    blob = gh_json(["api", f"repos/{REPO}/contents/{quote(filename, safe='/')}?ref={head}"])
+    if (not isinstance(blob, dict) or blob.get("type") != "file"
+            or not is_sha(blob_sha) or blob.get("sha") != blob_sha
+            or blob.get("encoding") != "base64" or not isinstance(blob.get("content"), str)):
+        return "could not read the complete head blob at the reviewed SHA"
+    try:
+        content = base64.b64decode("".join(blob["content"].split()), validate=True)
+    except ValueError:
+        return "the head blob has invalid base64 content"
+    if blob.get("size") != len(content):
+        return "the head blob is incomplete"
+    if b"\0" in content:
+        return "the head blob contains a NUL byte"
+    try:
+        content.decode("utf-8")
+    except UnicodeError:
+        return "the head blob is not UTF-8 text"
+    return ""
+
+
+def file_patch_problem(entry: dict, section: str, head: str) -> str:
+    """Bind a complete API patch to the exact text supplied to the LLM."""
+    patch = entry.get("patch")
+    additions, deletions = entry.get("additions"), entry.get("deletions")
+    if not complete_patch(patch, additions, deletions):
+        return "missing or incomplete text patch (binary or truncated)"
+    if entry.get("changes") != additions + deletions:
+        return "the patch does not account for all changed lines"
+    start = re.search(r"^@@ ", section, re.MULTILINE)
+    if start is None or section[start.start():].rstrip("\n") != patch.rstrip("\n"):
+        return "the pinned diff omits or differs from the complete API patch"
+    status = entry.get("status")
+    if status == "removed":
+        if additions or not re.search(r"^deleted file mode [0-7]+$", section, re.MULTILINE):
+            return "file deletion is not confirmed by the pinned diff"
+        return ""
+    if status not in ("added", "modified", "renamed", "copied", "changed"):
+        return "the changed file's status is unreadable"
+    return head_blob_problem(entry["filename"], head, entry.get("sha"))
+
+
+def unreviewable_diff(pr: dict, diff: str) -> str:
+    """Explain any opaque, missing, truncated or unpinned change; empty means reviewable."""
+    if "\0" in diff:
+        return "the diff contains a NUL byte"
+    if re.search(r"^(?:Binary files .+ differ|GIT binary patch)\r?$", diff, re.MULTILINE):
+        return "the diff contains a binary change with no reviewable text patch"
+    pages = gh_json(["api", "--paginate", "--slurp",
+                     f"repos/{REPO}/pulls/{pr['number']}/files?per_page=100"])
+    if not isinstance(pages, list) or not pages or not all(isinstance(page, list) for page in pages):
+        return "could not read the complete PR files listing"
+    files = [entry for page in pages for entry in page]
+    if (not files or len(files) >= MAX_DIFF_FILES
+            or not all(isinstance(entry, dict) for entry in files)):
+        return "the PR files listing is empty, invalid or reaches the review limit"
+    names = [entry.get("filename") for entry in files]
+    count = pr.get("changedFiles")
+    if (not isinstance(count, int) or isinstance(count, bool) or count != len(files)
+            or not all(isinstance(name, str) and name for name in names)
+            or len(set(names)) != len(names)):
+        return "the PR files listing does not cover every changed file"
+    listed = {entry.get("path") for entry in pr.get("files") or [] if isinstance(entry, dict)}
+    sections = re.split(r"^diff --git ", diff, flags=re.MULTILINE)
+    if listed != set(names) or sections[0].strip() or len(sections) - 1 != len(files):
+        return "the pinned diff and PR file inventories are incomplete or disagree"
+    sections = ["diff --git " + section for section in sections[1:]]
+    paths = [{path for path, _ in diff_files(section)} for section in sections]
+    used = set()
+    for entry in files:
+        name = entry["filename"]
+        matches = [index for index, found in enumerate(paths) if name in found]
+        expected = {name, entry.get("previous_filename", name)}
+        if len(matches) != 1 or matches[0] in used or paths[matches[0]] != expected:
+            return f"{name}: no unique, complete file section in the pinned diff"
+        used.add(matches[0])
+        problem = file_patch_problem(entry, sections[matches[0]], pr["headRefOid"])
+        if problem:
+            return f"{name}: {problem}"
+    return ""
 
 
 def evaluate_diff(title, body, diff):
@@ -620,17 +743,31 @@ class Review:
             return "conflict"
         diff = get_pinned_diff(base, sha)
         if not diff:
-            self.comment(pr, sha, "no_diff", "Factory review: could not fetch the diff; not merging.")
+            self.comment(pr, sha, "no_diff", "Factory review: could not fetch a complete text diff; "
+                         "human review required. Not approving or merging.")
             return "no_diff"
-        if len(diff) > MAX_DIFF_CHARS or diff.count("\ndiff --git ") + 1 >= MAX_DIFF_FILES:
-            self.comment(pr, sha, "too_large", f"Factory review: diff is {len(diff)} characters, over "
-                         f"the {MAX_DIFF_CHARS} the reviewer reads in full; not merging.")
+        file_count = len(re.findall(r"^diff --git ", diff, re.MULTILINE))
+        if len(diff) > MAX_DIFF_CHARS or file_count >= MAX_DIFF_FILES:
+            self.comment(pr, sha, "too_large", f"Factory review: diff has {len(diff)} characters and "
+                         f"{file_count} file sections; limits are {MAX_DIFF_CHARS} characters and "
+                         f"fewer than {MAX_DIFF_FILES} files. Human review required; not approving or merging.")
             return "too_large"
         blocked = protected_paths(pr, diff)
         if blocked:
-            self.comment(pr, sha, "blocked", "Factory gate: blocked. This worker PR changes protected "
+            self.comment(pr, sha, "blocked", "Factory gate: blocked; human review required. "
+                         "Not approving or merging. This worker PR changes protected "
                          "paths or removes tests:\n" + "\n".join(f"- `{inert(p)}`" for p in blocked))
             return "blocked"
+
+        try:
+            opaque = unreviewable_diff(pr, diff)
+        except (OSError, UnicodeError, subprocess.TimeoutExpired) as exc:
+            opaque = f"could not retrieve complete review evidence: {exc}"
+        if opaque:
+            self.comment(pr, sha, "human_review", f"Factory review: human review required on `{sha}`; "
+                         "not approving or merging. Every changed file must have a complete, "
+                         f"reviewable text patch and a NUL-free head blob.\n\n{inert(opaque)}")
+            return "human_review"
 
         verdict, evidence = judge_gate(self.gate_dir, number, sha)
         evidence = inert(evidence)[-3000:]

@@ -6,8 +6,8 @@ engineering work, it synthesizes the thread into a structured GitHub Issue
 ready for the Worker swarm to pick up.
 
 Dedupe, against every work order, open or closed: a [Foreman] issue
-labelled CARD_LABEL and opened by a trusted author (the same rule the Worker
-applies: the repository owner plus FACTORY_CARD_AUTHORS). Anyone can title
+labelled CARD_LABEL and opened by a trusted author (the repository owner,
+the account owning this token, or FACTORY_CARD_AUTHORS). Anyone can title
 an issue [Foreman], so other issues never feed the dedupe:
 - by source: each issue records the r/code post numbers it was drawn from
   (`<!-- factory-posts:... -->`). Only newer posts are sent to the LLM, and
@@ -33,6 +33,7 @@ import os
 import re
 import subprocess
 import sys
+from functools import lru_cache
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'sdk', 'python'))
@@ -65,11 +66,29 @@ def fingerprint(title):
     return hashlib.sha256(normalize_title(title).encode("utf-8")).hexdigest()[:16]
 
 
-def trusted_authors():
-    """Logins whose work orders count: the repository owner (whose token the
-    Foreman uses) plus FACTORY_CARD_AUTHORS. Same rule as agents/worker.py."""
+@lru_cache(maxsize=1)
+def token_owner() -> str:
+    """Resolve this token's login once; failed resolution never widens trust."""
+    try:
+        result = subprocess.run(["gh", "api", "user", "--jq", ".login"],
+                                capture_output=True, text=True, check=False, timeout=30)
+    except (OSError, UnicodeError, subprocess.TimeoutExpired) as exc:
+        print(f"Could not resolve Foreman token owner: {exc}; using configured authors.",
+              file=sys.stderr)
+        return ""
+    login = result.stdout.strip().lower() if result.returncode == 0 else ""
+    if (not login or login == "null"
+            or re.fullmatch(r"[a-z0-9][a-z0-9-]*(?:\[bot\])?", login) is None):
+        print("Could not resolve Foreman token owner; using repository owner and "
+              "FACTORY_CARD_AUTHORS only.", file=sys.stderr)
+        return ""
+    return login
+
+
+def trusted_authors() -> set[str]:
+    """Trust the repository owner, this token's account, and configured extra logins."""
     extra = os.getenv("FACTORY_CARD_AUTHORS", "")
-    logins = {REPO.split("/")[0]} | {x for x in extra.split(",")}
+    logins = {REPO.split("/")[0], token_owner()} | set(extra.split(","))
     return {x.strip().lower() for x in logins if x.strip()}
 
 

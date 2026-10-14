@@ -103,6 +103,73 @@ These are bets, not deliverables on a calendar. There is no sunset.
 
 ---
 
+## Entry 003.59 - 2026-10-13 - Complete worker diffs and token-owner dedupe
+
+**Session**: gpt-6.1-sol via Copilot CLI / operator: authorized operator
+**Read state**: `8331cbbe89b124491da1bf6ea840ab0318cfc20b` - clean, isolated `factory-pattern` worktree
+
+### Hypothesis tested
+The operator supplied two follow-up defects: binary changes could receive
+approval without exposing their executable content, and the Foreman still
+ignored its own bot-authored cards when FACTORY_CARD_AUTHORS was unset.
+These concrete repairs superseded the prior recommendation to observe a
+published run. The operator explicitly required a local commit and no push.
+
+### What I built
+- Made `agents/reviewer.py` require agreement between the complete paginated
+  PR-files listing, changed-file count and pinned diff. Every file needs a
+  complete patch, with hunk lengths and total additions/deletions validated,
+  that matches exactly what the model will read.
+- Read each non-deleted file at the pinned head SHA, verified its blob
+  identity and complete base64 content, and rejected NULs anywhere in the
+  blob, including beyond Git's initial binary-detection window. Binary
+  markers, absent patches, truncation and unavailable evidence request human
+  review before the test gate or model can approve; no merge is attempted.
+  Existing protected-path, dry-run and SHA-pinned merge behavior remains.
+- Added a cached `gh api user --jq .login` lookup to `agents/foreman.py`.
+  The token account joins the repository owner and configured card authors
+  for dedupe. Failed lookups are reported and cached without trusting
+  strangers or discarding configured authors.
+- Added regressions in `tests/test_factory_reviewer.py` and updated
+  `docs/FACTORY.md`. The external supplied PoC fixture now answers the new
+  identity lookup with its declared `rappter-bot` account; the original
+  fixture was preserved outside the repository.
+
+### What worked
+The initial selected behavioral regressions against `8331cbb` reported
+41 failures and one preserving pass. The final command
+`python3.11 -m pytest tests/test_factory_reviewer.py -q --tb=short`
+passed all 200 tests, including the Foreman tests. Every changed Python
+file compiled with `-W error -m py_compile` under `python3` (3.9.6),
+`python3.11` (3.11.15) and `python3.13` (3.13.12). With the same identity-aware
+PoC fixture, the old Foreman created `[Foreman] Fix heater` again; the
+fixed Foreman printed `LLM re-sent already-used posts: []` and
+`duplicate work orders created: []`. Canonical state is excluded from delivery.
+
+### What failed
+The PoC's original catch-all subprocess mock returned an empty successful
+response for every unknown command, so it could not model the newly required
+identity lookup. Adding only that explicit mock response preserved the
+before-fix failure and enabled the after-fix proof. Two initial blob-fixture
+argument collisions were corrected before the clean before/after regression
+run. No live workflow, approval, merge, deployment or push was performed.
+
+### Lessons for next session
+1. A nonempty diff is not complete review evidence. Account for every file
+   and changed line, and inspect immutable head bytes for binary content.
+2. Resolve authority from the token's actual account, not an assumption that
+   the repository owner owns every automation token.
+3. Extend API mocks when a fix adds an authoritative read; require the same
+   extended fixture to demonstrate both the old failure and the new result.
+4. The Worker still needs a non-owner bot in FACTORY_CARD_AUTHORS to build
+   its cards. Dedupe trust does not authorize broadening build trust.
+
+### Recommended next move
+Review the local two-fix commit. Only if publication is separately authorized,
+observe one binary worker PR being left for a human and one unchanged
+token-account Foreman card being deduplicated with FACTORY_CARD_AUTHORS unset.
+Keep all existing trust gates enabled and do not regenerate canonical state.
+
 ## Entry 003.58 - 2026-10-13 - Four factory reliability repairs
 
 **Session**: gpt-6.1-sol via Copilot CLI / operator: authorized operator

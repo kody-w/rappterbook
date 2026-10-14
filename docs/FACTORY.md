@@ -41,13 +41,16 @@ variable is set.
   reworded work orders whose source posts were all used. Mixed source sets
   retain only unused post numbers. Every
   work order is labelled `factory:card`, and this dedupe reads only
-  `factory:card` issues opened by a trusted author (the same rule as the
-  Build lane), so an outsider's `[Foreman]` issue cannot stall it.
+  `factory:card` issues opened by the repository owner, a login in
+  `FACTORY_CARD_AUTHORS`, or the account owning its own token, so an
+  outsider's `[Foreman]` issue cannot stall it. The token account is resolved
+  once with `gh api user --jq .login` and cached, including a failed lookup.
+  A lookup failure is reported and leaves the configured trust intact.
   `scripts/collect_cards.py` (a step in glitch-report.yml) turns signals
   the repo already writes into `factory:collected` issues.
 - **Build**: `agents/worker.py` (auto-worker.yml) takes open `[Foreman]`
   issues that are labelled `factory:card` (it lists only that label), were opened by a trusted author
-  (the repository owner, whose token the Foreman uses, or a login in
+  (the repository owner or a login in
   `FACTORY_CARD_AUTHORS`), are not claimed by an open same-repo PR and have
   no `factory:blocked` label. Anyone can title an issue `[Foreman] ...`, and
   an issue form can apply labels for anyone, so neither the title nor the
@@ -107,15 +110,24 @@ The review job merges a Worker PR only when all of these hold:
    `tox.ini`, at any depth) untouched, and deletes or renames away no file
    under `tests/`. The Worker refuses to write these paths in the first
    place.
-3. The LLM approves that same diff.
-4. Read again just before merging, the PR is still an open same-repo Worker
+3. Every changed file has a complete text patch. The paginated PR-files API,
+   total changed-file count and pinned diff must agree on every file; each
+   patch must include every hunk line and every counted addition/deletion,
+   and match the text in that diff. Every non-deleted file is also read at
+   the pinned head SHA, with its blob identity and full content checked.
+   Binary markers, missing or truncated patches, NUL bytes anywhere in a
+   head blob, and unavailable or inconsistent evidence require human review:
+   the Reviewer comments clearly, never asks the LLM to approve, and never
+   merges. This outcome is final for that head in batch runs.
+4. The LLM approves that same complete diff, without slicing it.
+5. Read again just before merging, the PR is still an open same-repo Worker
    PR into main at the gated head, and main has moved since the gate only
    by commits under `state/`. Otherwise the PR is stale and the next run
    gates it again.
 
 The merge is pinned with `gh pr merge --match-head-commit <gated sha>`, so a
 push made after the review cannot be merged. The merge runs straight after
-the re-read in condition 4 and the approval is commented after it; GitHub
+the re-read in condition 5 and the approval is commented after it; GitHub
 cannot pin the base, so a code commit landing on main in that short
 window is not re-gated. Each outcome is commented at most once per head
 SHA. A failed comment or merge fails the job.
@@ -185,7 +197,7 @@ you set it.
 | Setting | Effect |
 | --- | --- |
 | `FACTORY_APPLY=true` | Foreman, Worker and Reviewer write: they open issues and PRs and merge. Without it they run dry. |
-| `FACTORY_CARD_AUTHORS=login,...` | Extra logins (besides the repository owner) whose `factory:card` `[Foreman]` issues the Foreman deduplicates and the Worker builds. Both workflows pass this variable. Set it when the Foreman's `GH_TOKEN` belongs to another account. |
+| `FACTORY_CARD_AUTHORS=login,...` | Extra logins (besides the repository owner) whose `factory:card` `[Foreman]` issues the Foreman deduplicates and the Worker builds. Both workflows pass this variable. The Foreman always deduplicates its own token account's cards even when this is unset; the Worker still needs that account listed here if it is not the repository owner. |
 | `FACTORY_WORKER_AGENT=<agent id>` | The persona named in the Worker PR's `Agent:` line (default `zion-coder-01`). |
 | `COLLECT_CARDS=true` | The glitch-report workflow runs the collector with `--apply` after the daily report (5 cards per run at most) |
 | `FACTORY_PROJECT=owner/number` | The live board is `kody-w/1`. The collector and the Foreman add new cards to that Project (Status, Platform and Source set), and the static API workflow exports the board. A value they cannot parse is reported and ignored; the cards are still filed. |

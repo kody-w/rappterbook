@@ -2,6 +2,7 @@
 
 Every gh/git/pytest call and every LLM call is mocked; nothing reaches GitHub.
 """
+import base64
 import importlib.util
 import json
 import os
@@ -18,6 +19,7 @@ HEAD = "a" * 40
 BASE = "b" * 40
 MERGE = "c" * 40
 NEWER_BASE = "d" * 40
+BLOB = "e" * 40
 
 
 def _load(name):
@@ -73,6 +75,7 @@ def _pr(**overrides):
           "isCrossRepository": False, "mergeable": "MERGEABLE",
           "files": [{"path": "projects/new_tool.py"}], "comments": []}
     pr.update(overrides)
+    pr.setdefault("changedFiles", len(pr["files"]))
     return pr
 
 
@@ -81,7 +84,26 @@ def _comment(sha, outcome, association="OWNER", login="kody-w"):
             "authorAssociation": association, "author": {"login": login}}
 
 
-DIFF = "diff --git a/projects/new_tool.py b/projects/new_tool.py\n+print('hi')\n"
+PATCH = "@@ -0,0 +1 @@\n+print('hi')"
+DIFF = ("diff --git a/projects/new_tool.py b/projects/new_tool.py\n"
+        "new file mode 100644\nindex 0000000..eeeeeee\n"
+        "--- /dev/null\n+++ b/projects/new_tool.py\n" + PATCH + "\n")
+
+
+def _file(path="projects/new_tool.py", **overrides):
+    """A REST PR-files entry, including GitHub's patch and change counts."""
+    entry = {"filename": path, "sha": BLOB, "status": "added",
+             "additions": 1, "deletions": 0, "changes": 1, "patch": PATCH}
+    entry.update(overrides)
+    return entry
+
+
+def _head_blob(data=b"print('hi')\n", **overrides):
+    """A contents response for a file read at the planned head SHA."""
+    blob = {"type": "file", "sha": BLOB, "encoding": "base64",
+            "size": len(data), "content": base64.b64encode(data).decode("ascii")}
+    blob.update(overrides)
+    return blob
 
 
 def _write_gate(gate_dir, number=7, head=HEAD, base=BASE, baseline_exit=1, candidate_exit=1, **extra):
@@ -96,7 +118,8 @@ def _write_gate(gate_dir, number=7, head=HEAD, base=BASE, baseline_exit=1, candi
     return folder
 
 
-def _review_runner(pr, merge_rc=0, compare_rc=0, fresh=None, diff=DIFF, drift=None, comment_rc=0):
+def _review_runner(pr, merge_rc=0, compare_rc=0, fresh=None, diff=DIFF, drift=None, comment_rc=0,
+                   files=None, blob=None):
     """gh/compare fake. `fresh` is the PR the re-read before merging sees."""
     views = iter([pr, fresh or pr])
 
@@ -106,6 +129,10 @@ def _review_runner(pr, merge_rc=0, compare_rc=0, fresh=None, diff=DIFF, drift=No
     def api(cmd):
         if "Accept: application/vnd.github.diff" in cmd:
             return _proc(diff)
+        if "/pulls/" in cmd[-1] and "/files?" in cmd[-1]:
+            return _proc(json.dumps([files if files is not None else [_file()]]))
+        if "/contents/" in cmd[-1]:
+            return _proc(json.dumps(blob if blob is not None else _head_blob()))
         return _proc(json.dumps(drift or {"status": "identical", "files": []}))
 
     return FakeRunner([
@@ -163,6 +190,247 @@ def test_gate_pass_and_approval_merges_pinned_to_head(reviewer, monkeypatch, tmp
     assert compare[0][2:] == [str(tmp_path / "gates" / "gate-7" / f"{l}-tests.xml")
                               for l in ("baseline", "candidate")]
     assert not [c for c in fake.calls if "pytest" in c or c[:3] == ["git", "worktree", "add"]]
+
+
+@pytest.mark.parametrize("opaque", [
+    "Binary files a/docs/board.html and b/docs/board.html differ\n",
+    "GIT binary patch\nliteral 10\nopaque\n",
+    "--- a/docs/board.html\n+++ b/docs/board.html\n@@ -1 +1 @@\n-old\n+new\0\n",
+])
+@pytest.mark.parametrize("mixed", [False, True])
+def test_opaque_diff_requires_human_review(reviewer, monkeypatch, tmp_path, opaque, mixed):
+    """A binary-only or mixed PR must never turn an LLM approval into a merge."""
+    _write_gate(tmp_path / "gates")
+    diff = "diff --git a/docs/board.html b/docs/board.html\n" + opaque
+    paths = [{"path": "docs/board.html"}]
+    files = [_file("docs/board.html")]
+    if mixed:
+        diff = DIFF + diff
+        paths.append({"path": "projects/new_tool.py"})
+        files.append(_file())
+    fake = _review_runner(_pr(files=paths), diff=diff, files=files)
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge")
+    body = fake.find("gh", "pr", "comment")[0][-1]
+    assert "human review" in body.lower() and HEAD in body
+    assert "not approving or merging" in body.lower()
+
+
+@pytest.mark.parametrize("patch", [
+    None, "", "@@ -0,0 +2 @@\n+print('hi')", "@@ -0,0 +1 @@",
+    "@@ -0,0 +1 @@\n+print('hi')\n[truncated]",
+])
+def test_missing_or_incomplete_api_patch_requires_human_review(reviewer, monkeypatch, tmp_path, patch):
+    _write_gate(tmp_path / "gates")
+    entry = _file(patch=patch)
+    if patch is None:
+        entry.pop("patch")
+    fake = _review_runner(_pr(), files=[entry])
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge")
+    assert "projects/new_tool.py" in fake.find("gh", "pr", "comment")[0][-1]
+
+
+@pytest.mark.parametrize("diff, entry", [
+    (DIFF, _file(additions=2, changes=2)),  # a whole hunk omitted by GitHub
+    (DIFF, _file(deletions=1, changes=2)),
+    (DIFF, _file(changes=2)),
+    (DIFF, _file(patch=PATCH + "\n@@ -3,0 +5 @@\n+unseen", additions=2, changes=2)),
+    (DIFF.replace("+print('hi')\n", ""), _file()),
+    (DIFF, _file(patch=PATCH.replace("hi", "other"))),
+])
+def test_truncated_or_mismatched_diff_requires_human_review(reviewer, monkeypatch, tmp_path, diff, entry):
+    _write_gate(tmp_path / "gates")
+    fake = _review_runner(_pr(), diff=diff, files=[entry])
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge")
+
+
+@pytest.mark.parametrize("files, changed", [
+    ([], 1), ([_file(), _file("docs/unseen.html")], 2),
+    ([_file(), _file()], 2), ([_file()], 2), ([_file()], None),
+])
+def test_incomplete_file_inventory_requires_human_review(reviewer, monkeypatch, tmp_path, files, changed):
+    _write_gate(tmp_path / "gates")
+    fake = _review_runner(_pr(changedFiles=changed), files=files)
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge")
+
+
+@pytest.mark.parametrize("content", [
+    b"<!--\0--><html>changed</html>\n",
+    b"<!--" + b"x" * 9000 + b"\0--><html>changed</html>\n",
+])
+def test_nul_in_pinned_head_blob_requires_human_review(reviewer, monkeypatch, tmp_path, content):
+    """Also inspect NULs beyond git's initial binary-detection window."""
+    _write_gate(tmp_path / "gates")
+    path = "docs/board.html"
+    fake = _review_runner(_pr(files=[{"path": path}]), files=[_file(path)],
+                          diff=DIFF.replace("projects/new_tool.py", path), blob=_head_blob(content))
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge")
+    reads = [c for c in fake.find("gh", "api") if "/contents/" in c[-1]]
+    assert len(reads) == 1 and reads[0][-1] == f"repos/{reviewer.REPO}/contents/{path}?ref={HEAD}"
+    body = fake.find("gh", "pr", "comment")[0][-1]
+    assert path in body and "NUL" in body and "human review" in body.lower()
+
+
+@pytest.mark.parametrize("overrides", [
+    {"sha": "f" * 40}, {"encoding": "none"}, {"content": "not base64!"},
+    {"size": 100}, {"type": "symlink"}, {"content": None},
+])
+def test_unreadable_or_unpinned_head_blob_requires_human_review(reviewer, monkeypatch, tmp_path, overrides):
+    _write_gate(tmp_path / "gates")
+    fake = _review_runner(_pr(), blob=_head_blob(**overrides))
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge")
+
+
+@pytest.mark.parametrize("target", ["files", "blob"])
+def test_unavailable_review_evidence_requires_human_review(reviewer, monkeypatch, tmp_path, target):
+    _write_gate(tmp_path / "gates")
+    fake = _review_runner(_pr())
+    api = fake.rules[1][1]
+
+    def unavailable(cmd):
+        if ("/files?" if target == "files" else "/contents/") in cmd[-1]:
+            return _proc(returncode=1, stderr="HTTP 403")
+        return api(cmd)
+
+    fake.rules[1] = (["gh", "api"], unavailable)
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge")
+    assert "human review" in fake.find("gh", "pr", "comment")[0][-1].lower()
+
+
+def test_all_pr_file_pages_are_checked(reviewer, monkeypatch, tmp_path):
+    _write_gate(tmp_path / "gates")
+    path = "docs/board.html"
+    pr = _pr(files=[{"path": "projects/new_tool.py"}, {"path": path}])
+    fake = _review_runner(pr, diff=DIFF + DIFF.replace("projects/new_tool.py", path))
+    api = fake.rules[1][1]
+
+    def paginated(cmd):
+        if "/files?" in cmd[-1]:
+            return _proc(json.dumps([[_file()], [_file(path, patch=None)]]))
+        return api(cmd)
+
+    fake.rules[1] = (["gh", "api"], paginated)
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert path in fake.find("gh", "pr", "comment")[0][-1]
+    assert not fake.find("gh", "pr", "merge")
+
+
+@pytest.mark.parametrize("error", [
+    OSError("gh unavailable"), UnicodeError("non-text response"),
+    subprocess.TimeoutExpired(["gh", "api"], 300),
+])
+def test_review_evidence_errors_require_human_review(reviewer, monkeypatch, tmp_path, error):
+    _write_gate(tmp_path / "gates")
+    fake = _review_runner(_pr())
+    api = fake.rules[1][1]
+
+    def unavailable(cmd):
+        if "/contents/" in cmd[-1]:
+            raise error
+        return api(cmd)
+
+    fake.rules[1] = (["gh", "api"], unavailable)
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge")
+    assert "human review" in fake.find("gh", "pr", "comment")[0][-1].lower()
+
+
+def test_oversized_opaque_diff_requests_human_review(reviewer, monkeypatch, tmp_path):
+    diff = ("diff --git a/docs/board.html b/docs/board.html\n"
+            "Binary files a/docs/board.html and b/docs/board.html differ\n"
+            + "x" * reviewer.MAX_DIFF_CHARS)
+    fake = _review_runner(_pr(files=[{"path": "docs/board.html"}]), diff=diff)
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "too_large"
+    assert not fake.find("gh", "pr", "merge")
+    assert "human review" in fake.find("gh", "pr", "comment")[0][-1].lower()
+
+
+def test_opaque_review_dry_run_never_writes(reviewer, monkeypatch, tmp_path, capsys):
+    fake = _review_runner(_pr(), files=[_file(patch=None)])
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path, apply=False).pr(7) == "human_review"
+    assert not fake.find("gh", "pr", "merge") and not fake.find("gh", "pr", "comment")
+    assert "human review" in capsys.readouterr().err.lower()
+
+
+def test_complete_text_diff_reaches_llm_unchanged(reviewer, monkeypatch, tmp_path):
+    _write_gate(tmp_path / "gates")
+    patch = "@@ -0,0 +1,2 @@\n+Binary files a/x and b/x differ\n+GIT binary patch"
+    diff = DIFF.replace(PATCH, patch)
+    fake = _review_runner(_pr(), diff=diff, files=[_file(patch=patch, additions=2, changes=2)])
+    seen = []
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff",
+                        lambda title, body, text: seen.append(text) or _approve())
+    assert _review(reviewer, tmp_path).pr(7) == "merged"
+    assert seen == [diff]
+    listing = [c for c in fake.find("gh", "api") if "/files?" in c[-1]][0]
+    assert "--paginate" in listing and "--slurp" in listing
+
+
+def test_complete_deleted_text_file_needs_no_head_blob(reviewer, monkeypatch, tmp_path):
+    _write_gate(tmp_path / "gates")
+    patch = "@@ -1 +0,0 @@\n-print('hi')"
+    diff = ("diff --git a/projects/new_tool.py b/projects/new_tool.py\n"
+            "deleted file mode 100644\n--- a/projects/new_tool.py\n+++ /dev/null\n" + patch + "\n")
+    fake = _review_runner(_pr(), diff=diff, files=[_file(status="removed", patch=patch,
+                                                       additions=0, deletions=1)])
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "merged"
+    assert not [c for c in fake.find("gh", "api") if "/contents/" in c[-1]]
+
+
+def test_complete_renamed_text_file_is_reviewable(reviewer, monkeypatch, tmp_path):
+    _write_gate(tmp_path / "gates")
+    patch = "@@ -1,2 +1,2 @@\n same\n-old\n+new\n\\ No newline at end of file"
+    diff = ("diff --git a/docs/old name.md b/docs/new name.md\n"
+            "similarity index 50%\nrename from docs/old name.md\nrename to docs/new name.md\n"
+            "--- a/docs/old name.md\n+++ b/docs/new name.md\n" + patch + "\n")
+    entry = _file("docs/new name.md", status="renamed", previous_filename="docs/old name.md",
+                  patch=patch, additions=1, deletions=1, changes=2)
+    fake = _review_runner(_pr(files=[{"path": "docs/new name.md"}]), diff=diff, files=[entry],
+                          blob=_head_blob(b"same\nnew"))
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "evaluate_diff", _approve)
+    assert _review(reviewer, tmp_path).pr(7) == "merged"
+    assert any(f"/contents/docs/new%20name.md?ref={HEAD}" in c[-1] for c in fake.find("gh", "api"))
+
+
+def test_human_review_blocks_before_gate_and_model(reviewer, monkeypatch, tmp_path):
+    fake = _review_runner(_pr(), files=[_file(patch=None)])
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(reviewer, "judge_gate", lambda *a: pytest.fail("gate read"))
+    monkeypatch.setattr(reviewer, "evaluate_diff", lambda *a: pytest.fail("LLM ran"))
+    assert _review(reviewer, tmp_path).pr(7) == "human_review"
+    assert "human_review" in reviewer.FINAL_OUTCOMES
 
 
 def test_gate_regression_blocks_merge_and_comments_evidence(reviewer, monkeypatch, tmp_path):
@@ -835,7 +1103,8 @@ def test_worker_workflow_uses_reviewed_branch_prefix_and_body_file():
 def _foreman_runner(existing):
     """Existing issues are the owner's labelled work orders unless they say otherwise."""
     existing = [dict({"labels": list(CARD), "author": dict(OWNER)}, **i) for i in existing]
-    return FakeRunner([(["gh", "issue", "list"], _proc(json.dumps(existing))),
+    return FakeRunner([(["gh", "api", "user", "--jq", ".login"], _proc("kody-w\n")),
+                       (["gh", "issue", "list"], _proc(json.dumps(existing))),
                        (["gh", "issue", "create"], _proc("https://github.com/x/y/issues/9\n"))])
 
 
@@ -957,6 +1226,71 @@ def test_foreman_workflow_dedupes_bot_authored_work_orders(foreman, monkeypatch,
     assert foreman.create_github_issue("FIX HEATER!", "spec", apply=True, source_posts=[200]) == "duplicate"
     listing = fake.find("gh", "issue", "list")[0]
     assert listing[listing.index("--state") + 1] == "all"
+
+
+@pytest.mark.parametrize("state", ["OPEN", "CLOSED"])
+def test_foreman_dedupes_own_token_cards_without_config(foreman, monkeypatch, state):
+    """The account that filed the cards need not also be configured as trusted."""
+    monkeypatch.delenv("FACTORY_CARD_AUTHORS", raising=False)
+    fake = _foreman_runner([{
+        "number": 7, "title": "[Foreman] Fix heater", "state": state,
+        "author": {"login": "rappter-bot"},
+        "body": "<!-- factory-posts:100,101,102,103,104 -->",
+    }])
+    fake.rules[0] = (["gh", "api", "user", "--jq", ".login"], _proc(" Rappter-Bot\n"))
+    monkeypatch.setattr(subprocess, "run", fake)
+    monkeypatch.setattr(foreman, "Rapp",
+                        lambda **k: SimpleNamespace(posts=lambda channel: _posts(100, 101, 102, 103, 104)))
+    monkeypatch.setattr(foreman, "evaluate_thread_for_issue", lambda posts: pytest.fail("used posts sent to LLM"))
+    assert foreman.main(["--apply"]) == 0
+    assert foreman.create_github_issue("FIX HEATER!", "spec", apply=True, source_posts=[200]) == "duplicate"
+    assert foreman.create_github_issue("Repair the heater", "spec", apply=True, source_posts=[100]) == "duplicate"
+    assert not fake.find("gh", "issue", "create")
+    assert len(fake.find("gh", "api", "user", "--jq", ".login")) == 1
+
+
+def test_foreman_token_owner_is_cached_and_additive(foreman, monkeypatch):
+    monkeypatch.setenv("FACTORY_CARD_AUTHORS", " extra-bot, ")
+    fake = FakeRunner([(["gh", "api", "user", "--jq", ".login"], _proc("Rappter-Bot\n"))])
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert foreman.trusted_authors() == {"kody-w", "rappter-bot", "extra-bot"}
+    monkeypatch.setenv("FACTORY_CARD_AUTHORS", "second-bot")
+    assert foreman.trusted_authors() == {"kody-w", "rappter-bot", "second-bot"}
+    assert len(fake.find("gh", "api", "user", "--jq", ".login")) == 1
+
+
+@pytest.mark.parametrize("failure", [
+    _proc(returncode=1, stderr="HTTP 403"), _proc(), _proc("null\n"),
+    _proc("rappter-bot,stranger"), UnicodeError("non-text response"),
+    OSError("gh unavailable"), subprocess.TimeoutExpired(["gh", "api", "user"], 30),
+])
+def test_foreman_token_owner_failure_preserves_configured_trust(foreman, monkeypatch, capsys, failure):
+    monkeypatch.setenv("FACTORY_CARD_AUTHORS", " extra-bot, ")
+
+    def resolve(cmd):
+        if isinstance(failure, Exception):
+            raise failure
+        return failure
+
+    fake = FakeRunner([(["gh", "api", "user", "--jq", ".login"], resolve)])
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert foreman.trusted_authors() == {"kody-w", "extra-bot"}
+    assert foreman.trusted_authors() == {"kody-w", "extra-bot"}
+    assert len(fake.find("gh", "api", "user", "--jq", ".login")) == 1
+    assert "token owner" in capsys.readouterr().err.lower()
+
+
+def test_foreman_token_owner_does_not_trust_strangers(foreman, monkeypatch):
+    monkeypatch.delenv("FACTORY_CARD_AUTHORS", raising=False)
+    fake = _foreman_runner([{
+        "number": 7, "title": "[Foreman] Fix heater", "state": "CLOSED",
+        "author": {"login": "stranger"},
+        "body": "<!-- factory-posts:100,101 -->",
+    }])
+    fake.rules[0] = (["gh", "api", "user", "--jq", ".login"], _proc("rappter-bot\n"))
+    monkeypatch.setattr(subprocess, "run", fake)
+    assert foreman.existing_work_orders() == (set(), set(), set())
+    assert foreman.create_github_issue("Fix heater", "spec", apply=True, source_posts=[100]) == "created"
 
 
 @pytest.mark.parametrize("state", ["OPEN", "CLOSED"])
