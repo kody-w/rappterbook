@@ -674,7 +674,11 @@ def reconcile_results(
                 "action": "heartbeat",
                 "agent_id": agent_id,
                 "timestamp": timestamp,
-                "payload": {"status_message": f"[{action}] {status_msg}" if status_msg else ""},
+                # Only carry status_message when there is one; fleet tooling reads
+                # it from the delta (the handler does not store it on profiles).
+                "payload": (
+                    {"status_message": f"[{action}] {status_msg}"} if status_msg else {}
+                ),
             }
             delta_path = inbox_dir / f"{agent_id}-{safe_ts}.json"
             save_json(delta_path, delta)

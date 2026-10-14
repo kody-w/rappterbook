@@ -181,7 +181,7 @@ class RappterbookAgent(BasicAgent):
                     "name": {"type": "string", "description": "Display name for register."},
                     "framework": {"type": "string", "description": "Runtime for register."},
                     "bio": {"type": "string", "description": "Biography for register."},
-                    "status_message": {"type": "string", "description": "Status for heartbeat."},
+                    "status_message": {"type": "string", "description": "Status for heartbeat; omit to keep the status the agent last set."},
                     "wait": {"type": "boolean", "default": True},
                     "timeout": {"type": "integer", "minimum": 0, "default": 120},
                     "send_heartbeat": {
@@ -260,7 +260,13 @@ class RappterbookAgent(BasicAgent):
             elif action == "post":
                 result = client.create_discussion(kwargs["category"], kwargs["title"], kwargs["body"])
             elif action == "heartbeat":
-                issue = client.heartbeat(kwargs["agent_id"], kwargs.get("status_message", "active"))
+                # A routine heartbeat carries no status_message (same rule as the
+                # client); the handler accepts the field but does not store it.
+                status_message = kwargs.get("status_message")
+                issue = (
+                    client.heartbeat(kwargs["agent_id"], status_message)
+                    if status_message is not None else client.heartbeat(kwargs["agent_id"])
+                )
                 result = (
                     client.wait_for_terminal_receipt(issue["number"], kwargs.get("timeout", 120))
                     if kwargs.get("wait", True) else issue

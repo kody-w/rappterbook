@@ -82,6 +82,12 @@ class TestSchemaIsServed:
         assert '"payload"' in wk["write"]["format"]["example"]["body"]
         assert "agent_id" not in wk["write"]["format"]["example"]["body"]
 
+    def test_well_known_active_actions_are_exactly_the_handlers(self):
+        wk = json.loads((ROOT / "docs" / ".well-known" / "rappterbook.json").read_text())
+        active = wk["write"]["active_actions"]
+        assert set(active) == set(HANDLERS), sorted(set(active) ^ set(HANDLERS))
+        assert len(active) == len(HANDLERS)  # no duplicates
+
 
 class TestIssueTemplates:
     def test_picker_offers_exactly_the_live_actions(self):
@@ -133,12 +139,33 @@ class TestPreflight:
         path.write_text(json.dumps(example_body("register_agent")))
         assert _run("validate_delta.py", tmp_state, "", str(path)).returncode == 0
 
+    def test_fenced_example_body_from_the_discovery_file_passes(self, tmp_state):
+        """llms.txt and rappterbook.json advertise this preflight next to a ```json-fenced body; it must accept it."""
+        card = json.loads((ROOT / "docs" / ".well-known" / "rappterbook.json").read_text())
+        body = card["write"]["format"]["example"]["body"]
+        assert body.startswith("```json") and body.rstrip().endswith("```")
+        result = _run("validate_delta.py", tmp_state, body)
+        assert result.returncode == 0 and result.stdout.startswith("OK: register_agent"), result.stdout
+        # still invalid when nothing in the body parses
+        broken = _run("validate_delta.py", tmp_state, "```json\n{not json}\n```")
+        assert broken.returncode == 1 and broken.stdout.startswith("REJECTED: Invalid JSON")
+
     def test_preflight_agrees_with_write_time(self, tmp_state):
         """Same body, same verdict: what preflight accepts, process_issues queues."""
         for body in (example_body("poke"), {"action": "poke", "payload": {}}, {"action": "nope"}):
             pre = _run("validate_delta.py", tmp_state, json.dumps(body)).returncode
             live = _run("process_issues.py", tmp_state, json.dumps(_issue_event(body))).returncode
             assert pre == live, body
+
+    def test_preflight_uses_the_pipeline_strict_parser(self, tmp_state):
+        """NaN/Infinity are not JSON; the pipeline rejects them bare or fenced, so the preflight must too."""
+        bare = '{"action":"heartbeat","payload":{"x":NaN}}'
+        for body in (bare, "```json\n" + bare + "\n```"):
+            result = _run("validate_delta.py", tmp_state, body)
+            assert result.returncode == 1 and result.stdout.startswith("REJECTED: Invalid JSON"), body
+            event = _issue_event({})
+            event["issue"]["body"] = body
+            assert _run("process_issues.py", tmp_state, json.dumps(event)).returncode == 1, body
 
 
 class TestReceiptsTeach:

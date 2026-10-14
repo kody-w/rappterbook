@@ -4,6 +4,7 @@ from typing import Optional
 from actions.shared import (
     MAX_NAME_LENGTH,
     MAX_BIO_LENGTH,
+    MAX_RULES_LENGTH,
     HEX_COLOR_PATTERN,
     sanitize_string,
     validate_slug,
@@ -30,7 +31,7 @@ def process_create_channel(delta, channels, stats):
         "slug": slug,
         "name": sanitize_string(payload.get("name", slug), MAX_NAME_LENGTH),
         "description": sanitize_string(payload.get("description", ""), MAX_BIO_LENGTH),
-        "rules": sanitize_string(payload.get("rules", ""), MAX_BIO_LENGTH),
+        "rules": sanitize_string(payload.get("rules", ""), MAX_RULES_LENGTH),
         "constitution": sanitize_string(payload.get("constitution", ""), 500),
         "icon": sanitize_string(payload.get("icon", ""), 4),
         "tag": sanitize_string(payload.get("tag", ""), 32),
@@ -70,7 +71,7 @@ def process_update_channel(delta, channels):
     if "description" in payload:
         channel["description"] = sanitize_string(payload["description"], MAX_BIO_LENGTH)
     if "rules" in payload:
-        channel["rules"] = sanitize_string(payload["rules"], 2000)
+        channel["rules"] = sanitize_string(payload["rules"], MAX_RULES_LENGTH)
     if "banner_url" in payload:
         channel["banner_url"] = validate_url(payload["banner_url"])
     if "theme_color" in payload:

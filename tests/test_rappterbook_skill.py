@@ -8,6 +8,8 @@ import shlex
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "clients"))
 
@@ -58,6 +60,46 @@ def test_skill_client_pin_and_machine_contract_agree():
     assert descriptor["canonical_url"] == frontmatter_value(
         frontmatter, "canonical-skill"
     )
+
+
+def test_pinned_commit_serves_the_pinned_digest_when_it_is_available():
+    """Drift guard: client-commit and client-sha256 must describe the same bytes.
+
+    The URL in skill.md is immutable, so a sha256 bump without a commit bump
+    (or the reverse) makes every reader's integrity check fail. The pinned
+    commit is absent from shallow clones, where this can only be skipped;
+    scripts/bump_client_pin.py rotates both together and --check does this
+    same comparison from the command line.
+    """
+    import subprocess
+
+    frontmatter, _ = skill_parts()
+    commit = frontmatter_value(frontmatter, "client-commit")
+    probe = subprocess.run(["git", "cat-file", "-e", f"{commit}^{{commit}}"], cwd=ROOT, capture_output=True)
+    if probe.returncode != 0:
+        pytest.skip(f"pinned commit {commit} is not available in this clone")
+    served = subprocess.run(["git", "show", f"{commit}:clients/rappterbook_client.py"], cwd=ROOT,
+                            capture_output=True, check=True).stdout
+    assert hashlib.sha256(served).hexdigest() == frontmatter_value(frontmatter, "client-sha256"), (
+        "skill.md pins a commit whose client bytes do not hash to client-sha256; "
+        "run python3 scripts/bump_client_pin.py <commit-with-the-current-client>"
+    )
+    assert subprocess.run([sys.executable, str(ROOT / "scripts/bump_client_pin.py"), "--check"], cwd=ROOT).returncode == 0
+
+
+def test_bump_client_pin_check_distinguishes_an_unavailable_commit_from_a_mismatch(tmp_path):
+    import subprocess
+
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/bump_client_pin.py"), "--check"],
+                            cwd=ROOT, capture_output=True, text=True)
+    assert result.returncode in (0, 3), result.stdout + result.stderr
+    # a commit nobody has is refused before anything is rewritten
+    bogus = subprocess.run([sys.executable, str(ROOT / "scripts/bump_client_pin.py"), "0" * 40],
+                           cwd=ROOT, capture_output=True, text=True)
+    assert bogus.returncode != 0 and "not available locally" in bogus.stderr
+    assert subprocess.run(["git", "diff", "--quiet", "--", "skill.md", "llms.txt"], cwd=ROOT).returncode in (0, 1)
+    skill_json = json.loads((ROOT / "skill.json").read_text())
+    assert skill_json["onramp"]["client"]["version"] == CLIENT_VERSION
 
 
 def test_all_client_examples_parse_and_inspection_defaults_do_not_heartbeat():
@@ -113,3 +155,73 @@ def test_skill_input_contract_requires_intent_not_a_new_account():
     assert schema["required"] == ["request"]
     assert "authorized_github_login" in schema["properties"]
     assert "trusted_client_path" in schema["properties"]
+
+
+def test_bump_client_pin_check_catches_a_guide_url_or_mirror_that_drifted(tmp_path, monkeypatch, capsys):
+    """--check fails when a raw client URL or a byte mirror disagrees with client-commit, not only the digest pair."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("bump_client_pin_under_test", ROOT / "scripts/bump_client_pin.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    copies = {}
+    for name in ("SKILL", "SKILL_MIRROR", "LLMS", "LLMS_MIRROR"):
+        copies[name] = tmp_path / name
+        copies[name].write_bytes(getattr(module, name).read_bytes())
+        monkeypatch.setattr(module, name, copies[name])
+    local = (ROOT / "clients/rappterbook_client.py").read_bytes()
+    monkeypatch.setattr(module, "client_at", lambda commit: local)
+    commit, _ = module.current_pin()
+    assert module.check() == 0, capsys.readouterr().out
+    # the guide's URL on another commit, mirrored faithfully, is still a broken pin
+    other = ("1" if commit[0] != "1" else "2") + commit[1:]
+    copies["LLMS"].write_text(copies["LLMS"].read_text(encoding="utf-8").replace(commit, other), encoding="utf-8")
+    copies["LLMS_MIRROR"].write_bytes(copies["LLMS"].read_bytes())
+    assert module.check() == 1
+    assert f"pins {other}" in capsys.readouterr().out
+    # a mirror that is not a byte copy is a broken pin too
+    copies["LLMS"].write_bytes(module.LLMS_MIRROR.read_bytes().replace(other.encode(), commit.encode()))
+    copies["LLMS_MIRROR"].write_bytes(copies["LLMS"].read_bytes() + b"\n")
+    assert module.check() == 1
+    assert "not a byte copy" in capsys.readouterr().out
+
+
+def test_bump_client_pin_rotates_unquoted_front_matter_or_writes_nothing(tmp_path, monkeypatch):
+    """bump() must rotate a pin whose front-matter values are unquoted (frontmatter_value accepts them)
+    and must write none of the four files when a substitution cannot be made."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("bump_client_pin_under_test2", ROOT / "scripts/bump_client_pin.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    copies = {}
+    for name in ("SKILL", "SKILL_MIRROR", "LLMS", "LLMS_MIRROR"):
+        copies[name] = tmp_path / name
+        copies[name].write_bytes(getattr(module, name).read_bytes())
+        monkeypatch.setattr(module, name, copies[name])
+    local = (ROOT / "clients/rappterbook_client.py").read_bytes()
+    monkeypatch.setattr(module, "client_at", lambda commit: local)
+    commit, digest = module.current_pin()
+    quoted = copies["SKILL"].read_text(encoding="utf-8")
+    unquoted = quoted.replace(f'client-commit: "{commit}"', f"client-commit: {commit}")
+    unquoted = unquoted.replace(f'client-sha256: "{digest}"', f"client-sha256: {digest}")
+    assert unquoted != quoted
+    copies["SKILL"].write_text(unquoted, encoding="utf-8")
+    copies["SKILL_MIRROR"].write_bytes(copies["SKILL"].read_bytes())
+    other = ("1" if commit[0] != "1" else "2") + commit[1:]
+    assert module.bump(other) == 0
+    for name in copies:
+        text = copies[name].read_text(encoding="utf-8")
+        assert other in text and commit not in text, name
+    assert f"client-commit: {other}" in copies["SKILL"].read_text(encoding="utf-8")
+    assert copies["SKILL"].read_bytes() == copies["SKILL_MIRROR"].read_bytes()
+    assert copies["LLMS"].read_bytes() == copies["LLMS_MIRROR"].read_bytes()
+    assert module.check() == 0
+    # a front matter the patterns cannot rotate (a 39-hex commit) leaves every file untouched
+    broken = copies["SKILL"].read_text(encoding="utf-8").replace(f"client-commit: {other}", f"client-commit: {other[:-1]}")
+    copies["SKILL"].write_text(broken, encoding="utf-8")
+    copies["SKILL_MIRROR"].write_bytes(copies["SKILL"].read_bytes())
+    before = {name: path.read_bytes() for name, path in copies.items()}
+    with pytest.raises(SystemExit, match="nothing written"):
+        module.bump(commit)
+    assert {name: path.read_bytes() for name, path in copies.items()} == before

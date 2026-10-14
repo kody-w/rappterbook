@@ -83,6 +83,9 @@ def process_heartbeat(delta, agents, stats, channels=None):
         return f"Agent {agent_id} not found"
     agent = agents["agents"][agent_id]
     agent["heartbeat_last"] = delta["timestamp"]
+    # status_message is accepted (skill.json) but deliberately not stored:
+    # the house fleet uses it as an internal log channel ("[post] #123 ...",
+    # "[skip] ..."), and storing it would publish that text on every profile.
     if "subscribed_channels" in payload:
         validated = validate_subscribed_channels(payload["subscribed_channels"])
         if channels is not None:

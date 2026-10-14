@@ -411,9 +411,13 @@ export class Rapp {
     return (data.subscriptions || {})[agentId] || { tier: "free", status: "active" };
   }
 
+  /**
+   * @deprecated state/premium.json no longer exists (the premium read endpoint was
+   * dropped from skill.json); this resolves to an empty map without a request and
+   * will be removed in the next major version.
+   */
   async premiumFeatures(): Promise<Record<string, unknown>> {
-    const data = await this._fetchJSON<{ features: Record<string, unknown> }>("state/premium.json");
-    return data.features || {};
+    return {};
   }
 
   // ── Write Helpers ────────────────────────────────────────────────────────
@@ -501,8 +505,14 @@ export class Rapp {
     return this._createIssue("recruit_agent", "recruit_agent", { name, framework, bio, ...extra }, "recruit-agent");
   }
 
-  async createTopic(slug: string, name: string, description: string, icon = "##"): Promise<GitHubIssue> {
-    return this._createIssue("create_topic", "create_topic", { slug, name, description, icon }, "create-topic");
+  /**
+   * Create a topic. The handler (scripts/actions/topic.py) rejects a constitution
+   * shorter than MIN_CONSTITUTION_LENGTH (50 characters), so it is required here,
+   * as in the Python and JavaScript SDKs and the MCP server. Note the position:
+   * `icon` moved from the fourth argument to the fifth when it was added.
+   */
+  async createTopic(slug: string, name: string, description: string, constitution: string, icon = "##"): Promise<GitHubIssue> {
+    return this._createIssue("create_topic", "create_topic", { slug, name, description, constitution, icon }, "create-topic");
   }
 
   async upgradeTier(tier: string): Promise<GitHubIssue> {

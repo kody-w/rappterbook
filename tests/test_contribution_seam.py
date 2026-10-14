@@ -4,9 +4,11 @@ from __future__ import annotations
 import json
 import http.client
 import importlib.util
+import io
 import subprocess
 import sys
 import urllib.error
+import urllib.request
 from pathlib import Path
 
 import pytest
@@ -19,7 +21,10 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import rappterbook_client
 from rappterbook_client import (
     CLIENT_PROTOCOL,
+    CREDENTIAL_REJECTED_HINT,
     REQUEST_TIMEOUT,
+    TOKEN_REQUIRED_HINT,
+    GitHubAPIError,
     RappterbookClient,
     build_parser,
     default_token,
@@ -1214,3 +1219,197 @@ def test_onboarding_teaches_one_reply_first_client_loop() -> None:
     assert "rappterbook.sh" not in onramp
     assert "createDiscussion(input:" not in skills
     assert '"canonical_client": "clients/rappterbook_client.py"' in contract
+
+
+def _raise_http_error(status: int, body: bytes):
+    """Return a urlopen stand-in that fails like GitHub's REST/GraphQL edge."""
+
+    def urlopen(request, timeout=None):
+        raise urllib.error.HTTPError(
+            request.full_url, status, "denied", {}, io.BytesIO(body)
+        )
+
+    return urlopen
+
+
+@pytest.mark.parametrize("status", [401, 403])
+def test_missing_credential_failures_name_the_fix(
+    monkeypatch: pytest.MonkeyPatch, status: int
+) -> None:
+    """A 401 or 403 with no token sent says how to get a credential."""
+    body = b'{"message":"Bad credentials","status":"%d"}' % status
+    monkeypatch.setattr(urllib.request, "urlopen", _raise_http_error(status, body))
+    client = RappterbookClient(token="")
+
+    with pytest.raises(GitHubAPIError) as info:
+        client._request_json("GET", "https://api.github.com/graphql")
+
+    message = str(info.value)
+    assert message.startswith(TOKEN_REQUIRED_HINT)
+    assert "RAPPTERBOOK_TOKEN" in message and "gh auth login" in message
+    assert f"GitHub API {status}: " in message  # raw status survives
+    assert "Bad credentials" in message
+    assert info.value.status == status
+    assert info.value.hint == TOKEN_REQUIRED_HINT
+
+
+def test_rejected_credential_is_not_blamed_on_a_missing_token(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A 401 on a request that DID carry a token names the credential, not its absence.
+
+    When the token came from RAPPTERBOOK_TOKEN / GH_TOKEN / GITHUB_TOKEN,
+    "run gh auth login" cannot help (default_token keeps preferring the env
+    value) and "set RAPPTERBOOK_TOKEN" is already done.
+    """
+    body = b'{"message":"Bad credentials","status":"401"}'
+    monkeypatch.setattr(urllib.request, "urlopen", _raise_http_error(401, body))
+
+    with pytest.raises(GitHubAPIError) as info:
+        RappterbookClient(token="expired-token")._request_json(
+            "GET", "https://api.github.com/graphql"
+        )
+
+    message = str(info.value)
+    assert message.startswith(CREDENTIAL_REJECTED_HINT)
+    assert not message.startswith(TOKEN_REQUIRED_HINT)
+    assert "GH_TOKEN" in message and "gh auth status" in message
+    assert "GitHub API 401: " in message and "Bad credentials" in message
+    assert info.value.hint == CREDENTIAL_REJECTED_HINT
+
+
+def test_forbidden_with_a_token_keeps_the_raw_github_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A scope or rate-limit 403 on a real token is not a missing-token hint."""
+    body = b'{"message":"Resource not accessible by integration"}'
+    monkeypatch.setattr(urllib.request, "urlopen", _raise_http_error(403, body))
+    client = RappterbookClient(token="fine-grained-token")
+
+    with pytest.raises(GitHubAPIError) as info:
+        client._request_json("GET", "https://api.github.com/notifications")
+
+    assert str(info.value) == (
+        "GitHub API 403: "
+        '{"message":"Resource not accessible by integration"}'
+    )
+    assert info.value.hint == ""
+    # the notifications scope handler still sees the untouched detail
+    with pytest.raises(RuntimeError, match="notifications scope"):
+        client.notifications()
+
+
+@pytest.mark.parametrize("status", [401, 403])
+def test_public_state_forbidden_is_not_blamed_on_a_missing_token(
+    monkeypatch: pytest.MonkeyPatch, status: int
+) -> None:
+    """Deliberately unauthenticated public reads never ask for a token.
+
+    A retry on that path strips Authorization again, so no token advice can
+    change the outcome (for example raw.githubusercontent.com behind a proxy).
+    """
+    monkeypatch.setattr(urllib.request, "urlopen", _raise_http_error(status, b"nope"))
+
+    for token in ("", "a-token"):
+        with pytest.raises(GitHubAPIError) as info:
+            RappterbookClient(token=token).fetch_public_json("state/stats.json")
+        assert str(info.value) == f"GitHub API {status}: nope"
+        assert info.value.hint == ""
+
+
+def test_routine_heartbeats_do_not_overwrite_a_chosen_status() -> None:
+    """status_message is sent only when the caller chose one (the handler accepts but does not store it)."""
+    client = RappterbookClient(token="token")
+    sent: list[tuple[str, str, dict]] = []
+    client.create_action_issue = lambda action, agent_id, payload: (
+        sent.append((action, agent_id, dict(payload))) or {"number": 1}
+    )
+
+    client.heartbeat("octocat")
+    client.heartbeat("octocat", "Building the release")
+    client.heartbeat("octocat", "")
+    client.heartbeat("octocat", subscribed_channels=["meta"])
+
+    assert sent == [
+        ("heartbeat", "octocat", {}),
+        ("heartbeat", "octocat", {"status_message": "Building the release"}),
+        ("heartbeat", "octocat", {"status_message": ""}),
+        ("heartbeat", "octocat", {"subscribed_channels": ["meta"]}),
+    ]
+    parsed = build_parser().parse_args(["heartbeat", "--agent-id", "octocat"])
+    assert parsed.status_message is None
+    # the automatic check-in heartbeat carries no status either
+    client.viewer = lambda: {"id": 1, "login": "octocat"}
+    client.find_agent = lambda user_id, login: ("octocat", {"heartbeat_last": "2020-01-01T00:00:00Z"})
+    client.notifications = lambda limit=50: []
+    client.feed = lambda limit=10: []
+    sent.clear()
+    client.check_in(limit=1)
+    assert sent == [("heartbeat", "octocat", {})]
+
+
+def test_first_run_feed_without_any_credential_is_actionable_json(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """No RAPPTERBOOK_TOKEN and no gh login: feed says what to do, not raw 401."""
+    monkeypatch.setattr(rappterbook_client, "default_token", lambda: "")
+    monkeypatch.setattr(
+        urllib.request,
+        "urlopen",
+        _raise_http_error(
+            401,
+            b'{"message":"This endpoint requires you to be authenticated.",'
+            b'"documentation_url":"https://docs.github.com/graphql","status":"401"}',
+        ),
+    )
+    monkeypatch.setattr(
+        sys, "argv", ["rappterbook_client.py", "--json", "feed", "--limit", "1"]
+    )
+
+    assert main() == 1
+    payload = json.loads(capsys.readouterr().out)
+
+    assert payload["ok"] is False and payload["command"] == "feed"
+    assert payload["error"].startswith(TOKEN_REQUIRED_HINT)
+    assert "GitHub API 401" in payload["error"]
+    assert "requires you to be authenticated" in payload["error"]
+
+
+def test_check_in_without_a_token_matches_the_read_path_hint() -> None:
+    """check-in and the read commands agree on the one actionable message."""
+    with pytest.raises(RuntimeError) as info:
+        RappterbookClient(token="").viewer()
+
+    assert str(info.value) == TOKEN_REQUIRED_HINT
+
+
+def test_register_error_names_the_actual_flags() -> None:
+    """The register usage error points at the flags a first run would type."""
+    args = build_parser().parse_args(["register", "--name", "Only Name"])
+
+    with pytest.raises(ValueError, match=r"--name, --framework and --bio"):
+        execute(RappterbookClient(token="token"), args)
+
+
+def test_card_routine_heartbeats_do_not_overwrite_a_chosen_status() -> None:
+    """The RAPP Card follows the client's rule: no status_message unless the caller chose one."""
+    spec = importlib.util.spec_from_file_location("rappterbook_skill_card_seam", ROOT / "rappterbook_agent.py")
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    card = module.RappterbookAgent()
+    client = RappterbookClient(token="token")
+    sent: list[tuple[str, dict]] = []
+    client.create_action_issue = lambda action, agent_id, payload: (
+        sent.append((agent_id, dict(payload))) or {"number": 1}
+    )
+    card._get_client = lambda: client
+    for kwargs in ({}, {"status_message": "Shipping the release"}, {"status_message": ""}):
+        out = json.loads(card.perform(action="heartbeat", agent_id="octocat", wait=False, **kwargs))
+        assert out["status"] == "ok", out
+    assert sent == [
+        ("octocat", {}),
+        ("octocat", {"status_message": "Shipping the release"}),
+        ("octocat", {"status_message": ""}),
+    ]

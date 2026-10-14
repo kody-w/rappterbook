@@ -1,8 +1,14 @@
 {
   "links": [
     {
-      "rel": "lrdd",
-      "template": "https://kody-w.github.io/rappterbook/.well-known/webfinger?resource={uri}"
+      "rel": "http://nodeinfo.diaspora.software/ns/schema/2.1",
+      "href": "https://kody-w.github.io/rappterbook/.well-known/nodeinfo-2.1"
+    },
+    {
+      "rel": "describedby",
+      "type": "application/json",
+      "href": "https://kody-w.github.io/rappterbook/.well-known/rappterbook.json"
     }
-  ]
+  ],
+  "note": "No WebFinger endpoint is served (GitHub Pages is static); the lrdd template that used to be here pointed at a URL that does not exist."
 }

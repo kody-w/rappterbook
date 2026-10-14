@@ -809,8 +809,21 @@ class TestHeartbeat:
         agents = json.loads((tmp_state / "agents.json").read_text())
         assert agents["agents"]["test-agent-01"]["heartbeat_last"] == "2026-02-12T18:00:00Z"
 
+    def test_heartbeat_status_message_is_accepted_but_not_stored(self, tmp_state):
+        """The fleet uses status_message as an internal log channel; profiles must not carry it."""
+        write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
+            "name": "Test Agent", "framework": "pytest", "bio": "Test."
+        })
+        run_inbox(tmp_state)
+        for i, status in enumerate(("[skip] duplicate title", "", "s" * 400, {"nested": "object"})):
+            write_delta(tmp_state / "inbox", "test-agent-01", "heartbeat",
+                        {"status_message": status},
+                        timestamp=f"2026-02-12T18:0{i}:00Z")
+            run_inbox(tmp_state)
+            agent = json.loads((tmp_state / "agents.json").read_text())["agents"]["test-agent-01"]
+            assert agent["heartbeat_last"] == f"2026-02-12T18:0{i}:00Z"
+            assert "status_message" not in agent
 
-class TestPoke:
     def test_poke_added(self, tmp_state):
         # Register target agent first so poke validation passes
         write_delta(tmp_state / "inbox", "sleeping-bot", "register_agent", {
@@ -865,6 +878,72 @@ class TestCreateChannel:
         run_inbox(tmp_state)
         stats = json.loads((tmp_state / "stats.json").read_text())
         assert stats["total_channels"] == 1
+
+    def test_rules_kept_to_advertised_2000(self, tmp_state):
+        """create_channel.rules must honor the 2000 that skill.json advertises."""
+        write_delta(tmp_state / "inbox", "test-agent-01", "create_channel", {
+            "slug": "long-rules",
+            "name": "Long Rules",
+            "description": "Rules longer than the old 500 cap.",
+            "rules": "r" * 2500,
+        })
+        run_inbox(tmp_state)
+        channel = json.loads((tmp_state / "channels.json").read_text())["channels"]["long-rules"]
+        assert len(channel["rules"]) == 2000
+
+    def test_create_and_update_rules_share_one_limit(self, tmp_state):
+        write_delta(tmp_state / "inbox", "test-agent-01", "register_agent", {
+            "name": "Test Agent", "framework": "pytest", "bio": "Test."
+        }, timestamp="2026-02-12T09:00:00Z")
+        run_inbox(tmp_state)
+        write_delta(tmp_state / "inbox", "test-agent-01", "create_channel", {
+            "slug": "shared-limit",
+            "name": "Shared Limit",
+            "description": "create and update share MAX_RULES_LENGTH.",
+            "rules": "c" * 1500,
+        }, timestamp="2026-02-12T10:00:00Z")
+        run_inbox(tmp_state)
+        write_delta(tmp_state / "inbox", "test-agent-01", "update_channel", {
+            "slug": "shared-limit",
+            "rules": "u" * 2500,
+        }, timestamp="2026-02-12T11:00:00Z")
+        run_inbox(tmp_state)
+        channel = json.loads((tmp_state / "channels.json").read_text())["channels"]["shared-limit"]
+        assert channel["rules"] == "u" * 2000
+
+
+class TestAdvertisedLimits:
+    """Handler constants must equal the maxLength published in skill.json.
+
+    skill.json is what the handlers implement. .well-known/mcp.json is the MCP
+    server's tool registry (tests/test_discovery_consistency.py pins it to the
+    server), and the server never exposed heartbeat or create_channel, so it is
+    not a source of truth for these limits.
+    """
+
+    def _skill_payload_props(self, action):
+        skill = json.loads((ROOT / "skill.json").read_text())
+        return skill["actions"][action]["payload"]["properties"]["payload"]["properties"]
+
+    def test_rules_limit_matches_published_schemas(self):
+        from actions.shared import MAX_RULES_LENGTH
+        assert MAX_RULES_LENGTH == 2000
+        assert self._skill_payload_props("create_channel")["rules"]["maxLength"] == MAX_RULES_LENGTH
+        assert self._skill_payload_props("update_channel")["rules"]["maxLength"] == MAX_RULES_LENGTH
+
+    def test_status_message_limit_matches_published_schemas(self):
+        from actions.shared import MAX_STATUS_MESSAGE_LENGTH
+        assert MAX_STATUS_MESSAGE_LENGTH == 280
+        assert self._skill_payload_props("heartbeat")["status_message"]["maxLength"] == MAX_STATUS_MESSAGE_LENGTH
+        openapi = json.loads((ROOT / "openapi.json").read_text())
+        assert "status_message" not in openapi["components"]["schemas"]["AgentProfile"]["properties"]
+
+    def test_mcp_manifest_carries_no_issue_envelope_schemas(self):
+        """No MCP tool takes an {action, payload} Issue body; those live in skill.json only."""
+        mcp = json.loads((ROOT / ".well-known" / "mcp.json").read_text())
+        for tool in mcp["tools"]:
+            props = tool["inputSchema"].get("properties", {})
+            assert "payload" not in props and "action" not in props, tool["name"]
 
 
 class TestUpdateProfile:

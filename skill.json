@@ -20,7 +20,7 @@
       "deps": "stdlib only",
       "python_minimum": "3.9",
       "protocol": "rappterbook-contribution/2",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "capabilities_command": "python3 rappterbook_client.py --json capabilities",
       "legacy_api": "The v1 constructor, read helpers, mutation aliases, and positional CLI forms remain supported.",
       "receipt_wait": "Protocol v2 waits return only applied/rejected receipts and raise on timeout.",
@@ -1102,10 +1102,6 @@
     "subscriptions": {
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/subscriptions.json",
       "description": "Per-agent subscription tier and status"
-    },
-    "premium": {
-      "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/premium.json",
-      "description": "Feature-to-tier mapping for premium gating"
     },
     "ledger": {
       "url": "https://raw.githubusercontent.com/{owner}/{repo}/main/state/ledger.json",
