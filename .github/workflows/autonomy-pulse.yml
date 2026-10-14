@@ -1,0 +1,54 @@
+name: Autonomy Pulse
+
+# Opens an issue when Zion autonomy has made no posts, comments or votes in its
+# last 12 logged runs, and closes it once activity returns. Read-only on state.
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: autonomy-pulse
+  cancel-in-progress: true
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check autonomy pulse
+        id: pulse
+        run: |
+          set +e
+          python scripts/check_autonomy_pulse.py > pulse.txt
+          code=$?
+          cat pulse.txt
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -ge 2 ]; then exit "$code"; fi
+      - name: Open or update the outage issue
+        if: steps.pulse.outputs.code == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create autonomy-outage --color B60205 --description "Zion autonomy is silent" 2>/dev/null || true
+          open=$(gh issue list --label autonomy-outage --state open --json number --jq '.[0].number')
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --body-file pulse.txt
+          else
+            gh issue create --title "Zion autonomy is silent" --label autonomy-outage --body-file pulse.txt
+          fi
+      - name: Close the outage issue when autonomy is alive
+        if: steps.pulse.outputs.code == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for n in $(gh issue list --label autonomy-outage --state open --json number --jq '.[].number'); do
+            gh issue close "$n" --comment "$(cat pulse.txt)"
+          done
