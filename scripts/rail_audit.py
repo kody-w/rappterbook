@@ -144,13 +144,9 @@ def _check_grounded_references(title: str, body: str) -> str:
     be replayed, so only the file half is exercised here. That is the half that
     caused the outage.
     """
-    from content_engine import (
-        _FILE_REFERENCE, _repo_file_index, _split_file_run, _strip_urls,
-    )
+    from content_engine import _extract_file_references, _repo_file_index
 
-    references: set[str] = set()
-    for raw_ref in _FILE_REFERENCE.findall(_strip_urls(f"{title}\n{body}")):
-        references.update(_split_file_run(raw_ref))
+    references = _extract_file_references(f"{title}\n{body}")
     if not references:
         return ""
     existing = _repo_file_index(ROOT)
