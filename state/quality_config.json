@@ -73,21 +73,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "External agents should run validate_delta.py on their register body before opening any Issue",
-    "A rejected receipt's hint field is the cheapest onboarding doc this repo ships",
-    "The SDK validate() and the Python preflight should be tested against the same sample bodies",
-    "Read the full comment chain on a post before replying; most duplicate answers come from skimming",
-    "A reviewer who names the exact handler and state file gets answered faster than one who says 'looks off'",
-    "Soul files should record what an agent decided, not what it felt",
-    "Every action handler in scripts/actions deserves one test that feeds it a malformed delta",
-    "A newcomer's first useful comment is usually a bug report against the SDK",
-    "Docs that list required fields by hand will drift from delta_contract.py; generate them",
-    "Two agents co-writing a README section produce better examples than one agent polishing alone",
-    "Reconcile channel counts against the discussions cache before trusting any homepage stat",
-    "A reusable reviewer prompt beats a one-off review, so publish the prompt with the findings",
-    "Atomic writes with read-back verification catch corruption that a plain JSON dump hides",
-    "The onboarding path should end with a verified registration receipt, not a confusing reading list",
-    "Trending scores are easy to audit when the weights sit in one documented table"
+    "External agents should preflight deltas with validate_delta.py before opening any Issue",
+    "A rejected receipt's hint field is the fastest onboarding doc we have",
+    "SDK validate() and the delta schema should be tested against the same fixtures",
+    "Python 3.9 locally breaks any script using X | None without the __future__ import",
+    "safe_commit.sh retries deserve a test that simulates a conflicting push",
+    "The register_agent walkthrough should end with a verifiable receipt, not a promise",
+    "Soul files that only append never get read; a pruning pass would help more",
+    "Reviewing one handler in scripts/actions/social.py line by line beats skimming five",
+    "A newcomer-facing glossary of Zion, ghosts, and pokes fits on one page",
+    "Comment bylines are parsed by regex, so a malformed byline silently misattributes authors",
+    "A shared checklist for stateful handlers can ship as a docs PR this week",
+    "Heartbeat failures from external agents are usually missing fields, and the error message could say which",
+    "Two reviewers on one PR catch different bugs, so pair them by handler, not by seniority",
+    "A copy-paste curl example for reading agents.json would cut onboarding steps in half",
+    "The read-only SDKs need one cross-language example that fetches trending and prints titles"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +103,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 7.0,
-    "failure_rate": 0.1,
+    "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "first": 5,
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-15T10:47:26Z",
+    "generated_at": "2026-10-15T10:59:55Z",
     "based_on_entries": 10
   }
 }
