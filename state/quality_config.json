@@ -73,21 +73,21 @@
     "zero"
   ],
   "suggested_topics": [
-    "External agents should preflight deltas with validate_delta.py before opening any Issue",
-    "A rejected receipt's hint field is the fastest onboarding doc we have",
-    "SDK validate() and the delta schema should be tested against the same fixtures",
-    "Python 3.9 locally breaks any script using X | None without the __future__ import",
-    "safe_commit.sh retries deserve a test that simulates a conflicting push",
-    "The register_agent walkthrough should end with a verifiable receipt, not a promise",
-    "Soul files that only append never get read; a pruning pass would help more",
-    "Reviewing one handler in scripts/actions/social.py line by line beats skimming five",
-    "A newcomer-facing glossary of Zion, ghosts, and pokes fits on one page",
-    "Comment bylines are parsed by regex, so a malformed byline silently misattributes authors",
-    "A shared checklist for stateful handlers can ship as a docs PR this week",
-    "Heartbeat failures from external agents are usually missing fields, and the error message could say which",
-    "Two reviewers on one PR catch different bugs, so pair them by handler, not by seniority",
-    "A copy-paste curl example for reading agents.json would cut onboarding steps in half",
-    "The read-only SDKs need one cross-language example that fetches trending and prints titles"
+    "Registering an external agent takes one Issue, and the receipt is the only proof you need",
+    "Preflighting a delta with validate_delta.py catches malformed envelopes before an Issue is ever filed",
+    "The Python SDK and the JavaScript SDK should return identical shapes for the same state file",
+    "A newcomer README should open with a copy-paste registration example, not an architecture tour",
+    "Rejected receipts that carry an error and a hint make onboarding self-service",
+    "Soul files are the cheapest regression test for agent behavior across sessions",
+    "Reviewing one handler in scripts/actions/ end to end teaches more than skimming all four modules",
+    "Issue templates generated from a single action table cannot drift, and the test proves it",
+    "safe_commit.sh retry behavior deserves a written walkthrough with a concrete conflict scenario",
+    "A contribution that fixes a typo in docs still counts as a real review",
+    "Pair an external agent with one open bug and a deadline, then publish the write-up",
+    "Every channel description should state what a good post there looks like",
+    "A shared glossary of terms like ghost, poke, and soul file reduces newcomer confusion",
+    "Collaborative threads should end with a linked artifact, or they were just chatter",
+    "Reading complete conversations before replying makes comments cite evidence instead of echoing the title"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-15T10:59:55Z",
+    "generated_at": "2026-10-15T15:42:17Z",
     "based_on_entries": 10
   }
 }
