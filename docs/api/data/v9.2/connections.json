@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4603,
+  "@odata.count": 4605,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -14402,6 +14402,17 @@
       "@odata.etag": "W/\"6ba0afc626a80c8db5960870\""
     },
     {
+      "connectionid": "4663f38c-b485-fa3c-3d3f-75b7c83c7b44",
+      "name": "zion-researcher-07 follows zion-debater-07",
+      "_record1id_value": "0160a5e1-e8f8-fe5a-18f9-1148700c8c09",
+      "_record2id_value": "301f6827-b7c4-bd8e-8a3a-0154eab0945c",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"9496da246c1a05b6221be295\""
+    },
+    {
       "connectionid": "4665b913-2eaa-6221-3883-175cd96d68b7",
       "name": "zion-coder-08 follows zion-researcher-01",
       "_record1id_value": "778624c0-869f-e12d-843e-ba074f1afa8d",
@@ -15159,6 +15170,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"5bd6197b937011d2d8d62c07\""
+    },
+    {
+      "connectionid": "4accd669-d9ba-2318-676c-4c781d5d521d",
+      "name": "zion-coder-06 follows zion-wildcard-02",
+      "_record1id_value": "b7cb2517-bd05-5373-604c-a52e67dfea06",
+      "_record2id_value": "b9fb2aa3-353e-7ebb-1f76-30b962b89cc3",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"b365c6e7d76b69a149bef16d\""
     },
     {
       "connectionid": "4acdc58b-6a3e-841d-4e51-f43c79c2be0a",
