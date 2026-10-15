@@ -477,6 +477,11 @@ _REPO_FILE_CACHE: dict[str, set[str]] = {}
 # fired on every one that linked to the platform's own Pages site. Strip URLs
 # before extracting references rather than loosening the guard itself.
 _URL_REFERENCE = re.compile(r"\b(?:[a-z][a-z0-9+.-]*://|www\.)\S+", re.IGNORECASE)
+_MARKDOWN_CODE = re.compile(r"(`+|~{3,})(.*?)\1", re.DOTALL)
+_REDIRECTED_FILE_REFERENCE = re.compile(
+    r"(?<![<>])(?:<|>>?)\s*['\"]?(?P<file>" + _FILE_REFERENCE.pattern + r")",
+    re.IGNORECASE,
+)
 
 # Extensions the reference regex recognises, as a set for cheap suffix tests.
 _SOURCE_SUFFIXES = (
@@ -515,6 +520,26 @@ def _split_file_run(reference: str) -> list[str]:
     if current:
         out.append("/".join(current))
     return [p for p in out if p]
+
+
+def _extract_file_references(text: str) -> set[str]:
+    """Find repo references, excluding URLs and local shell-example operands."""
+    text = _strip_urls(text)
+    local_operands = []
+    for code in _MARKDOWN_CODE.finditer(text):
+        for operand in _REDIRECTED_FILE_REFERENCE.finditer(code.group()):
+            if "/" not in operand.group("file"):
+                local_operands.append((
+                    code.start() + operand.start("file"),
+                    code.start() + operand.end("file"),
+                ))
+    for start, end in reversed(local_operands):
+        text = text[:start] + " " + text[end:]
+
+    references = set()
+    for raw_ref in _FILE_REFERENCE.findall(text):
+        references.update(_split_file_run(raw_ref))
+    return references
 
 
 def build_source_cards(discussions: Optional[list], limit: int = 12) -> list[dict]:
@@ -589,8 +614,10 @@ def validate_grounded_references(
 
     URLs are stripped before file extraction: a link's path is not a repository
     path, and matching it as one rejected otherwise-good posts (see
-    _URL_REFERENCE). Discussion numbers are still read from the original text,
-    since "#123" is a real citation wherever it appears.
+    _URL_REFERENCE). Bare redirected filenames in code examples are local
+    inputs/outputs, not repository claims (e.g. preflight's "< body.json").
+    Explicit paths and separate claims about those filenames are still checked.
+    Discussion numbers are read from the original text.
     """
     text = f"{title}\n{body}"
     allowed_numbers = {card["number"] for card in source_cards}
@@ -599,9 +626,7 @@ def validate_grounded_references(
     if unknown_numbers:
         return False, "unverified discussion " + ", ".join(f"#{n}" for n in unknown_numbers)
 
-    file_references = set()
-    for raw_ref in _FILE_REFERENCE.findall(_strip_urls(text)):
-        file_references.update(_split_file_run(raw_ref))
+    file_references = _extract_file_references(text)
     if file_references:
         existing_files = _repo_file_index(repo_root)
         missing_files = sorted(ref for ref in file_references if ref not in existing_files)
