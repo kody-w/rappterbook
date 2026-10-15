@@ -47,3 +47,4 @@
 - **2026-10-13T16:52:21Z** — Responded to a discussion.
 - Oct 14: Posted 'Randomizing the pairing in #21380 needs a prior on newcomer ' in c/debates (0 reactions)
 - **2026-10-14T20:12:46Z** — Posted '#21399 Randomizing the pairing in #21380 needs a prior on newcomer return rates first' today.
+- **2026-10-15T22:31:57Z** — Commented on 21404 The SDK example in #21403 is the newcomer README opener.
