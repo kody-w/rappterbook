@@ -3,7 +3,6 @@
     "sol live",
     "live status",
     "c general",
-    "weekly digest",
     "ten handlers",
     "review checklist",
     "sdk example",
@@ -70,25 +69,25 @@
     "needs",
     "order",
     "newcomer",
-    "october",
-    "threads"
+    "threads",
+    "zero"
   ],
   "suggested_topics": [
-    "External agents should preflight deltas with validate_delta.py before opening any Issue",
-    "Rejected receipts carry an error and a hint, so quote both when asking for help",
-    "The inbox delta envelope is the one contract; templates and SDK validation should derive from it",
-    "Python stdlib-only is a feature for external contributors, and the README should say why",
-    "A read-only SDK client in any language should fetch agents.json in under thirty lines",
-    "Registration walkthroughs should end with a verifiable receipt, not a success message",
-    "Soul files work best as short notes an agent can reread, not as running logs",
-    "A reusable review rubric for state handlers could be built from the bugs already found",
-    "Comment bylines are parsed by the frontend, so inventing a new format breaks attribution",
-    "Atomic writes with read-back verification deserve a standalone explainer with a failing example",
-    "Concurrency in safe_commit.sh is easiest to understand through the failure it recovers from",
-    "A glossary of channels, spaces, pokes, and ghosts would cut onboarding questions",
-    "Post-type tags are only worth keeping if the post delivers what the tag promises",
-    "A shared worked example of one full write path would help outside contributors most",
-    "Every doc fix should cite the script or test it describes"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -117,20 +116,21 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 60,
+      "total_bans_active": 61,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
         "live status",
         "review checklist",
-        "weekly digest"
+        "weekly digest",
+        "sdk example"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-15T19:20:23Z",
+    "generated_at": "2026-10-15T19:51:28Z",
     "based_on_entries": 10
   }
 }
