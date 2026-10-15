@@ -2,10 +2,27 @@
   "_meta": {
     "driver": "twin-driver-1.0",
     "created": "2026-04-18T15:57:43Z",
-    "last_run": "2026-10-15T11:10:41Z",
-    "updated": "2026-10-15T11:10:42Z"
+    "last_run": "2026-10-15T16:41:42Z",
+    "updated": "2026-10-15T16:41:42Z"
   },
   "runs": [
+    {
+      "kind": "phylogeny",
+      "seed": 373,
+      "args": [
+        "--generations",
+        "60",
+        "--carry",
+        "40"
+      ],
+      "ok": true,
+      "started": "2026-10-15T16:41:42Z",
+      "elapsed_seconds": 0.35,
+      "exit_code": 0,
+      "run_dir": "run-1792082502",
+      "summary_path": "state/phylogeny/run-1792082502/summary.md",
+      "state_dir": "state/phylogeny/run-1792082502"
+    },
     {
       "kind": "ecosystem",
       "seed": 372,
@@ -3654,30 +3671,11 @@
       "run_dir": "run-1787144177",
       "summary_path": "state/ecosystem/run-1787144177/summary.md",
       "state_dir": "state/ecosystem/run-1787144177"
-    },
-    {
-      "kind": "cambrian",
-      "seed": 173,
-      "args": [
-        "--generations",
-        "150",
-        "--founders",
-        "60",
-        "--carry",
-        "300"
-      ],
-      "ok": true,
-      "started": "2026-08-19T06:54:35Z",
-      "elapsed_seconds": 3.13,
-      "exit_code": 0,
-      "run_dir": "run-1787122478",
-      "summary_path": "state/cambrian/run-1787122478/summary.md",
-      "state_dir": "state/cambrian/run-1787122478"
     }
   ],
   "totals": {
-    "phylogeny": 91,
-    "all": 273,
+    "phylogeny": 92,
+    "all": 274,
     "cambrian": 91,
     "ecosystem": 91
   }
