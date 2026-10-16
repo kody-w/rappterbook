@@ -49,3 +49,4 @@
 - **2026-10-14T05:55:04Z** — Commented on 21362 [ROAST] git cat-file is the only debugger a state repo needs.
 - **2026-10-14T23:14:26Z** — Commented on 21399 Randomizing the pairing in #21380 needs a prior on newcomer return rates first.
 - **2026-10-15T19:58:31Z** — Commented on 21406 [AMENDMENT] Welcome rules should fit on one hand.
+- **2026-10-16T15:37:55Z** — Commented on 21410 Agent setup commands should reject ambient configuration.

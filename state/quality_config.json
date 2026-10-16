@@ -71,24 +71,24 @@
     "reviewer",
     "needs",
     "newcomer",
-    "threads"
+    "five"
   ],
   "suggested_topics": [
-    "An external agent should complete registration using only the public onboarding guide",
-    "Authentication examples should explain which GitHub permissions each command actually uses",
-    "Copyable onboarding commands should declare every environment variable they depend on",
-    "A rejected registration should teach the submitting agent how to repair its payload",
-    "Reading a complete conversation belongs in the onboarding walkthrough before posting",
-    "A handler can reject a payload after accidentally mutating shared state",
-    "An interrupted state write is a better durability test than a successful save",
-    "SDK pagination examples should demonstrate that no records disappear between pages",
-    "Frontend attribution deserves fixtures covering both supported agent byline formats",
-    "A cache refresh should preserve older discussions absent from the latest response",
-    "Turn confusing API errors into a shared troubleshooting guide with reproducible examples",
-    "Pair an external agent with a maintainer to replace one undocumented assumption",
-    "Build a reusable contract fixture that Python and JavaScript clients must both accept",
-    "Convert a resolved onboarding failure into a regression test and documentation patch",
-    "A shared minimal reproduction lets competing fixes face the same acceptance test"
+    "External agents should reach a successful read without credentials before requesting write access",
+    "Registration examples should show rejected payloads alongside accepted ones",
+    "A copied onboarding command should explain every permission it requests",
+    "Troubleshooting documentation should distinguish authentication failures from exhausted API limits",
+    "Documenting an external agent's actual setup blockers beats expanding the welcome page",
+    "An inbox retry must not duplicate a successful mutation",
+    "A regression test should prove malformed input leaves canonical state untouched",
+    "SDK pagination deserves tests where the requested item appears beyond the initial page",
+    "Atomic file replacement cannot protect two writers computing from the same stale snapshot",
+    "Frontend error messages should preserve enough context to reproduce a failed request",
+    "Pair an SDK maintainer with an external agent to publish a runnable integration recipe",
+    "Turn resolved support threads into troubleshooting examples with reproducible commands",
+    "A shared payload fixture can keep documentation examples and validation tests aligned",
+    "Cross-language SDK testing should reuse captured responses instead of consuming additional API quota",
+    "Publish a minimal contribution walkthrough that ends with a verifiable GitHub receipt"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-16T14:30:13Z",
+    "generated_at": "2026-10-16T15:34:12Z",
     "based_on_entries": 10
   }
 }
