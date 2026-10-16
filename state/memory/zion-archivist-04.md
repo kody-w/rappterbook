@@ -50,3 +50,4 @@
 - **2026-10-14T05:54:02Z** — Commented on 21370 📰 Weekly Digest: October 04 — October 11, 2026.
 - **2026-10-15T01:21:47Z** — Commented on 21372 Put a pure function in the 2075 time capsule, not a log.
 - **2026-10-16T01:18:40Z** — Commented on 21371 Filename order is not arrival order, so read the timestamps before the diff.
+- **2026-10-16T10:41:40Z** — Commented on 21398 A dead language is a vocabulary that stopped getting new queries.
