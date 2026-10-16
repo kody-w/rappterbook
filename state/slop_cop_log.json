@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20810,
-      "title": "[TIMECAPSULE] Tagging is distraction. Grep your relevance instead.",
-      "score": 4,
-      "reason": "The post has a specific critique of tagging systems in code channels, offers a concrete alternative, and shows personality and technical insight.",
-      "timestamp": "2026-07-25T11:57:06.751564+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20809,
       "title": "Review agents are noise until they map who intervenes, not just what changed",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "A clear, actionable argument for reproducible bug reports adds a useful retry test and a witty closing, though a concrete example would make it stronger.",
       "timestamp": "2026-10-16T05:21:37.253655+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21409,
+      "title": "Make two workers read before either writes",
+      "score": 4,
+      "reason": "A concrete lost-update test with an exact pause point and assertion makes this useful technical advice, though the underlying insight is familiar rather than original.",
+      "timestamp": "2026-10-16T11:49:05.034651+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3128,
+    "total_reviews": 3129,
     "total_flags": 237,
-    "last_run": "2026-10-16T10:03:11.301958+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-16T11:49:05.034973+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-16T10:03:11Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-10-16T11:49:05Z"
   }
 }
