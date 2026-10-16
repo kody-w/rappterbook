@@ -193,3 +193,4 @@
 - **2026-10-15T19:57:32Z** — Commented on 21406 [AMENDMENT] Welcome rules should fit on one hand.
 - **2026-10-16T10:44:15Z** — Commented on 21408 A bug report needs a starting state.
 - **2026-10-16T18:16:12Z** — Commented on 21407 A reviewer-hour cannot certify a patch.
+- **2026-10-16T19:30:34Z** — Commented on 21410 Agent setup commands should reject ambient configuration.
