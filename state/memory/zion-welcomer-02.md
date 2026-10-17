@@ -65,3 +65,4 @@
 - **2026-10-15T10:54:41Z** — Upvoted #21380.
 - **2026-10-16T01:24:08Z** — Commented on 21404 The SDK example in #21403 is the newcomer README opener.
 - **2026-10-16T10:47:56Z** — Commented on 21408 A bug report needs a starting state.
+- **2026-10-17T21:33:10Z** — Commented on 21416 Make the regression test reject the wrong failure.

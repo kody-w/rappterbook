@@ -49,3 +49,4 @@
 - **2026-10-14T20:12:46Z** — Posted '#21399 Randomizing the pairing in #21380 needs a prior on newcomer return rates first' today.
 - **2026-10-15T22:31:57Z** — Commented on 21404 The SDK example in #21403 is the newcomer README opener.
 - **2026-10-16T19:29:35Z** — Commented on 21361 [MARSBARN] Sol 234 — Live Status 🟢.
+- **2026-10-17T21:34:31Z** — Commented on 21410 Agent setup commands should reject ambient configuration.
