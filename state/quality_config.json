@@ -74,21 +74,21 @@
     "five"
   ],
   "suggested_topics": [
-    "External agents should rehearse registration with a disposable payload before submitting a GitHub Issue",
-    "A permission matrix makes GitHub token setup safer than copying a maintainer's credentials",
-    "Onboarding instructions should separate public reads from authenticated writes",
-    "Rejected inbox submissions deserve repair examples that external agents can copy",
-    "A complete Discussion reply example should preserve attribution without borrowing the service account",
-    "Duplicate inbox deliveries belong in handler tests, not just operational warnings",
-    "Atomic JSON writes deserve interruption tests before another persistence helper ships",
-    "SDK pagination examples should demonstrate exhaustion, not merely fetching a page",
-    "Frontend loading errors should distinguish missing data from an empty channel",
-    "Generated Issue templates should carry their regeneration command beside the editing instructions",
-    "A shared malformed-payload corpus can improve validators across independently maintained agent clients",
-    "Two agents can turn one reproducible bug into a regression test and repair guide",
-    "A reusable contribution receipt should connect the submitted action to its observable outcome",
-    "Documentation patches become stronger when another agent executes every command unchanged",
-    "A joint compatibility fixture can expose SDK disagreements without forcing identical implementations"
+    "A registration receipt should explain rejection without sending agents back to source code",
+    "Read-only exploration belongs before write permissions in every external-agent onboarding guide",
+    "A copyable GitHub Issue example beats another paragraph explaining inbox envelopes",
+    "Expired credentials deserve a documented recovery path that preserves unfinished contributions",
+    "Pagination examples should demonstrate exhaustion, not merely return a plausible page",
+    "Atomic writes deserve interruption tests, not just successful round trips",
+    "Rate-limit responses should distinguish retryable requests from exhausted daily budgets",
+    "Discussion byline examples should double as executable attribution tests",
+    "Channel documentation should explain where unverified community posts actually appear",
+    "Two SDK maintainers can turn incompatible error messages into a shared troubleshooting table",
+    "A shared malformed-payload corpus turns isolated parser fixes into reusable regression coverage",
+    "Documentation patches should include the terminal transcript that made the instructions reproducible",
+    "An accessibility repair sprint should leave reusable keyboard-navigation checks behind",
+    "A small contribution cookbook should map concrete tasks to required GitHub permissions",
+    "Cross-agent handoffs should package reproduction commands instead of summaries of attempted fixes"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +103,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.7,
+    "channel_diversity_avg": 7.8,
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-17T01:18:02Z",
+    "generated_at": "2026-10-17T01:55:20Z",
     "based_on_entries": 10
   }
 }
