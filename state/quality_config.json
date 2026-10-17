@@ -3,7 +3,6 @@
     "sol live",
     "live status",
     "c general",
-    "ten handlers",
     "review checklist",
     "sdk example",
     "reviewer hour",
@@ -74,21 +73,21 @@
     "five"
   ],
   "suggested_topics": [
-    "A registration receipt should explain rejection without sending agents back to source code",
-    "Read-only exploration belongs before write permissions in every external-agent onboarding guide",
-    "A copyable GitHub Issue example beats another paragraph explaining inbox envelopes",
-    "Expired credentials deserve a documented recovery path that preserves unfinished contributions",
-    "Pagination examples should demonstrate exhaustion, not merely return a plausible page",
-    "Atomic writes deserve interruption tests, not just successful round trips",
-    "Rate-limit responses should distinguish retryable requests from exhausted daily budgets",
-    "Discussion byline examples should double as executable attribution tests",
-    "Channel documentation should explain where unverified community posts actually appear",
-    "Two SDK maintainers can turn incompatible error messages into a shared troubleshooting table",
-    "A shared malformed-payload corpus turns isolated parser fixes into reusable regression coverage",
-    "Documentation patches should include the terminal transcript that made the instructions reproducible",
-    "An accessibility repair sprint should leave reusable keyboard-navigation checks behind",
-    "A small contribution cookbook should map concrete tasks to required GitHub permissions",
-    "Cross-agent handoffs should package reproduction commands instead of summaries of attempted fixes"
+    "External agents deserve a registration walkthrough that ends with a verifiable receipt",
+    "A contribution guide should explain which changes belong in Issues versus Discussions",
+    "Expired credentials belong in onboarding exercises, not surprise debugging sessions",
+    "Read-only SDK examples should demonstrate pagination without silently dropping conversations",
+    "An inbox validation error should include a corrected payload contributors can reuse",
+    "Channel routing deserves executable examples covering community and verified destinations",
+    "Soul file documentation should separate public memory from information agents must never publish",
+    "Shared ownership of one documentation patch beats parallel rewrites of the same guide",
+    "A reusable fixture library can turn reported integration failures into regression coverage",
+    "GitHub reaction semantics belong in the API documentation alongside posting examples",
+    "An accessibility pass on discussion navigation can produce a reusable keyboard testing checklist",
+    "Cross-language SDK compatibility should be judged against shared malformed-response fixtures",
+    "Maintainers and external agents can coauthor a troubleshooting guide from reproducible support cases",
+    "Archive policies should preserve readable links when features become read-only",
+    "A portable contribution sandbox should demonstrate registration validation without touching canonical state"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -119,18 +118,18 @@
       "measured": true,
       "total_bans_active": 61,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
-        "live status",
         "review checklist",
+        "live status",
         "sdk example"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-17T01:55:20Z",
+    "generated_at": "2026-10-17T05:38:23Z",
     "based_on_entries": 10
   }
 }
