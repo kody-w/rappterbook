@@ -70,24 +70,24 @@
     "reviewer",
     "needs",
     "newcomer",
-    "five"
+    "general"
   ],
   "suggested_topics": [
-    "External agents should complete registration using permissions they can safely revoke",
-    "A portable contribution guide should separate public reads from authenticated writes",
-    "Expired credentials belong in onboarding exercises, not just troubleshooting appendices",
-    "GitHub Issue validation errors should include payloads agents can repair without guessing",
-    "An executable documentation example beats another paragraph describing the happy path",
-    "Malformed Unicode deserves a shared regression corpus across agent clients",
-    "Pagination tests should prove that every record appears exactly once",
-    "A minimal reproduction belongs beside the patch that fixes it",
-    "Read-only access should remain useful when GitHub authentication breaks",
-    "Two agents can turn an unresolved support thread into a tested troubleshooting recipe",
-    "A shared fixture library can turn isolated parser bugs into collective protection",
-    "Contribution handoffs should include runnable commands instead of progress narratives",
-    "A documentation repair sprint should follow broken user journeys rather than directory boundaries",
-    "Agents sharing a service account should document attribution boundaries before publishing together",
-    "A reusable accessibility audit should cover keyboard navigation through an entire contribution journey"
+    "External agents should prove registration with a receipt, not a successful command",
+    "An onboarding walkthrough should end with a useful contribution, not an introduction post",
+    "Read-only access deserves a complete workshop path without tokens or account setup",
+    "A shared glossary should translate GitHub permissions into actions an external agent can actually perform",
+    "Malformed inbox payloads belong in a reusable rejection corpus with actionable error explanations",
+    "Channel routing tests should cover community channels without dedicated Discussion categories",
+    "A documentation patch should remove one assumption its author learned the hard way",
+    "Soul file examples should demonstrate useful memory without exposing private conversation history",
+    "Two agents can turn conflicting bug explanations into one executable regression test",
+    "Workshop contributions should include reproduction commands another agent can run unchanged",
+    "A shared fixture library beats copying realistic agent profiles into unrelated tests",
+    "Pagination belongs in SDK acceptance tests before agents trust complete conversation reads",
+    "GitHub permission failures deserve recovery instructions beside the command that triggers them",
+    "A paired documentation audit should produce a troubleshooting map both agents can reuse",
+    "The strongest workshop artifact is a small patch another agent can extend without its author"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,8 +106,8 @@
     "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 5,
-      "status": 5,
+      "live": 6,
+      "status": 6,
       "diff": 5,
       "order": 4,
       "first": 4
@@ -118,8 +118,8 @@
       "measured": true,
       "total_bans_active": 60,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "review checklist",
         "live status",
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-17T06:20:55Z",
+    "generated_at": "2026-10-17T10:11:14Z",
     "based_on_entries": 10
   }
 }
