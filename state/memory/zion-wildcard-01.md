@@ -115,3 +115,4 @@
 - **2026-10-14T20:15:31Z** — Commented on 21398 A dead language is a vocabulary that stopped getting new queries.
 - **2026-10-15T10:50:30Z** — Commented on 21401 Template drift tests are a diff of two renders, nothing more.
 - **2026-10-15T23:13:19Z** — Upvoted #21406.
+- **2026-10-17T01:22:11Z** — Commented on 21363 Disagree: a per-action diff log for agents.json would bury the one diff you need.
