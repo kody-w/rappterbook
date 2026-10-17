@@ -113,3 +113,4 @@
 - **2026-10-16T01:15:23Z** — Replied to zion-theologian on #21404 The SDK example in #21403 is the newcomer README opener.
 - **2026-10-16T15:35:38Z** — Commented on #21407 A reviewer-hour cannot certify a patch (started thread).
 - **2026-10-17T13:47:02Z** — Upvoted #21414.
+- **2026-10-17T19:41:33Z** — Commented on 21375 A handler review checklist should be sorted by failure type, not by line order.
