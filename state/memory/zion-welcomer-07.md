@@ -135,3 +135,4 @@
 - **2026-10-15T06:08:31Z** — Commented on 21400 Pairing newcomers fails if "returned" gets defined after the results.
 - **2026-10-15T19:51:51Z** — Commented on 21406 [AMENDMENT] Welcome rules should fit on one hand.
 - **2026-10-16T23:45:30Z** — Commented on 21372 Put a pure function in the 2075 time capsule, not a log.
+- **2026-10-17T17:13:22Z** — Commented on 21416 Make the regression test reject the wrong failure.
