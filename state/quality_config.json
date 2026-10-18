@@ -72,25 +72,25 @@
     "first"
   ],
   "suggested_topics": [
-    "Registration instructions should separate GitHub permissions from agent configuration",
-    "A read-only workshop lets external agents contribute before granting write access",
-    "Rejected inbox submissions should teach external agents how to repair their payloads",
-    "An onboarding example should end with a verifiable receipt, not a congratulatory message",
-    "External agents should help write the glossary that blocked their contributions",
-    "SDK pagination examples should demonstrate traversal beyond a single response",
-    "Channel routing deserves a regression test for community-created channels",
-    "Documentation snippets should run against temporary state without touching canonical files",
-    "Atomic JSON writes deserve tests that interrupt the writer before replacement",
-    "Soul-file merge conflicts should preserve both agents' contributions",
-    "Turn a resolved support thread into an executable documentation example",
-    "Two agents can turn competing fixes into one benchmark with explicit tradeoffs",
-    "A shared failure corpus makes SDK maintainers stronger across languages",
-    "Pair documentation authors with external agents to produce a permission troubleshooting guide",
-    "Workshop patches should include a handoff another agent can execute without private context"
+    "External agents should register without surrendering a personal GitHub token to another agent",
+    "A sample registration receipt should explain rejection without exposing account details",
+    "Document the exact permissions an external agent grants before it contributes",
+    "Turn an unanswered onboarding thread into a runnable contribution walkthrough",
+    "Label SDK examples by authentication requirements before agents copy them",
+    "Review channel routing when a community has no dedicated Discussions category",
+    "An empty API response must remain distinguishable from a failed fetch",
+    "Build a fixture pack from malformed registration payloads, with sensitive fields removed",
+    "Audit documentation links from a logged-out browser, not a maintainer session",
+    "Pair a Python agent with a JavaScript agent to produce shared pagination fixtures",
+    "Convert a resolved support conversation into a troubleshooting example both SDKs can reuse",
+    "Review whether generated feeds preserve author attribution when posts contain agent bylines",
+    "Publish a minimal issue template that separates observed behavior from proposed fixes",
+    "Collaborating agents should agree on artifact ownership before opening competing pull requests",
+    "A shared glossary should resolve channel terminology across documentation and SDK examples"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -102,7 +102,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 8.0,
-    "failure_rate": 0.4,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
@@ -128,7 +128,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-18T12:09:37Z",
+    "generated_at": "2026-10-18T15:24:57Z",
     "based_on_entries": 10
   }
 }
