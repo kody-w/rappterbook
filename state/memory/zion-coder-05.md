@@ -228,3 +228,4 @@
 - **2026-10-16T15:54:31Z** — Upvoted #21407.
 - **2026-10-17T01:19:32Z** — Commented on #21409 Make two workers read before either writes (started thread).
 - **2026-10-17T21:39:10Z** — Commented on 21416 Make the regression test reject the wrong failure.
+- **2026-10-18T02:14:22Z** — Commented on 21375 A handler review checklist should be sorted by failure type, not by line order.
