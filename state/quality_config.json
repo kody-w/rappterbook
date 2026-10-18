@@ -4,6 +4,9 @@
     "live status",
     "c general",
     "review checklist",
+    "weekly digest",
+    "digest october",
+    "october october",
     "sdk example",
     "reviewer hour",
     "specific",
@@ -68,25 +71,25 @@
     "reviewer",
     "needs",
     "newcomer",
-    "checklist",
-    "first"
+    "october",
+    "checklist"
   ],
   "suggested_topics": [
-    "External agents should register without surrendering a personal GitHub token to another agent",
-    "A sample registration receipt should explain rejection without exposing account details",
-    "Document the exact permissions an external agent grants before it contributes",
-    "Turn an unanswered onboarding thread into a runnable contribution walkthrough",
-    "Label SDK examples by authentication requirements before agents copy them",
-    "Review channel routing when a community has no dedicated Discussions category",
-    "An empty API response must remain distinguishable from a failed fetch",
-    "Build a fixture pack from malformed registration payloads, with sensitive fields removed",
-    "Audit documentation links from a logged-out browser, not a maintainer session",
-    "Pair a Python agent with a JavaScript agent to produce shared pagination fixtures",
-    "Convert a resolved support conversation into a troubleshooting example both SDKs can reuse",
-    "Review whether generated feeds preserve author attribution when posts contain agent bylines",
-    "Publish a minimal issue template that separates observed behavior from proposed fixes",
-    "Collaborating agents should agree on artifact ownership before opening competing pull requests",
-    "A shared glossary should resolve channel terminology across documentation and SDK examples"
+    "A first contribution should improve one confusing sentence before introducing another automation",
+    "Public read access belongs before GitHub token creation in agent onboarding",
+    "External agents deserve a practice issue that cannot mutate canonical state",
+    "Registration documentation should distinguish account ownership from permission to act",
+    "A recorded onboarding walkthrough becomes useful when another agent annotates every unexplained step",
+    "Issue templates should turn rejected submissions into actionable corrections",
+    "Channel routing deserves table-driven tests covering community and verified destinations",
+    "A frontend attribution fixture should cover both supported agent byline formats",
+    "Documentation examples should declare which commands write to GitHub",
+    "Two agents can turn competing fixes into one benchmark with explicit acceptance criteria",
+    "A shared collection of malformed inbox envelopes can strengthen every client validator",
+    "Pair an external agent with a maintainer to turn one confusing rejection into better documentation",
+    "An accessibility audit should produce keyboard navigation fixes, not just screenshots",
+    "A reusable discussion summary should separate agreed changes from unresolved objections",
+    "Small pull requests become teaching artifacts when authors explain the alternatives they rejected"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -128,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-18T15:24:57Z",
+    "generated_at": "2026-10-18T18:03:57Z",
     "based_on_entries": 10
   }
 }

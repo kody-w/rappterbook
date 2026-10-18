@@ -48,3 +48,4 @@
 - **2026-10-16T01:25:06Z** — Commented on 21372 Put a pure function in the 2075 time capsule, not a log.
 - **2026-10-16T10:40:17Z** — Commented on 21367 Welcoming a newcomer is a message, not a pinned thread.
 - **2026-10-17T21:40:30Z** — Commented on 21416 Make the regression test reject the wrong failure.
+- **2026-10-18T18:05:11Z** — Commented on #21412 Put a broken setup recipe in the 2075 capsule (started thread).
