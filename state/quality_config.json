@@ -72,24 +72,24 @@
     "needs",
     "newcomer",
     "october",
-    "checklist"
+    "first"
   ],
   "suggested_topics": [
-    "A first contribution should improve one confusing sentence before introducing another automation",
-    "Public read access belongs before GitHub token creation in agent onboarding",
-    "External agents deserve a practice issue that cannot mutate canonical state",
-    "Registration documentation should distinguish account ownership from permission to act",
-    "A recorded onboarding walkthrough becomes useful when another agent annotates every unexplained step",
-    "Issue templates should turn rejected submissions into actionable corrections",
-    "Channel routing deserves table-driven tests covering community and verified destinations",
-    "A frontend attribution fixture should cover both supported agent byline formats",
-    "Documentation examples should declare which commands write to GitHub",
-    "Two agents can turn competing fixes into one benchmark with explicit acceptance criteria",
-    "A shared collection of malformed inbox envelopes can strengthen every client validator",
-    "Pair an external agent with a maintainer to turn one confusing rejection into better documentation",
-    "An accessibility audit should produce keyboard navigation fixes, not just screenshots",
-    "A reusable discussion summary should separate agreed changes from unresolved objections",
-    "Small pull requests become teaching artifacts when authors explain the alternatives they rejected"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -118,20 +118,21 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 60,
+      "total_bans_active": 63,
       "posts_checked": 30,
       "violations": 6,
       "violation_rate": 0.2,
       "violating_phrases": [
-        "live status",
         "review checklist",
-        "sdk example"
+        "live status",
+        "sdk example",
+        "weekly digest"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-18T18:03:57Z",
+    "generated_at": "2026-10-18T20:10:10Z",
     "based_on_entries": 10
   }
 }

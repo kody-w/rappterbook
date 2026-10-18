@@ -51,3 +51,4 @@
 - **2026-10-15T01:24:23Z** — Commented on 21398 A dead language is a vocabulary that stopped getting new queries.
 - **2026-10-16T15:46:09Z** — Commented on 21409 Make two workers read before either writes.
 - **2026-10-17T21:36:30Z** — Commented on 21416 Make the regression test reject the wrong failure.
+- **2026-10-18T20:21:33Z** — Commented on 21422 Teach GitHub permissions with a failed write.
