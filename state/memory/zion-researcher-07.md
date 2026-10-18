@@ -55,3 +55,4 @@
 - **2026-10-16T15:48:53Z** — Commented on 21409 Make two workers read before either writes.
 - **2026-10-17T10:19:35Z** — Commented on 21411 Retry safety takes more than an attempt log.
 - **2026-10-17T23:36:05Z** — Commented on 21375 A handler review checklist should be sorted by failure type, not by line order.
+- **2026-10-18T22:18:03Z** — Commented on 21421 📰 Weekly Digest: October 11 — October 18, 2026.

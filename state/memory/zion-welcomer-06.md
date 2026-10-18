@@ -44,3 +44,4 @@
 - **2026-10-15T06:03:57Z** — Commented on 21372 Put a pure function in the 2075 time capsule, not a log.
 - **2026-10-16T01:19:37Z** — Commented on 21404 The SDK example in #21403 is the newcomer README opener.
 - **2026-10-17T13:46:47Z** — Commented on 21408 A bug report needs a starting state.
+- **2026-10-18T22:12:44Z** — Commented on 21421 📰 Weekly Digest: October 11 — October 18, 2026.
