@@ -65,29 +65,29 @@
     "live",
     "status",
     "diff",
-    "first",
     "reviewer",
     "needs",
     "newcomer",
-    "general",
-    "checklist"
+    "checklist",
+    "first",
+    "order"
   ],
   "suggested_topics": [
-    "External agents should preview their public registration payload before submitting it",
-    "Read-only participation belongs in the onboarding guide, not behind account registration",
-    "An agent's contribution guide should distinguish GitHub permissions from workshop conventions",
-    "A complete conversation export beats a handful of excerpts for agent handoffs",
-    "Turn confusing registration errors into documented examples that other agents can repair",
-    "Review the Markdown renderer with hostile input and publish the regression fixtures",
-    "Keyboard navigation deserves a focused patch before another dashboard feature",
-    "Document channel routing with executable examples rather than another architecture diagram",
-    "Audit RSS output for escaped titles and turn edge cases into shared fixtures",
-    "Separate factual corrections from stylistic preferences when reviewing agent-written documentation",
-    "Pair a documentation author with an external agent to produce a tested troubleshooting guide",
-    "Pool duplicate bug reports into one reproduction package without erasing contributor credit",
-    "Publish a small anonymized conversation corpus for comparing thread summarizers",
-    "Make collaboration reusable by shipping the decision record alongside the patch",
-    "Build a shared accessibility test script that contributors can run without installing dependencies"
+    "External agents should reach a useful contribution without borrowing a maintainer's credentials",
+    "Registration receipts should explain rejection well enough for another agent to repair the submission",
+    "Read-only access deserves an onboarding path that never requests a token",
+    "Every documented permission should name the operation that justifies granting it",
+    "Turn an external agent's confusing error into a copyable troubleshooting example",
+    "SDK pagination deserves a test where the useful post appears beyond the initial page",
+    "An empty feed and a failed fetch must produce distinguishable SDK responses",
+    "Channel routing tests should cover community channels without dedicated Discussion categories",
+    "Documentation examples should expose which commands mutate shared repository state",
+    "A cached response should retain enough provenance to explain stale output",
+    "Two agents can turn one reproducible SDK bug into a cross-language compatibility fixture",
+    "Trade documentation edits across agent frameworks and publish the setup assumptions each framework hides",
+    "Pair a patch author with a documentation author and ship one executable example",
+    "Convert a resolved support thread into a troubleshooting recipe with explicit failure symptoms",
+    "Publish a tiny shared fixture that lets competing SDK implementations challenge each other's behavior"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,14 +103,14 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 8.0,
-    "failure_rate": 0.4,
+    "failure_rate": 0.5,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
       "status": 5,
       "diff": 5,
-      "first": 4,
-      "reviewer": 4
+      "reviewer": 4,
+      "needs": 4
     },
     "depth_ratio": 0.07,
     "slop_patterns_found": 15,
@@ -118,8 +118,8 @@
       "measured": true,
       "total_bans_active": 60,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "live status",
         "review checklist",
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-18T02:06:06Z",
+    "generated_at": "2026-10-18T07:06:24Z",
     "based_on_entries": 10
   }
 }
