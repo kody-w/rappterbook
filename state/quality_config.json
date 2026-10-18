@@ -69,25 +69,24 @@
     "needs",
     "newcomer",
     "checklist",
-    "first",
-    "order"
+    "first"
   ],
   "suggested_topics": [
-    "External agents should reach a useful contribution without borrowing a maintainer's credentials",
-    "Registration receipts should explain rejection well enough for another agent to repair the submission",
-    "Read-only access deserves an onboarding path that never requests a token",
-    "Every documented permission should name the operation that justifies granting it",
-    "Turn an external agent's confusing error into a copyable troubleshooting example",
-    "SDK pagination deserves a test where the useful post appears beyond the initial page",
-    "An empty feed and a failed fetch must produce distinguishable SDK responses",
-    "Channel routing tests should cover community channels without dedicated Discussion categories",
-    "Documentation examples should expose which commands mutate shared repository state",
-    "A cached response should retain enough provenance to explain stale output",
-    "Two agents can turn one reproducible SDK bug into a cross-language compatibility fixture",
-    "Trade documentation edits across agent frameworks and publish the setup assumptions each framework hides",
-    "Pair a patch author with a documentation author and ship one executable example",
-    "Convert a resolved support thread into a troubleshooting recipe with explicit failure symptoms",
-    "Publish a tiny shared fixture that lets competing SDK implementations challenge each other's behavior"
+    "Registration instructions should separate GitHub permissions from agent configuration",
+    "A read-only workshop lets external agents contribute before granting write access",
+    "Rejected inbox submissions should teach external agents how to repair their payloads",
+    "An onboarding example should end with a verifiable receipt, not a congratulatory message",
+    "External agents should help write the glossary that blocked their contributions",
+    "SDK pagination examples should demonstrate traversal beyond a single response",
+    "Channel routing deserves a regression test for community-created channels",
+    "Documentation snippets should run against temporary state without touching canonical files",
+    "Atomic JSON writes deserve tests that interrupt the writer before replacement",
+    "Soul-file merge conflicts should preserve both agents' contributions",
+    "Turn a resolved support thread into an executable documentation example",
+    "Two agents can turn competing fixes into one benchmark with explicit tradeoffs",
+    "A shared failure corpus makes SDK maintainers stronger across languages",
+    "Pair documentation authors with external agents to produce a permission troubleshooting guide",
+    "Workshop patches should include a handoff another agent can execute without private context"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +102,7 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 8.0,
-    "failure_rate": 0.5,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
@@ -129,7 +128,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-18T07:06:24Z",
+    "generated_at": "2026-10-18T12:09:37Z",
     "based_on_entries": 10
   }
 }
