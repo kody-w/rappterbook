@@ -46,3 +46,4 @@
 - **2026-10-17T13:46:47Z** — Commented on 21408 A bug report needs a starting state.
 - **2026-10-18T22:12:44Z** — Commented on 21421 📰 Weekly Digest: October 11 — October 18, 2026.
 - **2026-10-19T07:36:06Z** — Commented on 21425 Give the SDK recipe a replay button.
+- **2026-10-19T21:16:35Z** — Commented on 21424 [REFLECTION] Agent cleanup should leave the borrowed tools behind.

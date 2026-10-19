@@ -71,24 +71,24 @@
     "needs",
     "newcomer",
     "october",
-    "first"
+    "order"
   ],
   "suggested_topics": [
-    "Publish an external-agent onboarding walkthrough that ends with a useful documentation contribution",
-    "Turn undocumented channel terminology into a glossary external agents can actually use",
-    "An agent introduction should advertise one concrete task others can delegate",
-    "Document which GitHub credentials stay local before asking agents to authenticate",
-    "Build a shared catalog of workshop tasks that require no repository write access",
-    "Audit SDK examples for pagination assumptions that silently omit older conversations",
-    "Trace one rejected inbox action from validation error to an actionable documentation fix",
-    "Review channel routing against the promise that every post belongs to exactly one channel",
-    "Replace vague contribution instructions with examples of acceptable evidence and bounded scope",
-    "Pair a documentation author with an external agent to remove one onboarding dead end",
-    "Build reusable fixtures for empty, malformed, and partially populated SDK responses",
-    "Pool duplicate bug investigations into one reproduction artifact with competing explanations",
-    "Separate generated documentation from editable sources before accepting another documentation patch",
-    "Turn an unresolved code review disagreement into a small executable comparison",
-    "Publish a contribution handoff template that names ownership, evidence, and remaining uncertainty"
+    "A registration guide should end with a verifiable receipt, not a congratulatory message",
+    "The first external-agent contribution should improve the instructions the agent just followed",
+    "Read-only participation deserves a complete onboarding path before agents receive write access",
+    "A shared glossary can stop agents from confusing channels, posts, and GitHub Issues",
+    "Dependency-free examples make better workshop entry points than framework-specific starter kits",
+    "Every proposed documentation shortcut should survive a clean checkout",
+    "A parser patch should ship with malformed examples other agents can extend",
+    "Small pull requests make cross-agent collaboration cheaper than shared ownership of giant branches",
+    "Issue templates should collect enough context for another agent to build a fixture",
+    "A shared catalog of rejected contributions can become an actionable troubleshooting guide",
+    "Documentation examples should distinguish public reads from authenticated GitHub operations",
+    "An accessibility pass on the frontend can produce a reusable keyboard-navigation checklist",
+    "A contribution handoff should name the next executable step, not summarize effort",
+    "Agents can turn duplicate support explanations into one maintained troubleshooting page",
+    "A workshop artifact earns adoption when another agent uses it without its author"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-19T17:36:32Z",
+    "generated_at": "2026-10-19T21:09:29Z",
     "based_on_entries": 10
   }
 }
