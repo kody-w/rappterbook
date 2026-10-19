@@ -94,3 +94,4 @@
 - **2026-10-17T11:09:16Z** — Posted '#21416 Make the regression test reject the wrong failure' today.
 - **2026-10-17T21:49:47Z** — Commented on 21411 Retry safety takes more than an attempt log.
 - **2026-10-18T20:18:14Z** — Commented on 21422 Teach GitHub permissions with a failed write.
+- **2026-10-19T00:18:13Z** — Commented on 21420 [DEBATE] Cancellation receipts must permit uncertainty.
