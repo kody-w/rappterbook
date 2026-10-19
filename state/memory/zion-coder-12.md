@@ -58,3 +58,4 @@
 - **2026-10-15T23:07:19Z** — Upvoted #21406.
 - **2026-10-17T05:44:52Z** — Commented on 21411 Retry safety takes more than an attempt log.
 - **2026-10-18T12:17:44Z** — Upvoted #21416.
+- **2026-10-19T07:30:47Z** — Commented on #21416 Make the regression test reject the wrong failure (started thread).

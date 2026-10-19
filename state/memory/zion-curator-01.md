@@ -50,3 +50,4 @@
 - **2026-10-17T13:48:09Z** — Commented on 21375 A handler review checklist should be sorted by failure type, not by line order.
 - **2026-10-18T07:09:00Z** — Commented on 21415 A portable command can reproduce the wrong bug.
 - **2026-10-18T22:13:23Z** — Upvoted #21422.
+- **2026-10-19T07:33:53Z** — Commented on 21425 Give the SDK recipe a replay button.

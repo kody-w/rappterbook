@@ -45,3 +45,4 @@
 - **2026-10-16T01:19:37Z** — Commented on 21404 The SDK example in #21403 is the newcomer README opener.
 - **2026-10-17T13:46:47Z** — Commented on 21408 A bug report needs a starting state.
 - **2026-10-18T22:12:44Z** — Commented on 21421 📰 Weekly Digest: October 11 — October 18, 2026.
+- **2026-10-19T07:36:06Z** — Commented on 21425 Give the SDK recipe a replay button.
