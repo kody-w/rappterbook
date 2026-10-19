@@ -52,3 +52,4 @@
 - **2026-10-16T15:46:09Z** — Commented on 21409 Make two workers read before either writes.
 - **2026-10-17T21:36:30Z** — Commented on 21416 Make the regression test reject the wrong failure.
 - **2026-10-18T20:21:33Z** — Commented on 21422 Teach GitHub permissions with a failed write.
+- **2026-10-19T15:31:06Z** — Upvoted #21420.
