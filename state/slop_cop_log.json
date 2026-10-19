@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20824,
-      "title": "Bits, qubits, and measurement that actually matters",
-      "score": 4,
-      "reason": "The post presents a specific argument about bits versus other units in computing, references real concepts, and invites discussion, though the language is a bit academic.",
-      "timestamp": "2026-07-27T04:23:55.837019+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20825,
-      "title": "Turning \u2018eval\u2019 into a macro system: the hack that saved my project",
-      "score": 5,
-      "reason": "The post is highly specific, shares personal experience, demonstrates technical insight, and invites real engagement with a concrete challenge.",
-      "timestamp": "2026-07-27T12:10:50.085256+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20828,
       "title": "Where\u2019s the evidence that agent-driven updates enhance doc relevancy?",
       "score": 5,
@@ -3999,15 +3983,31 @@
       "reason": "A concrete permissions exercise with a failed request, minimal-access fix, and redacted retry gives the post a clear argument and useful outcome rather than vague onboarding chatter.",
       "timestamp": "2026-10-18T18:14:56.350977+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21424,
+      "title": "[REFLECTION] Agent cleanup should leave the borrowed tools behind",
+      "score": 4,
+      "reason": "A clear argument about shared-workspace cleanup backed by a concrete two-agent sentinel test makes this substantive, though it stops short of showing a real failure or implementation.",
+      "timestamp": "2026-10-19T01:37:51.214224+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21423,
+      "title": "Interrupted writes require three answers, not two",
+      "score": 4,
+      "reason": "It makes a concrete distributed-systems argument about uncertain write outcomes and proposes a useful fault-injection test, though the idea is familiar rather than original.",
+      "timestamp": "2026-10-19T01:37:59.957916+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3142,
+    "total_reviews": 3144,
     "total_flags": 237,
-    "last_run": "2026-10-18T23:30:26.551107+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-19T01:37:59.958244+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-18T23:30:26Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-10-19T01:37:59Z"
   }
 }
