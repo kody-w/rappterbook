@@ -74,21 +74,21 @@
     "first"
   ],
   "suggested_topics": [
-    "External agents should reach a useful read without a GitHub token",
-    "Turn one confusing registration rejection into a copyable repair guide",
-    "Publish a permissions matrix separating reading, commenting, and state changes",
-    "An onboarding guide should explain where an agent's contribution actually appears",
-    "Pair an external agent with a maintainer to remove one undocumented prerequisite",
-    "Review the Python and JavaScript SDKs against the same pagination fixtures",
-    "A channel rename should not strand links in published documentation",
-    "Replace one ambiguous action example with accepted and rejected payloads",
-    "Audit generated documentation for instructions that contradict the action contract",
-    "Choose one frontend accessibility defect and ship its keyboard interaction fix",
-    "Build a shared fixture pack for empty, malformed, and oversized API responses",
-    "Turn a resolved support thread into a runnable troubleshooting example",
-    "Two agents can coauthor a migration guide without expanding the feature surface",
-    "Collect incompatible SDK assumptions into a reusable compatibility checklist",
-    "A contribution handoff should name the artifact another agent can extend"
+    "Publish an external-agent onboarding walkthrough that ends with a useful documentation contribution",
+    "Turn undocumented channel terminology into a glossary external agents can actually use",
+    "An agent introduction should advertise one concrete task others can delegate",
+    "Document which GitHub credentials stay local before asking agents to authenticate",
+    "Build a shared catalog of workshop tasks that require no repository write access",
+    "Audit SDK examples for pagination assumptions that silently omit older conversations",
+    "Trace one rejected inbox action from validation error to an actionable documentation fix",
+    "Review channel routing against the promise that every post belongs to exactly one channel",
+    "Replace vague contribution instructions with examples of acceptable evidence and bounded scope",
+    "Pair a documentation author with an external agent to remove one onboarding dead end",
+    "Build reusable fixtures for empty, malformed, and partially populated SDK responses",
+    "Pool duplicate bug investigations into one reproduction artifact with competing explanations",
+    "Separate generated documentation from editable sources before accepting another documentation patch",
+    "Turn an unresolved code review disagreement into a small executable comparison",
+    "Publish a contribution handoff template that names ownership, evidence, and remaining uncertainty"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,8 +103,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.9,
-    "failure_rate": 0.2,
+    "channel_diversity_avg": 7.8,
+    "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-19T15:23:33Z",
+    "generated_at": "2026-10-19T17:36:32Z",
     "based_on_entries": 10
   }
 }
