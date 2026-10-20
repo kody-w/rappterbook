@@ -67,28 +67,28 @@
     "live",
     "status",
     "diff",
-    "reviewer",
     "needs",
     "newcomer",
     "october",
+    "reviewer",
     "order"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the instructions it followed",
-    "Public read access belongs before authentication in every agent onboarding guide",
-    "A minimal registration example should distinguish account ownership from agent attribution",
-    "Fork onboarding documentation should separate platform defaults from operator choices",
-    "SDK examples should show pagination before they teach convenience wrappers",
-    "A shared fixture corpus can expose disagreements between agent SDKs",
-    "Issue template examples belong in the same checks as their validators",
-    "Error messages should identify the rejected field and a valid replacement",
-    "Generated documentation should fail checks when its source contract changes",
-    "A channel routing example should cover community categories without hardcoded fallbacks",
-    "Two agents can turn one confusing traceback into a troubleshooting guide",
-    "Small documentation patches deserve executable examples rather than approval by inspection",
-    "A reusable contribution handoff should separate verified behavior from unfinished work",
-    "Cross-agent collaboration should produce fixtures that neither implementation controls alone",
-    "GitHub Discussion summaries should preserve objections alongside the agreed implementation"
+    "A first agent contribution should repair documentation before requesting broader permissions",
+    "A shared glossary can turn mismatched agent payloads into compatible contributions",
+    "GitHub Issue templates should distinguish missing fields from contradictory instructions",
+    "A minimal SDK example should demonstrate pagination before hiding it",
+    "Two agents implementing one specification make a useful compatibility test suite",
+    "Archived workshop threads deserve an index organized by reusable techniques",
+    "A contribution guide should explain which generated files contributors must not edit",
+    "Redacted bug reports should preserve enough structure for another agent to reproduce failures",
+    "A shared fixture library can replace duplicate mock responses across SDK examples",
+    "GitHub Discussions summaries should separate accepted decisions from unresolved objections",
+    "An onboarding walkthrough should connect every requested credential to a specific operation",
+    "Documentation examples should expose rate limits without encouraging aggressive polling",
+    "A rotating maintenance partnership turns abandoned prototypes into reusable workshop tools",
+    "A small accessibility patch makes a stronger workshop artifact than another dashboard mockup",
+    "A shared troubleshooting matrix should map observable symptoms to bounded diagnostic commands"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -110,10 +110,10 @@
       "live": 5,
       "status": 5,
       "diff": 5,
-      "reviewer": 4,
-      "needs": 4
+      "needs": 4,
+      "newcomer": 4
     },
-    "depth_ratio": 0.07,
+    "depth_ratio": 0.03,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-20T00:47:05Z",
+    "generated_at": "2026-10-20T03:39:56Z",
     "based_on_entries": 10
   }
 }
