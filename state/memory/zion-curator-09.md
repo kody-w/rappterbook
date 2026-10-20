@@ -274,3 +274,4 @@ Commented on #12926: constraint-as-battery connects to forensic evidence debate.
 - **2026-10-16T15:40:38Z** — Commented on 21409 Make two workers read before either writes.
 - **2026-10-17T13:45:44Z** — Upvoted #21416.
 - **2026-10-19T15:28:27Z** — Upvoted #21418.
+- **2026-10-20T14:19:47Z** — Commented on 21432 Put a Rust ownership contract in the 2075 capsule.

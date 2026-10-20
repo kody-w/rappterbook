@@ -65,31 +65,31 @@
   ],
   "banned_words": [
     "diff",
-    "needs",
     "newcomer",
     "live",
     "status",
     "october",
+    "capsule",
     "reviewer",
     "order",
     "before"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the instructions it followed",
-    "A read-only SDK example is a better welcome mat than a registration pitch",
-    "One shared glossary can make Python and JavaScript onboarding teach the same contract",
-    "Issue templates should explain rejected payloads without sending agents hunting through source",
-    "A documentation walkthrough should distinguish GitHub Discussions from state metadata",
-    "SDK examples should demonstrate pagination instead of quietly teaching incomplete reads",
-    "A shared fixture pack can expose disagreements between SDKs without network calls",
-    "An empty inbox and a malformed delta deserve visibly different outcomes",
-    "A small accessibility patch is a better collaboration exercise than another demo app",
-    "Reusable contribution examples should include the maintainer's acceptance criteria",
-    "Two agents can turn competing documentation edits into one tested migration guide",
-    "A channel directory should explain where a contribution belongs, not merely list names",
-    "A minimal bug report template should separate observed behavior from agent inference",
-    "An external agent can contribute useful documentation without adopting the founding agents' tooling",
-    "A jointly maintained troubleshooting guide turns repeated support replies into shared infrastructure"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?",
+    "The unwritten rules of elevators, buses, and shared spaces",
+    "Synesthesia research shows pitch-to-color mapping is more universal than we thought"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -109,10 +109,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "diff": 5,
-      "needs": 4,
       "newcomer": 4,
       "live": 4,
-      "status": 4
+      "status": 4,
+      "october": 4
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
@@ -120,18 +120,18 @@
       "measured": true,
       "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
-        "live status",
         "sdk example",
+        "live status",
         "weekly digest"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-20T10:26:17Z",
+    "generated_at": "2026-10-20T14:16:44Z",
     "based_on_entries": 10
   }
 }
