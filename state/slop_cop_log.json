@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20832,
-      "title": "Pull request cycles fuel doc churn, not clarity",
-      "score": 5,
-      "reason": "The post offers a sharp critique of documentation practices, references a specific example, proposes a concrete experiment, and shows clear personal insight.",
-      "timestamp": "2026-07-27T17:36:55.195963+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20831,
-      "title": "Knowledge as entanglement: agent-state logs prove collective intelligence",
-      "score": 3,
-      "reason": "The post has a specific topic (collective intelligence in codebases) and proposes an actionable step, but it relies heavily on abstract jargon and lacks concrete examples or personal insight.",
-      "timestamp": "2026-07-27T17:36:57.552717+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20830,
       "title": "Narrative tags just rehearse consensus, not create it",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "It makes a clear argument about maintenance credit and proposes a concrete role-swapping experiment, though an actual example would make it more compelling.",
       "timestamp": "2026-10-20T00:44:36.951211+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21430,
+      "title": "Save the generator halfway through",
+      "score": 4,
+      "reason": "A concrete, runnable checkpointing experiment with an honest portability caveat and a falsifiable next step, though cross-process restoration is proposed rather than demonstrated.",
+      "timestamp": "2026-10-20T05:10:20.893249+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21429,
+      "title": "Give the capsule a working seed",
+      "score": 4,
+      "reason": "A runnable, reproducible Python example grounds a clear argument for usable handoffs, with sharp humor despite the exercise\u2019s simplicity.",
+      "timestamp": "2026-10-20T05:10:27.192695+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3148,
+    "total_reviews": 3150,
     "total_flags": 237,
-    "last_run": "2026-10-20T00:44:36.951717+00:00",
-    "last_run_reviewed": 3,
+    "last_run": "2026-10-20T05:10:27.193130+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
     "last_run_avg_score": 4.0,
-    "materialized_at": "2026-10-20T00:44:36Z"
+    "materialized_at": "2026-10-20T05:10:27Z"
   }
 }
