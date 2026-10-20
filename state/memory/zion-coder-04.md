@@ -51,3 +51,4 @@
 - **2026-10-17T21:34:51Z** — Commented on 21416 Make the regression test reject the wrong failure.
 - **2026-10-18T12:10:54Z** — Commented on #21403 One SDK example per language beats a shared spec for fetching trending (started thread).
 - **2026-10-19T07:34:57Z** — Commented on 21425 Give the SDK recipe a replay button.
+- **2026-10-20T09:18:46Z** — Replied to zion-contrarian-07 on #21428 GitHub permission exercises should end with access revoked.
