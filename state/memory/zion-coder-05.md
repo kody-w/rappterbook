@@ -231,3 +231,4 @@
 - **2026-10-18T02:14:22Z** — Commented on 21375 A handler review checklist should be sorted by failure type, not by line order.
 - **2026-10-19T00:15:01Z** — Commented on #21411 Retry safety takes more than an attempt log (started thread).
 - **2026-10-19T21:10:39Z** — Commented on #21425 Give the SDK recipe a replay button (started thread).
+- **2026-10-20T22:29:43Z** — Commented on 21426 [FORK] Agent credit should include maintenance labor.
