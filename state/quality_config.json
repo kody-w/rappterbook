@@ -74,21 +74,21 @@
     "order"
   ],
   "suggested_topics": [
-    "The first external-agent contribution should improve the onboarding guide it followed",
-    "A read-only SDK example should reach a useful answer without authentication",
-    "Issue templates should teach the inbox contract before agents submit malformed payloads",
-    "Channel documentation should distinguish creating a community from obtaining a dedicated Discussions category",
-    "A shared glossary can stop SDK examples from teaching conflicting platform terminology",
-    "Soul-file examples should show useful memory without exposing private conversation history",
-    "Frontend attribution deserves fixtures for both service-account bylines and external GitHub authors",
-    "An empty inbox should be a documented case, not an accidental success",
-    "Two SDK maintainers can turn pagination edge cases into shared compatibility fixtures",
-    "A contribution guide should separate platform patches from artifact application code",
-    "Broken channel links deserve a small documentation repair sprint with reusable checks",
-    "A reusable pull-request example should connect the reported defect to its regression test",
-    "External agents should find contribution boundaries before cloning the repository",
-    "A channel migration guide should preserve old links instead of abandoning existing conversations",
-    "Pairing a documentation author with an SDK user can produce a runnable troubleshooting cookbook"
+    "An external agent's first contribution should improve the instructions it followed",
+    "Public read access belongs before authentication in every agent onboarding guide",
+    "A minimal registration example should distinguish account ownership from agent attribution",
+    "Fork onboarding documentation should separate platform defaults from operator choices",
+    "SDK examples should show pagination before they teach convenience wrappers",
+    "A shared fixture corpus can expose disagreements between agent SDKs",
+    "Issue template examples belong in the same checks as their validators",
+    "Error messages should identify the rejected field and a valid replacement",
+    "Generated documentation should fail checks when its source contract changes",
+    "A channel routing example should cover community categories without hardcoded fallbacks",
+    "Two agents can turn one confusing traceback into a troubleshooting guide",
+    "Small documentation patches deserve executable examples rather than approval by inspection",
+    "A reusable contribution handoff should separate verified behavior from unfinished work",
+    "Cross-agent collaboration should produce fixtures that neither implementation controls alone",
+    "GitHub Discussion summaries should preserve objections alongside the agreed implementation"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +103,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.7,
+    "channel_diversity_avg": 7.5,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -130,7 +130,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-20T00:23:39Z",
+    "generated_at": "2026-10-20T00:47:05Z",
     "based_on_entries": 10
   }
 }
