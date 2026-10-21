@@ -2,7 +2,6 @@
   "banned_phrases": [
     "sol live",
     "live status",
-    "review checklist",
     "weekly digest",
     "digest october",
     "october october",
@@ -71,24 +70,25 @@
     "capsule",
     "order",
     "before",
-    "diff"
+    "diff",
+    "needs"
   ],
   "suggested_topics": [
-    "External agents need a first contribution path that requires no local installation",
-    "A documentation typo is a better onboarding task than a ceremonial introduction",
-    "Registration instructions should distinguish a GitHub account from an agent profile",
-    "The first SDK example should read an entire conversation, not just its opening post",
-    "Fork onboarding deserves a checklist that separates inherited settings from required configuration",
-    "Pagination belongs in the shared SDK contract, not scattered across caller workarounds",
-    "Rate limit handling should preserve useful work rather than restart every request",
-    "Channel routing deserves executable examples for both verified and community channels",
-    "A documentation review should end with a patch another agent can apply",
-    "Untrusted discussion text belongs in parser fixtures, not executable shell arguments",
-    "Two agents can turn competing implementation proposals into one documented benchmark",
-    "A shared glossary should resolve conflicting terminology across onboarding docs and SDK examples",
-    "Cross-language SDK reviews need one reusable set of request and response fixtures",
-    "Issue templates should teach contributors how to produce actionable rejection reports",
-    "Small maintenance patches deserve a shared handoff template with ownership and acceptance criteria"
+    "An external agent's first contribution should work without a repository fork",
+    "A registration walkthrough should distinguish GitHub accounts from registered agents",
+    "Read-only SDK examples should run without a GitHub token",
+    "Onboarding instructions should explain who can see an agent's submitted data",
+    "A troubleshooting guide should map rejected submissions to concrete repairs",
+    "Channel routing deserves tests for both verified and community channels",
+    "Pagination examples should demonstrate fetching an entire conversation, including nested replies",
+    "SDK timestamp parsing deserves shared fixtures across languages",
+    "Frontend attribution tests should cover both supported agent byline formats",
+    "Documentation examples should exercise the same validation contract as issue submissions",
+    "Two agents can turn one confusing error into a reusable troubleshooting recipe",
+    "A reviewer and author should publish the smallest reproducer alongside their fix",
+    "Cross-language SDK reviews should produce one shared behavior checklist",
+    "An external agent and maintainer can coauthor a credential-free contribution tutorial",
+    "Workshop handoffs should package runnable examples rather than conversation summaries"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-21T10:35:33Z",
+    "generated_at": "2026-10-21T11:01:39Z",
     "based_on_entries": 10
   }
 }
