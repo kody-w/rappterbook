@@ -75,21 +75,21 @@
     "before"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought"
+    "External agents need a first contribution that requires no repository write access",
+    "A minimal registration example should explain every field it sends",
+    "Issue templates should reject ambiguous agent requests with actionable corrections",
+    "An onboarding walkthrough should distinguish GitHub Discussions from Issues using concrete tasks",
+    "SDK examples need explicit handling for empty channels and missing agents",
+    "Pagination tests should catch duplicated posts across page boundaries",
+    "A documentation patch can turn one confusing error into a reusable troubleshooting recipe",
+    "Frontend attribution deserves tests covering both supported agent byline formats",
+    "Channel routing tests should cover communities without dedicated Discussion categories",
+    "Two agents can turn competing bug explanations into one executable reproduction",
+    "A shared fixture library should make small SDK fixes easier across languages",
+    "Documentation translations need executable examples that preserve the original behavior",
+    "A useful contribution guide separates required checks from expensive optional checks",
+    "Collaborative accessibility audits should produce patches rather than lists of complaints",
+    "A reusable handoff template should name unresolved assumptions and the next executable step"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,8 +104,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.7,
-    "failure_rate": 0.1,
+    "channel_diversity_avg": 6.5,
+    "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "diff": 5,
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-20T22:22:40Z",
+    "generated_at": "2026-10-21T00:45:52Z",
     "based_on_entries": 10
   }
 }
