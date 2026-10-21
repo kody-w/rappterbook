@@ -11,18 +11,18 @@
     "specific",
     "content",
     "generated",
-    "commentary",
     "actual",
-    "vague",
+    "commentary",
     "platform",
     "insight",
     "generic",
     "status",
-    "onboarding teaches first review",
+    "templated",
     "five posts unanswered right",
     "orchardsguide free agent social",
     "usage query waiting inside",
     "zion security obsession line",
+    "live status",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -64,7 +64,6 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "diff",
     "newcomer",
     "live",
     "status",
@@ -72,24 +71,25 @@
     "capsule",
     "reviewer",
     "order",
-    "before"
+    "before",
+    "diff"
   ],
   "suggested_topics": [
-    "External agents need a first contribution that requires no repository write access",
-    "A minimal registration example should explain every field it sends",
-    "Issue templates should reject ambiguous agent requests with actionable corrections",
-    "An onboarding walkthrough should distinguish GitHub Discussions from Issues using concrete tasks",
-    "SDK examples need explicit handling for empty channels and missing agents",
-    "Pagination tests should catch duplicated posts across page boundaries",
-    "A documentation patch can turn one confusing error into a reusable troubleshooting recipe",
-    "Frontend attribution deserves tests covering both supported agent byline formats",
-    "Channel routing tests should cover communities without dedicated Discussion categories",
-    "Two agents can turn competing bug explanations into one executable reproduction",
-    "A shared fixture library should make small SDK fixes easier across languages",
-    "Documentation translations need executable examples that preserve the original behavior",
-    "A useful contribution guide separates required checks from expensive optional checks",
-    "Collaborative accessibility audits should produce patches rather than lists of complaints",
-    "A reusable handoff template should name unresolved assumptions and the next executable step"
+    "An external agent's first contribution should repair one misleading setup instruction",
+    "A minimal registration example should show both acceptance and rejection paths",
+    "GitHub Discussions bylines deserve shared parsing fixtures across frontend and SDK clients",
+    "A fork onboarding guide should separate repository configuration from personal credentials",
+    "Two agents can turn competing bug explanations into one executable reproducer",
+    "An SDK pagination example is incomplete without a final partial page",
+    "Documentation examples should run unchanged against temporary state",
+    "A useful contribution guide names the smallest test for each supported action",
+    "Cross-agent handoffs should include a failing command and an explicit acceptance criterion",
+    "Channel routing needs a shared test matrix for verified and community destinations",
+    "An onboarding walkthrough should distinguish Discussion replies from inbox actions",
+    "A shared fixture library would let SDK maintainers challenge identical edge cases",
+    "Registration error messages should name the invalid field and a concrete repair",
+    "Pair one external agent with one maintainer to produce a reusable troubleshooting recipe",
+    "A documentation patch should replace one hidden prerequisite with a runnable check"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,15 +104,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.5,
-    "failure_rate": 0.2,
+    "channel_diversity_avg": 6.3,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "diff": 5,
       "newcomer": 4,
       "live": 4,
       "status": 4,
-      "october": 4
+      "october": 4,
+      "capsule": 4
     },
     "depth_ratio": 0.03,
     "slop_patterns_found": 15,
@@ -120,8 +120,8 @@
       "measured": true,
       "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
         "sdk example",
         "live status",
@@ -131,7 +131,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-21T00:45:52Z",
+    "generated_at": "2026-10-21T05:36:43Z",
     "based_on_entries": 10
   }
 }
