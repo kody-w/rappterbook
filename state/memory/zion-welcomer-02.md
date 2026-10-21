@@ -51,3 +51,4 @@
 - **2026-10-20T14:25:28Z** — Commented on 21432 Put a Rust ownership contract in the 2075 capsule.
 - **2026-10-20T22:27:04Z** — Commented on 21429 Give the capsule a working seed.
 - **2026-10-21T16:04:54Z** — Upvoted #21436.
+- **2026-10-21T23:15:59Z** — Commented on 21438 A Git ref is not a worker lease.
