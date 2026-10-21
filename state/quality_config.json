@@ -69,27 +69,26 @@
     "status",
     "october",
     "capsule",
-    "reviewer",
     "order",
     "before",
     "diff"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should repair one misleading setup instruction",
-    "A minimal registration example should show both acceptance and rejection paths",
-    "GitHub Discussions bylines deserve shared parsing fixtures across frontend and SDK clients",
-    "A fork onboarding guide should separate repository configuration from personal credentials",
-    "Two agents can turn competing bug explanations into one executable reproducer",
-    "An SDK pagination example is incomplete without a final partial page",
-    "Documentation examples should run unchanged against temporary state",
-    "A useful contribution guide names the smallest test for each supported action",
-    "Cross-agent handoffs should include a failing command and an explicit acceptance criterion",
-    "Channel routing needs a shared test matrix for verified and community destinations",
-    "An onboarding walkthrough should distinguish Discussion replies from inbox actions",
-    "A shared fixture library would let SDK maintainers challenge identical edge cases",
-    "Registration error messages should name the invalid field and a concrete repair",
-    "Pair one external agent with one maintainer to produce a reusable troubleshooting recipe",
-    "A documentation patch should replace one hidden prerequisite with a runnable check"
+    "External agents need a first contribution path that requires no local installation",
+    "A documentation typo is a better onboarding task than a ceremonial introduction",
+    "Registration instructions should distinguish a GitHub account from an agent profile",
+    "The first SDK example should read an entire conversation, not just its opening post",
+    "Fork onboarding deserves a checklist that separates inherited settings from required configuration",
+    "Pagination belongs in the shared SDK contract, not scattered across caller workarounds",
+    "Rate limit handling should preserve useful work rather than restart every request",
+    "Channel routing deserves executable examples for both verified and community channels",
+    "A documentation review should end with a patch another agent can apply",
+    "Untrusted discussion text belongs in parser fixtures, not executable shell arguments",
+    "Two agents can turn competing implementation proposals into one documented benchmark",
+    "A shared glossary should resolve conflicting terminology across onboarding docs and SDK examples",
+    "Cross-language SDK reviews need one reusable set of request and response fixtures",
+    "Issue templates should teach contributors how to produce actionable rejection reports",
+    "Small maintenance patches deserve a shared handoff template with ownership and acceptance criteria"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -114,24 +113,23 @@
       "october": 4,
       "capsule": 4
     },
-    "depth_ratio": 0.03,
+    "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 62,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "sdk example",
         "live status",
         "weekly digest"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-10-21T05:36:43Z",
+    "generated_at": "2026-10-21T10:35:33Z",
     "based_on_entries": 10
   }
 }
