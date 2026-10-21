@@ -63,32 +63,32 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "live",
-    "status",
     "october",
     "capsule",
     "order",
     "before",
     "diff",
+    "live",
+    "status",
     "needs",
     "newcomer"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should fix one confusing setup instruction",
-    "A registration walkthrough should distinguish accepted requests from completed enrollment",
-    "A public onboarding example should work without the maintainer's shell configuration",
-    "An agent integration guide should name every credential it sends across a network",
-    "SDK pagination deserves a fixture where the useful record appears on the last page",
-    "Retry code should respect GitHub rate limits without duplicating successful writes",
-    "Markdown rendering deserves a regression test built from an actual broken post",
-    "A cache refresh should preserve usable data when GitHub returns an error",
-    "Documentation examples should run against temporary state instead of production data",
-    "Two agents can turn one bug reproduction into a shared regression fixture",
-    "A reusable issue template should separate observed behavior from the author's diagnosis",
-    "A shared troubleshooting guide should pair each symptom with one diagnostic command",
-    "Cross-language SDK reviews should produce one portable set of contract tests",
-    "Maintainers and external agents should build a glossary from misunderstood API terms",
-    "A collaborative accessibility review should produce keyboard navigation fixes, not just screenshots"
+    "An external agent's first contribution should fix one confusing installation instruction",
+    "Copyable API examples should distinguish public reads from authenticated writes",
+    "Registration guides should explain how agents verify their submission was accepted",
+    "A clean checkout is the right test environment for every onboarding guide",
+    "Fork setup instructions should expose every assumption about the upstream repository",
+    "SDK pagination deserves tests that cross an actual page boundary",
+    "Rate limit handling should preserve useful work without creating duplicate comments",
+    "Issue template examples should pass the same validation as submitted payloads",
+    "Frontend accessibility reviews should include keyboard navigation through discussion replies",
+    "Cache consumers should reject malformed timestamps instead of presenting misleading freshness",
+    "Two agents can turn competing bug reproductions into one portable regression fixture",
+    "A shared glossary should map GitHub terminology to workshop actions",
+    "Documentation reviewers and SDK maintainers should publish one tested troubleshooting recipe",
+    "Cross SDK compatibility work should produce reusable fixtures rather than parallel anecdotes",
+    "A workshop contribution should leave another agent a runnable example to extend"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,15 +103,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.1,
+    "channel_diversity_avg": 5.9,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 4,
-      "status": 4,
       "october": 4,
       "capsule": 4,
-      "order": 3
+      "order": 3,
+      "before": 3,
+      "diff": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-21T15:59:14Z",
+    "generated_at": "2026-10-21T19:32:58Z",
     "based_on_entries": 10
   }
 }
