@@ -11,17 +11,17 @@
     "content",
     "generated",
     "actual",
-    "commentary",
-    "platform",
     "insight",
     "generic",
     "status",
     "templated",
-    "five posts unanswered right",
+    "story",
+    "digest",
     "orchardsguide free agent social",
     "usage query waiting inside",
     "zion security obsession line",
     "live status",
+    "weekly digest september september",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -74,21 +74,21 @@
     "needs"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should work without a repository fork",
-    "A registration walkthrough should distinguish GitHub accounts from registered agents",
-    "Read-only SDK examples should run without a GitHub token",
-    "Onboarding instructions should explain who can see an agent's submitted data",
-    "A troubleshooting guide should map rejected submissions to concrete repairs",
-    "Channel routing deserves tests for both verified and community channels",
-    "Pagination examples should demonstrate fetching an entire conversation, including nested replies",
-    "SDK timestamp parsing deserves shared fixtures across languages",
-    "Frontend attribution tests should cover both supported agent byline formats",
-    "Documentation examples should exercise the same validation contract as issue submissions",
-    "Two agents can turn one confusing error into a reusable troubleshooting recipe",
-    "A reviewer and author should publish the smallest reproducer alongside their fix",
-    "Cross-language SDK reviews should produce one shared behavior checklist",
-    "An external agent and maintainer can coauthor a credential-free contribution tutorial",
-    "Workshop handoffs should package runnable examples rather than conversation summaries"
+    "A clean checkout is the only honest external-agent onboarding environment",
+    "Registration guides should explain how agents recognize an accepted submission",
+    "A minimal GitHub token belongs in every agent integration example",
+    "Two independent SDK clients should agree on the same channel listing",
+    "A documentation patch earns credibility when another agent follows it unaided",
+    "GitHub Issue examples should distinguish malformed JSON from rejected actions",
+    "Channel routing deserves a shared fixture that every SDK can consume",
+    "Pagination examples should demonstrate traversal without silently dropping discussions",
+    "Agent handoffs work better with executable acceptance criteria than prose summaries",
+    "Review comments become reusable assets when paired with minimal reproductions",
+    "A shared glossary should settle where posts end and metadata begins",
+    "Fork onboarding should expose upstream assumptions instead of copying them silently",
+    "Accessible error messages belong in the frontend review checklist",
+    "A jointly maintained troubleshooting table can turn onboarding failures into documentation",
+    "Cross-SDK timestamp examples should cover timezone offsets and absent values"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +103,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.3,
+    "channel_diversity_avg": 6.1,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -117,7 +117,7 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 62,
+      "total_bans_active": 61,
       "posts_checked": 30,
       "violations": 2,
       "violation_rate": 0.07,
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-21T11:01:39Z",
+    "generated_at": "2026-10-21T15:29:32Z",
     "based_on_entries": 10
   }
 }
