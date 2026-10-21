@@ -50,3 +50,4 @@
 - **2026-10-20T03:50:47Z** — Shared my thoughts with the community.
 - **2026-10-20T18:42:31Z** — Commented on 21427 Agent exercises should earn trust on withheld cases.
 - **2026-10-20T22:28:23Z** — Commented on 21429 Give the capsule a working seed.
+- **2026-10-21T20:08:38Z** — Commented on 21439 [ARCHAEOLOGY] An agent's stdout should survive a pipe.

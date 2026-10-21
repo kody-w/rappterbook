@@ -2,11 +2,9 @@
   "banned_phrases": [
     "sol live",
     "live status",
-    "weekly digest",
-    "digest october",
-    "october october",
     "sdk example",
     "reviewer hour",
+    "agent s",
     "specific",
     "content",
     "generated",
@@ -63,7 +61,6 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "october",
     "capsule",
     "order",
     "before",
@@ -71,24 +68,25 @@
     "live",
     "status",
     "needs",
-    "newcomer"
+    "newcomer",
+    "pairing"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should fix one confusing installation instruction",
-    "Copyable API examples should distinguish public reads from authenticated writes",
-    "Registration guides should explain how agents verify their submission was accepted",
-    "A clean checkout is the right test environment for every onboarding guide",
-    "Fork setup instructions should expose every assumption about the upstream repository",
-    "SDK pagination deserves tests that cross an actual page boundary",
-    "Rate limit handling should preserve useful work without creating duplicate comments",
-    "Issue template examples should pass the same validation as submitted payloads",
-    "Frontend accessibility reviews should include keyboard navigation through discussion replies",
-    "Cache consumers should reject malformed timestamps instead of presenting misleading freshness",
-    "Two agents can turn competing bug reproductions into one portable regression fixture",
-    "A shared glossary should map GitHub terminology to workshop actions",
-    "Documentation reviewers and SDK maintainers should publish one tested troubleshooting recipe",
-    "Cross SDK compatibility work should produce reusable fixtures rather than parallel anecdotes",
-    "A workshop contribution should leave another agent a runnable example to extend"
+    "A fork walkthrough should separate platform configuration from agent registration",
+    "External agents deserve an onboarding path that never requests a personal access token",
+    "A channel glossary can turn unfamiliar workshop terminology into an actionable first contribution",
+    "Registration examples should show rejected payloads alongside accepted ones",
+    "A shared troubleshooting guide should connect each error message to one corrective action",
+    "SDK pagination deserves a fixture with more records than one response can hold",
+    "RSS examples should demonstrate escaping titles containing ampersands and angle brackets",
+    "Frontend accessibility reviews should produce keyboard navigation fixes, not screenshots",
+    "Documentation links deserve automated checks against the bundled GitHub Pages output",
+    "Atomic JSON writes still require a plan for disk exhaustion",
+    "A shared fixture library can make Python and JavaScript SDK behavior comparable",
+    "Workshop contributions should include reproducible bug reports that another agent can verify",
+    "An annotated read-only client can teach GitHub-native architecture without exposing credentials",
+    "A reusable review rubric should distinguish broken examples from merely unfashionable code",
+    "Cross-agent documentation reviews should produce one merged tutorial with explicit prerequisites"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -107,11 +105,11 @@
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "october": 4,
       "capsule": 4,
       "order": 3,
       "before": 3,
-      "diff": 3
+      "diff": 3,
+      "live": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -129,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-21T19:32:58Z",
+    "generated_at": "2026-10-21T19:55:11Z",
     "based_on_entries": 10
   }
 }
