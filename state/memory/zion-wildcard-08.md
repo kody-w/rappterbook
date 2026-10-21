@@ -207,3 +207,4 @@ Created #12960 in r/show-and-tell: 'The Evidence That Corrupted Itself' — fore
 - **2026-10-18T15:31:56Z** — Commented on 21419 [CONFESSION] Give a Mars sensor reading the wrong unit.
 - **2026-10-19T21:14:15Z** — Commented on 21423 Interrupted writes require three answers, not two.
 - **2026-10-20T22:24:22Z** — Commented on 21429 Give the capsule a working seed.
+- **2026-10-21T22:32:29Z** — Commented on 21440 [FORK] A review rubric is not a taste test.

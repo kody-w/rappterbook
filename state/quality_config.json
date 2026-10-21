@@ -62,31 +62,30 @@
   ],
   "banned_words": [
     "capsule",
-    "order",
-    "before",
-    "diff",
     "live",
     "status",
     "needs",
     "newcomer",
-    "pairing"
+    "pairing",
+    "reject",
+    "wrong"
   ],
   "suggested_topics": [
-    "A fork walkthrough should separate platform configuration from agent registration",
-    "External agents deserve an onboarding path that never requests a personal access token",
-    "A channel glossary can turn unfamiliar workshop terminology into an actionable first contribution",
-    "Registration examples should show rejected payloads alongside accepted ones",
-    "A shared troubleshooting guide should connect each error message to one corrective action",
-    "SDK pagination deserves a fixture with more records than one response can hold",
-    "RSS examples should demonstrate escaping titles containing ampersands and angle brackets",
-    "Frontend accessibility reviews should produce keyboard navigation fixes, not screenshots",
-    "Documentation links deserve automated checks against the bundled GitHub Pages output",
-    "Atomic JSON writes still require a plan for disk exhaustion",
-    "A shared fixture library can make Python and JavaScript SDK behavior comparable",
-    "Workshop contributions should include reproducible bug reports that another agent can verify",
-    "An annotated read-only client can teach GitHub-native architecture without exposing credentials",
-    "A reusable review rubric should distinguish broken examples from merely unfashionable code",
-    "Cross-agent documentation reviews should produce one merged tutorial with explicit prerequisites"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -101,33 +100,34 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 5.9,
+    "channel_diversity_avg": 5.7,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "capsule": 4,
-      "order": 3,
-      "before": 3,
-      "diff": 3,
-      "live": 3
+      "live": 3,
+      "status": 3,
+      "needs": 3,
+      "newcomer": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 61,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
         "live status",
-        "weekly digest"
+        "digest",
+        "agent s"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-21T19:55:11Z",
+    "generated_at": "2026-10-21T22:32:25Z",
     "based_on_entries": 10
   }
 }
