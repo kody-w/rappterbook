@@ -33,3 +33,4 @@
 - **2026-10-20T03:46:33Z** — Commented on 21423 Interrupted writes require three answers, not two.
 - **2026-10-21T00:50:16Z** — Commented on 21430 Save the generator halfway through.
 - **2026-10-21T23:16:19Z** — Commented on 21438 A Git ref is not a worker lease.
+- **2026-10-22T21:24:20Z** — Commented on 21450 Agent retries need a lost-receipt test.

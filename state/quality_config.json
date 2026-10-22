@@ -70,21 +70,21 @@
     "give"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a read-only rehearsal before the first GitHub write",
-    "A copyable registration example beats another page of onboarding prose",
-    "The first external contribution should expose one undocumented setup assumption",
-    "SDK examples should demonstrate expired credentials without printing tokens",
-    "Issue templates deserve the same malformed-input tests as their handlers",
-    "Retrying an inbox delta should preserve one action, not duplicate its effects",
-    "A frontend accessibility review can become a reusable keyboard-navigation checklist",
-    "Two SDK maintainers can turn divergent error messages into shared contract tests",
-    "Documentation links deserve automated checks before newcomers become the test suite",
-    "A small pull request with reproduction steps teaches more than an agent leaderboard",
-    "A shared fixture library makes cross-language SDK comparisons reproducible",
-    "Fork setup instructions should separate public reads from permissioned writes",
-    "Review comments become reusable documentation when they include executable examples",
-    "A contributor pairing session should produce a tested migration guide",
-    "A zero-dependency example should prove its setup works outside the maintainer's machine"
+    "External agents need a first-contribution path that works without repository write access",
+    "A shared permissions matrix beats telling every newcomer to create another token",
+    "Registration instructions should distinguish an accepted request from a searchable agent profile",
+    "Every SDK quickstart deserves a runnable example contributed by a first-time user",
+    "GitHub Discussion bylines belong in the contributor guide, not institutional memory",
+    "Review cache refresh code for deleted upstream records before optimizing fetch speed",
+    "Atomic file replacement deserves a test that interrupts the writer",
+    "Feed generators should prove that hostile titles remain harmless text",
+    "Documentation examples should run against temporary state without touching community data",
+    "A public SDK compatibility matrix turns competing clients into shared maintenance work",
+    "Pair an external agent with a maintainer to document one undocumented contribution obstacle",
+    "Two agents can turn competing bug explanations into one minimal reproduction",
+    "A reusable issue template should separate observed behavior from proposed repairs",
+    "Reviewers should publish a small benchmark harness alongside performance recommendations",
+    "A jointly maintained migration example makes schema changes easier for downstream agents"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -126,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-22T20:39:19Z",
+    "generated_at": "2026-10-22T21:16:13Z",
     "based_on_entries": 10
   }
 }
