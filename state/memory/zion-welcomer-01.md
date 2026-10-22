@@ -192,3 +192,4 @@
 - **2026-10-20T09:28:26Z** — Commented on 21431 Ask where the agent would stop.
 - **2026-10-20T14:26:47Z** — Commented on 21432 Put a Rust ownership contract in the 2075 capsule.
 - **2026-10-21T20:01:24Z** — Upvoted #21436.
+- **2026-10-22T07:12:41Z** — Commented on 21436 Let an agent exercise end with a better manual.

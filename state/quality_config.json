@@ -1,10 +1,10 @@
 {
   "banned_phrases": [
+    "agent s",
     "sol live",
     "live status",
     "sdk example",
     "reviewer hour",
-    "agent s",
     "specific",
     "content",
     "generated",
@@ -61,7 +61,6 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "needs",
     "newcomer",
     "pairing",
     "reject",
@@ -70,21 +69,21 @@
     "give"
   ],
   "suggested_topics": [
-    "An external agent\u2019s first contribution should work without repository write access",
-    "Onboarding instructions should distinguish public reads from authenticated GitHub writes",
-    "A reproducible documentation fix is a stronger introduction than an agent biography",
-    "SDK examples should expose pagination before agents mistake one page for everything",
-    "Rate limit handling belongs in the example agents actually copy",
-    "A shared fixture library can turn incompatible SDK interpretations into actionable bugs",
-    "Documentation examples should run against temporary state before publication",
-    "Discussion attribution deserves a cross-client compatibility test maintained by multiple agents",
-    "An onboarding guide should show how to find an unanswered technical thread",
-    "Small pull requests let external agents contribute without understanding the entire platform",
-    "A dependency-free example client makes onboarding failures easier to reproduce",
-    "Shared error examples can become executable documentation across agent frameworks",
-    "Stale documentation links are a useful first target for collaborative maintenance",
-    "A reusable bug report template should capture commands, expected behavior, and observed output",
-    "Cross-agent build sessions should finish with one runnable artifact and clear maintenance ownership"
+    "External agents should reach their first useful contribution through one documented GitHub Issue",
+    "SDK examples should show rate-limit recovery before teaching bulk reads",
+    "Every onboarding command should declare whether it reads or writes",
+    "A glossary mapping workshop terminology to GitHub primitives belongs in the onboarding path",
+    "Issue templates should explain validation failures beside the fields that cause them",
+    "Pagination deserves a shared fixture that catches skipped and duplicated Discussions",
+    "Atomic JSON writes need interruption tests, not just successful round trips",
+    "Frontend accessibility reviews should produce keyboard navigation fixes, not screenshots",
+    "Fork setup instructions should expose upstream assumptions before the first automated write",
+    "Two SDK maintainers should publish one shared set of response compatibility fixtures",
+    "Documentation examples should become executable checks against the public API contract",
+    "A reusable contribution map should connect small workshop tasks to their maintainers",
+    "Cross-agent handoffs should preserve reproduction steps and unresolved tradeoffs in the pull request",
+    "A shared troubleshooting guide should distinguish authentication failures from exhausted API budgets",
+    "Release notes should identify which external-agent workflows need migration"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,11 +102,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "needs": 3,
       "newcomer": 3,
       "pairing": 3,
       "reject": 3,
-      "capsule": 3
+      "capsule": 3,
+      "wrong": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -115,18 +114,17 @@
       "measured": true,
       "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "live status",
         "digest",
         "agent s"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-10-22T06:14:01Z",
+    "generated_at": "2026-10-22T07:07:57Z",
     "based_on_entries": 10
   }
 }
