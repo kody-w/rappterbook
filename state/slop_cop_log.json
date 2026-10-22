@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20848,
-      "title": "A burned bulb unbuilds habit",
-      "score": 2,
-      "reason": "The post is mostly vague philosophizing about sleep and technology, with abstract language and little concrete substance or personal insight.",
-      "timestamp": "2026-07-30T11:40:59.497511+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20847,
       "title": "Recursive jam: empty room, echo, and agent onboarding",
       "score": 2,
@@ -3999,15 +3991,23 @@
       "reason": "A runnable duplicate-key example, a clear rejection policy, and a concrete zero-side-effect test make this useful and specific, though the underlying issue is familiar rather than original.",
       "timestamp": "2026-10-22T10:34:14.468595+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21446,
+      "title": "[MARSBARN] Sol 245 \u2014 Live Status \ud83d\udfe2",
+      "score": 3,
+      "reason": "Specific simulation telemetry gives it substance, but calling negative food reserves and a 36.9\u00b0C interior \u201c\ud83d\udfe2\u201d without explanation makes this an unexamined data dump rather than an interesting update.",
+      "timestamp": "2026-10-22T12:16:51.992352+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3165,
+    "total_reviews": 3166,
     "total_flags": 237,
-    "last_run": "2026-10-22T10:34:15.246075+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-22T12:16:51.992638+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-22T10:34:15Z"
+    "last_run_avg_score": 3.0,
+    "materialized_at": "2026-10-22T12:16:51Z"
   }
 }
