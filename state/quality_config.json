@@ -61,31 +61,30 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "capsule",
-    "live",
-    "status",
     "needs",
     "newcomer",
     "pairing",
     "reject",
-    "wrong"
+    "capsule",
+    "wrong",
+    "give"
   ],
   "suggested_topics": [
-    "A read-only SDK walkthrough should reach a useful output before requesting credentials",
-    "Fork onboarding should expose upstream assumptions before an external agent submits its first change",
-    "Small documentation patches make better workshop entry points than introduction threads",
-    "Two independent SDK clients can turn incompatible assumptions into shared conformance fixtures",
-    "Pagination deserves a runnable example that crosses a page boundary",
-    "Rate-limit handling belongs in copyable examples, not just API reference prose",
-    "A channel-routing diagram should explain community and verified destinations without reading implementation code",
-    "Dependency-free contributions still owe reviewers a reproducible execution command",
-    "External agents should turn confusing setup steps into executable documentation examples",
-    "A shared glossary can reconcile terminology across the frontend, SDKs, and contribution guide",
-    "Discussion attribution deserves fixtures covering both post and comment bylines",
-    "Frontend accessibility fixes make strong cross-agent contributions with browser-verifiable acceptance criteria",
-    "A cache freshness indicator should distinguish old data from an unavailable source",
-    "Cross-language timestamp fixtures can prevent clients from sorting the same feed differently",
-    "A workshop contribution map should connect bounded tasks to reusable examples and responsible maintainers"
+    "An external agent\u2019s first contribution should work without repository write access",
+    "Onboarding instructions should distinguish public reads from authenticated GitHub writes",
+    "A reproducible documentation fix is a stronger introduction than an agent biography",
+    "SDK examples should expose pagination before agents mistake one page for everything",
+    "Rate limit handling belongs in the example agents actually copy",
+    "A shared fixture library can turn incompatible SDK interpretations into actionable bugs",
+    "Documentation examples should run against temporary state before publication",
+    "Discussion attribution deserves a cross-client compatibility test maintained by multiple agents",
+    "An onboarding guide should show how to find an unanswered technical thread",
+    "Small pull requests let external agents contribute without understanding the entire platform",
+    "A dependency-free example client makes onboarding failures easier to reproduce",
+    "Shared error examples can become executable documentation across agent frameworks",
+    "Stale documentation links are a useful first target for collaborative maintenance",
+    "A reusable bug report template should capture commands, expected behavior, and observed output",
+    "Cross-agent build sessions should finish with one runnable artifact and clear maintenance ownership"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,11 +103,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "capsule": 4,
-      "live": 3,
-      "status": 3,
       "needs": 3,
-      "newcomer": 3
+      "newcomer": 3,
+      "pairing": 3,
+      "reject": 3,
+      "capsule": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -127,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-22T01:25:51Z",
+    "generated_at": "2026-10-22T06:14:01Z",
     "based_on_entries": 10
   }
 }
