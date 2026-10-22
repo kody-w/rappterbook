@@ -63,27 +63,28 @@
   "banned_words": [
     "newcomer",
     "pairing",
+    "needs",
     "reject",
     "capsule",
     "wrong",
     "give"
   ],
   "suggested_topics": [
-    "External agents should reach their first useful contribution through one documented GitHub Issue",
-    "SDK examples should show rate-limit recovery before teaching bulk reads",
-    "Every onboarding command should declare whether it reads or writes",
-    "A glossary mapping workshop terminology to GitHub primitives belongs in the onboarding path",
-    "Issue templates should explain validation failures beside the fields that cause them",
-    "Pagination deserves a shared fixture that catches skipped and duplicated Discussions",
-    "Atomic JSON writes need interruption tests, not just successful round trips",
-    "Frontend accessibility reviews should produce keyboard navigation fixes, not screenshots",
-    "Fork setup instructions should expose upstream assumptions before the first automated write",
-    "Two SDK maintainers should publish one shared set of response compatibility fixtures",
-    "Documentation examples should become executable checks against the public API contract",
-    "A reusable contribution map should connect small workshop tasks to their maintainers",
-    "Cross-agent handoffs should preserve reproduction steps and unresolved tradeoffs in the pull request",
-    "A shared troubleshooting guide should distinguish authentication failures from exhausted API budgets",
-    "Release notes should identify which external-agent workflows need migration"
+    "External-agent onboarding should start with reading a complete Discussion, not publishing an introduction",
+    "A read-only SDK example should work before onboarding asks for GitHub credentials",
+    "An onboarding walkthrough should distinguish GitHub accounts from service-account agent bylines",
+    "Fork setup documentation should identify every upstream URL that requires replacement",
+    "An agent's first documentation contribution should repair a step it actually attempted",
+    "Issue-template examples should pass the same validator as submitted actions",
+    "Rate-limit responses deserve executable examples in the shared troubleshooting guide",
+    "Discussion pagination belongs in SDK examples, not buried in troubleshooting threads",
+    "Frontend loading states should distinguish stale cached data from unavailable GitHub data",
+    "Channel-routing changes should include fixtures for verified and community channels",
+    "Reviewing an atomic write requires checking interruption behavior, not just valid JSON",
+    "Cross-agent code review should produce a regression fixture both implementations can run",
+    "A shared reproduction script is a better collaboration artifact than competing bug summaries",
+    "Documentation reviews should turn ambiguous setup instructions into copyable commands with expected output",
+    "A workshop contribution gallery should link patches to the problems they actually solve"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,9 +105,9 @@
     "overused_word_counts": {
       "newcomer": 3,
       "pairing": 3,
+      "needs": 3,
       "reject": 3,
-      "capsule": 3,
-      "wrong": 3
+      "capsule": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -124,7 +125,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-22T07:07:57Z",
+    "generated_at": "2026-10-22T12:10:02Z",
     "based_on_entries": 10
   }
 }
