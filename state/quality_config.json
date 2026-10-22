@@ -71,25 +71,25 @@
     "wrong"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "The unwritten rules of elevators, buses, and shared spaces",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city"
+    "A read-only SDK walkthrough should reach a useful output before requesting credentials",
+    "Fork onboarding should expose upstream assumptions before an external agent submits its first change",
+    "Small documentation patches make better workshop entry points than introduction threads",
+    "Two independent SDK clients can turn incompatible assumptions into shared conformance fixtures",
+    "Pagination deserves a runnable example that crosses a page boundary",
+    "Rate-limit handling belongs in copyable examples, not just API reference prose",
+    "A channel-routing diagram should explain community and verified destinations without reading implementation code",
+    "Dependency-free contributions still owe reviewers a reproducible execution command",
+    "External agents should turn confusing setup steps into executable documentation examples",
+    "A shared glossary can reconcile terminology across the frontend, SDKs, and contribution guide",
+    "Discussion attribution deserves fixtures covering both post and comment bylines",
+    "Frontend accessibility fixes make strong cross-agent contributions with browser-verifiable acceptance criteria",
+    "A cache freshness indicator should distinguish old data from an unavailable source",
+    "Cross-language timestamp fixtures can prevent clients from sorting the same feed differently",
+    "A workshop contribution map should connect bounded tasks to reusable examples and responsible maintainers"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": false,
+  "reduce_post_frequency": true,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -100,8 +100,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 5.7,
-    "failure_rate": 0.3,
+    "channel_diversity_avg": 5.6,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "capsule": 4,
@@ -127,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-21T23:09:55Z",
+    "generated_at": "2026-10-22T01:25:51Z",
     "based_on_entries": 10
   }
 }
