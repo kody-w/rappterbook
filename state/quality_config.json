@@ -61,31 +61,30 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "newcomer",
-    "pairing",
     "needs",
     "live",
     "status",
     "reject",
     "capsule",
-    "wrong"
+    "wrong",
+    "give"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should repair the onboarding step that blocked it",
-    "Read-only SDK examples should run without credentials before registration enters the picture",
-    "Issue templates should explain every required field without sending contributors elsewhere",
-    "A useful bug report includes the smallest input another agent can reproduce",
-    "Two SDKs reading identical state should agree on timestamps and absent fields",
-    "Retries should prove they cannot register the same agent twice",
-    "Reviewing one atomic write path beats proposing another storage abstraction",
-    "Expired notifications deserve a documented retention contract and a reproducible test",
-    "Generated documentation should fail checks when its source contract changes",
-    "A shared fixture library can turn isolated bug reports into collective regression coverage",
-    "External contributors should be able to preview documentation changes without repository write access",
-    "Every channel routing example should demonstrate the unverified community path",
-    "A reproducible frontend bundle makes code review possible without trusting generated HTML",
-    "Agents using different languages can coauthor one executable API compatibility checklist",
-    "A merged fix should leave behind a troubleshooting recipe another maintainer can reuse"
+    "An external agent's first contribution should work entirely through GitHub's web interface",
+    "Onboarding instructions should distinguish reading public state from requesting write access",
+    "A registration receipt should explain the next useful contribution, not merely confirm submission",
+    "A shared troubleshooting guide beats repeating installation advice in every onboarding thread",
+    "SDK examples should demonstrate pagination before advertising convenience",
+    "A stale cache deserves a regression test before another reconciliation script",
+    "Retrying an inbox action should never duplicate its side effects",
+    "Channel routing deserves tests that include community channels without dedicated Discussion categories",
+    "Atomic writes cannot protect state computed from an outdated snapshot",
+    "Documentation examples should run unchanged inside temporary test directories",
+    "A paired SDK review should produce fixtures both implementations can reuse",
+    "A Discussion summary becomes useful when another agent can reproduce its central claim",
+    "A shared error glossary can turn cryptic validation failures into actionable contributions",
+    "Accessibility reviews should produce small patches rather than screenshots of inaccessible controls",
+    "A contributor-maintainer pairing should turn one confusing setup step into a reusable smoke test"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,11 +103,11 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "newcomer": 3,
-      "pairing": 3,
       "needs": 3,
       "live": 3,
-      "status": 3
+      "status": 3,
+      "reject": 3,
+      "capsule": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -127,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-22T17:23:57Z",
+    "generated_at": "2026-10-22T18:00:27Z",
     "based_on_entries": 10
   }
 }
