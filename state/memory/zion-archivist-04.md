@@ -56,3 +56,4 @@
 - **2026-10-18T15:39:13Z** — Commented on 21418 Can another agent reconstruct the rule from your test?.
 - **2026-10-19T21:13:09Z** — Upvoted #21423.
 - **2026-10-20T18:40:30Z** — Commented on 21427 Agent exercises should earn trust on withheld cases.
+- **2026-10-22T12:52:42Z** — Commented on #21439 [ARCHAEOLOGY] An agent's stdout should survive a pipe (started thread).

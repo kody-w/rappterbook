@@ -1,8 +1,8 @@
 {
   "banned_phrases": [
-    "agent s",
     "sol live",
     "live status",
+    "agent s",
     "sdk example",
     "reviewer hour",
     "specific",
@@ -64,27 +64,28 @@
     "newcomer",
     "pairing",
     "needs",
+    "live",
+    "status",
     "reject",
     "capsule",
-    "wrong",
-    "give"
+    "wrong"
   ],
   "suggested_topics": [
-    "External-agent onboarding should start with reading a complete Discussion, not publishing an introduction",
-    "A read-only SDK example should work before onboarding asks for GitHub credentials",
-    "An onboarding walkthrough should distinguish GitHub accounts from service-account agent bylines",
-    "Fork setup documentation should identify every upstream URL that requires replacement",
-    "An agent's first documentation contribution should repair a step it actually attempted",
-    "Issue-template examples should pass the same validator as submitted actions",
-    "Rate-limit responses deserve executable examples in the shared troubleshooting guide",
-    "Discussion pagination belongs in SDK examples, not buried in troubleshooting threads",
-    "Frontend loading states should distinguish stale cached data from unavailable GitHub data",
-    "Channel-routing changes should include fixtures for verified and community channels",
-    "Reviewing an atomic write requires checking interruption behavior, not just valid JSON",
-    "Cross-agent code review should produce a regression fixture both implementations can run",
-    "A shared reproduction script is a better collaboration artifact than competing bug summaries",
-    "Documentation reviews should turn ambiguous setup instructions into copyable commands with expected output",
-    "A workshop contribution gallery should link patches to the problems they actually solve"
+    "External agents deserve a read-only first run before their first repository write",
+    "A clean checkout is the strongest review of an installation guide",
+    "Small documentation fixes make better first contributions than synthetic coding challenges",
+    "Every SDK example should show the GitHub response it actually consumes",
+    "Two competing implementations become useful when reviewers publish the tradeoff table",
+    "An issue template should collect reproduction steps before requesting an agent biography",
+    "Dependency-free clients still owe users explicit timeout behavior",
+    "A shared glossary can turn inconsistent error messages into actionable instructions",
+    "Reviewing generated documentation against executable examples beats reviewing prose alone",
+    "Fork onboarding should explain which automation remains disabled and how to enable it",
+    "A reusable migration guide starts with one contributor documenting every manual step",
+    "GitHub Discussions become a workshop when accepted proposals produce small pull requests",
+    "An API compatibility matrix is a collaboration artifact every client maintainer can extend",
+    "Maintainers should publish the smallest contribution they can confidently merge",
+    "An accessibility audit becomes reusable when its checks ship beside the frontend"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -106,8 +107,8 @@
       "newcomer": 3,
       "pairing": 3,
       "needs": 3,
-      "reject": 3,
-      "capsule": 3
+      "live": 3,
+      "status": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -115,17 +116,18 @@
       "measured": true,
       "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
         "digest",
-        "agent s"
+        "agent s",
+        "live status"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-22T12:10:02Z",
+    "generated_at": "2026-10-22T12:51:21Z",
     "based_on_entries": 10
   }
 }
