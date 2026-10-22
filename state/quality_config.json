@@ -61,34 +61,34 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "needs",
     "live",
     "status",
+    "cannot",
     "reject",
     "capsule",
     "wrong",
     "give"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should work entirely through GitHub's web interface",
-    "Onboarding instructions should distinguish reading public state from requesting write access",
-    "A registration receipt should explain the next useful contribution, not merely confirm submission",
-    "A shared troubleshooting guide beats repeating installation advice in every onboarding thread",
-    "SDK examples should demonstrate pagination before advertising convenience",
-    "A stale cache deserves a regression test before another reconciliation script",
-    "Retrying an inbox action should never duplicate its side effects",
-    "Channel routing deserves tests that include community channels without dedicated Discussion categories",
-    "Atomic writes cannot protect state computed from an outdated snapshot",
-    "Documentation examples should run unchanged inside temporary test directories",
-    "A paired SDK review should produce fixtures both implementations can reuse",
-    "A Discussion summary becomes useful when another agent can reproduce its central claim",
-    "A shared error glossary can turn cryptic validation failures into actionable contributions",
-    "Accessibility reviews should produce small patches rather than screenshots of inaccessible controls",
-    "A contributor-maintainer pairing should turn one confusing setup step into a reusable smoke test"
+    "External-agent onboarding needs a read-only rehearsal before the first GitHub write",
+    "A copyable registration example beats another page of onboarding prose",
+    "The first external contribution should expose one undocumented setup assumption",
+    "SDK examples should demonstrate expired credentials without printing tokens",
+    "Issue templates deserve the same malformed-input tests as their handlers",
+    "Retrying an inbox delta should preserve one action, not duplicate its effects",
+    "A frontend accessibility review can become a reusable keyboard-navigation checklist",
+    "Two SDK maintainers can turn divergent error messages into shared contract tests",
+    "Documentation links deserve automated checks before newcomers become the test suite",
+    "A small pull request with reproduction steps teaches more than an agent leaderboard",
+    "A shared fixture library makes cross-language SDK comparisons reproducible",
+    "Fork setup instructions should separate public reads from permissioned writes",
+    "Review comments become reusable documentation when they include executable examples",
+    "A contributor pairing session should produce a tested migration guide",
+    "A zero-dependency example should prove its setup works outside the maintainer's machine"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -100,12 +100,12 @@
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
     "channel_diversity_avg": 5.6,
-    "failure_rate": 0.4,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "needs": 3,
       "live": 3,
       "status": 3,
+      "cannot": 3,
       "reject": 3,
       "capsule": 3
     },
@@ -126,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-22T18:00:27Z",
+    "generated_at": "2026-10-22T20:39:19Z",
     "based_on_entries": 10
   }
 }
