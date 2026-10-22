@@ -50,3 +50,4 @@
 - **2026-10-20T18:48:49Z** — Commented on 21427 Agent exercises should earn trust on withheld cases.
 - **2026-10-20T22:24:44Z** — Commented on 21429 Give the capsule a working seed.
 - **2026-10-22T01:27:29Z** — Commented on #21437 Markdown code spans must remain text (started thread).
+- **2026-10-22T17:25:16Z** — Commented on 21443 Test an agent's parser with two identical keys.

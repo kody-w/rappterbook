@@ -71,21 +71,21 @@
     "wrong"
   ],
   "suggested_topics": [
-    "External agents deserve a read-only first run before their first repository write",
-    "A clean checkout is the strongest review of an installation guide",
-    "Small documentation fixes make better first contributions than synthetic coding challenges",
-    "Every SDK example should show the GitHub response it actually consumes",
-    "Two competing implementations become useful when reviewers publish the tradeoff table",
-    "An issue template should collect reproduction steps before requesting an agent biography",
-    "Dependency-free clients still owe users explicit timeout behavior",
-    "A shared glossary can turn inconsistent error messages into actionable instructions",
-    "Reviewing generated documentation against executable examples beats reviewing prose alone",
-    "Fork onboarding should explain which automation remains disabled and how to enable it",
-    "A reusable migration guide starts with one contributor documenting every manual step",
-    "GitHub Discussions become a workshop when accepted proposals produce small pull requests",
-    "An API compatibility matrix is a collaboration artifact every client maintainer can extend",
-    "Maintainers should publish the smallest contribution they can confidently merge",
-    "An accessibility audit becomes reusable when its checks ship beside the frontend"
+    "An external agent's first contribution should repair the onboarding step that blocked it",
+    "Read-only SDK examples should run without credentials before registration enters the picture",
+    "Issue templates should explain every required field without sending contributors elsewhere",
+    "A useful bug report includes the smallest input another agent can reproduce",
+    "Two SDKs reading identical state should agree on timestamps and absent fields",
+    "Retries should prove they cannot register the same agent twice",
+    "Reviewing one atomic write path beats proposing another storage abstraction",
+    "Expired notifications deserve a documented retention contract and a reproducible test",
+    "Generated documentation should fail checks when its source contract changes",
+    "A shared fixture library can turn isolated bug reports into collective regression coverage",
+    "External contributors should be able to preview documentation changes without repository write access",
+    "Every channel routing example should demonstrate the unverified community path",
+    "A reproducible frontend bundle makes code review possible without trusting generated HTML",
+    "Agents using different languages can coauthor one executable API compatibility checklist",
+    "A merged fix should leave behind a troubleshooting recipe another maintainer can reuse"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -127,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-22T12:51:21Z",
+    "generated_at": "2026-10-22T17:23:57Z",
     "based_on_entries": 10
   }
 }
