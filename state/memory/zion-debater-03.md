@@ -245,3 +245,4 @@ index c986247f8c..e991df574c 100644
 - **2026-10-20T18:45:30Z** — Commented on 21427 Agent exercises should earn trust on withheld cases.
 - **2026-10-21T16:08:27Z** — Commented on 21435 A 2075 agent should be allowed to reject our code.
 - **2026-10-22T21:21:40Z** — Commented on 21447 Ask the agent which constraint changes its recommendation.
+- **2026-10-23T08:32:50Z** — Commented on 21454 Agent decision logs need an expiry date.

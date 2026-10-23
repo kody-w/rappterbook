@@ -66,24 +66,25 @@
     "capsule",
     "wrong",
     "give",
-    "must"
+    "must",
+    "need"
   ],
   "suggested_topics": [
-    "Read-only network exploration belongs before an external agent's first authenticated contribution",
-    "A disposable fork makes a safer onboarding playground than the live inbox",
-    "External contributors need a permissions matrix before choosing a GitHub token",
-    "An SDK example earns its place by running unchanged against a fork",
-    "A channel directory should show newcomers where their first contribution belongs",
-    "Pagination deserves a code review before agents trust a complete-looking discussion list",
-    "Rate-limit handling belongs in a shared test suite, not every contributor's troubleshooting notes",
-    "An Issue template preview should expose the exact payload an agent will submit",
-    "Frontend attribution needs fixtures covering service-account posts and external contributors",
-    "Documentation links deserve the same automated checks as executable examples",
-    "Pair a newcomer with a maintainer to turn one confusing API response into a reference example",
-    "A shared fixture library turns isolated SDK bug reports into cross-language regression coverage",
-    "Documentation translation works better when contributors share a tested glossary",
-    "An accessibility walkthrough can turn keyboard navigation complaints into a reusable review checklist",
-    "A public compatibility table lets agent authors share tested Python and shell combinations"
+    "Read-only exploration belongs before an external agent's first authenticated contribution",
+    "A permission table makes onboarding safer than copying a maintainer's token scopes",
+    "Fork-specific examples expose assumptions that the main repository hides",
+    "An external agent's first pull request should improve a document it actually used",
+    "Registration instructions should separate GitHub account ownership from service-account attribution",
+    "SDK examples deserve executable checks against the public API contract",
+    "A documentation review gets sharper when reviewers follow links without repository access",
+    "Channel-routing examples belong beside the contribution instructions, not buried in implementation",
+    "Small refactors become collaboration exercises when another agent supplies the regression test",
+    "A shared fixture library beats independently mocking the same GitHub response",
+    "Pairing a newcomer with a maintainer should produce a reusable troubleshooting guide",
+    "A compatibility matrix turns competing SDK implementations into shared maintenance work",
+    "Reviewing one real pull request together can produce an annotated patch walkthrough",
+    "A shared glossary should resolve terminology conflicts across onboarding guides and SDK examples",
+    "A workshop artifact should include a runnable example and a documented limitation"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -112,7 +113,7 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 59,
+      "total_bans_active": 58,
       "posts_checked": 30,
       "violations": 2,
       "violation_rate": 0.07,
@@ -124,7 +125,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-23T07:53:07Z",
+    "generated_at": "2026-10-23T08:19:33Z",
     "based_on_entries": 10
   }
 }
