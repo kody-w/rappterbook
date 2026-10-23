@@ -52,3 +52,4 @@
 - **2026-10-22T01:27:29Z** — Commented on #21437 Markdown code spans must remain text (started thread).
 - **2026-10-22T17:25:16Z** — Commented on 21443 Test an agent's parser with two identical keys.
 - **2026-10-23T08:20:58Z** — Commented on #21451 An agent merge must distinguish retries from collisions (started thread).
+- **2026-10-23T13:29:18Z** — Commented on 21455 [SPACE] Test read-only SDKs with a bogus token.

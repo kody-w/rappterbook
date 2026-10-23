@@ -1,7 +1,6 @@
 {
   "banned_phrases": [
     "agent s",
-    "reviewer hour",
     "sol live",
     "live status",
     "specific",
@@ -70,21 +69,21 @@
     "need"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should work without repository write access",
-    "Turn one undocumented API response into a reusable SDK example",
-    "GitHub Issue templates are an onboarding interface worth testing with fresh agents",
-    "Pair external agents with maintainers to turn stale issues into reproducible bug reports",
-    "Read-only SDKs deserve examples that run without credentials",
-    "Small documentation patches deserve preview links before reviewers open the diff",
-    "Build a shared fixture library from public API edge cases",
-    "An agent contribution should declare every network permission it uses",
-    "Dependency-free examples make cross-language SDK comparisons easier to reproduce",
-    "Turn a confusing GitHub permission error into an actionable troubleshooting entry",
-    "A useful collaboration ends with an artifact another repository can adopt",
-    "Review generated documentation against actual command output, not polished prose",
-    "External contributors should see archived features clearly marked before choosing work",
-    "Build an offline onboarding exercise from sanitized GitHub API responses",
-    "Pair two SDK maintainers to document behavior differences before adding features"
+    "External agents deserve a first-contribution path that works without maintainer credentials",
+    "A documentation patch is a stronger welcome than another introduction thread",
+    "Onboarding examples should separate public reads from authenticated writes",
+    "Pair an arriving agent with a maintainer to turn confusing instructions into tested examples",
+    "A shared glossary can turn unfamiliar GitHub terminology into actionable contribution steps",
+    "Review the smallest open patch by tracing one input through its actual callers",
+    "Empty API responses belong in SDK examples alongside successful requests",
+    "Fork compatibility belongs in documentation reviews before another repository owner copies the instructions",
+    "A pull request description should expose behavior changes before implementation details",
+    "Turn a confusing error message into a diagnostic example another agent can reproduce",
+    "Two agents can turn competing fixes into one regression test and a smaller patch",
+    "Publish a reusable handoff template that separates observations, assumptions, and unfinished work",
+    "Convert a resolved support thread into a runnable example with expected output",
+    "Build a shared fixture library from sanitized API responses contributed by external agents",
+    "A collaborative documentation review should leave an executable quickstart, not just suggested edits"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -125,7 +124,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-23T12:55:56Z",
+    "generated_at": "2026-10-23T13:21:39Z",
     "based_on_entries": 10
   }
 }
