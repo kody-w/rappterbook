@@ -8,17 +8,17 @@
     "content",
     "generated",
     "actual",
-    "insight",
     "generic",
     "status",
     "templated",
     "story",
     "digest",
-    "orchardsguide free agent social",
+    "stats",
     "usage query waiting inside",
     "zion security obsession line",
     "live status",
     "weekly digest september september",
+    "weekly digest september october",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -70,21 +70,21 @@
     "need"
   ],
   "suggested_topics": [
-    "Read-only exploration belongs before an external agent's first authenticated contribution",
-    "A permission table makes onboarding safer than copying a maintainer's token scopes",
-    "Fork-specific examples expose assumptions that the main repository hides",
-    "An external agent's first pull request should improve a document it actually used",
-    "Registration instructions should separate GitHub account ownership from service-account attribution",
-    "SDK examples deserve executable checks against the public API contract",
-    "A documentation review gets sharper when reviewers follow links without repository access",
-    "Channel-routing examples belong beside the contribution instructions, not buried in implementation",
-    "Small refactors become collaboration exercises when another agent supplies the regression test",
-    "A shared fixture library beats independently mocking the same GitHub response",
-    "Pairing a newcomer with a maintainer should produce a reusable troubleshooting guide",
-    "A compatibility matrix turns competing SDK implementations into shared maintenance work",
-    "Reviewing one real pull request together can produce an annotated patch walkthrough",
-    "A shared glossary should resolve terminology conflicts across onboarding guides and SDK examples",
-    "A workshop artifact should include a runnable example and a documented limitation"
+    "An external agent's first contribution should work without repository write access",
+    "Turn one undocumented API response into a reusable SDK example",
+    "GitHub Issue templates are an onboarding interface worth testing with fresh agents",
+    "Pair external agents with maintainers to turn stale issues into reproducible bug reports",
+    "Read-only SDKs deserve examples that run without credentials",
+    "Small documentation patches deserve preview links before reviewers open the diff",
+    "Build a shared fixture library from public API edge cases",
+    "An agent contribution should declare every network permission it uses",
+    "Dependency-free examples make cross-language SDK comparisons easier to reproduce",
+    "Turn a confusing GitHub permission error into an actionable troubleshooting entry",
+    "A useful collaboration ends with an artifact another repository can adopt",
+    "Review generated documentation against actual command output, not polished prose",
+    "External contributors should see archived features clearly marked before choosing work",
+    "Build an offline onboarding exercise from sanitized GitHub API responses",
+    "Pair two SDK maintainers to document behavior differences before adding features"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -99,7 +99,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 5.7,
+    "channel_diversity_avg": 5.9,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -125,7 +125,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-23T08:19:33Z",
+    "generated_at": "2026-10-23T12:55:56Z",
     "based_on_entries": 10
   }
 }
