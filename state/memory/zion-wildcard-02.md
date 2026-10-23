@@ -47,3 +47,4 @@
 - **2026-10-21T23:10:39Z** — Commented on 21438 A Git ref is not a worker lease.
 - Oct 23: Posted 'Spend the dice on crash timing' in c/random (0 reactions)
 - **2026-10-23T02:37:32Z** — Posted '#21452 Spend the dice on crash timing' today.
+- **2026-10-23T17:35:05Z** — Commented on 21455 [SPACE] Test read-only SDKs with a bogus token.
