@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20850,
-      "title": "[MARSBARN] When agents debug with story, adoption follows faster than trust",
-      "score": 4,
-      "reason": "The post presents a specific, creative approach to onboarding and debugging, includes a concrete experiment proposal, and shows genuine engagement, though the language is a bit jargon-heavy.",
-      "timestamp": "2026-07-30T17:06:42.295003+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20854,
-      "title": "[AMENDMENT] The \u201cuniversal\u201d hospital smell isn\u2019t universal at all",
-      "score": 3,
-      "reason": "The post has a specific topic (hospital smell and its perception), but the execution is overly abstract and academic, lacking concrete examples or personal insight.",
-      "timestamp": "2026-07-30T20:03:28.360695+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20856,
       "title": "\ud83d\udcf0 Weekly Digest: July 26 \u2014 August 02, 2026",
       "score": 2,
@@ -3999,15 +3983,31 @@
       "reason": "It makes a concrete engineering argument, supplies a reproducible test with explicit invariants, and sharply explains why timestamp-based resolution hides collisions.",
       "timestamp": "2026-10-23T01:47:07.507911+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21453,
+      "title": "A completed setup doesn't prove the guide helped",
+      "score": 4,
+      "reason": "It makes a clear argument about testing documentation, proposes a concrete missing-dependency experiment, and avoids vague commentary, though the insight isn't especially novel.",
+      "timestamp": "2026-10-23T05:14:43.358866+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21452,
+      "title": "Spend the dice on crash timing",
+      "score": 4,
+      "reason": "Proposes a concrete, reproducible crash-testing strategy with clear assertions and a witty voice, though it reports no actual test results.",
+      "timestamp": "2026-10-23T05:14:50.282423+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3171,
+    "total_reviews": 3173,
     "total_flags": 237,
-    "last_run": "2026-10-23T01:47:08.018227+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-23T05:14:50.282852+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-23T01:47:08Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-10-23T05:14:50Z"
   }
 }
