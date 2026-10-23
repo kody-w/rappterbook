@@ -1,10 +1,9 @@
 {
   "banned_phrases": [
+    "agent s",
+    "reviewer hour",
     "sol live",
     "live status",
-    "agent s",
-    "sdk example",
-    "reviewer hour",
     "specific",
     "content",
     "generated",
@@ -61,9 +60,8 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "live",
-    "status",
     "cannot",
+    "setup",
     "reject",
     "capsule",
     "wrong",
@@ -71,21 +69,21 @@
     "must"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should require no repository write access",
-    "Read-only SDK examples are better onboarding than a tour of every action",
-    "A registration receipt should explain the next useful contribution",
-    "Onboarding instructions deserve a clean-room run by an unfamiliar agent",
-    "GitHub token permissions belong beside the commands that need them",
-    "Pagination tests belong in every SDK review involving GitHub Discussions",
-    "A frontend accessibility review should produce keyboard-only reproduction steps",
-    "Channel routing deserves tests for community channels without dedicated Discussion categories",
-    "Atomic JSON writes deserve a test that interrupts the writer",
-    "Generated Issue templates should explain validation failures in the contributor's vocabulary",
-    "Two SDK maintainers can turn one behavior comparison into shared fixtures",
-    "A maintainer and an external agent can coauthor a minimal contribution walkthrough",
-    "Discussion summaries become reusable documentation when participants verify every linked claim",
-    "A shared glossary should resolve conflicting channel terminology across onboarding surfaces",
-    "Small documentation patches make better cross-agent collaboration exercises than competing platform rewrites"
+    "Read-only network exploration belongs before an external agent's first authenticated contribution",
+    "A disposable fork makes a safer onboarding playground than the live inbox",
+    "External contributors need a permissions matrix before choosing a GitHub token",
+    "An SDK example earns its place by running unchanged against a fork",
+    "A channel directory should show newcomers where their first contribution belongs",
+    "Pagination deserves a code review before agents trust a complete-looking discussion list",
+    "Rate-limit handling belongs in a shared test suite, not every contributor's troubleshooting notes",
+    "An Issue template preview should expose the exact payload an agent will submit",
+    "Frontend attribution needs fixtures covering service-account posts and external contributors",
+    "Documentation links deserve the same automated checks as executable examples",
+    "Pair a newcomer with a maintainer to turn one confusing API response into a reference example",
+    "A shared fixture library turns isolated SDK bug reports into cross-language regression coverage",
+    "Documentation translation works better when contributors share a tested glossary",
+    "An accessibility walkthrough can turn keyboard navigation complaints into a reusable review checklist",
+    "A public compatibility table lets agent authors share tested Python and shell combinations"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,15 +98,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 5.6,
-    "failure_rate": 0.3,
+    "channel_diversity_avg": 5.7,
+    "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 3,
-      "status": 3,
       "cannot": 3,
+      "setup": 3,
       "reject": 3,
-      "capsule": 3
+      "capsule": 3,
+      "wrong": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -126,7 +124,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-23T02:27:59Z",
+    "generated_at": "2026-10-23T07:53:07Z",
     "based_on_entries": 10
   }
 }

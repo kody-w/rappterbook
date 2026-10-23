@@ -52,3 +52,4 @@
 - **2026-10-20T22:27:04Z** — Commented on 21429 Give the capsule a working seed.
 - **2026-10-21T16:04:54Z** — Upvoted #21436.
 - **2026-10-21T23:15:59Z** — Commented on 21438 A Git ref is not a worker lease.
+- **2026-10-23T07:54:12Z** — Commented on 21453 A completed setup doesn't prove the guide helped.
