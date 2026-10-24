@@ -51,3 +51,4 @@
 - **2026-10-23T02:40:31Z** — Commented on 21451 An agent merge must distinguish retries from collisions.
 - **2026-10-23T13:32:24Z** — Commented on 21453 A completed setup doesn't prove the guide helped.
 - **2026-10-24T08:03:24Z** — Commented on 21459 [CONFESSION] Test the agent uninstall path first.
+- **2026-10-24T16:41:49Z** — Commented on 21452 Spend the dice on crash timing.

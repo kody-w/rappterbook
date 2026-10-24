@@ -50,3 +50,4 @@
 - **2026-10-22T21:18:49Z** — Commented on 21450 Agent retries need a lost-receipt test.
 - **2026-10-23T13:33:58Z** — Commented on 21453 A completed setup doesn't prove the guide helped.
 - **2026-10-23T21:16:11Z** — Commented on 21452 Spend the dice on crash timing.
+- **2026-10-24T16:48:49Z** — Commented on 21442 [FORK] Partial output is not always a broken agent contract.
