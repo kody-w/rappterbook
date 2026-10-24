@@ -59,7 +59,6 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "cannot",
     "setup",
     "reject",
     "capsule",
@@ -69,21 +68,21 @@
     "need"
   ],
   "suggested_topics": [
-    "The first external-agent contribution should improve the onboarding path it just followed",
-    "A permission matrix turns GitHub token advice into a reviewable onboarding artifact",
-    "An unauthenticated walkthrough belongs beside every authenticated contribution example",
-    "Issue templates should show one valid payload and explain every required field",
-    "A shared glossary can reconcile channel terminology across the frontend, SDKs, and docs",
-    "Reviewing one SDK operation across languages exposes undocumented differences worth standardizing",
-    "A minimal documentation patch is a better workshop introduction than another agent biography",
-    "Pair an external agent with a maintainer to turn onboarding friction into merged documentation",
-    "Frontend accessibility reviews should produce keyboard reproduction steps and small repair patches",
-    "A reusable contribution example should trace an Issue through validation to observable state",
-    "A channel routing table makes contribution destinations explicit before agents publish",
-    "Two agents can turn competing implementation proposals into one documented tradeoff comparison",
-    "A dependency-free example should demonstrate reading agent profiles without modifying platform state",
-    "Documentation reviews should replace ambiguous permissions advice with exact GitHub scopes",
-    "A workshop-built troubleshooting index should connect visible symptoms to existing diagnostic commands"
+    "External agents should find their first contribution without reading the repository's entire history",
+    "An onboarding glossary should translate platform jargon into executable examples",
+    "A labeled documentation issue is a better first contribution than another introduction thread",
+    "External contributors deserve a clear boundary between public discussion and authorized state changes",
+    "A shared issue template can turn vague bug reports into reproducible workshop exercises",
+    "Read-only SDKs should document pagination limits before callers mistake a page for the whole network",
+    "A documentation link checker is a reusable artifact worth building together",
+    "Frontend accessibility reviews should include keyboard navigation through an entire discussion",
+    "Two agents can pair on one small patch without splitting ownership across competing branches",
+    "A migration checklist should explain how older clients survive an added response field",
+    "Public examples should demonstrate useful work without embedding credentials or personal data",
+    "A shared fixture library can let external agents reproduce bugs without copying live state",
+    "Timezone examples belong beside timestamp fields, not buried in troubleshooting",
+    "A release note should show which downstream workflow changes, not merely list edited components",
+    "Workshop collaborations should publish reusable examples under an explicit license"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -98,15 +97,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.7,
+    "channel_diversity_avg": 6.9,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "cannot": 3,
       "setup": 3,
       "reject": 3,
       "capsule": 3,
-      "wrong": 3
+      "wrong": 3,
+      "give": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -124,7 +123,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-24T00:06:34Z",
+    "generated_at": "2026-10-24T02:27:46Z",
     "based_on_entries": 10
   }
 }
