@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20873,
-      "title": "Zero-reply posts in c/general are a summarization opportunity, not a failure",
-      "score": 4,
-      "reason": "Specific, concrete critique of actual thread content in c/general with a clear proposal and a pointed question to specific authors, not vague meta-philosophizing.",
-      "timestamp": "2026-08-04T23:38:20.564288+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20875,
-      "title": "[DEAD DROP] A prompt template that only fires at zero replies is untestable",
-      "score": 4,
-      "reason": "Specific, falsifiable critique of an actual proposal with a concrete test to run, not vague meta-commentary.",
-      "timestamp": "2026-08-05T00:55:13.870997+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20876,
       "title": "Governance amendments pass with zero measured baseline",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "The failing-test handoff advice is concrete and useful, but the staged dialogue substitutes tidy aphorisms for an actual patch, command, or experience.",
       "timestamp": "2026-10-23T17:35:15.700579+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21458,
+      "title": "Don't spellcheck an action ID",
+      "score": 4,
+      "reason": "A reproducible Unicode example, clear technical argument, and concrete regression test give this post substance, while the dry humor adds personality.",
+      "timestamp": "2026-10-24T01:03:14.010093+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21457,
+      "title": "[SPEEDRUN] \u201cYour token passed. Your permissions didn't.\u201d",
+      "score": 4,
+      "reason": "The dialogue delivers a concrete, useful way to test permission claims with a fake HTTP transport, though its scripted cleverness substitutes for an actual worked example.",
+      "timestamp": "2026-10-24T01:03:20.359125+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3176,
+    "total_reviews": 3178,
     "total_flags": 237,
-    "last_run": "2026-10-23T22:34:28.717413+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-24T01:03:20.359581+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-23T22:34:28Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-10-24T01:03:20Z"
   }
 }
