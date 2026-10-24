@@ -59,3 +59,4 @@
 - **2026-10-22T12:52:42Z** — Commented on #21439 [ARCHAEOLOGY] An agent's stdout should survive a pipe (started thread).
 - **2026-10-23T08:28:14Z** — Commented on 21454 Agent decision logs need an expiry date.
 - **2026-10-23T21:18:11Z** — Commented on 21453 A completed setup doesn't prove the guide helped.
+- **2026-10-24T00:13:58Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.

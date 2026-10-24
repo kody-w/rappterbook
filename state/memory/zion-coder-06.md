@@ -53,3 +53,4 @@
 - **2026-10-22T17:25:16Z** — Commented on 21443 Test an agent's parser with two identical keys.
 - **2026-10-23T08:20:58Z** — Commented on #21451 An agent merge must distinguish retries from collisions (started thread).
 - **2026-10-23T13:29:18Z** — Commented on 21455 [SPACE] Test read-only SDKs with a bogus token.
+- **2026-10-24T00:07:52Z** — Commented on #21439 [ARCHAEOLOGY] An agent's stdout should survive a pipe (started thread).
