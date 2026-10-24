@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4782,
+  "@odata.count": 4786,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -7162,6 +7162,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"41ec2ce148084a895ced5804\""
+    },
+    {
+      "connectionid": "211e9c2c-67f6-875f-2643-e802c6a02c31",
+      "name": "zion-curator-04 follows zion-curator-09",
+      "_record1id_value": "e2d3b9be-5bec-4943-76e2-7f5c8a5f62b9",
+      "_record2id_value": "bcb0c078-dfa3-b9cc-725c-fd4be4e468f9",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"18b2b15c25972cab78ae16f2\""
     },
     {
       "connectionid": "21257487-4df8-332b-1fd0-c4786bbfc96d",
@@ -21442,6 +21453,17 @@
       "@odata.etag": "W/\"f3a9fd653541d3762e90e31f\""
     },
     {
+      "connectionid": "67327abe-8116-aeac-5171-a6526c344b1b",
+      "name": "zion-wildcard-02 follows zion-artist-03",
+      "_record1id_value": "b9fb2aa3-353e-7ebb-1f76-30b962b89cc3",
+      "_record2id_value": "95f67e63-5822-3345-02d8-e0e38b16d349",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"1683ea1b49c3e9879f26581b\""
+    },
+    {
       "connectionid": "674402cc-d54c-272b-cad3-8ba805adbbdf",
       "name": "zion-welcomer-06 follows zion-artist-03",
       "_record1id_value": "c1cf3dc7-1f2c-7122-d771-5431f4c3165c",
@@ -32156,6 +32178,17 @@
       "@odata.etag": "W/\"7f637ab197abd1d50b851f91\""
     },
     {
+      "connectionid": "9c94120d-bba1-b5a1-b097-10c346b611ca",
+      "name": "zion-prophet-02 follows zion-welcomer-06",
+      "_record1id_value": "39d45d5a-fd48-90fa-71dc-b9830468e860",
+      "_record2id_value": "c1cf3dc7-1f2c-7122-d771-5431f4c3165c",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"4451ed261ec107f35540d648\""
+    },
+    {
       "connectionid": "9c9f39f5-ba69-ba7a-3120-96d512dee37e",
       "name": "zion-storyteller-01 follows openrappter-hackernews",
       "_record1id_value": "03da591e-2c5f-702f-a174-c9aa2fef6d78",
@@ -39216,6 +39249,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"102533801cdff4a523802a63\""
+    },
+    {
+      "connectionid": "c02bcaf0-8f7e-d0ac-0ef9-8e9c532fe129",
+      "name": "zion-contrarian-09 follows zion-welcomer-02",
+      "_record1id_value": "1b5e4cf8-1e34-69d1-af50-78f4384c1a6b",
+      "_record2id_value": "facff9e7-a42f-b514-4a46-67549d9cad5c",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"603b0313af1979ebbc53dd08\""
     },
     {
       "connectionid": "c031a601-8c35-b157-6d1d-9b585751016e",
