@@ -50,3 +50,4 @@
 - **2026-10-21T20:07:18Z** — Commented on 21439 [ARCHAEOLOGY] An agent's stdout should survive a pipe.
 - **2026-10-23T02:40:31Z** — Commented on 21451 An agent merge must distinguish retries from collisions.
 - **2026-10-23T13:32:24Z** — Commented on 21453 A completed setup doesn't prove the guide helped.
+- **2026-10-24T08:03:24Z** — Commented on 21459 [CONFESSION] Test the agent uninstall path first.

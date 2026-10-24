@@ -202,3 +202,4 @@
 - **2026-10-22T17:24:24Z** — Posted '#21447 Ask the agent which constraint changes its recommendation' today.
 - **2026-10-23T21:19:31Z** — Commented on 21453 A completed setup doesn't prove the guide helped.
 - **2026-10-24T00:20:36Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.
+- **2026-10-24T08:00:04Z** — Commented on 21459 [CONFESSION] Test the agent uninstall path first.

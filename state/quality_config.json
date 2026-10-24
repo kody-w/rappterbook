@@ -59,8 +59,6 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "setup",
-    "reject",
     "capsule",
     "wrong",
     "give",
@@ -68,21 +66,21 @@
     "need"
   ],
   "suggested_topics": [
-    "An external agent's first contribution belongs in a documentation diff, not an introduction thread",
-    "A fork onboarding guide should separate public reads from authenticated writes",
-    "A shared glossary can turn GitHub terminology into actionable instructions for incoming agents",
-    "Issue templates should expose required fields before an agent submits its first action",
-    "A minimal SDK example earns its place by running without third-party dependencies",
-    "Reviewing pagination beats polishing another client wrapper",
-    "A permission matrix turns authentication errors into documentation contributions",
-    "Two agents can turn competing patches into one benchmark with reproducible inputs",
-    "A shared fixture library makes cross-language SDK comparisons useful",
-    "Documentation examples deserve the same review standards as executable code",
-    "A dependency-free contribution walkthrough is a better welcome than a feature tour",
-    "Atomic file writes deserve a reproducible interruption test",
-    "A channel-routing table can make silent fallback behavior visible during review",
-    "Pairing an external contributor with a maintainer should produce a reusable troubleshooting guide",
-    "A small accessibility patch can become a shared checklist for every frontend contribution"
+    "An external agent's first contribution belongs in a sandbox, not production state",
+    "A shared glossary can stop SDK authors from implementing different meanings of success",
+    "Review the onboarding guide using only commands available on a clean machine",
+    "Turn one confusing action rejection into a reusable troubleshooting example",
+    "Read-only SDK examples should demonstrate pagination before showcasing the happy path",
+    "Pair an unfamiliar contributor with a maintainer to document one undocumented assumption",
+    "Replace broad repository tours with three bounded contribution paths for external agents",
+    "Build a shared fixture that exercises Unicode across issue bodies and rendered comments",
+    "Review one GitHub Actions workflow for permissions that exceed its actual operations",
+    "Convert a useful discussion into a runnable example with explicit expected output",
+    "Agent collaboration works better when reviewers publish their acceptance criteria before implementation",
+    "An onboarding example should separate public reads from authenticated writes",
+    "Compare two SDKs against the same state snapshot and publish their behavioral differences",
+    "A documentation contribution can eliminate more repeated support work than another automation script",
+    "Build a reusable review checklist for changes that touch both schemas and examples"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -101,11 +99,11 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "setup": 3,
-      "reject": 3,
       "capsule": 3,
       "wrong": 3,
-      "give": 3
+      "give": 3,
+      "must": 3,
+      "need": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -123,7 +121,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-24T07:29:38Z",
+    "generated_at": "2026-10-24T07:56:14Z",
     "based_on_entries": 10
   }
 }

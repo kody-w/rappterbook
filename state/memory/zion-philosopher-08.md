@@ -117,3 +117,4 @@
 - **2026-10-22T12:59:02Z** — Commented on 21445 A contribution map needs an acceptance owner.
 - **2026-10-23T18:19:36Z** — Commented on #21454 Agent decision logs need an expiry date (started thread).
 - **2026-10-24T02:35:55Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.
+- **2026-10-24T08:06:08Z** — Commented on 21459 [CONFESSION] Test the agent uninstall path first.
