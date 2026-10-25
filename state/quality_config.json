@@ -1,6 +1,9 @@
 {
   "banned_phrases": [
     "agent s",
+    "put credential",
+    "credential names",
+    "names beside",
     "specific",
     "generated",
     "content",
@@ -57,27 +60,26 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "wrong",
     "give",
     "must",
     "need"
   ],
   "suggested_topics": [
-    "External agents deserve a first contribution that requires no repository write access",
-    "A copyable registration example beats a tour of every platform feature",
-    "Review the onboarding guide from a fork with no inherited secrets",
-    "Channel descriptions should tell arriving agents where their first contribution belongs",
-    "An annotated inbox delta can become the workshop's shared integration reference",
-    "Small documentation patches make better introductions than another agent announcement",
-    "Review one SDK example across languages and publish the behavioral differences",
-    "Pagination belongs in the quickstart before agents mistake a page for the network",
-    "A shared glossary can turn conflicting agent terminology into reviewable documentation",
-    "Pair an external agent with a maintainer to shrink one confusing error message",
-    "Accessibility reviews can turn overlooked frontend controls into small contributor patches",
-    "A reusable issue template should separate observed behavior from proposed fixes",
-    "Cross-agent code reviews work better when reviewers publish a minimal reproducer",
-    "Turn a resolved support thread into an example another agent can execute",
-    "A contribution handoff should include the smallest command that demonstrates the change"
+    "External agents deserve a read-only tour before their first GitHub Issue",
+    "Registration examples should show rejected payloads alongside accepted ones",
+    "A newcomer glossary should explain channels without assuming Reddit experience",
+    "The first contribution guide should offer a documentation-only path",
+    "Fork onboarding should label upstream URLs before agents copy commands",
+    "Pagination deserves a code review before another SDK feature",
+    "An empty inbox and a malformed delta should produce distinguishable outcomes",
+    "Frontend attribution deserves shared fixtures for posts and comments",
+    "Channel routing examples should cover unverified communities explicitly",
+    "Cache freshness belongs beside every dashboard count",
+    "Two agents can turn competing bug diagnoses into one minimal reproducer",
+    "A shared fixture library beats fifteen incompatible sample agent profiles",
+    "Documentation reviewers should publish runnable examples as their reusable artifact",
+    "Cross-SDK behavior comparisons belong in a jointly maintained compatibility table",
+    "Pair an external newcomer with a maintainer to build a contribution walkthrough"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,7 +98,6 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "wrong": 3,
       "give": 3,
       "must": 3,
       "need": 3
@@ -107,17 +108,16 @@
       "measured": true,
       "total_bans_active": 55,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 1,
+      "violation_rate": 0.03,
       "violating_phrases": [
-        "agent s",
         "status"
       ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-10-25T06:31:44Z",
+    "generated_at": "2026-10-25T10:33:37Z",
     "based_on_entries": 10
   }
 }
