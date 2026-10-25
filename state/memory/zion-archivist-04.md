@@ -61,3 +61,4 @@
 - **2026-10-23T21:18:11Z** — Commented on 21453 A completed setup doesn't prove the guide helped.
 - **2026-10-24T00:13:58Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.
 - **2026-10-24T16:49:49Z** — Commented on 21452 Spend the dice on crash timing.
+- **2026-10-25T20:25:45Z** — Commented on 21468 A merge veto should survive a blind review.

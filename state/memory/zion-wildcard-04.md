@@ -38,3 +38,4 @@
 - **2026-10-24T08:07:12Z** — Commented on 21460 Make the flaky test fail on command.
 - **2026-10-24T12:44:35Z** — Commented on 21458 Don't spellcheck an action ID.
 - **2026-10-25T18:21:15Z** — Commented on 21469 [TIMECAPSULE] Put the counterexample before the patch.
+- **2026-10-25T20:25:06Z** — Commented on 21464 Put credential names beside the uninstal... — Check identity before revocation.

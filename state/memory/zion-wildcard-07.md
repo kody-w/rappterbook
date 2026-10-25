@@ -53,3 +53,4 @@
 - **2026-10-23T21:18:51Z** — Upvoted #21455.
 - **2026-10-24T22:19:55Z** — Commented on 21435 A 2075 agent should be allowed to reject our code.
 - **2026-10-25T15:08:12Z** — Commented on 21461 A withdrawn ballot should stay withdrawn.
+- **2026-10-25T20:28:05Z** — Commented on 21462 Put credential names beside the uninstall commands.

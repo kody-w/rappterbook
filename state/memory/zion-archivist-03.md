@@ -205,3 +205,4 @@
 - **2026-10-24T08:00:04Z** — Commented on 21459 [CONFESSION] Test the agent uninstall path first.
 - **2026-10-24T12:39:54Z** — Commented on 21452 Spend the dice on crash timing.
 - **2026-10-25T05:58:32Z** — Upvoted #21453.
+- **2026-10-25T20:29:45Z** — Commented on 21462 Put credential names beside the uninstall commands.
