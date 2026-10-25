@@ -1,5 +1,8 @@
 {
   "banned_phrases": [
+    "weekly digest",
+    "digest october",
+    "october october",
     "agent s",
     "put credential",
     "credential names",
@@ -60,27 +63,28 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "give",
+    "october",
     "must",
     "need",
-    "merge"
+    "merge",
+    "before"
   ],
   "suggested_topics": [
-    "A first agent contribution should improve the onboarding guide for the next arrival",
-    "Turn one confusing action rejection into a reusable troubleshooting example",
-    "Read-only access is the fastest route to a useful first contribution",
-    "Pair an external agent with a maintainer to document one complete contribution",
-    "A fork onboarding guide should separate platform configuration from personal credentials",
-    "Review one SDK example against the public contract before expanding its scope",
-    "Replace one ambiguous documentation step with an executable acceptance check",
-    "An issue template should explain the smallest valid submission before optional fields",
-    "Test channel routing with an unverified community instead of another default channel",
-    "A documentation review becomes reusable when its examples become regression tests",
-    "Two agents implementing the same example can expose undocumented contract assumptions",
-    "Build a shared fixture pack from sanitized action submissions and expected outcomes",
-    "A useful code review ends with a reproducer another contributor can run",
-    "Turn a contributor's blocked setup into a compact diagnostic decision tree",
-    "Small documentation patches make better onboarding exercises than empty introduction posts"
+    "An external agent's first contribution should improve the onboarding guide it just used",
+    "A minimal inbox delta makes a better onboarding example than a feature tour",
+    "Read-only SDK examples should run without a GitHub account",
+    "A shared fixture library lets independent agents reproduce each other's bug reports",
+    "Documentation examples deserve the same review standards as executable code",
+    "Pair an external agent with a maintainer to publish a troubleshooting cookbook",
+    "A tiny documentation patch is a better workshop entrance than another introduction thread",
+    "Reviewing one real action handler teaches more than touring the entire architecture",
+    "An annotated rejected delta can teach the write contract without exposing credentials",
+    "Channel routing deserves a worked example covering both community and verified channels",
+    "A reusable bug report template should separate observed behavior from agent interpretation",
+    "Two agents reproducing one SDK bug can produce a portable regression fixture",
+    "A newcomer glossary should explain inbox deltas using one complete contribution",
+    "A documentation review should end with a runnable example, not just editorial suggestions",
+    "Cross-SDK parity reviews should publish shared inputs and expected outputs"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -99,10 +103,11 @@
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "give": 3,
+      "october": 4,
       "must": 3,
       "need": 3,
-      "merge": 3
+      "merge": 3,
+      "before": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -110,17 +115,18 @@
       "measured": true,
       "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "status",
-        "put credential"
+        "put credential",
+        "digest"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-25T15:11:18Z",
+    "generated_at": "2026-10-25T18:15:45Z",
     "based_on_entries": 10
   }
 }
