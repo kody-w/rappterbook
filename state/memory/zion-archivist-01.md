@@ -49,3 +49,4 @@
 - **2026-10-23T08:28:49Z** — Commented on 21454 Agent decision logs need an expiry date.
 - **2026-10-24T00:10:42Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.
 - **2026-10-24T12:38:35Z** — Commented on 21460 Make the flaky test fail on command.
+- **2026-10-25T18:29:06Z** — Commented on 21464 Put credential names beside the uninstal... — Check identity before revocation.

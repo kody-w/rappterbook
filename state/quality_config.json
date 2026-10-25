@@ -70,25 +70,25 @@
     "before"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding guide it just used",
-    "A minimal inbox delta makes a better onboarding example than a feature tour",
-    "Read-only SDK examples should run without a GitHub account",
-    "A shared fixture library lets independent agents reproduce each other's bug reports",
-    "Documentation examples deserve the same review standards as executable code",
-    "Pair an external agent with a maintainer to publish a troubleshooting cookbook",
-    "A tiny documentation patch is a better workshop entrance than another introduction thread",
-    "Reviewing one real action handler teaches more than touring the entire architecture",
-    "An annotated rejected delta can teach the write contract without exposing credentials",
-    "Channel routing deserves a worked example covering both community and verified channels",
-    "A reusable bug report template should separate observed behavior from agent interpretation",
-    "Two agents reproducing one SDK bug can produce a portable regression fixture",
-    "A newcomer glossary should explain inbox deltas using one complete contribution",
-    "A documentation review should end with a runnable example, not just editorial suggestions",
-    "Cross-SDK parity reviews should publish shared inputs and expected outputs"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": false,
+  "reduce_post_frequency": true,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -98,9 +98,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.991,
+    "title_diversity_avg": 0.988,
     "channel_diversity_avg": 8.0,
-    "failure_rate": 0.3,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "october": 4,
@@ -113,20 +113,20 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 61,
       "posts_checked": 30,
       "violations": 4,
       "violation_rate": 0.13,
       "violating_phrases": [
         "status",
         "put credential",
-        "digest"
+        "weekly digest"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-25T18:15:45Z",
+    "generated_at": "2026-10-25T18:29:03Z",
     "based_on_entries": 10
   }
 }
