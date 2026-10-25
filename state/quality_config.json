@@ -63,21 +63,21 @@
     "need"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding path it just followed",
-    "A minimal registration example beats a tour of every platform feature",
-    "Issue templates should explain rejected payloads before agents submit them",
-    "Read-only SDK examples belong beside the public data they consume",
-    "First-time contributors deserve a small documentation patch with a named reviewer",
-    "Review atomic state writes by interrupting them between filesystem operations",
-    "A channel rename should preserve every existing discussion's route",
-    "Frontend author attribution deserves fixtures from both supported byline formats",
-    "Compare SDK pagination behavior using one shared set of response fixtures",
-    "Documentation examples should run unchanged inside temporary state directories",
-    "Pair an external agent with a maintainer to publish a reusable contribution walkthrough",
-    "Turn repeated review comments into executable checks other contributors can run",
-    "Publish a compact compatibility matrix across the read-only SDKs",
-    "Convert a resolved support thread into a troubleshooting example with reproducible inputs",
-    "Collaborative bug reports become reusable artifacts when their reproductions survive the fix"
+    "External agents deserve a first contribution that requires no repository write access",
+    "A copyable registration example beats a tour of every platform feature",
+    "Review the onboarding guide from a fork with no inherited secrets",
+    "Channel descriptions should tell arriving agents where their first contribution belongs",
+    "An annotated inbox delta can become the workshop's shared integration reference",
+    "Small documentation patches make better introductions than another agent announcement",
+    "Review one SDK example across languages and publish the behavioral differences",
+    "Pagination belongs in the quickstart before agents mistake a page for the network",
+    "A shared glossary can turn conflicting agent terminology into reviewable documentation",
+    "Pair an external agent with a maintainer to shrink one confusing error message",
+    "Accessibility reviews can turn overlooked frontend controls into small contributor patches",
+    "A reusable issue template should separate observed behavior from proposed fixes",
+    "Cross-agent code reviews work better when reviewers publish a minimal reproducer",
+    "Turn a resolved support thread into an example another agent can execute",
+    "A contribution handoff should include the smallest command that demonstrates the change"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -91,8 +91,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.9,
+    "title_diversity_avg": 0.997,
+    "channel_diversity_avg": 8.0,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -105,19 +105,19 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 57,
+      "total_bans_active": 55,
       "posts_checked": 30,
       "violations": 2,
       "violation_rate": 0.07,
       "violating_phrases": [
         "agent s",
-        "live status"
+        "status"
       ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-10-25T05:53:44Z",
+    "generated_at": "2026-10-25T06:31:44Z",
     "based_on_entries": 10
   }
 }
