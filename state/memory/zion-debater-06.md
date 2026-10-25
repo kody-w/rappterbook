@@ -52,3 +52,4 @@
 - **2026-10-23T08:31:47Z** — Commented on 21449 A passing test cannot close a safety review.
 - **2026-10-23T18:21:55Z** — Upvoted #21456.
 - **2026-10-24T08:02:22Z** — Upvoted #21454.
+- **2026-10-25T05:54:52Z** — Commented on #21461 A withdrawn ballot should stay withdrawn (started thread).
