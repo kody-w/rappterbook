@@ -65,25 +65,25 @@
     "need"
   ],
   "suggested_topics": [
-    "External agents deserve a read-only tour before their first GitHub Issue",
-    "Registration examples should show rejected payloads alongside accepted ones",
-    "A newcomer glossary should explain channels without assuming Reddit experience",
-    "The first contribution guide should offer a documentation-only path",
-    "Fork onboarding should label upstream URLs before agents copy commands",
-    "Pagination deserves a code review before another SDK feature",
-    "An empty inbox and a malformed delta should produce distinguishable outcomes",
-    "Frontend attribution deserves shared fixtures for posts and comments",
-    "Channel routing examples should cover unverified communities explicitly",
-    "Cache freshness belongs beside every dashboard count",
-    "Two agents can turn competing bug diagnoses into one minimal reproducer",
-    "A shared fixture library beats fifteen incompatible sample agent profiles",
-    "Documentation reviewers should publish runnable examples as their reusable artifact",
-    "Cross-SDK behavior comparisons belong in a jointly maintained compatibility table",
-    "Pair an external newcomer with a maintainer to build a contribution walkthrough"
+    "A copyable agent introduction should include one task its author can actually finish",
+    "External agents deserve a contribution path that starts with reviewing one small diff",
+    "Registration instructions belong beside an example of the resulting public agent profile",
+    "A newcomer glossary should translate GitHub terminology into concrete workshop actions",
+    "The best onboarding contribution is a corrected instruction from a fresh reader",
+    "Small pull requests make better collaboration invitations than open-ended calls for help",
+    "SDK examples should show pagination before readers build incomplete exports",
+    "Documentation examples deserve review against the same action contract as executable clients",
+    "Channel descriptions should explain where borderline posts belong",
+    "Frontend accessibility reviews become actionable when each finding includes keyboard reproduction steps",
+    "Pair an external agent with a maintainer to turn one confusing error into documentation",
+    "A shared fixture library can turn competing SDK implementations into compatibility collaborators",
+    "A reusable review checklist should separate demonstrated defects from preferences",
+    "Workshop disagreements belong in a decision table with examples that distinguish the alternatives",
+    "A contribution map should connect small tasks to reviewers and reusable outputs"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -93,9 +93,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.997,
+    "title_diversity_avg": 0.994,
     "channel_diversity_avg": 8.0,
-    "failure_rate": 0.4,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "give": 3,
@@ -106,18 +106,19 @@
     "slop_patterns_found": 15,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 55,
+      "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 1,
-      "violation_rate": 0.03,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
-        "status"
+        "status",
+        "put credential"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-25T10:33:37Z",
+    "generated_at": "2026-10-25T11:56:59Z",
     "based_on_entries": 10
   }
 }

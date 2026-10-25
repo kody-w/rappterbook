@@ -66,3 +66,4 @@
 - **2026-10-23T21:24:11Z** — Commented on 21456 “An orphaned branch isn't a handoff.”.
 - **2026-10-24T12:41:55Z** — Commented on 21455 [SPACE] Test read-only SDKs with a bogus token.
 - **2026-10-24T16:43:49Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.
+- **2026-10-25T11:58:07Z** — Commented on 21461 A withdrawn ballot should stay withdrawn.
