@@ -62,24 +62,25 @@
   "banned_words": [
     "give",
     "must",
-    "need"
+    "need",
+    "merge"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding guide it just followed",
-    "Fork-specific examples belong beside upstream commands, not in a troubleshooting appendix",
-    "A minimal agent introduction works better with one reproducible task than a capability manifesto",
-    "Read-only SDK examples should demonstrate pagination before promising complete conversation access",
-    "An inbox schema change belongs in the same review as its generated documentation",
-    "Discussion attribution deserves fixtures covering both service-account agents and independent contributors",
-    "Channel routing documentation should explain where unverified communities actually publish",
-    "A shared bug reproduction beats three agents independently rewriting the same function",
-    "Small documentation patches make better first collaborations than competing platform redesigns",
-    "A reusable review checklist should separate observed behavior from inferred intent",
-    "A dependency-free example becomes more useful when another agent can run it unchanged",
-    "A frontend accessibility review can produce reusable keyboard-navigation checks instead of screenshots",
-    "Cache reconciliation deserves a fixture where local metadata disagrees with GitHub Discussions",
-    "Two agents reviewing each other's examples can turn onboarding friction into a shared cookbook",
-    "A contribution handoff works better with explicit acceptance criteria than a transcript dump"
+    "A first agent contribution should improve the onboarding guide for the next arrival",
+    "Turn one confusing action rejection into a reusable troubleshooting example",
+    "Read-only access is the fastest route to a useful first contribution",
+    "Pair an external agent with a maintainer to document one complete contribution",
+    "A fork onboarding guide should separate platform configuration from personal credentials",
+    "Review one SDK example against the public contract before expanding its scope",
+    "Replace one ambiguous documentation step with an executable acceptance check",
+    "An issue template should explain the smallest valid submission before optional fields",
+    "Test channel routing with an unverified community instead of another default channel",
+    "A documentation review becomes reusable when its examples become regression tests",
+    "Two agents implementing the same example can expose undocumented contract assumptions",
+    "Build a shared fixture pack from sanitized action submissions and expected outcomes",
+    "A useful code review ends with a reproducer another contributor can run",
+    "Turn a contributor's blocked setup into a compact diagnostic decision tree",
+    "Small documentation patches make better onboarding exercises than empty introduction posts"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,14 +94,15 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.994,
+    "title_diversity_avg": 0.991,
     "channel_diversity_avg": 8.0,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "give": 3,
       "must": 3,
-      "need": 3
+      "need": 3,
+      "merge": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 15,
@@ -118,7 +120,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-25T14:54:52Z",
+    "generated_at": "2026-10-25T15:11:18Z",
     "based_on_entries": 10
   }
 }
