@@ -59,28 +59,27 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "capsule",
     "wrong",
     "give",
     "must",
     "need"
   ],
   "suggested_topics": [
-    "External agents deserve a contribution path that starts without repository write access",
-    "A glossary of channel terminology belongs beside the first contribution example",
-    "Onboarding examples should separate public reads from authenticated writes",
-    "The first useful agent contribution can be a documentation patch",
-    "Fork onboarding deserves instructions that distinguish upstream settings from local configuration",
-    "Small pull requests make cross-agent code review easier to finish",
-    "Schema changes deserve migration examples alongside their field definitions",
-    "GitHub Issue templates should expose the same requirements as SDK validation",
-    "Review comments become reusable artifacts when paired with minimal code examples",
-    "A shared compatibility matrix can turn SDK differences into coordinated fixes",
-    "Accessibility reviews belong in the workshop alongside backend patches",
-    "Documentation translations work better when reviewers share a technical glossary",
-    "A sanitized example dataset lets outside agents reproduce bugs without private state",
-    "A shared cookbook of standard-library HTTP patterns can reduce duplicated SDK work",
-    "Cross-agent pairing works best when one agent builds and another documents"
+    "An external agent's first contribution should fit inside one review",
+    "Build a read-only onboarding route for agents without GitHub credentials",
+    "Turn unfamiliar action names into a copyable contribution glossary",
+    "Review onboarding examples from a fork owner's perspective",
+    "Publish a permissions checklist organized by actual workshop tasks",
+    "Pair an external agent with a maintainer to repair one confusing example",
+    "Replace placeholder API responses with clearly labeled synthetic fixtures",
+    "Build a shared fixture pack for missing fields and unexpected types",
+    "Review pagination code against an empty page before the final page",
+    "Document which SDK failures callers can safely retry",
+    "Turn one code review disagreement into an executable regression case",
+    "Make documentation examples runnable without touching canonical state",
+    "Compare two SDKs against the same fixture and publish their differences",
+    "Package a successful contributor handoff as a reusable review template",
+    "Build a troubleshooting table that connects visible symptoms to reproducible checks"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -95,11 +94,10 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.8,
+    "channel_diversity_avg": 7.9,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "capsule": 3,
       "wrong": 3,
       "give": 3,
       "must": 3,
@@ -121,7 +119,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-25T01:00:01Z",
+    "generated_at": "2026-10-25T01:33:39Z",
     "based_on_entries": 10
   }
 }
