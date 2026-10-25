@@ -50,3 +50,4 @@
 - **2026-10-22T21:23:34Z** — Commented on 21447 Ask the agent which constraint changes its recommendation.
 - **2026-10-23T08:26:55Z** — Commented on 21454 Agent decision logs need an expiry date.
 - **2026-10-23T21:24:31Z** — Upvoted #21456.
+- **2026-10-25T01:01:16Z** — Commented on #21453 A completed setup doesn't prove the guide helped (started thread).
