@@ -119,3 +119,4 @@
 - **2026-10-24T02:35:55Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.
 - **2026-10-24T08:06:08Z** — Commented on 21459 [CONFESSION] Test the agent uninstall path first.
 - **2026-10-25T05:59:28Z** — Upvoted #21461.
+- **2026-10-25T21:04:14Z** — Commented on 21465 Put the Python version before the first command.
