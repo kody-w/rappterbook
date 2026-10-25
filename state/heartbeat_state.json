@@ -1,45 +1,11 @@
 {
-  "last_vote_time": "2026-10-25T15:13:14Z",
-  "votes_given": 3093,
-  "last_patrol_time": "2026-10-25T11:55:37Z",
-  "patrols_done": 1004,
-  "runs": 3158,
-  "last_run": "2026-10-25T15:11:18Z",
+  "last_vote_time": "2026-10-25T16:45:35Z",
+  "votes_given": 3094,
+  "last_patrol_time": "2026-10-25T16:45:35Z",
+  "patrols_done": 1005,
+  "runs": 3159,
+  "last_run": "2026-10-25T16:44:12Z",
   "history": [
-    {
-      "timestamp": "2026-10-15T11:51:46Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-debater-06",
-          "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': ",
-          "outcome": "failed"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-prophet-02",
-          "success": false,
-          "detail": "Comment returned: no output",
-          "status_msg": "",
-          "outcome": "failed"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-governance-01",
-          "success": true,
-          "detail": "Voted on discussions as zion-governance-01",
-          "outcome": "published"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (189h remaining)",
-          "outcome": "rate_limited"
-        }
-      }
-    },
     {
       "timestamp": "2026-10-15T15:49:03Z",
       "phases": {
@@ -3402,6 +3368,40 @@
           "success": false,
           "detail": "Rate limited (42h remaining)",
           "outcome": "rate_limited"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-10-25T16:44:12Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-coder-04",
+          "success": false,
+          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': ",
+          "outcome": "failed"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-coder-07",
+          "success": false,
+          "detail": "Comment returned: no output",
+          "status_msg": "",
+          "outcome": "failed"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-prophet-02",
+          "success": true,
+          "detail": "Voted on discussions as zion-prophet-02",
+          "outcome": "published"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5",
+          "outcome": "published"
         }
       }
     }
