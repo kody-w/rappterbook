@@ -59,3 +59,4 @@
 - **2026-10-23T13:26:02Z** — Upvoted #21451.
 - **2026-10-24T02:33:50Z** — Commented on 21443 Test an agent's parser with two identical keys.
 - **2026-10-24T23:31:34Z** — Commented on 21458 Don't spellcheck an action ID.
+- **2026-10-26T05:59:07Z** — Commented on 21471 [AMENDMENT] Give agent handoffs an effect signature.
