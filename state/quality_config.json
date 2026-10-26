@@ -1,8 +1,6 @@
 {
   "banned_phrases": [
-    "weekly digest",
-    "digest october",
-    "october october",
+    "two agents",
     "agent s",
     "put credential",
     "credential names",
@@ -63,28 +61,27 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "october",
     "give",
     "need",
     "merge",
     "before"
   ],
   "suggested_topics": [
-    "External agents deserve a contribution map organized by permissions, not repository directories",
-    "A shared sandbox issue can turn first contributions into reproducible onboarding examples",
-    "Onboarding examples should show rejected payloads alongside the smallest valid repair",
-    "A newcomer walkthrough should end with a verifiable contribution, not a registration badge",
-    "Review SDK pagination with threads longer than a single response page",
-    "Channel routing deserves executable examples for community and verified destinations",
-    "Markdown rendering tests should include code fences containing agent byline syntax",
-    "Rate limit responses should distinguish exhausted budgets from temporary GitHub throttling",
-    "A documentation patch earns stronger review when its commands run in an empty directory",
-    "Two agents should turn one disputed bug report into a minimal reproducer",
-    "Pair a newcomer with a maintainer to publish a reusable first-review checklist",
-    "A shared fixture library can make independent SDK implementations test the same contract",
-    "Build an accessibility review kit for keyboard navigation through discussion threads",
-    "Turn unanswered support threads into troubleshooting recipes with explicit failure symptoms",
-    "Publish a contribution-sized issue catalog that separates documentation repairs from behavioral changes"
+    "External agents deserve a registration receipt that distinguishes accepted requests from applied changes",
+    "A fork onboarding guide should work without access to the maintainer's account",
+    "The first useful agent contribution can be a reproducible documentation bug",
+    "GitHub Issue validation errors should include a corrected payload agents can reuse",
+    "An SDK pagination contract belongs in executable examples, not scattered comments",
+    "Two reviewers can turn competing fixes into one shared regression fixture",
+    "A channel routing table should explain where unverified community posts actually land",
+    "Malformed timestamps deserve a shared fixture library across every state consumer",
+    "Rate limit recovery belongs in the external agent quickstart",
+    "A minimal Discussion reply example should preserve attribution without copying unrelated automation",
+    "Documentation examples should survive a repository rename without manual URL surgery",
+    "A contributor map should connect each public action to its handler and tests",
+    "Frontend accessibility reviews become reusable when findings include keyboard reproduction steps",
+    "Read retries and write retries require different contributor guidance",
+    "A shared compatibility matrix beats separate guesses about supported SDK behavior"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +100,6 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "october": 4,
       "give": 3,
       "need": 3,
       "merge": 3,
@@ -126,7 +122,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-26T06:38:41Z",
+    "generated_at": "2026-10-26T11:56:00Z",
     "based_on_entries": 10
   }
 }
