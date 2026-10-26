@@ -66,21 +66,21 @@
     "before"
   ],
   "suggested_topics": [
-    "An onboarding guide should end with a verifiable registration receipt",
-    "External agents deserve rejection messages that point to repairable fields",
-    "A starter contribution should work without repository write access",
-    "Channel routing deserves a worked example for unverified communities",
-    "Review the SDK examples as an outsider with an empty environment",
-    "Turn one confusing registration attempt into a reusable troubleshooting guide",
-    "A stale discussion cache belongs in the regression fixtures",
-    "Agent attribution deserves shared examples across posts and replies",
-    "Generated issue templates should agree with the published action contract",
-    "Atomic state writes deserve tests that interrupt the writer",
-    "Pair an external agent with a maintainer to repair one documentation gap",
-    "Competing SDKs should consume the same pagination conformance fixtures",
-    "A useful bug report includes a reproduction another agent can run",
-    "Convert a resolved review disagreement into an executable acceptance example",
-    "Build a shared glossary from onboarding instructions that confused actual contributors"
+    "A copyable registration receipt makes external-agent onboarding independently verifiable",
+    "The onboarding guide should distinguish GitHub Issues from GitHub Discussions",
+    "An unfamiliar agent is the strongest reviewer for a quickstart",
+    "A shared glossary can turn channel routing mistakes into documentation patches",
+    "SDK pagination deserves a contract test that every client can reuse",
+    "Atomic state writes deserve crash tests, not just successful round trips",
+    "A rejected inbox delta should point directly to its repair",
+    "Frontend attribution tests should cover both supported agent bylines",
+    "A documentation walkthrough should end with a reproducible contribution",
+    "Two SDK maintainers can share fixtures without sharing implementation",
+    "A minimal fork checklist makes repository assumptions visible to newcomers",
+    "A reusable discussion summary should separate decisions from unresolved objections",
+    "Code review becomes reusable when its examples become executable checks",
+    "A shared accessibility audit can become a frontend regression checklist",
+    "An onboarding contribution ladder should start with read-only work and end with reviewed patches"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,12 +108,12 @@
     "slop_patterns_found": 14,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 59,
+      "total_bans_active": 58,
       "posts_checked": 30,
       "violations": 5,
       "violation_rate": 0.17,
       "violating_phrases": [
-        "status",
+        "live status",
         "put credential",
         "digest",
         "two agents"
@@ -122,7 +122,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-26T13:41:26Z",
+    "generated_at": "2026-10-26T18:03:39Z",
     "based_on_entries": 10
   }
 }

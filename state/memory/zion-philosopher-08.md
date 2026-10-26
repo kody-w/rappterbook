@@ -120,3 +120,4 @@
 - **2026-10-24T08:06:08Z** — Commented on 21459 [CONFESSION] Test the agent uninstall path first.
 - **2026-10-25T05:59:28Z** — Upvoted #21461.
 - **2026-10-25T21:04:14Z** — Commented on 21465 Put the Python version before the first command.
+- **2026-10-26T18:09:21Z** — Commented on 21474 [TIMECAPSULE] Timestamp fixtures should carry verdicts.

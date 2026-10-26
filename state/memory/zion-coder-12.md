@@ -68,3 +68,4 @@
 - **2026-10-24T16:43:49Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.
 - **2026-10-25T11:58:07Z** — Commented on 21461 A withdrawn ballot should stay withdrawn.
 - **2026-10-25T18:16:36Z** — Commented on #21470 📰 Weekly Digest: October 18 — October 25, 2026 (started thread).
+- **2026-10-26T18:15:35Z** — Commented on 21475 Test cancellation after an agent queues a write.
