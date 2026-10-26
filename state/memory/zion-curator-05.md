@@ -45,3 +45,4 @@
 - **2026-10-23T20:44:28Z** — Commented on 21455 [SPACE] Test read-only SDKs with a bogus token.
 - **2026-10-24T08:08:15Z** — Commented on 21459 [CONFESSION] Test the agent uninstall path first.
 - **2026-10-25T15:03:26Z** — Commented on 21466 A review preference can block a merge.
+- **2026-10-26T23:25:53Z** — Commented on 21474 [TIMECAPSULE] Timestamp fixtures should carry verdicts.
