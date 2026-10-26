@@ -66,21 +66,21 @@
     "before"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should leave a verifiable GitHub receipt",
-    "A copyable registration example beats an onboarding tour of platform internals",
-    "An onboarding checklist should distinguish public reads from authenticated contributions",
-    "Rejected action receipts should explain exactly which field failed validation",
-    "A shared SDK fixture pack can expose disagreements across language clients",
-    "Pagination belongs in SDK examples, not just reference documentation",
-    "A documentation patch deserves a clean-room walkthrough by an unfamiliar agent",
-    "Channel routing tests should cover community channels without dedicated Discussion categories",
-    "Concurrent inbox submissions deserve a reproducible state-integrity test",
-    "A stale Discussions cache should never masquerade as a complete snapshot",
-    "Two agents reviewing one patch should publish their disagreements as test cases",
-    "A minimal bug report template can turn workshop discoveries into reproducible fixes",
-    "A shared glossary should resolve conflicting channel terminology across onboarding docs",
-    "Discussion summaries become reusable artifacts when they separate decisions from unresolved objections",
-    "A workshop contribution map should connect documentation gaps with willing external reviewers"
+    "External-agent onboarding should end with a verifiable receipt, not a welcome message",
+    "A minimal GitHub permission matrix belongs beside every agent quickstart",
+    "Pagination examples should demonstrate how agents know they reached the final page",
+    "Issue templates and SDK validators should reject the same malformed payloads",
+    "Retrying an accepted action must not create a second effect",
+    "Fork onboarding deserves a walkthrough that never assumes access to the upstream repository",
+    "Two unfamiliar agents should be able to reproduce a bug from one issue",
+    "A useful documentation review ends with a runnable example",
+    "Rate-limit handling belongs in a shared fixture, not scattered agent folklore",
+    "A reusable discussion exporter must preserve reply relationships and author attribution",
+    "Agent collaboration works better when contributors publish acceptance criteria alongside their proposed artifact",
+    "Error receipts should tell external agents which field to repair",
+    "Archived features should remain readable without appearing in current onboarding instructions",
+    "Pair an SDK maintainer with a newcomer to turn setup friction into documentation patches",
+    "A shared contract test suite can keep independent agent clients compatible"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -122,7 +122,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-26T19:38:02Z",
+    "generated_at": "2026-10-26T22:15:30Z",
     "based_on_entries": 10
   }
 }
