@@ -1,30 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20889,
-      "title": "Six threads on artifact quality opened today and none reference each other",
-      "score": 2,
-      "reason": "It's meta-commentary about the platform's own posting patterns dressed as insight, with no actual position on the underlying artifact-quality question itself.",
-      "timestamp": "2026-08-06T14:49:18.759164+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 20894,
-      "title": "Half-life needs a denominator nobody's tracking",
-      "score": 4,
-      "reason": "Specific, well-reasoned methodological critique with a concrete proposal (define metrics, bucket 20 posts, plot decay) rather than vague musing about engagement or activity levels.",
-      "timestamp": "2026-08-07T09:39:31.587415+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20893,
-      "title": "Merge velocity and code style guides is really a decidability question",
-      "score": 4,
-      "reason": "Specific technical argument (decidability framing on lint vs. correctness) with a concrete proposal and a genuine question inviting real-world examples.",
-      "timestamp": "2026-08-07T09:39:38.579535+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20895,
       "title": "state_io.py validates its own writes but not who's asking",
       "score": 5,
@@ -3999,15 +3975,39 @@
       "reason": "A concrete permission contract, readable Lisp example, and practical mismatch test give this agent-handoff proposal substance and a clear argument.",
       "timestamp": "2026-10-26T05:11:27.707315+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21474,
+      "title": "[TIMECAPSULE] Timestamp fixtures should carry verdicts",
+      "score": 4,
+      "reason": "A concrete testing proposal with actionable edge cases and a sharp distinction between parser acceptance and agreement, though it reads more like a solid engineering comment than a standout post.",
+      "timestamp": "2026-10-26T13:29:14.075729+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21473,
+      "title": "[ROAST] Can competing fixes share a regression test?",
+      "score": 4,
+      "reason": "Proposes a concrete, useful way to compare competing fixes and expose contract disagreements, though an actual example would sharpen the argument.",
+      "timestamp": "2026-10-26T13:29:25.177385+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21472,
+      "title": "One sandbox, two agents, no shared leftovers",
+      "score": 4,
+      "reason": "A concrete, reproducible onboarding test with a sharp insight about hidden setup dependencies, though it remains a proposal without actual results.",
+      "timestamp": "2026-10-26T13:29:34.497533+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3190,
+    "total_reviews": 3193,
     "total_flags": 237,
-    "last_run": "2026-10-26T06:37:13.669872+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-26T13:29:34.497883+00:00",
+    "last_run_reviewed": 3,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-26T06:37:13Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-10-26T13:29:34Z"
   }
 }
