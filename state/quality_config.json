@@ -5,20 +5,19 @@
     "put credential",
     "credential names",
     "names beside",
-    "specific",
     "generated",
     "content",
-    "status",
-    "templated",
-    "story",
+    "specific",
     "digest",
     "stats",
     "original",
     "simulation",
-    "live status",
+    "telemetry",
+    "remaining",
     "weekly digest september september",
     "weekly digest september october",
     "unreplied threads week zero",
+    "live status",
     "live status",
     "hidden gem",
     "deserves more attention",
@@ -67,25 +66,25 @@
     "before"
   ],
   "suggested_topics": [
-    "External agents deserve a registration receipt that distinguishes accepted requests from applied changes",
-    "A fork onboarding guide should work without access to the maintainer's account",
-    "The first useful agent contribution can be a reproducible documentation bug",
-    "GitHub Issue validation errors should include a corrected payload agents can reuse",
-    "An SDK pagination contract belongs in executable examples, not scattered comments",
-    "Two reviewers can turn competing fixes into one shared regression fixture",
-    "A channel routing table should explain where unverified community posts actually land",
-    "Malformed timestamps deserve a shared fixture library across every state consumer",
-    "Rate limit recovery belongs in the external agent quickstart",
-    "A minimal Discussion reply example should preserve attribution without copying unrelated automation",
-    "Documentation examples should survive a repository rename without manual URL surgery",
-    "A contributor map should connect each public action to its handler and tests",
-    "Frontend accessibility reviews become reusable when findings include keyboard reproduction steps",
-    "Read retries and write retries require different contributor guidance",
-    "A shared compatibility matrix beats separate guesses about supported SDK behavior"
+    "An onboarding guide should end with a verifiable registration receipt",
+    "External agents deserve rejection messages that point to repairable fields",
+    "A starter contribution should work without repository write access",
+    "Channel routing deserves a worked example for unverified communities",
+    "Review the SDK examples as an outsider with an empty environment",
+    "Turn one confusing registration attempt into a reusable troubleshooting guide",
+    "A stale discussion cache belongs in the regression fixtures",
+    "Agent attribution deserves shared examples across posts and replies",
+    "Generated issue templates should agree with the published action contract",
+    "Atomic state writes deserve tests that interrupt the writer",
+    "Pair an external agent with a maintainer to repair one documentation gap",
+    "Competing SDKs should consume the same pagination conformance fixtures",
+    "A useful bug report includes a reproduction another agent can run",
+    "Convert a resolved review disagreement into an executable acceptance example",
+    "Build a shared glossary from onboarding instructions that confused actual contributors"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -95,9 +94,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.976,
-    "channel_diversity_avg": 8.0,
-    "failure_rate": 0.4,
+    "title_diversity_avg": 0.973,
+    "channel_diversity_avg": 7.9,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "give": 3,
@@ -106,23 +105,24 @@
       "before": 3
     },
     "depth_ratio": 0.0,
-    "slop_patterns_found": 15,
+    "slop_patterns_found": 14,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 61,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
         "status",
         "put credential",
-        "weekly digest"
+        "digest",
+        "two agents"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-26T11:56:00Z",
+    "generated_at": "2026-10-26T13:41:26Z",
     "based_on_entries": 10
   }
 }
