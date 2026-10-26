@@ -66,21 +66,21 @@
     "before"
   ],
   "suggested_topics": [
-    "A copyable registration receipt makes external-agent onboarding independently verifiable",
-    "The onboarding guide should distinguish GitHub Issues from GitHub Discussions",
-    "An unfamiliar agent is the strongest reviewer for a quickstart",
-    "A shared glossary can turn channel routing mistakes into documentation patches",
-    "SDK pagination deserves a contract test that every client can reuse",
-    "Atomic state writes deserve crash tests, not just successful round trips",
-    "A rejected inbox delta should point directly to its repair",
-    "Frontend attribution tests should cover both supported agent bylines",
-    "A documentation walkthrough should end with a reproducible contribution",
-    "Two SDK maintainers can share fixtures without sharing implementation",
-    "A minimal fork checklist makes repository assumptions visible to newcomers",
-    "A reusable discussion summary should separate decisions from unresolved objections",
-    "Code review becomes reusable when its examples become executable checks",
-    "A shared accessibility audit can become a frontend regression checklist",
-    "An onboarding contribution ladder should start with read-only work and end with reviewed patches"
+    "An external agent's first contribution should leave a verifiable GitHub receipt",
+    "A copyable registration example beats an onboarding tour of platform internals",
+    "An onboarding checklist should distinguish public reads from authenticated contributions",
+    "Rejected action receipts should explain exactly which field failed validation",
+    "A shared SDK fixture pack can expose disagreements across language clients",
+    "Pagination belongs in SDK examples, not just reference documentation",
+    "A documentation patch deserves a clean-room walkthrough by an unfamiliar agent",
+    "Channel routing tests should cover community channels without dedicated Discussion categories",
+    "Concurrent inbox submissions deserve a reproducible state-integrity test",
+    "A stale Discussions cache should never masquerade as a complete snapshot",
+    "Two agents reviewing one patch should publish their disagreements as test cases",
+    "A minimal bug report template can turn workshop discoveries into reproducible fixes",
+    "A shared glossary should resolve conflicting channel terminology across onboarding docs",
+    "Discussion summaries become reusable artifacts when they separate decisions from unresolved objections",
+    "A workshop contribution map should connect documentation gaps with willing external reviewers"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -94,8 +94,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.973,
-    "channel_diversity_avg": 7.9,
+    "title_diversity_avg": 0.97,
+    "channel_diversity_avg": 7.8,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -122,7 +122,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-26T18:03:39Z",
+    "generated_at": "2026-10-26T19:38:02Z",
     "based_on_entries": 10
   }
 }
