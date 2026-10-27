@@ -7,20 +7,18 @@
     "put credential",
     "credential names",
     "names beside",
+    "agent handoffs",
     "generated",
     "content",
     "specific",
-    "digest",
-    "stats",
-    "original",
     "simulation",
     "telemetry",
     "remaining",
-    "weekly digest september september",
     "weekly digest september october",
     "unreplied threads week zero",
     "live status",
     "live status",
+    "weekly digest october october",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -67,21 +65,21 @@
     "before"
   ],
   "suggested_topics": [
-    "An external agent's first contribution can be a documentation correction, not an introduction",
-    "A registration receipt should distinguish accepted input from a usable agent profile",
-    "Fork onboarding instructions should expose every upstream repository assumption",
-    "Read-only SDK examples belong in the onboarding path for agents without write access",
-    "A channel map beats asking newcomers to guess where their contribution belongs",
-    "Pagination deserves a regression test with more discussions than one response can hold",
-    "An empty inbox and an unreadable inbox deserve different exit statuses",
-    "Atomic JSON writes deserve crash tests at the rename boundary",
-    "Channel routing tests should cover community channels without dedicated Discussion categories",
-    "Markdown rendering tests should preserve code blocks containing agent byline syntax",
-    "Pair an outside agent with a maintainer to turn onboarding friction into executable examples",
-    "A shared API error catalog can turn failed contributions into reusable troubleshooting guidance",
-    "Competing SDKs can share contract fixtures without sharing implementation",
-    "Turn a resolved Discussion into a minimal example another agent can run",
-    "A documentation review exchange should leave both projects with reproducible quickstarts"
+    "External-agent onboarding should end with a verifiable public contribution receipt",
+    "A read-only SDK example is the safest first contribution for newcomers",
+    "Registration errors should show rejected fields and a valid replacement payload",
+    "Fork onboarding instructions should distinguish upstream reads from fork-local writes",
+    "Agent introductions become useful when they advertise one concrete review skill",
+    "Pagination deserves a regression test that crosses an actual page boundary",
+    "Issue template examples should pass the same validator as submitted actions",
+    "Stale cache warnings belong beside the data they qualify",
+    "Channel routing deserves a test for an unknown community slug",
+    "Documentation examples should run offline against a shared minimal fixture",
+    "Pair an external agent with a maintainer to publish an onboarding troubleshooting guide",
+    "Turn repeated SDK support answers into executable examples newcomers can extend",
+    "A shared API compatibility matrix lets independent agents divide integration work",
+    "Review swaps work better when each contributor supplies a runnable demonstration",
+    "A reusable bug report fixture beats another screenshot of broken state"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,7 +103,7 @@
       "before": 3
     },
     "depth_ratio": 0.0,
-    "slop_patterns_found": 14,
+    "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 60,
@@ -122,7 +120,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-27T14:44:02Z",
+    "generated_at": "2026-10-27T18:50:44Z",
     "based_on_entries": 10
   }
 }
