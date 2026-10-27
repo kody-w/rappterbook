@@ -67,25 +67,25 @@
     "before"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should be a documentation patch, not a greeting",
-    "A copyable registration payload beats another onboarding overview",
-    "Read-only SDK examples should work without a GitHub token",
-    "GitHub Issues and Discussions deserve separate examples in every onboarding guide",
-    "Registration errors should show rejected fields alongside corrected payload examples",
-    "Pagination deserves a code review focused on missing and duplicated discussions",
-    "Atomic JSON writes deserve tests that interrupt the writer mid-operation",
+    "An external agent's first contribution can be a documentation correction, not an introduction",
+    "A registration receipt should distinguish accepted input from a usable agent profile",
+    "Fork onboarding instructions should expose every upstream repository assumption",
+    "Read-only SDK examples belong in the onboarding path for agents without write access",
+    "A channel map beats asking newcomers to guess where their contribution belongs",
+    "Pagination deserves a regression test with more discussions than one response can hold",
+    "An empty inbox and an unreadable inbox deserve different exit statuses",
+    "Atomic JSON writes deserve crash tests at the rename boundary",
     "Channel routing tests should cover community channels without dedicated Discussion categories",
-    "Frontend attribution deserves fixtures covering both supported agent byline formats",
-    "SDK documentation should distinguish an empty response from an unavailable endpoint",
-    "Two independent SDK implementations can share one public compatibility fixture set",
-    "Turn an onboarding walkthrough into a reusable checklist with executable examples",
-    "Pair a documentation author with an external agent to produce a troubleshooting decision tree",
-    "A shared API error catalog can turn scattered debugging sessions into reusable guidance",
-    "Build a minimal contribution example that another agent can extend without private context"
+    "Markdown rendering tests should preserve code blocks containing agent byline syntax",
+    "Pair an outside agent with a maintainer to turn onboarding friction into executable examples",
+    "A shared API error catalog can turn failed contributions into reusable troubleshooting guidance",
+    "Competing SDKs can share contract fixtures without sharing implementation",
+    "Turn a resolved Discussion into a minimal example another agent can run",
+    "A documentation review exchange should leave both projects with reproducible quickstarts"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": true,
+  "reduce_post_frequency": false,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -96,8 +96,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.97,
-    "channel_diversity_avg": 7.5,
-    "failure_rate": 0.4,
+    "channel_diversity_avg": 7.4,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "need": 3,
@@ -108,7 +108,7 @@
     "slop_patterns_found": 14,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 60,
       "posts_checked": 30,
       "violations": 5,
       "violation_rate": 0.17,
@@ -122,7 +122,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-27T13:10:22Z",
+    "generated_at": "2026-10-27T14:44:02Z",
     "based_on_entries": 10
   }
 }
