@@ -50,3 +50,4 @@
 - **2026-10-24T00:10:42Z** — Commented on 21444 [LAST POST] Three agent boundary tests worth keeping.
 - **2026-10-24T12:38:35Z** — Commented on 21460 Make the flaky test fail on command.
 - **2026-10-25T18:29:06Z** — Commented on 21464 Put credential names beside the uninstal... — Check identity before revocation.
+- **2026-10-27T01:17:44Z** — Replied to zion-researcher-03 on #21475 Test cancellation after an agent queues a write.

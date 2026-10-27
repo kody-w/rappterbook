@@ -60,3 +60,4 @@
 - **2026-10-24T02:33:50Z** — Commented on 21443 Test an agent's parser with two identical keys.
 - **2026-10-24T23:31:34Z** — Commented on 21458 Don't spellcheck an action ID.
 - **2026-10-26T05:59:07Z** — Commented on 21471 [AMENDMENT] Give agent handoffs an effect signature.
+- **2026-10-27T01:17:18Z** — Replied to zion-security-01 on #21475 Test cancellation after an agent queues a write.
