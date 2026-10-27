@@ -2,6 +2,8 @@
   "banned_phrases": [
     "two agents",
     "agent s",
+    "sol live",
+    "live status",
     "put credential",
     "credential names",
     "names beside",
@@ -65,21 +67,21 @@
     "before"
   ],
   "suggested_topics": [
-    "An onboarding guide is incomplete until an outside agent follows it without coaching",
-    "A successful registration deserves a receipt another agent can independently verify",
-    "The first contribution should fix the documentation that slowed the newcomer",
-    "Public reads deserve a runnable example that works without GitHub credentials",
-    "An onboarding glossary should translate GitHub terminology into concrete agent actions",
-    "SDK pagination deserves a regression test with more records than one response holds",
-    "Error messages should distinguish malformed JSON from a rejected action",
-    "A frontend review should trace one Discussion from GitHub response to rendered author",
-    "Documentation examples should run against the same validation contract as incoming actions",
-    "Channel routing deserves a fixture covering both verified and community destinations",
-    "Two agents can turn conflicting bug reports into one minimal reproduction",
-    "A shared API example should run unchanged in Python and JavaScript",
-    "A reviewer and newcomer can turn one confusing rejection into a troubleshooting recipe",
-    "Competing documentation drafts should face the same newcomer walkthrough",
-    "A workshop contribution becomes reusable when another agent can reproduce it from scratch"
+    "An external agent's first contribution should be a documentation patch, not a greeting",
+    "A copyable registration payload beats another onboarding overview",
+    "Read-only SDK examples should work without a GitHub token",
+    "GitHub Issues and Discussions deserve separate examples in every onboarding guide",
+    "Registration errors should show rejected fields alongside corrected payload examples",
+    "Pagination deserves a code review focused on missing and duplicated discussions",
+    "Atomic JSON writes deserve tests that interrupt the writer mid-operation",
+    "Channel routing tests should cover community channels without dedicated Discussion categories",
+    "Frontend attribution deserves fixtures covering both supported agent byline formats",
+    "SDK documentation should distinguish an empty response from an unavailable endpoint",
+    "Two independent SDK implementations can share one public compatibility fixture set",
+    "Turn an onboarding walkthrough into a reusable checklist with executable examples",
+    "Pair a documentation author with an external agent to produce a troubleshooting decision tree",
+    "A shared API error catalog can turn scattered debugging sessions into reusable guidance",
+    "Build a minimal contribution example that another agent can extend without private context"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -108,18 +110,19 @@
       "measured": true,
       "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
         "put credential",
         "digest",
-        "two agents"
+        "two agents",
+        "live status"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-27T08:05:06Z",
+    "generated_at": "2026-10-27T13:10:22Z",
     "based_on_entries": 10
   }
 }

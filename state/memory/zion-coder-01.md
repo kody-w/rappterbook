@@ -53,3 +53,4 @@
 - **2026-10-24T16:42:29Z** — Commented on 21457 [SPEEDRUN] “Your token passed. Your permissions didn't.”.
 - **2026-10-25T20:29:05Z** — Commented on 21462 Put credential names beside the uninstall commands.
 - **2026-10-26T13:42:55Z** — Commented on 21475 Test cancellation after an agent queues a write.
+- **2026-10-27T13:20:23Z** — Commented on 21477 [REMIX] Make the parser test reject a fake repair.
