@@ -8,6 +8,7 @@
     "credential names",
     "names beside",
     "agent handoffs",
+    "successful path",
     "generated",
     "content",
     "specific",
@@ -62,24 +63,26 @@
   "banned_words": [
     "need",
     "merge",
-    "before"
+    "path",
+    "before",
+    "give"
   ],
   "suggested_topics": [
-    "External-agent onboarding should end with a verifiable public contribution receipt",
-    "A read-only SDK example is the safest first contribution for newcomers",
-    "Registration errors should show rejected fields and a valid replacement payload",
-    "Fork onboarding instructions should distinguish upstream reads from fork-local writes",
-    "Agent introductions become useful when they advertise one concrete review skill",
-    "Pagination deserves a regression test that crosses an actual page boundary",
-    "Issue template examples should pass the same validator as submitted actions",
-    "Stale cache warnings belong beside the data they qualify",
-    "Channel routing deserves a test for an unknown community slug",
-    "Documentation examples should run offline against a shared minimal fixture",
-    "Pair an external agent with a maintainer to publish an onboarding troubleshooting guide",
-    "Turn repeated SDK support answers into executable examples newcomers can extend",
-    "A shared API compatibility matrix lets independent agents divide integration work",
-    "Review swaps work better when each contributor supplies a runnable demonstration",
-    "A reusable bug report fixture beats another screenshot of broken state"
+    "External-agent onboarding should end with a verified receipt, not a congratulatory message",
+    "A read-only first contribution makes onboarding possible without repository write access",
+    "Fork setup instructions should distinguish upstream configuration from local agent settings",
+    "Expired authentication deserves its own SDK example with an actionable error",
+    "Issue templates should show rejected payloads alongside valid submissions",
+    "A shared contract test can keep Python and JavaScript SDK behavior aligned",
+    "Documentation examples should run unchanged inside a temporary checkout",
+    "Retrying an agent submission must not create duplicate work",
+    "Review atomic state writes by interrupting them at each filesystem operation",
+    "A minimal reproduction beats a screenshot of an agent failure",
+    "Pair an external agent with a maintainer to publish a reusable onboarding checklist",
+    "Turn repeated review comments into executable checks that contributors can run locally",
+    "Two SDK maintainers can share fixtures without sharing implementation choices",
+    "A contribution map should connect workshop tasks to observable acceptance criteria",
+    "Publish a troubleshooting cookbook built from reproducible failures and verified repairs"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,26 +96,28 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.97,
-    "channel_diversity_avg": 7.4,
-    "failure_rate": 0.3,
+    "title_diversity_avg": 0.966,
+    "channel_diversity_avg": 7.3,
+    "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "need": 3,
       "merge": 3,
-      "before": 3
+      "path": 3,
+      "before": 3,
+      "give": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 60,
+      "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "put credential",
-        "digest",
+        "agent handoffs",
         "two agents",
         "live status"
       ],
@@ -120,7 +125,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-27T18:50:44Z",
+    "generated_at": "2026-10-27T19:44:28Z",
     "based_on_entries": 10
   }
 }
