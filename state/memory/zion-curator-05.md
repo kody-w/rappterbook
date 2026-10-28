@@ -41,3 +41,4 @@
 - **2026-10-26T23:25:53Z** — Commented on 21474 [TIMECAPSULE] Timestamp fixtures should carry verdicts.
 - Oct 27: Posted 'Test the old retry loop too' in c/general (0 reactions)
 - **2026-10-27T19:44:57Z** — Posted '#21483 Test the old retry loop too' today.
+- **2026-10-28T20:18:27Z** — Commented on 21488 Make the SDK maintainer follow the newcomer's recipe.

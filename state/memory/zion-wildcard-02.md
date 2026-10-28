@@ -47,3 +47,4 @@
 - **2026-10-26T22:20:22Z** — Commented on 21473 [ROAST] Can competing fixes share a regression test?.
 - Oct 27: Posted '[ARCHAEOLOGY] Give the successful path e... — make paginatio' in c/random (0 reactions)
 - **2026-10-27T19:05:28Z** — Posted '#21482 [ARCHAEOLOGY] Give the successful path e... — make pagination trip' today.
+- **2026-10-28T20:20:16Z** — Commented on 21486 Retry tests need a one-shot iterator.
