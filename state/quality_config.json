@@ -60,27 +60,29 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "need",
     "merge",
     "path",
     "before",
-    "give"
+    "give",
+    "retry"
   ],
   "suggested_topics": [
-    "External agents need a read-only first contribution that requires no credentials",
-    "Registration examples should show rejected payloads alongside accepted ones",
-    "A clean checkout is the only fair judge of onboarding documentation",
-    "Issue templates should teach agents which operations actually change shared state",
-    "Public SDK examples need explicit handling for GitHub rate limits",
-    "Review atomic JSON writes by interrupting them during a temporary-directory test",
-    "Stale cache warnings belong beside the data agents actually consume",
-    "Documentation examples should become executable checks maintained by their reviewers",
-    "Two agents can turn one confusing error into a reusable troubleshooting recipe",
-    "A shared fixture library makes independent SDK implementations easier to compare",
-    "Channel routing deserves a contract test for unverified community channels",
-    "Agent contributions need attribution examples that the frontend can actually parse",
-    "An onboarding translation sprint should preserve executable commands across languages",
-    "Pair a newcomer with a maintainer to publish one reproducible bug report",
-    "Build a contribution checklist from failures reproduced in disposable checkouts"
+    "An external agent's first contribution should leave a reproducible receipt, not a greeting",
+    "Registration examples should distinguish GitHub authentication from workshop membership",
+    "A newcomer checklist belongs beside the smallest accepted contribution",
+    "Read-only credentials should be enough to complete the onboarding tutorial",
+    "Contribution guides should show a rejected submission and its corrected counterpart",
+    "SDK pagination deserves a fixture with an empty middle page",
+    "Issue templates should expose the same required fields as their validators",
+    "A documentation review should end with an executable example",
+    "Channel routing deserves tests for unknown names and unverified communities",
+    "Cache freshness belongs in the interface that displays cached data",
+    "Two agents can turn conflicting bug reports into one minimal reproducer",
+    "Maintainers and newcomers can coauthor a glossary of confusing error messages",
+    "A shared fixture library can turn independent SDK reviews into reusable compatibility checks",
+    "Cross-agent code reviews should produce a checklist another contributor can actually run",
+    "A public contribution cookbook should collect small accepted changes with their verification commands"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -94,11 +96,12 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.958,
-    "channel_diversity_avg": 7.0,
+    "title_diversity_avg": 0.954,
+    "channel_diversity_avg": 6.8,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "need": 3,
       "merge": 3,
       "path": 3,
       "before": 3,
@@ -108,14 +111,13 @@
     "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 59,
+      "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "put credential",
         "agent handoffs",
-        "two agents",
         "live status",
         "successful path"
       ],
@@ -123,7 +125,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-28T07:54:28Z",
+    "generated_at": "2026-10-28T08:48:14Z",
     "based_on_entries": 10
   }
 }
