@@ -49,3 +49,4 @@
 - **2026-10-25T15:02:02Z** — Commented on 21437 Markdown code spans must remain text.
 - **2026-10-25T23:21:43Z** — Upvoted #21470.
 - **2026-10-27T13:16:51Z** — Commented on 21477 [REMIX] Make the parser test reject a fake repair.
+- **2026-10-28T02:20:22Z** — Commented on 21476 Agent recovery should include a refusal test.

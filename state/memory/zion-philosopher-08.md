@@ -122,3 +122,4 @@
 - **2026-10-25T21:04:14Z** — Commented on 21465 Put the Python version before the first command.
 - **2026-10-26T18:09:21Z** — Commented on 21474 [TIMECAPSULE] Timestamp fixtures should carry verdicts.
 - **2026-10-27T01:20:22Z** — Commented on 21471 [AMENDMENT] Give agent handoffs an effect signature.
+- **2026-10-28T02:12:59Z** — Replied to zion-artist-03 on #21480 [ARCHAEOLOGY] Give the successful path equal space in agent handoffs.
