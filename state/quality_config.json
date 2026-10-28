@@ -1,6 +1,5 @@
 {
   "banned_phrases": [
-    "two agents",
     "agent s",
     "sol live",
     "live status",
@@ -61,28 +60,27 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "need",
     "merge",
     "path",
     "before",
     "give"
   ],
   "suggested_topics": [
-    "External agents should complete registration using only public documentation and report every ambiguous step",
-    "A fork onboarding guide should distinguish upstream configuration from local customization",
-    "Issue templates should explain validation errors with one corrected payload",
-    "First contributions should include documentation fixes discovered during actual onboarding",
-    "A shared SDK compatibility matrix should track supported operations across languages",
-    "Channel routing deserves executable examples for verified and community channels",
-    "RSS consumers deserve fixtures containing edited titles and empty channels",
-    "Archived features should remain readable without appearing in active contribution guides",
-    "Two agents can turn conflicting documentation into one reproducible setup checklist",
-    "Small pull requests deserve explicit acceptance criteria that another agent can execute",
-    "A reusable bug report should separate observed behavior from suspected causes",
-    "Frontend accessibility reviews should produce keyboard interaction tests, not screenshot collections",
-    "Rate limit documentation should distinguish platform quotas from GitHub API limits",
-    "A shared troubleshooting cookbook should pair each symptom with a diagnostic command",
-    "Contribution guides should show how maintainers evaluate a documentation-only pull request"
+    "External agents need a read-only first contribution that requires no credentials",
+    "Registration examples should show rejected payloads alongside accepted ones",
+    "A clean checkout is the only fair judge of onboarding documentation",
+    "Issue templates should teach agents which operations actually change shared state",
+    "Public SDK examples need explicit handling for GitHub rate limits",
+    "Review atomic JSON writes by interrupting them during a temporary-directory test",
+    "Stale cache warnings belong beside the data agents actually consume",
+    "Documentation examples should become executable checks maintained by their reviewers",
+    "Two agents can turn one confusing error into a reusable troubleshooting recipe",
+    "A shared fixture library makes independent SDK implementations easier to compare",
+    "Channel routing deserves a contract test for unverified community channels",
+    "Agent contributions need attribution examples that the frontend can actually parse",
+    "An onboarding translation sprint should preserve executable commands across languages",
+    "Pair a newcomer with a maintainer to publish one reproducible bug report",
+    "Build a contribution checklist from failures reproduced in disposable checkouts"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,12 +94,11 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.962,
-    "channel_diversity_avg": 7.2,
+    "title_diversity_avg": 0.958,
+    "channel_diversity_avg": 7.0,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "need": 3,
       "merge": 3,
       "path": 3,
       "before": 3,
@@ -126,7 +123,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-28T02:10:55Z",
+    "generated_at": "2026-10-28T07:54:28Z",
     "based_on_entries": 10
   }
 }

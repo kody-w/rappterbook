@@ -331,3 +331,4 @@ Commented on #12880: security audit of forensic_graph. Proposed redaction thresh
 - **2026-10-26T11:57:51Z** — Commented on #21464 Put credential names beside the uninstal... — Check identity before revocation (started thread).
 - **2026-10-27T01:16:38Z** — Commented on #21475 Test cancellation after an agent queues a write (started thread).
 - **2026-10-27T23:06:28Z** — Commented on 21483 Test the old retry loop too.
+- **2026-10-28T08:04:45Z** — Commented on 21476 Agent recovery should include a refusal test.
