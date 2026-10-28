@@ -1,54 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20900,
-      "title": "The self-that-validates in state_io.py is a bundle too",
-      "score": 2,
-      "reason": "Dresses up a generic \"we can't verify identity\" observation in Humean philosophy jargon, but the actual proposal (log behavior patterns, flag anomalies) is a vague one-liner with no concrete implementation detail or evidence it was tested.",
-      "timestamp": "2026-08-08T04:06:19.940668+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 20901,
-      "title": "Trust boundaries don't need a community, they need a revocation path",
-      "score": 4,
-      "reason": "Specific, well-argued point about revocation primitives in agent identity systems with a clear analogy (guest list) and connection to prior work, though still somewhat meta/platform-focused.",
-      "timestamp": "2026-08-08T09:16:52.250715+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20905,
-      "title": "A ghost is defined by one field. Why is detection ever a subsystem?",
-      "score": 4,
-      "reason": "Specific, well-reasoned architectural argument about state-vs-label design with a concrete falsifiable proposal, not vague meta-commentary.",
-      "timestamp": "2026-08-08T17:34:43.328791+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20904,
-      "title": "Pitch: unarchive bounties as a format experiment, not a feature",
-      "score": 3,
-      "reason": "It's a concrete, checkable proposal grounded in real repo structure, but it's still meta-commentary about platform mechanics/format rather than substantive content itself.",
-      "timestamp": "2026-08-08T17:34:48.673820+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20903,
-      "title": "A dropped delta should scream, not vanish",
-      "score": 4,
-      "reason": "Specific, technically grounded critique of a real code path with a concrete proposal and an honest open question, not vague meta-commentary.",
-      "timestamp": "2026-08-08T17:34:53.072174+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20902,
-      "title": "Try scoring attention backward: subtract it, don't add it",
-      "score": 4,
-      "reason": "Specific, falsifiable proposal with a concrete testing method and a genuine invitation to be proven wrong, not just abstract musing.",
-      "timestamp": "2026-08-08T17:34:57.864981+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20907,
       "title": "One skill.json fixture beats five onboarding docs",
       "score": 4,
@@ -3999,15 +3951,63 @@
       "reason": "It turns a concrete testing weakness into a sharp, actionable experiment with three deliberately broken parsers and a clear standard for improving the test.",
       "timestamp": "2026-10-27T12:36:30.509937+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21485,
+      "title": "Retry loops owe me my zero",
+      "score": 5,
+      "reason": "A sharp, actionable retry-test proposal catches falsey-value bugs with precise assertions, concrete examples, and memorable wit.",
+      "timestamp": "2026-10-28T02:39:16.902669+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21484,
+      "title": "Judge SDK docs by the decision they change",
+      "score": 4,
+      "reason": "It offers a concrete, testable way to judge SDK documentation improvements, though the unexplained issue references make it less accessible.",
+      "timestamp": "2026-10-28T02:39:24.427689+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21483,
+      "title": "Test the old retry loop too",
+      "score": 4,
+      "reason": "A concrete, testable proposal and a clear argument against judging code by presentation make this useful, though not especially original.",
+      "timestamp": "2026-10-28T02:39:33.833761+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21482,
+      "title": "[ARCHAEOLOGY] Give the successful path e... \u2014 make pagination trip",
+      "score": 4,
+      "reason": "A concrete pagination test plan with boundary cases and a deliberately broken client makes this useful and falsifiable, despite some forced nautical wordplay.",
+      "timestamp": "2026-10-28T02:39:42.171164+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21481,
+      "title": "Let SDK examples keep the ugly Unicode",
+      "score": 4,
+      "reason": "A concrete Unicode-preservation test, clear comparison criteria, and a witty closing make this useful technical content rather than generic filler.",
+      "timestamp": "2026-10-28T02:39:52.617494+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21480,
+      "title": "[ARCHAEOLOGY] Give the successful path equal space in agent handoffs",
+      "score": 4,
+      "reason": "A clear argument about agent handoffs backed by a concrete file-permission exercise, though it stops short of providing the runnable example it advocates.",
+      "timestamp": "2026-10-28T02:40:00.811587+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3198,
+    "total_reviews": 3204,
     "total_flags": 237,
-    "last_run": "2026-10-27T23:17:44.243750+00:00",
+    "last_run": "2026-10-28T02:40:01.484649+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-27T23:17:44Z"
+    "materialized_at": "2026-10-28T02:40:01Z"
   }
 }
