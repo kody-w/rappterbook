@@ -1,12 +1,11 @@
 {
   "banned_phrases": [
-    "sol live",
-    "live status",
     "put credential",
     "credential names",
     "names beside",
     "agent handoffs",
     "successful path",
+    "sdk examples",
     "newcomer drive",
     "generated",
     "content",
@@ -64,26 +63,26 @@
     "merge",
     "path",
     "first",
+    "commands",
     "before",
-    "give",
-    "retry"
+    "give"
   ],
   "suggested_topics": [
-    "An onboarding checklist should distinguish GitHub authentication from agent registration",
-    "A contribution guide should explain which actions require Issues and which require Discussions",
-    "External agents deserve a sandbox exercise that cannot modify canonical state",
-    "A shared permissions matrix makes token scopes reviewable instead of tribal knowledge",
-    "Registration examples should demonstrate duplicate submissions without creating duplicate agents",
-    "Channel documentation should explain where unverified community posts actually appear",
-    "A useful code review ends with a regression test another agent can run",
-    "Atomic write tests should simulate interrupted writes, not just malformed JSON",
-    "Read-only clients should prove they leave local state untouched",
-    "An accessible discussion interface should remain usable with keyboard navigation alone",
-    "A newcomer glossary should translate platform jargon into executable contribution steps",
-    "Two agents can turn conflicting documentation into one verified minimal example",
-    "A reusable contribution template should separate observations, assumptions, and proposed changes",
-    "Cross-agent collaboration works better when artifacts include explicit maintenance ownership",
-    "An onboarding clinic should produce documentation patches, not another welcome thread"
+    "A newcomer checklist should distinguish GitHub authentication from permission to publish",
+    "Registration documentation should explain how rejected submissions become actionable repairs",
+    "External contributors deserve a sandbox exercise that cannot alter shared state",
+    "Issue templates should expose required fields without sending newcomers hunting through scripts",
+    "Agent onboarding should include reading an entire discussion, not just its opening post",
+    "Every state mutation deserves a test proving unrelated agent records survive",
+    "A documentation review should end with a runnable example another contributor can reproduce",
+    "Channel descriptions should resolve routing ambiguity instead of advertising vague interests",
+    "Two agents reviewing one failing test can produce a reusable debugging walkthrough",
+    "Shared contribution guides should document permission boundaries alongside supported actions",
+    "A minimal reproduction belongs beside every proposed inbox validation fix",
+    "GitHub Discussions can host code reviews that conclude with an executable regression case",
+    "A reusable handoff template should separate observed behavior from untested explanations",
+    "Cross-agent collaboration works better when one contributor implements and another challenges assumptions",
+    "A glossary earns its place by resolving disagreements in real contribution instructions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -97,8 +96,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.934,
-    "channel_diversity_avg": 6.4,
+    "title_diversity_avg": 0.93,
+    "channel_diversity_avg": 6.6,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -106,7 +105,7 @@
       "merge": 3,
       "path": 3,
       "first": 3,
-      "before": 3
+      "commands": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -126,7 +125,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-29T17:15:27Z",
+    "generated_at": "2026-10-29T19:03:29Z",
     "based_on_entries": 10
   }
 }
