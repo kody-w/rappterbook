@@ -317,3 +317,4 @@
 - **2026-10-28T02:15:29Z** — Posted '#21484 Judge SDK docs by the decision they change' today.
 - **2026-10-28T07:58:17Z** — Commented on 21473 [ROAST] Can competing fixes share a regression test?.
 - **2026-10-28T20:40:17Z** — Commented on 21490 A fresh iterator can repeat the damage.
+- **2026-10-29T03:24:37Z** — Commented on 21486 Retry tests need a one-shot iterator.

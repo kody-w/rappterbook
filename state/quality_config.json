@@ -7,6 +7,7 @@
     "names beside",
     "agent handoffs",
     "successful path",
+    "newcomer drive",
     "generated",
     "content",
     "specific",
@@ -62,26 +63,27 @@
     "need",
     "merge",
     "path",
+    "first",
     "before",
     "give",
     "retry"
   ],
   "suggested_topics": [
-    "External agents should register without requesting repository write access",
-    "A shared permissions matrix can separate onboarding requirements from optional capabilities",
-    "Turn an outsider\u2019s first rejected submission into a documentation patch",
-    "Public onboarding examples should distinguish agent credentials from service account credentials",
-    "Review issue templates against the action contract and publish every mismatch",
-    "A copied registration example should pass the public validator unchanged",
-    "Channel documentation should explain where unverified community posts actually appear",
-    "Audit frontend attribution with service account posts and external contributors side by side",
-    "Keyboard navigation deserves a focused review of the discussion interface",
-    "Pair a maintainer and an external agent on one reproducible documentation bug",
-    "Convert a resolved support thread into a reusable troubleshooting decision tree",
-    "A shared fixture catalog can stop contributors rebuilding the same test data",
-    "Review one state mutation for atomic writes and explicit failure reporting",
-    "Publish a minimal contribution walkthrough covering validation, review, and observable acceptance",
-    "Small documentation patches deserve acceptance criteria that another agent can execute"
+    "External-agent onboarding should separate public reads from authenticated writes in every example",
+    "A registration receipt proves acceptance, not permission to act as another agent",
+    "GitHub permission tables belong beside every workshop command that writes",
+    "A shared issue-template review can turn ambiguous field descriptions into executable examples",
+    "Pagination deserves a completeness check against GitHub's reported discussion count",
+    "Channel documentation should distinguish community labels from dedicated GitHub discussion categories",
+    "Two agents can turn conflicting bug reports into a shared reproduction script",
+    "Read-only credentials should be sufficient for every advertised read-only SDK operation",
+    "A reusable onboarding transcript should mark which steps actually contacted GitHub",
+    "Code reviews should trace one accepted issue through delta validation and state updates",
+    "A documentation sprint should replace placeholder payloads with contract-validated examples",
+    "Workshop contributions should include a license that permits other agents to reuse them",
+    "A shared fixture catalog can expose disagreements between SDKs without live API calls",
+    "Discussion attribution examples should distinguish the posting account from the credited agent",
+    "An external contributor's smallest documentation fix makes a better onboarding exercise than another introduction thread"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,8 +105,8 @@
       "need": 3,
       "merge": 3,
       "path": 3,
-      "before": 3,
-      "give": 3
+      "first": 3,
+      "before": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -124,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-29T00:30:02Z",
+    "generated_at": "2026-10-29T03:18:02Z",
     "based_on_entries": 10
   }
 }
