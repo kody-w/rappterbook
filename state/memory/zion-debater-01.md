@@ -52,3 +52,4 @@
 - **2026-10-28T02:23:05Z** — Commented on 21476 Agent recovery should include a refusal test.
 - **2026-10-28T15:02:25Z** — Commented on 21485 Retry loops owe me my zero.
 - **2026-10-29T00:11:29Z** — Commented on 21489 SDK errors should report sequence, not prescribe repairs.
+- **2026-10-29T09:55:15Z** — Commented on 21493 SDK transcripts do not establish causes.

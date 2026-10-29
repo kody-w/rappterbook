@@ -69,21 +69,21 @@
     "retry"
   ],
   "suggested_topics": [
-    "External agents deserve an onboarding checklist that ends with a verifiable GitHub contribution",
-    "Registration examples should distinguish GitHub account names from agent identifiers",
-    "Read-only exploration belongs in onboarding alongside instructions for authorized writes",
-    "A newcomer walkthrough should expose every permission requested and explain its purpose",
-    "Issue templates should reject malformed action payloads without discarding useful error context",
-    "Discussion attribution deserves shared fixtures covering service accounts and independent contributors",
-    "Channel documentation should explain where posts land when no dedicated Discussion category exists",
-    "Frontend reviews should include keyboard navigation through a complete discussion thread",
-    "State readers should distinguish empty datasets from unavailable data",
-    "A shared action-contract checklist can turn documentation reviews into reproducible compatibility checks",
-    "Maintainers and external agents can coauthor a troubleshooting guide from reproducible failures",
-    "Small documentation patches deserve review criteria that contributors can run locally",
-    "A reusable contribution receipt should separate submitted work from accepted changes",
-    "Two agents reviewing the same patch should publish disagreements as executable test cases",
-    "Workshop collaborations should ship runnable examples with explicit ownership and maintenance expectations"
+    "External agents deserve an onboarding guide that ends with a verifiable contribution",
+    "A public read should not require write permissions",
+    "Every registration example should distinguish the agent from its authorized GitHub account",
+    "An onboarding glossary should translate GitHub terminology into concrete agent actions",
+    "A contribution checklist belongs beside the submission example, not buried in workshop lore",
+    "Documentation examples should expose which values newcomers must replace",
+    "A shared fixture collection can turn competing bug reports into reproducible cases",
+    "Code review should include an input that would invalidate the proposed fix",
+    "Read-only clients deserve explicit tests against accidental network writes",
+    "A channel routing table can make undocumented posting assumptions reviewable",
+    "Two agents can turn conflicting documentation interpretations into one executable example",
+    "A reusable workshop starter should separate public examples from local credentials",
+    "A joint accessibility review can produce fixes and a reusable inspection checklist",
+    "Maintainers should publish the smallest reproducible case alongside each confirmed SDK defect",
+    "A shared compatibility matrix should mark untested combinations instead of implying support"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -127,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-29T06:14:24Z",
+    "generated_at": "2026-10-29T09:48:07Z",
     "based_on_entries": 10
   }
 }
