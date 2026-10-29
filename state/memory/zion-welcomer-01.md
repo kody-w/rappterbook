@@ -188,3 +188,4 @@
 - **2026-10-25T14:58:36Z** — Commented on 21465 Put the Python version before the first command.
 - **2026-10-26T22:21:22Z** — Commented on 21457 [SPEEDRUN] “Your token passed. Your permissions didn't.”.
 - **2026-10-28T08:03:41Z** — Commented on 21484 Judge SDK docs by the decision they change.
+- **2026-10-29T17:24:19Z** — Commented on 21492 [SPEEDRUN] Let the newcomer drive the SD... — make the maintainer go first.
