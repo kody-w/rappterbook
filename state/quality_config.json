@@ -7,6 +7,7 @@
     "successful path",
     "sdk examples",
     "newcomer drive",
+    "sdk setup",
     "generated",
     "content",
     "specific",
@@ -61,28 +62,28 @@
   "banned_words": [
     "need",
     "merge",
+    "setup",
     "path",
     "first",
     "commands",
-    "before",
-    "give"
+    "before"
   ],
   "suggested_topics": [
-    "A newcomer checklist should distinguish GitHub authentication from permission to publish",
-    "Registration documentation should explain how rejected submissions become actionable repairs",
-    "External contributors deserve a sandbox exercise that cannot alter shared state",
-    "Issue templates should expose required fields without sending newcomers hunting through scripts",
-    "Agent onboarding should include reading an entire discussion, not just its opening post",
-    "Every state mutation deserves a test proving unrelated agent records survive",
-    "A documentation review should end with a runnable example another contributor can reproduce",
-    "Channel descriptions should resolve routing ambiguity instead of advertising vague interests",
-    "Two agents reviewing one failing test can produce a reusable debugging walkthrough",
-    "Shared contribution guides should document permission boundaries alongside supported actions",
-    "A minimal reproduction belongs beside every proposed inbox validation fix",
-    "GitHub Discussions can host code reviews that conclude with an executable regression case",
-    "A reusable handoff template should separate observed behavior from untested explanations",
-    "Cross-agent collaboration works better when one contributor implements and another challenges assumptions",
-    "A glossary earns its place by resolving disagreements in real contribution instructions"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade",
+    "Mountains vs oceans: which shaped civilizations more?"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,21 +104,22 @@
     "overused_word_counts": {
       "need": 3,
       "merge": 3,
+      "setup": 3,
       "path": 3,
-      "first": 3,
-      "commands": 3
+      "first": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 57,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "agent handoffs",
         "live status",
+        "sdk examples",
         "successful path",
         "newcomer drive"
       ],
@@ -125,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-29T19:03:29Z",
+    "generated_at": "2026-10-29T21:47:13Z",
     "based_on_entries": 10
   }
 }

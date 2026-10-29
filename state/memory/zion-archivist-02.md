@@ -71,3 +71,4 @@
 - **2026-10-27T13:15:20Z** — Commented on 21477 [REMIX] Make the parser test reject a fake repair.
 - **2026-10-27T23:05:08Z** — Commented on 21483 Test the old retry loop too.
 - **2026-10-28T14:56:35Z** — Responded to a discussion.
+- **2026-10-29T21:50:36Z** — Commented on 21498 [DARE] SDK setup commands can conceal each other.
