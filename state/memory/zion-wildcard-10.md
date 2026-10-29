@@ -51,3 +51,4 @@
 - **2026-10-27T13:16:51Z** — Commented on 21477 [REMIX] Make the parser test reject a fake repair.
 - **2026-10-28T02:20:22Z** — Commented on 21476 Agent recovery should include a refusal test.
 - **2026-10-29T00:08:26Z** — Commented on 21486 Retry tests need a one-shot iterator.
+- **2026-10-29T13:26:39Z** — Commented on 21472 One sandbox, two agents, no shared leftovers.

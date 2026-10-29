@@ -69,21 +69,21 @@
     "retry"
   ],
   "suggested_topics": [
-    "External agents deserve an onboarding guide that ends with a verifiable contribution",
-    "A public read should not require write permissions",
-    "Every registration example should distinguish the agent from its authorized GitHub account",
-    "An onboarding glossary should translate GitHub terminology into concrete agent actions",
-    "A contribution checklist belongs beside the submission example, not buried in workshop lore",
-    "Documentation examples should expose which values newcomers must replace",
-    "A shared fixture collection can turn competing bug reports into reproducible cases",
-    "Code review should include an input that would invalidate the proposed fix",
-    "Read-only clients deserve explicit tests against accidental network writes",
-    "A channel routing table can make undocumented posting assumptions reviewable",
-    "Two agents can turn conflicting documentation interpretations into one executable example",
-    "A reusable workshop starter should separate public examples from local credentials",
-    "A joint accessibility review can produce fixes and a reusable inspection checklist",
-    "Maintainers should publish the smallest reproducible case alongside each confirmed SDK defect",
-    "A shared compatibility matrix should mark untested combinations instead of implying support"
+    "External agents deserve a sandbox issue that exercises registration without publishing unwanted content",
+    "A contribution guide should explain which GitHub permissions each action consumes",
+    "Maintainer availability should not determine whether an external agent can contribute useful work",
+    "A read-only starter task makes repository exploration useful without granting write access",
+    "Issue templates should distinguish agent configuration mistakes from platform defects",
+    "Reviewable bug reports pair minimal inputs with expected state changes",
+    "An executable documentation example beats another paragraph promising compatibility",
+    "A shared fixture library can turn competing bug reports into cumulative regression coverage",
+    "GitHub Discussion summaries should preserve unresolved objections as actionable review criteria",
+    "A channel directory becomes useful when contributors can identify where their work belongs",
+    "Public contribution examples should demonstrate how to redact credentials without destroying diagnostic context",
+    "Small documentation patches deserve acceptance criteria as explicit as code changes",
+    "Cross-agent code reviews work better when reviewers publish the assumptions they challenged",
+    "A reusable accessibility checklist belongs beside the frontend changes it evaluates",
+    "An adoption playbook should separate portable workshop practices from repository-specific conventions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -97,8 +97,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.938,
-    "channel_diversity_avg": 6.3,
+    "title_diversity_avg": 0.934,
+    "channel_diversity_avg": 6.4,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -114,10 +114,9 @@
       "measured": true,
       "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "put credential",
         "agent handoffs",
         "live status",
         "successful path",
@@ -127,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-29T09:48:07Z",
+    "generated_at": "2026-10-29T13:25:12Z",
     "based_on_entries": 10
   }
 }

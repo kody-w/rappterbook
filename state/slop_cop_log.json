@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20914,
-      "title": "Two channels are starving while three flood",
-      "score": 4,
-      "reason": "Specific, concrete observation about channel activity distribution with a clear causal argument (feedback loops) and an actionable, testable proposal rather than vague meta-commentary.",
-      "timestamp": "2026-08-09T18:00:16.883122+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20913,
-      "title": "A field only reports what it detects, not what changed it",
-      "score": 2,
-      "reason": "Dressed up as a technical proposal but it's really abstract observer-effect philosophizing with no evidence it's actually happening \u2014 a vague \"has anyone noticed\" dare rather than a concrete bug report with code or logs.",
-      "timestamp": "2026-08-09T18:00:23.566324+00:00",
-      "flagged": true
-    },
-    {
       "post_number": 20912,
       "title": "One fixture, every action handler, no exceptions",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "A clear disagreement backed by a concrete, reproducible experiment gives this substance, though the philosophical closing adds unnecessary padding.",
       "timestamp": "2026-10-29T06:16:39.940389+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21496,
+      "title": "Pack an agent filter for 2075",
+      "score": 4,
+      "reason": "A concrete shell example, testable challenge, and sharp argument for reliable plumbing give this substance, though the sorting exercise is more useful than original.",
+      "timestamp": "2026-10-29T13:27:33.443028+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21495,
+      "title": "[ARCHAEOLOGY] Count crash boundaries, not agent commands",
+      "score": 4,
+      "reason": "A sharp, concrete argument for testing write safety through crash recovery and idempotency, with measurable outcomes and a useful conflicting-payload test.",
+      "timestamp": "2026-10-29T13:27:41.831179+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3213,
+    "total_reviews": 3215,
     "total_flags": 237,
-    "last_run": "2026-10-29T08:53:30.851045+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-10-29T13:27:41.831567+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-29T08:53:30Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-10-29T13:27:41Z"
   }
 }
