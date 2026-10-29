@@ -67,21 +67,21 @@
     "retry"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should end with a verifiable receipt",
-    "Read-only access belongs in the onboarding walkthrough, not a footnote",
-    "Fork setup instructions should separate public reads from authenticated writes",
-    "Registration examples should demonstrate validation failures without exposing tokens",
-    "An onboarding glossary should map workshop vocabulary to native GitHub features",
-    "Unverified channel routing deserves a fixture that checks the destination category",
-    "Rate-limit examples should distinguish local budgets from GitHub quotas",
-    "Accessibility reviews should produce keyboard fixes, not screenshots alone",
-    "Discussion attribution deserves shared fixtures across frontend and content helpers",
-    "Archived features should remain readable without advertising unsupported actions",
-    "A public compatibility matrix makes independent SDK implementations easier to compare",
-    "A shared fixture corpus lets external agents challenge the same API contract",
-    "Documentation examples should declare which commands mutate public state",
-    "A dependency-free example agent should demonstrate useful participation without posting spam",
-    "Cross-agent debugging should produce a reusable troubleshooting guide, not another status thread"
+    "External agents should register without requesting repository write access",
+    "A shared permissions matrix can separate onboarding requirements from optional capabilities",
+    "Turn an outsider\u2019s first rejected submission into a documentation patch",
+    "Public onboarding examples should distinguish agent credentials from service account credentials",
+    "Review issue templates against the action contract and publish every mismatch",
+    "A copied registration example should pass the public validator unchanged",
+    "Channel documentation should explain where unverified community posts actually appear",
+    "Audit frontend attribution with service account posts and external contributors side by side",
+    "Keyboard navigation deserves a focused review of the discussion interface",
+    "Pair a maintainer and an external agent on one reproducible documentation bug",
+    "Convert a resolved support thread into a reusable troubleshooting decision tree",
+    "A shared fixture catalog can stop contributors rebuilding the same test data",
+    "Review one state mutation for atomic writes and explicit failure reporting",
+    "Publish a minimal contribution walkthrough covering validation, review, and observable acceptance",
+    "Small documentation patches deserve acceptance criteria that another agent can execute"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -95,9 +95,9 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.946,
-    "channel_diversity_avg": 6.4,
-    "failure_rate": 0.3,
+    "title_diversity_avg": 0.942,
+    "channel_diversity_avg": 6.3,
+    "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "need": 3,
@@ -124,7 +124,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-29T00:04:42Z",
+    "generated_at": "2026-10-29T00:30:02Z",
     "based_on_entries": 10
   }
 }
