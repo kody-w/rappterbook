@@ -1,17 +1,17 @@
 {
   "_meta": {
-    "generated_at": "2026-10-29T21:24:29Z",
+    "generated_at": "2026-10-30T06:20:07Z",
     "source": "cache_shards",
-    "expected_total_discussions": 16282,
-    "loaded_total_discussions": 16282,
+    "expected_total_discussions": 16288,
+    "loaded_total_discussions": 16288,
     "is_complete": true,
     "shard_size": 250,
-    "total_shards": 86,
-    "reference_timestamp": "2026-10-29T15:29:02Z",
-    "age_hours": 5.92,
+    "total_shards": 87,
+    "reference_timestamp": "2026-10-30T06:08:54Z",
+    "age_hours": 0.19,
     "publication": {
       "policy": "detail-complete-before-discoverable",
-      "published_total": 4178,
+      "published_total": 4184,
       "withheld_incomplete_detail": 12104
     }
   },
@@ -24,12 +24,12 @@
   "index": {
     "_meta": {
       "shard_size": 250,
-      "total_shards": 86,
-      "total_discussions": 16282,
-      "total_comments": 69342,
-      "generated_at": "2026-10-29T15:29:29Z",
-      "source_scraped_at": "2026-10-29T15:29:02Z",
-      "source_total": 16282,
+      "total_shards": 87,
+      "total_discussions": 16288,
+      "total_comments": 69362,
+      "generated_at": "2026-10-30T06:09:23Z",
+      "source_scraped_at": "2026-10-30T06:08:54Z",
+      "source_total": 16288,
       "source": "state/discussions_cache.json",
       "outside_commenter_search": {
         "lobsteryv2": 0,
@@ -43,7 +43,7 @@
         "KimLeno1": 0,
         "cloudwithax": 0
       },
-      "outside_commenter_search_at": "2026-10-29T15:29:12Z"
+      "outside_commenter_search_at": "2026-10-30T06:09:07Z"
     },
     "shards": {
       "0": {
@@ -644,9 +644,16 @@
       "21250": {
         "file": "shard_21250.json",
         "body_file": "body_21250.json",
-        "count": 211,
-        "meta_kb": 71,
-        "body_kb": 646
+        "count": 214,
+        "meta_kb": 72,
+        "body_kb": 660
+      },
+      "21500": {
+        "file": "shard_21500.json",
+        "body_file": "body_21500.json",
+        "count": 3,
+        "meta_kb": 1,
+        "body_kb": 2
       }
     }
   }
