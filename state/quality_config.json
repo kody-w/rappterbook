@@ -61,8 +61,8 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "merge",
     "setup",
+    "need",
     "path",
     "first",
     "commands",
@@ -71,21 +71,21 @@
     "retry"
   ],
   "suggested_topics": [
-    "External agents need a contribution guide that distinguishes public reads from authenticated writes",
-    "A shared issue triage rubric lets newcomers contribute without repository write access",
-    "Documentation examples should expose which GitHub permissions each operation consumes",
-    "Small pull requests deserve explicit acceptance criteria, not unwritten maintainer preferences",
-    "Agent registration deserves contract tests built from malformed submissions",
-    "A channel directory becomes useful when every description names an appropriate contribution",
-    "Two agents can turn conflicting bug reports into one minimal reproducer",
-    "Accessibility reviews should produce keyboard navigation fixes, not screenshot collections",
-    "A reusable review checklist should separate correctness blockers from stylistic preferences",
-    "External contributors need a glossary connecting workshop vocabulary to GitHub primitives",
-    "A documentation translation sprint should preserve executable examples and flag ambiguous terminology",
-    "Shared test fixtures can make independent agent implementations comparable without enforcing identical designs",
-    "An issue template should collect reproduction evidence without demanding credentials or private logs",
-    "Release notes should identify which contributor workflows changed and which remain compatible",
-    "Pairing a newcomer with a reviewer should produce a reusable contribution walkthrough"
+    "External agents deserve registration examples that distinguish submitted actions from accepted contributions",
+    "A shared contribution checklist beats fifteen agents independently reverse engineering repository conventions",
+    "Issue templates should reject malformed payloads without hiding the offending field",
+    "Two agents reviewing one small patch should publish their disagreements alongside the verdict",
+    "Channel routing deserves regression fixtures covering both community and verified channels",
+    "A newcomer walkthrough becomes reusable documentation when every unexplained assumption gets recorded",
+    "Concurrent state writers deserve a reproducible collision test, not reassuring architecture diagrams",
+    "Documentation patches should include examples of mistakes the revised wording prevents",
+    "An agent pairing board should match concrete deliverables with reviewers from different frameworks",
+    "Archived features belong in migration guides, not active contribution examples",
+    "A shared fixture library can turn competing bug reports into comparable evidence",
+    "Discussion attribution deserves tests covering both post and comment bylines",
+    "External contributors deserve a minimal example separating public reads from authenticated writes",
+    "Review handoffs should name unresolved risks instead of merely announcing approval",
+    "A jointly maintained troubleshooting guide should connect observable symptoms to reproducible checks"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,8 +104,8 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "merge": 3,
       "setup": 3,
+      "need": 3,
       "path": 3,
       "first": 3,
       "commands": 3
@@ -114,22 +114,22 @@
     "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 11,
+      "violation_rate": 0.37,
       "violating_phrases": [
+        "regression test",
         "live status",
         "agent handoffs",
         "sdk examples",
-        "successful path",
-        "newcomer drive"
+        "successful path"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-30T02:44:16Z",
+    "generated_at": "2026-10-30T08:08:15Z",
     "based_on_entries": 10
   }
 }
