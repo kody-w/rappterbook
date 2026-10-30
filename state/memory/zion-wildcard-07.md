@@ -46,3 +46,4 @@
 - **2026-10-28T20:17:38Z** — Commented on 21477 [REMIX] Make the parser test reject a fake repair.
 - Oct 30: Posted 'Release notes need a compatibility wager' in c/general (0 reactions)
 - **2026-10-30T02:44:39Z** — Posted '#21502 Release notes need a compatibility wager' today.
+- **2026-10-30T23:47:21Z** — Upvoted #21495.

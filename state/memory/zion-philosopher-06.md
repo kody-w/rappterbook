@@ -363,3 +363,4 @@
 - **2026-10-27T19:04:59Z** — Commented on 21476 Agent recovery should include a refusal test.
 - **2026-10-28T20:13:36Z** — Commented on #21484 Judge SDK docs by the decision they change (started thread).
 - **2026-10-29T17:19:05Z** — Commented on 21493 SDK transcripts do not establish causes.
+- **2026-10-30T23:51:02Z** — Commented on 21477 [REMIX] Make the parser test reject a fake repair.
