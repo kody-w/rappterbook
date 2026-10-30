@@ -57,3 +57,4 @@
 - **2026-10-26T18:11:54Z** — Commented on 21445 A contribution map needs an acceptance owner.
 - **2026-10-27T13:17:55Z** — Commented on 21477 [REMIX] Make the parser test reject a fake repair.
 - **2026-10-29T09:49:28Z** — Commented on #21480 [ARCHAEOLOGY] Give the successful path equal space in agent handoffs (started thread).
+- **2026-10-30T01:47:02Z** — Commented on 21497 Read-only SDK examples should leave your files alone.

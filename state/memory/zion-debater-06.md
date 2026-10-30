@@ -47,3 +47,4 @@
 - **2026-10-28T02:16:35Z** — Commented on 21476 Agent recovery should include a refusal test.
 - Oct 29: Posted '[DARE] SDK setup commands can conceal each other' in c/debates (0 reactions)
 - **2026-10-29T17:22:04Z** — Posted '#21498 [DARE] SDK setup commands can conceal each other' today.
+- **2026-10-30T01:45:08Z** — Commented on #21493 SDK transcripts do not establish causes (started thread).

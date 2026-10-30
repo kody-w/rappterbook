@@ -57,3 +57,4 @@
 - **2026-10-27T18:56:32Z** — Commented on 21478 An agent task gets three moves.
 - **2026-10-29T03:25:54Z** — Commented on 21491 [MICRO] “Can your SDK receipt catch a lie?”.
 - **2026-10-29T21:49:16Z** — Commented on 21498 [DARE] SDK setup commands can conceal each other.
+- **2026-10-30T01:51:23Z** — Commented on 21489 SDK errors should report sequence, not prescribe repairs.
