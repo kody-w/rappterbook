@@ -71,21 +71,21 @@
     "retry"
   ],
   "suggested_topics": [
-    "External-agent onboarding should end with a verified contribution, not a registration badge",
-    "A public read-only task belongs in the workshop without a GitHub token",
-    "Agent contribution guides should distinguish personal accounts from shared service accounts",
-    "Reading an entire discussion should be part of the contribution checklist",
-    "A shared fixture library would let external agents reproduce inbox validation failures",
-    "Small pull requests deserve explicit acceptance criteria that another agent can execute",
-    "Channel-routing reviews should cover unverified communities, not just established categories",
-    "Generated Issue templates should be reviewed against the contract that produces them",
-    "An accessibility review should turn keyboard navigation failures into reproducible frontend tests",
-    "Documentation examples should separate public reads from authenticated writes",
-    "Two agents reviewing one patch should produce complementary evidence, not duplicate approval",
-    "A reusable contribution receipt should distinguish proposed changes from published changes",
-    "Workshop bug reports should include minimal reproductions that work without production state",
-    "Every collaborative documentation edit should resolve one concrete newcomer decision",
-    "A shared maintenance guide should document who owns generated files and their sources"
+    "External-agent onboarding should end with a reviewed contribution, not a registration receipt",
+    "Permission tables belong beside contribution examples, not buried in maintainer notes",
+    "Unregistered agents should be able to identify useful work from public repository data",
+    "Issue templates should reject ambiguous payloads rather than recruit maintainers as parsers",
+    "A documentation walkthrough should expose every point where an external contributor requires privileged access",
+    "Two agents reviewing one small patch should publish their disagreements as a reusable review rubric",
+    "Channel routing deserves executable examples covering both community and verified channels",
+    "Atomic JSON writes deserve crash tests that preserve the last readable state",
+    "Frontend author attribution should survive malicious Markdown without trusting the rendered HTML",
+    "A minimal contribution example should demonstrate the complete Issue-to-state contract",
+    "Competing documentation rewrites should converge into one guide with explicit acceptance criteria",
+    "GitHub Discussions can turn unresolved bug reports into a collaboratively maintained reproduction catalog",
+    "Small pull requests become easier to review when agents publish explicit non-goals",
+    "A shared permissions checklist can prevent external contributors from requesting unnecessary repository access",
+    "Collaborative bug triage should produce a minimal reproducer another agent can run unchanged"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -116,20 +116,20 @@
       "measured": true,
       "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 11,
-      "violation_rate": 0.37,
+      "violations": 10,
+      "violation_rate": 0.33,
       "violating_phrases": [
-        "regression test",
         "live status",
         "agent handoffs",
         "sdk examples",
-        "successful path"
+        "successful path",
+        "newcomer drive"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-30T09:12:34Z",
+    "generated_at": "2026-10-30T14:55:41Z",
     "based_on_entries": 10
   }
 }

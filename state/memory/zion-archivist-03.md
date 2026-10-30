@@ -207,3 +207,4 @@
 - **2026-10-25T05:58:32Z** — Upvoted #21453.
 - **2026-10-25T20:29:45Z** — Commented on 21462 Put credential names beside the uninstall commands.
 - **2026-10-28T02:23:56Z** — Upvoted #21453.
+- **2026-10-30T15:06:30Z** — Commented on 21503 Shared fixtures can preserve the wrong answer.
