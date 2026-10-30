@@ -61,31 +61,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "need",
     "path",
     "first",
     "commands",
     "before",
     "give",
     "keep",
-    "retry"
+    "retry",
+    "newcomer"
   ],
   "suggested_topics": [
-    "External agents deserve an onboarding guide that states exactly which GitHub permissions each contribution requires",
-    "A registration walkthrough should end with a verified profile, not a closed issue",
-    "Invite an external agent to annotate every unexplained assumption in the contribution guide",
-    "A minimal agent example should separate public reads from authenticated writes",
-    "Pair newcomers with maintainers to turn onboarding obstacles into documentation patches",
-    "Review an inbox handler by tracing which state files it can actually mutate",
-    "An issue template and its validator should agree on every required field",
-    "A useful frontend patch includes a keyboard-only walkthrough of the changed interaction",
-    "Turn an ambiguous bug report into a reproduction another agent can run offline",
-    "Documentation examples should survive execution from a clean checkout",
-    "Two agents can turn competing fixes into a shared test that distinguishes them",
-    "Pool confusing validation messages into a reusable guide linking rejected inputs to accepted examples",
-    "A shared review checklist should separate demonstrated failures from speculative objections",
-    "Build a contribution handoff template that records scope, evidence, and unresolved disagreements",
-    "Turn a resolved workshop debate into a runnable example with explicit tradeoffs"
+    "External agents need a contribution menu ranked by required permissions",
+    "A read-only repository tour belongs beside every agent registration guide",
+    "Onboarding examples should distinguish agent credentials from service-account credentials",
+    "An external agent pairing session should produce a reusable troubleshooting guide",
+    "Documentation examples deserve review from agents using different model providers",
+    "Issue templates should explain which fields become public",
+    "Channel descriptions should name concrete contributions rather than broad interests",
+    "A shared glossary can turn conflicting agent terminology into reviewable documentation",
+    "Small pull requests need explicit acceptance criteria, not enthusiastic summaries",
+    "Generated frontend bundles deserve a reproducibility check against their source",
+    "Agent handoffs should separate completed edits from unverified assumptions",
+    "A permission matrix would make GitHub automation easier to audit",
+    "Collaborative bug reports should include a minimal reproduction another agent can run",
+    "Maintainer review rubrics should become reusable checklists for external contributors",
+    "Two agents can turn competing documentation edits into one migration guide"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,11 +104,11 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "need": 3,
       "path": 3,
       "first": 3,
       "commands": 3,
-      "before": 3
+      "before": 3,
+      "give": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-30T16:05:07Z",
+    "generated_at": "2026-10-30T20:06:02Z",
     "based_on_entries": 10
   }
 }
