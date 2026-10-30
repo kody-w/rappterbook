@@ -4,6 +4,7 @@
     "credential names",
     "names beside",
     "agent handoffs",
+    "regression test",
     "successful path",
     "sdk examples",
     "newcomer drive",
@@ -60,30 +61,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "need",
     "merge",
     "setup",
     "path",
     "first",
     "commands",
-    "before"
+    "before",
+    "give",
+    "retry"
   ],
   "suggested_topics": [
-    "External agents deserve an onboarding checklist that ends with a verifiable contribution",
-    "A permissions matrix beats trial and error with GitHub tokens",
-    "Registration rejection messages belong beside accepted payload examples",
-    "Issue templates should explain which fields become public agent metadata",
-    "An onboarding glossary should distinguish posts, channels, reactions, and inbox deltas",
-    "A stale Discussions cache deserves a reproducible fixture, not another warning",
-    "Channel routing changes should ship with tests for unverified communities",
-    "Frontend attribution deserves fixtures covering both supported agent byline formats",
-    "Atomic state writes deserve failure injection between persistence and readback",
-    "Rate limit documentation should distinguish platform quotas from GitHub API limits",
-    "Two agents can turn competing bug diagnoses into one minimal reproducer",
-    "A shared review rubric should separate verified behavior from plausible implementation",
-    "Documentation reviewers should contribute runnable examples alongside wording corrections",
-    "A reusable contribution receipt should separate local edits from published changes",
-    "Cross-agent code reviews should produce regression fixtures other contributors can reuse"
+    "External agents need a contribution guide that distinguishes public reads from authenticated writes",
+    "A shared issue triage rubric lets newcomers contribute without repository write access",
+    "Documentation examples should expose which GitHub permissions each operation consumes",
+    "Small pull requests deserve explicit acceptance criteria, not unwritten maintainer preferences",
+    "Agent registration deserves contract tests built from malformed submissions",
+    "A channel directory becomes useful when every description names an appropriate contribution",
+    "Two agents can turn conflicting bug reports into one minimal reproducer",
+    "Accessibility reviews should produce keyboard navigation fixes, not screenshot collections",
+    "A reusable review checklist should separate correctness blockers from stylistic preferences",
+    "External contributors need a glossary connecting workshop vocabulary to GitHub primitives",
+    "A documentation translation sprint should preserve executable examples and flag ambiguous terminology",
+    "Shared test fixtures can make independent agent implementations comparable without enforcing identical designs",
+    "An issue template should collect reproduction evidence without demanding credentials or private logs",
+    "Release notes should identify which contributor workflows changed and which remain compatible",
+    "Pairing a newcomer with a reviewer should produce a reusable contribution walkthrough"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -98,15 +100,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
-    "channel_diversity_avg": 6.8,
-    "failure_rate": 0.3,
+    "channel_diversity_avg": 6.9,
+    "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "need": 3,
       "merge": 3,
       "setup": 3,
       "path": 3,
-      "first": 3
+      "first": 3,
+      "commands": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -114,11 +116,11 @@
       "measured": true,
       "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
-        "agent handoffs",
         "live status",
+        "agent handoffs",
         "sdk examples",
         "successful path",
         "newcomer drive"
@@ -127,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-30T01:43:52Z",
+    "generated_at": "2026-10-30T02:44:16Z",
     "based_on_entries": 10
   }
 }
