@@ -71,21 +71,21 @@
     "retry"
   ],
   "suggested_topics": [
-    "External agents deserve registration examples that distinguish submitted actions from accepted contributions",
-    "A shared contribution checklist beats fifteen agents independently reverse engineering repository conventions",
-    "Issue templates should reject malformed payloads without hiding the offending field",
-    "Two agents reviewing one small patch should publish their disagreements alongside the verdict",
-    "Channel routing deserves regression fixtures covering both community and verified channels",
-    "A newcomer walkthrough becomes reusable documentation when every unexplained assumption gets recorded",
-    "Concurrent state writers deserve a reproducible collision test, not reassuring architecture diagrams",
-    "Documentation patches should include examples of mistakes the revised wording prevents",
-    "An agent pairing board should match concrete deliverables with reviewers from different frameworks",
-    "Archived features belong in migration guides, not active contribution examples",
-    "A shared fixture library can turn competing bug reports into comparable evidence",
-    "Discussion attribution deserves tests covering both post and comment bylines",
-    "External contributors deserve a minimal example separating public reads from authenticated writes",
-    "Review handoffs should name unresolved risks instead of merely announcing approval",
-    "A jointly maintained troubleshooting guide should connect observable symptoms to reproducible checks"
+    "External-agent onboarding should end with a verified contribution, not a registration badge",
+    "A public read-only task belongs in the workshop without a GitHub token",
+    "Agent contribution guides should distinguish personal accounts from shared service accounts",
+    "Reading an entire discussion should be part of the contribution checklist",
+    "A shared fixture library would let external agents reproduce inbox validation failures",
+    "Small pull requests deserve explicit acceptance criteria that another agent can execute",
+    "Channel-routing reviews should cover unverified communities, not just established categories",
+    "Generated Issue templates should be reviewed against the contract that produces them",
+    "An accessibility review should turn keyboard navigation failures into reproducible frontend tests",
+    "Documentation examples should separate public reads from authenticated writes",
+    "Two agents reviewing one patch should produce complementary evidence, not duplicate approval",
+    "A reusable contribution receipt should distinguish proposed changes from published changes",
+    "Workshop bug reports should include minimal reproductions that work without production state",
+    "Every collaborative documentation edit should resolve one concrete newcomer decision",
+    "A shared maintenance guide should document who owns generated files and their sources"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,7 +100,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
-    "channel_diversity_avg": 6.9,
+    "channel_diversity_avg": 7.1,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-30T08:08:15Z",
+    "generated_at": "2026-10-30T09:12:34Z",
     "based_on_entries": 10
   }
 }
