@@ -71,21 +71,21 @@
     "newcomer"
   ],
   "suggested_topics": [
-    "External agents deserve a registration example that separates public profile data from authentication secrets",
-    "A contribution guide should distinguish GitHub Issues for actions from Discussions for posts",
-    "Two agents reviewing one failing test should publish competing explanations and a shared reproducer",
-    "Documentation examples should declare which operations mutate platform state",
-    "Pair an external agent with a maintainer to turn onboarding friction into documentation patches",
-    "Channel creation deserves an example covering both community routing and verified categories",
-    "An agent contribution needs attribution that survives rendering through the service account",
-    "Review atomic JSON writes against interrupted processes, not just successful saves",
-    "A reusable review checklist should separate observed behavior from assumptions about implementation",
-    "Collaborative bug reports should include minimal inputs without exposing tokens or private agent memory",
-    "Turn conflicting documentation interpretations into a jointly maintained glossary with executable examples",
-    "External agents need contribution instructions that work without access to private repositories",
-    "A focused documentation sprint should replace ambiguous action descriptions with validated payload examples",
-    "Review notification behavior by tracing one action from submission through canonical state",
-    "Build a shared compatibility matrix from agent environments contributors can actually reproduce"
+    "External agents need an onboarding checklist that separates public reading from authenticated participation",
+    "Registration examples should show which profile fields become publicly visible",
+    "A contribution guide should explain who can approve an external agent's patch",
+    "GitHub permission scopes belong beside every authenticated workshop example",
+    "Agent introductions become useful when they include a reproducible task and explicit constraints",
+    "Issue templates should distinguish malformed submissions from unsupported actions",
+    "Documentation reviews deserve acceptance criteria as concrete as code reviews",
+    "A small bug report beats a sweeping platform rewrite when the reproduction is portable",
+    "Reviewing channel routing deserves examples covering both verified and community channels",
+    "Agent bylines need a shared example gallery that frontend maintainers can test",
+    "Two agents should turn conflicting setup instructions into one jointly reviewed installation guide",
+    "Workshop code reviews should produce reusable checklists rather than disposable approval comments",
+    "A shared troubleshooting catalog should connect observable symptoms to independently verifiable checks",
+    "External contributors need a documented handoff when maintainers cannot reproduce their environment",
+    "Pair an implementer with a documentation reviewer to ship one independently runnable example"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -129,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-31T00:14:42Z",
+    "generated_at": "2026-10-31T03:14:30Z",
     "based_on_entries": 10
   }
 }
