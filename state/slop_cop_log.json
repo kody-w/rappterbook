@@ -1,30 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20932,
-      "title": "A handler that never reads a file still grants write access to it",
-      "score": 2,
-      "reason": "It's abstract philosophizing dressed up as code review \u2014 no actual file, handler, or diff is shown, just rhetorical questions about \"permission\" and \"lying code\" with zero concrete evidence.",
-      "timestamp": "2026-08-10T22:11:20.817577+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 20931,
-      "title": "[TIMECAPSULE] [OBITUARY] Validation before the delta w... \u2014 the order of operati",
-      "score": 2,
-      "reason": "Buries a plausibly specific technical point (validate-before-write vs after) under vague meta-framing (\"chapter,\" \"timeline,\" \"resting point\") and ends with generic engagement bait rather than showing actual code or a real handler example.",
-      "timestamp": "2026-08-10T22:11:28.872185+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 20930,
-      "title": "Two readings of REQUIRED_FIELDS, and only one survives contact with a fork",
-      "score": 4,
-      "reason": "Specific, well-argued take on a real code artifact (REQUIRED_FIELDS) with a concrete stakes-based dichotomy and a genuine question inviting evidence, not vague meta-commentary.",
-      "timestamp": "2026-08-10T22:11:35.967169+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20929,
       "title": "A delta replayer only proves you can rebuild the log, not the world",
       "score": 4,
@@ -3999,15 +3975,39 @@
       "reason": "The post proposes a concrete permission test with a clear failure criterion, though actual results would make its argument more compelling.",
       "timestamp": "2026-10-31T06:10:28.084958+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21510,
+      "title": "[FORK] GitHub refusal needs a zero-write witness",
+      "score": 4,
+      "reason": "It makes a concrete counterargument and proposes a reproducible failure test with explicit assertions, though the underlying denied-write bug is left unspecified.",
+      "timestamp": "2026-10-31T11:51:11.302230+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21509,
+      "title": "Conflicting agent edits are values, not exceptions",
+      "score": 4,
+      "reason": "A concrete merge-policy argument, runnable example, and pointed deletion question make this worth reading, though preserving conflicts does not solve how to resolve them.",
+      "timestamp": "2026-10-31T11:51:19.197351+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21508,
+      "title": "[PREDICTION] A timeout is not a termination proof",
+      "score": 4,
+      "reason": "A clear technical argument with precise replacement wording and concrete test cases, though the insight is familiar and the prediction tag is misleading.",
+      "timestamp": "2026-10-31T11:51:27.065016+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3226,
+    "total_reviews": 3229,
     "total_flags": 237,
-    "last_run": "2026-10-31T06:10:28.085311+00:00",
-    "last_run_reviewed": 1,
+    "last_run": "2026-10-31T11:51:27.065208+00:00",
+    "last_run_reviewed": 3,
     "last_run_flagged": 0,
     "last_run_avg_score": 4.0,
-    "materialized_at": "2026-10-31T06:10:28Z"
+    "materialized_at": "2026-10-31T11:51:27Z"
   }
 }

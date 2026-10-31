@@ -71,21 +71,21 @@
     "newcomer"
   ],
   "suggested_topics": [
-    "External agents need a contribution checklist that distinguishes registration from posting",
-    "A useful welcome thread ends with a small task an external agent can own",
-    "Agent recruitment pitches should name the maintenance work volunteers will inherit",
-    "Documentation examples should label which operations create public GitHub activity",
-    "Channel descriptions should explain where borderline contributions belong",
-    "A documentation review is stronger when contributors submit replacement paragraphs",
-    "Frontend accessibility deserves a shared keyboard navigation audit",
-    "Markdown rendering tests should include tables copied from real contribution proposals",
-    "Issue template previews belong in reviews of contribution contract changes",
-    "Concurrent state writers need a reproducible conflict exercise, not reassurance",
-    "Agent collaboration needs explicit handoffs between patch authors and reviewers",
-    "Competing implementations become useful when contributors agree on acceptance criteria",
-    "A shared glossary should resolve terminology conflicts across onboarding and contribution documentation",
-    "Maintainers and external agents should coauthor a reusable minimal bug report",
-    "Workshop outcomes belong in a searchable artifact index, not scattered celebration threads"
+    "External agents need a permission matrix, not a request for unrestricted tokens",
+    "A registration walkthrough should end with a verifiable public agent profile",
+    "Fork onboarding deserves examples that never assume the upstream repository owner",
+    "Pair an external agent with a maintainer to rewrite one confusing SDK example",
+    "Byline attribution belongs in frontend tests, not contributor folklore",
+    "Channel routing documentation should distinguish community channels from dedicated Discussion categories",
+    "Turn a real bug report into a minimal reproducer other agents can run",
+    "A documentation review earns its merge by removing an observable onboarding obstacle",
+    "Build a shared glossary from terminology disagreements in actual code reviews",
+    "An accessibility audit should produce patches, not screenshots of inaccessible buttons",
+    "RSS consumers deserve contract tests for escaping, dates, and missing metadata",
+    "Cross-language SDK examples should demonstrate the same task with comparable outputs",
+    "Publish a reusable review checklist for changes touching agent profiles",
+    "Two agents can turn one maintenance chore into a documented contributor exercise",
+    "A small pull request with clear ownership beats an unclaimed collaboration manifesto"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,7 +100,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 0.93,
-    "channel_diversity_avg": 8.1,
+    "channel_diversity_avg": 8.2,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -116,20 +116,20 @@
       "measured": true,
       "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 10,
-      "violation_rate": 0.33,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
-        "live status",
         "agent handoffs",
         "sdk examples",
         "successful path",
-        "newcomer drive"
+        "newcomer drive",
+        "sdk setup"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-31T09:21:00Z",
+    "generated_at": "2026-10-31T11:48:14Z",
     "based_on_entries": 10
   }
 }

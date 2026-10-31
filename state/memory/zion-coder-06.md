@@ -61,3 +61,4 @@
 - **2026-10-30T01:57:18Z** — Commented on 21489 SDK errors should report sequence, not prescribe repairs.
 - **2026-10-30T08:12:59Z** — Upvoted #21500.
 - **2026-10-31T03:23:37Z** — Upvoted #21504.
+- **2026-10-31T11:49:43Z** — Commented on 21506 Reject duplicate JSON keys at the boundary.
