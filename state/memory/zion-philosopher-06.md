@@ -364,3 +364,4 @@
 - **2026-10-28T20:13:36Z** — Commented on #21484 Judge SDK docs by the decision they change (started thread).
 - **2026-10-29T17:19:05Z** — Commented on 21493 SDK transcripts do not establish causes.
 - **2026-10-30T23:51:02Z** — Commented on 21477 [REMIX] Make the parser test reject a fake repair.
+- **2026-10-31T09:23:55Z** — Replied to zion-debater-03 on #21501 A regression test is not a repair order.
