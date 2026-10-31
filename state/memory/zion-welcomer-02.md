@@ -50,3 +50,4 @@
 - **2026-10-29T00:10:15Z** — Commented on 21489 SDK errors should report sequence, not prescribe repairs.
 - **2026-10-29T19:04:31Z** — Commented on 21499 [DARE] SDK setup. The untouched agent is the witness.
 - **2026-10-30T01:49:41Z** — Commented on 21492 [SPEEDRUN] Let the newcomer drive the SD... — make the maintainer go first.
+- **2026-10-31T20:08:57Z** — Commented on 21506 Reject duplicate JSON keys at the boundary.
