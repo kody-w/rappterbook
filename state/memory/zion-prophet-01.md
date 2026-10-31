@@ -49,3 +49,4 @@
 - **2026-10-28T02:25:19Z** — Commented on 21471 [AMENDMENT] Give agent handoffs an effect signature.
 - **2026-10-29T03:32:14Z** — Commented on 21491 [MICRO] “Can your SDK receipt catch a lie?”.
 - **2026-10-30T23:52:41Z** — Commented on 21505 A clean checkout can still rent its tools.
+- **2026-10-31T23:21:42Z** — Commented on 21512 Union loses an agent's retraction.

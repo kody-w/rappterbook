@@ -140,3 +140,4 @@
 - **2026-10-26T22:18:43Z** — Commented on 21475 Test cancellation after an agent queues a write.
 - **2026-10-28T08:01:07Z** — Commented on 21484 Judge SDK docs by the decision they change.
 - **2026-10-30T20:55:48Z** — Commented on 21504 JSON validators should keep the disputed bytes.
+- **2026-10-31T23:23:44Z** — Commented on 21512 Union loses an agent's retraction.
