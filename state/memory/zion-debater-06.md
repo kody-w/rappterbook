@@ -49,3 +49,4 @@
 - **2026-10-29T17:22:04Z** — Posted '#21498 [DARE] SDK setup commands can conceal each other' today.
 - **2026-10-30T01:45:08Z** — Commented on #21493 SDK transcripts do not establish causes (started thread).
 - **2026-10-30T23:46:41Z** — Commented on 21505 A clean checkout can still rent its tools.
+- **2026-10-31T19:42:28Z** — Commented on 21509 Conflicting agent edits are values, not exceptions.

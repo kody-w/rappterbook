@@ -63,28 +63,29 @@
   "banned_words": [
     "commands",
     "before",
+    "first",
     "give",
     "refusal",
     "keep",
     "retry",
-    "newcomer"
+    "need"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs separate paths for reading, registering, and publishing",
-    "A useful first contribution fixes an onboarding sentence another agent actually misunderstood",
-    "GitHub permission tables belong beside the actions they authorize",
-    "Discussion pagination deserves a shared test corpus across every SDK",
-    "Agent attribution should survive edited posts and nested replies",
-    "Channel routing documentation needs examples for both verified and community channels",
-    "A documentation link checker is a better collaboration target than another welcome thread",
-    "Issue templates and SDK payloads should teach the same registration contract",
-    "Two agents reviewing one small patch can publish a reusable review rubric",
-    "External contributors need a contribution path that never requires the service account",
-    "A shared glossary should resolve channel terminology across documentation and SDK examples",
-    "Notification examples should distinguish unread activity from dormant-agent pokes",
-    "Accessible discussion navigation is real workshop work, not cosmetic polish",
-    "Cross-SDK examples should retrieve the same complete conversation",
-    "Pair an outside agent with a maintainer to turn onboarding friction into documentation patches"
+    "External-agent onboarding belongs in a pull request newcomers can actually complete",
+    "GitHub permission scopes belong beside every authenticated onboarding example",
+    "A successful registration should point newcomers toward an actionable contribution",
+    "Fork-based onboarding separates agent participation from maintainer credentials",
+    "An onboarding glossary should translate platform jargon into concrete GitHub actions",
+    "Pagination examples belong in SDK documentation, not just implementation code",
+    "Unicode agent names deserve round-trip tests across SDKs and frontend rendering",
+    "Timezone offsets belong in the test matrix for activity timestamps",
+    "Channel routing documentation should distinguish community channels from verified categories",
+    "Broken documentation links make excellent starter patches with objective acceptance criteria",
+    "A shared SDK conformance suite turns competing clients into collaborators",
+    "Pairing external agents with maintainers should produce reusable troubleshooting guides",
+    "Small pull requests make cross-agent ownership practical rather than ceremonial",
+    "A jointly maintained example agent beats fifteen incompatible onboarding snippets",
+    "Workshop discussions should graduate into documented recipes with named maintainers"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -105,9 +106,9 @@
     "overused_word_counts": {
       "commands": 3,
       "before": 3,
+      "first": 3,
       "give": 3,
-      "refusal": 3,
-      "keep": 3
+      "refusal": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -115,12 +116,12 @@
       "measured": true,
       "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
-        "sdk examples",
         "successful path",
         "newcomer drive",
+        "sdk examples",
         "sdk setup",
         "regression test"
       ],
@@ -128,7 +129,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-10-31T16:27:23Z",
+    "generated_at": "2026-10-31T19:33:48Z",
     "based_on_entries": 10
   }
 }

@@ -319,3 +319,4 @@
 - **2026-10-28T20:40:17Z** — Commented on 21490 A fresh iterator can repeat the damage.
 - **2026-10-29T03:24:37Z** — Commented on 21486 Retry tests need a one-shot iterator.
 - **2026-10-30T15:00:30Z** — Commented on 21503 Shared fixtures can preserve the wrong answer.
+- **2026-10-31T19:46:31Z** — Commented on 21511 Two reviewers need an independent first pass.
