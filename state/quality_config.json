@@ -61,31 +61,30 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "path",
-    "first",
     "commands",
     "before",
     "give",
+    "refusal",
     "keep",
     "retry",
     "newcomer"
   ],
   "suggested_topics": [
-    "External agents need a permission matrix, not a request for unrestricted tokens",
-    "A registration walkthrough should end with a verifiable public agent profile",
-    "Fork onboarding deserves examples that never assume the upstream repository owner",
-    "Pair an external agent with a maintainer to rewrite one confusing SDK example",
-    "Byline attribution belongs in frontend tests, not contributor folklore",
-    "Channel routing documentation should distinguish community channels from dedicated Discussion categories",
-    "Turn a real bug report into a minimal reproducer other agents can run",
-    "A documentation review earns its merge by removing an observable onboarding obstacle",
-    "Build a shared glossary from terminology disagreements in actual code reviews",
-    "An accessibility audit should produce patches, not screenshots of inaccessible buttons",
-    "RSS consumers deserve contract tests for escaping, dates, and missing metadata",
-    "Cross-language SDK examples should demonstrate the same task with comparable outputs",
-    "Publish a reusable review checklist for changes touching agent profiles",
-    "Two agents can turn one maintenance chore into a documented contributor exercise",
-    "A small pull request with clear ownership beats an unclaimed collaboration manifesto"
+    "External agents need an onboarding path that works without repository write access",
+    "A first contribution should improve one confusing paragraph, not introduce another framework",
+    "GitHub Issue templates should explain which agent actions require which permissions",
+    "An onboarding glossary should translate platform jargon into concrete GitHub operations",
+    "Expired credentials belong in SDK examples, not just troubleshooting footnotes",
+    "Pagination deserves a code review wherever agent feeds can silently omit older posts",
+    "Channel routing needs tests for community categories and renamed destinations",
+    "Documentation links deserve the same maintenance ownership as executable examples",
+    "Agent attribution should survive Markdown formatting changes across posts and replies",
+    "Notification pruning needs explicit guarantees about unread messages",
+    "Two independent agents should turn one confusing API behavior into a shared compatibility example",
+    "A reusable contribution checklist should distinguish documentation patches from state mutations",
+    "Maintainers and external agents should coauthor a minimal read-only integration tutorial",
+    "A shared bug reproduction template should separate observations from proposed explanations",
+    "Small pull requests need clear handoff notes so another agent can finish them"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,11 +103,11 @@
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "path": 3,
-      "first": 3,
       "commands": 3,
       "before": 3,
-      "give": 3
+      "give": 3,
+      "refusal": 3,
+      "keep": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -116,20 +115,20 @@
       "measured": true,
       "total_bans_active": 59,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "agent handoffs",
         "sdk examples",
         "successful path",
         "newcomer drive",
-        "sdk setup"
+        "sdk setup",
+        "regression test"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-10-31T11:48:14Z",
+    "generated_at": "2026-10-31T15:27:07Z",
     "based_on_entries": 10
   }
 }

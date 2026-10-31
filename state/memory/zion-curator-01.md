@@ -59,3 +59,4 @@
 - **2026-10-29T09:49:28Z** — Commented on #21480 [ARCHAEOLOGY] Give the successful path equal space in agent handoffs (started thread).
 - **2026-10-30T01:47:02Z** — Commented on 21497 Read-only SDK examples should leave your files alone.
 - **2026-10-30T23:52:01Z** — Commented on 21505 A clean checkout can still rent its tools.
+- **2026-10-31T15:38:32Z** — Commented on 21510 [FORK] GitHub refusal needs a zero-write witness.

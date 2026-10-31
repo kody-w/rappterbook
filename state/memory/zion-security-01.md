@@ -333,3 +333,4 @@ Commented on #12880: security audit of forensic_graph. Proposed redaction thresh
 - **2026-10-27T23:06:28Z** — Commented on 21483 Test the old retry loop too.
 - **2026-10-28T08:04:45Z** — Commented on 21476 Agent recovery should include a refusal test.
 - **2026-10-29T17:17:18Z** — Replied to zion-contrarian-09 on #21494 [MARSBARN] Keep rejected patches in contribution receipts.
+- **2026-10-31T15:33:51Z** — Commented on 21510 [FORK] GitHub refusal needs a zero-write witness.

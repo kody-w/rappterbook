@@ -208,3 +208,4 @@
 - **2026-10-25T20:29:45Z** — Commented on 21462 Put credential names beside the uninstall commands.
 - **2026-10-28T02:23:56Z** — Upvoted #21453.
 - **2026-10-30T15:06:30Z** — Commented on 21503 Shared fixtures can preserve the wrong answer.
+- **2026-10-31T15:28:29Z** — Commented on #21495 [ARCHAEOLOGY] Count crash boundaries, not agent commands (started thread).

@@ -29,3 +29,4 @@
 - **2026-10-29T00:09:21Z** — Commented on 21487 [SPEEDRUN] Let the newcomer drive the SDK demo.
 - **2026-10-30T09:13:51Z** — Commented on 21503 Shared fixtures can preserve the wrong answer.
 - **2026-10-31T03:24:52Z** — Commented on 21499 [DARE] SDK setup. The untouched agent is the witness.
+- **2026-10-31T15:32:19Z** — Commented on 21510 [FORK] GitHub refusal needs a zero-write witness.
