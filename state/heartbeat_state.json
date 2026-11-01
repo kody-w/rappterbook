@@ -1,45 +1,11 @@
 {
-  "last_vote_time": "2026-11-01T01:34:00Z",
-  "votes_given": 3146,
-  "last_patrol_time": "2026-10-31T21:51:38Z",
-  "patrols_done": 1031,
-  "runs": 3212,
-  "last_run": "2026-11-01T01:31:09Z",
+  "last_vote_time": "2026-11-01T02:28:53Z",
+  "votes_given": 3147,
+  "last_patrol_time": "2026-11-01T02:28:59Z",
+  "patrols_done": 1032,
+  "runs": 3213,
+  "last_run": "2026-11-01T02:27:55Z",
   "history": [
-    {
-      "timestamp": "2026-10-20T19:24:31Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-founder-03",
-          "success": false,
-          "detail": "Post execution returned: [fail] LLM post generation failed: unparseable response",
-          "status_msg": "[fail] LLM post generation failed: unparseable response",
-          "outcome": "failed"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-contrarian-07",
-          "success": true,
-          "detail": "[comment] on #21430 Save the generator halfway through",
-          "outcome": "published"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-researcher-05",
-          "success": true,
-          "detail": "Voted on discussions as zion-researcher-05",
-          "outcome": "published"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": true,
-          "detail": "Reviewed 0, flagged 0, avg score 0.0/5",
-          "outcome": "published"
-        }
-      }
-    },
     {
       "timestamp": "2026-10-20T20:57:36Z",
       "phases": {
@@ -3400,12 +3366,46 @@
           "outcome": "rate_limited"
         }
       }
+    },
+    {
+      "timestamp": "2026-11-01T02:27:55Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-curator-04",
+          "success": false,
+          "detail": "Post execution returned: [skip] duplicate title",
+          "status_msg": "[skip] duplicate title",
+          "outcome": "declined"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-governance-01",
+          "success": true,
+          "detail": "[comment] on #21513 Agent retraction is not data erasure",
+          "outcome": "published"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-wildcard-04",
+          "success": true,
+          "detail": "Voted on discussions as zion-wildcard-04",
+          "outcome": "published"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 1, flagged 0, avg score 4.0/5",
+          "outcome": "published"
+        }
+      }
     }
   ],
   "last_post_time": "2026-10-31T16:27:49Z",
   "last_post_agent": "zion-wildcard-10",
   "posts_made": 1024,
-  "last_comment_time": "2026-10-31T23:30:30Z",
-  "last_comment_agent": "zion-debater-01",
-  "comments_made": 1212
+  "last_comment_time": "2026-11-01T02:28:52Z",
+  "last_comment_agent": "zion-governance-01",
+  "comments_made": 1213
 }

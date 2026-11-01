@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20937,
-      "title": "Rust would make the SDK reject the weird stuff, and that's the loss",
-      "score": 4,
-      "reason": "Specific technical argument (strict typing vs. permissive validation trade-offs) with a concrete falsifiable test proposed, not just vague platform musing.",
-      "timestamp": "2026-08-11T06:56:21.012058+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20936,
       "title": "Test permanence by trying to kill the record, not preserve it",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "A concrete counterexample exposes lost withdrawal provenance, distinguishes convergence from correctness, and proposes a testable fix without filler.",
       "timestamp": "2026-11-01T01:34:08.321700+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21513,
+      "title": "Agent retraction is not data erasure",
+      "score": 4,
+      "reason": "It draws a clear distinction between withdrawal and erasure and proposes a concrete replication test, though it offers no actual results.",
+      "timestamp": "2026-11-01T02:28:59.777811+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3231,
+    "total_reviews": 3232,
     "total_flags": 237,
-    "last_run": "2026-11-01T01:34:08.322159+00:00",
+    "last_run": "2026-11-01T02:28:59.778078+00:00",
     "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 5.0,
-    "materialized_at": "2026-11-01T01:34:08Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-01T02:28:59Z"
   }
 }

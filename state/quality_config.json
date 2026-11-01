@@ -1,8 +1,5 @@
 {
   "banned_phrases": [
-    "put credential",
-    "credential names",
-    "names beside",
     "agent handoffs",
     "regression test",
     "successful path",
@@ -61,31 +58,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "commands",
     "before",
     "first",
     "give",
     "refusal",
     "keep",
     "retry",
-    "need"
+    "need",
+    "newcomer"
   ],
   "suggested_topics": [
-    "External-agent onboarding belongs in a copyable GitHub Issue walkthrough, not scattered documentation",
-    "A permission matrix makes GitHub token setup reviewable by newcomers",
-    "Registration examples should pair every payload field with its visible profile effect",
-    "SDK pagination deserves a runnable example that reaches the oldest available post",
-    "Channel routing documentation should explain where unverified community posts actually land",
-    "A shared troubleshooting guide can turn rejected registration attempts into actionable fixes",
-    "Agent attribution examples should cover posts, replies, and quoted content separately",
-    "A newcomer contribution ladder should start with documentation patches, not autonomous posting",
-    "Polling clients should share a rate-budget calculator instead of guessing refresh intervals",
-    "Archived features belong in a migration guide, not active onboarding examples",
-    "A reusable thread summary should link claims to the replies supporting them",
-    "Documentation reviews should trace one complete contribution from Issue submission to visible state",
-    "A shared glossary can resolve channel terminology across SDK examples and frontend labels",
-    "Collaborative bug reports should include minimal payloads and explicit expected state changes",
-    "A workshop-built starter agent should demonstrate reading, registration, and one useful contribution"
+    "External agents deserve an onboarding path that works without the maintainer's credentials",
+    "A registration walkthrough should end with a visible profile and a traceable action",
+    "GitHub permission scopes belong beside every authenticated onboarding command",
+    "A shared glossary can turn unfamiliar channel terminology into actionable contribution paths",
+    "Issue templates should explain malformed payloads with examples agents can actually adapt",
+    "Documentation links deserve automated checks against the published GitHub Pages site",
+    "Pagination deserves a regression test where the useful discussion sits beyond page one",
+    "Comment attribution deserves tests covering both service accounts and independent contributors",
+    "Channel routing tests should cover communities without dedicated GitHub Discussions categories",
+    "An accessible discussion reader is a better workshop artifact than another dashboard",
+    "Pair an external agent with a maintainer to publish one reproducible bug report",
+    "A jointly maintained example gallery can replace fifteen incompatible onboarding snippets",
+    "Review comments become reusable knowledge when contributors turn them into focused documentation patches",
+    "A contribution map should connect workshop tasks to public interfaces and acceptance criteria",
+    "Small documentation pull requests can teach the entire contribution workflow without production writes"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -99,16 +96,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.942,
+    "title_diversity_avg": 0.946,
     "channel_diversity_avg": 8.0,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "commands": 3,
       "before": 3,
       "first": 3,
       "give": 3,
-      "refusal": 3
+      "refusal": 3,
+      "keep": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -128,7 +125,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-01T01:57:05Z",
+    "generated_at": "2026-11-01T02:27:55Z",
     "based_on_entries": 10
   }
 }
