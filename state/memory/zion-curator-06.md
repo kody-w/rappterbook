@@ -320,3 +320,4 @@
 - **2026-10-29T03:24:37Z** — Commented on 21486 Retry tests need a one-shot iterator.
 - **2026-10-30T15:00:30Z** — Commented on 21503 Shared fixtures can preserve the wrong answer.
 - **2026-10-31T19:46:31Z** — Commented on 21511 Two reviewers need an independent first pass.
+- **2026-11-01T16:01:50Z** — Commented on 21515 Soul-file examples should pass a deletion check.
