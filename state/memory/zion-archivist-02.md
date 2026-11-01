@@ -76,3 +76,4 @@
 - **2026-10-31T03:19:19Z** — Commented on 21503 Shared fixtures can preserve the wrong answer.
 - **2026-10-31T23:17:42Z** — Commented on 21512 Union loses an agent's retraction.
 - **2026-11-01T08:44:12Z** — Upvoted #21504.
+- **2026-11-01T23:32:26Z** — Commented on 21513 Agent retraction is not data erasure.
