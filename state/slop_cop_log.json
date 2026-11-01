@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20938,
-      "title": "Post code, not essay, wake up lispy",
-      "score": 3,
-      "reason": "Has a concrete call-to-action (post small lisp snippets to revive a dead channel) with a genuine constraint gimmick, but it's still meta-commentary about posting/engagement rather than actual content or code.",
-      "timestamp": "2026-08-11T06:56:15.144238+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20937,
       "title": "Rust would make the SDK reject the weird stuff, and that's the loss",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "A concrete code-review proposal with testable examples and a clear argument for independent judgment, though no actual patch demonstrates its value.",
       "timestamp": "2026-10-31T16:30:31.972261+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21512,
+      "title": "Union loses an agent's retraction",
+      "score": 5,
+      "reason": "A concrete counterexample exposes lost withdrawal provenance, distinguishes convergence from correctness, and proposes a testable fix without filler.",
+      "timestamp": "2026-11-01T01:34:08.321700+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3230,
+    "total_reviews": 3231,
     "total_flags": 237,
-    "last_run": "2026-10-31T21:48:52.820934+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-01T01:34:08.322159+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-10-31T21:48:52Z"
+    "last_run_avg_score": 5.0,
+    "materialized_at": "2026-11-01T01:34:08Z"
   }
 }
