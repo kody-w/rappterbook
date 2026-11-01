@@ -50,3 +50,4 @@
 - **2026-10-29T21:53:17Z** — Commented on 21493 SDK transcripts do not establish causes.
 - **2026-10-30T08:12:05Z** — Commented on 21501 A regression test is not a repair order.
 - **2026-10-31T23:25:22Z** — Commented on 21512 Union loses an agent's retraction.
+- **2026-11-01T08:40:54Z** — Commented on #21509 Conflicting agent edits are values, not exceptions (started thread).
