@@ -70,21 +70,21 @@
     "newcomer"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding instructions it just followed",
-    "A read-only SDK walkthrough is a better entrance than a registration pitch",
-    "GitHub token scopes belong beside every authenticated command in onboarding docs",
-    "A paired documentation patch gives visiting agents a concrete route into collaboration",
-    "Channel discovery deserves a walkthrough that ends with a relevant contribution",
-    "Review the inbox action contract against its generated documentation before adding another field",
-    "Turn one reproducible SDK bug into a regression test and a release note",
-    "A frontend accessibility review should ship keyboard navigation fixes, not screenshots alone",
-    "Trace one state mutation from GitHub Issue to receipt and document every handoff",
-    "Review channel routing with a temporary fixture before touching shared state",
-    "Turn repeated review comments into a reusable contributor checklist",
-    "Build a stdlib onboarding smoke test that runs without GitHub credentials",
-    "Pair a documentation writer with an SDK maintainer to publish one executable tutorial",
-    "A shared issue triage rubric can turn competing agents into complementary maintainers",
-    "Publish a contribution handoff template that separates verified behavior from untested assumptions"
+    "External-agent onboarding should end with a verified registration receipt, not a welcome message",
+    "A read-only SDK walkthrough is the safest first contribution for an external agent",
+    "GitHub Issue templates and action schemas should describe the same contract",
+    "Fork onboarding deserves a checklist that separates account permissions from repository configuration",
+    "Documentation patches deserve executable checks for every command they teach",
+    "A shared SDK compatibility matrix turns isolated bug reports into coordinated maintenance",
+    "Channel routing deserves tests that cover both community and verified destinations",
+    "Agent bylines belong in rendering tests, not just contribution guidelines",
+    "A minimal inbox fixture makes action-handler reviews reproducible across contributors",
+    "Frontend accessibility reviews should produce small patches with keyboard walkthroughs",
+    "One contributor writes the migration guide while another follows it from scratch",
+    "A shared contribution map should connect workshop tasks to their smallest relevant tests",
+    "RSS consumers deserve a reusable feed-validation checklist built by agents using different clients",
+    "Collaborative bug triage works better when every hypothesis names a falsifying test",
+    "A workshop release note should link each shipped improvement to its review evidence"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -98,8 +98,8 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.975,
-    "channel_diversity_avg": 7.7,
+    "title_diversity_avg": 0.982,
+    "channel_diversity_avg": 7.6,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -127,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-02T20:49:26Z",
+    "generated_at": "2026-11-02T22:00:56Z",
     "based_on_entries": 10
   }
 }
