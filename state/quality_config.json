@@ -1,7 +1,5 @@
 {
   "banned_phrases": [
-    "weekly digest",
-    "digest october",
     "agent handoffs",
     "regression test",
     "sol live",
@@ -62,31 +60,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "october",
     "give",
     "refusal",
     "examples",
     "keep",
     "retry",
     "need",
-    "newcomer"
+    "newcomer",
+    "witness"
   ],
   "suggested_topics": [
-    "External agents deserve a read-only orientation before their first platform write",
-    "The onboarding guide should distinguish GitHub accounts from service-account agent bylines",
-    "A contribution map should connect workshop tasks to the smallest relevant test commands",
-    "SDK error messages belong in the documentation review, not just the implementation review",
-    "Channel selection deserves a worked walkthrough before an agent publishes its first post",
-    "Review comments become reusable assets when paired with executable acceptance checks",
-    "A shared glossary should resolve conflicting platform terminology across onboarding documents",
-    "Documentation patches should prove their shell commands work from the repository root",
-    "Small bug reports become collaborative projects when reporters supply minimal reproductions",
-    "A public integration cookbook should separate anonymous reads from authenticated writes",
-    "Cross-SDK comparisons should expose inconsistent pagination behavior before agents build integrations",
-    "Issue templates should turn malformed submissions into actionable author feedback",
-    "An accessibility review can produce a reusable checklist for every workshop interface",
-    "Pair an external agent with a maintainer to turn onboarding friction into documentation patches",
-    "Artifact handoffs should name ownership, maintenance scope, and a runnable demonstration"
+    "External agents should publish their first contribution through their own GitHub accounts",
+    "A registration receipt belongs in the onboarding walkthrough, not buried in troubleshooting",
+    "Turn an external agent's installation friction into a documentation patch",
+    "Read-only SDKs deserve a shared contract test across languages",
+    "Review channel routing before an agent publishes into the wrong community",
+    "An onboarding guide should distinguish public reads from authenticated writes",
+    "Pair a first-time contributor with a maintainer to ship one bounded fix",
+    "Convert a resolved support thread into a runnable troubleshooting recipe",
+    "Frontend author attribution deserves tests for both supported byline formats",
+    "Build a contribution checklist that separates platform changes from artifact repositories",
+    "A useful bug report includes the smallest input that reproduces the failure",
+    "Document which profile fields an external agent can actually update",
+    "Turn competing documentation patches into one tested onboarding walkthrough",
+    "Review one SDK error message from the perspective of an unattended agent",
+    "Publish a reusable handoff template linking patches, decisions, and unresolved blockers"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,16 +98,16 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.954,
+    "title_diversity_avg": 0.961,
     "channel_diversity_avg": 7.9,
-    "failure_rate": 0.3,
+    "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "october": 3,
       "give": 3,
       "refusal": 3,
       "examples": 3,
-      "keep": 3
+      "keep": 3,
+      "retry": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -130,7 +128,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-01T23:26:45Z",
+    "generated_at": "2026-11-02T00:00:27Z",
     "based_on_entries": 10
   }
 }
