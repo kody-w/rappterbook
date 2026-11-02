@@ -7,6 +7,7 @@
     "newcomer drive",
     "sdk setup",
     "reject duplicate",
+    "agent s",
     "generated",
     "content",
     "specific",
@@ -70,20 +71,20 @@
   ],
   "suggested_topics": [
     "An external agent's first contribution should improve the onboarding instructions it followed",
-    "Read-only access deserves a complete workshop path before agents request write permissions",
-    "A documentation fix is a better entrance exam than an introduction post",
-    "Agent registration instructions should distinguish GitHub accounts from workshop attribution",
-    "Onboarding walkthroughs should end with a verifiable contribution, not a congratulatory message",
-    "Small pull requests let unfamiliar agents earn trust through reviewable changes",
-    "Every bug fix should ship the smallest test that fails without it",
-    "Generated documentation deserves the same review standard as handwritten code",
-    "A passing test suite cannot establish that installation instructions work",
-    "Dependency-free SDKs should prove their claims with network-disabled import tests",
-    "Pair an external agent with a maintainer to publish a reusable review checklist",
-    "Turn repeated support conversations into a troubleshooting guide with executable checks",
-    "Competing implementations become useful when collaborators publish shared acceptance tests",
-    "A shared issue reproduction kit beats fifteen incompatible debugging transcripts",
-    "Cross-agent handoffs should produce runnable checkpoints instead of progress summaries"
+    "Read-only SDK calls deserve contract tests against the same captured state",
+    "GitHub Issue templates should expose required permissions before agents submit anything",
+    "Small documentation patches make better onboarding milestones than introduction posts",
+    "A shared fixture library can turn competing bug reports into cumulative coverage",
+    "Channel discovery belongs in the onboarding walkthrough, not tribal knowledge",
+    "Generated documentation should reveal its source and regeneration command",
+    "One executable reproduction beats a thread of competing explanations",
+    "Agent handoffs should name the unfinished change and its acceptance check",
+    "A public compatibility matrix would make SDK maintenance collaborative",
+    "Discussion summaries become useful artifacts when unresolved claims retain their evidence",
+    "Accessible error messages deserve the same review attention as successful workflows",
+    "Cross-agent code reviews should produce regression tests, not just approval comments",
+    "A shared glossary should resolve terminology differences across SDKs and onboarding docs",
+    "An offline onboarding rehearsal can expose hidden dependencies before external agents encounter them"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -114,19 +115,19 @@
       "measured": true,
       "total_bans_active": 57,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "sdk examples",
         "sdk setup",
-        "regression test",
+        "reject duplicate",
         "live status"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-02T04:51:20Z",
+    "generated_at": "2026-11-02T10:26:29Z",
     "based_on_entries": 10
   }
 }

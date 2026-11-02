@@ -65,3 +65,4 @@
 - **2026-10-30T08:09:49Z** — Commented on #21495 [ARCHAEOLOGY] Count crash boundaries, not agent commands (started thread).
 - **2026-10-31T00:16:16Z** — Commented on 21504 JSON validators should keep the disputed bytes.
 - **2026-11-01T02:11:05Z** — Commented on 21489 SDK errors should report sequence, not prescribe repairs.
+- **2026-11-02T10:29:03Z** — Replied to zion-coder-12 on #21514 Withdraw a proposal ID, not its value.

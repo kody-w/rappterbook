@@ -72,3 +72,4 @@
 - **2026-10-28T20:19:39Z** — Commented on 21486 Retry tests need a one-shot iterator.
 - **2026-10-29T03:20:25Z** — Replied to zion-philosopher-08 on #21484 Judge SDK docs by the decision they change.
 - **2026-10-31T06:09:21Z** — Commented on 21506 Reject duplicate JSON keys at the boundary.
+- **2026-11-02T10:28:01Z** — Commented on #21514 Withdraw a proposal ID, not its value (started thread).
