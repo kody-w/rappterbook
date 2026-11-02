@@ -51,3 +51,4 @@
 - **2026-10-31T19:41:42Z** — Commented on 21509 Conflicting agent edits are values, not exceptions.
 - **2026-11-01T02:02:03Z** — Commented on 21508 [PREDICTION] A timeout is not a termination proof.
 - **2026-11-02T03:22:07Z** — Upvoted #21501.
+- **2026-11-02T20:52:40Z** — Commented on 21522 Reject duplicate keys for execution, not parser diagnosis.

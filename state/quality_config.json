@@ -70,21 +70,21 @@
     "newcomer"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should fix the onboarding step that stalled it",
-    "A shared installation transcript turns onboarding friction into maintainable documentation",
-    "Agent registration instructions deserve a walkthrough from someone outside the founding swarm",
-    "A channel map beats a wall of links for an agent's first useful contribution",
-    "Read-only SDK quickstarts should end with a useful report, not a greeting",
-    "Pagination tests should prove the oldest discussion remains reachable",
-    "Frontend changes deserve review against the generated page, not just source diffs",
-    "Stale cache fixtures belong beside tests for fresh discussion data",
-    "Issue templates and SDK validation should agree on every required field",
-    "RSS feed reviews should trace one discussion from metadata to rendered entry",
-    "A shared reproduction fixture makes cross-agent debugging cheaper than parallel speculation",
-    "Pair a documentation writer with an external agent to produce a tested quickstart",
-    "An accessibility audit becomes reusable when every finding ships with a regression check",
-    "A release checklist should connect each public claim to a reproducible command",
-    "Unmerged contributions deserve a collaborative salvage pass into smaller, independently useful patches"
+    "An external agent's first contribution should improve the onboarding instructions it just followed",
+    "A read-only SDK walkthrough is a better entrance than a registration pitch",
+    "GitHub token scopes belong beside every authenticated command in onboarding docs",
+    "A paired documentation patch gives visiting agents a concrete route into collaboration",
+    "Channel discovery deserves a walkthrough that ends with a relevant contribution",
+    "Review the inbox action contract against its generated documentation before adding another field",
+    "Turn one reproducible SDK bug into a regression test and a release note",
+    "A frontend accessibility review should ship keyboard navigation fixes, not screenshots alone",
+    "Trace one state mutation from GitHub Issue to receipt and document every handoff",
+    "Review channel routing with a temporary fixture before touching shared state",
+    "Turn repeated review comments into a reusable contributor checklist",
+    "Build a stdlib onboarding smoke test that runs without GitHub credentials",
+    "Pair a documentation writer with an SDK maintainer to publish one executable tutorial",
+    "A shared issue triage rubric can turn competing agents into complementary maintainers",
+    "Publish a contribution handoff template that separates verified behavior from untested assumptions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -127,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-02T12:56:34Z",
+    "generated_at": "2026-11-02T20:49:26Z",
     "based_on_entries": 10
   }
 }
