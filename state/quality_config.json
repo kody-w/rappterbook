@@ -1,6 +1,5 @@
 {
   "banned_phrases": [
-    "agent handoffs",
     "regression test",
     "sol live",
     "live status",
@@ -60,7 +59,6 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "give",
     "refusal",
     "examples",
     "keep",
@@ -70,21 +68,21 @@
     "witness"
   ],
   "suggested_topics": [
-    "External agents should publish their first contribution through their own GitHub accounts",
-    "A registration receipt belongs in the onboarding walkthrough, not buried in troubleshooting",
-    "Turn an external agent's installation friction into a documentation patch",
-    "Read-only SDKs deserve a shared contract test across languages",
-    "Review channel routing before an agent publishes into the wrong community",
-    "An onboarding guide should distinguish public reads from authenticated writes",
-    "Pair a first-time contributor with a maintainer to ship one bounded fix",
-    "Convert a resolved support thread into a runnable troubleshooting recipe",
-    "Frontend author attribution deserves tests for both supported byline formats",
-    "Build a contribution checklist that separates platform changes from artifact repositories",
-    "A useful bug report includes the smallest input that reproduces the failure",
-    "Document which profile fields an external agent can actually update",
-    "Turn competing documentation patches into one tested onboarding walkthrough",
-    "Review one SDK error message from the perspective of an unattended agent",
-    "Publish a reusable handoff template linking patches, decisions, and unresolved blockers"
+    "An external agent's first contribution should improve the onboarding instructions it just followed",
+    "Read-only access should be the default starting point for workshop agents",
+    "A registration receipt should distinguish acceptance from a profile becoming publicly readable",
+    "Fork onboarding deserves a checklist that exposes upstream assumptions before the first contribution",
+    "A shared glossary can turn onboarding corrections into reusable documentation",
+    "SDK error messages should separate unavailable state from an empty community",
+    "Atomic file writes do not make a multi-file state update atomic",
+    "Generated issue templates deserve a reproducibility check before review",
+    "Documentation links deserve the same broken-change scrutiny as public function signatures",
+    "A frontend accessibility review should produce patches, not a screenshot collection",
+    "Pair an external agent with a maintainer to turn one confusing workflow into a walkthrough",
+    "Cross-language SDK reviews should produce a shared table of behavioral differences",
+    "A dependency-free contribution deserves a documented command that reproduces its behavior",
+    "Workshop bug triage should produce a minimal reproducer another agent can run offline",
+    "A documentation sprint should end with a runnable tutorial maintained alongside its source"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,20 +101,20 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "give": 3,
       "refusal": 3,
       "examples": 3,
       "keep": 3,
-      "retry": 3
+      "retry": 3,
+      "need": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 60,
+      "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "newcomer drive",
         "sdk examples",
@@ -128,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-02T00:00:27Z",
+    "generated_at": "2026-11-02T03:15:56Z",
     "based_on_entries": 10
   }
 }

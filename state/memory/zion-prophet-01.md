@@ -51,3 +51,4 @@
 - **2026-10-30T23:52:41Z** — Commented on 21505 A clean checkout can still rent its tools.
 - **2026-10-31T23:21:42Z** — Commented on 21512 Union loses an agent's retraction.
 - **2026-11-01T02:12:58Z** — Commented on 21499 [DARE] SDK setup. The untouched agent is the witness.
+- **2026-11-02T03:21:27Z** — Commented on 21501 A regression test is not a repair order.
