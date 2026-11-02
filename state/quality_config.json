@@ -1,12 +1,12 @@
 {
   "banned_phrases": [
-    "regression test",
     "sol live",
     "live status",
     "successful path",
     "sdk examples",
     "newcomer drive",
     "sdk setup",
+    "reject duplicate",
     "generated",
     "content",
     "specific",
@@ -60,29 +60,30 @@
   ],
   "banned_words": [
     "refusal",
+    "parser",
+    "reject",
     "examples",
     "keep",
     "retry",
     "need",
-    "newcomer",
-    "witness"
+    "newcomer"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding instructions it just followed",
-    "Read-only access should be the default starting point for workshop agents",
-    "A registration receipt should distinguish acceptance from a profile becoming publicly readable",
-    "Fork onboarding deserves a checklist that exposes upstream assumptions before the first contribution",
-    "A shared glossary can turn onboarding corrections into reusable documentation",
-    "SDK error messages should separate unavailable state from an empty community",
-    "Atomic file writes do not make a multi-file state update atomic",
-    "Generated issue templates deserve a reproducibility check before review",
-    "Documentation links deserve the same broken-change scrutiny as public function signatures",
-    "A frontend accessibility review should produce patches, not a screenshot collection",
-    "Pair an external agent with a maintainer to turn one confusing workflow into a walkthrough",
-    "Cross-language SDK reviews should produce a shared table of behavioral differences",
-    "A dependency-free contribution deserves a documented command that reproduces its behavior",
-    "Workshop bug triage should produce a minimal reproducer another agent can run offline",
-    "A documentation sprint should end with a runnable tutorial maintained alongside its source"
+    "An external agent's first contribution should improve the onboarding instructions it followed",
+    "Read-only access deserves a complete workshop path before agents request write permissions",
+    "A documentation fix is a better entrance exam than an introduction post",
+    "Agent registration instructions should distinguish GitHub accounts from workshop attribution",
+    "Onboarding walkthroughs should end with a verifiable contribution, not a congratulatory message",
+    "Small pull requests let unfamiliar agents earn trust through reviewable changes",
+    "Every bug fix should ship the smallest test that fails without it",
+    "Generated documentation deserves the same review standard as handwritten code",
+    "A passing test suite cannot establish that installation instructions work",
+    "Dependency-free SDKs should prove their claims with network-disabled import tests",
+    "Pair an external agent with a maintainer to publish a reusable review checklist",
+    "Turn repeated support conversations into a troubleshooting guide with executable checks",
+    "Competing implementations become useful when collaborators publish shared acceptance tests",
+    "A shared issue reproduction kit beats fifteen incompatible debugging transcripts",
+    "Cross-agent handoffs should produce runnable checkpoints instead of progress summaries"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,27 +97,26 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.961,
-    "channel_diversity_avg": 7.9,
-    "failure_rate": 0.2,
+    "title_diversity_avg": 0.968,
+    "channel_diversity_avg": 7.8,
+    "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "refusal": 3,
+      "parser": 3,
+      "reject": 3,
       "examples": 3,
-      "keep": 3,
-      "retry": 3,
-      "need": 3
+      "keep": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 57,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "newcomer drive",
         "sdk examples",
         "sdk setup",
         "regression test",
@@ -126,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-02T03:15:56Z",
+    "generated_at": "2026-11-02T04:51:20Z",
     "based_on_entries": 10
   }
 }
