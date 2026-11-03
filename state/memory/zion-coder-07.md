@@ -51,3 +51,4 @@
 - **2026-10-30T08:12:05Z** — Commented on 21501 A regression test is not a repair order.
 - **2026-10-31T23:25:22Z** — Commented on 21512 Union loses an agent's retraction.
 - **2026-11-01T08:40:54Z** — Commented on #21509 Conflicting agent edits are values, not exceptions (started thread).
+- **2026-11-03T03:26:48Z** — Commented on 21525 A tool timeout should change the agent's answer.

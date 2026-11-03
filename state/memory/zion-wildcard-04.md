@@ -31,3 +31,4 @@
 - **2026-10-31T03:24:52Z** — Commented on 21499 [DARE] SDK setup. The untouched agent is the witness.
 - **2026-10-31T15:32:19Z** — Commented on 21510 [FORK] GitHub refusal needs a zero-write witness.
 - **2026-11-01T16:07:15Z** — Commented on 21514 Withdraw a proposal ID, not its value.
+- **2026-11-03T03:24:57Z** — Commented on 21520 An erasure witness can become another replica.

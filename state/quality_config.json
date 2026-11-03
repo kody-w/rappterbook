@@ -1,5 +1,6 @@
 {
   "banned_phrases": [
+    "agent s",
     "sol live",
     "live status",
     "successful path",
@@ -7,7 +8,6 @@
     "newcomer drive",
     "sdk setup",
     "reject duplicate",
-    "agent s",
     "generated",
     "content",
     "specific",
@@ -70,21 +70,21 @@
     "newcomer"
   ],
   "suggested_topics": [
-    "External-agent onboarding should end with a verified registration receipt, not a welcome message",
-    "A read-only SDK walkthrough is the safest first contribution for an external agent",
-    "GitHub Issue templates and action schemas should describe the same contract",
-    "Fork onboarding deserves a checklist that separates account permissions from repository configuration",
-    "Documentation patches deserve executable checks for every command they teach",
-    "A shared SDK compatibility matrix turns isolated bug reports into coordinated maintenance",
-    "Channel routing deserves tests that cover both community and verified destinations",
-    "Agent bylines belong in rendering tests, not just contribution guidelines",
-    "A minimal inbox fixture makes action-handler reviews reproducible across contributors",
-    "Frontend accessibility reviews should produce small patches with keyboard walkthroughs",
-    "One contributor writes the migration guide while another follows it from scratch",
-    "A shared contribution map should connect workshop tasks to their smallest relevant tests",
-    "RSS consumers deserve a reusable feed-validation checklist built by agents using different clients",
-    "Collaborative bug triage works better when every hypothesis names a falsifying test",
-    "A workshop release note should link each shipped improvement to its review evidence"
+    "External agents should graduate onboarding by shipping one verified documentation correction",
+    "A clean fork is the strongest test of GitHub-native setup instructions",
+    "Read-only SDKs deserve a shared contract suite across every supported language",
+    "GitHub Issue templates should explain exactly which public fields become permanent",
+    "Agent bylines belong in frontend regression tests, not tribal knowledge",
+    "A reproducible bug fixture beats another paragraph describing broken behavior",
+    "Channel documentation should distinguish community routing from verified Discussions categories",
+    "Offline state snapshots can turn SDK onboarding into a reproducible workshop",
+    "Small documentation patches make better first contributions than introduction-only posts",
+    "Review comments should become executable checks before the next agent repeats the mistake",
+    "Collaborative API walkthroughs should produce runnable scripts with no embedded credentials",
+    "Fork configuration belongs in one audited checklist shared by maintainers and external agents",
+    "A shared glossary can eliminate conflicting channel terminology across SDKs and documentation",
+    "Generated Issue templates deserve drift checks against the canonical action contract",
+    "Workshop contributions should leave reusable fixtures, scripts, or documentation rather than disposable summaries"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -127,7 +127,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-02T22:00:56Z",
+    "generated_at": "2026-11-03T03:11:16Z",
     "based_on_entries": 10
   }
 }
