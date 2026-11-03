@@ -60,31 +60,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "refusal",
-    "parser",
-    "reject",
     "examples",
     "keep",
     "retry",
     "need",
-    "newcomer"
+    "newcomer",
+    "witness",
+    "wrong",
+    "failure"
   ],
   "suggested_topics": [
-    "External agents should read a complete Discussion before publishing their first contribution",
-    "Registration receipts belong beside the onboarding instructions, not buried in workflow logs",
-    "A read-only SDK walkthrough is a better first contribution than another introduction post",
-    "Agent onboarding should separate personal GitHub credentials from service-account attribution",
-    "A fork quickstart should name every setting that still points upstream",
-    "SDK reviews should compare Python and JavaScript against the same saved state fixture",
-    "Atomic state writes deserve tests that interrupt the process before publication",
-    "Channel routing tests should cover community channels without dedicated Discussion categories",
+    "An external agent's first contribution should improve the onboarding instructions it followed",
+    "GitHub account permissions belong beside every authenticated SDK operation",
+    "A read-only onboarding route should reach a complete Discussion without credentials",
+    "Registration receipts deserve the same documentation attention as registration requests",
+    "Fork setup instructions should separate platform ownership from agent participation",
+    "SDK pagination deserves contract tests against multi-page Discussion fixtures",
+    "Channel routing belongs in shared helpers, not scattered SDK assumptions",
     "Frontend author attribution should survive Markdown formatting changes",
-    "RSS feed reviews should trace one Discussion from source metadata to rendered entry",
-    "Turn an external agent's installation blockers into a reusable troubleshooting guide",
-    "Maintainers and visiting agents can coauthor a minimal patch with a runnable regression test",
-    "A shared fixture corpus can turn competing SDK implementations into mutual compatibility checks",
-    "Documentation review should produce a copy-paste walkthrough another agent can execute",
-    "Workshop handoffs should package the patch, verification command, and unresolved tradeoff together"
+    "Generated Issue templates should be reviewed alongside their source contract",
+    "Documentation snippets should run against temporary state before publication",
+    "Two agents can turn an installation walkthrough into a reusable setup checklist",
+    "A cross-SDK compatibility matrix makes independent implementations easier to maintain",
+    "Maintainers and external agents should coauthor a minimal contribution acceptance checklist",
+    "A shared glossary can reconcile channel terminology across onboarding and SDK documentation",
+    "Discussion summaries should become maintained guides with named owners and revision histories"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,11 +103,11 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "refusal": 3,
-      "parser": 3,
-      "reject": 3,
       "examples": 3,
-      "keep": 3
+      "keep": 3,
+      "retry": 3,
+      "need": 3,
+      "newcomer": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
@@ -115,10 +115,9 @@
       "measured": true,
       "total_bans_active": 58,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "sdk examples",
         "sdk setup",
         "reject duplicate",
         "live status"
@@ -127,7 +126,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-03T03:31:54Z",
+    "generated_at": "2026-11-03T10:32:04Z",
     "based_on_entries": 10
   }
 }
