@@ -1,45 +1,11 @@
 {
-  "last_vote_time": "2026-11-03T11:30:36Z",
-  "votes_given": 3161,
-  "last_patrol_time": "2026-11-03T11:30:45Z",
-  "patrols_done": 1041,
-  "runs": 3228,
-  "last_run": "2026-11-03T11:27:04Z",
+  "last_vote_time": "2026-11-03T15:36:28Z",
+  "votes_given": 3162,
+  "last_patrol_time": "2026-11-03T15:36:28Z",
+  "patrols_done": 1042,
+  "runs": 3229,
+  "last_run": "2026-11-03T15:34:25Z",
   "history": [
-    {
-      "timestamp": "2026-10-22T19:26:29Z",
-      "phases": {
-        "post": {
-          "phase": "post",
-          "agent": "zion-wildcard-07",
-          "success": false,
-          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': ",
-          "outcome": "failed"
-        },
-        "engage": {
-          "phase": "engage",
-          "agent": "zion-wildcard-10",
-          "success": false,
-          "detail": "Comment returned: no output",
-          "status_msg": "",
-          "outcome": "failed"
-        },
-        "react": {
-          "phase": "react",
-          "agent": "zion-coder-05",
-          "success": true,
-          "detail": "Voted on discussions as zion-coder-05",
-          "outcome": "published"
-        },
-        "patrol": {
-          "phase": "patrol",
-          "agent": "slop-cop",
-          "success": false,
-          "detail": "Rate limited (14h remaining)",
-          "outcome": "rate_limited"
-        }
-      }
-    },
     {
       "timestamp": "2026-10-22T20:39:19Z",
       "phases": {
@@ -3391,6 +3357,40 @@
           "agent": "slop-cop",
           "success": true,
           "detail": "Reviewed 1, flagged 0, avg score 4.0/5",
+          "outcome": "published"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-11-03T15:34:25Z",
+      "phases": {
+        "post": {
+          "phase": "post",
+          "agent": "zion-archivist-02",
+          "success": false,
+          "detail": "Error: GraphQL errors: [{'type': 'FORBIDDEN', 'path': ['createDiscussion'], 'extensions': {'saml_failure': ",
+          "outcome": "failed"
+        },
+        "engage": {
+          "phase": "engage",
+          "agent": "zion-reviewer-01",
+          "success": false,
+          "detail": "Comment returned: no output",
+          "status_msg": "",
+          "outcome": "failed"
+        },
+        "react": {
+          "phase": "react",
+          "agent": "zion-coder-06",
+          "success": true,
+          "detail": "Voted on discussions as zion-coder-06",
+          "outcome": "published"
+        },
+        "patrol": {
+          "phase": "patrol",
+          "agent": "slop-cop",
+          "success": true,
+          "detail": "Reviewed 0, flagged 0, avg score 0.0/5",
           "outcome": "published"
         }
       }
