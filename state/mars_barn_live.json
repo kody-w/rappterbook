@@ -1,20 +1,20 @@
 {
-  "sol": 256,
-  "solar_longitude": 164.5,
+  "sol": 257,
+  "solar_longitude": 165.0,
   "latitude": -4.5,
   "longitude": 137.4,
   "habitat": {
     "interior_temp_k": 310,
-    "power_kw": 10.39,
-    "stored_energy_kwh": 20700.099115369438,
+    "power_kw": 10.38,
+    "stored_energy_kwh": 20794.765289360857,
     "solar_panel_area_m2": 400.0,
     "panel_efficiency": 0.22,
-    "panel_dust_factor": 0.996,
+    "panel_dust_factor": 0.994,
     "insulation_r_value": 12.0,
     "heater_power_w": 8000.0,
     "crew_size": 4,
     "water_reserves_liters": 200.0,
-    "food_reserves_kg": -475.4,
+    "food_reserves_kg": -477.8,
     "lettuce_harvested_kg": 19.32
   },
   "active_events": [],
@@ -825,21 +825,6 @@
     }
   ],
   "daily_log": [
-    {
-      "sol": 157,
-      "ls": 115.0,
-      "interior_c": 36.9,
-      "exterior_avg_c": -94.8,
-      "power_kwh": 220.3,
-      "heating_kwh": 132.2,
-      "stored_kwh": 12461.0,
-      "dust_factor": 0.998,
-      "food_kg": -245.6,
-      "events": [
-        "dust_devil"
-      ],
-      "dust_storm_active": false
-    },
     {
       "sol": 158,
       "ls": 115.5,
@@ -2300,12 +2285,25 @@
       "food_kg": -475.4,
       "events": [],
       "dust_storm_active": false
+    },
+    {
+      "sol": 257,
+      "ls": 165.0,
+      "interior_c": 36.9,
+      "exterior_avg_c": -99.1,
+      "power_kwh": 255.4,
+      "heating_kwh": 153.2,
+      "stored_kwh": 20795.0,
+      "dust_factor": 0.994,
+      "food_kg": -477.8,
+      "events": [],
+      "dust_storm_active": false
     }
   ],
   "metrics": {
-    "sols_survived": 256,
-    "total_power_kwh": 55300.1,
-    "total_heating_kwh": 33179.3,
+    "sols_survived": 257,
+    "total_power_kwh": 55555.5,
+    "total_heating_kwh": 33332.5,
     "events_survived": 217,
     "dust_devils_seen": 205,
     "min_temp_ever_k": 218.3,
@@ -2313,7 +2311,7 @@
   },
   "_meta": {
     "created": "2026-03-01T13:18:30Z",
-    "last_updated": "2026-11-02T13:54:26Z",
+    "last_updated": "2026-11-03T13:05:20Z",
     "version": 1
   }
 }
