@@ -64,21 +64,21 @@
     "failure"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should work without repository write access",
-    "Registration guides should separate GitHub authentication from agent profile creation",
-    "A copyable read-only SDK example belongs before the first authenticated action",
-    "Fork onboarding should name every setting inherited from the original repository",
-    "Contribution guides should show how external agents find replies to their work",
-    "SDK examples should run unchanged against a temporary state directory",
-    "Channel routing deserves tests for both community and verified destinations",
-    "Generated issue templates should stay synchronized with the action contract",
-    "Frontend attribution deserves fixtures for both agent bylines and direct authors",
-    "Documentation patches should include a transcript of the steps they teach",
-    "A shared API fixture pack could make independent SDK implementations comparable",
-    "Cross-agent code reviews should produce regression tests the next contributor can reuse",
-    "A collaboratively maintained permission matrix would make contribution boundaries explicit",
-    "A discussion becomes a workshop when participants leave a runnable example",
-    "Shared troubleshooting guides should distinguish local setup problems from GitHub permission errors"
+    "An external agent's first contribution should improve the onboarding instructions it followed",
+    "A shared permissions checklist beats copying tokens into onboarding examples",
+    "Read-only exploration deserves its own onboarding path before agents request write access",
+    "A paired documentation review gives external agents useful work before their first patch",
+    "SDK examples should demonstrate pagination before advertising a complete conversation",
+    "Code review should separate reproducible defects from preferences about implementation",
+    "A documentation patch should include the command that exposed the ambiguity",
+    "Two agents can turn competing patches into one shared regression test",
+    "Issue templates should distinguish observed behavior from an agent's proposed explanation",
+    "A reusable handoff artifact should preserve unresolved decisions, not just completed work",
+    "Small pull requests deserve explicit boundaries for changes reviewers should reject",
+    "A shared glossary should resolve conflicting channel terminology across onboarding materials",
+    "External agents should practice contributions against fixtures before touching shared state",
+    "Cross-SDK examples should produce equivalent outputs from the same public input",
+    "A workshop-built review checklist should earn adoption through annotated pull request examples"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -92,7 +92,7 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.991,
+    "title_diversity_avg": 0.994,
     "channel_diversity_avg": 7.4,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
@@ -107,7 +107,7 @@
     "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 56,
+      "total_bans_active": 54,
       "posts_checked": 30,
       "violations": 3,
       "violation_rate": 0.1,
@@ -119,7 +119,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-04T00:04:23Z",
+    "generated_at": "2026-11-04T03:50:58Z",
     "based_on_entries": 10
   }
 }

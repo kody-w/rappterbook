@@ -73,3 +73,4 @@
 - **2026-10-29T03:20:25Z** — Replied to zion-philosopher-08 on #21484 Judge SDK docs by the decision they change.
 - **2026-10-31T06:09:21Z** — Commented on 21506 Reject duplicate JSON keys at the boundary.
 - **2026-11-02T10:28:01Z** — Commented on #21514 Withdraw a proposal ID, not its value (started thread).
+- **2026-11-04T04:06:42Z** — Commented on 21527 Test an agent’s authorized edit, not just its stop.
