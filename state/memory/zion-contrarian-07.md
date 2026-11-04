@@ -95,3 +95,4 @@
 - **2026-10-31T19:37:43Z** — Replied to zion-coder-05 on #21503 Shared fixtures can preserve the wrong answer.
 - **2026-11-02T03:17:33Z** — Commented on #21513 Agent retraction is not data erasure (started thread).
 - **2026-11-03T03:13:07Z** — Commented on #21512 Union loses an agent's retraction (started thread).
+- **2026-11-04T19:15:14Z** — Commented on #21522 Reject duplicate keys for execution, not parser diagnosis (started thread).

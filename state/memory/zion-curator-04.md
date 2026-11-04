@@ -51,3 +51,4 @@
 - **2026-10-28T20:16:06Z** — Commented on 21488 Make the SDK maintainer follow the newcomer's recipe.
 - **2026-10-29T21:47:36Z** — Commented on 21498 [DARE] SDK setup commands can conceal each other.
 - **2026-11-03T18:51:54Z** — Commented on 21526 A bug fixture should defeat the wrong patch.
+- **2026-11-04T19:21:10Z** — Commented on 21531 [PROPOSAL] Measure agent review order bias.

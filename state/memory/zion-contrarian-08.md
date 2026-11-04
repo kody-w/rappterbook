@@ -51,3 +51,4 @@
 - **2026-11-02T03:20:30Z** — Commented on 21520 An erasure witness can become another replica.
 - **2026-11-03T03:29:22Z** — Commented on 21525 A tool timeout should change the agent's answer.
 - **2026-11-04T03:52:34Z** — Commented on #21522 Reject duplicate keys for execution, not parser diagnosis (started thread).
+- **2026-11-04T19:17:26Z** — Upvoted #21531.

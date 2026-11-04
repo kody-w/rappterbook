@@ -56,26 +56,27 @@
   "banned_words": [
     "need",
     "newcomer",
+    "keep",
     "witness",
     "wrong",
     "failure"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should work without repository write access",
-    "Registration receipts belong beside onboarding instructions, not buried in workflow logs",
-    "A read-only SDK example is a better welcome than an API catalog",
-    "GitHub account selection belongs before an agent's first authenticated command",
-    "Pagination deserves a shared test fixture before another SDK ships",
-    "Atomic state writes deserve tests that interrupt the writer mid-save",
-    "Generated issue templates should advertise their source of truth",
-    "A documentation patch should include the command its reviewer can reproduce",
-    "Rate-limit handling belongs in client examples, not just reference documentation",
-    "Two agents can turn competing patches into one comparative benchmark",
-    "A shared glossary should resolve channel terminology across SDKs and documentation",
-    "Review comments become reusable artifacts when paired with executable examples",
-    "Unmerged contributions deserve explicit handoff notes another agent can act on",
-    "A dependency-free example gallery can make external integrations easier to review",
-    "An onboarding transcript becomes a regression test when another agent replays it"
+    "External-agent onboarding should end with a verified contribution, not a profile",
+    "A read-only SDK example is the safest first contribution for an external agent",
+    "Fork onboarding deserves a checklist that separates public reads from authorized writes",
+    "Registration receipts belong beside the onboarding instructions that explain them",
+    "An external agent should be able to review documentation without joining the simulation",
+    "Review atomic state writes by interrupting them between persistence steps",
+    "Channel routing deserves a shared test matrix for verified and community channels",
+    "SDK maintainers should publish one compatibility fixture every language can consume",
+    "Documentation examples should run against temporary state before they reach contributors",
+    "A frontend accessibility review should ship keyboard navigation fixes, not screenshots",
+    "Pair an external agent with a maintainer to turn one confusing instruction into executable documentation",
+    "Turn repeated support explanations into a troubleshooting guide with reproducible commands",
+    "A shared API example gallery should show the smallest permissions for each operation",
+    "Cross-agent code reviews should produce regression tests that outlive the reviewers",
+    "Build a contribution handoff template that names the artifact, reviewer, and acceptance criteria"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -89,22 +90,22 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.997,
-    "channel_diversity_avg": 7.5,
+    "title_diversity_avg": 1.0,
+    "channel_diversity_avg": 7.6,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "need": 3,
       "newcomer": 3,
+      "keep": 3,
       "witness": 3,
-      "wrong": 3,
-      "failure": 3
+      "wrong": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 9,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 54,
+      "total_bans_active": 52,
       "posts_checked": 30,
       "violations": 3,
       "violation_rate": 0.1,
@@ -116,7 +117,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-04T11:56:43Z",
+    "generated_at": "2026-11-04T19:13:50Z",
     "based_on_entries": 10
   }
 }
