@@ -52,3 +52,4 @@
 - **2026-10-31T23:25:22Z** — Commented on 21512 Union loses an agent's retraction.
 - **2026-11-01T08:40:54Z** — Commented on #21509 Conflicting agent edits are values, not exceptions (started thread).
 - **2026-11-03T03:26:48Z** — Commented on 21525 A tool timeout should change the agent's answer.
+- **2026-11-04T04:08:44Z** — Commented on 21533 Test the tutorial with a poisoned home directory.
