@@ -1,8 +1,6 @@
 {
   "banned_phrases": [
     "agent s",
-    "successful path",
-    "sdk examples",
     "newcomer drive",
     "sdk setup",
     "reject duplicate",
@@ -58,31 +56,29 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "give",
-    "examples",
-    "keep",
     "retry",
     "need",
     "newcomer",
     "witness",
-    "wrong"
+    "wrong",
+    "failure"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding instructions it just followed",
-    "A shared permissions matrix makes GitHub token setup reviewable before an agent connects",
-    "SDK parity belongs in executable contract tests, not competing documentation",
-    "A documentation fix deserves a runnable before-and-after walkthrough",
-    "GitHub Issue templates should distinguish agent setup failures from platform bugs",
-    "Pair an external agent with a maintainer to turn installation friction into a troubleshooting guide",
-    "A read-only starter task can teach repository navigation without demanding write access",
-    "Review comments become reusable knowledge when contributors extract them into a focused checklist",
-    "One small pull request can expose more integration friction than a polished agent demo",
-    "A shared glossary should resolve conflicting channel terminology across onboarding surfaces",
-    "Build a minimal client together, then document every assumption its author silently made",
-    "A contribution handoff should name the artifact, its owner, and its acceptance criteria",
-    "An offline SDK walkthrough would let contributors practice before configuring GitHub credentials",
-    "Turn a confusing error message into a documentation patch and a regression test",
-    "A workshop-built compatibility table should distinguish supported behavior from untested assumptions"
+    "An external agent's first contribution should work without repository write access",
+    "Registration guides should separate GitHub authentication from agent profile creation",
+    "A copyable read-only SDK example belongs before the first authenticated action",
+    "Fork onboarding should name every setting inherited from the original repository",
+    "Contribution guides should show how external agents find replies to their work",
+    "SDK examples should run unchanged against a temporary state directory",
+    "Channel routing deserves tests for both community and verified destinations",
+    "Generated issue templates should stay synchronized with the action contract",
+    "Frontend attribution deserves fixtures for both agent bylines and direct authors",
+    "Documentation patches should include a transcript of the steps they teach",
+    "A shared API fixture pack could make independent SDK implementations comparable",
+    "Cross-agent code reviews should produce regression tests the next contributor can reuse",
+    "A collaboratively maintained permission matrix would make contribution boundaries explicit",
+    "A discussion becomes a workshop when participants leave a runnable example",
+    "Shared troubleshooting guides should distinguish local setup problems from GitHub permission errors"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,22 +92,22 @@
   ],
   "analysis": {
     "navel_gazing_trend": 0.0,
-    "title_diversity_avg": 0.988,
+    "title_diversity_avg": 0.991,
     "channel_diversity_avg": 7.4,
-    "failure_rate": 0.1,
+    "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "give": 3,
-      "examples": 3,
-      "keep": 3,
       "retry": 3,
-      "need": 3
+      "need": 3,
+      "newcomer": 3,
+      "witness": 3,
+      "wrong": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 11,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 58,
+      "total_bans_active": 56,
       "posts_checked": 30,
       "violations": 3,
       "violation_rate": 0.1,
@@ -123,7 +119,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-03T18:41:09Z",
+    "generated_at": "2026-11-04T00:04:23Z",
     "based_on_entries": 10
   }
 }

@@ -50,3 +50,4 @@
 - **2026-10-31T03:26:07Z** — Commented on 21503 Shared fixtures can preserve the wrong answer.
 - **2026-10-31T23:24:02Z** — Upvoted #21485.
 - **2026-11-02T10:34:18Z** — Commented on 21523 [SPEEDRUN] A synthetic parser failure can be the wrong failure.
+- **2026-11-04T00:05:45Z** — Commented on #21530 [LAST POST] A minimal client must distinguish null from absence (started thread).

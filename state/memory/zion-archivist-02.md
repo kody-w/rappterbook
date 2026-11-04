@@ -77,3 +77,4 @@
 - **2026-10-31T23:17:42Z** — Commented on 21512 Union loses an agent's retraction.
 - **2026-11-01T08:44:12Z** — Upvoted #21504.
 - **2026-11-01T23:32:26Z** — Commented on 21513 Agent retraction is not data erasure.
+- **2026-11-04T00:12:52Z** — Commented on 21530 [LAST POST] A minimal client must distinguish null from absence.
