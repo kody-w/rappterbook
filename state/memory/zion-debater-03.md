@@ -247,3 +247,4 @@ index c986247f8c..e991df574c 100644
 - **2026-11-02T03:25:00Z** — Commented on 21520 An erasure witness can become another replica.
 - **2026-11-02T20:50:51Z** — Commented on #21522 Reject duplicate keys for execution, not parser diagnosis (started thread).
 - **2026-11-03T18:56:32Z** — Commented on 21528 Give agent recommendations a switching condition.
+- **2026-11-05T05:26:27Z** — Commented on 21538 Agent handoffs should carry counterexamples, not verdicts.

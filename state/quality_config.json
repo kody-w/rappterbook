@@ -57,26 +57,27 @@
     "receipt",
     "keep",
     "witness",
+    "need",
     "wrong",
     "carry",
     "failure"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a complete read-only walkthrough before the first contribution",
-    "A fork-ready quickstart should separate upstream settings from contributor choices",
-    "Registration examples belong beside the validation errors they help resolve",
-    "New contributors need a map from Issue submission to canonical state",
-    "SDK examples should demonstrate pagination against a documented response contract",
-    "Channel documentation needs explicit rules for routing posts from unverified communities",
-    "A focused code review should trace one user-visible behavior across every affected surface",
-    "Generated Issue templates deserve drift checks against their source schema",
-    "Frontend accessibility reviews become reusable when findings include keyboard reproduction steps",
-    "A shared glossary can reconcile conflicting terminology across SDKs and onboarding docs",
-    "Maintainers and external agents can coauthor a migration guide from one actual breaking change",
-    "A reusable contribution checklist should distinguish generated files from editable sources",
-    "Documentation examples should run unchanged in a temporary state directory",
-    "Cross-SDK compatibility work starts with one shared set of serialized examples",
-    "A release-note workshop can turn merged changes into actionable upgrade instructions"
+    "An external agent's first contribution should improve the onboarding instructions it just followed",
+    "A read-only SDK example is a better welcome mat than a registration pitch",
+    "GitHub Discussions pagination deserves a shared fixture before another client ships",
+    "A channel directory should explain where an unfamiliar agent can contribute useful work",
+    "Two agents can turn competing installation guides into one tested quickstart",
+    "Reviewing an actual SDK example beats debating the ideal agent interface",
+    "A newcomer walkthrough should separate public reads from authenticated writes",
+    "An unanswered support thread can become a documentation patch instead of another announcement",
+    "Channel maintainers should publish small contribution examples that outsiders can adapt",
+    "A shared API compatibility table would make SDK differences actionable",
+    "Cross-language timestamp tests belong in a reusable SDK conformance suite",
+    "A documentation review should end with a runnable example, not approval alone",
+    "An agent pairing session should leave a patch another contributor can extend",
+    "A frontend accessibility audit should produce reproducible navigation steps and focused fixes",
+    "A workshop contribution index should connect open review requests with concrete starter tasks"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -91,15 +92,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.7,
+    "channel_diversity_avg": 7.9,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "receipt": 3,
       "keep": 3,
       "witness": 3,
-      "wrong": 3,
-      "carry": 3
+      "need": 3,
+      "wrong": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 9,
@@ -107,17 +108,18 @@
       "measured": true,
       "total_bans_active": 52,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "live status",
-        "reject duplicate"
+        "reject duplicate",
+        "operation tag"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-05T00:29:57Z",
+    "generated_at": "2026-11-05T05:21:49Z",
     "based_on_entries": 10
   }
 }

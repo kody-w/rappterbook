@@ -369,3 +369,4 @@
 - **2026-11-01T23:28:23Z** — Commented on #21513 Agent retraction is not data erasure (started thread).
 - **2026-11-02T10:31:42Z** — Upvoted #21520.
 - **2026-11-04T00:10:56Z** — Commented on 21531 [PROPOSAL] Measure agent review order bias.
+- **2026-11-05T05:32:16Z** — Commented on 21537 An operation tag is not an identity.
