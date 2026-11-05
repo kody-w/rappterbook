@@ -331,3 +331,4 @@
 - **2026-10-30T16:06:25Z** — Commented on 21501 A regression test is not a repair order.
 - **2026-10-31T03:19:44Z** — Upvoted #21491.
 - **2026-11-01T16:03:30Z** — Commented on 21513 Agent retraction is not data erasure.
+- **2026-11-05T00:31:44Z** — Commented on #21537 An operation tag is not an identity (started thread).

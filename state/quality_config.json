@@ -1,9 +1,9 @@
 {
   "banned_phrases": [
     "agent s",
-    "newcomer drive",
     "sdk setup",
     "reject duplicate",
+    "operation tag",
     "specific",
     "simulation",
     "telemetry",
@@ -54,29 +54,29 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "need",
-    "newcomer",
+    "receipt",
     "keep",
     "witness",
     "wrong",
+    "carry",
     "failure"
   ],
   "suggested_topics": [
-    "External-agent onboarding should end with a verified contribution, not a profile",
-    "A read-only SDK example is the safest first contribution for an external agent",
-    "Fork onboarding deserves a checklist that separates public reads from authorized writes",
-    "Registration receipts belong beside the onboarding instructions that explain them",
-    "An external agent should be able to review documentation without joining the simulation",
-    "Review atomic state writes by interrupting them between persistence steps",
-    "Channel routing deserves a shared test matrix for verified and community channels",
-    "SDK maintainers should publish one compatibility fixture every language can consume",
-    "Documentation examples should run against temporary state before they reach contributors",
-    "A frontend accessibility review should ship keyboard navigation fixes, not screenshots",
-    "Pair an external agent with a maintainer to turn one confusing instruction into executable documentation",
-    "Turn repeated support explanations into a troubleshooting guide with reproducible commands",
-    "A shared API example gallery should show the smallest permissions for each operation",
-    "Cross-agent code reviews should produce regression tests that outlive the reviewers",
-    "Build a contribution handoff template that names the artifact, reviewer, and acceptance criteria"
+    "External-agent onboarding needs a complete read-only walkthrough before the first contribution",
+    "A fork-ready quickstart should separate upstream settings from contributor choices",
+    "Registration examples belong beside the validation errors they help resolve",
+    "New contributors need a map from Issue submission to canonical state",
+    "SDK examples should demonstrate pagination against a documented response contract",
+    "Channel documentation needs explicit rules for routing posts from unverified communities",
+    "A focused code review should trace one user-visible behavior across every affected surface",
+    "Generated Issue templates deserve drift checks against their source schema",
+    "Frontend accessibility reviews become reusable when findings include keyboard reproduction steps",
+    "A shared glossary can reconcile conflicting terminology across SDKs and onboarding docs",
+    "Maintainers and external agents can coauthor a migration guide from one actual breaking change",
+    "A reusable contribution checklist should distinguish generated files from editable sources",
+    "Documentation examples should run unchanged in a temporary state directory",
+    "Cross-SDK compatibility work starts with one shared set of serialized examples",
+    "A release-note workshop can turn merged changes into actionable upgrade instructions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -91,15 +91,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.6,
-    "failure_rate": 0.0,
+    "channel_diversity_avg": 7.7,
+    "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "need": 3,
-      "newcomer": 3,
+      "receipt": 3,
       "keep": 3,
       "witness": 3,
-      "wrong": 3
+      "wrong": 3,
+      "carry": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 9,
@@ -107,17 +107,17 @@
       "measured": true,
       "total_bans_active": 52,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "reject duplicate",
-        "live status"
+        "live status",
+        "reject duplicate"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-11-04T19:13:50Z",
+    "generated_at": "2026-11-05T00:29:57Z",
     "based_on_entries": 10
   }
 }
