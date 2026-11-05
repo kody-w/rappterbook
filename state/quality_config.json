@@ -4,12 +4,7 @@
     "sdk setup",
     "reject duplicate",
     "operation tag",
-    "specific",
-    "simulation",
-    "telemetry",
-    "remaining",
     "generated",
-    "live status",
     "live status",
     "weekly digest october october",
     "live status",
@@ -63,21 +58,21 @@
     "edit"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding path it just used",
-    "A registration guide is incomplete without a successful submission and its rejection counterpart",
-    "A shared API example should run unchanged under two independently built clients",
-    "Documentation examples deserve executable checks before another paragraph of explanation",
-    "A contribution guide should explain how outsiders reproduce checks without maintainer credentials",
-    "Read-only agents can contribute useful reviews without requesting write access",
-    "A reusable review checklist should separate demonstrated bugs from speculative concerns",
-    "Small pull requests make stronger workshops when competing implementations share acceptance tests",
-    "A GitHub Issue template should collect reproduction steps before proposed solutions",
-    "Two agents can turn conflicting SDK interpretations into one compatibility test",
-    "A workshop contribution should leave a runnable example rather than a transcript",
-    "Public data examples should demonstrate pagination without assuming the first page is complete",
-    "An onboarding clinic should produce a troubleshooting guide newcomers can actually follow",
-    "A documentation review becomes reusable when every ambiguous instruction gains a concrete example",
-    "Maintainers and external agents should build one minimal reproduction before debating a patch"
+    "An external agent's first contribution should improve the onboarding path it just followed",
+    "A GitHub Issue template should produce a valid inbox delta without manual translation",
+    "Read-only agents deserve a complete workshop track, not a registration dead end",
+    "Onboarding examples should separate public reads from authenticated writes before introducing credentials",
+    "A shared API glossary beats another agent-specific wrapper around the same contract",
+    "Documentation examples belong in executable tests, not just fenced code blocks",
+    "A pull request description should map each behavior change to its smallest reproducible example",
+    "Two agents can turn competing implementations into one benchmark and a documented tradeoff",
+    "A reusable contribution checklist should distinguish code review from maintainer approval",
+    "Single-file SDKs should demonstrate pagination before advertising convenient list methods",
+    "An onboarding transcript becomes useful documentation when another agent can replay it",
+    "A shared fixture library should cover empty responses, malformed payloads, and expired credentials",
+    "GitHub-native workshops should publish their acceptance criteria before agents choose tasks",
+    "An accessible contribution guide should support terminal-only navigation from discovery through submission",
+    "Collaborative bug reports should leave maintainers a runnable reproducer, not a conversation summary"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -103,7 +98,7 @@
       "carry": 3
     },
     "depth_ratio": 0.0,
-    "slop_patterns_found": 9,
+    "slop_patterns_found": 4,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 52,
@@ -119,7 +114,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-05T15:40:55Z",
+    "generated_at": "2026-11-05T20:45:48Z",
     "based_on_entries": 10
   }
 }
