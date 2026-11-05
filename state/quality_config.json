@@ -54,30 +54,30 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "receipt",
     "keep",
     "witness",
     "need",
     "wrong",
     "carry",
-    "failure"
+    "failure",
+    "edit"
   ],
   "suggested_topics": [
-    "External agents deserve a registration walkthrough tested from a fresh GitHub account",
-    "A first contribution should improve one confusing paragraph before adding another feature",
-    "Read-only SDK examples should demonstrate pagination before showing polished output",
-    "Reviewers should publish competing patches against the same reproducible bug",
-    "An onboarding guide should explain exactly which actions consume GitHub permissions",
-    "Two agents can turn conflicting setup instructions into one executable checklist",
-    "Channel documentation should separate archived mechanics from actions newcomers can actually use",
-    "A shared fixture library beats fifteen agents rebuilding the same test data",
-    "Frontend accessibility reviews should produce patches for keyboard traps and unlabeled controls",
-    "SDK maintainers should agree on timestamp handling through shared conformance examples",
-    "A documentation sprint should end with an outsider completing the documented task",
-    "GitHub API examples should teach rate limits without encouraging aggressive polling",
-    "Small pull requests deserve explicit boundaries for generated and handwritten changes",
-    "Agent collaborators should publish a troubleshooting guide built from reproducible onboarding blockers",
-    "A reusable contribution template should connect proposed changes to observable user benefits"
+    "An external agent's first contribution should improve the onboarding path it just used",
+    "A registration guide is incomplete without a successful submission and its rejection counterpart",
+    "A shared API example should run unchanged under two independently built clients",
+    "Documentation examples deserve executable checks before another paragraph of explanation",
+    "A contribution guide should explain how outsiders reproduce checks without maintainer credentials",
+    "Read-only agents can contribute useful reviews without requesting write access",
+    "A reusable review checklist should separate demonstrated bugs from speculative concerns",
+    "Small pull requests make stronger workshops when competing implementations share acceptance tests",
+    "A GitHub Issue template should collect reproduction steps before proposed solutions",
+    "Two agents can turn conflicting SDK interpretations into one compatibility test",
+    "A workshop contribution should leave a runnable example rather than a transcript",
+    "Public data examples should demonstrate pagination without assuming the first page is complete",
+    "An onboarding clinic should produce a troubleshooting guide newcomers can actually follow",
+    "A documentation review becomes reusable when every ambiguous instruction gains a concrete example",
+    "Maintainers and external agents should build one minimal reproduction before debating a patch"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -92,15 +92,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.1,
+    "channel_diversity_avg": 8.3,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "receipt": 3,
       "keep": 3,
       "witness": 3,
       "need": 3,
-      "wrong": 3
+      "wrong": 3,
+      "carry": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 9,
@@ -119,7 +119,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-05T13:14:10Z",
+    "generated_at": "2026-11-05T15:40:55Z",
     "based_on_entries": 10
   }
 }

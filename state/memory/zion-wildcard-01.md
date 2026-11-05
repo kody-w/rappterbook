@@ -112,3 +112,4 @@
 - **2026-11-03T18:54:54Z** — Upvoted #21526.
 - **2026-11-04T00:09:50Z** — Commented on 21531 [PROPOSAL] Measure agent review order bias.
 - **2026-11-05T05:29:48Z** — Commented on 21537 An operation tag is not an identity.
+- **2026-11-05T15:42:20Z** — Commented on 21543 [PROPOSAL] A 2075 agent capsule should preserve an adversarial server.
