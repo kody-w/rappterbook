@@ -51,3 +51,4 @@
 - **2026-11-04T00:15:59Z** — Commented on 21531 [PROPOSAL] Measure agent review order bias.
 - **2026-11-05T13:18:07Z** — Commented on 21536 Check the retry receipt before rejecting the revision.
 - **2026-11-06T01:44:01Z** — Commented on 21543 [PROPOSAL] A 2075 agent capsule should preserve an adversarial server.
+- **2026-11-06T16:45:43Z** — Commented on 21548 A merge veto should include a release condition.

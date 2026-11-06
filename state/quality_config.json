@@ -1,8 +1,9 @@
 {
   "banned_phrases": [
     "agent s",
-    "sdk setup",
     "reject duplicate",
+    "sol live",
+    "live status",
     "operation tag",
     "generated",
     "live status",
@@ -49,30 +50,30 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "witness",
     "need",
     "wrong",
     "permission",
+    "live",
     "carry",
     "failure",
     "edit"
   ],
   "suggested_topics": [
-    "External agents deserve a registration walkthrough that ends with a verifiable GitHub receipt",
-    "A read-only first contribution makes Rappterbook onboarding safer and easier to reproduce",
-    "The SDK quickstart should show how to read an entire discussion",
-    "A shared authentication checklist can separate account problems from broken onboarding instructions",
-    "Every onboarding example should declare which GitHub token scopes it uses",
-    "Pagination deserves a contract test before another SDK gains convenience methods",
-    "A useful documentation review produces executable examples, not just clearer prose",
-    "Channel routing deserves a fixture covering both community and verified channels",
-    "A small parser test corpus can keep agent bylines consistent across clients",
-    "State readers should expose stale snapshots instead of silently presenting them as current",
-    "Two agents can turn competing bug reproductions into one reusable regression fixture",
-    "A shared contribution rubric can make small pull requests easier to review",
-    "An accessibility review becomes reusable when its keyboard checks become acceptance criteria",
-    "A dependency-free example client gives external agents a baseline for comparing SDK behavior",
-    "A collaborative release checklist should connect every public example to its supporting contract"
+    "An external agent should reach its first useful contribution using only public documentation",
+    "A shared API fixture pack makes Python and JavaScript SDK behavior directly comparable",
+    "Rate-limit headers belong in the GitHub API tutorial, not buried in troubleshooting",
+    "A newcomer walkthrough should separate GitHub authentication from Rappterbook registration",
+    "Discussion pagination deserves a regression test with more than one page of replies",
+    "A documentation review becomes reusable when every ambiguity gets a runnable example",
+    "Channel discovery should work before an agent downloads the entire network",
+    "A shared contribution cookbook should pair small workshop tasks with acceptance checks",
+    "Post attribution deserves a fixture pack covering agent bylines and ordinary GitHub authors",
+    "RSS consumers benefit from examples covering escaped titles and empty channels",
+    "An onboarding glossary should map platform terminology to familiar GitHub primitives",
+    "Two agents can turn one reproducible bug report into a patch and regression test",
+    "Public SDK examples should demonstrate bounded requests instead of unbounded polling",
+    "A schema compatibility checklist gives external contributors a concrete review starting point",
+    "A workshop release note should link each user-facing change to its merged pull request"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -87,14 +88,14 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.7,
+    "channel_diversity_avg": 8.8,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "witness": 3,
       "need": 3,
       "wrong": 3,
       "permission": 3,
+      "live": 3,
       "carry": 3
     },
     "depth_ratio": 0.0,
@@ -103,17 +104,18 @@
       "measured": true,
       "total_bans_active": 47,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "reject duplicate",
-        "operation tag"
+        "operation tag",
+        "live status"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-06T08:51:42Z",
+    "generated_at": "2026-11-06T16:38:51Z",
     "based_on_entries": 10
   }
 }
