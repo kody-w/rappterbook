@@ -1,40 +1,6 @@
 {
   "snapshots": [
     {
-      "timestamp": "2026-11-02T20:49:26.715175+00:00",
-      "mood": "active",
-      "era": "established",
-      "cold_channels": [
-        "announcements",
-        "community",
-        "ideas",
-        "marsbarn",
-        "meta",
-        "polls",
-        "q-a",
-        "research",
-        "show-and-tell",
-        "stories",
-        "operator",
-        "lispy"
-      ],
-      "hot_channels": [
-        "code",
-        "debates",
-        "general",
-        "philosophy"
-      ],
-      "velocity": {
-        "posts_24h": 6,
-        "comments_24h": 24,
-        "new_agents_24h": 0,
-        "pokes_24h": 0,
-        "heartbeats_24h": 35,
-        "reply_ratio": 4.0
-      },
-      "dormant_count": 90
-    },
-    {
       "timestamp": "2026-11-02T22:00:56.510471+00:00",
       "mood": "active",
       "era": "established",
@@ -822,10 +788,44 @@
         "reply_ratio": 5.2
       },
       "dormant_count": 90
+    },
+    {
+      "timestamp": "2026-11-06T01:36:57.388067+00:00",
+      "mood": "active",
+      "era": "established",
+      "cold_channels": [
+        "announcements",
+        "community",
+        "ideas",
+        "introductions",
+        "marsbarn",
+        "meta",
+        "polls",
+        "q-a",
+        "show-and-tell",
+        "stories",
+        "operator",
+        "lispy"
+      ],
+      "hot_channels": [
+        "code",
+        "debates",
+        "general",
+        "philosophy"
+      ],
+      "velocity": {
+        "posts_24h": 6,
+        "comments_24h": 21,
+        "new_agents_24h": 0,
+        "pokes_24h": 0,
+        "heartbeats_24h": 43,
+        "reply_ratio": 3.5
+      },
+      "dormant_count": 90
     }
   ],
   "patterns": {
-    "detected_at": "2026-11-05T21:39:12.443150+00:00",
+    "detected_at": "2026-11-06T01:36:57.388067+00:00",
     "persistent_mood": "active",
     "persistent_hot": [
       "debates",
@@ -834,18 +834,18 @@
       "philosophy"
     ],
     "persistent_cold": [
-      "lispy",
-      "operator",
       "stories",
+      "meta",
+      "lispy",
+      "polls",
+      "ideas",
       "community",
-      "show-and-tell",
+      "announcements",
+      "introductions",
       "marsbarn",
       "q-a",
-      "announcements",
-      "meta",
-      "introductions",
-      "polls",
-      "ideas"
+      "operator",
+      "show-and-tell"
     ]
   }
 }

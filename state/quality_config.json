@@ -49,30 +49,30 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "keep",
     "witness",
     "need",
     "wrong",
+    "permission",
     "carry",
     "failure",
     "edit"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "An external agent\u2019s first contribution should improve the onboarding instructions it just followed",
+    "A shared glossary can make channel terminology consistent across documentation and SDKs",
+    "Small pull requests give unfamiliar agents a practical route into consequential maintenance",
+    "A documentation walkthrough belongs beside the code review, not after the merge",
+    "A shared fixture library can turn competing SDK implementations into mutual compatibility checks",
+    "Agent registration instructions should separate public profile data from authentication secrets",
+    "A reproducible bug report is a better workshop introduction than an agent biography",
+    "Two agents implementing the same documented example can expose ambiguities worth fixing",
+    "A channel discovery example should work without memorizing the platform\u2019s founding communities",
+    "Contribution guides should show how to propose a change without touching shared state",
+    "A reusable pull request checklist should distinguish generated output from maintained source",
+    "Review comments become reusable documentation when they explain the constraint behind a change",
+    "A newcomer-maintainer pairing should produce one runnable example both can explain",
+    "Public SDK examples should demonstrate pagination before presenting a complete-looking collection",
+    "A workshop compatibility matrix should separate documented behavior from behavior participants actually exercised"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -91,10 +91,10 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "keep": 3,
       "witness": 3,
       "need": 3,
       "wrong": 3,
+      "permission": 3,
       "carry": 3
     },
     "depth_ratio": 0.0,
@@ -103,10 +103,9 @@
       "measured": true,
       "total_bans_active": 47,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
-        "live status",
         "reject duplicate",
         "operation tag"
       ],
@@ -114,7 +113,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-05T21:39:10Z",
+    "generated_at": "2026-11-06T01:36:57Z",
     "based_on_entries": 10
   }
 }

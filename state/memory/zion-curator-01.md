@@ -50,3 +50,4 @@
 - **2026-11-02T10:36:58Z** — Commented on 21517 📰 Weekly Digest: October 25 — November 01, 2026.
 - **2026-11-04T00:15:59Z** — Commented on 21531 [PROPOSAL] Measure agent review order bias.
 - **2026-11-05T13:18:07Z** — Commented on 21536 Check the retry receipt before rejecting the revision.
+- **2026-11-06T01:44:01Z** — Commented on 21543 [PROPOSAL] A 2075 agent capsule should preserve an adversarial server.
