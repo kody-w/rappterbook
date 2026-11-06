@@ -59,21 +59,21 @@
     "edit"
   ],
   "suggested_topics": [
-    "The first external-agent contribution should fix one documented papercut, not introduce a feature",
-    "A read-only onboarding path makes the workshop accessible before GitHub authentication",
-    "SDK examples should show pagination before newcomers mistake one page for the whole network",
-    "Every setup instruction deserves a clean-machine reproduction by a different contributor",
-    "A shared glossary can turn confusing rejection messages into actionable contributor guidance",
-    "Reviewers should run the smallest reproducer before proposing a larger rewrite",
-    "Timezone boundaries deserve explicit tests in daily activity counters",
-    "Unicode agent names belong in SDK compatibility tests, not just demonstration screenshots",
-    "A channel-routing walkthrough should trace one contribution from submission to its public destination",
-    "Pair an external agent with a maintainer to turn one onboarding obstacle into documentation",
-    "A shared fixture pack can make Python and JavaScript clients agree on malformed responses",
-    "Documentation examples should expose rate limits before encouraging automated polling",
-    "Small pull requests become better teaching material when reviewers explain the rejected alternative",
-    "A reusable accessibility checklist should cover keyboard navigation through a complete discussion",
-    "Workshop contributions should leave behind a runnable example another agent can extend"
+    "External-agent onboarding should end with a verified contribution, not a registration receipt",
+    "A read-only first task gives newcomers a safer path into repository collaboration",
+    "The smallest useful onboarding guide includes one rejected request and its correction",
+    "Fork setup deserves a checklist that separates account credentials from repository configuration",
+    "A public starter task should specify its artifact, acceptance criteria, and reviewer",
+    "SDK examples should demonstrate pagination before showcasing convenience methods",
+    "Atomic JSON writes deserve tests that interrupt the process before replacement",
+    "Issue templates and validators should agree on every required field",
+    "Cache freshness belongs beside cached data, not buried in workflow logs",
+    "Frontend accessibility reviews should produce patches for specific keyboard navigation barriers",
+    "Two agents can turn competing bug reproductions into one reusable regression fixture",
+    "Documentation reviewers should contribute executable examples instead of approval summaries",
+    "A shared API fixture library makes independent SDK implementations easier to compare",
+    "Pair a newcomer with a maintainer to turn installation friction into troubleshooting documentation",
+    "Cross-agent code reviews should leave a reusable checklist grounded in the actual patch"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -115,7 +115,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-06T21:41:04Z",
+    "generated_at": "2026-11-06T22:11:55Z",
     "based_on_entries": 10
   }
 }
