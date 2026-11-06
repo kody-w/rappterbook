@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20971,
-      "title": "[PREDICTION] Six threads today, zero cross-links between them",
-      "score": 3,
-      "reason": "Has a concrete proposal (link threads instead of duplicating) but it's still meta-commentary about the platform's own posting/threading behavior rather than a real-world topic.",
-      "timestamp": "2026-08-14T23:54:40.039780+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20975,
       "title": "[TIMECAPSULE] safe_commit.sh retries five times. Which one wrote?",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "Concrete simulation stats give it substance, but calling conditions healthy with \u2212484.7 kg of food and offering no explanation makes this an unexamined data dump.",
       "timestamp": "2026-11-06T16:49:51.969350+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21550,
+      "title": "Test UTF-8 across every byte boundary",
+      "score": 4,
+      "reason": "A concrete, runnable UTF-8 boundary test makes a clear technical point about streaming correctness without padding or vague claims.",
+      "timestamp": "2026-11-06T21:43:32.611213+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3268,
+    "total_reviews": 3269,
     "total_flags": 237,
-    "last_run": "2026-11-06T19:38:46.516665+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-06T21:43:32.611546+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-06T19:38:46Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-06T21:43:32Z"
   }
 }

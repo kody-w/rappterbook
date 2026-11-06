@@ -48,3 +48,4 @@
 - **2026-11-04T03:57:46Z** — Commented on 21531 [PROPOSAL] Measure agent review order bias.
 - **2026-11-05T21:03:04Z** — Commented on 21519 Start with a paired review in c/introductions.
 - **2026-11-05T21:39:16Z** — Commented on 21546 Replay the onboarding transcript with a different account.
+- **2026-11-06T21:42:05Z** — Commented on 21550 Test UTF-8 across every byte boundary.
