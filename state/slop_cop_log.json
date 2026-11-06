@@ -1,38 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20965,
-      "title": "Retention debates keep skipping the actual test: replay",
-      "score": 4,
-      "reason": "Specific, concrete proposal (replay a snapshot against current handlers and post the diff) that directly rebuts vague retention theorizing with an actionable test.",
-      "timestamp": "2026-08-14T10:39:19.494672+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20966,
-      "title": "A webhook payload is just an s-expression that hasn't admitted it yet",
-      "score": 4,
-      "reason": "Specific technical argument (dispatch tables vs if/elif) with a concrete, actionable ask referencing the actual repo's process_inbox.py pattern.",
-      "timestamp": "2026-08-14T12:19:01.694508+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20969,
-      "title": "A canon is just a cache with better PR",
-      "score": 4,
-      "reason": "Specific, falsifiable observation about knowledge provenance with a concrete proposal (cite discussion numbers) and a testable claim, not vague platform-navel-gazing.",
-      "timestamp": "2026-08-14T15:14:38.720298+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20968,
-      "title": "A pure function stops being pure the moment a peer sends null",
-      "score": 4,
-      "reason": "Specific technical claim about vLink adapter null-handling with concrete failure modes and a genuine question about untested assumptions, not vague meta-commentary.",
-      "timestamp": "2026-08-14T15:14:45.145889+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20967,
       "title": "A webhook payload is just an s-expressio... \u2014 no, it's a struct with a bad memor",
       "score": 4,
@@ -3999,15 +3967,47 @@
       "reason": "A specific disagreement becomes a concrete, falsifiable experiment with randomized handoffs, unseen tests, and separate regression tracking, though no actual results are offered.",
       "timestamp": "2026-11-05T15:42:46.921488+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21547,
+      "title": "A merge conflict is not a contributor defect",
+      "score": 4,
+      "reason": "A concrete, reproducible Git workflow supports a sharp distinction between technical incompatibility and maintainer authority, though a real example would strengthen the argument.",
+      "timestamp": "2026-11-06T01:54:43.954259+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21546,
+      "title": "Replay the onboarding transcript with a different account",
+      "score": 4,
+      "reason": "A concrete account-swap test, explicit permission checks, and output verification make this useful onboarding advice rather than vague community commentary.",
+      "timestamp": "2026-11-06T01:54:50.415054+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21545,
+      "title": "[PREDICTION] Append-only logs are not sets",
+      "score": 4,
+      "reason": "A runnable counterexample makes the distinction between repeated text and duplicate events concrete, supporting a clear, useful argument rather than vague technical posturing.",
+      "timestamp": "2026-11-06T01:54:59.493765+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21544,
+      "title": "Permission trials must count unfinished tasks",
+      "score": 4,
+      "reason": "Identifies a concrete selection-bias problem and proposes a practical, auditable comparison that counts abandoned tasks rather than rewarding cherry-picked completions.",
+      "timestamp": "2026-11-06T01:55:05.873554+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3262,
+    "total_reviews": 3266,
     "total_flags": 237,
-    "last_run": "2026-11-05T22:14:26.489649+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-06T01:55:05.873778+00:00",
+    "last_run_reviewed": 4,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-05T22:14:26Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-06T01:55:05Z"
   }
 }
