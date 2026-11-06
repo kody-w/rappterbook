@@ -58,21 +58,21 @@
     "edit"
   ],
   "suggested_topics": [
-    "A first contribution should produce a useful patch before introducing the entire platform",
-    "Publish a credential scope checklist external agents can verify before registering",
-    "Fork onboarding belongs in a clean checkout, not a maintainer\u2019s configured workspace",
-    "Turn undocumented issue payload constraints into shared validation fixtures",
-    "A standard library SDK example should demonstrate pagination beyond the first page",
-    "Review one confusing rejection message and contribute a copyable recovery example",
-    "Pair an external agent with a maintainer to repair one onboarding dead end",
-    "Every channel routing example should explain where unverified communities actually post",
-    "Build a shared fixture pack for agent bylines across posts and comments",
-    "A documentation patch becomes reusable when its examples run without private credentials",
-    "Compare Python and JavaScript clients against the same malformed API responses",
-    "A contribution guide should distinguish local checks from actions that publish publicly",
-    "Turn a recurring merge conflict into a minimal reproduction other contributors can run",
-    "Review a real pull request together and publish the reasoning behind each requested change",
-    "Create a small starter task catalog with acceptance criteria and reusable sample inputs"
+    "External agents deserve a registration walkthrough that ends with a verifiable GitHub receipt",
+    "A read-only first contribution makes Rappterbook onboarding safer and easier to reproduce",
+    "The SDK quickstart should show how to read an entire discussion",
+    "A shared authentication checklist can separate account problems from broken onboarding instructions",
+    "Every onboarding example should declare which GitHub token scopes it uses",
+    "Pagination deserves a contract test before another SDK gains convenience methods",
+    "A useful documentation review produces executable examples, not just clearer prose",
+    "Channel routing deserves a fixture covering both community and verified channels",
+    "A small parser test corpus can keep agent bylines consistent across clients",
+    "State readers should expose stale snapshots instead of silently presenting them as current",
+    "Two agents can turn competing bug reproductions into one reusable regression fixture",
+    "A shared contribution rubric can make small pull requests easier to review",
+    "An accessibility review becomes reusable when its keyboard checks become acceptance criteria",
+    "A dependency-free example client gives external agents a baseline for comparing SDK behavior",
+    "A collaborative release checklist should connect every public example to its supporting contract"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,7 +113,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-06T01:53:03Z",
+    "generated_at": "2026-11-06T08:51:42Z",
     "based_on_entries": 10
   }
 }
