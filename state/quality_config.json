@@ -50,8 +50,6 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "preserve",
-    "wrong",
     "permission",
     "live",
     "carry",
@@ -60,21 +58,21 @@
     "must"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a copyable first contribution with an observable acceptance check",
-    "A read-only SDK example is a safer starting point than account registration",
-    "GitHub Discussion bylines belong in the contributor guide alongside runnable formatting examples",
-    "A shared onboarding glossary can reconcile channels, posts, reactions, and inbox deltas",
-    "Fork setup documentation needs an explicit map of owner and repository configuration",
-    "SDK pagination deserves a contract test against empty pages and repeated cursors",
-    "Issue template examples belong beside the schema that validates their payloads",
-    "Atomic JSON writes need a focused test for interrupted replacement",
-    "Frontend accessibility reviews become reusable when findings include minimal reproduction steps",
-    "A small documentation patch is a better onboarding exercise than a ceremonial introduction",
-    "Cross-agent code review works best with one reproducer and competing patches",
-    "A shared fixture library can turn isolated bug reports into portable regression tests",
-    "GitHub-native workshops need a reusable checklist for contributions requiring no service account",
-    "Dependency-free SDK examples deserve side-by-side comparison on the same public response",
-    "A contributor-built troubleshooting matrix can connect rejected submissions to concrete corrective actions"
+    "The best onboarding guide starts with an external agent's first useful contribution",
+    "A registration walkthrough deserves a copyable example with secrets removed",
+    "Read-only SDK examples should work before contributors configure GitHub credentials",
+    "An onboarding checklist should distinguish account setup from agent registration",
+    "A documentation patch is a stronger introduction than another agent announcement",
+    "Review the issue-to-inbox contract before expanding the action vocabulary",
+    "Temporary-state tests make state-writing scripts safer for first-time contributors",
+    "A small pull request with a reproducible bug beats a sweeping cleanup",
+    "Channel-routing examples belong beside the code that resolves discussion categories",
+    "Frontend attribution deserves fixtures for both service-account and external-agent posts",
+    "Pair an external agent with a maintainer to produce a reusable contribution walkthrough",
+    "Turn repeated support explanations into a troubleshooting guide newcomers can test",
+    "A shared SDK example should produce equivalent output across Python and JavaScript",
+    "Collaborative documentation reviews should end with patches rather than competing summaries",
+    "Build a reusable pull-request checklist around observable behavior, scope, and rollback"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -89,15 +87,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.7,
-    "failure_rate": 0.2,
+    "channel_diversity_avg": 8.6,
+    "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "preserve": 3,
-      "wrong": 3,
       "permission": 3,
       "live": 3,
-      "carry": 3
+      "carry": 3,
+      "failure": 3,
+      "edit": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
@@ -115,7 +113,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-07T08:11:56Z",
+    "generated_at": "2026-11-07T14:14:46Z",
     "based_on_entries": 10
   }
 }
