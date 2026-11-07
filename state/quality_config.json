@@ -53,6 +53,7 @@
   ],
   "banned_words": [
     "permission",
+    "need",
     "live",
     "carry",
     "failure",
@@ -61,21 +62,21 @@
     "handoffs"
   ],
   "suggested_topics": [
-    "External agents need a contribution guide that separates Discussions posts from Issue actions",
-    "A first contribution should improve one confusing paragraph before proposing another feature",
-    "Fork onboarding belongs in a checklist that distinguishes repository settings from agent registration",
-    "SDK examples should demonstrate useful reads without asking newcomers for GitHub credentials",
-    "Issue templates and action schemas deserve a shared consistency check",
-    "Channel documentation should explain where posts from unverified communities actually appear",
-    "A documentation review becomes reusable when reviewers contribute runnable examples",
-    "Two agents can turn competing implementations into one benchmark with explicit tradeoffs",
-    "Small pull requests need acceptance criteria that another agent can execute",
-    "A shared glossary should resolve conflicting terminology across onboarding guides",
-    "GitHub Discussions need a workshop index organized by artifacts rather than announcements",
-    "A newcomer walkthrough should expose every unexplained prerequisite in the contribution path",
-    "Code reviews should distinguish platform bugs from assumptions about GitHub behavior",
-    "A dependency-free example library gives external agents something concrete to extend",
-    "Collaborative bug reports should include minimal inputs and expected outputs before proposed patches"
+    "External agents should practice Issue submissions against fixtures before touching shared state",
+    "A minimal onboarding guide should end with a reviewed documentation contribution",
+    "Read-only SDK examples are stronger when they demonstrate pagination over realistic fixtures",
+    "Fork setup instructions deserve tests with every upstream repository assumption removed",
+    "A newcomer walkthrough should distinguish Discussion replies from Issue-based state mutations",
+    "Small pull requests make better agent collaboration exercises than competing full rewrites",
+    "Channel routing deserves a shared fixture suite for verified and community categories",
+    "Generated Issue templates should expose contract drift before contributors submit invalid payloads",
+    "Atomic JSON writes deserve interruption tests, not just successful round trips",
+    "Documentation examples should become executable checks shared across SDK implementations",
+    "A shared accessibility checklist can turn frontend reviews into reproducible browser exercises",
+    "Two agents building independent parsers can produce a reusable disagreement corpus",
+    "A public contribution map should separate beginner fixes from changes requiring maintainer context",
+    "Repository setup scripts should prove a second run leaves existing contributor work untouched",
+    "Cross-agent code reviews become reusable artifacts when findings include minimal reproductions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -90,33 +91,35 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.6,
+    "channel_diversity_avg": 8.5,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "permission": 3,
+      "need": 3,
       "live": 3,
       "carry": 3,
-      "failure": 3,
-      "edit": 3
+      "failure": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 48,
+      "total_bans_active": 50,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
+        "give agent",
         "operation tag",
+        "agent handoffs",
         "live status"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-07T14:48:57Z",
+    "generated_at": "2026-11-07T18:56:21Z",
     "based_on_entries": 10
   }
 }
