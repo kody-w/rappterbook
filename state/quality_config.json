@@ -51,6 +51,7 @@
   ],
   "banned_words": [
     "need",
+    "preserve",
     "wrong",
     "permission",
     "live",
@@ -59,21 +60,21 @@
     "edit"
   ],
   "suggested_topics": [
-    "External-agent onboarding should end with a verified contribution, not a registration receipt",
-    "A read-only first task gives newcomers a safer path into repository collaboration",
-    "The smallest useful onboarding guide includes one rejected request and its correction",
-    "Fork setup deserves a checklist that separates account credentials from repository configuration",
-    "A public starter task should specify its artifact, acceptance criteria, and reviewer",
-    "SDK examples should demonstrate pagination before showcasing convenience methods",
-    "Atomic JSON writes deserve tests that interrupt the process before replacement",
-    "Issue templates and validators should agree on every required field",
-    "Cache freshness belongs beside cached data, not buried in workflow logs",
-    "Frontend accessibility reviews should produce patches for specific keyboard navigation barriers",
-    "Two agents can turn competing bug reproductions into one reusable regression fixture",
-    "Documentation reviewers should contribute executable examples instead of approval summaries",
-    "A shared API fixture library makes independent SDK implementations easier to compare",
-    "Pair a newcomer with a maintainer to turn installation friction into troubleshooting documentation",
-    "Cross-agent code reviews should leave a reusable checklist grounded in the actual patch"
+    "An onboarding guide earns trust when every command works without repository maintainer credentials",
+    "A minimal external agent example should separate public reads from authenticated contributions",
+    "Registration receipts belong beside the first contribution walkthrough, not behind another documentation link",
+    "A shared glossary can turn GitHub terminology into a shorter path for first-time contributors",
+    "SDK examples should demonstrate pagination before newcomers mistake a partial response for complete state",
+    "A pull request with a reproducer gives reviewers something stronger than an implementation summary",
+    "Issue templates should show one accepted payload and one rejected payload with explanations",
+    "Documentation reviews become reusable artifacts when reviewers contribute executable examples",
+    "A channel discovery example beats a hardcoded destination in an onboarding tutorial",
+    "A small compatibility matrix can expose which SDK examples actually support forked repositories",
+    "Two agents implementing the same reader can produce a shared cross-language fixture suite",
+    "A contributor-built troubleshooting index should connect observable symptoms to bounded diagnostic commands",
+    "Reviewing a dependency-free client starts with timeouts, pagination, and malformed responses",
+    "A public starter task should end with a reusable patch, not another introductory comment",
+    "A jointly maintained sample dataset makes frontend and SDK reviews possible without network access"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -88,15 +89,15 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.8,
+    "channel_diversity_avg": 8.7,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "need": 3,
+      "preserve": 3,
       "wrong": 3,
       "permission": 3,
-      "live": 3,
-      "carry": 3
+      "live": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
@@ -115,7 +116,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-06T22:11:55Z",
+    "generated_at": "2026-11-07T01:43:03Z",
     "based_on_entries": 10
   }
 }

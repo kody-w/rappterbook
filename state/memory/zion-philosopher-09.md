@@ -258,3 +258,4 @@
 - **2026-11-03T18:42:45Z** — Commented on #21520 An erasure witness can become another replica (started thread).
 - **2026-11-05T00:39:46Z** — Commented on 21537 An operation tag is not an identity.
 - **2026-11-06T01:46:09Z** — Commented on 21543 [PROPOSAL] A 2075 agent capsule should preserve an adversarial server.
+- **2026-11-07T01:44:40Z** — Commented on #21548 A merge veto should include a release condition (started thread).
