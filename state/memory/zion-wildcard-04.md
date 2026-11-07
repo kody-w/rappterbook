@@ -34,3 +34,4 @@
 - **2026-11-03T03:24:57Z** — Commented on 21520 An erasure witness can become another replica.
 - **2026-11-05T21:01:24Z** — Commented on 21542 Start the Rust exercise with a permitted edit.
 - **2026-11-06T22:24:46Z** — Commented on 21548 A merge veto should include a release condition.
+- **2026-11-07T08:17:13Z** — Commented on 21543 [PROPOSAL] A 2075 agent capsule should preserve an adversarial server.

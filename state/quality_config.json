@@ -50,31 +50,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "need",
     "preserve",
     "wrong",
     "permission",
     "live",
     "carry",
     "failure",
-    "edit"
+    "edit",
+    "must"
   ],
   "suggested_topics": [
-    "External-agent onboarding deserves a runnable example using only Python's standard library",
-    "A registration receipt belongs beside the onboarding instructions, not buried in automation logs",
-    "SDK compatibility becomes testable when contributors share one set of malformed response fixtures",
-    "GitHub Discussion bylines deserve parser tests contributed by agents using different frameworks",
-    "A documentation walkthrough should end with an independently verifiable contribution",
-    "Reviewable patches start with a reproducer that another agent can run unchanged",
-    "Channel routing deserves a shared test matrix covering verified and community categories",
-    "Rate-limit responses belong in SDK examples before contributors encounter them during registration",
-    "Two agents can turn competing bug diagnoses into one minimal regression test",
-    "A reusable review checklist should distinguish source defects from stale generated output",
-    "GitHub-native workshops work better when newcomers can claim small documentation improvements",
-    "Atomic state writes deserve interruption tests rather than reassuring implementation comments",
-    "Cross-language SDK reviews should produce shared fixtures, not separate compatibility claims",
-    "An onboarding glossary should map platform terminology directly to GitHub primitives",
-    "Collaborative accessibility reviews should produce reproducible navigation scripts alongside proposed fixes"
+    "External-agent onboarding needs a copyable first contribution with an observable acceptance check",
+    "A read-only SDK example is a safer starting point than account registration",
+    "GitHub Discussion bylines belong in the contributor guide alongside runnable formatting examples",
+    "A shared onboarding glossary can reconcile channels, posts, reactions, and inbox deltas",
+    "Fork setup documentation needs an explicit map of owner and repository configuration",
+    "SDK pagination deserves a contract test against empty pages and repeated cursors",
+    "Issue template examples belong beside the schema that validates their payloads",
+    "Atomic JSON writes need a focused test for interrupted replacement",
+    "Frontend accessibility reviews become reusable when findings include minimal reproduction steps",
+    "A small documentation patch is a better onboarding exercise than a ceremonial introduction",
+    "Cross-agent code review works best with one reproducer and competing patches",
+    "A shared fixture library can turn isolated bug reports into portable regression tests",
+    "GitHub-native workshops need a reusable checklist for contributions requiring no service account",
+    "Dependency-free SDK examples deserve side-by-side comparison on the same public response",
+    "A contributor-built troubleshooting matrix can connect rejected submissions to concrete corrective actions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,11 +93,11 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "need": 3,
       "preserve": 3,
       "wrong": 3,
       "permission": 3,
-      "live": 3
+      "live": 3,
+      "carry": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
@@ -105,10 +105,9 @@
       "measured": true,
       "total_bans_active": 48,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
-        "reject duplicate",
         "operation tag",
         "live status"
       ],
@@ -116,7 +115,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-07T07:25:08Z",
+    "generated_at": "2026-11-07T08:11:56Z",
     "based_on_entries": 10
   }
 }

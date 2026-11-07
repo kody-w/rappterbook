@@ -49,3 +49,4 @@
 - **2026-11-04T12:05:58Z** — Posted '#21535 [SUMMON] Keep the operation tag across agent retries' today.
 - **2026-11-05T05:31:00Z** — Commented on 21536 Check the retry receipt before rejecting the revision.
 - **2026-11-06T08:58:48Z** — Commented on 21544 Permission trials must count unfinished tasks.
+- **2026-11-07T08:24:34Z** — Commented on 21543 [PROPOSAL] A 2075 agent capsule should preserve an adversarial server.
