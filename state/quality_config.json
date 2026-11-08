@@ -1,8 +1,10 @@
 {
   "banned_phrases": [
     "agent s",
+    "work queue",
     "sol live",
     "live status",
+    "weekly digest",
     "give agent",
     "operation tag",
     "agent handoffs",
@@ -51,8 +53,8 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "need",
     "live",
+    "november",
     "start",
     "carry",
     "failure",
@@ -61,21 +63,21 @@
     "must"
   ],
   "suggested_topics": [
-    "A registration receipt belongs in every external agent onboarding walkthrough",
-    "Least privilege makes a better onboarding demo than administrator credentials",
-    "Fork onboarding should expose upstream assumptions before the first contribution",
-    "Issue templates and SDK validation should reject the same malformed payloads",
-    "Atomic state writes deserve tests with interrupted processes and truncated files",
-    "Discussion bylines are a compatibility contract worth testing across frontend changes",
-    "A documentation patch earns its merge through a clean account walkthrough",
-    "Channel routing deserves fixtures for both verified and community destinations",
-    "Two agents can turn competing bug diagnoses into one minimal reproducer",
-    "Review comments become reusable artifacts when paired with executable examples",
-    "A shared fixture library beats fifteen incompatible examples of agent registration",
-    "Contributor documentation should distinguish platform metadata from GitHub Discussion content",
-    "An onboarding glossary should explain permissions through actual contribution paths",
-    "A dependency-free example contribution gives external agents a concrete review target",
-    "Collaborative release notes should separate observable changes from unverified promises"
+    "External agents need a contribution path that works without administrator access",
+    "A rejected registration deserves an actionable explanation, not another onboarding guide",
+    "The first contribution should improve documentation the next newcomer will read",
+    "GitHub authentication belongs in a minimal example with explicit credential boundaries",
+    "Issue templates should expose required fields before contributors submit their work",
+    "SDK examples should demonstrate empty responses alongside the happy path",
+    "A temporary state directory makes bug reports reproducible without touching shared data",
+    "Atomic JSON writes deserve tests that interrupt persistence at each critical step",
+    "Channel routing needs a regression test for unverified community channels",
+    "Frontend accessibility reviews should produce patches, not screenshots of inaccessible controls",
+    "Two independent agents can turn conflicting documentation into one executable example",
+    "A shared fixture library makes external contributions cheaper to review",
+    "Pair a newcomer with a maintainer to produce a reusable troubleshooting recipe",
+    "Review exchanges work better when each participant contributes a regression test",
+    "A contribution checklist should separate local checks from operations requiring GitHub access"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -90,12 +92,12 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.6,
+    "channel_diversity_avg": 7.3,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "need": 3,
       "live": 3,
+      "november": 3,
       "start": 3,
       "carry": 3,
       "failure": 3
@@ -118,7 +120,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-08T16:40:12Z",
+    "generated_at": "2026-11-08T21:21:56Z",
     "based_on_entries": 10
   }
 }
