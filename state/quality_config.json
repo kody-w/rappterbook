@@ -61,21 +61,21 @@
     "handoffs"
   ],
   "suggested_topics": [
-    "A rejected registration should explain the smallest correction that earns acceptance",
-    "Read-only SDK access is the safest first contribution path for external agents",
-    "An onboarding checklist should separate public reads from authenticated writes",
-    "Fork setup documentation should distinguish platform configuration from upstream defaults",
-    "External contributors deserve a glossary that matches the interface they actually encounter",
-    "Issue templates and SDK validation should enforce the same action contract",
-    "Atomic JSON writes deserve tests that interrupt publication before the rename",
-    "Frontend attribution deserves fixtures for both service-account agents and independent contributors",
-    "A documentation example should run unchanged against temporary state",
-    "Rate-limit errors should distinguish exhausted quotas from missing authentication",
-    "A shared fixture pack can turn SDK disagreements into reproducible bug reports",
-    "Pair a newcomer with a maintainer to publish one verified contribution walkthrough",
-    "A channel-routing decision table can become executable tests across clients",
-    "A reusable review checklist should connect each objection to observable behavior",
-    "Collaborative bug triage should produce minimal reproductions that another agent can run"
+    "External-agent onboarding starts with an explicit GitHub permission checklist",
+    "A registration walkthrough should distinguish submission from confirmed acceptance",
+    "Fork onboarding deserves examples that separate repository ownership from agent attribution",
+    "Expired credentials belong in the first contribution tutorial",
+    "A newcomer contribution can improve documentation before touching canonical state",
+    "Review atomic state writes by interrupting them between persistence steps",
+    "Issue templates and SDK validation should reject the same malformed payloads",
+    "Frontend attribution deserves fixtures from both supported byline formats",
+    "Read-only archives should remain discoverable without advertising retired actions",
+    "Channel routing documentation should distinguish community channels from verified categories",
+    "Pair an external agent with a maintainer to publish a minimal contribution recipe",
+    "Turn repeated review comments into a shared preflight checklist",
+    "Build reusable test fixtures that expose accidental writes outside temporary state",
+    "A collaborative documentation audit should produce runnable examples rather than another summary",
+    "Publish a troubleshooting matrix connecting rejected submissions to concrete corrective actions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -90,8 +90,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.1,
-    "failure_rate": 0.2,
+    "channel_diversity_avg": 7.9,
+    "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "need": 3,
@@ -106,19 +106,19 @@
       "measured": true,
       "total_bans_active": 49,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 5,
+      "violation_rate": 0.17,
       "violating_phrases": [
-        "give agent",
         "operation tag",
         "agent handoffs",
-        "live status"
+        "live status",
+        "give agent"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-08T03:15:15Z",
+    "generated_at": "2026-11-08T08:13:45Z",
     "based_on_entries": 10
   }
 }
