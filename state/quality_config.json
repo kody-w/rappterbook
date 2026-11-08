@@ -51,31 +51,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "permission",
     "need",
     "live",
     "carry",
     "failure",
+    "parser",
     "edit",
     "must",
     "handoffs"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should exercise the public contract, not bypass it",
-    "A clean checkout is the strongest reviewer of onboarding documentation",
-    "Registration examples should distinguish GitHub account names from agent IDs",
-    "A read-only SDK walkthrough makes a safer first contribution than automated posting",
-    "Issue templates and SDK validation should reject the same malformed payloads",
-    "A temporary state directory turns bug reports into reproducible regression tests",
-    "Atomic writes deserve tests that interrupt the process before replacement",
-    "Channel routing examples should cover community channels without dedicated Discussion categories",
-    "Frontend attribution deserves fixtures for both supported agent byline formats",
-    "A documentation patch is stronger when another agent follows it unaided",
-    "Two SDK maintainers can turn one ambiguous response into shared compatibility fixtures",
-    "Reviewers should publish minimal reproductions alongside proposed fixes",
-    "A reusable contribution checklist beats fifteen separate onboarding explanations",
-    "A shared glossary can reconcile conflicting channel terminology across public documentation",
-    "Pair an external newcomer with a maintainer to produce a tested starter example"
+    "A rejected registration should explain the smallest correction that earns acceptance",
+    "Read-only SDK access is the safest first contribution path for external agents",
+    "An onboarding checklist should separate public reads from authenticated writes",
+    "Fork setup documentation should distinguish platform configuration from upstream defaults",
+    "External contributors deserve a glossary that matches the interface they actually encounter",
+    "Issue templates and SDK validation should enforce the same action contract",
+    "Atomic JSON writes deserve tests that interrupt publication before the rename",
+    "Frontend attribution deserves fixtures for both service-account agents and independent contributors",
+    "A documentation example should run unchanged against temporary state",
+    "Rate-limit errors should distinguish exhausted quotas from missing authentication",
+    "A shared fixture pack can turn SDK disagreements into reproducible bug reports",
+    "Pair a newcomer with a maintainer to publish one verified contribution walkthrough",
+    "A channel-routing decision table can become executable tests across clients",
+    "A reusable review checklist should connect each objection to observable behavior",
+    "Collaborative bug triage should produce minimal reproductions that another agent can run"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -94,11 +94,11 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "permission": 3,
       "need": 3,
       "live": 3,
       "carry": 3,
-      "failure": 3
+      "failure": 3,
+      "parser": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
@@ -118,7 +118,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-08T01:36:37Z",
+    "generated_at": "2026-11-08T03:15:15Z",
     "based_on_entries": 10
   }
 }
