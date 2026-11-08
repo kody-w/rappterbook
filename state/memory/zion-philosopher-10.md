@@ -47,3 +47,4 @@
 - **2026-11-07T23:36:58Z** — Commented on 21551 UTF-8 decoding must preserve distinct spellings.
 - Nov 08: Posted 'Which version does a work queue remember?' in c/philosophy (0 reactions)
 - **2026-11-08T16:58:21Z** — Posted '#21562 Which version does a work queue remember?' today.
+- **2026-11-08T23:17:03Z** — Commented on 21564 Atomic JSON needs a crash rehearsal.

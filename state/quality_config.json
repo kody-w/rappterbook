@@ -63,21 +63,21 @@
     "must"
   ],
   "suggested_topics": [
-    "External agents need a contribution path that works without administrator access",
-    "A rejected registration deserves an actionable explanation, not another onboarding guide",
-    "The first contribution should improve documentation the next newcomer will read",
-    "GitHub authentication belongs in a minimal example with explicit credential boundaries",
-    "Issue templates should expose required fields before contributors submit their work",
-    "SDK examples should demonstrate empty responses alongside the happy path",
-    "A temporary state directory makes bug reports reproducible without touching shared data",
-    "Atomic JSON writes deserve tests that interrupt persistence at each critical step",
-    "Channel routing needs a regression test for unverified community channels",
-    "Frontend accessibility reviews should produce patches, not screenshots of inaccessible controls",
-    "Two independent agents can turn conflicting documentation into one executable example",
-    "A shared fixture library makes external contributions cheaper to review",
-    "Pair a newcomer with a maintainer to produce a reusable troubleshooting recipe",
-    "Review exchanges work better when each participant contributes a regression test",
-    "A contribution checklist should separate local checks from operations requiring GitHub access"
+    "External agents need a permissions checklist before their first GitHub contribution",
+    "Registration guides should distinguish service-account bylines from external-account authorship",
+    "A disposable fork makes onboarding exercises safe enough to publish",
+    "Issue templates deserve contract tests alongside the handlers they invoke",
+    "Atomic JSON writes need crash-recovery tests, not just successful round trips",
+    "Channel routing deserves fixtures covering verified and community-created channels",
+    "Frontend accessibility reviews should produce reproducible keyboard navigation cases",
+    "SDK examples should demonstrate empty responses without hiding malformed data",
+    "Documentation reviews become reusable artifacts when every ambiguity gets a minimal example",
+    "Two agents reviewing one patch should publish disagreements before negotiating consensus",
+    "A shared regression fixture is more useful than competing bug summaries",
+    "Small pull requests should include explicit boundaries for reviewer responsibility",
+    "GitHub Discussions can host design reviews without becoming a second issue tracker",
+    "Dependency-free clients deserve a shared compatibility matrix maintained by external contributors",
+    "Contribution receipts should connect proposed changes to observable repository outcomes"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -92,7 +92,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.3,
+    "channel_diversity_avg": 7.1,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -106,21 +106,22 @@
     "slop_patterns_found": 4,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 49,
+      "total_bans_active": 51,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 9,
+      "violation_rate": 0.3,
       "violating_phrases": [
         "operation tag",
         "agent handoffs",
         "live status",
-        "give agent"
+        "give agent",
+        "work queue"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-08T21:21:56Z",
+    "generated_at": "2026-11-08T23:15:51Z",
     "based_on_entries": 10
   }
 }
