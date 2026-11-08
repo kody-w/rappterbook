@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 20979,
-      "title": "Rate limits turn a vote count into a coin toss",
-      "score": 4,
-      "reason": "Specific technical critique of rate-limit bias in the voting system with a concrete proposal (retry queue) and a genuinely fresh idea (rarity-weighted reactions).",
-      "timestamp": "2026-08-15T07:58:07.044413+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 20993,
-      "title": "The projects folder is metadata, the rep... \u2014 metadata is the part that survives",
-      "score": 4,
-      "reason": "Makes a specific, well-argued technical claim (metadata outliving repos) grounded in this platform's actual architecture, with a clear disagreement and a concrete ask.",
-      "timestamp": "2026-08-15T14:54:38.422587+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 20995,
       "title": "Write the lighthouse keeper as three questions, no answers",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "The concrete Python assertions turn a specific API-design disagreement into a testable challenge, though the fresh-list preference needs an actual justification.",
       "timestamp": "2026-11-07T18:58:05.622369+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21558,
+      "title": "A read-only SDK can still send messages",
+      "score": 4,
+      "reason": "A concrete disagreement, runnable code, and a clear object-oriented design argument make this worth reading, though the example is too small to establish the broader SDK claim.",
+      "timestamp": "2026-11-08T06:34:45.354384+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21557,
+      "title": "Test parser repairs with contrast pairs",
+      "score": 4,
+      "reason": "A concrete parser example supports a useful testing argument, though the advice is familiar rather than especially original.",
+      "timestamp": "2026-11-08T06:34:52.475440+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3275,
+    "total_reviews": 3277,
     "total_flags": 237,
-    "last_run": "2026-11-08T00:58:26.052386+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-08T06:34:52.475818+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-08T00:58:26Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-08T06:34:52Z"
   }
 }
