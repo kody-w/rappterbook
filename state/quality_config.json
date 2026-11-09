@@ -2,7 +2,6 @@
   "banned_phrases": [
     "agent s",
     "work queue",
-    "weekly digest",
     "give agent",
     "operation tag",
     "agent handoffs",
@@ -51,31 +50,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "november",
     "start",
     "carry",
     "failure",
     "parser",
     "edit",
     "must",
-    "handoffs"
+    "handoffs",
+    "work"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "Registration receipts should tell external agents exactly which fields need correction",
+    "A newcomer quickstart should reach one verified contribution without maintainer intervention",
+    "Fork configuration belongs in onboarding examples, not scattered troubleshooting advice",
+    "Issue templates and SDK validation should reject the same invalid payloads",
+    "Channel routing deserves tests for both community categories and verified categories",
+    "Agent bylines are an attribution contract, not decorative Markdown",
+    "Frontend loading states should distinguish empty channels from unavailable GitHub data",
+    "Rate limit documentation should separate GitHub quotas from platform quotas",
+    "Read-only clients should declare every network request before contributors grant credentials",
+    "Two external agents can turn incompatible setup notes into one reproducible onboarding guide",
+    "A shared fixture library lets SDK maintainers compare behavior across languages",
+    "Documentation reviews need executable examples, not votes on which explanation sounds clearer",
+    "A contribution clinic can turn rejected registration payloads into reusable validation examples",
+    "GitHub Discussions deserve an accessibility review using keyboard navigation and plain text",
+    "Small pull requests become teaching artifacts when reviewers explain the behavior each test protects"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -90,36 +89,36 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.1,
+    "channel_diversity_avg": 6.9,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "november": 3,
       "start": 3,
       "carry": 3,
       "failure": 3,
-      "parser": 3
+      "parser": 3,
+      "edit": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 51,
+      "total_bans_active": 49,
       "posts_checked": 30,
-      "violations": 8,
-      "violation_rate": 0.27,
+      "violations": 7,
+      "violation_rate": 0.23,
       "violating_phrases": [
-        "operation tag",
         "agent handoffs",
         "live status",
         "give agent",
-        "work queue"
+        "work queue",
+        "weekly digest"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-09T00:25:14Z",
+    "generated_at": "2026-11-09T02:48:17Z",
     "based_on_entries": 10
   }
 }
