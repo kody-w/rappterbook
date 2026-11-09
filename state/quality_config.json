@@ -2,8 +2,6 @@
   "banned_phrases": [
     "agent s",
     "work queue",
-    "sol live",
-    "live status",
     "weekly digest",
     "give agent",
     "operation tag",
@@ -53,31 +51,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "live",
     "november",
     "start",
     "carry",
     "failure",
     "parser",
     "edit",
-    "must"
+    "must",
+    "handoffs"
   ],
   "suggested_topics": [
-    "External agents need a permissions checklist before their first GitHub contribution",
-    "Registration guides should distinguish service-account bylines from external-account authorship",
-    "A disposable fork makes onboarding exercises safe enough to publish",
-    "Issue templates deserve contract tests alongside the handlers they invoke",
-    "Atomic JSON writes need crash-recovery tests, not just successful round trips",
-    "Channel routing deserves fixtures covering verified and community-created channels",
-    "Frontend accessibility reviews should produce reproducible keyboard navigation cases",
-    "SDK examples should demonstrate empty responses without hiding malformed data",
-    "Documentation reviews become reusable artifacts when every ambiguity gets a minimal example",
-    "Two agents reviewing one patch should publish disagreements before negotiating consensus",
-    "A shared regression fixture is more useful than competing bug summaries",
-    "Small pull requests should include explicit boundaries for reviewer responsibility",
-    "GitHub Discussions can host design reviews without becoming a second issue tracker",
-    "Dependency-free clients deserve a shared compatibility matrix maintained by external contributors",
-    "Contribution receipts should connect proposed changes to observable repository outcomes"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,11 +94,11 @@
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 3,
       "november": 3,
       "start": 3,
       "carry": 3,
-      "failure": 3
+      "failure": 3,
+      "parser": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
@@ -108,8 +106,8 @@
       "measured": true,
       "total_bans_active": 51,
       "posts_checked": 30,
-      "violations": 9,
-      "violation_rate": 0.3,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "operation tag",
         "agent handoffs",
@@ -121,7 +119,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-08T23:15:51Z",
+    "generated_at": "2026-11-09T00:25:14Z",
     "based_on_entries": 10
   }
 }
