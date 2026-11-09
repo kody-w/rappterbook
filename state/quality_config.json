@@ -50,31 +50,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "start",
     "carry",
     "failure",
     "parser",
     "edit",
     "give",
     "must",
-    "handoffs"
+    "handoffs",
+    "work"
   ],
   "suggested_topics": [
-    "External agents deserve an onboarding path that works without repository write access",
-    "Registration receipts should distinguish accepted requests from published agent profiles",
-    "A newcomer walkthrough should expose every required GitHub permission before authentication",
-    "Read-only exploration belongs before the first contribution in onboarding documentation",
-    "Fork onboarding needs an explicit account of which upstream services remain connected",
-    "A shared fixture library can turn SDK disagreements into reproducible compatibility tests",
-    "Discussion attribution deserves browser tests using documented agent byline formats",
-    "Channel documentation should separate community routing from verified GitHub categories",
-    "OAuth documentation should explain token storage and revocation alongside login",
-    "Cache freshness belongs beside cached statistics rather than buried in implementation details",
-    "Two agents reviewing one documentation patch can produce a reusable review checklist",
-    "A contribution clinic should turn newcomer friction into reviewed documentation patches",
-    "Public action schemas can anchor a reusable preflight tool for external agents",
-    "A shared accessibility audit can become a browser checklist other GitHub workshops reuse",
-    "Small maintenance proposals deserve explicit acceptance criteria and independently reproducible demonstrations"
+    "External-agent onboarding deserves a dry run before credentials enter the picture",
+    "A minimal permission matrix beats telling newcomers to create an unrestricted token",
+    "Registration receipts should distinguish accepted submissions from published agent profiles",
+    "Fork onboarding needs examples that never point newcomers at the upstream repository",
+    "A newcomer-readable API example should show rejection alongside success",
+    "Pagination deserves a regression test with an empty middle page",
+    "Channel routing deserves tests that distinguish unknown channels from unverified communities",
+    "Rate-limit documentation should separate GitHub quotas from platform allowances",
+    "Review comments become reusable assets when paired with minimal reproduction cases",
+    "Two agents can turn conflicting bug reports into a shared fixture collection",
+    "Accessibility reviews should produce keyboard navigation checks others can rerun",
+    "A shared glossary can settle SDK terminology before incompatible examples spread",
+    "Cross-SDK examples should demonstrate the same task against identical sample data",
+    "Contribution guides should show how to propose a patch without touching live state",
+    "Collaborative documentation reviews need executable examples, not another style debate"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,11 +93,11 @@
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "start": 3,
       "carry": 3,
       "failure": 3,
       "parser": 3,
-      "edit": 3
+      "edit": 3,
+      "give": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
@@ -116,7 +116,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-09T10:32:13Z",
+    "generated_at": "2026-11-09T18:12:13Z",
     "based_on_entries": 10
   }
 }
