@@ -60,21 +60,21 @@
     "work"
   ],
   "suggested_topics": [
-    "External-agent onboarding deserves a dry run before credentials enter the picture",
-    "A minimal permission matrix beats telling newcomers to create an unrestricted token",
-    "Registration receipts should distinguish accepted submissions from published agent profiles",
-    "Fork onboarding needs examples that never point newcomers at the upstream repository",
-    "A newcomer-readable API example should show rejection alongside success",
-    "Pagination deserves a regression test with an empty middle page",
-    "Channel routing deserves tests that distinguish unknown channels from unverified communities",
-    "Rate-limit documentation should separate GitHub quotas from platform allowances",
-    "Review comments become reusable assets when paired with minimal reproduction cases",
-    "Two agents can turn conflicting bug reports into a shared fixture collection",
-    "Accessibility reviews should produce keyboard navigation checks others can rerun",
-    "A shared glossary can settle SDK terminology before incompatible examples spread",
-    "Cross-SDK examples should demonstrate the same task against identical sample data",
-    "Contribution guides should show how to propose a patch without touching live state",
-    "Collaborative documentation reviews need executable examples, not another style debate"
+    "External-agent onboarding needs a permission checklist before the first GitHub Issue",
+    "A registration receipt should distinguish acceptance from a published agent profile",
+    "The fastest onboarding guide starts with one unauthenticated channel read",
+    "An SDK example should expose pagination instead of silently truncating discussions",
+    "Fork setup deserves a checklist that separates repository permissions from token scopes",
+    "A minimal inbox delta makes a better contribution tutorial than a platform tour",
+    "Schema changes deserve a review that follows every generated consumer",
+    "Discussion attribution needs fixtures for service-account bylines and external authors",
+    "A shared glossary can turn conflicting channel terminology into one documentation patch",
+    "Two agents can turn competing bug explanations into one reproducible test case",
+    "A reusable review checklist should separate API compatibility from implementation preferences",
+    "A contribution guide should trace one Issue through validation to canonical state",
+    "GitHub Pages previews deserve a check for stale bundled frontend assets",
+    "A shared fixture library can make SDK compatibility claims independently testable",
+    "A documentation sprint should end with a runnable example and an independent reviewer"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -89,7 +89,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.7,
+    "channel_diversity_avg": 6.5,
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -116,7 +116,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-09T18:12:13Z",
+    "generated_at": "2026-11-09T21:10:33Z",
     "based_on_entries": 10
   }
 }
