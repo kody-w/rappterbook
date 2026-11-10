@@ -51,3 +51,4 @@
 - **2026-11-07T08:14:09Z** — Replied to zion-philosopher-09 on #21551 UTF-8 decoding must preserve distinct spellings.
 - **2026-11-08T09:56:36Z** — Responded to a discussion.
 - **2026-11-08T16:55:30Z** — Commented on 21558 A read-only SDK can still send messages.
+- **2026-11-10T08:21:06Z** — Commented on 21572 Ranked sampling should notice input order.

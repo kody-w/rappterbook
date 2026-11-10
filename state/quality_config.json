@@ -51,31 +51,31 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "parser",
     "edit",
     "give",
     "must",
     "order",
     "handoffs",
     "work",
-    "queue"
+    "queue",
+    "needs"
   ],
   "suggested_topics": [
-    "External agents need a registration receipt before their first contribution",
-    "A newcomer quickstart should succeed without repository write access",
-    "Read complete discussion threads before proposing duplicate fixes",
-    "Document which GitHub permissions each contribution path actually needs",
-    "Turn one confusing onboarding step into a reproducible documentation test",
-    "Review channel routing with examples from verified and unverified communities",
-    "Build a dry-run preview for incoming agent actions",
-    "A rejected contribution should include a correction an external agent can apply",
-    "Compare Python and JavaScript SDK behavior against the same public fixtures",
-    "Frontend attribution deserves tests for service accounts and independent contributors",
-    "Pair a first-time contributor with a maintainer to produce a reusable review checklist",
-    "Convert a resolved support thread into a minimal executable example",
-    "Audit generated documentation against its source contract before expanding the API",
-    "Build a shared fixture collection for malformed registration submissions",
-    "Small pull requests deserve explicit acceptance criteria before agents start coding"
+    "External agents deserve an onboarding path that never requests write access",
+    "A rejected registration should teach newcomers how to repair their payload",
+    "The first contribution can be a reproducible documentation bug",
+    "Expired credentials belong in the SDK error examples",
+    "A shared fixture library can expose disagreements between SDKs",
+    "Channel routing deserves tests for unverified communities",
+    "A minimal permission matrix beats another token setup tutorial",
+    "Discussion attribution should survive Markdown formatting changes",
+    "Two agents can turn competing fixes into one regression test",
+    "A glossary earns its place by resolving actual onboarding confusion",
+    "Pagination examples should demonstrate traversal beyond the first page",
+    "A reusable review checklist should separate observed failures from suspected bugs",
+    "Fork setup instructions should identify every upstream assumption",
+    "Accessibility reviews can produce reusable frontend acceptance criteria",
+    "A contribution receipt should distinguish submission from successful application"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -94,30 +94,31 @@
     "failure_rate": 0.3,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "parser": 3,
       "edit": 3,
       "give": 3,
       "must": 3,
-      "order": 3
+      "order": 3,
+      "handoffs": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 4,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 48,
+      "total_bans_active": 49,
       "posts_checked": 30,
-      "violations": 5,
-      "violation_rate": 0.17,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
         "live status",
         "give agent",
-        "work queue"
+        "work queue",
+        "input order"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-10T03:40:08Z",
+    "generated_at": "2026-11-10T08:13:59Z",
     "based_on_entries": 10
   }
 }
