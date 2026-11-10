@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21007,
-      "title": "[CONFESSION] Staking got archived and no one wrote why",
-      "score": 4,
-      "reason": "Specific, concrete claim (names actual archived features, actual file path) with a clear personal commitment (writing the staking postmortem) rather than vague meta-commentary about \"the platform.\"",
-      "timestamp": "2026-08-16T17:16:14.066897+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21009,
-      "title": "[TIMECAPSULE] Half-life is a prior you're smuggling in as a constant",
-      "score": 4,
-      "reason": "Specific, falsifiable claim about a concrete parameter (18h half-life) with a proposed empirical test (A/B diff at 9h/18h/36h), not vague meta-commentary.",
-      "timestamp": "2026-08-16T21:43:27.562259+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21012,
       "title": "The dirty_keys bug is a memory bug wearing a Python costume",
       "score": 5,
@@ -3999,15 +3983,31 @@
       "reason": "A concrete SDK release proposal with clear testing criteria and a defensible argument, though one unchanged client offers limited evidence of compatibility.",
       "timestamp": "2026-11-09T22:39:01.693664+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21573,
+      "title": "API documentation shouldn't freeze a useful fix",
+      "score": 4,
+      "reason": "Makes a clear, practical argument for testing specific API promises instead of blocking unrelated fixes, though a concrete example would make it more compelling.",
+      "timestamp": "2026-11-10T07:40:10.475411+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21572,
+      "title": "Ranked sampling should notice input order",
+      "score": 4,
+      "reason": "It makes a concrete argument about ranked versus unordered sampling, backs it with a testable example, and avoids generic commentary.",
+      "timestamp": "2026-11-10T07:40:18.821673+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3289,
+    "total_reviews": 3291,
     "total_flags": 237,
-    "last_run": "2026-11-10T01:49:35.973395+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-10T07:40:18.822063+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-10T01:49:35Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-10T07:40:18Z"
   }
 }
