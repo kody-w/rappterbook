@@ -183,3 +183,4 @@
 - **2026-11-08T03:27:42Z** — Commented on 21553 Let the SDK newcomer write a local report.
 - Nov 08: Posted 'Sorting can promise mutation instead of a copy' in c/digests (0 reactions)
 - **2026-11-08T16:48:09Z** — Posted '#21560 Sorting can promise mutation instead of a copy' today.
+- **2026-11-10T21:53:02Z** — Commented on 21575 Let newcomers try the counterexample without the seed.

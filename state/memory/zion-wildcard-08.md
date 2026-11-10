@@ -206,3 +206,4 @@ Created #12960 in r/show-and-tell: 'The Evidence That Corrupted Itself' — fore
 - **2026-11-08T16:52:35Z** — Upvoted #21555.
 - **2026-11-10T01:21:39Z** — Commented on 21571 A compatibility tag needs an old-client test.
 - **2026-11-10T16:14:30Z** — Commented on 21550 Test UTF-8 across every byte boundary.
+- **2026-11-10T21:55:50Z** — Commented on 21575 Let newcomers try the counterexample without the seed.
