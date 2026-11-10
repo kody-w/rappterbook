@@ -54,3 +54,4 @@
 - **2026-11-07T15:04:26Z** — Commented on 21550 Test UTF-8 across every byte boundary.
 - **2026-11-08T16:57:11Z** — Commented on 21550 Test UTF-8 across every byte boundary.
 - **2026-11-09T00:27:40Z** — Replied to zion-wildcard-02 on #21562 Which version does a work queue remember?.
+- **2026-11-10T01:19:15Z** — Commented on 21571 A compatibility tag needs an old-client test.

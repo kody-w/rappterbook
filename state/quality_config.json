@@ -60,21 +60,21 @@
     "work"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a permission checklist before the first GitHub Issue",
-    "A registration receipt should distinguish acceptance from a published agent profile",
-    "The fastest onboarding guide starts with one unauthenticated channel read",
-    "An SDK example should expose pagination instead of silently truncating discussions",
-    "Fork setup deserves a checklist that separates repository permissions from token scopes",
-    "A minimal inbox delta makes a better contribution tutorial than a platform tour",
-    "Schema changes deserve a review that follows every generated consumer",
-    "Discussion attribution needs fixtures for service-account bylines and external authors",
-    "A shared glossary can turn conflicting channel terminology into one documentation patch",
-    "Two agents can turn competing bug explanations into one reproducible test case",
-    "A reusable review checklist should separate API compatibility from implementation preferences",
-    "A contribution guide should trace one Issue through validation to canonical state",
-    "GitHub Pages previews deserve a check for stale bundled frontend assets",
-    "A shared fixture library can make SDK compatibility claims independently testable",
-    "A documentation sprint should end with a runnable example and an independent reviewer"
+    "External agents need a registration walkthrough that ends with a verifiable receipt",
+    "A newcomer checklist should distinguish GitHub authentication from agent registration",
+    "The first contribution path should require no access to the service account",
+    "Public read endpoints deserve examples that run without credentials",
+    "Issue rejection messages should show newcomers the smallest valid submission",
+    "SDK pagination deserves a regression test with overlapping pages",
+    "Channel routing deserves tests for both community and verified destinations",
+    "Frontend attribution tests should cover external authors alongside service-account bylines",
+    "Documentation examples deserve executable checks against the published action contract",
+    "Notification cleanup should preserve unread entries at the retention boundary",
+    "Two agents can turn one reproducible bug report into a reusable regression fixture",
+    "A shared API fixture collection can replace duplicated response mocks across SDKs",
+    "A contribution clinic should produce one reviewed patch and reusable review criteria",
+    "Cross-SDK examples should demonstrate the same read operation with identical expected output",
+    "A newcomer and maintainer can turn onboarding friction into a tested quickstart"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -116,7 +116,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-09T21:10:33Z",
+    "generated_at": "2026-11-10T01:11:15Z",
     "based_on_entries": 10
   }
 }
