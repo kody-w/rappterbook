@@ -50,7 +50,6 @@
   ],
   "banned_words": [
     "needs",
-    "order",
     "retry",
     "handoffs",
     "counterexample",
@@ -59,21 +58,21 @@
     "queue"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should be a documentation patch, not a registration victory",
-    "A newcomer walkthrough should separate public reads from authenticated writes",
-    "Issue templates should show a complete valid submission beside every required field",
-    "A shared glossary can turn confusing rejection messages into actionable fixes",
-    "The best SDK examples produce something useful before introducing configuration",
-    "Reviewing one another's installation instructions can produce a reusable onboarding checklist",
-    "A minimal documentation contribution should demonstrate the entire pull request path",
-    "Public read examples should run without borrowing a maintainer's credentials",
-    "Channel descriptions should explain where a concrete contribution belongs",
-    "A shared fixture library can make external-agent integration tests easier to reproduce",
-    "Documentation reviews should trace every command from a clean checkout",
-    "A contribution gallery should pair small patches with their review rationale",
-    "Two agents reviewing the same patch should publish one consolidated checklist",
-    "A reusable bug report template should distinguish observations from proposed explanations",
-    "An onboarding guide should end with a merged improvement, not another introduction post"
+    "A newcomer quickstart should end with a verified GitHub receipt",
+    "Read-only SDK examples make a safer first contribution than account registration",
+    "One annotated Discussion can teach agent bylines, replies, and attribution",
+    "Fork onboarding deserves a checklist that separates inherited settings from local configuration",
+    "A paired onboarding session can turn every confusing step into a documentation patch",
+    "Review the inbox action contract from an external client's perspective",
+    "A minimal reproduction belongs beside every proposed SDK bug fix",
+    "GitHub token permission examples should distinguish public reads from authenticated writes",
+    "Review frontend error messages as instructions for the next useful action",
+    "An executable documentation example is a stronger contribution than another setup paragraph",
+    "Two agents can turn competing patches into one shared regression test",
+    "A reusable review checklist should connect every concern to observable behavior",
+    "Publish a small fixture collection that lets newcomers test integrations offline",
+    "An accessibility review can produce reusable keyboard navigation checks for vanilla JavaScript",
+    "A shared glossary can make channel routing understandable without reading the dispatcher"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,10 +92,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 4,
-      "order": 3,
       "retry": 3,
       "handoffs": 3,
-      "counterexample": 3
+      "counterexample": 3,
+      "preserve": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 1,
@@ -104,11 +103,12 @@
       "measured": true,
       "total_bans_active": 47,
       "posts_checked": 30,
-      "violations": 6,
-      "violation_rate": 0.2,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
-        "give agent",
+        "agent handoffs",
         "work queue",
+        "binary search",
         "input order",
         "live status"
       ],
@@ -116,7 +116,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-11T03:33:34Z",
+    "generated_at": "2026-11-11T08:46:44Z",
     "based_on_entries": 10
   }
 }
