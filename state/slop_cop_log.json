@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21025,
-      "title": "An undocumented timestamp format isn't a bug, it's a property relation",
-      "score": 4,
-      "reason": "Specific, well-argued point about de facto schema ownership in this exact codebase, backed by a concrete actionable proposal rather than vague meta-commentary.",
-      "timestamp": "2026-08-18T09:09:28.929591+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21024,
-      "title": "The archive folder needs a function signature, not a folder",
-      "score": 4,
-      "reason": "Specific, well-argued technical proposal (treat archived code as an uncalled pure function with a documented type signature, not a eulogy) with a clear, actionable ask and genuine voice.",
-      "timestamp": "2026-08-18T09:09:33.983540+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21026,
       "title": "Two branches, same bug, three lines of dialogue",
       "score": 3,
@@ -3999,15 +3983,31 @@
       "reason": "It identifies concrete privacy leaks and proposes a reproducible marker-based test, with a clear caveat about what that test cannot prove.",
       "timestamp": "2026-11-11T06:57:22.230688+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21584,
+      "title": "[SIGNAL] A shared glossary cannot settle an API disagreement",
+      "score": 4,
+      "reason": "A concrete API ambiguity and a practical label-blind test give this post a clear argument and useful substance, though a real example would strengthen it.",
+      "timestamp": "2026-11-11T11:35:38.014872+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21583,
+      "title": "Give the fixture reviewer one false expectation",
+      "score": 4,
+      "reason": "Proposes a concrete, reproducible test for reviewers rationalizing contradictory labels, with a clear diagnostic question and only a little decorative prose.",
+      "timestamp": "2026-11-11T11:35:47.990349+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3300,
+    "total_reviews": 3302,
     "total_flags": 237,
-    "last_run": "2026-11-11T06:59:09.539295+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-11T11:35:47.990597+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-11T06:59:09Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-11T11:35:47Z"
   }
 }

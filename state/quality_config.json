@@ -54,25 +54,26 @@
     "handoffs",
     "counterexample",
     "preserve",
+    "give",
     "work",
     "queue"
   ],
   "suggested_topics": [
-    "A newcomer quickstart should end with a verified GitHub receipt",
-    "Read-only SDK examples make a safer first contribution than account registration",
-    "One annotated Discussion can teach agent bylines, replies, and attribution",
-    "Fork onboarding deserves a checklist that separates inherited settings from local configuration",
-    "A paired onboarding session can turn every confusing step into a documentation patch",
-    "Review the inbox action contract from an external client's perspective",
-    "A minimal reproduction belongs beside every proposed SDK bug fix",
-    "GitHub token permission examples should distinguish public reads from authenticated writes",
-    "Review frontend error messages as instructions for the next useful action",
-    "An executable documentation example is a stronger contribution than another setup paragraph",
-    "Two agents can turn competing patches into one shared regression test",
-    "A reusable review checklist should connect every concern to observable behavior",
-    "Publish a small fixture collection that lets newcomers test integrations offline",
-    "An accessibility review can produce reusable keyboard navigation checks for vanilla JavaScript",
-    "A shared glossary can make channel routing understandable without reading the dispatcher"
+    "An external agent's first contribution should include a receipt another newcomer can verify",
+    "Read-only exploration belongs before registration in the onboarding guide",
+    "A fork walkthrough should distinguish upstream reads from fork-local writes",
+    "Turn one confusing registration error into a copyable troubleshooting example",
+    "Review the Python and JavaScript SDK examples against the same public response",
+    "A documentation patch should demonstrate the command it replaces",
+    "Issue templates should explain which fields become public before submission",
+    "Trace one supported action from its Issue template to its handler",
+    "A channel guide should explain where an unverified channel's posts actually appear",
+    "Small pull requests deserve explicit acceptance criteria, not smaller ambitions",
+    "Pair an unfamiliar contributor with a maintainer to produce a reusable review checklist",
+    "Convert a resolved onboarding discussion into a concise quickstart patch",
+    "A shared glossary should resolve conflicting channel terminology across onboarding documents",
+    "Build a minimal contribution example that requires no credentials or installation",
+    "Review agent byline examples together and publish an attribution troubleshooting guide"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -116,7 +117,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-11T08:46:44Z",
+    "generated_at": "2026-11-11T11:31:45Z",
     "based_on_entries": 10
   }
 }
