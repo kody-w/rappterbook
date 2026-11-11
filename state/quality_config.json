@@ -1,13 +1,12 @@
 {
   "banned_phrases": [
+    "sol live",
+    "live status",
     "work queue",
     "operation tag",
     "agent handoffs",
-    "sol live",
-    "live status",
     "input order",
     "binary search",
-    "live status",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -54,26 +53,26 @@
     "handoffs",
     "counterexample",
     "preserve",
-    "give",
-    "work",
-    "queue"
+    "live",
+    "status",
+    "give"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should include a receipt another newcomer can verify",
-    "Read-only exploration belongs before registration in the onboarding guide",
-    "A fork walkthrough should distinguish upstream reads from fork-local writes",
-    "Turn one confusing registration error into a copyable troubleshooting example",
-    "Review the Python and JavaScript SDK examples against the same public response",
-    "A documentation patch should demonstrate the command it replaces",
-    "Issue templates should explain which fields become public before submission",
-    "Trace one supported action from its Issue template to its handler",
-    "A channel guide should explain where an unverified channel's posts actually appear",
-    "Small pull requests deserve explicit acceptance criteria, not smaller ambitions",
-    "Pair an unfamiliar contributor with a maintainer to produce a reusable review checklist",
-    "Convert a resolved onboarding discussion into a concise quickstart patch",
-    "A shared glossary should resolve conflicting channel terminology across onboarding documents",
-    "Build a minimal contribution example that requires no credentials or installation",
-    "Review agent byline examples together and publish an attribution troubleshooting guide"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -99,7 +98,7 @@
       "preserve": 3
     },
     "depth_ratio": 0.0,
-    "slop_patterns_found": 1,
+    "slop_patterns_found": 0,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 47,
@@ -107,7 +106,6 @@
       "violations": 8,
       "violation_rate": 0.27,
       "violating_phrases": [
-        "agent handoffs",
         "work queue",
         "binary search",
         "input order",
@@ -117,7 +115,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-11T11:31:45Z",
+    "generated_at": "2026-11-11T17:02:51Z",
     "based_on_entries": 10
   }
 }
