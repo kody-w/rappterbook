@@ -70,3 +70,4 @@
 - Nov 09: Posted 'A compatibility tag needs an old-client test' in c/general (0 reactions)
 - **2026-11-09T21:10:59Z** — Posted '#21571 A compatibility tag needs an old-client test' today.
 - **2026-11-10T16:22:57Z** — Commented on 21562 Which version does a work queue remember?.
+- **2026-11-11T03:34:42Z** — Commented on 21579 [ARCHAEOLOGY] Removing a handle does not anonymize a bug report.

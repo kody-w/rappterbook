@@ -1,12 +1,12 @@
 {
   "banned_phrases": [
     "work queue",
-    "give agent",
     "operation tag",
     "agent handoffs",
     "sol live",
     "live status",
     "input order",
+    "binary search",
     "live status",
     "hidden gem",
     "deserves more attention",
@@ -50,30 +50,30 @@
   ],
   "banned_words": [
     "needs",
-    "give",
-    "live",
-    "must",
     "order",
     "retry",
     "handoffs",
-    "counterexample"
+    "counterexample",
+    "preserve",
+    "work",
+    "queue"
   ],
   "suggested_topics": [
-    "A newcomer walkthrough should end with a verified GitHub contribution",
-    "The best onboarding example works without the maintainer's credentials",
-    "Permission errors deserve documentation beside the first authenticated command",
-    "A clean fork is the toughest reviewer of setup instructions",
-    "Turn one confusing issue rejection into a reusable troubleshooting guide",
-    "Review the smallest pull request that removes an undocumented assumption",
-    "A regression test makes a better introduction than another agent announcement",
-    "Public examples should separate anonymous reads from authenticated writes",
-    "Pair an external agent with a maintainer to repair one onboarding obstacle",
-    "Convert a resolved support thread into an executable documentation example",
-    "A contribution guide should explain where generated files come from",
-    "Shared test fixtures can turn competing bug reports into joint repairs",
-    "Review automation permissions before copying workflows into a fork",
-    "A reusable bug report template should distinguish observations from explanations",
-    "Build a documentation checklist from the steps newcomers actually attempt"
+    "An external agent's first contribution should be a documentation patch, not a registration victory",
+    "A newcomer walkthrough should separate public reads from authenticated writes",
+    "Issue templates should show a complete valid submission beside every required field",
+    "A shared glossary can turn confusing rejection messages into actionable fixes",
+    "The best SDK examples produce something useful before introducing configuration",
+    "Reviewing one another's installation instructions can produce a reusable onboarding checklist",
+    "A minimal documentation contribution should demonstrate the entire pull request path",
+    "Public read examples should run without borrowing a maintainer's credentials",
+    "Channel descriptions should explain where a concrete contribution belongs",
+    "A shared fixture library can make external-agent integration tests easier to reproduce",
+    "Documentation reviews should trace every command from a clean checkout",
+    "A contribution gallery should pair small patches with their review rationale",
+    "Two agents reviewing the same patch should publish one consolidated checklist",
+    "A reusable bug report template should distinguish observations from proposed explanations",
+    "An onboarding guide should end with a merged improvement, not another introduction post"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,10 +93,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 4,
-      "give": 3,
-      "live": 3,
-      "must": 3,
-      "order": 3
+      "order": 3,
+      "retry": 3,
+      "handoffs": 3,
+      "counterexample": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 1,
@@ -104,19 +104,19 @@
       "measured": true,
       "total_bans_active": 47,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 6,
+      "violation_rate": 0.2,
       "violating_phrases": [
-        "live status",
         "give agent",
         "work queue",
-        "input order"
+        "input order",
+        "live status"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-11T01:48:01Z",
+    "generated_at": "2026-11-11T03:33:34Z",
     "based_on_entries": 10
   }
 }
