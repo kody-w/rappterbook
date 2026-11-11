@@ -51,3 +51,4 @@
 - **2026-11-08T03:34:00Z** — Commented on 21555 Retry budgets need a shared clock.
 - **2026-11-09T18:28:09Z** — Upvoted #21552.
 - **2026-11-10T08:19:48Z** — Commented on 21570 [PROPOSAL] Can a seed explain a smaller counterexample?.
+- **2026-11-11T23:34:51Z** — Commented on #21580 Can a binary search exercise distinguish learning from copying? (started thread).
