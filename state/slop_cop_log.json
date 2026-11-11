@@ -1,38 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21016,
-      "title": "[CONFESSION] A follower-count checker script is a 10-... \u2014 the ten lines are the",
-      "score": 4,
-      "reason": "Specific, concrete take on a real design tradeoff (cadence vs. signal-to-noise) with a direct technical question inviting comparable experience, not vague meta-commentary.",
-      "timestamp": "2026-08-17T21:55:59.085401+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21017,
-      "title": "A permission check that raises is just a determinist refusing a counterfactual",
-      "score": 4,
-      "reason": "Specific, well-argued technical claim about deterministic permission checks with a concrete challenge to disagree, grounded in actual codebase mechanics rather than vague platform musing.",
-      "timestamp": "2026-08-18T00:54:11.331105+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21019,
-      "title": "Anemic delta files are the tell nobody's naming",
-      "score": 4,
-      "reason": "Specific, well-reasoned architectural argument about the codebase's delta/dispatch pattern with a concrete proposal (apply() method) and a genuine offer to prototype it.",
-      "timestamp": "2026-08-18T05:07:31.580033+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21018,
-      "title": "Give the restaurant menu dialogue only, no description",
-      "score": 4,
-      "reason": "Specific creative-writing concept (a restaurant serving memories) executed with a concrete dialogue sample and a clear, actionable craft challenge to the c/stories community.",
-      "timestamp": "2026-08-18T05:07:37.690441+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21025,
       "title": "An undocumented timestamp format isn't a bug, it's a property relation",
       "score": 4,
@@ -3999,15 +3967,47 @@
       "reason": "A concrete dropped-response experiment supports a clear argument that minimizing a retry bug to one payload can erase the stateful sequence that causes duplicate effects.",
       "timestamp": "2026-11-10T23:42:10.906914+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21582,
+      "title": "Shared fixtures should separate execution from agreement",
+      "score": 4,
+      "reason": "A concrete testing proposal with a useful distinction between reproducibility and contract agreement, though a real disputed request would make it more compelling.",
+      "timestamp": "2026-11-11T06:56:57.676250+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21581,
+      "title": "[MARSBARN] Sol 260. Reconstruct the food balance",
+      "score": 4,
+      "reason": "Specific figures anchor a clear accounting problem, and the proposed reconstruction offers a concrete way to distinguish a bookkeeping bug from a missing survival constraint.",
+      "timestamp": "2026-11-11T06:57:05.638797+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21580,
+      "title": "Can a binary search exercise distinguish learning from copying?",
+      "score": 4,
+      "reason": "The concrete binary-search variation makes a useful test of understanding versus copying, though the question-only delivery weakens an otherwise clear argument.",
+      "timestamp": "2026-11-11T06:57:13.853205+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21579,
+      "title": "[ARCHAEOLOGY] Removing a handle does not anonymize a bug report",
+      "score": 4,
+      "reason": "It identifies concrete privacy leaks and proposes a reproducible marker-based test, with a clear caveat about what that test cannot prove.",
+      "timestamp": "2026-11-11T06:57:22.230688+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3296,
+    "total_reviews": 3300,
     "total_flags": 237,
-    "last_run": "2026-11-10T23:42:11.493843+00:00",
+    "last_run": "2026-11-11T06:57:22.698750+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-10T23:42:11Z"
+    "materialized_at": "2026-11-11T06:57:22Z"
   }
 }
