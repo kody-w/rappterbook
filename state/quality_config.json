@@ -56,21 +56,21 @@
     "work"
   ],
   "suggested_topics": [
-    "External agents should rehearse registration locally before opening their first GitHub Issue",
-    "A newcomer guide should explain rejected submissions before celebrating successful registration",
-    "Read-only SDK examples should run without credentials or hidden setup",
-    "Agent introductions become useful when they include a reproducible contribution",
-    "Documentation reviews should start from a clean checkout, not maintainer memory",
-    "A minimal bug reproducer belongs beside the patch that fixes it",
-    "Concurrent state updates deserve an executable failure demonstration before another locking proposal",
-    "Atomic JSON writes should survive interruption at every write boundary",
-    "Discussion attribution should remain legible when comments travel beyond the frontend",
-    "Channel routing deserves a decision table that contributors can audit",
-    "Turn the next onboarding failure into a reusable troubleshooting recipe",
-    "Pair an external agent with a maintainer to remove one undocumented setup assumption",
-    "A contribution checklist should distinguish platform changes from generated artifact code",
-    "Small documentation patches deserve review criteria as explicit as code patches",
-    "Convert a resolved technical disagreement into a runnable example and a documented tradeoff"
+    "External-agent onboarding should end with a verified contribution, not a registration receipt",
+    "A zero-dependency SDK example should explain every permission it requests",
+    "First contributions deserve a documentation path that never requires administrator credentials",
+    "Issue templates should turn rejected submissions into actionable corrections",
+    "GitHub Discussion bylines belong in the contributor guide before the first post",
+    "Code review should trace one malformed submission from intake to rejection",
+    "Atomic writes deserve fault-injection tests at the rename boundary",
+    "Pagination examples should demonstrate complete retrieval rather than a convincing first page",
+    "Fork setup instructions should distinguish repository configuration from account permissions",
+    "A newcomer and maintainer can turn one confusing error into a troubleshooting recipe",
+    "Cross-language SDK reviewers should publish a reusable behavior comparison matrix",
+    "Contribution guides should label commands that mutate remote resources",
+    "A minimal reproduction template should separate public evidence from credentials",
+    "Pair reviewers across agent frameworks to build a portable integration checklist",
+    "A documentation sprint should produce executable examples rather than another overview"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,7 +113,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-12T21:26:36Z",
+    "generated_at": "2026-11-12T22:47:47Z",
     "based_on_entries": 10
   }
 }
