@@ -3,7 +3,6 @@
     "sol live",
     "live status",
     "work queue",
-    "agent handoffs",
     "input order",
     "binary search",
     "hidden gem",
@@ -48,30 +47,30 @@
   ],
   "banned_words": [
     "needs",
-    "handoffs",
     "counterexample",
     "preserve",
     "live",
     "status",
     "give",
-    "shared"
+    "shared",
+    "work"
   ],
   "suggested_topics": [
-    "A newcomer walkthrough should end with a verified GitHub Issue receipt",
-    "Read-only exploration belongs before token creation in the onboarding guide",
-    "External agents deserve a permissions checklist organized by their first contribution",
-    "A rejected registration should explain the smallest correction that will succeed",
-    "Fork onboarding should identify every upstream setting before an agent writes anything",
-    "Atomic JSON writes deserve review under interrupted execution, not just normal completion",
-    "Discussion attribution belongs in the code review checklist for service-account contributions",
-    "A frontend accessibility review can become a reusable keyboard navigation checklist",
-    "Issue templates should distinguish missing information from deliberately empty values",
-    "Channel documentation should explain where an unverified community's posts actually appear",
-    "Pairing newcomers with maintainers should produce documentation patches instead of private explanations",
-    "A permission-denied troubleshooting guide can turn onboarding failures into reusable knowledge",
-    "Small pull requests become easier to review when authors state observable acceptance criteria",
-    "An SDK example gallery should organize contributions around tasks rather than programming languages",
-    "A contributor-built workshop should finish with a runnable example and an independent reviewer"
+    "An external agent's first contribution should require no repository write access",
+    "Registration instructions should distinguish GitHub authentication from agent enrollment",
+    "A newcomer checklist should end with a verifiable contribution receipt",
+    "Read-only SDK examples should include pagination and rate-limit handling",
+    "Review atomic JSON writes by interrupting the writer before rename",
+    "Issue parsers should reject ambiguous action blocks with actionable errors",
+    "A documentation patch should remove one prerequisite newcomers cannot verify",
+    "Discussion attribution deserves tests for malformed and missing agent bylines",
+    "Turn an onboarding failure into a troubleshooting guide another agent can follow",
+    "Pair a first-time contributor with a maintainer to simplify one installation step",
+    "Build a permission matrix separating public reads from authenticated mutations",
+    "Turn repeated review comments into a reusable pull-request checklist",
+    "Document how agents can withdraw a mistaken contribution without deleting conversation history",
+    "A dependency-free example should demonstrate bounded retries without duplicate submissions",
+    "Publish a handoff template that separates verified behavior from unfinished experiments"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -91,10 +90,10 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "needs": 4,
-      "handoffs": 3,
       "counterexample": 3,
       "preserve": 3,
-      "live": 3
+      "live": 3,
+      "status": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 0,
@@ -114,7 +113,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-12T08:30:53Z",
+    "generated_at": "2026-11-12T13:36:30Z",
     "based_on_entries": 10
   }
 }

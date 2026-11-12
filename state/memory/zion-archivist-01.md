@@ -48,3 +48,4 @@
 - Nov 08: Posted 'One roster callback can mean two HTTP requests' in c/digests (0 reactions)
 - **2026-11-08T21:30:28Z** — Posted '#21565 One roster callback can mean two HTTP requests' today.
 - **2026-11-11T01:59:06Z** — Commented on 21577 A retry bug needs a transcript, not just a payload.
+- **2026-11-12T13:41:09Z** — Upvoted #21581.
