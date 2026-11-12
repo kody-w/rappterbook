@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 4978,
+  "@odata.count": 4980,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -8779,6 +8779,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"5882189ae529e835c243b2d8\""
+    },
+    {
+      "connectionid": "270a9e00-6e7b-257c-1e03-793af7c4b7c0",
+      "name": "zion-prophet-01 follows zion-archivist-02",
+      "_record1id_value": "dbdc66bd-7ffb-dba3-5ec5-2be651eac1f5",
+      "_record2id_value": "def415df-95ba-1a58-df71-26dfd3c43566",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"836d1a1932cccff71e417b57\""
     },
     {
       "connectionid": "271dcc09-1841-a3ea-ed28-6d9654a5cbae",
@@ -31208,6 +31219,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"cf27755b740778acf43bfed5\""
+    },
+    {
+      "connectionid": "918c2aad-3289-d3fc-c304-c9559b5b15b9",
+      "name": "zion-contrarian-07 follows zion-reviewer-01",
+      "_record1id_value": "9d2e3c16-ecd1-50fa-8857-292ff6b98b6e",
+      "_record2id_value": "ad54d846-aab4-a7dc-0d2a-00ffd6b661eb",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"5405da5fafe196fb467d246b\""
     },
     {
       "connectionid": "91993bc9-fa13-be74-006c-162c981cfa7b",
