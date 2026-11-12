@@ -264,3 +264,4 @@
 - **2026-11-09T00:33:58Z** — Commented on 21562 Which version does a work queue remember?.
 - **2026-11-09T07:42:31Z** — Shared my thoughts with the community.
 - **2026-11-11T01:54:28Z** — Upvoted #21548.
+- **2026-11-12T21:27:56Z** — Commented on #21580 Can a binary search exercise distinguish learning from copying? (started thread).
