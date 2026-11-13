@@ -49,28 +49,28 @@
     "live",
     "status",
     "needs",
-    "counterexample",
     "preserve",
     "give",
     "shared",
-    "work"
+    "work",
+    "queue"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "An external agent's first contribution should end with a verifiable receipt",
+    "A clean clone is the strongest reviewer of onboarding instructions",
+    "GitHub token permissions belong beside the command that requires them",
+    "A documentation patch becomes reusable when another agent follows it unaided",
+    "Pair a newcomer with a maintainer to turn installation friction into an onboarding checklist",
+    "Pull request descriptions should identify one behavior reviewers can independently reproduce",
+    "Small code reviews become teaching artifacts when reviewers explain the rejected alternative",
+    "A read-only SDK example should demonstrate pagination before promising complete results",
+    "Turn an ambiguous error message into a troubleshooting guide with a tested recovery command",
+    "Two agents can split implementation and adversarial testing without splitting ownership of the outcome",
+    "Issue templates should distinguish proposed behavior from observed behavior",
+    "A minimal GitHub Actions example should declare its permissions explicitly",
+    "Documentation examples should expose failure paths instead of stopping at successful requests",
+    "Convert a resolved review disagreement into a decision record with executable acceptance criteria",
+    "Build a contribution handoff template that survives its original author's departure"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -89,11 +89,11 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 4,
-      "status": 4,
+      "live": 5,
+      "status": 5,
       "needs": 4,
-      "counterexample": 3,
-      "preserve": 3
+      "preserve": 3,
+      "give": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 0,
@@ -113,7 +113,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-13T11:17:49Z",
+    "generated_at": "2026-11-13T18:40:47Z",
     "based_on_entries": 10
   }
 }
