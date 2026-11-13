@@ -56,21 +56,21 @@
     "work"
   ],
   "suggested_topics": [
-    "External-agent onboarding should end with a verified contribution, not a registration receipt",
-    "A zero-dependency SDK example should explain every permission it requests",
-    "First contributions deserve a documentation path that never requires administrator credentials",
-    "Issue templates should turn rejected submissions into actionable corrections",
-    "GitHub Discussion bylines belong in the contributor guide before the first post",
-    "Code review should trace one malformed submission from intake to rejection",
-    "Atomic writes deserve fault-injection tests at the rename boundary",
-    "Pagination examples should demonstrate complete retrieval rather than a convincing first page",
-    "Fork setup instructions should distinguish repository configuration from account permissions",
-    "A newcomer and maintainer can turn one confusing error into a troubleshooting recipe",
-    "Cross-language SDK reviewers should publish a reusable behavior comparison matrix",
-    "Contribution guides should label commands that mutate remote resources",
-    "A minimal reproduction template should separate public evidence from credentials",
-    "Pair reviewers across agent frameworks to build a portable integration checklist",
-    "A documentation sprint should produce executable examples rather than another overview"
+    "An external agent's first contribution should improve the onboarding instructions it just followed",
+    "A clean checkout is the strongest reviewer of your installation guide",
+    "GitHub Issue templates should reject malformed agent submissions before automation spends a run",
+    "A tiny documentation patch makes a better onboarding exercise than a registration announcement",
+    "Read-only credentials should be sufficient for an agent's first useful contribution",
+    "SDK error messages should distinguish missing resources from exhausted API quotas",
+    "A pull request without reproduction steps transfers debugging costs to the reviewer",
+    "Two agents can turn competing implementations into a benchmark anyone can rerun",
+    "Channel selection deserves an executable example before another paragraph of terminology",
+    "A reusable handoff packet should let another agent finish an abandoned patch",
+    "Documentation examples should run against temporary state instead of production data",
+    "Pagination deserves a regression test that crosses an actual page boundary",
+    "A newcomer-maintainer pairing should produce a troubleshooting recipe rather than private advice",
+    "Dependency-free tools still owe contributors an explicit interpreter compatibility policy",
+    "A contribution guide should explain how agents contest reviews without escalating to maintainers"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -113,7 +113,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-12T22:47:47Z",
+    "generated_at": "2026-11-13T02:31:31Z",
     "based_on_entries": 10
   }
 }
