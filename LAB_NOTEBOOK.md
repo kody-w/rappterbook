@@ -6950,3 +6950,81 @@ challenges are whether the standalone CLI retains a submitted Issue locator
 after receipt transport failure, and how an established installation can
 recognize lost retained history without inventing credit. Select from
 current evidence; do not assume either candidate is already a proven bug.
+
+## Entry 003.58 - 2026-10-14 - Convergent channel counts and state-safe tests
+
+**Session**: gpt-6.1-sol via Copilot CLI / operator: kody-w
+**Read state**: `ddb84b75e9929f937b2b2148f13b09b26e101a24`, clean worktree on `fix-state-drift-and-test-hygiene`, based on `origin/main`.
+
+### Hypothesis tested
+The repeated 16-post drift comes from competing category/topic accounting, not
+16 missing publications. The reconciler itself counts a different representation
+from the log it subsequently publishes, and successful conflict recovery can
+discard its repairs. Mocked generation also retains real logging side effects.
+This explicit maintenance request takes precedence over the previous
+participation experiment's recommended next move.
+
+### What I built
+Shared `state_io.channel_post_counts` between reconciliation and verification:
+verified channels count `post.channel`, while unverified subrappters count
+`post.topic`. Reconciliation now synchronizes its in-memory posted log first,
+preserves explicit assignments and uncached posts, recognizes legacy verified
+channels absent from the manifest, and uses the standard atomic state I/O.
+No canonical state file was manually repaired or staged.
+
+The dedicated reconcile workflow requires complete authority and opts into
+recomputing its coupled outputs after either a clean rebase or resolved state
+conflicts. `safe_commit.sh` retains remote state before recomputing with the
+cached corpus instead of blindly preferring stale local snapshots.
+
+Content, comment-style, ghost-comment and LLM tests now route outcome, event and
+prompt logs into temporary directories. Ordinary content fixtures pin unrelated
+random post-type selection. A session-start SHA-256 snapshot and session-scoped
+teardown guard name changed tracked state files and produce a JUnit-visible
+error. Added 11 regression cases across convergence, concurrent publication,
+failed recomputation, and the guard. Changes remain on the requested local
+branch; no push or live repair was requested or performed.
+
+### What worked
+- Workflow run `38486848546` loaded 16,184 discussions and computed four count
+  repairs, but its log explicitly kept the remote versions of channels, stats,
+  agents and posted log during rebase; only pulse metadata reached the retry.
+- The original exclusive topic path subtracts nine `[LISPY]` posts from `code`
+  and seven `[OPERATOR]` posts from `meta`, while backfill retains their real
+  categories. Existing log overrides instead zero the topic counts. Neither
+  representation satisfies the checker's two independent dimensions.
+- Replaying the real reconciler twice on temporary copies of the committed
+  corpus produced 16,184 posts and consistent counts for all 19 channels:
+  code 2,755, meta 1,447, operator 7, lispy 9. Independent field counters and
+  the consistency checker agree on both iterations.
+- Focused coverage passed 239 cases. The exact requested full-suite command,
+  `python3.11 -m pytest -q -p no:cacheprovider tests`, changed from
+  **3,777 passed / 12 failed / 10 errors / 108 skipped** to
+  **3,788 passed / 12 failed / 10 errors / 108 skipped**. Failure/error IDs
+  are identical. Final status showed no tracked state changes before cleanup.
+- Every changed Python file compiled with `-W error` under python3 (3.9.6),
+  python3.11 (3.11.15), and python3.13 (3.13.12). Bash syntax checks passed.
+
+### What failed
+The first guarded full run exposed additional dry-run comment tests writing
+real outcomes; a subsequent narrowed run exposed comment-style failure events.
+Both were isolated rather than hidden by restoring state in the guard. A fixed
+ordinary-post fixture also randomly hit the prediction rail, so its unrelated
+type selection is now deterministic. The 22 pre-existing failure/error cases
+remain out of scope. `bd` is unavailable on this machine.
+
+### Lessons for next session
+1. Count the representation being published, and share verification semantics.
+   Category counts and topic counts are not mutually exclusive buckets.
+2. A green push can discard the actual repair. Recompute derived outputs after
+   rebasing instead of assuming either whole-file conflict side is correct.
+3. Mocking an API does not suppress local telemetry, and dry-run generation can
+   still write outcomes. Keep real logging enabled against temporary paths.
+4. Hash working-tree bytes, not HEAD, so existing developer dirt is preserved;
+   make guard failures visible to the differential CI comparator.
+
+### Recommended next move
+After this branch is merged, inspect the next scheduled reconcile run and its
+published channel/log counts, including any rebase recovery. Compare current
+field counts rather than pinning today's totals. Do not hand-edit state to make
+the check green. Address the unchanged baseline test failures separately.

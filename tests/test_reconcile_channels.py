@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import reconcile_channels  # noqa: E402
+import state_io  # noqa: E402
 from reconcile_channels import (  # noqa: E402
     build_channel_counts,
     build_stats_snapshot,
@@ -106,6 +107,82 @@ def test_main_reads_from_cache_shards_when_cache_file_is_missing(tmp_path, monke
     assert stats["total_posts"] == 1
     assert stats["total_comments"] == 2
     assert posted_log["_meta"]["authoritative_total_comments"] == 2
+
+
+@pytest.mark.parametrize("retained_posts", [False, True], ids=["rotated", "retained"])
+def test_reconcile_converges_with_category_and_topic_counts(
+    tmp_state, docs_dir, monkeypatch, retained_posts
+) -> None:
+    """Backfilling a rotated log must not move posts out of their categories."""
+    channels = {"channels": {
+        "code": {"verified": True, "post_count": 99},
+        "meta": {"verified": True, "post_count": 99},
+        "operator": {"verified": False, "post_count": 0},
+        "lispy": {"verified": False, "tag": "lispy", "post_count": 0},
+        "legacy": {"post_count": 0},
+    }}
+    discussions = [
+        {"number": 1, "title": "[OPERATOR] Report", "category_slug": "meta"},
+        {"number": 2, "title": "[LISPY] A tool", "category_slug": "code"},
+        {"number": 3, "title": "Legacy category", "category_slug": "legacy"},
+        {"number": 4, "title": "New category", "category_slug": "new-category"},
+    ]
+    state_io.save_json(tmp_state / "channels.json", channels)
+    state_io.save_json(tmp_state / "manifest.json", {
+        "category_ids": {"code": "C", "meta": "M", "new-category": "N"},
+    })
+    state_io.save_json(tmp_state / "discussions_cache.json", {
+        "_meta": {"total": len(discussions)}, "discussions": discussions,
+    })
+    if retained_posts:
+        state_io.save_json(tmp_state / "posted_log.json", {
+            "posts": [
+                {"number": 1, "title": "[OPERATOR] Report", "channel": "meta"},
+                {"number": 2, "title": "[LISPY] A tool", "channel": "code"},
+            ],
+            "comments": [],
+        })
+    monkeypatch.setattr(reconcile_channels, "STATE_DIR", tmp_state)
+    monkeypatch.setattr(reconcile_channels, "DOCS_DIR", docs_dir)
+    monkeypatch.setattr(sys, "argv", ["reconcile_channels.py", "--require-authoritative"])
+
+    for _ in range(2):
+        reconcile_channels.main()
+        actual = state_io.load_json(tmp_state / "channels.json")["channels"]
+        assert {slug: info["post_count"] for slug, info in actual.items()} == {
+            "code": 1, "meta": 1, "operator": 1, "lispy": 1,
+            "legacy": 1, "new-category": 1,
+        }
+        assert state_io.verify_consistency(tmp_state) == []
+        assert state_io.reconcile_counts(tmp_state) == 0
+
+
+def test_build_counts_preserves_explicit_channels_and_uncached_posts() -> None:
+    """An explicit channel and an unverified topic are independent counters."""
+    channels = {"channels": {
+        "code": {"verified": True},
+        "meta": {"verified": True},
+        "lispy": {"verified": False},
+    }}
+    posted_log = {"posts": [
+        {"number": 1, "channel": "meta", "topic": "lispy"},
+        {"number": 2, "channel": "code", "topic": "lispy"},
+    ]}
+    discussions = [
+        {"number": 1, "title": "[LISPY] A tool", "category": {"slug": "code"}},
+    ]
+
+    counts = build_channel_counts(discussions, channels, {"code", "meta"}, posted_log)
+
+    assert counts == {"code": 1, "meta": 1, "lispy": 2}
+
+
+def test_reconcile_workflow_recomputes_after_publication_conflicts() -> None:
+    """The dedicated job must not discard repairs behind a successful push."""
+    workflow = (ROOT / ".github/workflows/reconcile-channels.yml").read_text()
+
+    assert "python scripts/reconcile_channels.py --require-authoritative" in workflow
+    assert "SAFE_COMMIT_RECONCILE_CHANNELS: 'true'" in workflow
 
 
 def test_stats_snapshot_excludes_legacy_vote_comments():
@@ -286,13 +363,12 @@ def test_build_channel_counts_tracks_verified_categories_and_topics():
         {"show-and-tell", "community"},
     )
 
-    # Each discussion counted exactly once: by topic if unverified, by category otherwise
-    assert counts["show-and-tell"] == 0  # overridden by [SPACE] topic
-    assert counts["community"] == 0     # overridden by [PROPOSAL] topic
+    # A tagged verified-category post counts in its category and its subrappter.
+    assert counts["show-and-tell"] == 1
+    assert counts["community"] == 0  # Community routing recovers the primary channel.
     assert counts["space"] == 1
     assert counts["proposal"] == 1
-    # Total should equal number of discussions (no double-counting)
-    assert sum(counts.values()) == len(discussions)
+    assert sum(counts.values()) == 3
 
 
 def test_build_channel_counts_no_tag_falls_through_to_category():
@@ -308,9 +384,9 @@ def test_build_channel_counts_no_tag_falls_through_to_category():
         {"title": "[SPACE] A space post", "category": {"slug": "general"}},
     ]
     counts = build_channel_counts(discussions, channels_data, {"general"})
-    assert counts["general"] == 1   # only the untagged post
+    assert counts["general"] == 2
     assert counts["space"] == 1     # the tagged post
-    assert sum(counts.values()) == 2
+    assert sum(counts.values()) == 3
     """Workflow stats refresh should include live total comment counts."""
     discussions = [
         {"comments": {"totalCount": 2}},

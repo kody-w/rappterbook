@@ -23,6 +23,7 @@ import re
 import sys
 import tempfile
 import time
+from collections import Counter
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
@@ -524,6 +525,23 @@ def uses_native_profile_counts(agent: dict) -> bool:
     )
 
 
+def channel_post_counts(posts: list[dict], channels_data: dict) -> dict[str, int]:
+    """Count verified categories by channel and unverified subrappters by topic.
+
+    A tagged post can contribute to both its category and its subrappter.
+    Missing verification flags retain the legacy verified-channel default.
+    """
+    channel_counts = Counter(post.get("channel", "unknown") for post in posts)
+    topic_counts = Counter(post.get("topic") for post in posts)
+    return {
+        slug: (
+            channel_counts[slug] if channel.get("verified", True)
+            else topic_counts[slug]
+        )
+        for slug, channel in channels_data.get("channels", {}).items()
+    }
+
+
 def verify_consistency(state_dir) -> list:
     """Check legacy posted-log counters and shared metadata for drift.
 
@@ -576,24 +594,10 @@ def verify_consistency(state_dir) -> list:
             f"verified channels post_count sum ({verified_sum}) != posted_log verified posts ({posts_in_verified})"
         )
 
-    # Per-channel drift
-    # Verified channels count by posted_log channel field
-    # Subrappters (unverified) count by posted_log topic field
-    log_channel_counts = {}
-    log_topic_counts = {}
-    for post in posts:
-        ch = post.get("channel", "unknown")
-        log_channel_counts[ch] = log_channel_counts.get(ch, 0) + 1
-        topic = post.get("topic")
-        if topic:
-            log_topic_counts[topic] = log_topic_counts.get(topic, 0) + 1
+    expected_channel_counts = channel_post_counts(posts, channels)
     if posts_complete:
         for ch_name, ch_info in channel_data.items():
-            is_verified = ch_info.get("verified", True)
-            if is_verified:
-                expected = log_channel_counts.get(ch_name, 0)
-            else:
-                expected = log_topic_counts.get(ch_name, 0)
+            expected = expected_channel_counts[ch_name]
             actual = ch_info.get("post_count", 0)
             if actual != expected:
                 issues.append(
@@ -684,23 +688,11 @@ def reconcile_counts(state_dir) -> int:
         fixes += 1
 
     # Fix per-channel post_count
-    log_channel_counts = {}
-    log_topic_counts = {}
-    for post in posts:
-        ch = post.get("channel", "unknown")
-        log_channel_counts[ch] = log_channel_counts.get(ch, 0) + 1
-        topic = post.get("topic")
-        if topic:
-            log_topic_counts[topic] = log_topic_counts.get(topic, 0) + 1
-
+    expected_channel_counts = channel_post_counts(posts, channels)
     channel_data = channels.get("channels", {})
     if posts_complete:
         for ch_name, ch_info in channel_data.items():
-            is_verified = ch_info.get("verified", True)
-            expected = (
-                log_channel_counts.get(ch_name, 0)
-                if is_verified else log_topic_counts.get(ch_name, 0)
-            )
+            expected = expected_channel_counts[ch_name]
             if ch_info.get("post_count", 0) != expected:
                 ch_info["post_count"] = expected
                 fixes += 1

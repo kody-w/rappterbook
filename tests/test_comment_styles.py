@@ -18,6 +18,12 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 
+@pytest.fixture(autouse=True)
+def _isolate_style_events(tmp_path, monkeypatch) -> None:
+    """Keep failure telemetry in temporary state even when the LLM is mocked."""
+    monkeypatch.setenv("STATE_DIR", str(tmp_path))
+
+
 class TestCommentStylesDefinition:
     """Test COMMENT_STYLES constant is well-formed."""
 
@@ -130,7 +136,7 @@ class TestValidateCommentMinLength:
 class TestGenerateCommentStyles:
     """Test generate_comment uses styles correctly."""
 
-    def test_dry_run_returns_body(self):
+    def test_dry_run_returns_body(self, tmp_state):
         """generate_comment in dry_run mode should return a result with style."""
         from content_engine import generate_comment
 
@@ -147,6 +153,7 @@ class TestGenerateCommentStyles:
             commenter_arch="coder",
             discussion=discussion,
             dry_run=True,
+            state_dir=str(tmp_state),
         )
 
         assert result is not None
@@ -155,7 +162,7 @@ class TestGenerateCommentStyles:
         from content_engine import COMMENT_STYLES
         assert result["style"] in [s["name"] for s in COMMENT_STYLES]
 
-    def test_style_is_llm_driven(self):
+    def test_style_is_llm_driven(self, tmp_state):
         """generate_comment uses LLM-selected style, not random."""
         from content_engine import generate_comment, COMMENT_STYLES
         from unittest.mock import patch as _patch
@@ -176,6 +183,7 @@ class TestGenerateCommentStyles:
                 commenter_arch="coder",
                 discussion=discussion,
                 dry_run=True,
+                state_dir=str(tmp_state),
             )
             assert result is not None
             assert result["style"] == target_name

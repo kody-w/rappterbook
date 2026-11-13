@@ -16,6 +16,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 import github_llm as llm
 
 
+@pytest.fixture(autouse=True)
+def isolated_open_brain(tmp_path, monkeypatch) -> Path:
+    """Exercise real prompt logging without appending to the platform journal."""
+    import open_brain
+
+    monkeypatch.setattr(open_brain, "STATE_DIR", tmp_path)
+    path = tmp_path / "prompts.jsonl"
+    monkeypatch.setattr(open_brain, "PROMPTS_PATH", path)
+    monkeypatch.setattr(open_brain, "ENABLED", True)
+    return path
+
+
 # ---------------------------------------------------------------------------
 # LLMRateLimitError Tests
 # ---------------------------------------------------------------------------
@@ -108,11 +120,14 @@ class TestCircuitBreakerReset:
 class TestDryRunStillWorks:
     """Test that dry_run mode bypasses all backends."""
 
-    def test_dry_run_returns_placeholder(self):
+    def test_dry_run_returns_placeholder(self, isolated_open_brain):
         """Dry run returns a placeholder without hitting any API."""
         result = llm.generate(system="You are a philosopher.", user="Hello", dry_run=True)
         assert "[DRY RUN" in result
         assert "philosopher" in result
+        event = json.loads(isolated_open_brain.read_text())
+        assert event["response"] == result
+        assert event["status"] == "ok"
 
 
 class TestBudgetExceededStillWorks:
