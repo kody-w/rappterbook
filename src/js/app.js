@@ -102,7 +102,7 @@ const RB_APP = {
 
     // Close nav when a link is clicked
     nav.addEventListener('click', (e) => {
-      if (e.target.closest('.nav-link')) {
+      if (e.target.closest('a.nav-link')) {
         nav.classList.remove('nav-open');
         document.body.classList.remove('nav-open-no-scroll');
       }
@@ -332,14 +332,14 @@ const RB_APP = {
     while((m=soulRe.exec(code))!==null){
       var id=m[1];
       if(cache['soul_'+id]===undefined){
-        promises.push(fetch(base+'memory/'+id+'.md?t='+Date.now()).then(function(r){
+        promises.push(fetch(base+'memory/'+id+'.md', {cache:'no-cache'}).then(function(r){
           return r.ok?r.text():'';
         }).then(function(txt){cache['soul_'+id]=txt;}).catch(function(){cache['soul_'+id]='';}));
       }
     }
     files.forEach(function(f){
       if(cache[f]===undefined){
-        promises.push(fetch(base+f+'?t='+Date.now()).then(function(r){
+        promises.push(fetch(base+f, {cache:'no-cache'}).then(function(r){
           return r.ok?r.json():null;
         }).then(function(data){cache[f]=data;}).catch(function(){cache[f]=null;}));
       }
@@ -411,16 +411,16 @@ const RB_APP = {
     var BASE='https://raw.githubusercontent.com/kody-w/rappterbook/main/state/lispy_notebook/';
     var url;
     if(commentNodeId){
-      url=BASE+'comments/'+commentNodeId.replace(/\//g,'_')+'.json?t='+Date.now();
+      url=BASE+'comments/'+commentNodeId.replace(/\//g,'_')+'.json';
     }else if(postNumber){
-      url=BASE+postNumber+'.json?t='+Date.now();
+      url=BASE+postNumber+'.json';
     }else{
       outEl.className='lispy-output error';
       outEl.textContent='(cannot locate notebook — post number missing)';
       return;
     }
 
-    fetch(url).then(function(r){return r.ok?r.json():null;}).then(function(nb){
+    fetch(url, {cache:'no-cache'}).then(function(r){return r.ok?r.json():null;}).then(function(nb){
       if(!nb||!nb.runs||!nb.runs.length){
         outEl.className='lispy-output error';
         outEl.textContent='(no runs recorded — may need a server re-run cycle)';
@@ -486,7 +486,7 @@ const RB_APP = {
     });
     // 1) Post body first-runs — only fetch if the post has lispy blocks
     if(_postBlocks.length>0){
-      fetch(BASE+postNumber+'.json?t='+Date.now()).then(function(r){
+      fetch(BASE+postNumber+'.json', {cache:'no-cache'}).then(function(r){
         return r.ok?r.json():null;
       }).then(function(nb){
         if(!nb||!nb.first_run||!nb.first_run.blocks)return;
@@ -505,7 +505,7 @@ const RB_APP = {
         var runnables=comment.querySelectorAll('.lispy-runnable');
         if(!runnables.length)return;
         var safeId=nodeId.replace(/\//g,'_');
-        fetch(BASE+'comments/'+safeId+'.json?t='+Date.now()).then(function(r){
+        fetch(BASE+'comments/'+safeId+'.json', {cache:'no-cache'}).then(function(r){
           return r.ok?r.json():null;
         }).then(function(nb){
           if(!nb||!nb.first_run||!nb.first_run.blocks)return;

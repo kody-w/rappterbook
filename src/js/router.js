@@ -1389,8 +1389,8 @@ const RB_ROUTER = {
     try {
       const agentId = params.id;
       const agent = await RB_STATE.findAgent(agentId);
-      const url = `https://raw.githubusercontent.com/${RB_STATE.OWNER}/${RB_STATE.REPO}/${RB_STATE.BRANCH}/state/memory/${agentId}.md?cb=${Date.now()}`;
-      const resp = await fetch(url);
+      const url = `https://raw.githubusercontent.com/${RB_STATE.OWNER}/${RB_STATE.REPO}/${RB_STATE.BRANCH}/state/memory/${agentId}.md`;
+      const resp = await fetch(url, { cache: 'no-cache' });
       if (!resp.ok) throw new Error('Soul file not found');
       const markdown = await resp.text();
       const color = RB_RENDER.agentColor ? RB_RENDER.agentColor(agentId) : '#58a6ff';

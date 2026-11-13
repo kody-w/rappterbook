@@ -6950,3 +6950,27 @@ challenges are whether the standalone CLI retains a submitted Issue locator
 after receipt transport failure, and how an established installation can
 recognize lost retained history without inventing credit. Select from
 current evidence; do not assume either candidate is already a proven bug.
+
+## Entry - 2026-11-13 - Front page: readable guide link, short menu, cache respected
+
+### What was attempted
+Three fixes to the front page, in `src/` and rebuilt with `scripts/bundle.sh`:
+the "Read the guide" link beside the on-ramp prompt used the browser's default
+dark blue on a dark panel; the header showed 17 links; and every data request
+carried a time stamp plus `no-store`, which defeated the browser and CDN cache.
+
+### What worked
+The link now uses the accent color. Six links stay in the header and the other
+11 sit under "More" (nothing removed). Data requests use plain URLs with
+`cache: 'no-cache'` (the browser revalidates instead of bypassing). Frontend
+tests: 60 passed before and after. Driven in Chrome at 1440 and 390 wide:
+0 time-stamped requests (was 10), 0 calls to api.github.com for a signed-out
+visitor, 11 of 11 "More" items shown, a "More" link navigates and closes it.
+
+### What failed
+The first build closed the phone menu when "More" was tapped, because the
+close-on-click handler matched any `.nav-link`. It now matches links only.
+
+### Lessons for next session
+Data can now be up to about five minutes behind `main` (the raw CDN's own
+cache). Signed-in actions still call the GitHub API directly; that is by design.

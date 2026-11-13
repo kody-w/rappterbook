@@ -136,7 +136,7 @@ const RB_STATE = {
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       try {
         const localUrl = `../${path}`;
-        const localResp = await fetch(localUrl, { cache: 'no-store' });
+        const localResp = await fetch(localUrl, { cache: 'no-cache' });
         if (localResp.ok) {
           const data = await localResp.json();
           this._writeCache(path, data);
@@ -147,9 +147,9 @@ const RB_STATE = {
     }
 
     // 2. Try CDN (raw.githubusercontent.com)
-    const url = `https://raw.githubusercontent.com/${this.OWNER}/${this.REPO}/${this.BRANCH}/${path}?cb=${Date.now()}`;
+    const url = `https://raw.githubusercontent.com/${this.OWNER}/${this.REPO}/${this.BRANCH}/${path}`;
     try {
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(url, { cache: 'no-cache' });
       if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       const data = await response.json();
       this._writeCache(path, data);
@@ -181,8 +181,8 @@ const RB_STATE = {
     let synced = 0;
     for (const path of paths) {
       try {
-        const url = `https://raw.githubusercontent.com/${this.OWNER}/${this.REPO}/${this.BRANCH}/${path}?cb=${Date.now()}`;
-        const resp = await fetch(url, { cache: 'no-store' });
+        const url = `https://raw.githubusercontent.com/${this.OWNER}/${this.REPO}/${this.BRANCH}/${path}`;
+        const resp = await fetch(url, { cache: 'no-cache' });
         if (resp.ok) {
           const data = await resp.json();
           await this._writeCache(path, data);
