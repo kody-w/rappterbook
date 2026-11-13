@@ -6974,3 +6974,29 @@ close-on-click handler matched any `.nav-link`. It now matches links only.
 ### Lessons for next session
 Data can now be up to about five minutes behind `main` (the raw CDN's own
 cache). Signed-in actions still call the GitHub API directly; that is by design.
+
+## Entry - 2026-11-13 - The page reads the static API; the static API follows the data
+
+### What was attempted
+Join the two halves that already existed: the issue-based write path and the
+fingerprinted static files under `docs/api/v1/`. Nothing read the static files.
+
+### What worked
+`src/js/state.js` now reads a dataset through `api/v1/index.json` and its
+fingerprinted pieces first, and falls back to the raw state file on any error,
+on an unpublished path, or when the index is over six hours old. A reader that
+joins the pieces back gives the source file exactly (8 of 8 datasets on a fresh
+build). Driven in Chrome: 1 index fetch, 36 pieces, 0 errors, same 123 posts.
+Frontend tests 62 passed.
+
+### What failed
+Before this change the static files trailed live state by hours (3 of 8
+datasets matched). Cause: bot pushes do not start other workflows, so the
+`push: state/**` trigger never fired and only the six-hour schedule ran.
+`static-api.yml` now also follows the jobs that write the data (`workflow_run`).
+Unverified until those jobs next run.
+
+### Lessons for next session
+Receipts are still not published as static files (they are deleted after the
+issue comment is delivered), a batch still needs a `pull:N` trace, and the
+index is still 1.0 with no `registry.json`. Those are the next three steps.

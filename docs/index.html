@@ -6237,7 +6237,58 @@ const RB_STATE = {
     } catch { /* silent */ }
   },
 
-  // Fetch JSON — local-first, CDN-second, IndexedDB-third
+  // Static API reader. Returns the dataset exactly as its source file, or null
+  // when the path is not a published dataset or anything at all goes wrong
+  // (the caller then falls back to the raw file, as before).
+  _staticIndex: null,
+  _staticIndexAt: 0,
+  STATIC_API: 'api/v1',
+  STATIC_MAX_LAG_MS: 6 * 60 * 60 * 1000,
+
+  async _staticApiIndex() {
+    if (this._staticIndex && Date.now() - this._staticIndexAt < 60000) return this._staticIndex;
+    if (!this._staticIndexPending) {
+      this._staticIndexPending = fetch(`${this.STATIC_API}/index.json`, { cache: 'no-cache' })
+        .then(resp => { if (!resp.ok) throw new Error('no static index'); return resp.json(); })
+        .then(index => { this._staticIndex = index; this._staticIndexAt = Date.now(); return index; })
+        .finally(() => { this._staticIndexPending = null; });
+    }
+    return this._staticIndexPending;
+  },
+
+  async _staticBlob(ref) {
+    const resp = await fetch(`${this.STATIC_API}/${ref.path}`);
+    if (!resp.ok) throw new Error(`static piece ${ref.path}: HTTP ${resp.status}`);
+    return resp.json();
+  },
+
+  async _fromStaticApi(path) {
+    try {
+      const index = await this._staticApiIndex();
+      const entry = (index.entries || []).find(e => e.source === path && e.status !== 'missing');
+      if (!entry) return null;
+      if (Date.now() - Date.parse(index.generated) > this.STATIC_MAX_LAG_MS) return null;
+      if (entry.whole) return await this._staticBlob(entry.whole);
+      const cols = entry.shards.collections;
+      const names = Object.keys(cols);
+      const [head, ...groups] = await Promise.all([
+        this._staticBlob(entry.head),
+        ...names.map(n => Promise.all(
+          cols[n].items.slice().sort((a, b) => a.n - b.n).map(s => this._staticBlob(s)))),
+      ]);
+      const join = chunks => Array.isArray(chunks[0])
+        ? [].concat(...chunks)
+        : Object.assign({}, ...chunks);
+      if (names.length === 1 && names[0] === '_') return join(groups[0]);
+      names.forEach((n, i) => { head[n] = join(groups[i]); });
+      return head;
+    } catch (error) {
+      console.warn(`[RB_STATIC] ${path}: falling back to the raw file (${error.message})`);
+      return null;
+    }
+  },
+
+  // Fetch JSON — local-first, static API, raw file, then IndexedDB
   async fetchJSON(path) {
     // 1. Try local files first (when served from localhost)
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
@@ -6253,7 +6304,16 @@ const RB_STATE = {
       } catch { /* local not available, try CDN */ }
     }
 
-    // 2. Try CDN (raw.githubusercontent.com)
+    // 2. Try the static API: one small index, then fingerprinted pieces that
+    //    never change and so are cached for good (scripts/build_static_api.py).
+    const fromStatic = await this._fromStaticApi(path);
+    if (fromStatic !== null) {
+      this._writeCache(path, fromStatic);
+      this._updateSyncStatus(path, true);
+      return fromStatic;
+    }
+
+    // 3. Fall back to the raw state file
     const url = `https://raw.githubusercontent.com/${this.OWNER}/${this.REPO}/${this.BRANCH}/${path}`;
     try {
       const response = await fetch(url, { cache: 'no-cache' });

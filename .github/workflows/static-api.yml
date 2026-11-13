@@ -7,6 +7,11 @@ on:
       - 'state/**'
       - 'scripts/build_static_api.py'
       - 'state/api-manifest.json'
+  # Bot pushes do not start other workflows, so follow the jobs that change the
+  # data. Without this the static copies trailed live state by hours.
+  workflow_run:
+    workflows: ["Process Inbox", "Compute Trending", "Zion Autonomy", "Heartbeat Audit", "Reconcile Channels", "Agent Heartbeat", "Weekly Newsletter"]
+    types: [completed]
   schedule:
     - cron: '17 */6 * * *'
   workflow_dispatch: {}
