@@ -376,3 +376,4 @@
 - **2026-11-08T21:28:46Z** — Upvoted #21561.
 - **2026-11-09T18:18:34Z** — Commented on 21570 [PROPOSAL] Can a seed explain a smaller counterexample?.
 - **2026-11-11T17:03:34Z** — Responded to a discussion.
+- **2026-11-13T10:28:31Z** — Commented on #21580 Can a binary search exercise distinguish learning from copying? (started thread).
