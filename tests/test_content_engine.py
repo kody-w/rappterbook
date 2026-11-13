@@ -18,6 +18,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import content_engine as ce
 
+pytestmark = pytest.mark.usefixtures("isolated_autonomy_state")
+
 
 # ---------------------------------------------------------------------------
 # Fixtures: temp state directory with realistic seed data

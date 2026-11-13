@@ -18,6 +18,7 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
@@ -664,6 +665,7 @@ def execute_action(
     repo_id=None, category_ids=None,
     recent_discussions=None, discussions_for_commenting=None,
     dry_run=None, pulse=None, agents_data=None, observation=None,
+    commented_discussions: Optional[set[int]] = None,
 ):
     """Execute the chosen action — real posts/comments/votes via GitHub API."""
     sdir = state_dir or STATE_DIR
@@ -689,6 +691,7 @@ def execute_action(
             discussions_for_commenting or recent_discussions or [],
             is_dry, timestamp, inbox_dir,
             pulse=pulse, observation=observation,
+            commented_discussions=commented_discussions,
         )
 
     elif action == "vote":
@@ -989,12 +992,20 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
 
 def _execute_comment(agent_id, arch_name, archetypes, state_dir,
                      discussions, dry_run, timestamp, inbox_dir,
-                     pulse=None, observation=None):
+                     pulse=None, observation=None,
+                     commented_discussions: Optional[set[int]] = None):
     """Generate and post a contextual comment via LLM.
 
     When a ghost observation is available, discussion selection is guided
     by what the ghost noticed — hot channels, cold channels, trending topics.
+    Independent comments exclude discussions already served in this run.
     """
+    comment_candidates = discussions
+    if commented_discussions is not None:
+        comment_candidates = [
+            discussion for discussion in discussions
+            if discussion.get("number") not in commented_discussions
+        ]
     posted_log = load_json(state_dir / "posted_log.json")
     if not posted_log:
         posted_log = {"posts": [], "comments": []}
@@ -1004,9 +1015,9 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
         from emergence import detect_rivals
         import re as _re_rival_seek
         rivals = detect_rivals(str(state_dir), agent_id)
-        if rivals and discussions:
+        if rivals and comment_candidates:
             rival_discussions = []
-            for d in discussions:
+            for d in comment_candidates:
                 body = d.get("body", "")
                 _bm = _re_rival_seek.search(r'\*Posted by \*\*(\S+)\*\*\*', body)
                 if _bm and _bm.group(1) in rivals:
@@ -1023,7 +1034,7 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
 
     # Ghost-aware discussion picking: LLM picks from ranked candidates
     if observation is not None:
-        ranked = ghost_rank_discussions(observation, discussions, agent_id, posted_log)
+        ranked = ghost_rank_discussions(observation, comment_candidates, agent_id, posted_log)
         if ranked:
             top_n = ranked[:min(5, len(ranked))]
             try:
@@ -1065,7 +1076,7 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
             target = None
     else:
         target = pick_discussion_to_comment(
-            agent_id, arch_name, archetypes, discussions, posted_log,
+            agent_id, arch_name, archetypes, comment_candidates, posted_log,
         )
 
     if not target:
@@ -1164,6 +1175,8 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
     if dry_run:
         label = "REPLY" if is_reply else "COMMENT"
         print(f"    [DRY RUN] {label} by {agent_id} on #{target['number']}: {title_short}")
+        if commented_discussions is not None:
+            commented_discussions.add(target["number"])
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
                                 f"[comment] on #{target['number']} {title_short}")
 
@@ -1177,6 +1190,8 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
         print(f"    [ERROR] Comment post failed for {agent_id}: {e}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir)
 
+    if commented_discussions is not None:
+        commented_discussions.add(target["number"])
     label = "REPLY" if is_reply else "COMMENT"
     print(f"    {label} by {agent_id} on #{target['number']}: {title_short}")
 
@@ -1229,7 +1244,8 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
 
 
 def _execute_thread(thread_agents, archetypes, state_dir, discussions,
-                    dry_run, timestamp, inbox_dir, observations=None):
+                    dry_run, timestamp, inbox_dir, observations=None,
+                    commented_discussions: Optional[set[int]] = None):
     """Orchestrate a multi-agent conversation thread on one discussion.
 
     Picks one discussion, then has each agent comment sequentially, each
@@ -1244,12 +1260,19 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
         timestamp: ISO timestamp string.
         inbox_dir: Path to inbox directory.
         observations: Optional dict mapping agent_id → observation for ghost context.
+        commented_discussions: Shared successful targets; this batch may share one.
 
     Returns:
         List of result dicts (one per successful comment), empty if no
         discussion found.
     """
-    if not thread_agents or not discussions:
+    comment_candidates = discussions
+    if commented_discussions is not None:
+        comment_candidates = [
+            discussion for discussion in discussions
+            if discussion.get("number") not in commented_discussions
+        ]
+    if not thread_agents or not comment_candidates:
         return []
 
     first_agent_id, first_agent_data = thread_agents[0]
@@ -1260,7 +1283,7 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
 
     # Pick ONE discussion using first agent's preferences
     target = pick_discussion_to_comment(
-        first_agent_id, first_arch, archetypes, discussions, posted_log,
+        first_agent_id, first_arch, archetypes, comment_candidates, posted_log,
     )
     if not target:
         return []
@@ -1339,6 +1362,8 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
 
             result = _write_heartbeat(agent_id, timestamp, inbox_dir, status_msg)
             results.append(result)
+            if commented_discussions is not None:
+                commented_discussions.add(target["number"])
             continue
 
         # Live API calls
@@ -1356,6 +1381,8 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
                 break  # No root comment — abort thread
             continue  # Skip this agent, let others continue
 
+        if commented_discussions is not None:
+            commented_discussions.add(target["number"])
         new_comment_id = comment_result["id"]
         label = "THREAD-START" if i == 0 else "THREAD-REPLY"
         reply_info = f" (replying to {prev_agent_id})" if prev_agent_id else ""
@@ -2516,9 +2543,10 @@ def main():
     """Run the autonomy engine.
 
     Two-pass execution:
-      Pass 1: Decide actions for all agents. If ≥2 comment agents and 30% roll,
-              form a thread batch of 2-3 agents for a coordinated conversation.
+      Pass 1: Decide actions for all agents. The LLM may group 2-3 commenters
+              into a coordinated conversation on one discussion.
       Pass 2: Execute thread batch first, then remaining agents individually.
+              Independent comments do not reuse successful targets this run.
     """
     # Check sim lock — skip if fleet is actively running
     if _check_sim_lock():
@@ -2725,6 +2753,8 @@ def main():
     else:
         print(f"  [CAP] Daily post budget: {daily_budget_remaining} remaining ({posts_today}/{DAILY_POST_CAP} used)")
 
+    commented_discussions: set[int] = set()
+
     # Execute thread batch first
     if thread_batch:
         # Build observations dict for thread agents
@@ -2738,6 +2768,7 @@ def main():
             discussions_for_commenting or recent_discussions,
             DRY_RUN, timestamp, inbox_dir,
             observations=thread_observations,
+            commented_discussions=commented_discussions,
         )
         if thread_results:
             # Count only results that actually posted (not failed-to-heartbeat)
@@ -2800,6 +2831,7 @@ def main():
                 dry_run=DRY_RUN,
                 pulse=pulse, agents_data=agents_data,
                 observation=observation,
+                commented_discussions=commented_discussions,
             )
             print(f"  {agent_id}: {action}")
 
@@ -2846,13 +2878,20 @@ def main():
                    if a.get("status") == "dormant" or
                    (a.get("heartbeat_last") and hours_since(a["heartbeat_last"]) > 168)]
         for aid, adata in dormant[:20]:
+            candidates = [
+                discussion for discussion in discussions_for_commenting[:10]
+                if discussion.get("number") not in commented_discussions
+            ]
+            if not candidates:
+                break
             whisper_text = ghost_whisper(aid, adata, STATE_DIR)
-            if whisper_text and discussions_for_commenting:
-                target = random.choice(discussions_for_commenting[:10])
+            if whisper_text:
+                target = random.choice(candidates)
                 body = format_comment_body(aid, f"👻 {whisper_text}")
                 try:
                     pace_mutation()
                     add_discussion_comment(target["id"], body)
+                    commented_discussions.add(target["number"])
                     print(f"  👻 WHISPER by {aid} on #{target.get('number')}: {whisper_text[:50]}")
                     whisper_count += 1
                     if whisper_count >= 2:

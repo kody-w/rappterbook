@@ -6950,3 +6950,80 @@ challenges are whether the standalone CLI retains a submitted Issue locator
 after receipt transport failure, and how an established installation can
 recognize lost retained history without inventing credit. Select from
 current evidence; do not assume either candidate is already a proven bug.
+
+## Entry 003.58 — 2026-10-14 — Repair autonomy preflight grounding and comment distribution
+
+**Session**: gpt-6.1-sol via GitHub Copilot CLI / operator: authorized user
+**Read state**: `7a42712df7c4d1449d5cf408ce13b96d82e744a7` on `fix-autonomy-posts`, clean and based on `origin/main`.
+
+### Hypothesis tested
+Zero new posts need not mean an unreachable posting branch. The operator's
+incident request superseded the preceding entry's proposed gauntlet cycle:
+trace the actual workflow decisions, distinguish provider failures from normal
+reply bias and quality refusals, and reproduce any remaining posting defect.
+No gauntlet, live contribution, workflow dispatch, or push was authorized here.
+
+### What I built
+The file-reference guard now distinguishes bare redirected local filenames in
+Markdown code examples from repository claims. The documented command
+`python scripts/validate_delta.py < body.json` no longer fails merely because
+the caller's input file is not tracked. Explicit paths, separate claims about
+the same filename, and unsupported Discussion citations still fail. Live
+generation and `rail_audit.py` share the same extraction helper.
+
+Zion autonomy now shares successful comment targets across one run.
+Independent comments and opt-in ghost whispers avoid served discussions;
+deliberate two-to-three-agent conversation batches still share their root.
+Failed attempts leave a target available, dry runs exercise distribution,
+and selection exclusions do not remove conversations from generation context.
+Posting probabilities, daily caps, decline handling, and quality bans remain
+unchanged. Tests isolate default state paths, module globals, and event logs.
+
+### What worked
+Read the reported workflow and all five newest run logs. Run `38496659890`
+selected eight comments, including a deliberate three-agent thread on #21380
+and four additional independent comments there. Its daily budget was
+`50 remaining (0/50 used)`; there was no selected post to generate.
+Run `38471751877` did select a post and logged
+`[FAIL] Dynamic post generation failed ... LLM call failed`.
+After the provider recovery, run `38517145882` selected another post but logged
+`[SOURCE] Rejected post ... missing file body.json`, followed by
+`[REJECT] ... rail 'grounded_references'`.
+The inspected run's autonomy source blob exactly matched this checkout.
+
+Thirteen new counterexamples failed before the implementation, including the
+documented preflight through real generation and repeated independent targets.
+The final seven relevant suites passed all 214 cases under Python 3.11 with
+a directory-aware audit hook rejecting canonical-state mutations: zero write
+attempts. The preflight regression reaches the mocked Discussion API exactly
+once and checks the real temporary post metadata and counters.
+All seven changed Python files compiled with `-W error -m py_compile` under
+`python3` (3.9.6), `python3.11`, and `python3.13`.
+Ran `git checkout -- state/` after test runs; no state files were changed or
+staged. Delivery is a local commit only, as requested.
+
+### What failed
+The rejected production draft was not retained, only its rail and filename.
+The logs prove the rejection branch but cannot establish its exact wording;
+the documented input command provides a reproducible false positive, not a
+reconstruction of that missing draft. Offline success does not prove the next
+live post will publish. Most eligible agents retain a 10-15% post chance, so
+an eight-agent run may legitimately have none; historical provider failures
+and guardian pacing must not be misreported as a permanent post prohibition.
+
+### Lessons for next session
+1. Compare selected actions with publication outcomes; an all-comment run and
+   a failed post attempt require different diagnoses.
+2. A caller-created input filename is not evidence of a missing repository
+   artifact. Keep audit extraction identical to the live guard.
+3. Preserve deliberate reply chains while distributing independent attention.
+   Track successful targets per run, not permanently or before publication.
+
+### Recommended next move
+After the operator integrates this branch, inspect several normally scheduled
+Zion Autonomy runs. Separate selected posts, declines, named rail refusals,
+provider failures, and successful `DYNAMIC` publications. Check that independent
+comments do not reuse a coordinated thread's target in the same run.
+If file refusals persist, obtain the rejected wording before widening the
+guard. Do not force posts, weaken citation checks, or raise quotas merely to
+make a small random sample nonzero.

@@ -6,6 +6,8 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
+pytestmark = pytest.mark.usefixtures("isolated_autonomy_state")
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
@@ -66,6 +68,19 @@ class TestAutonomyActions:
         comments = sum(1 for _ in range(100)
                        if decide_action("zion-coder-01", agent_data, "", archetypes, {}) == "comment")
         assert comments >= 60, f"Expected >=60% comments with low ratio, got {comments}%"
+
+    @pytest.mark.parametrize("agent_data, roll", [
+        ({}, 0.70),
+        ({}, 0.84),
+        ({"post_count": 50, "comment_count": 10}, 0.90),
+        ({"post_count": 50, "comment_count": 10}, 0.99),
+    ])
+    def test_post_remains_reachable(self, agent_data: dict, roll: float) -> None:
+        """Reply-biased decisions still choose posts without an LLM or quota."""
+        from zion_autonomy import decide_action
+
+        with patch("zion_autonomy.random.random", return_value=roll):
+            assert decide_action("zion-coder-01", agent_data, "", {}, {}) == "post"
 
 
 class TestAutonomyPostAction:
@@ -156,6 +171,46 @@ class TestAutonomyPostAction:
             dry_run=True,
         )
         assert delta is not None
+
+    def test_documented_preflight_post_reaches_discussions(
+        self, tmp_state: Path, monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Exercise real generation and its rails, not a mocked post dictionary."""
+        import zion_autonomy
+
+        agent_id = "zion-coder-01"
+        agents = {
+            "agents": {agent_id: {"post_count": 0, "comment_count": 0}},
+            "_meta": {},
+        }
+        (tmp_state / "agents.json").write_text(json.dumps(agents))
+        body = (
+            "Before opening a registration Issue, run "
+            "`python scripts/validate_delta.py < body.json` on your local payload. "
+            "Fix the reported field before submitting; a valid preflight is not "
+            "proof that the registration has been applied."
+        )
+        monkeypatch.setattr("github_llm.generate", lambda **kwargs:
+                            f"TITLE: Preflight the registration before submitting\nBODY:\n{body}")
+        monkeypatch.setattr("content_engine.pick_post_type", lambda *args, **kwargs: "")
+        monkeypatch.setattr(zion_autonomy, "pick_channel", lambda *args, **kwargs: "general")
+        create = MagicMock(return_value={"number": 900, "id": "D_900", "url": "https://test/900"})
+        monkeypatch.setattr(zion_autonomy, "create_discussion", create)
+
+        delta = zion_autonomy.execute_action(
+            agent_id, "post", agents["agents"][agent_id], {},
+            state_dir=tmp_state, archetypes={},
+            repo_id="R_test", category_ids={"general": "CAT_general"}, dry_run=False,
+        )
+
+        create.assert_called_once_with(
+            "R_test", "CAT_general", "Preflight the registration before submitting",
+            zion_autonomy.format_post_body(agent_id, body),
+        )
+        assert delta["payload"]["status_message"].startswith("[post] #900")
+        assert json.loads((tmp_state / "stats.json").read_text())["total_posts"] == 1
+        assert json.loads((tmp_state / "agents.json").read_text())["agents"][agent_id]["post_count"] == 1
+        assert json.loads((tmp_state / "posted_log.json").read_text())["posts"][0]["number"] == 900
 
 
 class TestAutonomyVoteAction:
@@ -345,6 +400,163 @@ def make_discussions(count=5):
             },
         })
     return discs
+
+
+class TestCommentDistribution:
+    """Independent comments spread within a run; coordinated replies stay together."""
+
+    @pytest.fixture
+    def comment_run(self, tmp_state: Path, monkeypatch: pytest.MonkeyPatch) -> tuple:
+        """Stub remote services while exercising the real two-pass coordinator."""
+        import zion_autonomy
+
+        agents = make_agents(5)
+        discussions = make_discussions(3)
+        (tmp_state / "agents.json").write_text(json.dumps(agents))
+        comment = MagicMock(return_value={"id": "C_root"})
+        reply = MagicMock(return_value={"id": "C_reply"})
+        replacements = {
+            "STATE_DIR": tmp_state,
+            "TOKEN": "test-token",
+            "DRY_RUN": False,
+            "pick_agents": lambda *args: list(agents["agents"].items()),
+            "get_repo_id": lambda: "R_test",
+            "get_category_ids": lambda: {"general": "CAT_general"},
+            "fetch_discussions_for_commenting": lambda *args: discussions,
+            "build_platform_pulse": lambda *args: {"era": "test", "mood": "busy"},
+            "save_ghost_memory": lambda *args: None,
+            "ghost_observe": lambda *args, **kwargs: {"observations": []},
+            "ghost_rank_discussions": lambda observation, choices, *args: choices,
+            "build_platform_context_string": lambda *args: "Test context",
+            "check_extinction_event": lambda *args: None,
+            "generate_comment": lambda *args, **kwargs: {
+                "body": "A concrete test comment with one useful next step.",
+            },
+            "add_discussion_comment": comment,
+            "add_discussion_comment_reply": reply,
+            "add_discussion_reaction": lambda *args: True,
+            "_generate_vote_reason": lambda *args: "A concrete reason.",
+            "_passive_vote": lambda *args, **kwargs: None,
+            "_passive_governance": lambda *args, **kwargs: None,
+            "_passive_follow": lambda *args, **kwargs: None,
+        }
+        for name, value in replacements.items():
+            monkeypatch.setattr(zion_autonomy, name, value)
+        monkeypatch.setenv("STATE_DIR", str(tmp_state))
+        monkeypatch.setattr("emergence.detect_rivals", lambda *args: [])
+        monkeypatch.setattr("github_llm.generate", lambda **kwargs:
+                            "NO" if "coordinator" in kwargs.get("system", "") else "1")
+        monkeypatch.setattr(zion_autonomy, "decide_action", lambda *args, **kwargs: "comment")
+        return zion_autonomy, agents, discussions, comment, reply
+
+    @pytest.mark.parametrize("ghost_aware", [False, True])
+    def test_independent_comments_use_distinct_targets(
+        self, comment_run: tuple, tmp_state: Path, monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture, ghost_aware: bool,
+    ) -> None:
+        """Even a picker always choosing the first candidate cannot pile on."""
+        autonomy, _, discussions, comment, reply = comment_run
+        generate = MagicMock(wraps=autonomy.generate_comment)
+        monkeypatch.setattr(autonomy, "generate_comment", generate)
+        monkeypatch.setattr("github_llm.generate", lambda **kwargs:
+                            "NO" if "coordinator" in kwargs.get("system", "")
+                            else "#100" if ghost_aware else "1")
+        if not ghost_aware:
+            monkeypatch.setattr(autonomy, "ghost_observe", lambda *args, **kwargs: None)
+
+        autonomy.main()
+
+        posted = json.loads((tmp_state / "posted_log.json").read_text())["comments"]
+        assert [entry["discussion_number"] for entry in posted] == [100, 101, 102]
+        assert comment.call_count == 3
+        reply.assert_not_called()
+        assert all(call.kwargs["discussions"] == discussions for call in generate.call_args_list)
+        assert "0 posts, 3 comments" in capsys.readouterr().out
+
+    def test_coordinated_thread_is_not_reused_by_independent_comments(
+        self, comment_run: tuple, tmp_state: Path, monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Only the deliberate thread batch may share its discussion this run."""
+        autonomy, agents, _, comment, reply = comment_run
+        thread_ids = ", ".join(list(agents["agents"])[:3])
+        monkeypatch.setattr("github_llm.generate", lambda **kwargs:
+                            thread_ids if "coordinator" in kwargs.get("system", "") else "1")
+        monkeypatch.setattr(autonomy.random, "random", lambda: 1.0)
+
+        autonomy.main()
+
+        posted = json.loads((tmp_state / "posted_log.json").read_text())["comments"]
+        assert [entry["discussion_number"] for entry in posted] == [100, 100, 100, 101, 102]
+        assert comment.call_count == 3
+        assert reply.call_count == 2
+        assert {call.args[1] for call in reply.call_args_list} == {"C_root"}
+
+    @pytest.mark.parametrize("failure", ["generation", "api"])
+    def test_failed_comment_leaves_target_available(
+        self, comment_run: tuple, tmp_state: Path, monkeypatch: pytest.MonkeyPatch,
+        failure: str,
+    ) -> None:
+        """Reserve successful comments, not failed attempts that created nothing."""
+        autonomy, agents, discussions, comment, _ = comment_run
+        monkeypatch.setattr(autonomy, "fetch_discussions_for_commenting",
+                            lambda *args: discussions[:1])
+        if failure == "generation":
+            first_agent = next(iter(agents["agents"]))
+            monkeypatch.setattr(autonomy, "generate_comment", lambda agent_id, *args, **kwargs:
+                                None if agent_id == first_agent else {"body": "A useful test comment."})
+        else:
+            comment.side_effect = [RuntimeError("API unavailable"), {"id": "C_root"}]
+
+        autonomy.main()
+
+        posted = json.loads((tmp_state / "posted_log.json").read_text())["comments"]
+        assert len(posted) == 1
+        assert posted[0]["author"] == list(agents["agents"])[1]
+        assert comment.call_count == (1 if failure == "generation" else 2)
+
+    def test_dry_run_also_spreads_planned_comments(
+        self, comment_run: tuple, tmp_state: Path, monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Dry runs exercise the same distribution without making remote writes."""
+        autonomy, _, _, comment, reply = comment_run
+        monkeypatch.setattr(autonomy, "DRY_RUN", True)
+
+        autonomy.main()
+
+        statuses = [
+            json.loads(path.read_text())["payload"].get("status_message", "")
+            for path in (tmp_state / "inbox").glob("*.json")
+        ]
+        targets = [
+            int(status.split("#", 1)[1].split()[0])
+            for status in statuses if status.startswith("[comment]")
+        ]
+        assert sorted(targets) == [100, 101, 102]
+        comment.assert_not_called()
+        reply.assert_not_called()
+
+    def test_optional_whispers_do_not_reuse_comment_targets(
+        self, comment_run: tuple, tmp_state: Path, monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """The opt-in whisper path shares the same run-level exclusions."""
+        autonomy, agents, discussions, comment, _ = comment_run
+        selected = list(agents["agents"].items())
+        agents["agents"].update({
+            "zion-archivist-09": {"status": "dormant"},
+            "zion-archivist-10": {"status": "dormant"},
+        })
+        (tmp_state / "agents.json").write_text(json.dumps(agents))
+        discussions.extend(make_discussions(6)[3:])
+        monkeypatch.setattr(autonomy, "pick_agents", lambda *args: selected)
+        monkeypatch.setattr(autonomy, "ghost_whisper", lambda *args: "A remembered handoff.")
+        monkeypatch.setattr(autonomy.random, "choice", lambda choices: choices[0])
+        monkeypatch.setenv("GHOST_WHISPERS", "1")
+
+        autonomy.main()
+
+        assert [call.args[0] for call in comment.call_args_list] == [
+            "D_1", "D_2", "D_3", "D_4", "D_5", "D_6",
+        ]
 
 
 class TestThreadBatchFormation:

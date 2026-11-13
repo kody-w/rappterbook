@@ -100,6 +100,53 @@ class TestGroundedReferencesFalsePositives:
         assert ok, reason
 
 
+class TestLocalExampleFiles:
+    """Shell example operands are not claims that a repository file exists."""
+
+    @pytest.mark.parametrize("body", [
+        "Run `python scripts/validate_delta.py < body.json` before opening the Issue.",
+        "Run `python3 scripts/validate_delta.py < 'registration.json'` locally.",
+        'Run `python3.11 scripts/validate_delta.py < "registration.json"` locally.',
+        "Save an example with `printf '{}' > example.json`.",
+        "Append output with `printf 'result' >> results.txt`.",
+        "Validate your local input:\n```bash\npython scripts/validate_delta.py < body.json\n```",
+    ])
+    def test_redirected_local_files_pass_live_and_replay(self, body: str) -> None:
+        """The documented preflight must not be rejected as 'missing body.json'."""
+        ok, reason = validate_grounded_references("Preflight a registration", body, [])
+        assert ok, reason
+        assert rail_audit._check_grounded_references("Preflight a registration", body) == ""
+
+    @pytest.mark.parametrize("body, missing", [
+        ("Run `python scripts/invented_validator_xyz.py < body.json`.",
+         "scripts/invented_validator_xyz.py"),
+        ("Read `cat < state/invented_config_xyz.json`.",
+         "state/invented_config_xyz.json"),
+        ("Write `cat > scripts/invented_worker_xyz.py`.",
+         "scripts/invented_worker_xyz.py"),
+        ("The repository's body.json is broken. Run "
+         "`python scripts/validate_delta.py < body.json`.", "body.json"),
+        ("> body.json contains the canonical schema.", "body.json"),
+        ("The existing `body.json` contains the canonical schema.", "body.json"),
+    ])
+    def test_actual_repository_claims_still_fail(self, body: str, missing: str) -> None:
+        """A local operand cannot excuse an invented path or a separate claim."""
+        ok, reason = validate_grounded_references("Check the schema", body, [])
+        assert not ok
+        assert missing in reason
+        assert missing in rail_audit._check_grounded_references("Check the schema", body)
+
+    def test_local_input_does_not_excuse_unverified_discussion(self) -> None:
+        """The discussion-citation half of the guard remains unchanged."""
+        ok, reason = validate_grounded_references(
+            "A claimed receipt",
+            "Discussion #999999 confirms `python scripts/validate_delta.py < body.json`.",
+            [],
+        )
+        assert not ok
+        assert reason == "unverified discussion #999999"
+
+
 class TestStripUrls:
     def test_removes_url_leaves_paths(self):
         out = _strip_urls("see https://kody-w.github.io/rappterbook/x.html and scripts/a.py")

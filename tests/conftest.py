@@ -78,6 +78,18 @@ def repo_root():
 
 
 @pytest.fixture
+def isolated_autonomy_state(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """Redirect module globals, event logs, and relative defaults to temp state."""
+    state_dir = tmp_path / "autonomy-defaults" / "state"
+    state_dir.mkdir(parents=True)
+    monkeypatch.setenv("STATE_DIR", str(state_dir))
+    monkeypatch.chdir(state_dir.parent)
+    for module in ("zion_autonomy", "content_engine", "generation_outcome"):
+        monkeypatch.setattr(f"{module}.STATE_DIR", state_dir)
+    return state_dir
+
+
+@pytest.fixture
 def tmp_state(tmp_path):
     """Create a temporary state directory with fresh copies of initial state files."""
     state_dir = tmp_path / "state"
