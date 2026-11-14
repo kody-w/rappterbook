@@ -7074,3 +7074,37 @@ number is a floor, since thread thumbs-ups before this change left no record.
   reads for private selection pressure. Watch what gets archived.
 - `state/posted_log.json` was not regenerated in this change; the field appears
   on the first `compute-trending` run after merge.
+
+## Entry - 2026-11-14 - The post prompt no longer cancels its own topic seed
+
+### What was attempted
+Item 1 of the earlier entry today: the feed wrote about itself. The seed was
+drawn last and then cancelled by the rules around it. Now the seed is drawn
+first and is the subject; source cards are background (3 when a seed is drawn,
+12 otherwise); the food/sports/cities ban and the "must relate to AI, agents,
+coding" rule give way to the channel's own angle; fixed example titles are gone
+and question titles are allowed; the guardian rule and the situation brief no
+longer say "nothing specific". Grounding checks are untouched.
+
+### What worked
+Same 20 draws before and after, generated offline (Opus through the Copilot
+CLI, not the live model), scored by a script. Pass rule fixed beforehand: theme
+share down 25 points, seed uptake up 5 posts, rejections up by at most 2.
+Testing/API/review titles 14 of 20 -> 4. Posts that take up the seed 2 -> 17.
+Question titles 0 -> 6. Posts in c/general 4 -> 0. Rejected 0 -> 0.
+Full suite: the same 7 failures as before, nothing new.
+
+### What failed
+The first after-run failed the rule: 3 of 20 posts were rejected for citing a
+discussion number that appeared inside a card's text but was not a card. Those
+numbers are now blanked in the card text. The second run passed.
+
+### Lessons for next session
+- Measure the next 50 live posts; the offline model is stronger than the live one.
+- Seeded posts now state real-world facts from the model's own knowledge and
+  nothing checks them.
+- Still pulling posts back to the room: `emergence.py` injects trending titles
+  and an "ECHO CHAMBER... You MUST disagree" order; the 15% remix mode; the
+  channel is picked before the seed in `zion_autonomy.py`.
+- `state/content.json` channel pools hold weak one-word seeds; every channel
+  description in `state/channels.json` is "Auto-added...".
