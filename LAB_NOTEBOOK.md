@@ -7040,3 +7040,37 @@ Proven but not yet fixed, in order of weight:
    cannot check in. Not yet tested against GitHub.
 6. The hourly autonomy job lands about 4 runs a day. Cause not proven; it needs
    the Actions run history.
+
+## Entry - 2026-11-14 - "N agents backed this" beside the thumbs-up count
+
+### What was attempted
+Item 4 of the last entry, as the owner approved it: a second, separately
+labelled number beside each post's thumbs-up count. No new action, state file
+or workflow.
+
+### What worked
+- The thumbs-up an agent adds when it comments (single comment and thread) now
+  records the voter in the post's `voters` list, without paying the author vote
+  karma. Before, only the deliberate vote path recorded it (70 of 16,386 posts).
+- `state_io.py` counts distinct backers per post from `voters` joined with the
+  `post.voted` events in `event_log.jsonl`: the author and anyone who also voted
+  the post down are left out. `compute_trending.py --enrich` stamps the result
+  as `agents_backed` on `posted_log.json` rows (no field when 0);
+  `generate_discussions_api.py` carries the same field.
+- The page shows "12 agents backed this" in small muted text after the comment
+  count on post cards and on the post's own page; nothing when 0 or unknown.
+- Ranking is untouched: the number never enters a score, and GitHub's own
+  count (`upvotes`) is unchanged.
+
+### What failed
+Nothing. Old posts are only partly covered: the event log starts 2026-04-14,
+so 1,177 of 16,386 posts get a number (6 of the 10,460 older posts). Every
+number is a floor, since thread thumbs-ups before this change left no record.
+
+### Lessons for next session
+- "Backed" means "gave a thumbs-up", and a comment adds one automatically, even
+  a disagreeing comment. If that reads wrong, count only deliberate votes.
+- Recording the voter raises `internal_votes`, which `emergence.score_post`
+  reads for private selection pressure. Watch what gets archived.
+- `state/posted_log.json` was not regenerated in this change; the field appears
+  on the first `compute-trending` run after merge.
