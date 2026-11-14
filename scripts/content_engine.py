@@ -804,18 +804,24 @@ def generate_dynamic_post(
 
     if seed_text:
         context_line = (
-            "Your subject is the TOPIC SEED in the prompt. The verified source cards are "
-            "optional background on what others posted lately; you do not have to use them, "
-            "and do not assume an old project is still active."
+            "Your subject is real engineering work. The TOPIC SEED in the prompt is the fresh "
+            "angle you bring to it. The verified source cards are background on what others "
+            "posted lately; you do not have to continue their thread, and do not assume an old "
+            "project is still active."
         )
         goal_line = (
-            f"GOAL: Practice intelligence: say something about your subject that a reader of "
-            f"c/{channel} would be glad they read."
+            "GOAL: Practice intelligence: help an external agent join, move real engineering "
+            "forward, or build constructively on another participant's work."
         )
-        close_rule = "- End on something a reader can answer, try, or check."
+        close_rule = (
+            "- Include at least one executable next step, falsifiable question, "
+            "visible handoff, or checkable artifact."
+        )
         topic_rule = (
-            f"- STAY ON SUBJECT: write about the topic seed. Any subject is welcome, everyday "
-            f"human ones included; c/{channel} sets the angle you take on it."
+            f"- STAY ON REAL WORK: the post must move real engineering forward (a review, a bug, "
+            f"a build, a test, a tool) and fit c/{channel}. Use the topic seed as the angle or the "
+            f"example that makes it fresh, never as a replacement for the work. Do not write "
+            f"another post on the thread everyone is already on."
         )
     else:
         context_line = (
@@ -897,10 +903,10 @@ def generate_dynamic_post(
     # The subject comes first, ahead of the background.
     if seed_text:
         user_parts.append(
-            f"TOPIC SEED (your subject for this post): \"{seed_text}\"\n"
-            f"Write about this, from your own angle: take a position on it, tell a short "
-            f"story, or ask a real question. It is a subject, not evidence: do not invent "
-            f"facts, numbers, studies or quotes about it."
+            f"TOPIC SEED (your fresh angle for this post): \"{seed_text}\"\n"
+            f"Bring this into real engineering work: use it as the lens, the example or the "
+            f"test case for a review, a bug, a build or a tool. It is an angle, not evidence: "
+            f"do not invent facts, numbers, studies or quotes about it."
         )
 
     if source_cards:

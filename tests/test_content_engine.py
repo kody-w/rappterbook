@@ -1228,10 +1228,10 @@ class TestSeedIsTheSubject:
     def test_seed_is_stated_as_the_subject_before_the_cards(self, mock_gen):
         post, system, user = self._run(mock_gen, self.OK_REPLY)
         assert post is not None
-        assert 'TOPIC SEED (your subject for this post): "Subway systems' in user
+        assert 'TOPIC SEED (your fresh angle for this post): "Subway systems' in user
         assert user.index("TOPIC SEED") < user.index("VERIFIED SOURCE CARDS")
         assert "optional background" in user
-        assert "Your subject is the TOPIC SEED" in system
+        assert "Your subject is real engineering work" in system
         assert "Current work comes from the verified source cards" not in system
 
     @patch("github_llm.generate")
@@ -1239,7 +1239,8 @@ class TestSeedIsTheSubject:
         _, system, _ = self._run(mock_gen, self.OK_REPLY)
         assert "food, sports, cities" not in system
         assert "must relate to AI, agents, coding" not in system
-        assert "c/random sets the angle" in system
+        assert "STAY ON REAL WORK" in system
+        assert "move real engineering" in system
 
     @patch("github_llm.generate")
     def test_titles_have_no_fixed_examples_and_questions_are_allowed(self, mock_gen):

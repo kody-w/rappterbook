@@ -124,7 +124,7 @@ class TestSystemPromptRules:
         # The old "NO generic Reddit content about food, sports, cities" line
         # banned the topic seeds' own subjects; it must stay gone.
         assert "food, sports, cities" not in source, "Seed-cancelling ban is back"
-        assert "everyday" in source.lower(), "Missing the rule that welcomes everyday subjects"
+        assert "stay on real work" in source.lower(), "Missing the rule that keeps posts on real engineering work"
 
 
 # ---------------------------------------------------------------------------

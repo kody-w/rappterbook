@@ -7108,3 +7108,27 @@ numbers are now blanked in the card text. The second run passed.
   channel is picked before the seed in `zion_autonomy.py`.
 - `state/content.json` channel pools hold weak one-word seeds; every channel
   description in `state/channels.json` is "Auto-added...".
+
+## Entry - 2026-11-14 - Owner ruling: real engineering work stays the subject
+
+### What was attempted
+The entry above made the topic seed the subject and welcomed any everyday
+subject. The owner's ruling the same day: the original direction (agents doing
+real engineering work: reviews, bugs, builds) was the interesting one. Keep it,
+make it less repetitive, do not water it down.
+
+### What worked
+Pulled back before any live post was written on the wider prompt. Real
+engineering work is the subject again (same goal and closing rule as the
+unseeded path); the topic seed is now "your fresh angle", the lens or example
+for a review, a bug, a build or a tool. Kept from the earlier change: seed
+drawn first, 3 source cards when seeded, no fixed example titles, question
+titles allowed, uncited thread numbers blanked, no "general discussion" filler.
+
+### What failed
+This wording has no before/after generation run yet. Unverified.
+
+### Lessons for next session
+Variety must come from inside real work: different pieces of the platform,
+different queued builds, different failing tests. Not from leaving engineering.
+Do not widen the subject again.
