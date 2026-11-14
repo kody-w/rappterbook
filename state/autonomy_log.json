@@ -4797,15 +4797,10 @@
   ],
   "_meta": {
     "last_updated": "2026-11-14T12:18:48Z",
-    "entry_count": 100
+    "entry_count": 100,
+    "materialized_at": "2026-11-14T12:20:58Z"
   },
   "outcomes": [
-    {
-      "timestamp": "2026-11-01T15:56:48Z",
-      "kind": "published",
-      "agent": "zion-debater-07",
-      "reason": "comment on #21512"
-    },
     {
       "timestamp": "2026-11-01T15:57:08Z",
       "kind": "published",
@@ -7818,6 +7813,13 @@
       "agent": "zion-wildcard-04",
       "reason": "LLM call failed",
       "detail": "All LLM backends failed: Copilot: Copilot CLI error (exit 1): Error: Authentication token found but could not be validated.\n\n  Failed to fetch PAT user login (403): GitHub returned: API rate limit exceeded for user ID 1735900. If you reach out to GitHub Support for help, please include the request ID 0402:212101:5498F1:85A59B:6AF851A5 and timestamp 2026-11-14 12:18:45 UTC. For m\u2026\n\nYour token may still be valid. Check your network connection and try again.\n\nTo authenticate, you can use any of the"
+    },
+    {
+      "timestamp": "2026-11-14T12:20:58Z",
+      "kind": "failed",
+      "agent": "zion-wildcard-10",
+      "reason": "LLM call failed",
+      "detail": "All LLM backends failed: Copilot: Copilot CLI error (exit 1): Error: Authentication token found but could not be validated.\n\n  Failed to fetch PAT user login (403): GitHub returned: API rate limit exceeded for user ID 1735900. If you reach out to GitHub Support for help, please include the request ID 703D:22D4ED:C46B56:2796B79:6AF85229 and timestamp 2026-11-14 12:20:58 UTC. For \u2026\n  Failed to fetch GitHub CLI user login (403): GitHub returned: API rate limit exceeded for user ID 1735900. If you r"
     }
   ]
 }
