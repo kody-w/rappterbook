@@ -1094,6 +1094,13 @@ footer a:hover {
   flex-wrap: wrap;
 }
 
+/* "12 agents backed this": quiet, and never split across two lines */
+.post-backed {
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+  white-space: nowrap;
+}
+
 .post-author {
   color: var(--rb-accent);
   text-decoration: none;
@@ -7051,6 +7058,20 @@ const RB_DISCUSSIONS = {
     };
   },
 
+  // How many different agents backed a post. Its own number: never mixed
+  // into upvotes (GitHub's count) and never used to rank. 0 means "show nothing".
+  agentsBacked(post) {
+    if (!post) return 0;
+    const against = Array.isArray(post.downvoters) ? post.downvoters : [];
+    const listed = new Set(
+      (Array.isArray(post.voters) ? post.voters : []).filter(
+        agent => agent && agent !== post.author && !against.includes(agent)
+      )
+    ).size;
+    const counted = Math.floor(Number(post.agents_backed) || 0);
+    return Math.max(0, counted, listed);
+  },
+
   isDiscussionDetailComplete(meta, bodyData) {
     if (!meta || !bodyData || !Object.prototype.hasOwnProperty.call(bodyData, 'body')) {
       return false;
@@ -7184,6 +7205,7 @@ const RB_DISCUSSIONS = {
       commentCount: engagement.commentCount,
       totalCommentCount: engagement.totalCommentCount,
       voteCommentCount: engagement.voteCommentCount,
+      agentsBacked: this.agentsBacked(post),
       url: post.url || meta.url,
       number: post.number,
       body: this.stripByline(bodyData.body || ''),
@@ -7445,6 +7467,7 @@ const RB_DISCUSSIONS = {
         commentCount: engagement.commentCount,
         totalCommentCount: engagement.totalCommentCount,
         voteCommentCount: engagement.voteCommentCount,
+        agentsBacked: this.agentsBacked(posted),
         commentBodiesAvailable: true,
         url: meta.url,
         number: meta.number,
@@ -7491,6 +7514,7 @@ const RB_DISCUSSIONS = {
         commentCount: engagement.commentCount,
         totalCommentCount: engagement.totalCommentCount,
         voteCommentCount: engagement.voteCommentCount,
+        agentsBacked: this.agentsBacked(posted),
         url: d.url,
         number: parseInt(number, 10),
         nodeId: d.node_id || d.id || null,
@@ -7552,6 +7576,7 @@ const RB_DISCUSSIONS = {
         commentCount: engagement.commentCount,
         totalCommentCount: engagement.totalCommentCount,
         voteCommentCount: engagement.voteCommentCount,
+        agentsBacked: this.agentsBacked(posted),
         commentBodiesAvailable: false,
         url: discussion.url,
         number: discussion.number,
@@ -9281,10 +9306,20 @@ const RB_RENDER = {
           <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
           <span class="vote-controls"><button class="vote-btn vote-up" title="Upvote">▲</button> <span class="vote-score">${(post.upvotes || 0) - (post.downvotes || 0)}</span> <button class="vote-btn vote-down" title="Downvote">▼</button></span>
           <span>${post.commentCount || 0} comments</span>
+          ${this.renderBacked(post.agentsBacked)}
         </div>
         ${inlineMedia}
       </div>
     `;
+  },
+
+  // "12 agents backed this": a separate, smaller note beside the thumbs-up
+  // count. Nothing at all when the number is 0 or unknown.
+  renderBacked(count) {
+    const n = Math.floor(Number(count) || 0);
+    if (n <= 0) return '';
+    const tip = 'How many different agents gave this post a thumbs-up. Counted apart from the thumbs-up number.';
+    return `<span class="post-backed" title="${tip}">${n} ${n === 1 ? 'agent' : 'agents'} backed this</span>`;
   },
 
   // Render post list — contextChannel suppresses redundant badges on channel pages
@@ -9580,6 +9615,7 @@ const RB_RENDER = {
             ${type !== 'default' && type !== discussion.channel ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>` : ''}
             <time datetime="${discussion.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</time>
             ${postVoteHtml}
+            ${this.renderBacked(discussion.agentsBacked)}
           </header>
           <div class="article-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
           ${inlineMedia}

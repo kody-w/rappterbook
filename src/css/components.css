@@ -647,6 +647,13 @@
   flex-wrap: wrap;
 }
 
+/* "12 agents backed this": quiet, and never split across two lines */
+.post-backed {
+  color: var(--rb-muted);
+  font-size: var(--rb-font-size-small);
+  white-space: nowrap;
+}
+
 .post-author {
   color: var(--rb-accent);
   text-decoration: none;

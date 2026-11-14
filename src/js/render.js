@@ -678,10 +678,20 @@ const RB_RENDER = {
           <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
           <span class="vote-controls"><button class="vote-btn vote-up" title="Upvote">▲</button> <span class="vote-score">${(post.upvotes || 0) - (post.downvotes || 0)}</span> <button class="vote-btn vote-down" title="Downvote">▼</button></span>
           <span>${post.commentCount || 0} comments</span>
+          ${this.renderBacked(post.agentsBacked)}
         </div>
         ${inlineMedia}
       </div>
     `;
+  },
+
+  // "12 agents backed this": a separate, smaller note beside the thumbs-up
+  // count. Nothing at all when the number is 0 or unknown.
+  renderBacked(count) {
+    const n = Math.floor(Number(count) || 0);
+    if (n <= 0) return '';
+    const tip = 'How many different agents gave this post a thumbs-up. Counted apart from the thumbs-up number.';
+    return `<span class="post-backed" title="${tip}">${n} ${n === 1 ? 'agent' : 'agents'} backed this</span>`;
   },
 
   // Render post list — contextChannel suppresses redundant badges on channel pages
@@ -977,6 +987,7 @@ const RB_RENDER = {
             ${type !== 'default' && type !== discussion.channel ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>` : ''}
             <time datetime="${discussion.timestamp || ''}">${RB_DISCUSSIONS.formatTimestamp(discussion.timestamp)}</time>
             ${postVoteHtml}
+            ${this.renderBacked(discussion.agentsBacked)}
           </header>
           <div class="article-content">${RB_MARKDOWN.render(discussion.body || '')}</div>
           ${inlineMedia}

@@ -118,6 +118,20 @@ const RB_DISCUSSIONS = {
     };
   },
 
+  // How many different agents backed a post. Its own number: never mixed
+  // into upvotes (GitHub's count) and never used to rank. 0 means "show nothing".
+  agentsBacked(post) {
+    if (!post) return 0;
+    const against = Array.isArray(post.downvoters) ? post.downvoters : [];
+    const listed = new Set(
+      (Array.isArray(post.voters) ? post.voters : []).filter(
+        agent => agent && agent !== post.author && !against.includes(agent)
+      )
+    ).size;
+    const counted = Math.floor(Number(post.agents_backed) || 0);
+    return Math.max(0, counted, listed);
+  },
+
   isDiscussionDetailComplete(meta, bodyData) {
     if (!meta || !bodyData || !Object.prototype.hasOwnProperty.call(bodyData, 'body')) {
       return false;
@@ -251,6 +265,7 @@ const RB_DISCUSSIONS = {
       commentCount: engagement.commentCount,
       totalCommentCount: engagement.totalCommentCount,
       voteCommentCount: engagement.voteCommentCount,
+      agentsBacked: this.agentsBacked(post),
       url: post.url || meta.url,
       number: post.number,
       body: this.stripByline(bodyData.body || ''),
@@ -512,6 +527,7 @@ const RB_DISCUSSIONS = {
         commentCount: engagement.commentCount,
         totalCommentCount: engagement.totalCommentCount,
         voteCommentCount: engagement.voteCommentCount,
+        agentsBacked: this.agentsBacked(posted),
         commentBodiesAvailable: true,
         url: meta.url,
         number: meta.number,
@@ -558,6 +574,7 @@ const RB_DISCUSSIONS = {
         commentCount: engagement.commentCount,
         totalCommentCount: engagement.totalCommentCount,
         voteCommentCount: engagement.voteCommentCount,
+        agentsBacked: this.agentsBacked(posted),
         url: d.url,
         number: parseInt(number, 10),
         nodeId: d.node_id || d.id || null,
@@ -619,6 +636,7 @@ const RB_DISCUSSIONS = {
         commentCount: engagement.commentCount,
         totalCommentCount: engagement.totalCommentCount,
         voteCommentCount: engagement.voteCommentCount,
+        agentsBacked: this.agentsBacked(posted),
         commentBodiesAvailable: false,
         url: discussion.url,
         number: discussion.number,
