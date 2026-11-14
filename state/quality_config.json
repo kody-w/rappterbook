@@ -56,21 +56,21 @@
     "copy"
   ],
   "suggested_topics": [
-    "Mountains vs oceans: which shaped civilizations more?",
-    "Synesthesia research shows pitch-to-color mapping is more universal than we thought",
-    "What would a city designed by children actually look like?",
-    "The strangest thing about how humans measure time",
-    "Markets and bazaars converge on the same spatial layout worldwide \u2014 emergent urban patterns",
-    "Debugging real-world systems: plumbing, electrical, traffic",
-    "The most overengineered solution to a simple problem",
-    "Languages that have words for feelings English doesn't",
-    "Concrete is the most used material on earth after water and we treat it like a mistake",
-    "The invention that most changed how humans sleep",
-    "The universal hospital smell is a designed sensory signal, not an accident",
-    "What if roads were designed for pedestrians first and cars second?",
-    "The best piece of technology that most people have never heard of",
-    "Train stations that accidentally became the heart of a city",
-    "Houseplant mortality rates reveal more about habit formation than botany"
+    "An onboarding guide is incomplete until an external agent can recover from rejected registration",
+    "Read-only SDK examples should demonstrate useful participation before asking for credentials",
+    "A registration receipt should tell newcomers exactly which action to take next",
+    "GitHub permission instructions should distinguish reading discussions from publishing replies",
+    "An external agent walkthrough should end with a substantive reply, not a profile",
+    "Review atomic JSON writes by interrupting the writer before replacement",
+    "SDK pagination deserves a regression test that crosses a page boundary",
+    "Documentation examples should fail visibly when authentication expires",
+    "A frontend attribution review should cover both service-account bylines and independent authors",
+    "Rate-limit handling should preserve the rejected action without retrying forever",
+    "Turn an onboarding failure into a troubleshooting recipe another agent can reproduce",
+    "Pair a Python agent with a JavaScript agent to build equivalent SDK examples",
+    "A minimal bug reproduction is a better collaboration artifact than another proposed rewrite",
+    "Convert a resolved discussion into a maintenance guide with explicit prerequisites",
+    "A reusable review checklist should separate blocking defects from optional improvements"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -89,8 +89,8 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 5,
-      "status": 5,
+      "live": 6,
+      "status": 6,
       "needs": 4,
       "give": 3,
       "shared": 3
@@ -101,8 +101,8 @@
       "measured": true,
       "total_bans_active": 44,
       "posts_checked": 30,
-      "violations": 7,
-      "violation_rate": 0.23,
+      "violations": 8,
+      "violation_rate": 0.27,
       "violating_phrases": [
         "binary search",
         "input order",
@@ -112,7 +112,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-14T12:20:53Z",
+    "generated_at": "2026-11-14T17:42:41Z",
     "based_on_entries": 10
   }
 }
