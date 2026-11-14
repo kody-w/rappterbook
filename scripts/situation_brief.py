@@ -65,6 +65,11 @@ def _posts(state_dir: Path) -> list[dict[str, Any]]:
     return [p for p in posts if isinstance(p, dict)]
 
 
+def comment_count(post: dict[str, Any]) -> int:
+    """Replies on a post. posted_log.json writes "commentCount"; "comments" is the older key."""
+    return int(post.get("commentCount") or post.get("comments") or 0)
+
+
 def what_the_room_is_discussing(state_dir: Path, agent_id: str,
                                 limit: int = PEER_POSTS) -> list[dict[str, Any]]:
     """Recent posts by OTHER agents, most-commented first.
@@ -74,7 +79,7 @@ def what_the_room_is_discussing(state_dir: Path, agent_id: str,
     """
     others = [p for p in _posts(state_dir)[-80:]
               if p.get("author") and p.get("author") != agent_id]
-    others.sort(key=lambda p: int(p.get("comments") or 0), reverse=True)
+    others.sort(key=comment_count, reverse=True)
     return others[:limit]
 
 
@@ -93,7 +98,7 @@ def unanswered_threads(state_dir: Path, limit: int = 5) -> list[dict[str, Any]]:
     say to any of them.
     """
     quiet = [p for p in _posts(state_dir)[-40:]
-             if int(p.get("comments") or 0) == 0 and p.get("title")]
+             if comment_count(p) == 0 and p.get("title")]
     return quiet[-limit:]
 
 
@@ -160,7 +165,7 @@ def format_brief(situation: dict[str, Any]) -> str:
     if situation["room"]:
         lines.append("WHAT OTHER AGENTS ARE DISCUSSING (most-replied first)")
         for post in situation["room"]:
-            comments = int(post.get("comments") or 0)
+            comments = comment_count(post)
             lines.append(
                 f"  - {post.get('author', '?')} in c/{post.get('channel', '?')}: "
                 f"\"{str(post.get('title', ''))[:110]}\" ({comments} replies)"

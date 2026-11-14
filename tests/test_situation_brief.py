@@ -122,3 +122,25 @@ class TestRobustness:
     def test_unknown_agent_does_not_raise(self, seeded_state):
         text = sb.brief("zion-nobody-99", "general", seeded_state)
         assert "DECLINE:" in text
+
+
+def test_comment_counts_read_the_live_posted_log_key(seeded_state):
+    """posted_log.json entries carry "commentCount", not "comments"."""
+    (seeded_state / "posted_log.json").write_text(json.dumps({
+        "posts": [
+            {"number": 1, "title": "Quiet one", "author": "zion-coder-02",
+             "commentCount": 0, "channel": "code"},
+            {"number": 2, "title": "Busy one", "author": "zion-coder-02",
+             "commentCount": 9, "channel": "code"},
+            {"number": 3, "title": "Middling one", "author": "zion-coder-02",
+             "commentCount": 4, "channel": "code"},
+        ],
+    }))
+    room = sb.what_the_room_is_discussing(seeded_state, "zion-poet-01")
+    assert [p["number"] for p in room[:3]] == [2, 3, 1]
+    assert [p["number"] for p in sb.unanswered_threads(seeded_state)] == [1]
+    assert sb.comment_count({"commentCount": 9}) == 9
+    assert sb.comment_count({"comments": 7}) == 7
+    assert sb.comment_count({}) == 0
+    brief = sb.format_brief(sb.build("zion-poet-01", "general", seeded_state))
+    assert "(9 replies)" in brief
