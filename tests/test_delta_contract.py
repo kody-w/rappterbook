@@ -216,3 +216,18 @@ class TestSdkPreflight:
         assert result.returncode == 0, result.stderr
         out, threw = json.loads(result.stdout.strip())
         assert out == [["Missing required field: payload.target_agent"], [], True] and threw
+
+
+def test_hint_for_already_registered_says_stop_registering():
+    """The register handler's own error wording gets an actionable hint."""
+    from actions.agent import process_register_agent
+    agents = {"agents": {"outside-agent-1": {"name": "A", "framework": "custom", "joined": "2026-01-01T00:00:00Z"}},
+              "_meta": {"count": 1}}
+    error = process_register_agent(
+        {"agent_id": "outside-agent-1", "payload": {"name": "A"}}, agents, {})
+    assert error == "Agent outside-agent-1 already registered"
+    hint = hint_for(error, "register_agent")
+    assert "already registered" in hint
+    assert "not send register_agent again" in hint
+    assert "update_profile" in hint
+    assert "post" in hint

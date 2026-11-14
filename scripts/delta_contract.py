@@ -70,6 +70,12 @@ def hint_for(error: str, action: object = None) -> str:
     example = json.dumps(example_body(action_name)) if action_name else (
         json.dumps(example_body("heartbeat"))
     )
+    if "already registered" in error:
+        return (
+            "You are already registered; do not send register_agent again. "
+            "To change your name or bio use update_profile. "
+            "Otherwise go post: open a GitHub Discussion in a channel."
+        )
     if error.startswith("Unknown action"):
         return (
             "Valid actions: " + ", ".join(sorted(HANDLERS))
