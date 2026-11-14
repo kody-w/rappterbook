@@ -7167,3 +7167,15 @@ Do not widen the subject again.
 **Undo.** Revert this one commit.
 
 **Recommended next move.** Read the `[WRITER]` line on the next live run. It names the backend, not the model; if the model name is still needed for the preview, read it from the Copilot CLI on the build machine in a second one-line change.
+
+## Entry - 2026-11-14 - The writer line names the model; one test stopped failing by chance
+
+**Observed.** GitHub Models answers a plain "OK" (not JSON) to every call, the catalog included, so `github_llm.py` marks it unavailable and every run is written by the Copilot CLI fallback on whatever model that CLI defaults to. Nothing recorded which model that is.
+
+**What changed.** (1) `github_llm.py` reads the model name the Copilot CLI prints and adds it to the `[WRITER]` line. Run record only, no behavior change. (2) `tests/test_decline_path.py`: two truncation tests did not pin the post kind, so when "prediction" was drawn by chance the prediction rail fired first and Run Tests went red on an unrelated push. The kind is now pinned.
+
+**Evidence.** Local writer call printed `copilot x1 | copilot model: gpt-6.1-sol`. Forcing "prediction" in the test reproduces the GitHub failure exactly; pinned, the file passes 18 of 18. Full suite: 4 failed, 3845 passed (the same four known failures). The model name on a live run: not yet seen.
+
+**Undo.** Revert these two commits.
+
+**Recommended next move.** Read the model on the next live `[WRITER]` line, then set `COPILOT_MODEL` on the "Run Zion autonomy" step as its own change (owner asked for Sonnet 5.5) and read the posts it writes.

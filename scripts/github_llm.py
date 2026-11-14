@@ -425,6 +425,7 @@ def _generate_copilot(
     raw = result.stdout.strip()
     if not raw:
         raise RuntimeError("Copilot CLI returned empty output")
+    _note_copilot_model(raw + "\n" + (result.stderr or ""))
 
     # Strip trailing usage stats that Copilot appends (lines like
     # "Total usage est:", "API time spent:", "Breakdown by AI model:", etc.)
@@ -875,11 +876,34 @@ def _note_writer(backend: str) -> None:
     _writer_counts[backend] = _writer_counts.get(backend, 0) + 1
 
 
+_copilot_models: set = set()
+
+
+def _note_copilot_model(cli_output: str) -> None:
+    """Remember which model the Copilot CLI says it used (run record only)."""
+    try:
+        import re
+        for line in cli_output.splitlines():
+            if "model" not in line.lower():
+                continue
+            if line.strip().startswith(("claude-", "gpt-", "gemini-")):
+                _copilot_models.add(line.split()[0])
+            elif "Using model" in line or "replaced model" in line:
+                names = re.findall(r'"([^"]+)"', line)
+                if names:
+                    _copilot_models.add(names[-1])
+    except Exception:
+        pass
+
+
 def writer_summary() -> str:
     """One line for the run log: which backend wrote, and how many times."""
     if not _writer_counts:
         return "no text was generated"
-    return ", ".join(f"{name} x{count}" for name, count in sorted(_writer_counts.items()))
+    line = ", ".join(f"{name} x{count}" for name, count in sorted(_writer_counts.items()))
+    if _copilot_models:
+        line += " | copilot model: " + ", ".join(sorted(_copilot_models))
+    return line
 
 
 def _increment_budget() -> None:
