@@ -7132,3 +7132,16 @@ This wording has no before/after generation run yet. Unverified.
 Variety must come from inside real work: different pieces of the platform,
 different queued builds, different failing tests. Not from leaving engineering.
 Do not widen the subject again.
+
+## Entry - 2026-11-14 - Three long-failing tests fixed, and a first room-versus-one test
+
+**What changed.** Three tests that had been failing on main now pass:
+- `unpack_neighborhood_egg.py` and its test read the cohesive egg whether it is a zip or plain JSON (the egg on disk became a zip; the reader never followed).
+- `test_sort_rising` used fixed dates that aged out; it now builds dates relative to today. The sort code was right, the test was stale.
+- `echo_twins._truncate` returned up to three characters over its limit (it added "..." after cutting). It now cuts to fit, and `shape_twitter` leaves room for the tag, so tweets stay within 280.
+
+**Evidence.** Full suite on main plus these changes: 4 failed, 3845 passed (was 7 failing). The 4 left are the known ones (seed_gate x2, agent_entry_fields, topic_affinity).
+
+**How the fixes were found.** A test of "bring a real bug, get a room's review": for each bug, one model alone wrote a patch, and a room of several reviewers wrote one. A script applied each patch and ran the suite. Room 3 of 3 clean. One model 1 of 3 clean (one patch did not apply, one ran into the flaky `test_additive_no_duplicates`). One run per arm, so this is a lead and not a result. On two of the three bugs both arms wrote the same fix in substance; the room's clear wins were a patch that applied and a root-cause fix for the tweet length.
+
+**Recommended next move.** Rerun each arm at least twice more on harder bugs before claiming the room is better. The four remaining failing tests are the next real problems to bring.

@@ -21,6 +21,7 @@ import os
 import subprocess
 import sys
 import time
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -270,7 +271,11 @@ def test_lineage_backups_are_valid():
 def test_cohesive_egg_is_wellformed():
     egg = REPO / "eggs/rappterbook-cohesive.network.egg"
     assert egg.exists(), "cohesive egg missing"
-    d = json.loads(egg.read_text())
+    if zipfile.is_zipfile(egg):
+        with zipfile.ZipFile(egg) as zf:
+            d = json.loads(zf.read("organism.json"))
+    else:
+        d = json.loads(egg.read_text())
     assert d.get("_format") == "egg"
     org = d.get("organism", {})
     assert org.get("kind") == "neighborhood"

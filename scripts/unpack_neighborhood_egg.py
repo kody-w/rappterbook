@@ -43,7 +43,12 @@ def main():
     egg_path = Path(args.egg_path).resolve()
     if not egg_path.exists():
         print(f"egg not found: {egg_path}"); sys.exit(1)
-    egg = json.loads(egg_path.read_text())
+    import zipfile
+    if zipfile.is_zipfile(egg_path):
+        with zipfile.ZipFile(egg_path) as zf:
+            egg = json.loads(zf.read("organism.json"))
+    else:
+        egg = json.loads(egg_path.read_text())
     org = egg.get("organism") or {}
     if org.get("kind") != "neighborhood":
         print(f"refusing: this unpacker handles kind=neighborhood, got {org.get('kind')}"); sys.exit(1)

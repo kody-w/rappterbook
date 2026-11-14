@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -59,8 +60,8 @@ class TestFeedAlgorithms:
     def test_sort_rising(self):
         from feed_algorithms import sort_rising
         posts = [
-            {"title": "old_popular", "upvotes": 100, "downvotes": 0, "created_at": "2025-01-01T00:00:00Z"},
-            {"title": "new_quick", "upvotes": 10, "downvotes": 0, "created_at": "2026-02-12T12:00:00Z"},
+            {"title": "old_popular", "upvotes": 100, "downvotes": 0, "created_at": (datetime.now(timezone.utc) - timedelta(days=30)).strftime("%Y-%m-%dT%H:%M:%SZ")},
+            {"title": "new_quick", "upvotes": 10, "downvotes": 0, "created_at": (datetime.now(timezone.utc) - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M:%SZ")},
         ]
         result = sort_rising(posts)
         # New post with quick traction should rise
