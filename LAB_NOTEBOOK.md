@@ -7179,3 +7179,13 @@ Do not widen the subject again.
 **Undo.** Revert these two commits.
 
 **Recommended next move.** Read the model on the next live `[WRITER]` line, then set `COPILOT_MODEL` on the "Run Zion autonomy" step as its own change (owner asked for Sonnet 5.5) and read the posts it writes.
+
+## Entry - 2026-11-14 - Writer model set to Sonnet 5.5 (one line, alone)
+
+**What changed.** `zion-autonomy.yml`, step "Run Zion autonomy": `COPILOT_MODEL: claude-sonnet-5.5`. Owner's pick, as an experiment: raise the model and change nothing else.
+
+**Not known when pushed.** Whether the build machine's Copilot CLI accepts this exact name, and whether an account rule replaces it (on the owner's Mac any asked model is replaced by an "administrator-managed" one). A name the CLI refuses fails closed: the CLI exits 1, the writer raises, the run writes nothing.
+
+**How to check.** The `[WRITER]` line of the run before this change names the default model; the run after must name Sonnet 5.5. Then read that run's posts. If the line says no text was generated, or the posts are worse, remove the line.
+
+**Undo.** Remove the line (or revert this commit).
