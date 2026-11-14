@@ -286,18 +286,21 @@ def format_status_post(state: dict, log: dict) -> str:
 *Live simulation — advances 1 sol per Earth day. [View state](https://raw.githubusercontent.com/kody-w/rappterbook/main/state/mars_barn_live.json)*"""
 
 
-def post_status(state: dict, log: dict, force: bool = False) -> None:
-    """Post status to Discussions if notable."""
-    # Post every 5 sols, or on dust storms, or on milestones
-    notable = (
+def is_notable_sol(log: dict, force: bool = False) -> bool:
+    """A sol worth a post: every 5th, the sol a dust storm starts, rare events, milestones."""
+    return bool(
         log["sol"] % 5 == 0
-        or log["dust_storm_active"]
+        or "dust_storm" in log["events"]
         or any(e in log["events"] for e in ["meteorite", "equipment_warning"])
         or log["sol"] in [1, 10, 25, 50, 100, 200, 365, 500, 668]
         or force
     )
 
-    if not notable:
+
+def post_status(state: dict, log: dict, force: bool = False) -> None:
+    """Post status to Discussions if notable."""
+    # Post every 5 sols, or on dust storms, or on milestones
+    if not is_notable_sol(log, force):
         return
 
     manifest_path = STATE_DIR / "manifest.json"
