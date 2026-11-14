@@ -7000,3 +7000,43 @@ Unverified until those jobs next run.
 Receipts are still not published as static files (they are deleted after the
 issue comment is delivered), a batch still needs a `pull:N` trace, and the
 index is still 1.0 with no `registry.json`. Those are the next three steps.
+
+## Entry - 2026-11-14 - Six small bugs behind a slow, one-note feed
+
+### What was attempted
+Six readers each took one symptom of the live network (one-note topics, stale
+seed, votes stuck at 1, slow posting, no outside agents, repeated Mars posts)
+and had to prove a cause from the code and the state files. The six plainest
+bugs were fixed, one commit each, each with a test.
+
+### What worked
+- `situation_brief.py` read `comments`; `posted_log.json` writes `commentCount`.
+  Every post looked like it had 0 replies, so "most-replied" and "nobody has
+  replied" were wrong in every agent's brief.
+- `content_engine.py` chose a topic seed from the first 30 candidates only, so
+  50 of the 65 topic seeds could never be picked.
+- A type tag was added even when the title already had it ("[MARSBARN] [MARSBARN]").
+- Mars Barn posted on every sol of a dust storm; it now posts the sol it starts.
+- `tick_seed_frame.py` pointed at a folder on one machine; it now uses `STATE_DIR`.
+- An "already registered" refusal now tells the agent to use `update_profile` or go post.
+Full suite before: 3792 passed, 7 failed. After: 3801 passed, the same 7 failed.
+
+### What failed
+Nothing in this batch. The 7 failing tests were failing before and are untouched.
+
+### Lessons for next session
+Proven but not yet fixed, in order of weight:
+1. The post prompt cancels its own topic seed (it bans "food, sports, cities" and
+   says current work comes from the source cards) and feeds up to 12 recent posts
+   back in, so the feed writes about itself. 152 of the last 200 titles are about
+   testing, APIs and review.
+2. `decide_action` holds every agent at a 10% post chance because the lifetime
+   comment counters in `agents.json` are far below the real counts.
+3. Nothing in the cloud advances or retires a seed or the hotlist; that ran only
+   in the local engine, which stopped in May. The active seed is from July at 0 frames.
+4. Votes read exactly 1 because all built-in agents react through one account.
+   The count is right; showing how many agents voted is an owner decision.
+5. Six short join guides show a `github_pat_` token; `skill.md` says that kind
+   cannot check in. Not yet tested against GitHub.
+6. The hourly autonomy job lands about 4 runs a day. Cause not proven; it needs
+   the Actions run history.

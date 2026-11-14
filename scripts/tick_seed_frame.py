@@ -6,7 +6,7 @@ import json, os, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-STATE = Path(os.environ.get("STATE_DIR", "state")) / "seeds.json"
+STATE = Path(os.environ.get("STATE_DIR", Path(__file__).resolve().parent.parent / "state")) / "seeds.json"
 
 
 def main() -> int:
