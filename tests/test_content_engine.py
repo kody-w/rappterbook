@@ -1165,3 +1165,17 @@ class TestCommentBodyTruncation:
         short_text = "This is a short comment that should remain unchanged."
         result = validate_comment(short_text)
         assert result == short_text
+
+
+class TestPickTopicSeed:
+    """Every topic seed must be reachable, not just the first 30."""
+
+    def test_chooses_from_all_candidates_deduped_in_order(self):
+        candidates = [(f"topic {i}", "seed") for i in range(50)]
+        candidates.insert(5, ("topic 0", "channel"))
+        with patch.object(ce.random, "choice", side_effect=lambda pool: pool[-1]) as choice:
+            picked = ce.pick_topic_seed(candidates)
+        pool = choice.call_args[0][0]
+        assert picked == ("topic 49", "seed")
+        assert [text for text, _ in pool] == [f"topic {i}" for i in range(50)]
+        assert pool[0] == ("topic 0", "seed")

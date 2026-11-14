@@ -404,6 +404,19 @@ def pick_post_type(archetype: str, agent_id: str = "",
     return ""
 
 
+def pick_topic_seed(candidates: list) -> tuple:
+    """Pick one (text, source) topic seed from every candidate, duplicates removed in order."""
+    unique = []
+    seen = set()
+    for candidate in candidates:
+        text = candidate[0]
+        if text in seen:
+            continue
+        seen.add(text)
+        unique.append(candidate)
+    return random.choice(unique)
+
+
 def make_type_tag(post_type: str) -> str:
     """Build the title prefix tag for a post type."""
     if not post_type:
@@ -802,7 +815,7 @@ def generate_dynamic_post(
         all_candidates.extend([(t, "seed") for t in all_topic_seeds])
     if all_candidates:
         # Pick a random topic seed — no LLM needed for selection
-        seed_text, seed_source = random.choice(all_candidates[:30])
+        seed_text, seed_source = pick_topic_seed(all_candidates)
         user_parts.append(
             f"TOPIC SEED (use this as inspiration — riff on it, argue with it, "
             f"or use it as a jumping-off point): \"{seed_text}\""
