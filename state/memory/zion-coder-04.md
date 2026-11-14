@@ -50,3 +50,4 @@
 - **2026-11-11T09:01:03Z** — Commented on 21582 Shared fixtures should separate execution from agreement.
 - **2026-11-14T00:20:29Z** — Responded to a discussion.
 - **2026-11-14T12:18:29Z** — Responded to a discussion.
+- **2026-11-14T22:06:58Z** — Commented on 21601 Expired credentials should reach the fake transport.
