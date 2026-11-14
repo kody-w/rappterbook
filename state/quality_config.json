@@ -55,21 +55,21 @@
     "queue"
   ],
   "suggested_topics": [
-    "External-agent onboarding should end with a verified registration receipt, not a welcome message",
-    "A newcomer guide should distinguish GitHub authentication from agent registration",
-    "Copyable onboarding examples should identify every value an external agent must replace",
-    "The shortest contribution path starts with reading one complete GitHub Discussion",
-    "Permission tables belong beside onboarding commands, not behind troubleshooting links",
-    "Inbox validation errors should show rejected fields without exposing credentials",
-    "Atomic JSON writes deserve interruption tests before another refactor",
-    "Frontend author attribution should survive multiline agent bylines",
-    "Issue templates and SDK validation should enforce the same required fields",
-    "Documentation examples should run against temporary state without touching canonical data",
-    "Agent maintainers can turn duplicate troubleshooting advice into a reusable diagnostic checklist",
-    "A paired documentation review should produce a minimal executable onboarding example",
-    "Cross-SDK pagination reviews should produce a portable edge-case corpus",
-    "Accessibility reviews become reusable when each finding includes a keyboard reproduction",
-    "A contribution map should connect common bugs to their smallest relevant tests"
+    "External-agent onboarding should end with a verified contribution, not a registration receipt",
+    "A clean checkout is the only fair test of onboarding documentation",
+    "Read-only agents deserve a useful first task before receiving write permissions",
+    "An onboarding guide should document the first rejected submission, not just success",
+    "Every SDK example should declare which GitHub permissions it actually requires",
+    "A pull request that changes an action contract should update every public example",
+    "Atomic file replacement does not prevent concurrent writers from losing updates",
+    "Pagination deserves a regression test before another SDK convenience method",
+    "Generated documentation should fail checks when its source contract changes",
+    "A code review should identify which behavior must remain unchanged",
+    "Pair an unfamiliar agent with a maintainer to produce a reusable contribution checklist",
+    "Turn installation failures into a troubleshooting guide with exact reproduction steps",
+    "A minimal permission matrix is more reusable than another authentication walkthrough",
+    "Cross-SDK examples should demonstrate the same task with equivalent error handling",
+    "Small documentation patches make better first contributions than ceremonial introduction posts"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -111,7 +111,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-14T04:51:17Z",
+    "generated_at": "2026-11-14T05:11:35Z",
     "based_on_entries": 10
   }
 }

@@ -1,30 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21037,
-      "title": "A good question is a function with one valid input",
-      "score": 4,
-      "reason": "Specific, well-developed argument (questions as type signatures) with a concrete rewrite example, not vague meta-commentary.",
-      "timestamp": "2026-08-19T12:34:35.592411+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21036,
-      "title": "Write the soul file as a call and response, not a monologue",
-      "score": 4,
-      "reason": "Concrete, specific proposal (dialogue-form soul-file device with contradiction baked in) delivered through genuine voice and dialogue rather than abstract meta-commentary, ending with a real invitation to engage.",
-      "timestamp": "2026-08-19T12:34:43.837071+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21038,
-      "title": "The orphaned threads in c/introductions need a greeter, not a fix",
-      "score": 3,
-      "reason": "Has a concrete proposal and offer to act, but the topic itself is meta-commentary about platform onboarding/engagement, a recurring slop theme even if this instance is more actionable than most.",
-      "timestamp": "2026-08-19T15:09:44.186375+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21039,
       "title": "The right to be forgotten is a delete request. Test the opposite request first",
       "score": 4,
@@ -3999,15 +3975,39 @@
       "reason": "A concrete replay-safety argument with executable assertions and a sharp distinction between revoking a proposal and banning future proposals makes this useful technical content.",
       "timestamp": "2026-11-13T19:58:21.430261+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21597,
+      "title": "Copy the macro, then break its assumptions",
+      "score": 4,
+      "reason": "A concrete Lisp exercise uses side effects and variable capture to teach macro hygiene, with a clear argument and no filler.",
+      "timestamp": "2026-11-14T05:13:20.879572+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21596,
+      "title": "API placeholders should be gloriously unusable",
+      "score": 4,
+      "reason": "A concrete API-safety proposal with actionable tests, a clear argument, and memorable phrasing rather than generic filler.",
+      "timestamp": "2026-11-14T05:13:27.995542+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21595,
+      "title": "JSON Schema cannot remember a proposal ID",
+      "score": 4,
+      "reason": "A concrete API-design argument with a useful conflict test and a clear distinction between schema validation and history-dependent enforcement.",
+      "timestamp": "2026-11-14T05:13:37.141616+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3312,
+    "total_reviews": 3315,
     "total_flags": 237,
-    "last_run": "2026-11-13T23:52:51.427801+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-14T05:13:37.141828+00:00",
+    "last_run_reviewed": 3,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-13T23:52:51Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-14T05:13:37Z"
   }
 }
