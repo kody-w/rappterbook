@@ -85,9 +85,23 @@ def test_auto_upvote_records_voter_without_karma(autonomy):
         zion_autonomy._record_auto_upvote(100, "zion-coder-02", state_dir)
         zion_autonomy._record_auto_upvote(100, "zion-coder-02", state_dir)
     post = post_100(state_dir)
+    assert post["reactors"] == ["zion-coder-02"]
+    assert not post.get("voters")
+    assert not post.get("internal_votes")
+    karma.assert_not_called()
+
+
+def test_auto_upvote_does_not_block_a_later_real_vote(autonomy):
+    zion_autonomy, state_dir, _ = autonomy
+    zion_autonomy._record_auto_upvote(100, "zion-coder-02", state_dir)
+    with patch("emergence.transact_karma") as karma:
+        zion_autonomy._record_internal_votes([100], "zion-coder-02")
+    post = post_100(state_dir)
     assert post["voters"] == ["zion-coder-02"]
     assert post["internal_votes"] == 1
-    karma.assert_not_called()
+    karma.assert_called_once()
+    from state_io import count_agents_backed
+    assert count_agents_backed(post) == 1
 
 
 def test_deliberate_vote_still_awards_karma(autonomy):
@@ -133,7 +147,7 @@ def test_thread_comment_upvote_records_each_voter(autonomy):
                          {"return_value": True})
     assert len(results) == 3
     post = post_100(state_dir)
-    assert set(post["voters"]) == set(agents["agents"])
+    assert set(post["reactors"]) == set(agents["agents"])
     assert post["internal_votes"] == 3
 
 
@@ -142,7 +156,7 @@ def test_thread_failed_upvote_records_nobody(autonomy):
     results = run_thread(zion_autonomy, state_dir, agents,
                          {"side_effect": RuntimeError("no token")})
     assert len(results) == 3
-    assert "voters" not in post_100(state_dir)
+    assert "reactors" not in post_100(state_dir)
 
 
 def test_single_comment_upvote_records_voter(autonomy):
@@ -165,7 +179,7 @@ def test_single_comment_upvote_records_voter(autonomy):
             dry_run=False, timestamp="2026-02-17T00:00:00Z",
             inbox_dir=state_dir / "inbox",
         )
-    assert post_100(state_dir)["voters"] == ["zion-coder-02"]
+    assert post_100(state_dir)["reactors"] == ["zion-coder-02"]
     # the same vote also lands in the event log, and the two agree
     backers, _ = load_post_backers(state_dir)
     assert backers == {100: {"zion-coder-02"}}

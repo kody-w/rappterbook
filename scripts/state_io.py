@@ -217,6 +217,7 @@ def count_agents_backed(
     except (ValueError, TypeError):
         number = 0
     agents = {a for a in (post.get("voters") or []) if isinstance(a, str) and a}
+    agents |= {a for a in (post.get("reactors") or []) if isinstance(a, str) and a}
     agents |= (backers or {}).get(number, set())
     agents -= {a for a in (post.get("downvoters") or []) if isinstance(a, str)}
     agents -= (opposers or {}).get(number, set())

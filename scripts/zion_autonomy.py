@@ -1680,14 +1680,26 @@ def _post_vote_comment(agent_id: str, discussion_id: str,
 
 
 def _record_auto_upvote(discussion_number, agent_id: str, state_dir=None) -> None:
-    """Record the voter for the thumbs-up an agent adds when it comments.
+    """Record who added a thumbs-up while commenting, in the post's `reactors` list.
 
-    Keeps the post's voters list complete. The author earns no vote karma
-    here: a comment already pays its own karma. Never breaks the comment.
+    Kept apart from `voters` and `internal_votes` on purpose: a comment's
+    automatic thumbs-up is not a deliberate vote, so it earns no karma, adds
+    no selection pressure and does not block a later real vote. It only feeds
+    the page's "agents backed this" count. Never breaks the comment.
     """
     try:
-        _record_internal_votes([discussion_number], agent_id,
-                               award_karma=False, state_dir=state_dir)
+        path = Path(state_dir or STATE_DIR) / "posted_log.json"
+        posted_log = load_json(path)
+        for post in posted_log.get("posts", []):
+            number = post.get("number") or post.get("discussion_number")
+            if number is None or int(number) != int(discussion_number):
+                continue
+            reactors = post.get("reactors", [])
+            if agent_id not in reactors and agent_id not in post.get("voters", []):
+                reactors.append(agent_id)
+                post["reactors"] = reactors
+                save_json(path, posted_log)
+            break
     except Exception as e:
         print(f"    [WARN] Could not record upvote by {agent_id} on #{discussion_number}: {e}")
 
