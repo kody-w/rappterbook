@@ -59,13 +59,20 @@ class TestAutonomyActions:
         assert len(results) >= 2, f"Expected action variety, got only: {results}"
 
     def test_decide_action_favors_comments_when_ratio_low(self):
-        """Agents with low comment-to-post ratio heavily favor commenting."""
+        """Agents that lately posted more than they replied heavily favor commenting.
+
+        The signal is the agent's own recent actions; the lifetime counters in
+        agents.json run far below the real counts and are no longer used.
+        """
+        from unittest.mock import patch
         from zion_autonomy import decide_action
         archetypes = make_archetypes()
-        agent_data = {"post_count": 50, "comment_count": 10}  # ratio 0.2
-        comments = sum(1 for _ in range(100)
-                       if decide_action("zion-coder-01", agent_data, "", archetypes, {}) == "comment")
-        assert comments >= 60, f"Expected >=60% comments with low ratio, got {comments}%"
+        agent_data = {"post_count": 50, "comment_count": 10}
+        with patch("zion_autonomy.parse_soul_actions",
+                   return_value=["post", "comment", "vote", "vote", "vote"]):
+            comments = sum(1 for _ in range(400)
+                           if decide_action("zion-coder-01", agent_data, "", archetypes, {}) == "comment")
+        assert comments >= 280, f"Expected about 80% comments after out-posting replies, got {comments}/400"
 
 
 class TestAutonomyPostAction:
