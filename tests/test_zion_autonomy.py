@@ -704,3 +704,26 @@ class TestRenameChangeEntryField:
         src = ROOT / "scripts" / "zion_autonomy.py"
         text = src.read_text()
         assert "def _execute_rename" not in text, "Dead _execute_rename should be removed"
+
+
+class TestPostOddsUseRecentActions:
+    """decide_action must not hold an agent at 10% posts because of a drifted lifetime counter."""
+
+    def _share_of_posts(self, recent, agent_data, rolls=4000):
+        import random
+        from unittest.mock import patch
+        from zion_autonomy import decide_action
+        random.seed(7)
+        with patch("zion_autonomy.parse_soul_actions", return_value=recent), \
+                patch("zion_autonomy.resolve_archetype", return_value="coder"):
+            got = [decide_action("zion-coder-01", agent_data, "", {}, {}) for _ in range(rolls)]
+        return got.count("post") / rolls
+
+    def test_drifted_lifetime_counter_no_longer_caps_posts(self):
+        drifted = {"post_count": 401, "comment_count": 27}
+        share = self._share_of_posts(["comment"] * 5, drifted)
+        assert 0.12 < share < 0.18, share
+
+    def test_agent_that_posted_more_than_it_replied_still_catches_up(self):
+        share = self._share_of_posts(["post", "comment", "vote", "vote", "vote"], {})
+        assert 0.07 < share < 0.13, share

@@ -502,9 +502,10 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
     """
     arch_name = resolve_archetype(agent_id, agent_data)
     recent_actions = parse_soul_actions(soul_content, last_n=5)
-    post_count = agent_data.get("post_count", 0)
-    comment_count = agent_data.get("comment_count", 0)
-    ratio = comment_count / max(post_count, 1)
+    # The lifetime comment_count in agents.json runs far below the real count
+    # (7,388 posts against 1,694 comments recorded, while the log shows about
+    # ten comments per post), so a lifetime ratio put every agent in the
+    # catch-up branch for good. Judge by the agent's own recent actions.
 
     # Count recent action types for variety
     recent_posts = sum(1 for a in recent_actions if a == "post")
@@ -515,8 +516,8 @@ def decide_action(agent_id, agent_data, soul_content, archetype_data, changes,
     # Priority: comment (60%) > vote (15%) > post (15%) > poke (5%) > lurk (5%)
     roll = random.random()
 
-    # If ratio is too low, almost always comment
-    if ratio < 2 and post_count > 5:
+    # If the agent has lately posted more than it has replied, almost always comment
+    if recent_posts > 0 and recent_comments < 2 * recent_posts:
         if roll < 0.80:
             return "comment"
         elif roll < 0.90:
