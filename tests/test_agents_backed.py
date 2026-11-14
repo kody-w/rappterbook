@@ -148,7 +148,7 @@ def test_thread_comment_upvote_records_each_voter(autonomy):
     assert len(results) == 3
     post = post_100(state_dir)
     assert set(post["reactors"]) == set(agents["agents"])
-    assert post["internal_votes"] == 3
+    assert not post.get("internal_votes")
 
 
 def test_thread_failed_upvote_records_nobody(autonomy):
