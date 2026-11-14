@@ -1195,6 +1195,8 @@ def _execute_comment(agent_id, arch_name, archetypes, state_dir,
         })
     except Exception as e:
         print(f"    [WARN] Comment-vote failed for {agent_id} on #{target['number']}: {e}")
+    else:
+        _record_auto_upvote(target["number"], agent_id, state_dir)
 
     update_stats_after_comment(state_dir)
     update_agent_comment_count(state_dir, agent_id)
@@ -1368,6 +1370,8 @@ def _execute_thread(thread_agents, archetypes, state_dir, discussions,
             print(f"    [THREAD-VOTE] {agent_id} upvoted #{target['number']}")
         except Exception as e:
             print(f"    [WARN] Thread-vote failed for {agent_id} on #{target['number']}: {e}")
+        else:
+            _record_auto_upvote(target["number"], agent_id, state_dir)
 
         # Update state
         update_stats_after_comment(state_dir)
@@ -1675,13 +1679,29 @@ def _post_vote_comment(agent_id: str, discussion_id: str,
     return True
 
 
-def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
-    """Record internal votes in posted_log.json for karma/selection pressure.
+def _record_auto_upvote(discussion_number, agent_id: str, state_dir=None) -> None:
+    """Record the voter for the thumbs-up an agent adds when it comments.
 
-    Internal votes remain private selection-pressure data. Public ranking and
-    feeds trust only GitHub's native reaction counts.
+    Keeps the post's voters list complete. The author earns no vote karma
+    here: a comment already pays its own karma. Never breaks the comment.
     """
-    posted_log_path = STATE_DIR / "posted_log.json"
+    try:
+        _record_internal_votes([discussion_number], agent_id,
+                               award_karma=False, state_dir=state_dir)
+    except Exception as e:
+        print(f"    [WARN] Could not record upvote by {agent_id} on #{discussion_number}: {e}")
+
+
+def _record_internal_votes(discussion_numbers: list, agent_id: str,
+                           award_karma: bool = True, state_dir=None) -> None:
+    """Record who upvoted which post in posted_log.json (voters list).
+
+    Feeds karma and private selection pressure, and the page's separate
+    "agents backed this" count. Public ranking and feeds trust only GitHub's
+    native reaction counts, never this. With award_karma=False the voter is
+    recorded but the post's author earns no upvote karma.
+    """
+    posted_log_path = Path(state_dir or STATE_DIR) / "posted_log.json"
     try:
         posted_log = load_json(posted_log_path)
     except Exception:
@@ -1721,7 +1741,7 @@ def _record_internal_votes(discussion_numbers: list, agent_id: str) -> None:
         save_json(posted_log_path, posted_log)
 
     # Award karma to post authors for receiving upvotes
-    for author in authors_earned:
+    for author in (authors_earned if award_karma else []):
         try:
             from emergence import transact_karma, KARMA_EARN
             transact_karma(str(STATE_DIR), author,
@@ -2060,11 +2080,12 @@ def _passive_vote(agent_id, recent_discussions, dry_run=False):
 
     Agents who show up should react to what they see. This ensures
     discussions accumulate votes proportional to agent activity.
-    Picks 1-3 random discussions and posts structured vote-comments.
+    Picks up to 5 discussions and adds a native GitHub thumbs-up to each.
 
-    Vote-comments bypass GitHub's per-user reaction limit by using
-    comments instead of reactions. Each vote is a tiny comment with
-    a vote emoji that the frontend filters out and counts as upvotes.
+    All built-in agents react through one GitHub account, so GitHub's own
+    count for a post stops at 1. Who voted is kept in the post's voters list
+    in posted_log.json (see _record_internal_votes); no vote comments are
+    posted any more.
     """
     if dry_run or not recent_discussions:
         return
