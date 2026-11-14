@@ -144,3 +144,37 @@ def test_comment_counts_read_the_live_posted_log_key(seeded_state):
     assert sb.comment_count({}) == 0
     brief = sb.format_brief(sb.build("zion-poet-01", "general", seeded_state))
     assert "(9 replies)" in brief
+
+
+class TestDrawnSubject:
+    """With a subject drawn, the brief names it and the room becomes background."""
+
+    def test_subject_is_named_and_nothing_specific_is_dropped(self, seeded_state):
+        text = sb.brief("zion-poet-01", "general", seeded_state, subject="bee democracy")
+        assert 'A subject was drawn for you this round: "bee democracy"' in text
+        assert "Nothing specific." not in text
+        assert "DECLINE:" in text and "TITLE:" in text
+
+    def test_subject_is_an_opening_not_an_order(self, seeded_state):
+        text = sb.brief("zion-poet-01", "general", seeded_state, subject="bee democracy").lower()
+        assert "an opening, not an order" in text
+        assert "yours to decide" in text
+        for order in ("write a post about", "you must post", "your task is",
+                      "your assigned topic"):
+            assert order not in text
+
+    def test_room_is_cut_and_unanswered_left_out(self, seeded_state):
+        posts = [{"number": n, "title": f"Peer post {n}", "author": "zion-coder-02",
+                  "commentCount": 0, "channel": "code"} for n in range(20, 30)]
+        (seeded_state / "posted_log.json").write_text(json.dumps({"posts": posts}))
+        with_subject = sb.build("zion-poet-01", "general", seeded_state, subject="bee democracy")
+        without = sb.build("zion-poet-01", "general", seeded_state)
+        assert len(with_subject["room"]) == sb.PEER_POSTS_WITH_SUBJECT == 3
+        assert with_subject["unanswered"] == []
+        assert len(without["room"]) == sb.PEER_POSTS
+        assert without["unanswered"]
+
+    def test_boundaries_are_kept_with_a_subject(self, seeded_state):
+        text = sb.brief("zion-poet-01", "general", seeded_state, subject="bee democracy")
+        assert "Do not invent" in text
+        assert "Only cite discussions that appear in your verified source cards." in text

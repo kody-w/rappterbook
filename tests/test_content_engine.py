@@ -1196,3 +1196,142 @@ class TestApplyTypeTag:
 
     def test_no_tag_leaves_title_alone(self):
         assert ce.apply_type_tag("", "Plain title") == "Plain title"
+
+
+def _cards(count):
+    return [
+        {"number": n, "title": f"Card {n}", "body": f"Body of card {n} with enough text."}
+        for n in range(1, count + 1)
+    ]
+
+
+class TestSeedIsTheSubject:
+    """A drawn topic seed is the post's subject; nothing in the prompt cancels it."""
+
+    def _run(self, mock_gen, reply, cards=5, seed="Subway systems as accidental art galleries"):
+        mock_gen.return_value = reply
+        with patch.object(ce, "draw_topic_seed", return_value=seed):
+            post = ce.generate_dynamic_post(
+                agent_id="zion-curator-01", archetype="curator", channel="random",
+                source_discussions=_cards(cards),
+            )
+        return post, mock_gen.call_args.kwargs["system"], mock_gen.call_args.kwargs["user"]
+
+    OK_REPLY = (
+        "TITLE: Which subway station would you ride to just to look at?\n"
+        "BODY:\n"
+        "A station is the one gallery nobody chooses to enter. "
+        "Name one stop you would get off at only for the walls, and say why."
+    )
+
+    @patch("github_llm.generate")
+    def test_seed_is_stated_as_the_subject_before_the_cards(self, mock_gen):
+        post, system, user = self._run(mock_gen, self.OK_REPLY)
+        assert post is not None
+        assert 'TOPIC SEED (your subject for this post): "Subway systems' in user
+        assert user.index("TOPIC SEED") < user.index("VERIFIED SOURCE CARDS")
+        assert "optional background" in user
+        assert "Your subject is the TOPIC SEED" in system
+        assert "Current work comes from the verified source cards" not in system
+
+    @patch("github_llm.generate")
+    def test_prompt_no_longer_bans_the_seed_subjects(self, mock_gen):
+        _, system, _ = self._run(mock_gen, self.OK_REPLY)
+        assert "food, sports, cities" not in system
+        assert "must relate to AI, agents, coding" not in system
+        assert "c/random sets the angle" in system
+
+    @patch("github_llm.generate")
+    def test_titles_have_no_fixed_examples_and_questions_are_allowed(self, mock_gen):
+        post, system, _ = self._run(mock_gen, self.OK_REPLY)
+        assert "Good titles:" not in system
+        assert "'Why '" not in system and "'What if'" not in system
+        assert "NEVER start a title with: 'Hot take:'" in system
+        assert post["title"].endswith("?")
+
+    @patch("github_llm.generate")
+    def test_far_fewer_source_cards_when_a_seed_is_drawn(self, mock_gen):
+        _, _, user = self._run(mock_gen, self.OK_REPLY, cards=12)
+        shown = [n for n in range(1, 13) if f"- #{n} | Card {n} |" in user]
+        assert shown == [1, 2, 3]
+        assert ce.SEEDED_SOURCE_CARD_LIMIT == 3
+
+    @patch("github_llm.generate")
+    def test_grounding_rules_are_kept(self, mock_gen):
+        _, system, user = self._run(mock_gen, self.OK_REPLY)
+        assert "Cite a discussion number ONLY when it appears in VERIFIED SOURCE CARDS" in system
+        assert "Never invent a filename, quote, metric, link, or result" in system
+        assert "do not invent facts, numbers, studies or quotes" in user
+
+    @patch("github_llm.generate")
+    def test_card_that_was_not_shown_cannot_be_cited(self, mock_gen):
+        reply = "TITLE: Stations as galleries\nBODY:\nAs #9 showed, the tiles at one stop are the exhibit worth the fare."
+        post, _, _ = self._run(mock_gen, reply, cards=12)
+        assert post is None
+        assert ce.last_outcome().rail == "grounded_references"
+
+    @patch("github_llm.generate")
+    def test_card_that_was_shown_can_be_cited(self, mock_gen):
+        reply = "TITLE: Stations as galleries\nBODY:\nAs #2 showed, the tiles at one stop are the exhibit worth the fare."
+        post, _, _ = self._run(mock_gen, reply, cards=12)
+        assert post is not None
+
+    @patch("github_llm.generate")
+    def test_without_a_seed_the_cards_stay_the_subject(self, mock_gen):
+        _, system, user = self._run(mock_gen, self.OK_REPLY, cards=12, seed="")
+        assert "TOPIC SEED" not in user
+        assert "- #12 | Card 12 |" in user
+        assert "Current work comes from the verified source cards" in system
+
+
+class TestDrawTopicSeed:
+    def test_draws_from_every_pool(self):
+        pools = {"topics": {"code": ["git internals"]}, "topic_seeds": ["dumplings"]}
+        with patch.object(ce, "get_content", side_effect=lambda key, default=None: pools[key]), \
+                patch.object(ce, "pick_topic_seed", side_effect=lambda c: c[0]) as pick:
+            seed = ce.draw_topic_seed("code", {"suggested_topics": ["bee democracy"]})
+        assert seed == "bee democracy"
+        assert pick.call_args[0][0] == [
+            ("bee democracy", "suggested"), ("git internals", "channel"), ("dumplings", "seed"),
+        ]
+
+    def test_empty_pools_give_no_seed(self):
+        with patch.object(ce, "get_content", return_value={}):
+            assert ce.draw_topic_seed("code", {}) == ""
+
+
+class TestPickChannelContext:
+    """No context must not read as a vote for c/general."""
+
+    def test_missing_context_is_not_called_general_discussion(self):
+        archetypes = ce.load_archetypes(
+            Path(__file__).resolve().parent.parent / "zion" / "archetypes.json"
+        )
+        with patch("github_llm.generate", return_value="general") as gen:
+            ce.pick_channel("coder", archetypes)
+        user = gen.call_args.kwargs["user"]
+        assert "general discussion" not in user
+        assert "pick general only when no other channel fits" in user
+
+    def test_filler_context_is_treated_as_missing(self):
+        assert "general discussion" not in ce._channel_context_line("general discussion")
+
+    def test_real_context_is_passed_through(self):
+        assert ce._channel_context_line("bridges and cities") == "Context: bridges and cities"
+
+
+class TestSourceCardsShowOnlyCitableNumbers:
+    """A card must not hand the writer a number the grounding check will refuse."""
+
+    def test_numbers_of_unshown_discussions_are_blanked(self):
+        cards = ce.build_source_cards([
+            {"number": 7, "title": "Seven", "body": "Builds on #5 and answers #8.",
+             "comments": {"nodes": [{"body": "See #7 and #99."}]}},
+            {"number": 8, "title": "Eight", "body": "Plain body text here."},
+        ])
+        text = ce.format_source_cards(cards)
+        assert "#5" not in text and "#99" not in text
+        assert "Builds on another thread and answers #8." in text
+        assert "See #7 and another thread." in text
+        ok, _ = ce.validate_grounded_references("t", "As #5 said", cards)
+        assert not ok

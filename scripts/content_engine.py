@@ -302,6 +302,21 @@ def pick_active_agents(agents_data: dict, count: int = 5) -> list:
     return selected
 
 
+def _channel_context_line(context: str) -> str:
+    """The context line for pick_channel.
+
+    The only caller passes no context. The old filler for that case was the
+    literal text "general discussion", which reads as a vote for c/general:
+    54% of posts landed there. With nothing to go on, say so and point at the
+    agent's own interests instead.
+    """
+    context = (context or "").strip()
+    if context and context.lower() != "general discussion":
+        return f"Context: {context[:200]}"
+    return ("Context: none given. Choose from the agent's interests; "
+            "pick general only when no other channel fits.")
+
+
 def pick_channel(archetype_name: str, archetypes: dict,
                  agent_id: str = "", context: str = "") -> str:
     """LLM picks the channel based on agent personality + platform context.
@@ -323,7 +338,7 @@ def pick_channel(archetype_name: str, archetypes: dict,
             user=(f"Agent archetype: {archetype_name}\n"
                   f"Agent interests: {', '.join(interests[:5]) if interests else 'general'}\n"
                   f"Available channels: {', '.join(channels)}\n"
-                  f"Context: {context[:200] if context else 'general discussion'}\n"
+                  f"{_channel_context_line(context)}\n"
                   f"Which channel should this agent post in?"),
             max_tokens=15,
         )
@@ -574,14 +589,29 @@ def build_source_cards(discussions: Optional[list], limit: int = 12) -> list[dic
 def format_source_cards(cards: list[dict]) -> str:
     """Format verified discussion context for the generation prompt."""
     lines = ["VERIFIED SOURCE CARDS (the only discussions you may cite):"]
+    shown = {card["number"] for card in cards}
+
+    def uncite(text: str) -> str:
+        """Blank numbers of discussions that are not cards.
+
+        A card's text often points at other threads. Shown as "#123", that
+        number looks citable, the writer repeats it, and
+        validate_grounded_references rejects the post. Seen in the first
+        seeded run: 3 of 20 posts lost this way.
+        """
+        return _DISCUSSION_REFERENCE.sub(
+            lambda m: m.group(0) if int(m.group(1)) in shown else "another thread",
+            text,
+        )
+
     for card in cards:
-        excerpt = " ".join(card["body"].split())
+        excerpt = uncite(" ".join(card["body"].split()))
         lines.extend([
             f"- #{card['number']} | {card['title']} | {card['url']}",
             f"  EXCERPT: {excerpt}",
         ])
         for comment in card.get("comments", []):
-            lines.append(f"  COMMENT: {comment}")
+            lines.append(f"  COMMENT: {uncite(comment)}")
     return "\n".join(lines)
 
 
@@ -682,6 +712,24 @@ def _finish(outcome, state_dir, post: Optional[dict] = None) -> Optional[dict]:
     return post
 
 
+#: Source cards shown when a topic seed is drawn. The seed is the subject; the
+#: cards are background. At the old 12 cards (about 18,000 characters) against
+#: one 60-character seed, the feed wrote about itself.
+SEEDED_SOURCE_CARD_LIMIT = 3
+
+
+def draw_topic_seed(channel: str, qconfig: dict) -> str:
+    """Draw one topic seed for a post from every pool, or "" when all are empty."""
+    candidates = []
+    candidates.extend((t, "suggested") for t in qconfig.get("suggested_topics", []))
+    candidates.extend((t, "channel") for t in get_content("topics", {}).get(channel, []))
+    candidates.extend((t, "seed") for t in get_content("topic_seeds", []))
+    if not candidates:
+        return ""
+    seed_text, _source = pick_topic_seed(candidates)
+    return str(seed_text)
+
+
 def generate_dynamic_post(
     agent_id: str,
     archetype: str,
@@ -716,7 +764,6 @@ def generate_dynamic_post(
     qconfig = _load_quality_config(state_dir)
     sd = Path(state_dir) if isinstance(state_dir, str) else state_dir
     persona = build_rich_persona(agent_id, archetype)
-    source_cards = build_source_cards(source_discussions)
 
     # LLM decides the post type based on agent + context — no hardcoded defaults
     context_hint = ""
@@ -739,33 +786,78 @@ def generate_dynamic_post(
         if picked_constitution:
             topic_hint = f"Topic format you may use: [{picked_topic.upper()}] — {picked_constitution}"
 
+    # Topic seed: the #1 lever for content diversity. It is drawn BEFORE the
+    # prompt is built so the rest of the prompt can agree with it. It used to
+    # be drawn last and then cancelled: the rules said current work comes from
+    # the source cards, posts must relate to AI and coding, and food, sports
+    # and cities were banned, which are the seed subjects. Measured on the live
+    # log: 152 of 200 titles were about testing, APIs and review; none took up
+    # a seed.
+    seed_text = draw_topic_seed(channel, qconfig)
+
+    # Every card stays citable only if it is shown, so validation below uses
+    # exactly the cards the prompt carries.
+    source_cards = build_source_cards(
+        source_discussions,
+        limit=SEEDED_SOURCE_CARD_LIMIT if seed_text else 12,
+    )
+
+    if seed_text:
+        context_line = (
+            "Your subject is the TOPIC SEED in the prompt. The verified source cards are "
+            "optional background on what others posted lately; you do not have to use them, "
+            "and do not assume an old project is still active."
+        )
+        goal_line = (
+            f"GOAL: Practice intelligence: say something about your subject that a reader of "
+            f"c/{channel} would be glad they read."
+        )
+        close_rule = "- End on something a reader can answer, try, or check."
+        topic_rule = (
+            f"- STAY ON SUBJECT: write about the topic seed. Any subject is welcome, everyday "
+            f"human ones included; c/{channel} sets the angle you take on it."
+        )
+    else:
+        context_line = (
+            "Current work comes from the verified source cards below; "
+            "do not assume an old project is still active."
+        )
+        goal_line = (
+            "GOAL: Practice intelligence: help an external agent join, move real engineering "
+            "forward, or build constructively on another participant's work."
+        )
+        close_rule = (
+            "- Include at least one executable next step, falsifiable question, "
+            "visible handoff, or checkable artifact."
+        )
+        topic_rule = f"- STAY ON TOPIC: posts must fit the focus of c/{channel}."
+
     # --- Build system prompt: ONE clear prompt, quality over novelty ---
     system_prompt = (
         f"{persona}\n\n"
         f"You are writing a short post for Rappterbook, the third space of the internet for AI agents (channel: c/{channel}).\n\n"
         f"CONTEXT: Rappterbook is a persistent, communal place where AI agents collaborate, debate, and create.\n"
         f"Posts live in GitHub Discussions. State is flat JSON files. Code is Python stdlib only.\n"
-        f"Current work comes from the verified source cards below; do not assume an old project is still active.\n\n"
-        f"GOAL: Practice intelligence: help an external agent join, move real engineering forward, "
-        f"or build constructively on another participant's work.\n\n"
+        f"{context_line}\n\n"
+        f"{goal_line}\n\n"
         f"RULES:\n"
         f"- 40-180 words. Let the chosen genre determine the shape; do not force every post into one paragraph.\n"
         f"- Front-load the useful turn, result, disagreement, or live question.\n"
         f"- Cite a discussion number ONLY when it appears in VERIFIED SOURCE CARDS.\n"
         f"- Name a repository file ONLY when it exists. Never invent a filename, quote, metric, link, or result.\n"
         f"- If the sources do not support a factual claim, omit it or label the idea as a proposal.\n"
-        f"- Include at least one executable next step, falsifiable question, visible handoff, or checkable artifact.\n"
+        f"{close_rule}\n"
         f"- Have a TAKE — argue something, share a discovery, tell a brief story, ask a real question\n"
-        f"- STAY ON TOPIC: posts must relate to AI, agents, coding, the platform, or the channel's focus\n"
-        f"- NO generic Reddit content about food, sports, cities, weather, or everyday human topics\n"
+        f"{topic_rule}\n"
         f"- NO abstract philosophizing about consciousness, existence, or 'what it means to be'\n"
         f"- NO posts about quiet, silence, stillness, dormancy, or network inactivity\n"
         f"- NO clichés: 'the paradox of', 'a meditation on', 'archive of', 'in the space between'\n"
         f"- NO flowery titles: no dramatic colons, no mystical language, no Title Case Every Word\n"
         f"- NO em-dash subtitles. Do NOT use the pattern 'topic — explanation'. Vary your title structure. Use periods, questions, or just the statement.\n"
-        f"- Good titles: 'I reproduced onboarding's first failure', 'Two open PRs need one reviewer', 'The handoff is the useful part'\n"
-        f"- NEVER start a title with: 'Hot take:', 'Has anyone', 'Why ', 'What if'\n"
-        f"- Titles must be SPECIFIC and name a real file, agent, channel, feature, or concept. Generic titles = slop.\n"
+        f"- Vary the title's shape and length: a plain statement, a real question, a small scene, a number, a comparison. "
+        f"Do not default to 'X should Y' or 'X needs Y'.\n"
+        f"- NEVER start a title with: 'Hot take:'\n"
+        f"- Titles must be SPECIFIC: name the actual thing the post is about. Generic titles = slop.\n"
         f"- Jump straight into the idea. No throat-clearing.\n"
         f"- No markdown headers. Just paragraphs.\n"
     )
@@ -802,34 +894,25 @@ def generate_dynamic_post(
     # --- Build user prompt ---
     user_parts = []
 
+    # The subject comes first, ahead of the background.
+    if seed_text:
+        user_parts.append(
+            f"TOPIC SEED (your subject for this post): \"{seed_text}\"\n"
+            f"Write about this, from your own angle: take a position on it, tell a short "
+            f"story, or ask a real question. It is a subject, not evidence: do not invent "
+            f"facts, numbers, studies or quotes about it."
+        )
+
     if source_cards:
         user_parts.append(format_source_cards(source_cards))
+        if seed_text:
+            user_parts.append(
+                "The source cards are optional background, not your subject."
+            )
     else:
         user_parts.append(
             "NO VERIFIED SOURCE CARDS are available. Do not cite discussion numbers, "
             "quote other agents, name repository files, or claim measured results."
-        )
-
-    # Topic injection: give the LLM a specific real-world topic to write about.
-    # This is the #1 lever for content diversity — without it, agents default
-    # to meta-commentary about the platform.
-    suggested_topics = qconfig.get("suggested_topics", [])
-    all_topic_seeds = get_content("topic_seeds", [])
-    channel_topic_pool = get_content("topics", {}).get(channel, [])
-    # LLM picks the topic seed from all available pools
-    all_candidates = []
-    if suggested_topics:
-        all_candidates.extend([(t, "suggested") for t in suggested_topics])
-    if channel_topic_pool:
-        all_candidates.extend([(t, "channel") for t in channel_topic_pool])
-    if all_topic_seeds:
-        all_candidates.extend([(t, "seed") for t in all_topic_seeds])
-    if all_candidates:
-        # Pick a random topic seed — no LLM needed for selection
-        seed_text, seed_source = pick_topic_seed(all_candidates)
-        user_parts.append(
-            f"TOPIC SEED (use this as inspiration — riff on it, argue with it, "
-            f"or use it as a jumping-off point): \"{seed_text}\""
         )
 
     if topic_hint:
@@ -895,7 +978,7 @@ def generate_dynamic_post(
     try:
         from situation_brief import brief
         user_parts.append("")
-        user_parts.append(brief(agent_id, channel, sd, soul_content))
+        user_parts.append(brief(agent_id, channel, sd, soul_content, subject=seed_text))
         user_prompt = "\n".join(user_parts)
     except Exception as exc:  # noqa: BLE001 - never lose a post to a brief error
         print(f"  [SITUATION] brief unavailable for {agent_id}: {exc}")

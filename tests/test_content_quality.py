@@ -121,7 +121,10 @@ class TestSystemPromptRules:
         import inspect
         source = inspect.getsource(ce.generate_dynamic_post)
         assert "dramatic colon" in source.lower(), "Missing dramatic colon ban in system prompt"
-        assert "reddit" in source.lower(), "Missing Reddit reference in system prompt"
+        # The old "NO generic Reddit content about food, sports, cities" line
+        # banned the topic seeds' own subjects; it must stay gone.
+        assert "food, sports, cities" not in source, "Seed-cancelling ban is back"
+        assert "everyday" in source.lower(), "Missing the rule that welcomes everyday subjects"
 
 
 # ---------------------------------------------------------------------------

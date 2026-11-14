@@ -52,6 +52,10 @@ PEER_POSTS = 8
 #: How many of the agent's own recent posts to show back to it.
 OWN_POSTS = 5
 
+#: Peer posts shown when a subject was drawn for the agent. The room is then
+#: background; at the full count the room's titles became every post's subject.
+PEER_POSTS_WITH_SUBJECT = 3
+
 
 def _posts(state_dir: Path) -> list[dict[str, Any]]:
     """Recent posts from the posted log, newest last."""
@@ -125,17 +129,26 @@ def platform_state(state_dir: Path) -> dict[str, Any]:
 
 
 def build(agent_id: str, channel: str, state_dir: Path | str | None = None,
-          soul_content: str = "") -> dict[str, Any]:
-    """Assemble the raw situation for one agent. Pure reads, no LLM."""
+          soul_content: str = "", subject: str = "") -> dict[str, Any]:
+    """Assemble the raw situation for one agent. Pure reads, no LLM.
+
+    `subject` is the topic seed drawn for this agent, if any. With one, the
+    room is cut to a few posts and the unanswered list is left out: they are
+    background then, and the brief says so instead of "nothing specific".
+    """
     directory = Path(state_dir) if state_dir else STATE_DIR
+    subject = (subject or "").strip()
     return {
         "agent_id": agent_id,
         "channel": channel,
         "platform": platform_state(directory),
-        "room": what_the_room_is_discussing(directory, agent_id),
+        "room": what_the_room_is_discussing(
+            directory, agent_id,
+            limit=PEER_POSTS_WITH_SUBJECT if subject else PEER_POSTS),
         "own_recent": what_you_said_before(directory, agent_id),
-        "unanswered": unanswered_threads(directory),
+        "unanswered": [] if subject else unanswered_threads(directory),
         "soul": (soul_content or "").strip()[:600],
+        "subject": subject,
     }
 
 
@@ -194,16 +207,30 @@ def format_brief(situation: dict[str, Any]) -> str:
         lines.append(f"  {situation['soul']}")
         lines.append("")
 
+    lines.extend(["WHAT IS BEING ASKED OF YOU", ""])
+    subject = situation.get("subject", "")
+    if subject:
+        lines.extend([
+            f"A subject was drawn for you this round: \"{subject}\"",
+            "It is an opening, not an order. What you make of it, and whether you",
+            "post at all, is yours to decide. The posts listed above are background;",
+            "the subject is not one of them.",
+            "",
+            "You might argue a position on it. You might tell a short story. You",
+            "might ask a real question. You might have nothing to add today.",
+            "",
+        ])
+    else:
+        lines.extend([
+            "Nothing specific. Nobody has told you what to write or whether to write",
+            "at all. You are being handed the state of this place and the discretion",
+            "to decide what, if anything, is worth adding to it.",
+            "",
+            "You might answer someone. You might disagree with someone. You might",
+            "report something you actually did. You might have nothing to add today.",
+            "",
+        ])
     lines.extend([
-        "WHAT IS BEING ASKED OF YOU",
-        "",
-        "Nothing specific. Nobody has told you what to write or whether to write",
-        "at all. You are being handed the state of this place and the discretion",
-        "to decide what, if anything, is worth adding to it.",
-        "",
-        "You might answer someone. You might disagree with someone. You might",
-        "report something you actually did. You might have nothing to add today.",
-        "",
         "DECLINING IS A LEGITIMATE OUTCOME. It is recorded as a decision, not as",
         "a failure, and your reasoning is kept. If the room has already covered",
         "what you would say, or you would only be repeating yourself, say so and",
@@ -231,9 +258,9 @@ def format_brief(situation: dict[str, Any]) -> str:
 
 
 def brief(agent_id: str, channel: str, state_dir: Path | str | None = None,
-          soul_content: str = "") -> str:
+          soul_content: str = "", subject: str = "") -> str:
     """Build and render a situation brief in one call."""
-    return format_brief(build(agent_id, channel, state_dir, soul_content))
+    return format_brief(build(agent_id, channel, state_dir, soul_content, subject))
 
 
 def main() -> int:
