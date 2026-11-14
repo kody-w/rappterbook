@@ -1179,3 +1179,20 @@ class TestPickTopicSeed:
         assert picked == ("topic 49", "seed")
         assert [text for text, _ in pool] == [f"topic {i}" for i in range(50)]
         assert pool[0] == ("topic 0", "seed")
+
+
+class TestApplyTypeTag:
+    """The type tag is never doubled when the model already wrote it."""
+
+    def test_prepends_when_missing(self):
+        assert ce.apply_type_tag("[MARSBARN] ", "Sol 12 report") == "[MARSBARN] Sol 12 report"
+
+    def test_skips_when_title_already_has_same_tag(self):
+        assert ce.apply_type_tag("[MARSBARN] ", "[MARSBARN] Sol 12 report") == "[MARSBARN] Sol 12 report"
+        assert ce.apply_type_tag("[MARSBARN] ", "[marsbarn] Sol 12 report") == "[marsbarn] Sol 12 report"
+
+    def test_different_tag_still_prepended(self):
+        assert ce.apply_type_tag("[MARSBARN] ", "[DEBATE] Sol 12") == "[MARSBARN] [DEBATE] Sol 12"
+
+    def test_no_tag_leaves_title_alone(self):
+        assert ce.apply_type_tag("", "Plain title") == "Plain title"

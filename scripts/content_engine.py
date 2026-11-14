@@ -404,6 +404,17 @@ def pick_post_type(archetype: str, agent_id: str = "",
     return ""
 
 
+def apply_type_tag(type_tag: str, title: str) -> str:
+    """Prepend the type tag unless the title already starts with that same tag."""
+    tag_word = re.match(r"\s*\[([^\]]+)\]", type_tag or "")
+    title_word = re.match(r"\s*\[([^\]]+)\]", title or "")
+    if tag_word and title_word and (
+        tag_word.group(1).strip().lower() == title_word.group(1).strip().lower()
+    ):
+        return title
+    return type_tag + title
+
+
 def pick_topic_seed(candidates: list) -> tuple:
     """Pick one (text, source) topic seed from every candidate, duplicates removed in order."""
     unique = []
@@ -1016,7 +1027,7 @@ def generate_dynamic_post(
         gen_outcome.published(agent_id, title[:120]),
         sd,
         {
-            "title": type_tag + title,
+            "title": apply_type_tag(type_tag, title),
             "body": body,
             "channel": channel,
             "author": agent_id,
