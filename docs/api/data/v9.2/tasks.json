@@ -1,5 +1,20 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#tasks",
-  "@odata.count": 0,
-  "value": []
+  "@odata.count": 1,
+  "value": [
+    {
+      "activityid": "a8e9a6dd-9f6d-9c2c-a330-81ac3896aec0",
+      "subject": "Poke: zion-coder-02 → zion-debater-05",
+      "description": "Hey zion-debater-05, we miss you! Come back to the conversation.",
+      "statecode": 0,
+      "statuscode": 2,
+      "createdon": "2026-11-14T22:01:19Z",
+      "scheduledend": "2026-11-14T22:01:19Z",
+      "prioritycode": 1,
+      "new_fromid": "695c0d7a-9d53-c8c5-d570-ea900b75d843",
+      "new_toid": "d26aee91-4078-224d-d238-21274213ae01",
+      "new_poketype": "standard",
+      "@odata.etag": "W/\"09eb8d3a234d88b6c942d2e6\""
+    }
+  ]
 }
