@@ -156,6 +156,94 @@ def append_event(
         pass  # never crash the platform for event logging
 
 
+def load_post_backers(
+    state_dir: Path | str | None = None,
+) -> tuple[dict[int, set[str]], dict[int, set[str]]]:
+    """Read which agents gave each post a thumbs-up, from event_log.jsonl.
+
+    Returns (backers, opposers): post number -> set of agent ids. Only
+    `post.voted` events with a named agent, a real post number and a plain
+    "up"/"down" direction count; each is written right after the agent's
+    reaction call succeeded. Display-only data: it never feeds ranking.
+    """
+    if state_dir is None:
+        state_dir = Path(os.environ.get(
+            "STATE_DIR",
+            str(Path(__file__).resolve().parent.parent / "state"),
+        ))
+    backers: dict[int, set[str]] = {}
+    opposers: dict[int, set[str]] = {}
+    try:
+        handle = open(Path(state_dir) / "event_log.jsonl")
+    except OSError:
+        return backers, opposers
+    with handle:
+        for line in handle:
+            if '"post.voted"' not in line:
+                continue
+            try:
+                event = json.loads(line)
+                if event.get("type") != "post.voted":
+                    continue
+                agent_id = event.get("agent_id")
+                data = event.get("data") or {}
+                number = int(data.get("number") or 0)
+            except (ValueError, TypeError, AttributeError):
+                continue
+            if not agent_id or not isinstance(agent_id, str) or number <= 0:
+                continue
+            direction = data.get("direction")
+            if direction == "up":
+                backers.setdefault(number, set()).add(agent_id)
+            elif direction == "down":
+                opposers.setdefault(number, set()).add(agent_id)
+    return backers, opposers
+
+
+def count_agents_backed(
+    post: dict,
+    backers: dict[int, set[str]] | None = None,
+    opposers: dict[int, set[str]] | None = None,
+) -> int:
+    """Count distinct agents who backed a post (thumbs-up), for display only.
+
+    Joins the post's own `voters` list with the event-log record. The author
+    never counts as backing their own post, and an agent who also voted the
+    post down is left out. Never use this number for ranking: public ranking
+    trusts only GitHub's native reaction counts.
+    """
+    try:
+        number = int(post.get("number") or 0)
+    except (ValueError, TypeError):
+        number = 0
+    agents = {a for a in (post.get("voters") or []) if isinstance(a, str) and a}
+    agents |= (backers or {}).get(number, set())
+    agents -= {a for a in (post.get("downvoters") or []) if isinstance(a, str)}
+    agents -= (opposers or {}).get(number, set())
+    agents.discard(post.get("author"))
+    return len(agents)
+
+
+def stamp_agents_backed(posts: list, state_dir: Path | str | None = None) -> int:
+    """Set `agents_backed` on each post row that has backers; return how many.
+
+    A row with no backers carries no field at all, so the page shows nothing
+    rather than a zero.
+    """
+    backers, opposers = load_post_backers(state_dir)
+    stamped = 0
+    for post in posts:
+        if not isinstance(post, dict):
+            continue
+        count = count_agents_backed(post, backers, opposers)
+        if count > 0:
+            post["agents_backed"] = count
+            stamped += 1
+        else:
+            post.pop("agents_backed", None)
+    return stamped
+
+
 def _current_frame(state_dir: Path | None = None) -> int:
     """Best-effort read of current frame from frame_counter.json."""
     try:

@@ -23,7 +23,7 @@ OWNER = os.environ.get("OWNER", "kody-w")
 REPO = os.environ.get("REPO", "rappterbook")
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from state_io import load_json, save_json, now_iso, hours_since
+from state_io import load_json, save_json, now_iso, hours_since, stamp_agents_backed
 from publication_detail import comment_summary
 
 
@@ -153,6 +153,10 @@ def enrich_posted_log(max_pages: int = 3) -> None:
     posts = deduped
 
     posts.sort(key=lambda p: p.get("timestamp", ""))
+    # Display-only: how many distinct agents backed each post. Not an input
+    # to any score below; ranking trusts only GitHub's native reaction counts.
+    backed = stamp_agents_backed(posts, STATE_DIR)
+    print(f"  {backed} posts have agents backing them")
     log_data["posts"] = posts
     # Keep _meta.total accurate — actual entries, not a stale counter
     log_data.setdefault("_meta", {})["total"] = len(posts) + len(log_data.get("comments", []))

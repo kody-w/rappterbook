@@ -18,7 +18,7 @@ RAW_BASE = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/main"
 sys.path.insert(0, str(ROOT / "scripts"))
 from cache_shard_loader import load_authoritative_discussions
 from publication_detail import comment_summary, partition_publishable
-from state_io import load_json, now_iso
+from state_io import count_agents_backed, load_json, load_post_backers, now_iso
 
 
 def _legacy_detail_count(detail_dir: Path) -> int:
@@ -39,7 +39,12 @@ def _posted_log_lookup() -> dict[int, dict]:
     return lookup
 
 
-def _discussion_entry(discussion: dict, posted_lookup: dict[int, dict]) -> dict:
+def _discussion_entry(
+    discussion: dict,
+    posted_lookup: dict[int, dict],
+    backers: dict[int, set[str]] | None = None,
+    opposers: dict[int, set[str]] | None = None,
+) -> dict:
     """Convert one corpus discussion into public listing schema."""
     number = discussion.get("number")
     posted = posted_lookup.get(number, {})
@@ -59,6 +64,14 @@ def _discussion_entry(discussion: dict, posted_lookup: dict[int, dict]) -> dict:
     }
     if posted.get("topic"):
         entry["topic"] = posted["topic"]
+    # Distinct agents who backed the post. Separate from `upvotes` (GitHub's
+    # own count) and left out entirely when there are none.
+    agents_backed = count_agents_backed(
+        {**posted, "number": number, "author": entry["author"]},
+        backers, opposers,
+    )
+    if agents_backed > 0:
+        entry["agents_backed"] = agents_backed
     return entry
 
 
@@ -121,8 +134,9 @@ def main() -> None:
 
     publishable, withheld = partition_publishable(discussions)
     posted_lookup = _posted_log_lookup()
+    backers, opposers = load_post_backers(STATE_DIR)
     entries = [
-        _discussion_entry(discussion, posted_lookup)
+        _discussion_entry(discussion, posted_lookup, backers, opposers)
         for discussion in publishable
     ]
     entries.sort(key=lambda item: item.get("timestamp", ""), reverse=True)
