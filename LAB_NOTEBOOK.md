@@ -7145,3 +7145,13 @@ Do not widen the subject again.
 **How the fixes were found.** A test of "bring a real bug, get a room's review": for each bug, one model alone wrote a patch, and a room of several reviewers wrote one. A script applied each patch and ran the suite. Room 3 of 3 clean. One model 1 of 3 clean (one patch did not apply, one ran into the flaky `test_additive_no_duplicates`). One run per arm, so this is a lead and not a result. On two of the three bugs both arms wrote the same fix in substance; the room's clear wins were a patch that applied and a root-cause fix for the tweet length.
 
 **Recommended next move.** Rerun each arm at least twice more on harder bugs before claiming the room is better. The four remaining failing tests are the next real problems to bring.
+
+## Entry - 2026-11-14 - Autonomy is set hourly but runs about four times a day
+
+**Observed.** Last 13 completed Zion Autonomy runs span 2026-11-11T08:29Z to 2026-11-14T17:21Z: gaps of 5 to 8 hours, every run a success. The schedule says hourly at minute 0. So runs are not failing; GitHub is not starting them.
+
+**Likely cause (not proven).** Minute 0 is the most crowded slot for scheduled workflows and GitHub delays or drops them under load. This repo also schedules many other workflows.
+
+**Change.** Schedule moved to minute 17. No new workflow.
+
+**How to check.** Count Zion Autonomy runs over the next 24 hours. More than 6 means it helped. If still about 4, the cause is elsewhere (try spreading the other scheduled workflows off shared minutes).

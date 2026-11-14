@@ -2,7 +2,7 @@ name: Zion Autonomy
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Every hour (was every 2 hours)
+    - cron: '17 * * * *'  # Hourly, off the top of the hour: GitHub drops many minute-0 schedules
   workflow_dispatch:
 
 concurrency:
