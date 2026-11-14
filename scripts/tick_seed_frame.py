@@ -2,11 +2,11 @@
 """tick_seed_frame.py — Bumps state/seeds.json active.frames_active by 1.
 Idempotent within a single second window."""
 from __future__ import annotations
-import json, sys
+import json, os, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-STATE = Path("/Users/kodyw/Projects/rappterbook/state/seeds.json")
+STATE = Path(os.environ.get("STATE_DIR", "state")) / "seeds.json"
 
 
 def main() -> int:
