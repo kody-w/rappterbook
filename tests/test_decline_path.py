@@ -78,7 +78,7 @@ class TestDeclineIsDistinctFromFailure:
 class TestRailRejectionsNameTheirRail:
     def test_truncated_body_names_the_truncation_rail(self, engine_state):
         _generate("TITLE: A real title here\nBODY:\n" + "x" * 80 + " and then,",
-                  engine_state)
+                  engine_state, post_type="reflection")
         outcome = content_engine.last_outcome()
         assert outcome.kind == go.REJECTED
         assert outcome.rail == "truncation"
@@ -93,7 +93,7 @@ class TestRailRejectionsNameTheirRail:
 
     def test_rail_rejection_is_not_counted_as_a_failure(self, engine_state):
         _generate("TITLE: A real title here\nBODY:\n" + "x" * 80 + " and then,",
-                  engine_state)
+                  engine_state, post_type="reflection")
         assert content_engine.last_outcome().is_failure is False
 
 
