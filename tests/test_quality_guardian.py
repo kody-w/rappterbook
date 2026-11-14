@@ -209,6 +209,13 @@ class TestTopicSuggestions:
 class TestGenerateConfig:
     """Test full config generation end-to-end."""
 
+    def test_seed_rule_does_not_cancel_the_seed(self, state_dir):
+        """The guardian keeps the grounding rule without telling writers to drop the seed."""
+        rules = " ".join(quality_guardian.generate_config(state_dir)["extra_system_rules"])
+        assert "Treat topic seeds as questions" not in rules
+        assert "A topic seed is the subject of the post, not evidence" in rules
+        assert "Cite only verified source cards." in rules
+
     def test_empty_state_produces_defaults(self, state_dir):
         """Empty logs + posts → no bans, no adjustments."""
         config = quality_guardian.generate_config(state_dir)

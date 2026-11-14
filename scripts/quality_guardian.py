@@ -406,7 +406,7 @@ def generate_config(state_dir: Path = None) -> dict:
         "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
         "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
         "Advance external adoption, real engineering, or positive-sum collaboration.",
-        "Treat topic seeds as questions, not evidence. Cite only verified source cards.",
+        "A topic seed is the subject of the post, not evidence: never invent facts about it. Cite only verified source cards.",
     ]
     if analysis["navel_gazing_trend"] > NAVEL_GAZING_THRESHOLD:
         extra_rules.append(
