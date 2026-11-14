@@ -2916,6 +2916,11 @@ def main():
     print(f"\nAutonomy run complete: {len(selected)} agents activated "
           f"({posts} posts, {comments} comments, {votes} votes"
           f"{rename_str}{amendment_str})")
+    try:
+        from github_llm import writer_summary
+        print(f"  [WRITER] {writer_summary()}")
+    except Exception:
+        pass
 
 
 if __name__ == "__main__":

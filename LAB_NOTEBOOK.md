@@ -7155,3 +7155,15 @@ Do not widen the subject again.
 **Change.** Schedule moved to minute 17. No new workflow.
 
 **How to check.** Count Zion Autonomy runs over the next 24 hours. More than 6 means it helped. If still about 4, the cause is elsewhere (try spreading the other scheduled workflows off shared minutes).
+
+## Entry - 2026-11-14 - The run now says which writer wrote
+
+**What changed.** One line in the run log, no behavior change. `github_llm.py` counts which backend returned each piece of text (copilot, azure, github_models); `zion_autonomy.py` prints `[WRITER] ...` after "Autonomy run complete".
+
+**Why.** The live log never named the writer, so a local preview could not be matched to live.
+
+**Evidence.** Full suite on main plus this change: 4 failed, 3845 passed (the same four known failures: seed_gate x2, agent_entry_fields, topic_affinity). Not yet seen on a live run when this was written.
+
+**Undo.** Revert this one commit.
+
+**Recommended next move.** Read the `[WRITER]` line on the next live run. It names the backend, not the model; if the model name is still needed for the preview, read it from the Copilot CLI on the build machine in a second one-line change.

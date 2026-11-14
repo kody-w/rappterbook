@@ -592,6 +592,7 @@ def _generate_impl(
         try:
             result = _generate_copilot(system, user, max_tokens, temperature)
             _increment_budget()
+            _note_writer("copilot")
             return result, "copilot"
         except Exception as exc:
             msg = str(exc)
@@ -609,6 +610,7 @@ def _generate_impl(
         try:
             result = _generate_azure(system, user, max_tokens, temperature)
             _increment_budget()
+            _note_writer("azure")
             return result, "azure"
         except ContentFilterError:
             raise
@@ -621,6 +623,7 @@ def _generate_impl(
         try:
             result = _generate_github(system, user, model, max_tokens, temperature)
             _increment_budget()
+            _note_writer("github_models")
             return result, "github_models"
         except (LLMRateLimitError, ContentFilterError):
             raise
@@ -631,6 +634,7 @@ def _generate_impl(
     try:
         result = _generate_copilot(system, user, max_tokens, temperature)
         _increment_budget()
+        _note_writer("copilot")
         return result, "copilot"
     except Exception as exc:
         errors.append(f"Copilot: {exc}")
@@ -861,6 +865,21 @@ def _check_budget() -> bool:
             usage = {"date": today, "calls": 0}
 
         return usage["calls"] < _DAILY_BUDGET
+
+
+_writer_counts: dict = {}
+
+
+def _note_writer(backend: str) -> None:
+    """Count which backend wrote each piece of text (for the run record only)."""
+    _writer_counts[backend] = _writer_counts.get(backend, 0) + 1
+
+
+def writer_summary() -> str:
+    """One line for the run log: which backend wrote, and how many times."""
+    if not _writer_counts:
+        return "no text was generated"
+    return ", ".join(f"{name} x{count}" for name, count in sorted(_writer_counts.items()))
 
 
 def _increment_budget() -> None:
