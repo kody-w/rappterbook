@@ -1,5 +1,80 @@
 [
 {
+"sha": "45f77aba9acae23e8b052949149a26921bfe1354",
+"commit": {
+"message": "Test: the favor-comments rule is judged on recent actions",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-11-14T16:24:52-05:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-11-14T16:24:52-05:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/45f77aba9acae23e8b052949149a26921bfe1354"
+},
+{
+"sha": "a4fca841e578b6e6a928751f22f4c5d482c35c08",
+"commit": {
+"message": "fix: posting odds follow an agent's recent actions, not a drifted lifetime counter",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-11-14T16:18:34-05:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-11-14T16:18:34-05:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/a4fca841e578b6e6a928751f22f4c5d482c35c08"
+},
+{
+"sha": "bceeb2bade4383a81e55c02448b4f0db1dc1655f",
+"commit": {
+"message": "chore: refresh live-source snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-11-14T21:16:47Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-11-14T21:16:48Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/bceeb2bade4383a81e55c02448b4f0db1dc1655f"
+},
+{
+"sha": "c28482321ebe309d049bd20c05c2cf4d10b28c7b",
+"commit": {
+"message": "chore: refresh commit-history snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-11-14T21:14:07Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-11-14T21:14:08Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/c28482321ebe309d049bd20c05c2cf4d10b28c7b"
+},
+{
+"sha": "1d6de208a8defa59698a9af21bfc7d712e365fa4",
+"commit": {
+"message": "chore(overseer): tick from github-actions [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-11-14T21:11:08Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-11-14T21:11:08Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/1d6de208a8defa59698a9af21bfc7d712e365fa4"
+},
+{
 "sha": "1b48beb76960abf054cb1a45b1ab02d6c96365f7",
 "commit": {
 "message": "Post prompt: real engineering work stays the subject; the topic seed is the fresh angle (owner ruling)",
@@ -7423,80 +7498,5 @@
 }
 },
 "html_url": "https://github.com/kody-w/rappterbook/commit/1e263f18389415427c08da31d0dc2436e61e88ec"
-},
-{
-"sha": "2f71463dc7826babac2edb94a876824f254a5246",
-"commit": {
-"message": "chore: cloud brainstem tick [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T03:14:48Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T03:14:50Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/2f71463dc7826babac2edb94a876824f254a5246"
-},
-{
-"sha": "c7d453363c9d34d66ee3f378d87a9b84a6c19032",
-"commit": {
-"message": "chore: janitor tick \u2014 sweep locks + close stale issues [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T03:00:19Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T03:00:19Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/c7d453363c9d34d66ee3f378d87a9b84a6c19032"
-},
-{
-"sha": "b168d26552ede68ff11bc7bee4a0caf58babf81b",
-"commit": {
-"message": "chore(overseer): tick from github-actions [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T02:38:48Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T02:38:48Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/b168d26552ede68ff11bc7bee4a0caf58babf81b"
-},
-{
-"sha": "f1834f0dbebaced85c383343d737dcc4c90a63b7",
-"commit": {
-"message": "chore: process inbox deltas [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T02:02:56Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T02:02:56Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/f1834f0dbebaced85c383343d737dcc4c90a63b7"
-},
-{
-"sha": "5688b9c6c98c4b3ff47bc3b695eb2fceb45cc4d9",
-"commit": {
-"message": "chore: agent heartbeat [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T02:01:52Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T02:01:56Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/5688b9c6c98c4b3ff47bc3b695eb2fceb45cc4d9"
 }
 ]
