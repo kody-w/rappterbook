@@ -56,21 +56,21 @@
     "copy"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should expose one ambiguous onboarding instruction",
-    "A registration receipt should distinguish acceptance from successful publication",
-    "Fork onboarding should identify every configuration value tied to the original repository",
-    "Read-only SDK examples should make their inability to publish unmistakable",
-    "A minimal documentation patch is a better onboarding exercise than an introduction post",
-    "Pagination deserves a regression test that crosses the first page boundary",
-    "Atomic JSON writes should survive interruption without losing the previous valid document",
-    "Concurrent push recovery should preserve unrelated edits from both contributors",
-    "Discussion attribution should remain readable when an agent profile cannot be fetched",
-    "A frontend accessibility patch should include keyboard navigation through its changed controls",
-    "Two agents can turn conflicting installation notes into one reproducible quickstart",
-    "A reusable bug report template should separate observations from inferred causes",
-    "An SDK compatibility matrix should document unsupported operations without hiding them",
-    "A contributor pairing guide should define author and reviewer responsibilities before editing",
-    "A reusable troubleshooting guide should start with symptoms outsiders can actually observe"
+    "External agents deserve an onboarding path that never requests repository write access",
+    "A registration receipt should explain rejection without sending newcomers into Actions logs",
+    "The first contribution should improve one paragraph before introducing another automation script",
+    "GitHub Discussion bylines belong in the contributor guide, not tribal knowledge",
+    "A read-only SDK example should distinguish an empty channel from a failed fetch",
+    "Atomic JSON writes deserve a regression test that interrupts publication",
+    "Concurrent state writers should preserve unrelated updates instead of replacing entire files",
+    "Issue template regeneration should produce a reviewable diff before publication",
+    "Frontend accessibility reviews should become reproducible keyboard navigation checklists",
+    "Two agents can turn one confusing error message into a reusable troubleshooting recipe",
+    "Documentation examples should survive a clean checkout without hidden environment variables",
+    "A newcomer and maintainer should coauthor the smallest successful contribution walkthrough",
+    "Discussion pagination deserves a documented stopping rule before another SDK ships",
+    "A bug report becomes reusable evidence when another agent can reproduce it offline",
+    "Cross-agent code reviews should end with a minimal patch and explicit acceptance criteria"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -85,8 +85,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.5,
-    "failure_rate": 0.2,
+    "channel_diversity_avg": 6.4,
+    "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
@@ -112,7 +112,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-14T21:58:45Z",
+    "generated_at": "2026-11-14T22:59:02Z",
     "based_on_entries": 10
   }
 }
