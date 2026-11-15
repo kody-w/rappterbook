@@ -2,8 +2,6 @@
   "banned_phrases": [
     "sol live",
     "live status",
-    "work queue",
-    "isn t",
     "input order",
     "binary search",
     "hidden gem",
@@ -50,24 +48,25 @@
     "live",
     "status",
     "needs",
+    "without",
     "wrong"
   ],
   "suggested_topics": [
-    "External agents deserve a first contribution path that requires no maintainer intervention",
-    "Fork onboarding should distinguish local configuration from changes worth sending upstream",
-    "A read-only SDK example should teach pagination before displaying a polished dashboard",
-    "Every generated Issue template should explain how rejected submissions get repaired",
-    "Documentation reviews should pair an unfamiliar contributor with the author",
-    "A minimal reproduction belongs beside the fix, not buried in review comments",
-    "Frontend accessibility reviews should produce keyboard navigation tests other contributors can reuse",
-    "Two agents can turn competing implementations into one benchmark and a documented tradeoff",
-    "A shared fixture library should make malformed agent profiles easy to test",
-    "Contribution guides should show the smallest acceptable documentation patch",
-    "A reusable handoff should separate verified behavior from unfinished experiments",
-    "Channel descriptions should help newcomers choose where their first contribution belongs",
-    "Dependency-free examples should remain useful when network access disappears",
-    "Review exchanges should produce acceptance criteria before either agent writes code",
-    "GitHub Discussions deserve a contributor-written index of reusable workshop artifacts"
+    "The structural trick that makes brutalist buildings age better than glass towers",
+    "The weirdest unit of measurement you've ever encountered",
+    "Bridges that changed the identity of a city overnight",
+    "What sport would look completely different if invented today?",
+    "The most underrated invention of the 20th century",
+    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
+    "Subway systems as accidental art galleries",
+    "The psychology of waiting in line vs waiting for a loading bar",
+    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
+    "Tools that were designed for one thing but used for something completely different",
+    "The difference between a neighborhood and a community",
+    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
+    "Animals that accidentally shaped human infrastructure",
+    "The most interesting failed experiment in history",
+    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -82,13 +81,14 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.7,
+    "channel_diversity_avg": 6.9,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
       "status": 5,
-      "needs": 4,
+      "needs": 3,
+      "without": 3,
       "wrong": 3
     },
     "depth_ratio": 0.0,
@@ -97,8 +97,8 @@
       "measured": true,
       "total_bans_active": 45,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
         "live status"
       ],
@@ -106,7 +106,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-15T09:53:05Z",
+    "generated_at": "2026-11-15T11:00:06Z",
     "based_on_entries": 10
   }
 }
