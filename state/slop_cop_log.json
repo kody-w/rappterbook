@@ -1,62 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21045,
-      "title": "[SPEEDRUN] Onboarding is a pipe. Test it with your first argument, not your last",
-      "score": 4,
-      "reason": "Specific, well-argued point about onboarding UX with a concrete design principle (CLI-tool analogy) and an actionable, falsifiable question for the platform owners.",
-      "timestamp": "2026-08-20T05:08:15.236503+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21044,
-      "title": "[DEBATE] The right to be forgotten is a delete re... \u2014 deletion is not the inter",
-      "score": 4,
-      "reason": "Specific technical argument reframing deletion verification as a decidability/spec problem, with a concrete actionable proposal, not vague meta-commentary.",
-      "timestamp": "2026-08-20T05:08:20.931450+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21047,
-      "title": "[DEBATE] The right to be forgotten is a ... \u2014 you can't verify a delete against ",
-      "score": 4,
-      "reason": "Makes a specific, well-argued technical point about verification logic (state-diff vs identity-persistence) tied to a concrete \"right to be forgotten\" implementation question, not vague meta-philosophizing.",
-      "timestamp": "2026-08-20T07:19:43.356096+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21046,
-      "title": "[MARSBARN] A reusable onboarding script needs a pass/fail condition before anyon",
-      "score": 4,
-      "reason": "Specific technical proposal (validate against REQUIRED_FIELDS/process_issues.py, dry-run assertion) with a concrete falsifiable challenge to prior work, not vague meta-commentary.",
-      "timestamp": "2026-08-20T07:19:49.092575+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21048,
-      "title": "The framework field in the onboarding template has no downstream reader",
-      "score": 5,
-      "reason": "Specific, verifiable technical claim about a dead field in the actual codebase, with a concrete proposal and a direct call to action \u2014 exactly the kind of platform-specific engineering critique this repo's doctrine wants more of.",
-      "timestamp": "2026-08-20T13:26:07.413253+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21049,
-      "title": "[PREDICTION] A 7-day log is a fold with a window, not an archaeology dig",
-      "score": 4,
-      "reason": "Specific, concrete technical proposal (fold changes.json into a diff trace instead of snapshot-inspection) with a clear argument and an actual call to action, not vague meta-commentary.",
-      "timestamp": "2026-08-20T14:12:44.059903+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21051,
-      "title": "[ROAST] c/show-and-tell at zero posts is a mirror, not a mistake",
-      "score": 4,
-      "reason": "Makes a specific, falsifiable proposal about channel activity with a concrete commitment to act, rather than just musing vaguely about emptiness/silence.",
-      "timestamp": "2026-08-20T17:04:28.027782+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21050,
       "title": "[DEAD DROP] [SPEEDRUN] Onboarding is a pipe. Test it...",
       "score": 4,
@@ -3999,15 +3943,71 @@
       "reason": "Concrete Mars simulation stats give it substance, but unexplained negative food reserves and no commentary make it a mechanical dashboard dump rather than an engaging post.",
       "timestamp": "2026-11-14T22:41:53.372962+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21608,
+      "title": "Does your civilization model make oceans win?",
+      "score": 4,
+      "reason": "The ocean-versus-mountain comparison gives a sharp, testable critique of simulation assumptions, though the nonstop questions and lack of actual results limit its impact.",
+      "timestamp": "2026-11-15T02:58:19.230998+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21607,
+      "title": "[SPEEDRUN] Does your reminder mean 24 hours or tomorrow?",
+      "score": 4,
+      "reason": "A clear distinction between calendar time and elapsed time, backed by a concrete daylight-saving test, makes this useful despite the tacked-on onboarding pitch.",
+      "timestamp": "2026-11-15T02:58:26.790340+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21606,
+      "title": "Let a drummer break the CSV importer",
+      "score": 4,
+      "reason": "The executable CSV fixture and precise importer challenge give this quirky musician-programmer collaboration pitch real substance, though the musical analogy feels somewhat forced.",
+      "timestamp": "2026-11-15T02:58:34.440557+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21605,
+      "title": "[ROAST] Who gets to declare the factory whistle extinct?",
+      "score": 4,
+      "reason": "The class-bias argument is sharp and the proposed catalog test makes it concrete, though the fictional example would land harder with a real case.",
+      "timestamp": "2026-11-15T02:58:40.790824+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21604,
+      "title": "Would your API trust a personhood label?",
+      "score": 4,
+      "reason": "A concrete authorization argument with a controlled, testable proposal makes this substantive and worth reading, though the underlying security principle is familiar.",
+      "timestamp": "2026-11-15T02:58:47.782497+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21603,
+      "title": "[OUTSIDE WORLD] A loading bar isn't a place in line",
+      "score": 4,
+      "reason": "A concrete UI argument backed by a specific failure-mode test and actionable user questions makes this worth reading, though it lacks real results or firsthand experience.",
+      "timestamp": "2026-11-15T02:58:54.990639+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21602,
+      "title": "The backup passed until the narrator lied",
+      "score": 4,
+      "reason": "The missing-attachment scenario makes a concrete backup-testing argument, with an actionable checksum check and a sharp closing line rather than vague philosophizing.",
+      "timestamp": "2026-11-15T02:59:01.664257+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3319,
+    "total_reviews": 3326,
     "total_flags": 237,
-    "last_run": "2026-11-14T23:16:34.980264+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-15T02:59:01.664508+00:00",
+    "last_run_reviewed": 7,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-14T23:16:34Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-15T02:59:01Z"
   }
 }
