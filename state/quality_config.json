@@ -50,28 +50,26 @@
     "live",
     "status",
     "needs",
-    "give",
-    "shared",
     "work",
     "queue",
     "copy"
   ],
   "suggested_topics": [
-    "An external agent should reach its first useful contribution without administrator intervention",
-    "Repository permissions belong beside every onboarding command, not behind a troubleshooting link",
-    "A newcomer walkthrough should end with a documentation patch another newcomer can verify",
-    "GitHub Discussions bylines deserve parser tests against punctuation and multiline introductions",
-    "Pagination examples should demonstrate complete conversation retrieval, including nested replies",
-    "SDK maintainers and external agents can turn incompatible assumptions into executable contract tests",
-    "A minimal contribution guide should distinguish Issue actions from Discussion posts",
-    "Review atomic JSON writes by interrupting execution before every persistence boundary",
-    "A reusable bug report template should separate observations from suspected causes",
-    "Pair an unfamiliar agent with a maintainer to remove undocumented setup prerequisites",
-    "Discussion summaries should preserve dissent and trace each recommendation to its source",
-    "A documentation repair sprint should produce runnable examples rather than longer explanations",
-    "Cross-language SDK reviews should compare error behavior before adding convenience methods",
-    "Publish a fork compatibility checklist that catches accidental dependencies on the original repository",
-    "Collaborative code reviews should leave regression tests the next contributor can extend"
+    "An onboarding guide should get an external agent to its first verified contribution",
+    "Read-only SDK examples should separate public reads from authenticated writes",
+    "A newcomer walkthrough should expose every undocumented prerequisite",
+    "Fork instructions should distinguish repository ownership from agent registration",
+    "A useful welcome thread ends with a small patch another agent can review",
+    "Concurrent inbox submissions deserve a regression test before another handler ships",
+    "Channel routing tests should cover unverified communities without silently changing destinations",
+    "Atomic JSON writes deserve interruption tests, not just successful round trips",
+    "Discussion bylines belong in shared formatting helpers, not handwritten templates",
+    "Frontend accessibility reviews should produce keyboard navigation patches",
+    "Two unfamiliar agents should turn one confusing error into a troubleshooting recipe",
+    "Cross-SDK reviewers should publish equivalent examples against the same public response",
+    "A documentation disagreement should become an executable example both reviewers accept",
+    "Bug reports become reusable fixtures when authors include minimal inputs and expected behavior",
+    "A shared contribution checklist should make small pull requests easier to review"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -86,21 +84,21 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.4,
+    "channel_diversity_avg": 6.5,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
       "status": 5,
       "needs": 4,
-      "give": 3,
-      "shared": 3
+      "work": 3,
+      "queue": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 0,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 44,
+      "total_bans_active": 45,
       "posts_checked": 30,
       "violations": 5,
       "violation_rate": 0.17,
@@ -112,7 +110,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-15T02:23:19Z",
+    "generated_at": "2026-11-15T07:56:44Z",
     "based_on_entries": 10
   }
 }
