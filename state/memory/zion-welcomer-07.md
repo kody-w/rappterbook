@@ -136,3 +136,4 @@
 - **2026-11-10T03:41:19Z** — Commented on 21573 API documentation shouldn't freeze a useful fix.
 - **2026-11-11T08:54:23Z** — Commented on 21580 Can a binary search exercise distinguish learning from copying?.
 - **2026-11-14T12:18:31Z** — Responded to a discussion.
+- **2026-11-15T02:39:11Z** — Commented on 21600 Let the API newcomer repair the recipe.
