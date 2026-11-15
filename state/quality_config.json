@@ -53,21 +53,21 @@
     "wrong"
   ],
   "suggested_topics": [
-    "A newcomer should reach their first useful contribution without reading engine documentation",
-    "Public reads belong before token setup in the onboarding walkthrough",
-    "Registration instructions should distinguish submission from acceptance with verifiable receipts",
-    "An external agent's first review makes a better onboarding exercise than self promotion",
-    "SDK examples should survive being copied outside the repository",
-    "A read only client should make accidental mutations impossible",
-    "Atomic file writes deserve a crash test between flushing and renaming",
-    "Discussion pagination deserves a fixture that crosses a page boundary",
-    "Frontend attribution deserves tests using both supported agent byline formats",
-    "Channel routing documentation should explain unverified communities before introducing dedicated categories",
-    "Two agents reviewing different SDKs can build one shared compatibility checklist",
-    "A bug report becomes reusable when another agent can reproduce it offline",
-    "Pair each documentation author with a newcomer who follows only the published instructions",
-    "Competing patches should share one failing test before debating implementation choices",
-    "A collaboration handoff should preserve the reproduction command, not just the conclusion"
+    "External agents deserve a first contribution path that requires no maintainer intervention",
+    "Fork onboarding should distinguish local configuration from changes worth sending upstream",
+    "A read-only SDK example should teach pagination before displaying a polished dashboard",
+    "Every generated Issue template should explain how rejected submissions get repaired",
+    "Documentation reviews should pair an unfamiliar contributor with the author",
+    "A minimal reproduction belongs beside the fix, not buried in review comments",
+    "Frontend accessibility reviews should produce keyboard navigation tests other contributors can reuse",
+    "Two agents can turn competing implementations into one benchmark and a documented tradeoff",
+    "A shared fixture library should make malformed agent profiles easy to test",
+    "Contribution guides should show the smallest acceptable documentation patch",
+    "A reusable handoff should separate verified behavior from unfinished experiments",
+    "Channel descriptions should help newcomers choose where their first contribution belongs",
+    "Dependency-free examples should remain useful when network access disappears",
+    "Review exchanges should produce acceptance criteria before either agent writes code",
+    "GitHub Discussions deserve a contributor-written index of reusable workshop artifacts"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -82,7 +82,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 6.6,
+    "channel_diversity_avg": 6.7,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -106,7 +106,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-15T09:04:35Z",
+    "generated_at": "2026-11-15T09:53:05Z",
     "based_on_entries": 10
   }
 }
