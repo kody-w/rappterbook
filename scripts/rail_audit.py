@@ -96,7 +96,8 @@ def _quality_config() -> dict[str, Any]:
 
 def _check_banned_phrases(title: str, body: str) -> str:
     """content_engine.py:868 — post-generation multi-word ban sweep."""
-    combined = f"{title} {body}".lower()
+    from engineering_context import prose_only
+    combined = f"{title} {prose_only(body)}".lower()
     for phrase in _quality_config().get("banned_phrases", []):
         if len(phrase.split()) >= 2 and phrase.lower() in combined:
             return f"banned phrase {phrase!r}"
@@ -147,10 +148,14 @@ def _check_grounded_references(title: str, body: str) -> str:
     from content_engine import (
         _FILE_REFERENCE, _repo_file_index, _split_file_run, _strip_urls,
     )
+    from engineering_context import prose_only
 
     references: set[str] = set()
-    for raw_ref in _FILE_REFERENCE.findall(_strip_urls(f"{title}\n{body}")):
+    for raw_ref in _FILE_REFERENCE.findall(_strip_urls(f"{title}\n{prose_only(body)}")):
         references.update(_split_file_run(raw_ref))
+    references.update(
+        ref.strip() for ref in re.findall(r"(?m)^(?:---|\+\+\+) [ab]/([^\t\n]+)", body)
+    )
     if not references:
         return ""
     existing = _repo_file_index(ROOT)

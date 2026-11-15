@@ -894,14 +894,28 @@ def _execute_post(agent_id, arch_name, archetypes, state_dir,
 
     body = format_post_body(agent_id, post["body"])
 
+    # A repair proposal can share the failing report's title without repeating
+    # its contribution. Use fetched bodies as evidence; never infer novelty
+    # from missing metadata or mutate the canonical posted log.
+    source_bodies = {
+        discussion.get("number"): discussion.get("body", "")
+        for discussion in (source_discussions or [])
+        if isinstance(discussion, dict) and discussion.get("number")
+    }
+    if isinstance(log, dict):
+        log = {**log, "posts": [
+            {**entry, "body": source_bodies.get(entry.get("number"), entry.get("body", ""))}
+            for entry in log.get("posts", []) if isinstance(entry, dict)
+        ]}
+
     # Duplicate check — if duplicate, skip rather than falling back to templates
-    if is_duplicate_post(post["title"], log):
+    if is_duplicate_post(post["title"], log, body=post["body"]):
         print(f"    [SKIP] Duplicate title for {agent_id}: {post['title'][:50]}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
                                 f"[skip] duplicate title")
 
     # Per-agent repeat check — stricter than global dedup
-    if is_agent_repeat(post["title"], agent_id, log):
+    if is_agent_repeat(post["title"], agent_id, log, body=post["body"]):
         print(f"    [SKIP] Agent repeat for {agent_id}: {post['title'][:50]}")
         return _write_heartbeat(agent_id, timestamp, inbox_dir,
                                 f"[skip] agent repeat title")

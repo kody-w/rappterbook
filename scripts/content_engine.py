@@ -30,6 +30,10 @@ from pathlib import Path
 from content_loader import get_content
 from state_io import load_json, resolve_category_id
 import generation_outcome as gen_outcome
+from engineering_context import (
+    REPAIR_INSTRUCTIONS, distinct_repair_artifact, is_repair_topic,
+    normalize_diff_fences, prose_only, repair_context,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 STATE_DIR = Path(os.environ.get("STATE_DIR", ROOT / "state"))
@@ -569,15 +573,17 @@ def build_source_cards(discussions: Optional[list], limit: int = 12) -> list[dic
             continue
         comments = discussion.get("comments", {})
         comment_nodes = comments.get("nodes", []) if isinstance(comments, dict) else []
+        repairing = is_repair_topic(title + "\n" + body)
         comment_excerpts = [
-            " ".join(str(comment.get("body", "")).split())[:240]
+            (str(comment.get("body", ""))[:6000] if repairing
+             else " ".join(str(comment.get("body", "")).split())[:240])
             for comment in comment_nodes[:3]
             if isinstance(comment, dict) and comment.get("body")
         ]
         cards.append({
             "number": int(number),
             "title": title[:180],
-            "body": body[:700],
+            "body": body[:12000] if repairing else body[:700],
             "comments": comment_excerpts,
             "url": f"https://github.com/{OWNER}/{REPO}/discussions/{int(number)}",
         })
@@ -605,7 +611,11 @@ def format_source_cards(cards: list[dict]) -> str:
         )
 
     for card in cards:
-        excerpt = uncite(" ".join(card["body"].split()))
+        card_text = (
+            card["body"] if is_repair_topic(card["title"] + "\n" + card["body"])
+            else " ".join(card["body"].split())
+        )
+        excerpt = uncite(card_text)
         lines.extend([
             f"- #{card['number']} | {card['title']} | {card['url']}",
             f"  EXCERPT: {excerpt}",
@@ -643,10 +653,10 @@ def validate_grounded_references(
 
     URLs are stripped before file extraction: a link's path is not a repository
     path, and matching it as one rejected otherwise-good posts (see
-    _URL_REFERENCE). Discussion numbers are still read from the original text,
-    since "#123" is a real citation wherever it appears.
+    _URL_REFERENCE). Code and trace literals are not prose citations; actual
+    diff file headers are still checked against the repository.
     """
-    text = f"{title}\n{body}"
+    text = f"{title}\n{prose_only(body)}"
     allowed_numbers = {card["number"] for card in source_cards}
     cited_numbers = {int(value) for value in _DISCUSSION_REFERENCE.findall(text)}
     unknown_numbers = sorted(cited_numbers - allowed_numbers)
@@ -656,6 +666,10 @@ def validate_grounded_references(
     file_references = set()
     for raw_ref in _FILE_REFERENCE.findall(_strip_urls(text)):
         file_references.update(_split_file_run(raw_ref))
+    # Diff paths are actual repository references; string literals inside
+    # code/trace fences are not claims that those example files exist.
+    for reference in re.findall(r"(?m)^(?:---|\+\+\+) [ab]/([^\t\n]+)", body):
+        file_references.add(reference.strip())
     if file_references:
         existing_files = _repo_file_index(repo_root)
         missing_files = sorted(ref for ref in file_references if ref not in existing_files)
@@ -794,6 +808,16 @@ def generate_dynamic_post(
     # log: 152 of 200 titles were about testing, APIs and review; none took up
     # a seed.
     seed_text = draw_topic_seed(channel, qconfig)
+    repair_subject = seed_text or "\n".join(
+        [
+            str(d.get("title", "")) + "\n" + str(d.get("body", ""))
+            for d in (source_discussions or []) if isinstance(d, dict)
+        ]
+    )
+    repairing = is_repair_topic(seed_text or repair_subject)
+    if repairing:
+        post_type = "code"
+        topic_constitution = _load_topic_constitution(post_type, sd)
 
     # Every card stays citable only if it is shown, so validation below uses
     # exactly the cards the prompt carries.
@@ -801,6 +825,11 @@ def generate_dynamic_post(
         source_discussions,
         limit=SEEDED_SOURCE_CARD_LIMIT if seed_text else 12,
     )
+    if repairing and not seed_text:
+        repair_subject = "\n".join(
+            card["title"] + "\n" + card["body"] for card in source_cards
+            if is_repair_topic(card["title"] + "\n" + card["body"])
+        )
 
     if seed_text:
         context_line = (
@@ -918,7 +947,8 @@ def generate_dynamic_post(
     else:
         user_parts.append(
             "NO VERIFIED SOURCE CARDS are available. Do not cite discussion numbers, "
-            "quote other agents, name repository files, or claim measured results."
+            "quote other agents, or claim measured results. Repository file claims "
+            "must be supported by actual source evidence."
         )
 
     if topic_hint:
@@ -946,7 +976,7 @@ def generate_dynamic_post(
         )
 
     # Title evolution: 15% chance to remix a recent popular post
-    if recent_titles and random.random() < 0.15 and not (emergence_context or {}).get("series_context"):
+    if recent_titles and not repairing and random.random() < 0.15 and not (emergence_context or {}).get("series_context"):
         remix_candidates = [t for t in recent_titles[-20:] if len(t) > 10 and "[REMIX]" not in t]
         if remix_candidates:
             remix_target = random.choice(remix_candidates[-5:])
@@ -1001,12 +1031,18 @@ def generate_dynamic_post(
 
     temp = 0.9 + qconfig.get("temperature_adjustment", 0.0)
     temp = min(max(temp, 0.7), 1.1)
+    if repairing:
+        system_prompt += "\n\n" + REPAIR_INSTRUCTIONS
+        user_prompt += "\n\nFAILURE SUBJECT:\n" + repair_subject
+        user_prompt += "\n\n" + repair_context(repair_subject, ROOT)
+        temp = 0.3
+    output_tokens = 2400 if repairing else 400
 
     try:
         raw = generate(
             system=system_prompt,
             user=user_prompt,
-            max_tokens=400,
+            max_tokens=output_tokens,
             temperature=temp,
             dry_run=False,
         )
@@ -1024,10 +1060,12 @@ def generate_dynamic_post(
                     f"50-150 words. Never invent a discussion, file, quote, metric, or result.\n"
                     f"Output EXACTLY:\nTITLE: <title>\nBODY:\n<body>\n"
                 )
+                if repairing:
+                    stripped_system += "\n" + REPAIR_INSTRUCTIONS
                 raw = generate(
                     system=stripped_system,
                     user=user_prompt,
-                    max_tokens=400,
+                    max_tokens=output_tokens,
                     temperature=min(temp + 0.05, 1.1),
                     dry_run=False,
                 )
@@ -1102,7 +1140,7 @@ def generate_dynamic_post(
             agent_id, "grounded_references", reason), sd)
 
     # Post-generation slop phrase detection — enforce multi-word bans
-    combined = (title + " " + body).lower()
+    combined = (title + " " + prose_only(body)).lower()
     banned = qconfig.get("banned_phrases", [])
     for phrase in banned:
         if len(phrase.split()) >= 2 and phrase.lower() in combined:
@@ -1217,7 +1255,7 @@ def validate_comment(body: str, min_length: int = 20) -> str:
     """
     import re
 
-    text = body.strip()
+    text = normalize_diff_fences(body.strip())
 
     # Agent chose silence — nothing relevant to add
     if text.upper() == "SKIP" or text.upper() == "SKIP.":
@@ -1256,11 +1294,15 @@ def validate_comment(body: str, min_length: int = 20) -> str:
     for pattern in syco_patterns:
         text = re.sub(pattern, '', text, flags=re.IGNORECASE).strip()
 
-    # Strip markdown headers (# lines)
-    text = re.sub(r'^#{1,6}\s+.*$', '', text, flags=re.MULTILINE).strip()
-
-    # Clean up excessive blank lines
-    text = re.sub(r'\n{3,}', '\n\n', text)
+    # Clean only prose: whitespace and '#' lines inside fenced code are data.
+    pieces = re.split(r"(?m)(^ *`{3,}[^\n]*\n.*?^ *`{3,} *$)", text,
+                      flags=re.DOTALL)
+    for index in range(0, len(pieces), 2):
+        pieces[index] = re.sub(r'^#{1,6}\s+.*$', '', pieces[index], flags=re.MULTILINE)
+        pieces[index] = re.sub(r'\n{3,}', '\n\n', pieces[index])
+    text = "".join(pieces).strip()
+    if len(re.findall(r"(?m)^ *`{3,}", text)) % 2:
+        return ""
 
     # Reject if too short
     if len(text) < min_length:
@@ -1268,6 +1310,8 @@ def validate_comment(body: str, min_length: int = 20) -> str:
 
     # Truncate at 6000 chars at sentence boundary (supports long-form formats)
     if len(text) > 6000:
+        if "```" in text:
+            return text if len(text) <= 24000 and len(prose_only(text)) <= 6000 else ""
         truncated = text[:6000]
         for sep in ['. ', '! ', '? ', '.\n', '!\n', '?\n']:
             idx = truncated.rfind(sep)
@@ -1386,15 +1430,26 @@ def generate_comment(
     post_title = discussion.get("title", "Untitled")
     post_body = discussion.get("body", "")
     comment_count = discussion.get("comments", {}).get("totalCount", 0)
+    repair_subject = post_title + "\n" + post_body
+    if reply_to:
+        repair_subject += "\n" + reply_to.get("body", "")
+    repairing = is_repair_topic(repair_subject)
 
     # Pick a comment style for emergent variety — LLM chooses
-    style = pick_comment_style(agent_id=agent_id, post_title=post_title)
+    style = (
+        {"name": "test_repair", "instructions": REPAIR_INSTRUCTIONS, "max_tokens": 2400}
+        if repairing else pick_comment_style(agent_id=agent_id, post_title=post_title)
+    )
     style_name = style["name"]
     style_instructions = style["instructions"]
     style_max_tokens = style["max_tokens"]
 
     # Build system prompt from rich persona (falls back to archetype persona)
     persona = build_rich_persona(agent_id, commenter_arch)
+    length_rule = (
+        "- Keep the explanation concise; include the complete patch regardless of length."
+        if repairing else "- 50 WORDS MAXIMUM. Two to three sentences. Density over length."
+    )
     system_prompt = (
         f"{persona}\n\n"
         f"Your agent ID is {agent_id}. "
@@ -1404,7 +1459,7 @@ def generate_comment(
         f"{style_instructions}\n\n"
         f"RULES:\n"
         f"- CRITICAL: If you have nothing relevant to add to this discussion, return EXACTLY the word 'SKIP' and nothing else. Do not comment for the sake of commenting. Silence is better than noise.\n"
-        f"- 50 WORDS MAXIMUM. Two to three sentences. Density over length.\n"
+        f"{length_rule}\n"
         f"- If you AGREE: cite a specific example, data point, or discussion number that supports it. Naked agreement is noise.\n"
         f"- If you DISAGREE: first restate the original point in its strongest form, then explain why you disagree. No strawmanning.\n"
         f"- Your comment must add NEW information, a NEW perspective, a CHALLENGE, or a SPECIFIC question. Generic agreement ('Great point!'), vague riffing, or restating the post in different words is not a comment.\n"
@@ -1452,7 +1507,7 @@ def generate_comment(
 
     # Build user prompt with actual discussion content
     # Truncate post body to fit within token limits
-    truncated_body = post_body[:2000] if len(post_body) > 2000 else post_body
+    truncated_body = post_body if repairing else post_body[:2000]
     topic = extract_post_topic(post_title)
 
     # Code post collaboration directive: when commenting on code, engage with it
@@ -1479,7 +1534,9 @@ def generate_comment(
 
     # If replying to a specific comment, include its content
     if reply_to:
-        parent_body = reply_to.get("body", "")[:800]
+        parent_body = reply_to.get("body", "")
+        if not repairing:
+            parent_body = parent_body[:800]
         parent_author = reply_to.get("author", {}).get("login", "someone")
         user_prompt += (
             f"You are REPLYING to this specific comment by {parent_author}:\n"
@@ -1505,6 +1562,10 @@ def generate_comment(
             )
 
     user_prompt += "Write your comment now. Just the comment text, no preamble."
+    if repairing:
+        user_prompt += "\n\n" + repair_context(repair_subject, ROOT)
+        for node in discussion.get("comments", {}).get("nodes", [])[-5:]:
+            user_prompt += "\n\nEXISTING REVIEW:\n" + str(node.get("body", ""))
 
     # Soul cross-reading: read the post author's soul file for shared history
     try:
@@ -1535,6 +1596,8 @@ def generate_comment(
     base_temp = 0.85 if style_name == "deep_reply" else 0.92
     comment_temp = base_temp + qconfig.get("temperature_adjustment", 0.0)
     comment_temp = min(max(comment_temp, 0.7), 1.1)  # clamp to safe range
+    if repairing:
+        comment_temp = 0.3
 
     try:
         body = generate(
@@ -1556,9 +1619,11 @@ def generate_comment(
                     f"You are {agent_id}. Write a brief, casual comment responding "
                     f"to the discussion below. Stay conversational.\n"
                 )
+                if repairing:
+                    stripped_system += "\n" + REPAIR_INSTRUCTIONS
                 body = generate(
                     system=stripped_system,
-                    user=f"Discussion: {discussion.get('title', '')}\n\nWrite a short comment.",
+                    user=user_prompt if repairing else f"Discussion: {discussion.get('title', '')}\n\nWrite a short comment.",
                     max_tokens=style_max_tokens,
                     temperature=min(comment_temp + 0.05, 1.1),
                     dry_run=dry_run,
@@ -1598,7 +1663,7 @@ def generate_comment(
                 f"comment under {min_len} chars after cleaning"), sd)
 
     # Post-generation slop phrase detection for comments
-    body_lower = body.lower()
+    body_lower = prose_only(body).lower()
     banned = qconfig.get("banned_phrases", [])
     for phrase in banned:
         if len(phrase.split()) >= 2 and phrase.lower() in body_lower:
@@ -1651,7 +1716,8 @@ def _extract_subject_words(title: str) -> set:
     return {w for w in words if len(w) > 2 and w not in _TITLE_STOP_WORDS}
 
 
-def is_duplicate_post(title: str, log: dict, threshold: float = 0.75) -> bool:
+def is_duplicate_post(title: str, log: dict, threshold: float = 0.75,
+                      body: str = "") -> bool:
     """Check if a post title is too similar to an existing one.
 
     Three layers of detection:
@@ -1674,9 +1740,15 @@ def is_duplicate_post(title: str, log: dict, threshold: float = 0.75) -> bool:
         existing = post.get("title", "").lower().strip()
         if not existing:
             continue
+        if distinct_repair_artifact(title, body, post):
+            continue
         # Exact match
         if title_lower == existing:
             return True
+        tests = set(re.findall(r"\btest_\w+", title_lower))
+        existing_tests = set(re.findall(r"\btest_\w+", existing))
+        if tests and existing_tests and tests.isdisjoint(existing_tests):
+            continue
         # Fuzzy match
         ratio = SequenceMatcher(None, title_lower, existing).ratio()
         if ratio >= threshold:
@@ -1729,7 +1801,7 @@ def is_lazy_pattern(title: str, log: dict, max_pct: float = 0.15) -> bool:
 
 
 def is_agent_repeat(title: str, agent_id: str, log: dict,
-                    threshold: float = 0.65) -> bool:
+                    threshold: float = 0.65, body: str = "") -> bool:
     """Check if this agent has posted something too similar before.
 
     Stricter than global dedup — uses a lower threshold (0.65 vs 0.75)
@@ -1753,6 +1825,12 @@ def is_agent_repeat(title: str, agent_id: str, log: dict,
     for post in agent_posts[-50:]:
         existing = post.get("title", "").lower().strip()
         if not existing:
+            continue
+        if distinct_repair_artifact(title, body, post):
+            continue
+        tests = set(re.findall(r"\btest_\w+", title_lower))
+        existing_tests = set(re.findall(r"\btest_\w+", existing))
+        if tests and existing_tests and tests.isdisjoint(existing_tests):
             continue
         # Fuzzy match at stricter threshold
         ratio = SequenceMatcher(None, title_lower, existing).ratio()
