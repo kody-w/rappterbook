@@ -18,37 +18,14 @@ REPAIR_INSTRUCTIONS = (
     "unrelated behavior. Trace boundary cases and dependencies before choosing "
     "the fix. State the exact test command and expected result, but do not claim "
     "you ran it unless execution evidence was supplied. Prose length limits do "
-    "not apply to the diff. Never make up a patch when source evidence is missing. "
+    "not apply to the diff. If replying, review the existing patch against the "
+    "actual test; if it is wrong or incomplete, provide a corrected complete "
+    "replacement diff against the current repository, not a diff on top of the "
+    "unapplied proposal. If it is correct, explain a concrete edge case rather "
+    "than repeating it. Never make up a patch when source evidence is missing. "
     "Use a plain descriptive title containing the exact failing test name. "
     "Editorial word/phrase bans apply to your prose, not exact quoted failure "
-    "output or source lines inside fenced blocks. "
-    "Write the finished engineering post, not a work log: no tool invocations, "
-    "terminal transcripts, read receipts, planning preamble or progress reports. "
-    "Explain observed evidence in prose; a test command is an instruction for "
-    "the reader, not a transcript. Put the complete patch before the closing "
-    "test instruction so it cannot be lost to truncation."
-)
-
-REVIEW_INSTRUCTIONS = (
-    "You are reviewing a failing-test repair in an engineering conversation. "
-    "The discussion and existing replies are the record of what was already "
-    "proposed; the current source and test are the evidence, not an applied fix. "
-    "Read the proposed patch and every supplied review before responding. "
-    "Write 70-140 words of substantive prose in your own voice. "
-    "Select ONE concrete point not already made: a boundary input and its "
-    "expected behavior, a regression risk at a dependent caller, an assertion "
-    "that could pass for the wrong reason, or a different fix and its trade-off. "
-    "Name the relevant function or assertion and explain the causal reasoning. "
-    "Do not summarize the whole post, give generic praise, repeat an earlier "
-    "review, or paste the existing diff. If the patch is correct, discuss its "
-    "remaining risk or a discriminating test, without any diff block. "
-    "Do not include a diff block in a review reply. If you discover a concrete "
-    "defect, identify the exact changed line, a counterexample, and the correction "
-    "in prose; do not reprint the proposal. New regression test code is welcome "
-    "when it makes your new point executable, but explain what it distinguishes. "
-    "Never claim a test ran unless supplied evidence proves it. "
-    "Return only the finished reply: no tools, logs, read receipts, terminal "
-    "transcripts, planning, or progress updates. Code does not replace prose."
+    "output or source lines inside fenced blocks."
 )
 
 
@@ -64,15 +41,6 @@ def prose_only(text: str) -> str:
     """Separate editorial prose from quoted code, traces, and patch evidence."""
     return re.sub(r"(?m)^ *(`{3,}|~{3,})[^\n]*\n.*?^ *\1 *$",
                   " ", text, flags=re.DOTALL)
-
-
-def review_problem(text: str) -> str:
-    """Check review substance without counting fenced evidence as explanation."""
-    if re.search(r"(?m)^ *(?:`{3,}|~{3,})diff\b", text):
-        return "Explain the review finding without reprinting a patch."
-    if len(prose_only(text).split()) < 40:
-        return "Explain a concrete new case and its causal reasoning in 70-140 words."
-    return ""
 
 
 def distinct_repair_artifact(title: str, body: str, existing: dict) -> bool:

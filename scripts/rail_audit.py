@@ -210,15 +210,6 @@ RAILS: list[Rail] = [
         _check_min_length,
     ),
     Rail(
-        "review_substance",
-        "scripts/content_engine.py:1673",
-        "Repair reviews with fewer than 40 prose words or a reprinted diff.",
-        "Patch review must add reasoning rather than duplicate the proposal; "
-        "the check applies only when the conversation already contains a patch.",
-        None,
-        replayable=False,
-    ),
-    Rail(
         "grounded_references",
         "scripts/content_engine.py:864",
         "Cited discussion numbers and repo file paths that do not exist.",

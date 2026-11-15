@@ -31,8 +31,8 @@ from content_loader import get_content
 from state_io import load_json, resolve_category_id
 import generation_outcome as gen_outcome
 from engineering_context import (
-    REPAIR_INSTRUCTIONS, REVIEW_INSTRUCTIONS, distinct_repair_artifact, is_repair_topic,
-    normalize_diff_fences, prose_only, repair_context, review_problem,
+    REPAIR_INSTRUCTIONS, distinct_repair_artifact, is_repair_topic,
+    normalize_diff_fences, prose_only, repair_context,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -1434,19 +1434,10 @@ def generate_comment(
     if reply_to:
         repair_subject += "\n" + reply_to.get("body", "")
     repairing = is_repair_topic(repair_subject)
-    existing_review_bodies = [
-        str(node.get("body", "")) for node in discussion.get("comments", {}).get("nodes", [])
-    ]
-    if reply_to:
-        existing_review_bodies.append(reply_to.get("body", ""))
-    reviewing_patch = repairing and bool(re.search(
-        r"(?m)^ *```diff\b", "\n".join([post_body] + existing_review_bodies),
-    ))
-    repair_instructions = REVIEW_INSTRUCTIONS if reviewing_patch else REPAIR_INSTRUCTIONS
 
     # Pick a comment style for emergent variety — LLM chooses
     style = (
-        {"name": "test_repair", "instructions": repair_instructions, "max_tokens": 2400}
+        {"name": "test_repair", "instructions": REPAIR_INSTRUCTIONS, "max_tokens": 2400}
         if repairing else pick_comment_style(agent_id=agent_id, post_title=post_title)
     )
     style_name = style["name"]
@@ -1456,7 +1447,7 @@ def generate_comment(
     # Build system prompt from rich persona (falls back to archetype persona)
     persona = build_rich_persona(agent_id, commenter_arch)
     length_rule = (
-        "- Write 70-140 words of new review reasoning, excluding any fenced code."
+        "- Keep the explanation concise; include the complete patch regardless of length."
         if repairing else "- 50 WORDS MAXIMUM. Two to three sentences. Density over length."
     )
     system_prompt = (
@@ -1629,7 +1620,7 @@ def generate_comment(
                     f"to the discussion below. Stay conversational.\n"
                 )
                 if repairing:
-                    stripped_system += "\n" + repair_instructions
+                    stripped_system += "\n" + REPAIR_INSTRUCTIONS
                 body = generate(
                     system=stripped_system,
                     user=user_prompt if repairing else f"Discussion: {discussion.get('title', '')}\n\nWrite a short comment.",
@@ -1655,13 +1646,14 @@ def generate_comment(
     if comment_decline:
         print(f"  [DECLINE] {agent_id} skipped commenting: {comment_decline[:90]}")
         return _finish(gen_outcome.declined(
-            agent_id, comment_decline), sd)
+            agent_id, comment_decline,
+            detail=f"discussion #{discussion.get('number')}"), sd)
 
     # Apply quality guardrails (skip for dry run placeholders)
     if not dry_run:
         min_len = 5 if style_name in ("snap_reaction", "hot_take", "question") else 20
         cleaned = validate_comment(body, min_length=min_len)
-        if cleaned or reviewing_patch:
+        if cleaned:
             body = cleaned
         else:
             # LLM produced unusable output — fail loudly, no static fallback
@@ -1669,31 +1661,6 @@ def generate_comment(
             return _finish(gen_outcome.rejected(
                 agent_id, "min_length",
                 f"comment under {min_len} chars after cleaning"), sd)
-
-    if reviewing_patch and not dry_run:
-        problem = review_problem(body)
-        if problem:
-            print(f"  [REVIEW] Revising incomplete review by {agent_id}: {problem}")
-            body = generate(
-                system=system_prompt,
-                user=user_prompt + "\n\nRevise this draft before returning it:\n"
-                + body + "\n\n" + problem,
-                max_tokens=style_max_tokens,
-                temperature=comment_temp,
-                dry_run=False,
-            )
-            retry_decline = gen_outcome.parse_decline(body)
-            if body.strip().upper().rstrip(".") == "SKIP":
-                retry_decline = "nothing relevant to add to this discussion"
-            if retry_decline:
-                return _finish(gen_outcome.declined(
-                    agent_id, retry_decline), sd)
-            body = validate_comment(body, min_length=20)
-            problem = review_problem(body)
-            if problem:
-                print(f"  [REVIEW] Rejected review by {agent_id}: {problem}")
-                return _finish(gen_outcome.rejected(
-                    agent_id, "review_substance", problem), sd)
 
     # Post-generation slop phrase detection for comments
     body_lower = prose_only(body).lower()
