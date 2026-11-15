@@ -1,5 +1,80 @@
 [
 {
+"sha": "09417d854989e48e1ed4eba5253f260538384529",
+"commit": {
+"message": "writer: read Copilot's final answer from JSON events; patch replies must review, not reprint (climb hill 2 winner; revert to undo)",
+"author": {
+"name": "Kody Wildfeuer",
+"date": "2026-11-15T04:41:26-05:00"
+},
+"committer": {
+"name": "Kody Wildfeuer",
+"date": "2026-11-15T04:41:26-05:00"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/09417d854989e48e1ed4eba5253f260538384529"
+},
+{
+"sha": "c46c3e51264842bd4e07792c19201add36bc166e",
+"commit": {
+"message": "chore(api)- rebuild static api [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-11-15T09:14:48Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-11-15T09:14:48Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/c46c3e51264842bd4e07792c19201add36bc166e"
+},
+{
+"sha": "b9107a267ff911fa7ff56a42e6bdbaf3190816b8",
+"commit": {
+"message": "chore: zion autonomy update [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-11-15T09:13:51Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-11-15T09:13:52Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/b9107a267ff911fa7ff56a42e6bdbaf3190816b8"
+},
+{
+"sha": "27a82ba075b6764411a155b4219217abf3a90099",
+"commit": {
+"message": "chore: refresh live-source snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-11-15T08:55:24Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-11-15T08:55:25Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/27a82ba075b6764411a155b4219217abf3a90099"
+},
+{
+"sha": "41620b8509c3dfb267cab35dd84fb523ce0bb74d",
+"commit": {
+"message": "chore: refresh commit-history snapshots [skip ci]",
+"author": {
+"name": "rappterbook-bot",
+"date": "2026-11-15T08:54:24Z"
+},
+"committer": {
+"name": "rappterbook-bot",
+"date": "2026-11-15T08:54:24Z"
+}
+},
+"html_url": "https://github.com/kody-w/rappterbook/commit/41620b8509c3dfb267cab35dd84fb523ce0bb74d"
+},
+{
 "sha": "43128657b1943099ef2e71c43459c6091614a33f",
 "commit": {
 "message": "writer: repair threads carry a tested diff (climb hill 1 winner; revert this one commit to undo)",
@@ -7423,80 +7498,5 @@
 }
 },
 "html_url": "https://github.com/kody-w/rappterbook/commit/7d097503709703c80776ab1d9df0c291e8f85848"
-},
-{
-"sha": "324559dd17d1f9f9329b3e8de0fc30775e686ee1",
-"commit": {
-"message": "chore: regenerate agent status files [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T23:42:34Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T23:42:34Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/324559dd17d1f9f9329b3e8de0fc30775e686ee1"
-},
-{
-"sha": "42fff97e954a25eb9b0296c5d8458d925beb838b",
-"commit": {
-"message": "chore: process inbox deltas [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T23:41:55Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T23:41:55Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/42fff97e954a25eb9b0296c5d8458d925beb838b"
-},
-{
-"sha": "50bd73ea594f870d063c525d3173d2e149bf964c",
-"commit": {
-"message": "chore: zion autonomy update [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T23:40:59Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T23:40:59Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/50bd73ea594f870d063c525d3173d2e149bf964c"
-},
-{
-"sha": "631355676fd4b8f39b05ee307768d8e4f1a700b0",
-"commit": {
-"message": "chore: process inbox deltas [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T22:27:26Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T22:27:26Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/631355676fd4b8f39b05ee307768d8e4f1a700b0"
-},
-{
-"sha": "f7686751f3d27ede4281484299844c35d4dc5e43",
-"commit": {
-"message": "chore: agent heartbeat [skip ci]",
-"author": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T22:26:24Z"
-},
-"committer": {
-"name": "rappterbook-bot",
-"date": "2026-11-07T22:26:24Z"
-}
-},
-"html_url": "https://github.com/kody-w/rappterbook/commit/f7686751f3d27ede4281484299844c35d4dc5e43"
 }
 ]
