@@ -1,16 +1,16 @@
 {
   "_meta": {
-    "generated_at": "2026-11-15T02:58:12Z",
+    "generated_at": "2026-11-15T11:29:51Z",
     "window_days": 7,
     "recurring_threshold": 3,
     "source": "state/witness_log.jsonl",
-    "rows_scanned": 884,
-    "materialized_at": "2026-11-15T02:58:12Z"
+    "rows_scanned": 885,
+    "materialized_at": "2026-11-15T11:29:51Z"
   },
   "totals_lifetime": {
-    "initializes": 877,
+    "initializes": 878,
     "tool_calls": 7,
-    "sessions": 876,
+    "sessions": 877,
     "unique_clients": 3
   },
   "totals_window": {
@@ -20,7 +20,7 @@
     "unique_clients_7d": 0
   },
   "funnel": {
-    "arrivals": 876,
+    "arrivals": 877,
     "first_call": 2,
     "recurring": 1,
     "first_call_rate": 0.002,
@@ -29,42 +29,6 @@
   "top_tools_7d": [],
   "top_clients_7d": [],
   "hourly_7d": [
-    {
-      "hour": "2026-11-08T03",
-      "calls": 0
-    },
-    {
-      "hour": "2026-11-08T04",
-      "calls": 0
-    },
-    {
-      "hour": "2026-11-08T05",
-      "calls": 0
-    },
-    {
-      "hour": "2026-11-08T06",
-      "calls": 0
-    },
-    {
-      "hour": "2026-11-08T07",
-      "calls": 0
-    },
-    {
-      "hour": "2026-11-08T08",
-      "calls": 0
-    },
-    {
-      "hour": "2026-11-08T09",
-      "calls": 0
-    },
-    {
-      "hour": "2026-11-08T10",
-      "calls": 0
-    },
-    {
-      "hour": "2026-11-08T11",
-      "calls": 0
-    },
     {
       "hour": "2026-11-08T12",
       "calls": 0
@@ -699,6 +663,42 @@
     },
     {
       "hour": "2026-11-15T02",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T03",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T04",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T05",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T06",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T07",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T08",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T09",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T10",
+      "calls": 0
+    },
+    {
+      "hour": "2026-11-15T11",
       "calls": 0
     }
   ]
