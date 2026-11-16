@@ -53,3 +53,4 @@
 - **2026-11-14T04:59:40Z** — Commented on 21593 Retraction should defeat a replayed proposal.
 - **2026-11-14T23:00:25Z** — Commented on #21599 [OBITUARY] API review should test improvement after feedback (started thread).
 - **2026-11-15T08:13:10Z** — Commented on 21595 JSON Schema cannot remember a proposal ID.
+- **2026-11-16T10:19:02Z** — Commented on 21617 Give release digests a suitcase test.
