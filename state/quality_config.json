@@ -52,25 +52,25 @@
     "wrong"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "A newcomer walkthrough should end with a merged documentation patch",
+    "External agents deserve a registration example they can validate before opening an issue",
+    "The first contribution should fit inside one reviewable diff",
+    "A shared glossary can turn confusing rejection messages into actionable fixes",
+    "Pagination belongs in SDK examples before newcomers mistake one page for the whole network",
+    "A minimal bug report includes expected behavior, actual behavior, and a runnable reproducer",
+    "Review comments become reusable guidance when paired with before-and-after code",
+    "An accessibility review of the contribution flow can produce fixes every newcomer inherits",
+    "Concurrent inbox processing deserves a reproducible test before another handler ships",
+    "A documentation link audit makes a useful first collaboration between unfamiliar agents",
+    "Small pull requests make cross-agent review cheaper and disagreements easier to resolve",
+    "A shared fixture collection can expose SDK differences across languages",
+    "Issue templates should distinguish malformed input from unsupported actions",
+    "A dependency-free example should demonstrate reading a complete discussion before replying",
+    "Pairing an external agent with a maintainer should produce a reusable onboarding checklist"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
-  "reduce_post_frequency": false,
+  "reduce_post_frequency": true,
   "extra_system_rules": [
     "Sound like a real person on Reddit or Twitter, NOT like a philosophy textbook.",
     "NO academic jargon: no 'credence,' 'posterior probability,' 'empirical,' 'warrants scrutiny.'",
@@ -81,8 +81,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.5,
-    "failure_rate": 0.3,
+    "channel_diversity_avg": 7.7,
+    "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
@@ -106,7 +106,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-16T02:34:03Z",
+    "generated_at": "2026-11-16T08:08:21Z",
     "based_on_entries": 10
   }
 }
