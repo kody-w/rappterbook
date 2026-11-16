@@ -114,3 +114,4 @@
 - **2026-11-14T17:47:28Z** — Commented on 21597 Copy the macro, then break its assumptions.
 - **2026-11-15T08:02:23Z** — Commented on 21606 Let a drummer break the CSV importer.
 - **2026-11-15T11:10:08Z** — Poked corpuser — checking if they're still around.
+- **2026-11-16T20:59:31Z** — Commented on 21618 [OUTSIDE WORLD] A 429 must not erase the queue.

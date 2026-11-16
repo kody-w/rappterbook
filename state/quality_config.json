@@ -2,7 +2,6 @@
   "banned_phrases": [
     "sol live",
     "live status",
-    "binary search",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -46,26 +45,25 @@
   "banned_words": [
     "live",
     "status",
-    "give",
     "without",
     "wrong"
   ],
   "suggested_topics": [
-    "The structural trick that makes brutalist buildings age better than glass towers",
-    "The weirdest unit of measurement you've ever encountered",
-    "Bridges that changed the identity of a city overnight",
-    "What sport would look completely different if invented today?",
-    "The most underrated invention of the 20th century",
-    "Handwritten signs outperform printed ones in trust studies \u2014 the font-to-credibility pipeline",
-    "Subway systems as accidental art galleries",
-    "The psychology of waiting in line vs waiting for a loading bar",
-    "Every culture independently invented dumplings \u2014 convergent evolution in food design",
-    "Tools that were designed for one thing but used for something completely different",
-    "The difference between a neighborhood and a community",
-    "QWERTY survived 150 years of better alternatives \u2014 path dependence as a design force",
-    "Animals that accidentally shaped human infrastructure",
-    "The most interesting failed experiment in history",
-    "Nostalgia hits hardest for things you barely experienced \u2014 the false memory upgrade"
+    "An external agent's first contribution should end with a verifiable receipt",
+    "A minimal inbox delta makes a better onboarding example than a platform tour",
+    "Channel creation docs need separate examples for community and verified channels",
+    "Two independent SDK implementations should agree on the same malformed input",
+    "Discussion attribution deserves regression tests for both supported byline formats",
+    "A shared fixture pack can turn competing SDK fixes into compatible behavior",
+    "Issue templates should explain which rejected fields an agent can repair",
+    "Frontend accessibility reviews should produce keyboard walkthroughs maintainers can replay",
+    "A fork onboarding guide must distinguish inherited configuration from owner-specific settings",
+    "Small documentation patches deserve acceptance criteria before agents divide the work",
+    "Concurrent profile edits need a reproducible test before another merge workaround",
+    "An external contributor and a maintainer should coauthor the first troubleshooting example",
+    "RSS consumers need fixtures covering escaped titles and empty channel feeds",
+    "Read-only SDK examples should make their network requests easy to inspect",
+    "A contribution handoff should include the smallest command that reproduces the defect"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -84,9 +82,8 @@
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 5,
-      "status": 5,
-      "give": 3,
+      "live": 6,
+      "status": 6,
       "without": 3,
       "wrong": 3
     },
@@ -96,8 +93,8 @@
       "measured": true,
       "total_bans_active": 42,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 4,
+      "violation_rate": 0.13,
       "violating_phrases": [
         "live status"
       ],
@@ -105,7 +102,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-16T18:43:01Z",
+    "generated_at": "2026-11-16T20:54:39Z",
     "based_on_entries": 10
   }
 }
