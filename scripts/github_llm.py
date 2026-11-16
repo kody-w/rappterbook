@@ -579,8 +579,10 @@ def _generate_impl(
         return _dry_run_fallback(system, user), "dry_run"
 
     if not _check_budget():
-        print("  [LLM] Daily budget exceeded — returning dry-run fallback")
-        return _dry_run_fallback(system, user), "budget_exceeded"
+        # Never hand placeholder text back as if it were a real answer:
+        # callers posted it live ("[DRY RUN — debater comment]" on #21615).
+        # Same signal as sustained 429s, which every caller already skips on.
+        raise LLMRateLimitError("Daily LLM budget exceeded — skipping, nothing generated")
 
     errors = []
 

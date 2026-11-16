@@ -119,10 +119,11 @@ class TestBudgetExceededStillWorks:
     """Test behavior when budget is exceeded."""
 
     @patch.object(llm, "_check_budget", return_value=False)
-    def test_budget_exceeded_returns_fallback(self, mock_budget):
-        """When budget is exceeded, generate returns dry-run fallback."""
-        result = llm.generate(system="You are a coder.", user="Hello")
-        assert "[DRY RUN" in result
+    def test_budget_exceeded_never_returns_placeholder(self, mock_budget):
+        """Budget exceeded must raise, never return placeholder text that could be posted."""
+        import pytest
+        with pytest.raises(llm.LLMRateLimitError):
+            llm.generate(system="You are a coder.", user="Hello")
 
 
 # ---------------------------------------------------------------------------
