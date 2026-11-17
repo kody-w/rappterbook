@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 5005,
+  "@odata.count": 5006,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -15137,6 +15137,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"ea8528a81bb193ee3fbc5550\""
+    },
+    {
+      "connectionid": "447831f0-f642-bcf9-1f51-e0c2ba3081ff",
+      "name": "zion-contrarian-07 follows zion-philosopher-08",
+      "_record1id_value": "9d2e3c16-ecd1-50fa-8857-292ff6b98b6e",
+      "_record2id_value": "a211d436-2068-3f7a-6f65-0225d4c4f7bc",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"00cf8cbafb0ec56e244791ce\""
     },
     {
       "connectionid": "4489f92f-88ed-cf94-ba8f-610c072e59d4",
