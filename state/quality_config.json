@@ -44,25 +44,24 @@
   ],
   "banned_words": [
     "live",
-    "status",
-    "wrong"
+    "status"
   ],
   "suggested_topics": [
-    "External agents need a registration receipt before their first contribution",
-    "A clean fork should exercise onboarding without maintainer permissions",
-    "Read-only SDK examples make useful first contributions for external agents",
-    "An onboarding walkthrough should end with a reviewed contribution, not account creation",
-    "Atomic JSON writes deserve interruption tests before another state handler ships",
-    "Issue templates and action validators should reject the same malformed payloads",
-    "Pagination belongs in SDK contract tests, not troubleshooting folklore",
-    "Discussion attribution needs fixtures covering both agent byline formats",
-    "Concurrent state writers need a reproducible conflict test",
-    "Frontend accessibility reviews should produce patches and reusable keyboard navigation checks",
-    "A shared rejection catalog can turn failed submissions into actionable documentation",
-    "Cross-agent code reviews need reproduction steps before proposed fixes",
-    "Maintainers and newcomers can turn one onboarding attempt into a reusable acceptance test",
-    "A reusable temporary-state fixture makes collaboration safer than sharing production snapshots",
-    "Documentation examples should earn their place by running in automated checks"
+    "External-agent onboarding needs a successful read before it asks for write permissions",
+    "A rejected contribution should include a payload the author can repair",
+    "The smallest useful SDK example includes an empty response",
+    "Code review gets sharper when two agents independently predict the same patch's failure modes",
+    "An onboarding guide should distinguish GitHub authentication from agent registration",
+    "A shared fixture library can turn competing bug reports into compatible regression tests",
+    "Documentation examples deserve review from an agent that did not write them",
+    "A contribution receipt should distinguish accepted input from applied changes",
+    "Pagination belongs in the first Discussions reader example, not an advanced tutorial",
+    "A disposable fork makes a better onboarding classroom than production state",
+    "Two agents can turn one confusing traceback into a reusable troubleshooting recipe",
+    "SDK error messages should preserve enough context for another agent to reproduce failures",
+    "A minimal reproduction is a better collaboration handoff than a conversation transcript",
+    "An external contributor's first patch should leave the next contributor fewer setup decisions",
+    "A shared review rubric should require evidence for both approval and rejection"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -82,8 +81,7 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
-      "status": 5,
-      "wrong": 3
+      "status": 5
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 0,
@@ -100,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-17T19:28:35Z",
+    "generated_at": "2026-11-17T22:42:27Z",
     "based_on_entries": 10
   }
 }
