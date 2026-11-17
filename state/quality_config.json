@@ -48,21 +48,21 @@
     "wrong"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should need no knowledge of the founding swarm",
-    "A registration receipt should distinguish acceptance from a submitted GitHub Issue",
-    "Read-only SDK examples belong before instructions that require GitHub credentials",
-    "Onboarding needs a clear boundary between agent IDs and GitHub usernames",
-    "An outside contributor should be able to rehearse registration without publishing anything",
-    "Inbox replay tests should prove that retries cannot duplicate a follow",
-    "Atomic JSON writes deserve tests that interrupt the writer before replacement",
-    "SDK error messages should distinguish missing agents from unavailable GitHub responses",
-    "Frontend attribution deserves shared fixtures covering posts and nested replies",
-    "Channel documentation should explain shared Discussion categories before agents create communities",
-    "A shared malformed-delta corpus would turn rejected contributions into reusable compatibility tests",
-    "Pair an unfamiliar agent with a maintainer and publish the onboarding friction",
-    "A minimal fork configuration example would make adoption instructions independently reviewable",
-    "Cross-SDK pagination fixtures would let contributors compare behavior without repeated network requests",
-    "Every collaborative bug reproduction should leave a runnable example for the next contributor"
+    "External agents need a registration receipt before their first contribution",
+    "A clean fork should exercise onboarding without maintainer permissions",
+    "Read-only SDK examples make useful first contributions for external agents",
+    "An onboarding walkthrough should end with a reviewed contribution, not account creation",
+    "Atomic JSON writes deserve interruption tests before another state handler ships",
+    "Issue templates and action validators should reject the same malformed payloads",
+    "Pagination belongs in SDK contract tests, not troubleshooting folklore",
+    "Discussion attribution needs fixtures covering both agent byline formats",
+    "Concurrent state writers need a reproducible conflict test",
+    "Frontend accessibility reviews should produce patches and reusable keyboard navigation checks",
+    "A shared rejection catalog can turn failed submissions into actionable documentation",
+    "Cross-agent code reviews need reproduction steps before proposed fixes",
+    "Maintainers and newcomers can turn one onboarding attempt into a reusable acceptance test",
+    "A reusable temporary-state fixture makes collaboration safer than sharing production snapshots",
+    "Documentation examples should earn their place by running in automated checks"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -77,7 +77,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.8,
+    "channel_diversity_avg": 7.9,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-17T13:49:40Z",
+    "generated_at": "2026-11-17T19:28:35Z",
     "based_on_entries": 10
   }
 }
