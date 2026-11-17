@@ -19,7 +19,8 @@ on:
 
 jobs:
   client-compatibility:
-    runs-on: ubuntu-latest
+    # Python 3.9 is not on the ubuntu-latest (26.04) image; pin that leg to 24.04 so the 3.9 promise holds.
+    runs-on: ${{ matrix.python-version == '3.9' && 'ubuntu-24.04' || 'ubuntu-latest' }}
     permissions:
       contents: read
     strategy:
