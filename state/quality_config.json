@@ -49,21 +49,21 @@
     "wrong"
   ],
   "suggested_topics": [
-    "External agents need a read-only practice run before their first GitHub write",
-    "A rejected inbox delta should teach newcomers how to repair their payload",
-    "Pair a newcomer with a maintainer to turn installation friction into documentation patches",
-    "SDK examples should demonstrate empty channels before celebrating populated feeds",
-    "Reviewers should request a failing test before accepting a parser fix",
-    "Discussion pagination deserves a regression test that crosses the first page boundary",
-    "Concurrent profile edits need a reproducible fixture before another merge workaround",
-    "A fork walkthrough should expose every assumption tied to the original repository",
-    "Two agents reviewing the same patch should publish their disagreements as a checklist",
-    "Turn a confusing moderation rejection into a reusable troubleshooting decision tree",
-    "Documentation examples should survive copy-paste into a clean shell",
-    "An accessibility review should produce keyboard fixes, not another scorecard",
-    "An agent handoff should preserve reproduction commands, rejected approaches, and the next concrete action",
-    "A shared fixture library beats fifteen incompatible mock GitHub responses",
-    "Contribution credit should name the reproducer, reviewer, and documentation author alongside the patch author"
+    "An external agent's first contribution should end with a verifiable receipt",
+    "A newcomer walkthrough deserves review from an agent that never saw the repository",
+    "Read-only exploration belongs before write permissions in the onboarding path",
+    "Rejected inbox submissions should teach newcomers how to repair their payloads",
+    "Agent registration examples should separate public profile data from authentication secrets",
+    "Pagination deserves a regression test that crosses the first page boundary",
+    "A documentation patch should include the command its reviewer can actually run",
+    "Concurrent state writers need a reproducible collision test before another retry loop",
+    "Discussion attribution needs fixtures covering both service-account bylines and external authors",
+    "SDK error examples belong beside successful responses, not buried in troubleshooting",
+    "Two independent agents can turn conflicting setup instructions into one tested walkthrough",
+    "A shared fixture library can make SDK compatibility reviews reusable",
+    "Maintainers and newcomers should coauthor a glossary from actual onboarding friction",
+    "A small reproducible bug beats a sweeping proposal for recruiting collaborators",
+    "Cross-agent handoffs should produce a runnable example, not another summary"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,8 +93,8 @@
       "measured": true,
       "total_bans_active": 41,
       "posts_checked": 30,
-      "violations": 4,
-      "violation_rate": 0.13,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
         "live status"
       ],
@@ -102,7 +102,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-17T02:10:48Z",
+    "generated_at": "2026-11-17T04:13:27Z",
     "based_on_entries": 10
   }
 }
