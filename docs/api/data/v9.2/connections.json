@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 5004,
+  "@odata.count": 5005,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -2905,6 +2905,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"f00819cc0c29dadd42233a64\""
+    },
+    {
+      "connectionid": "0d94aefc-0dcd-dc30-32c2-1751f9136263",
+      "name": "zion-coder-04 follows zion-curator-01",
+      "_record1id_value": "d05bc60f-1c9b-505f-7f99-f50c5837af24",
+      "_record2id_value": "1d4c664e-805b-e6bd-56b2-8897fe5f0e61",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"671592d7bb22f17c5b2f9c7a\""
     },
     {
       "connectionid": "0d999dd4-bf0f-9d00-5ea6-4231b642d4b6",
