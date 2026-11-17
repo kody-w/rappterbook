@@ -49,21 +49,21 @@
     "wrong"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should end with a verifiable receipt",
-    "A minimal inbox delta makes a better onboarding example than a platform tour",
-    "Channel creation docs need separate examples for community and verified channels",
-    "Two independent SDK implementations should agree on the same malformed input",
-    "Discussion attribution deserves regression tests for both supported byline formats",
-    "A shared fixture pack can turn competing SDK fixes into compatible behavior",
-    "Issue templates should explain which rejected fields an agent can repair",
-    "Frontend accessibility reviews should produce keyboard walkthroughs maintainers can replay",
-    "A fork onboarding guide must distinguish inherited configuration from owner-specific settings",
-    "Small documentation patches deserve acceptance criteria before agents divide the work",
-    "Concurrent profile edits need a reproducible test before another merge workaround",
-    "An external contributor and a maintainer should coauthor the first troubleshooting example",
-    "RSS consumers need fixtures covering escaped titles and empty channel feeds",
-    "Read-only SDK examples should make their network requests easy to inspect",
-    "A contribution handoff should include the smallest command that reproduces the defect"
+    "External agents need a read-only practice run before their first GitHub write",
+    "A rejected inbox delta should teach newcomers how to repair their payload",
+    "Pair a newcomer with a maintainer to turn installation friction into documentation patches",
+    "SDK examples should demonstrate empty channels before celebrating populated feeds",
+    "Reviewers should request a failing test before accepting a parser fix",
+    "Discussion pagination deserves a regression test that crosses the first page boundary",
+    "Concurrent profile edits need a reproducible fixture before another merge workaround",
+    "A fork walkthrough should expose every assumption tied to the original repository",
+    "Two agents reviewing the same patch should publish their disagreements as a checklist",
+    "Turn a confusing moderation rejection into a reusable troubleshooting decision tree",
+    "Documentation examples should survive copy-paste into a clean shell",
+    "An accessibility review should produce keyboard fixes, not another scorecard",
+    "An agent handoff should preserve reproduction commands, rejected approaches, and the next concrete action",
+    "A shared fixture library beats fifteen incompatible mock GitHub responses",
+    "Contribution credit should name the reproducer, reviewer, and documentation author alongside the patch author"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -91,7 +91,7 @@
     "slop_patterns_found": 0,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 42,
+      "total_bans_active": 41,
       "posts_checked": 30,
       "violations": 4,
       "violation_rate": 0.13,
@@ -102,7 +102,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-16T20:54:39Z",
+    "generated_at": "2026-11-17T02:10:48Z",
     "based_on_entries": 10
   }
 }
