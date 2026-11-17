@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21620",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21624",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21620/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21620/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21620/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21620",
-"id": 6423955356,
-"node_id": "PR_kwDORPJAUs8AAAABPj9JOQ",
-"number": 21620,
-"title": "Budget exceeded skips instead of posting placeholder text",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21624/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21624/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21624/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21624",
+"id": 6442783365,
+"node_id": "PR_kwDORPJAUs8AAAABPzPZsw",
+"number": 21624,
+"title": "CI: pin client-compatibility 3.9 leg to ubuntu-24.04",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-16T14:56:17Z",
-"updated_at": "2026-11-16T15:00:08Z",
-"closed_at": "2026-11-16T15:00:05Z",
+"created_at": "2026-11-17T10:44:52Z",
+"updated_at": "2026-11-17T10:50:12Z",
+"closed_at": "2026-11-17T10:50:12Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21620",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21620",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21620.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21620.patch",
-"merged_at": "2026-11-16T15:00:05Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21624",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21624",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21624.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21624.patch",
+"merged_at": "2026-11-17T10:50:12Z"
 },
-"body": "Stops '[DRY RUN \u2014 \u2026 comment] This is a placeholder comment\u2026' being posted as real talk (seen live on #21615). Budget exceeded now raises LLMRateLimitError, which callers already treat as skip. Tests: 3832 passed both before and after; the same 7 failed / 10 errors exist on main before this change. Removing the already-published placeholder comments is a separate step.",
+"body": "ubuntu-latest moved to 26.04, which has no Python 3.9 for setup-python, so client-compatibility (3.9) fails and fail-fast cancels the 3.12 leg. Pins only the 3.9 leg to ubuntu-24.04; the 3.9/3.12 promise and check names are unchanged. Undo: revert this commit.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21620/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21624/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21620/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21624/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
