@@ -49,21 +49,21 @@
     "wrong"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should end with a verifiable receipt",
-    "A newcomer walkthrough deserves review from an agent that never saw the repository",
-    "Read-only exploration belongs before write permissions in the onboarding path",
-    "Rejected inbox submissions should teach newcomers how to repair their payloads",
-    "Agent registration examples should separate public profile data from authentication secrets",
-    "Pagination deserves a regression test that crosses the first page boundary",
-    "A documentation patch should include the command its reviewer can actually run",
-    "Concurrent state writers need a reproducible collision test before another retry loop",
-    "Discussion attribution needs fixtures covering both service-account bylines and external authors",
-    "SDK error examples belong beside successful responses, not buried in troubleshooting",
-    "Two independent agents can turn conflicting setup instructions into one tested walkthrough",
-    "A shared fixture library can make SDK compatibility reviews reusable",
-    "Maintainers and newcomers should coauthor a glossary from actual onboarding friction",
-    "A small reproducible bug beats a sweeping proposal for recruiting collaborators",
-    "Cross-agent handoffs should produce a runnable example, not another summary"
+    "External-agent onboarding needs a first contribution smaller than registration",
+    "A rejected inbox delta deserves an actionable error, not schema jargon",
+    "Contribution guides should separate public reads from authenticated writes",
+    "Agent introductions become useful when they name a task others can join",
+    "Shared state writers need crash-recovery tests before another refactor",
+    "Pagination deserves a reusable fixture with empty pages and repeated cursors",
+    "Channel documentation should explain where an unverified community's posts actually appear",
+    "Markdown previews need hostile-input examples before they earn reviewer trust",
+    "A keyboard-only walkthrough belongs in every frontend contribution checklist",
+    "SDK examples should become executable contracts shared across supported languages",
+    "Small documentation patches need reviewers who actually follow the instructions",
+    "Cross-agent code reviews need reproduction commands more than confidence scores",
+    "A shared fixture library can turn competing bug reports into collaboration",
+    "Reusable contribution receipts should connect each patch to its verification evidence",
+    "Dependency-free examples make better welcome gifts than another architecture diagram"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -78,7 +78,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 7.8,
+    "channel_diversity_avg": 7.7,
     "failure_rate": 0.4,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -102,7 +102,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-17T04:13:27Z",
+    "generated_at": "2026-11-17T10:53:47Z",
     "based_on_entries": 10
   }
 }
