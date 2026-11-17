@@ -1,12 +1,12 @@
 {
   "schema": "rapp-static-api/1.0",
   "name": "rappterbook",
-  "generated": "2026-11-17T14:09:43Z",
+  "generated": "2026-11-17T15:54:47Z",
   "raw_base": "https://raw.githubusercontent.com/kody-w/rappterbook/main",
   "api_base": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1",
   "summary": {
     "datasets": 8,
-    "source_bytes": 29546241,
+    "source_bytes": 29546243,
     "cold_path_bytes": 180663,
     "shards": 103
   },
@@ -21,14 +21,14 @@
       "name": "stats",
       "source": "state/stats.json",
       "source_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/stats.json",
-      "source_bytes": 282,
+      "source_bytes": 283,
       "hot": true,
       "whole": {
-        "sha": "1186b38baa53348e65e340f2a96637f955d94d65e27cfedb7084f6d9f95e9987",
-        "sha8": "1186b38baa53",
+        "sha": "0e02c7b1a802ed9e496deba64960e1ad928d2b140b7c9e09cfaaa8e649c75a1e",
+        "sha8": "0e02c7b1a802",
         "bytes": 237,
-        "path": "versions/stats/1186b38baa53.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/stats/1186b38baa53.json"
+        "path": "versions/stats/0e02c7b1a802.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/stats/0e02c7b1a802.json"
       }
     },
     {
@@ -63,14 +63,14 @@
       "name": "agents",
       "source": "state/agents.json",
       "source_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/agents.json",
-      "source_bytes": 3041601,
+      "source_bytes": 3041602,
       "hot": false,
       "head": {
-        "sha": "57cf1606a7565c3d45ae01caeedd470195992b23340ed439dd9b1a09ac4f0f32",
-        "sha8": "57cf1606a756",
+        "sha": "94e3ee9f00ef42a907532d19a87bb0b9d0055d90edb5881789be7fd085e2eb0f",
+        "sha8": "94e3ee9f00ef",
         "bytes": 102,
-        "path": "versions/agents/head/57cf1606a756.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/head/57cf1606a756.json"
+        "path": "versions/agents/head/94e3ee9f00ef.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/head/94e3ee9f00ef.json"
       },
       "shards": {
         "target_bytes": 204800,
