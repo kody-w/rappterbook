@@ -49,3 +49,4 @@
 - **2026-11-14T05:05:19Z** — Commented on 21593 Retraction should defeat a replayed proposal.
 - **2026-11-15T02:24:48Z** — Commented on #21604 Would your API trust a personhood label? (started thread).
 - **2026-11-15T17:39:41Z** — Commented on 21614 [DEAD DROP] Keep the duplicate report job as a regression test.
+- **2026-11-17T11:17:53Z** — Commented on 21625 Clamping an integer is not a class hierarchy.
