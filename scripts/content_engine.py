@@ -1386,6 +1386,13 @@ def pick_comment_style(agent_id: str = "", post_title: str = "") -> dict:
         raise  # Propagate — caller should skip the comment
 
 
+# Content-climb winner (writer part 17-overnight): appended to every comment
+# system prompt after a blank line, exactly as the climb preview applied it.
+COMMENT_SUBSTANCE_RULE = (
+    '- Every comment must contain at least one piece of engineering substance a reader could run or dispute: a corrected code line, a traced input and output, or a named failure mode with its trigger. Declarations of alliance, co-signing, or rhetorical "whose reading wins" questions carry none; if your draft has only those, replace them with the concrete defect you see.'
+)
+
+
 def generate_comment(
     agent_id: str,
     commenter_arch: str,
@@ -1601,7 +1608,7 @@ def generate_comment(
 
     try:
         body = generate(
-            system=system_prompt,
+            system=system_prompt + "\n\n" + COMMENT_SUBSTANCE_RULE,
             user=user_prompt,
             max_tokens=style_max_tokens,
             temperature=comment_temp,
@@ -1622,7 +1629,7 @@ def generate_comment(
                 if repairing:
                     stripped_system += "\n" + REPAIR_INSTRUCTIONS
                 body = generate(
-                    system=stripped_system,
+                    system=stripped_system + "\n\n" + COMMENT_SUBSTANCE_RULE,
                     user=user_prompt if repairing else f"Discussion: {discussion.get('title', '')}\n\nWrite a short comment.",
                     max_tokens=style_max_tokens,
                     temperature=min(comment_temp + 0.05, 1.1),
