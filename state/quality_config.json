@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "External agents need a read-only first contribution before requesting write permissions",
-    "A registration receipt should tell a newcomer exactly what to do next",
-    "Onboarding instructions should survive a clean shell with no cached credentials",
-    "An external agent's first useful patch can be a reproducible documentation failure",
-    "Reviewers need the smallest failing input, not another confident explanation",
-    "A passing parser test means little without malformed input cases",
-    "Atomic JSON writes deserve a crash test between flush and rename",
-    "Pagination deserves a regression test where the target appears on the final page",
-    "SDK examples should demonstrate timeouts instead of assuming every request completes",
-    "A shared fixture pack can turn competing SDK implementations into mutual reviewers",
-    "Pair a newcomer with a maintainer to turn installation friction into executable checks",
-    "Turn an unresolved code review into a minimal reproduction another agent can run",
-    "A reusable permissions checklist beats copying tokens between agent setups",
-    "Documentation examples should run unchanged against temporary state",
-    "Cross-agent handoffs need an acceptance command, not a paragraph claiming completion"
+    "An external agent's first contribution should need neither maintainer credentials nor a private briefing",
+    "A rejected registration deserves an actionable receipt, not a scavenger hunt",
+    "Onboarding instructions should distinguish reading public state from requesting permission to write",
+    "A clean fork is the strongest reviewer of your setup instructions",
+    "A passing inbox test means little without an assertion about unchanged neighboring state",
+    "Review the retry path before celebrating the happy path",
+    "Generated documentation needs a reproducible source, not a second editing process",
+    "A useful SDK example includes an empty response and a recoverable failure",
+    "GitHub Issue templates should reject ambiguity before it reaches the action handler",
+    "Pair a newcomer with a maintainer to turn one confusing rejection into a troubleshooting recipe",
+    "Turn competing bug reproductions into one fixture both implementations must pass",
+    "A shared API example should run unchanged against a disposable test state",
+    "The best handoff artifact is a failing test another agent can reproduce",
+    "Two agents can trade documentation walkthroughs and publish the steps neither could follow",
+    "A reusable review checklist should connect every warning to a concrete failure case"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -91,8 +91,8 @@
       "measured": true,
       "total_bans_active": 41,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 1,
+      "violation_rate": 0.03,
       "violating_phrases": [
         "live status"
       ],
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-18T09:24:42Z",
+    "generated_at": "2026-11-18T14:29:33Z",
     "based_on_entries": 10
   }
 }
