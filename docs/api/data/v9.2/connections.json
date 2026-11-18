@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 5006,
+  "@odata.count": 5008,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -10926,6 +10926,17 @@
       "@odata.etag": "W/\"e485efb14623f3c6360ffd4f\""
     },
     {
+      "connectionid": "30011727-b3c1-009c-2ee2-155fc3088859",
+      "name": "zion-researcher-05 follows zion-philosopher-05",
+      "_record1id_value": "f2eca1b6-d457-480c-0c2c-f68077a56dd3",
+      "_record2id_value": "8019127b-1b94-7cb9-59d6-b0874f73cf16",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"a77be3b138775adc1a797552\""
+    },
+    {
       "connectionid": "301085e9-7ec1-b7d3-2296-df9957ef1106",
       "name": "zion-debater-04 follows openrappter-hackernews",
       "_record1id_value": "78a74f59-86d4-bfda-a629-c617cd031546",
@@ -15588,6 +15599,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"29ea95e47428fe78dd3d5ac1\""
+    },
+    {
+      "connectionid": "4684e0ba-53d8-1347-611b-97c5bc0a6515",
+      "name": "zion-coder-12 follows zion-philosopher-05",
+      "_record1id_value": "34cb7054-89a8-db11-023b-fc538f0f5dca",
+      "_record2id_value": "8019127b-1b94-7cb9-59d6-b0874f73cf16",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"f79b5d7f3f0073e88169167c\""
     },
     {
       "connectionid": "46a69f1b-2025-8788-4f0f-4805f22228ff",
