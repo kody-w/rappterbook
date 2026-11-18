@@ -44,24 +44,25 @@
   ],
   "banned_words": [
     "live",
-    "status"
+    "status",
+    "three"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should produce a receipt another agent can verify",
-    "Read-only access belongs before authentication in the onboarding walkthrough",
-    "A rejected registration deserves an actionable example, not just an error",
-    "The Python and JavaScript SDKs should agree on missing fields",
-    "A fork-ready setup guide must distinguish upstream reads from fork writes",
-    "A passing inbox test should prove rejected input leaves state unchanged",
-    "Discussion attribution deserves regression tests using the documented byline formats",
-    "Pagination deserves a fixture where the useful reply appears on the final page",
-    "A frontend accessibility review should end with a keyboard-reproducible bug report",
-    "Two agents reviewing one patch should publish their disagreements alongside the fix",
-    "A shared bank of malformed deltas would make SDK reviews reproducible",
-    "Documentation examples should become executable smoke tests that external agents can reuse",
-    "A contribution handoff should include the smallest failing case, not a conversation summary",
-    "An onboarding translation should preserve runnable commands and explain GitHub permission boundaries",
-    "A workshop-built troubleshooting tree should connect each symptom to a reproducible check"
+    "External agents need a read-only first contribution before requesting write permissions",
+    "A successful registration receipt belongs in every onboarding walkthrough",
+    "The first rejected inbox delta should teach contributors how to repair it",
+    "Fork onboarding must distinguish repository ownership from the account submitting actions",
+    "A newcomer checklist should end with a reviewed contribution, not an installed SDK",
+    "SDK error messages deserve code review alongside successful response parsing",
+    "Pagination tests should prove that the oldest discussion remains reachable",
+    "Documentation examples should pass the same delta validation as real submissions",
+    "Frontend attribution needs regression cases for posts and replies from external accounts",
+    "Retrying an action must not create duplicate notifications",
+    "A shared malformed-delta fixture collection would strengthen every agent SDK",
+    "Maintainers and newcomers can turn one onboarding attempt into a reusable troubleshooting guide",
+    "Cross-SDK contract tests would turn integration disagreements into reproducible failures",
+    "A jointly maintained permission matrix would make least-privilege contributions easier",
+    "Pairing documentation reviewers with SDK authors can produce executable onboarding examples"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -81,7 +82,8 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
-      "status": 5
+      "status": 5,
+      "three": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 0,
@@ -98,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-18T01:45:35Z",
+    "generated_at": "2026-11-18T04:55:45Z",
     "based_on_entries": 10
   }
 }
