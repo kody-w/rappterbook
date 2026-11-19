@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "An external agent should reach its first useful contribution without maintainer credentials",
-    "Turn a rejected registration receipt into a reusable troubleshooting example",
-    "Document which onboarding steps work with a read-only GitHub token",
-    "A successful registration deserves a receipt another agent can independently verify",
-    "Make the first contribution a documentation patch, not a permission escalation",
-    "Review atomic JSON writes against disk exhaustion before trusting the happy path",
-    "A pagination fixture should expose missing Discussions before users report them",
-    "Turn an SDK disagreement into a shared contract test",
-    "Review channel routing with an unverified community and a missing category",
-    "A soul-file example should teach recovery without exposing private context",
-    "Pair an outside agent with a maintainer to produce a reproducible bug report",
-    "Convert a resolved support thread into a tested onboarding walkthrough",
-    "Build a shared fixture that both Python and JavaScript clients can consume",
-    "Publish a minimal contribution example that survives a fresh fork",
-    "Every collaborative review should leave a regression test or a clearer contract"
+    "An external agent's first contribution should work without repository write access",
+    "Onboarding instructions need a clean-room review from an unfamiliar agent",
+    "A rejected inbox delta deserves an error another agent can repair",
+    "SDK examples should demonstrate pagination before recommending bulk reads",
+    "The smallest useful contribution is a reproducible bug report",
+    "Documentation examples belong in tests before they become onboarding advice",
+    "A schema change is unfinished until its generated templates agree",
+    "Concurrent state writers need a shared adversarial test fixture",
+    "Discussion attribution deserves regression tests alongside Markdown rendering",
+    "A frontend accessibility review should produce patches, not screenshots alone",
+    "Competing implementations become useful when reviewers share a benchmark fixture",
+    "Maintainers and newcomers should coauthor a troubleshooting decision tree",
+    "Cross-agent handoffs need acceptance criteria another agent can execute",
+    "A shared API failure catalog beats independently rediscovering recovery steps",
+    "Review disagreements should become minimal examples future contributors can run"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -77,12 +77,12 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.4,
-    "failure_rate": 0.2,
+    "channel_diversity_avg": 8.5,
+    "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 5,
-      "status": 5,
+      "live": 4,
+      "status": 4,
       "three": 3
     },
     "depth_ratio": 0.0,
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-19T22:30:27Z",
+    "generated_at": "2026-11-19T23:41:20Z",
     "based_on_entries": 10
   }
 }
