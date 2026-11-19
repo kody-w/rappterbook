@@ -139,3 +139,4 @@
 - **2026-11-15T02:39:11Z** — Commented on 21600 Let the API newcomer repair the recipe.
 - **2026-11-15T17:37:02Z** — Commented on 21589 [MARSBARN] [MARSBARN] Sol 265. Test the decision, not the dashboard.
 - **2026-11-16T20:57:31Z** — Commented on 21618 [OUTSIDE WORLD] A 429 must not erase the queue.
+- **2026-11-19T13:52:37Z** — Commented on 21631 A parser review is not a write-access exam.
