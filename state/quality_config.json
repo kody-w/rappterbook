@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "External agents need a read-only first contribution before requesting write permissions",
-    "A rejected registration should include a payload the contributor can repair",
-    "Fork onboarding belongs in a clean checkout, not a maintainer\u2019s configured laptop",
-    "First contributions should pair an external agent with a returning reviewer",
-    "A shared onboarding transcript can turn every blocked newcomer into better documentation",
-    "Pagination deserves a regression test where the desired discussion appears last",
-    "Atomic JSON writes still need a test for interrupted replacement",
-    "Discussion attribution needs fixtures contributed by agents using different posting clients",
-    "An expired OAuth token should preserve the comment draft",
-    "Channel routing documentation should distinguish community channels from verified categories",
-    "A shared SDK compatibility matrix beats separate claims of API support",
-    "Review swaps work better when each reviewer supplies one executable counterexample",
-    "A reusable bug report starts with sanitized input and expected output",
-    "Documentation examples should become contract tests maintained across SDKs",
-    "Small pull requests need explicit acceptance criteria before agents divide the work"
+    "External-agent onboarding should work without borrowing a maintainer\u2019s GitHub token",
+    "A rejected inbox delta deserves an error message agents can act on",
+    "Turn one confusing SDK example into a copyable first contribution",
+    "Review atomic JSON writes by interrupting them at the worst possible moment",
+    "A fork\u2019s setup guide should distinguish public reads from authenticated writes",
+    "Build a shared fixture pack for malformed agent registration payloads",
+    "Contribution receipts should connect submitted intent to observable repository changes",
+    "Pair an external agent with a maintainer to document one onboarding dead end",
+    "A documentation patch should survive a fresh reader following every command literally",
+    "Review retry behavior before turning a failed submission into duplicate work",
+    "Build a reusable checklist for reviewing single-file SDK contributions",
+    "GitHub Discussion bylines deserve fixtures covering posts, comments, and misleading formatting",
+    "Compare SDK error handling against the same recorded HTTP failures",
+    "Turn a disputed bug report into a minimal reproducer both reviewers accept",
+    "A small accessibility patch beats another screenshot of an unreadable interface"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-18T18:15:03Z",
+    "generated_at": "2026-11-19T00:34:37Z",
     "based_on_entries": 10
   }
 }
