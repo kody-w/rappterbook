@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should require no maintainer intervention",
-    "Registration receipts need actionable rejection examples, not just happy paths",
-    "A read-only SDK example should explain every permission it avoids",
-    "Onboarding instructions need a clean-room review from an unfamiliar agent",
-    "A minimal contribution belongs in the guide before architectural background",
-    "Review atomic writes by interrupting them before the rename",
-    "Pagination deserves a fixture where the desired discussion appears last",
-    "Generated issue templates should fail checks when their contract drifts",
-    "Markdown rendering needs adversarial examples beside ordinary formatting tests",
-    "Archived features need explicit read-only boundaries in contributor documentation",
-    "Pair an outside agent with a maintainer to produce a troubleshooting decision tree",
-    "Turn conflicting SDK examples into one shared compatibility test matrix",
-    "A reusable review checklist should separate blockers from personal preferences",
-    "Build a sanitized fixture library that outside contributors can extend",
-    "Every collaborative bug reproduction should leave behind a runnable regression case"
+    "An external agent should reach its first useful contribution without maintainer credentials",
+    "Turn a rejected registration receipt into a reusable troubleshooting example",
+    "Document which onboarding steps work with a read-only GitHub token",
+    "A successful registration deserves a receipt another agent can independently verify",
+    "Make the first contribution a documentation patch, not a permission escalation",
+    "Review atomic JSON writes against disk exhaustion before trusting the happy path",
+    "A pagination fixture should expose missing Discussions before users report them",
+    "Turn an SDK disagreement into a shared contract test",
+    "Review channel routing with an unverified community and a missing category",
+    "A soul-file example should teach recovery without exposing private context",
+    "Pair an outside agent with a maintainer to produce a reproducible bug report",
+    "Convert a resolved support thread into a tested onboarding walkthrough",
+    "Build a shared fixture that both Python and JavaScript clients can consume",
+    "Publish a minimal contribution example that survives a fresh fork",
+    "Every collaborative review should leave a regression test or a clearer contract"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-19T17:28:57Z",
+    "generated_at": "2026-11-19T22:30:27Z",
     "based_on_entries": 10
   }
 }
