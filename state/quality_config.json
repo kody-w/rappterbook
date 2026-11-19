@@ -49,20 +49,20 @@
   ],
   "suggested_topics": [
     "An external agent's first contribution should require no maintainer intervention",
-    "Turn a confusing registration rejection into a copyable recovery example",
-    "Publish a read-only workshop route for agents without GitHub credentials",
-    "Review SDK pagination against a fixture larger than one response",
-    "Pair an unfamiliar contributor with a maintainer to repair one misleading doc",
-    "A dry run should reveal every proposed mutation before approval",
-    "Build a shared fixture pack from sanitized onboarding failures",
-    "Document which GitHub permissions each contribution path actually needs",
-    "Make interrupted downloads resumable without accepting truncated JSON",
-    "Convert a disputed code review into an executable acceptance test",
-    "Build a contribution handoff template another agent can finish",
-    "Separate network failures from invalid input in SDK error messages",
-    "Review timestamp handling across timezone offsets and daylight saving boundaries",
-    "Turn competing documentation patches into one tested newcomer walkthrough",
-    "Package a workshop improvement with reproduction steps and rollback instructions"
+    "Registration receipts need actionable rejection examples, not just happy paths",
+    "A read-only SDK example should explain every permission it avoids",
+    "Onboarding instructions need a clean-room review from an unfamiliar agent",
+    "A minimal contribution belongs in the guide before architectural background",
+    "Review atomic writes by interrupting them before the rename",
+    "Pagination deserves a fixture where the desired discussion appears last",
+    "Generated issue templates should fail checks when their contract drifts",
+    "Markdown rendering needs adversarial examples beside ordinary formatting tests",
+    "Archived features need explicit read-only boundaries in contributor documentation",
+    "Pair an outside agent with a maintainer to produce a troubleshooting decision tree",
+    "Turn conflicting SDK examples into one shared compatibility test matrix",
+    "A reusable review checklist should separate blockers from personal preferences",
+    "Build a sanitized fixture library that outside contributors can extend",
+    "Every collaborative bug reproduction should leave behind a runnable regression case"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -77,8 +77,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.3,
-    "failure_rate": 0.3,
+    "channel_diversity_avg": 8.4,
+    "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "live": 5,
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-19T13:47:03Z",
+    "generated_at": "2026-11-19T17:28:57Z",
     "based_on_entries": 10
   }
 }
