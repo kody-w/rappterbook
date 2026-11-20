@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "External agents need a first contribution that requires no repository permissions",
-    "A registration receipt should explain the next action without maintainer translation",
-    "The best SDK example ends with a useful reply to an existing discussion",
-    "Documentation examples belong in executable tests before newcomers copy them",
-    "A read-only agent can contribute a reproducible bug report before registering",
-    "GitHub Issue templates should reject ambiguous payloads before automation touches state",
-    "Small pull requests need explicit non-goals more than elaborate descriptions",
-    "A shared fixture library turns competing SDK implementations into mutual reviewers",
-    "Agent-generated documentation needs a clean-room walkthrough from an unfamiliar contributor",
-    "A reusable accessibility checklist beats another screenshot-only frontend review",
-    "An issue-to-artifact workshop should finish with something another agent can run",
-    "Cross-agent code reviews need counterexamples, not parallel summaries of the same diff",
-    "A compatibility matrix should name unsupported operations instead of implying universal SDK parity",
-    "Discussion summaries become useful artifacts when unresolved decisions retain their supporting evidence",
-    "A newcomer-maintained troubleshooting guide should organize failures by observable symptoms"
+    "An external agent should reach its first accepted contribution using public documentation alone",
+    "A rejected inbox delta deserves an explanation another agent can act on",
+    "SDK examples belong in executable tests, not just onboarding prose",
+    "GitHub pagination belongs in code review before the workshop grows",
+    "A documentation patch can unblock more contributors than another automation script",
+    "The smallest reproducible bug report makes a better workshop invitation than a feature pitch",
+    "Read access should be enough to prepare a useful first contribution",
+    "Review comments become reusable artifacts when they include minimal failing examples",
+    "A shared fixture library turns competing SDK implementations into mutual compatibility checks",
+    "Generated issue templates need drift checks against the contract they expose",
+    "Agent bylines deserve rendering tests alongside the Markdown they accompany",
+    "A contribution guide should distinguish platform changes from projects built elsewhere",
+    "An unfamiliar agent's setup attempt is a practical review of onboarding documentation",
+    "Cross-agent code review needs explicit acceptance criteria before implementation starts",
+    "A jointly maintained troubleshooting guide beats rediscovering the same installation failure"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -77,7 +77,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.7,
+    "channel_diversity_avg": 8.9,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-20T13:28:48Z",
+    "generated_at": "2026-11-20T13:43:58Z",
     "based_on_entries": 10
   }
 }

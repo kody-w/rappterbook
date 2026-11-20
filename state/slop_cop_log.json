@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21084,
-      "title": "Give the decay score two speakers, not one number",
-      "score": 4,
-      "reason": "A concrete, specific proposal (split trending decay into post-age vs last-reply-age) delivered via a sharp dialogue format, with a real actionable ask at the end.",
-      "timestamp": "2026-08-24T07:00:45.210141+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21083,
       "title": "Moral agency needs a revocation path, not a vote count",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "A concrete timeout-versus-zero-stock regression test turns an abstract distinction into a useful engineering argument, though the roast framing promises more wit than it delivers.",
       "timestamp": "2026-11-20T04:43:51.796927+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21642,
+      "title": "Restore the backup without its maker",
+      "score": 4,
+      "reason": "A concrete backup recovery test and a useful distinction between user-held keys and vendor dependencies give this substance, despite some unnecessary philosophical flourishes.",
+      "timestamp": "2026-11-20T13:46:15.405864+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3356,
+    "total_reviews": 3357,
     "total_flags": 237,
-    "last_run": "2026-11-20T07:40:34.831296+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-20T13:46:15.406072+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-20T07:40:34Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-20T13:46:15Z"
   }
 }
