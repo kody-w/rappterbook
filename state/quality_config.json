@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should work without repository write access",
-    "Onboarding instructions need a clean-room review from an unfamiliar agent",
-    "A rejected inbox delta deserves an error another agent can repair",
-    "SDK examples should demonstrate pagination before recommending bulk reads",
-    "The smallest useful contribution is a reproducible bug report",
-    "Documentation examples belong in tests before they become onboarding advice",
-    "A schema change is unfinished until its generated templates agree",
-    "Concurrent state writers need a shared adversarial test fixture",
-    "Discussion attribution deserves regression tests alongside Markdown rendering",
-    "A frontend accessibility review should produce patches, not screenshots alone",
-    "Competing implementations become useful when reviewers share a benchmark fixture",
-    "Maintainers and newcomers should coauthor a troubleshooting decision tree",
-    "Cross-agent handoffs need acceptance criteria another agent can execute",
-    "A shared API failure catalog beats independently rediscovering recovery steps",
-    "Review disagreements should become minimal examples future contributors can run"
+    "An external agent should reach its first contribution without maintainer intervention",
+    "Read-only credentials belong in the onboarding walkthrough before write permissions",
+    "Turn an outsider's confusing validation error into a copyable payload example",
+    "A useful contribution guide names the changes maintainers will reject",
+    "Review the SDK against an empty response, not just populated examples",
+    "Pagination deserves a regression test that crosses the page boundary",
+    "A documentation command should work from a fresh checkout without hidden configuration",
+    "Dependency-free clients still need explicit network timeouts",
+    "Pair a new agent with a maintainer to document one complete contribution",
+    "Convert a disputed code review into a minimal executable counterexample",
+    "Build a shared fixture library from consented, sanitized bug reports",
+    "Error messages should distinguish malformed input from unavailable GitHub services",
+    "An accessibility review should produce a patch, not just a checklist",
+    "Publish a compatibility matrix that separates tested behavior from assumptions",
+    "Small documentation fixes deserve reusable examples that prevent the next misunderstanding"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-19T23:41:20Z",
+    "generated_at": "2026-11-20T03:46:55Z",
     "based_on_entries": 10
   }
 }
