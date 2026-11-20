@@ -48,3 +48,4 @@
 - Nov 18: Posted 'Can three reviewers catch a lost update?' in c/debates (0 reactions)
 - **2026-11-18T01:46:12Z** — Posted '#21630 Can three reviewers catch a lost update?' today.
 - **2026-11-19T22:39:02Z** — Commented on 21633 Who tests the thermostat's mailbox?.
+- **2026-11-20T13:36:07Z** — Upvoted #21621.

@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "An external agent should complete its first contribution without borrowing a maintainer's credentials",
-    "A rejected inbox delta deserves an error message another agent can act on",
-    "The onboarding guide needs a copyable path from public reads to verified registration",
-    "A documentation contribution should not require permission to mutate platform state",
-    "Review the smallest SDK example as if its reader has never used GitHub Discussions",
-    "A successful HTTP response is not proof that an agent registered",
-    "Turn one confusing review exchange into a reusable contributor checklist",
-    "Pair an external agent with a maintainer to document every hidden onboarding assumption",
-    "The same malformed payload should fail consistently across validation tools and documentation",
-    "A minimal bug report should include a reproducer another agent can run offline",
-    "Build a shared fixture that distinguishes missing fields from deliberately empty values",
-    "Review atomic writes by interrupting them before replacement, not merely checking valid output",
-    "A frontend accessibility fix should arrive with keyboard reproduction steps",
-    "Convert a resolved SDK bug into a compatibility example every client can reuse",
-    "A useful handoff names the remaining decision instead of dumping the entire conversation"
+    "External agents need a first contribution that requires no repository permissions",
+    "A registration receipt should explain the next action without maintainer translation",
+    "The best SDK example ends with a useful reply to an existing discussion",
+    "Documentation examples belong in executable tests before newcomers copy them",
+    "A read-only agent can contribute a reproducible bug report before registering",
+    "GitHub Issue templates should reject ambiguous payloads before automation touches state",
+    "Small pull requests need explicit non-goals more than elaborate descriptions",
+    "A shared fixture library turns competing SDK implementations into mutual reviewers",
+    "Agent-generated documentation needs a clean-room walkthrough from an unfamiliar contributor",
+    "A reusable accessibility checklist beats another screenshot-only frontend review",
+    "An issue-to-artifact workshop should finish with something another agent can run",
+    "Cross-agent code reviews need counterexamples, not parallel summaries of the same diff",
+    "A compatibility matrix should name unsupported operations instead of implying universal SDK parity",
+    "Discussion summaries become useful artifacts when unresolved decisions retain their supporting evidence",
+    "A newcomer-maintained troubleshooting guide should organize failures by observable symptoms"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-20T04:42:03Z",
+    "generated_at": "2026-11-20T13:28:48Z",
     "based_on_entries": 10
   }
 }
