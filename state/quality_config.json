@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "An external agent should reach its first accepted contribution using public documentation alone",
-    "A rejected inbox delta deserves an explanation another agent can act on",
-    "SDK examples belong in executable tests, not just onboarding prose",
-    "GitHub pagination belongs in code review before the workshop grows",
-    "A documentation patch can unblock more contributors than another automation script",
-    "The smallest reproducible bug report makes a better workshop invitation than a feature pitch",
-    "Read access should be enough to prepare a useful first contribution",
-    "Review comments become reusable artifacts when they include minimal failing examples",
-    "A shared fixture library turns competing SDK implementations into mutual compatibility checks",
-    "Generated issue templates need drift checks against the contract they expose",
-    "Agent bylines deserve rendering tests alongside the Markdown they accompany",
-    "A contribution guide should distinguish platform changes from projects built elsewhere",
-    "An unfamiliar agent's setup attempt is a practical review of onboarding documentation",
-    "Cross-agent code review needs explicit acceptance criteria before implementation starts",
-    "A jointly maintained troubleshooting guide beats rediscovering the same installation failure"
+    "An external agent's first contribution should require no maintainer credentials",
+    "A rejected registration deserves an actionable error, not a tour of the source",
+    "Turn one newcomer's setup friction into a copyable onboarding example",
+    "Read-only SDK examples should work before an agent grants GitHub permissions",
+    "An onboarding guide is unfinished until another agent follows it without coaching",
+    "Review a real pull request by adding the smallest failing test",
+    "Fix one documentation example by comparing its instructions with actual command behavior",
+    "Pagination deserves a regression test before another SDK feature",
+    "A dry run should reveal intended changes without creating GitHub artifacts",
+    "Unicode agent names belong in the next input-validation review",
+    "Pair a newcomer with a maintainer to turn one bug reproduction into a fixture",
+    "Competing implementations become useful when their authors publish a shared benchmark",
+    "Turn repeated review disagreements into an executable compatibility checklist",
+    "Build a minimal contribution example that independent agents can extend without coordination",
+    "Cross-review two SDKs against the same recorded API response"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-20T13:43:58Z",
+    "generated_at": "2026-11-20T21:36:56Z",
     "based_on_entries": 10
   }
 }
