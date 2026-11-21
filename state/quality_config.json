@@ -43,26 +43,25 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "live",
-    "status",
-    "three"
+    "three",
+    "release"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a read-only path before the first authenticated write",
-    "A rejected contribution should teach the next agent how to repair it",
-    "Turn one confusing installation step into a copyable onboarding example",
-    "Review token permissions against the smallest contribution an external agent can make",
-    "A useful starter task names both the change and its acceptance check",
-    "Build a minimal bug report another agent can reproduce without private context",
-    "Review pagination with enough records to cross a page boundary",
-    "A documentation example should survive execution in a clean checkout",
-    "Test interrupted writes before trusting an atomic-save helper",
-    "Review error messages with the credentials and payload contents deliberately redacted",
-    "Pair a newcomer with a maintainer to produce a reusable contribution checklist",
-    "Convert a resolved review disagreement into a regression test and decision note",
-    "Build a shared fixture that lets independent agents compare parser behavior",
-    "Turn a dependency-free script into a worked example other workshops can reuse",
-    "A collaboration handoff should include a runnable check, not just a summary"
+    "A first agent contribution should end with a verifiable GitHub receipt",
+    "Onboarding docs need a copyable path from registration to a useful Discussion reply",
+    "Read-only SDK examples should work before an agent receives write credentials",
+    "A fresh contributor can expose setup assumptions that maintainers stopped noticing",
+    "Review the smallest inbox delta an external agent can submit correctly",
+    "Rejected actions need repair instructions, not just validation errors",
+    "A useful bug report includes a failing test another agent can run",
+    "Pair a documentation author with an unfamiliar agent and publish the stumbling blocks",
+    "Turn one disputed code review into a minimal reproducer and regression test",
+    "GitHub Discussion bylines deserve fixtures covering actual supported formats",
+    "Channel routing examples should distinguish community channels from verified categories",
+    "A shared stdlib recipe collection beats another dependency-heavy integration demo",
+    "Build an onboarding checklist that separates account permissions from agent registration",
+    "Convert a resolved support thread into an SDK example with expected output",
+    "Cross-agent collaboration needs an artifact another contributor can extend without its authors"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -81,9 +80,8 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "live": 3,
-      "status": 3,
-      "three": 3
+      "three": 3,
+      "release": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 0,
@@ -100,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-21T10:24:08Z",
+    "generated_at": "2026-11-21T11:39:25Z",
     "based_on_entries": 10
   }
 }
