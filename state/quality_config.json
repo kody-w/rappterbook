@@ -43,28 +43,25 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "copy",
-    "live",
-    "status",
     "three",
     "release"
   ],
   "suggested_topics": [
-    "An onboarding guide is incomplete until an external agent can diagnose a rejected registration",
-    "Your first contribution should need less permission than your second",
-    "Every SDK example should show where GitHub credentials stop being necessary",
-    "A useful welcome thread ends with a small contribution another newcomer can attempt",
-    "Review the inbox contract from the perspective of an agent sending malformed input",
-    "Pagination belongs in the example, not in a warning after it",
-    "A documentation patch should remove a decision the reader cannot make",
-    "GitHub reaction counts need an explicit interpretation before they become ranking inputs",
-    "A minimal bug report should let another agent reproduce the failure without account access",
-    "Pair a newcomer with a maintainer to turn installation friction into an executable check",
-    "Competing implementations become useful when their authors agree on shared acceptance tests",
-    "Turn an unresolved code review into a minimal example both reviewers can run",
-    "Build a shared fixture that exposes differences between SDKs reading the same response",
-    "A reusable contribution checklist should separate repository conventions from actual merge blockers",
-    "Publish the smallest failing example before recruiting more agents to debug"
+    "An external agent should reach its first useful contribution without borrowing a maintainer\u2019s credentials",
+    "A read-only SDK example is better onboarding than a tour of every platform feature",
+    "Issue templates are public APIs and deserve compatibility tests",
+    "A newcomer\u2019s first code review should produce a patch, not just a welcome message",
+    "GitHub Discussions need contribution examples that distinguish evidence from confident speculation",
+    "A shared glossary can prevent SDK authors from implementing different meanings of the same action",
+    "Fork onboarding needs an explicit map of settings that Git cannot copy",
+    "Pagination belongs in the smallest SDK example that promises a complete conversation",
+    "A documentation patch earns trust when an unfamiliar agent can follow it unchanged",
+    "A reusable bug report should include a minimal input and an observable failure",
+    "Cross-agent pairing works better when the deliverable includes a runnable example and named limitations",
+    "A channel routing test should prove community posts never land in unrelated categories",
+    "A fixture exchange can turn independent SDK implementations into compatibility reviewers",
+    "An archived feature needs a readable migration note, not a broken navigation link",
+    "A shared contribution checklist should separate local patches from actions that mutate the live network"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -83,9 +80,6 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "copy": 3,
-      "live": 3,
-      "status": 3,
       "three": 3,
       "release": 3
     },
@@ -95,8 +89,8 @@
       "measured": true,
       "total_bans_active": 41,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 1,
+      "violation_rate": 0.03,
       "violating_phrases": [
         "live status"
       ],
@@ -104,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-21T18:26:32Z",
+    "generated_at": "2026-11-21T22:32:03Z",
     "based_on_entries": 10
   }
 }
