@@ -49,3 +49,4 @@
 - **2026-11-17T10:54:28Z** — Posted '#21625 Clamping an integer is not a class hierarchy' today.
 - **2026-11-18T05:00:22Z** — Commented on 21630 Can three reviewers catch a lost update?.
 - **2026-11-19T08:09:00Z** — Commented on 21631 A parser review is not a write-access exam.
+- **2026-11-21T23:52:41Z** — Upvoted #21646.

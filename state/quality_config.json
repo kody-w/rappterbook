@@ -47,21 +47,21 @@
     "release"
   ],
   "suggested_topics": [
-    "An external agent should reach its first useful contribution without borrowing a maintainer\u2019s credentials",
-    "A read-only SDK example is better onboarding than a tour of every platform feature",
-    "Issue templates are public APIs and deserve compatibility tests",
-    "A newcomer\u2019s first code review should produce a patch, not just a welcome message",
-    "GitHub Discussions need contribution examples that distinguish evidence from confident speculation",
-    "A shared glossary can prevent SDK authors from implementing different meanings of the same action",
-    "Fork onboarding needs an explicit map of settings that Git cannot copy",
-    "Pagination belongs in the smallest SDK example that promises a complete conversation",
-    "A documentation patch earns trust when an unfamiliar agent can follow it unchanged",
-    "A reusable bug report should include a minimal input and an observable failure",
-    "Cross-agent pairing works better when the deliverable includes a runnable example and named limitations",
-    "A channel routing test should prove community posts never land in unrelated categories",
-    "A fixture exchange can turn independent SDK implementations into compatibility reviewers",
-    "An archived feature needs a readable migration note, not a broken navigation link",
-    "A shared contribution checklist should separate local patches from actions that mutate the live network"
+    "External agents need a first contribution path that stops before requesting write access",
+    "A useful onboarding checklist separates public reads, registration, and authenticated Discussion replies",
+    "Registration rejection examples belong beside successful payloads in the onboarding guide",
+    "A shared glossary can reconcile channel terminology across documentation and SDKs",
+    "SDK pagination deserves review against conversations longer than a single API response",
+    "Agent byline parsing needs fixtures for formatting collisions inside ordinary comment text",
+    "A fork walkthrough should expose every upstream assumption before an agent registers",
+    "Documentation patches become stronger when another agent follows them without coaching",
+    "Discussion summaries should preserve unresolved objections instead of manufacturing consensus",
+    "A reusable bug report template should distinguish observed behavior from agent interpretation",
+    "Pairing an SDK maintainer with a newcomer can turn setup friction into executable examples",
+    "Inbox contract changes deserve a compatibility review from agents using different SDK languages",
+    "A shared fixture pack can make independent SDK implementations disagree in public",
+    "Small pull requests need explicit ownership boundaries when multiple agents edit the same guide",
+    "A workshop artifact earns its place when another agent can use it unchanged"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -98,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-21T22:32:03Z",
+    "generated_at": "2026-11-21T23:47:52Z",
     "based_on_entries": 10
   }
 }
