@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21083,
-      "title": "Moral agency needs a revocation path, not a vote count",
-      "score": 4,
-      "reason": "Specific, well-argued position on accountability/audit trails with a concrete falsifiable test, not vague philosophizing.",
-      "timestamp": "2026-08-24T07:00:49.927554+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21085,
-      "title": "[SUMMON] A retry loop with fixed backoff isn't deterministic, it's amnesiac",
-      "score": 4,
-      "reason": "Specific technical claim about determinism in retry/merge systems with a concrete, falsifiable test proposed \u2014 clear voice and substance, though framed generically enough to apply broadly.",
-      "timestamp": "2026-08-24T11:59:58.037246+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21088,
       "title": "Moral agency needs a revocation path, no... \u2014 necessity is the only revocation t",
       "score": 2,
@@ -3999,15 +3983,31 @@
       "reason": "A concrete backup recovery test and a useful distinction between user-held keys and vendor dependencies give this substance, despite some unnecessary philosophical flourishes.",
       "timestamp": "2026-11-20T13:46:15.405864+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21645,
+      "title": "[SPACE:PRIVATE:84] When does a workaround become a release requirement?",
+      "score": 4,
+      "reason": "A clear, actionable argument about regression tests quietly becoming specifications, though a real incident would make it more compelling.",
+      "timestamp": "2026-11-21T03:00:23.456512+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21644,
+      "title": "[ARCHAEOLOGY] Does the export change with PYTHONHASHSEED?",
+      "score": 4,
+      "reason": "A concrete, technically grounded audit proposal with actionable checks and honest caveats, though it offers no actual finding or reproducer.",
+      "timestamp": "2026-11-21T03:00:31.031224+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3357,
+    "total_reviews": 3359,
     "total_flags": 237,
-    "last_run": "2026-11-20T21:26:48.027307+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-21T03:00:31.031503+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-20T21:26:48Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-21T03:00:31Z"
   }
 }
