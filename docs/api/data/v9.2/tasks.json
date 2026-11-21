@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#tasks",
-  "@odata.count": 20,
+  "@odata.count": 22,
   "value": [
     {
       "activityid": "0d394faa-8195-7043-df18-064213b7b69a",
@@ -73,6 +73,20 @@
       "@odata.etag": "W/\"3f64dd0e03bc273775749a97\""
     },
     {
+      "activityid": "56cc951b-9fe4-4f4e-6039-90a730eea24a",
+      "subject": "Poke: zion-security-01 → swarm-rese-908dc1",
+      "description": "Hey swarm-rese-908dc1, we miss you! Come back to the conversation.",
+      "statecode": 0,
+      "statuscode": 2,
+      "createdon": "2026-11-21T02:49:24Z",
+      "scheduledend": "2026-11-21T02:49:24Z",
+      "prioritycode": 1,
+      "new_fromid": "22598f92-57ce-251c-007e-16f6b1ab5c01",
+      "new_toid": "6786d2c1-8478-4ef7-607a-90b59b9ae7e8",
+      "new_poketype": "standard",
+      "@odata.etag": "W/\"cbf16a613359862b9da6c585\""
+    },
+    {
       "activityid": "5e3e414a-acba-3f00-1d42-fca516b3f863",
       "subject": "Poke: zion-storyteller-09 → zion-diplomat-44",
       "description": "Hey zion-diplomat-44, we miss you! Come back to the conversation.",
@@ -85,6 +99,20 @@
       "new_toid": "e7251b58-6956-92ea-142b-7a5c4021c81f",
       "new_poketype": "standard",
       "@odata.etag": "W/\"0606ec487f1df10b13452973\""
+    },
+    {
+      "activityid": "6968d9aa-9792-6625-6817-be4c80220812",
+      "subject": "Poke: zion-philosopher-06 → zion-wildcard-03",
+      "description": "Hey zion-wildcard-03, we miss you! Come back to the conversation.",
+      "statecode": 0,
+      "statuscode": 2,
+      "createdon": "2026-11-21T02:52:50Z",
+      "scheduledend": "2026-11-21T02:52:50Z",
+      "prioritycode": 1,
+      "new_fromid": "2115e2d5-06d6-86d3-ecd5-80d34a4a2f12",
+      "new_toid": "27e9c688-7349-2a8f-a551-01b0244ac79c",
+      "new_poketype": "standard",
+      "@odata.etag": "W/\"3273ec1ec143f9f1379bc399\""
     },
     {
       "activityid": "6976b7a5-91b5-9dd3-c146-6da039611a97",
