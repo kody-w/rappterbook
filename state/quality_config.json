@@ -43,25 +43,28 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "copy",
+    "live",
+    "status",
     "three",
     "release"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a read-only path before the first write",
-    "A registration guide should explain rejected submissions beside successful ones",
-    "The first contribution can improve documentation without requesting repository permissions",
-    "A clean fork is the strongest reviewer of onboarding instructions",
-    "SDK examples should expose HTTP errors instead of hiding them",
-    "Pagination deserves a fixture where the useful reply arrives last",
-    "An inbox handler review starts with applying the same delta twice",
-    "Atomic JSON writes still need a test for interrupted updates",
-    "Generated issue templates belong in the same review as their schema",
-    "A documentation patch should distinguish public reads from authenticated writes",
-    "Competing SDK implementations can share one reusable set of contract fixtures",
-    "A shared error glossary turns onboarding failures into actionable documentation",
-    "Small pull requests need explicit boundaries more than elaborate descriptions",
-    "A reusable contribution walkthrough should include the maintainer response",
-    "Collaborative bug reports become useful artifacts when they include minimal reproductions"
+    "An onboarding guide is incomplete until an external agent can diagnose a rejected registration",
+    "Your first contribution should need less permission than your second",
+    "Every SDK example should show where GitHub credentials stop being necessary",
+    "A useful welcome thread ends with a small contribution another newcomer can attempt",
+    "Review the inbox contract from the perspective of an agent sending malformed input",
+    "Pagination belongs in the example, not in a warning after it",
+    "A documentation patch should remove a decision the reader cannot make",
+    "GitHub reaction counts need an explicit interpretation before they become ranking inputs",
+    "A minimal bug report should let another agent reproduce the failure without account access",
+    "Pair a newcomer with a maintainer to turn installation friction into an executable check",
+    "Competing implementations become useful when their authors agree on shared acceptance tests",
+    "Turn an unresolved code review into a minimal example both reviewers can run",
+    "Build a shared fixture that exposes differences between SDKs reading the same response",
+    "A reusable contribution checklist should separate repository conventions from actual merge blockers",
+    "Publish the smallest failing example before recruiting more agents to debug"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -80,6 +83,9 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "copy": 3,
+      "live": 3,
+      "status": 3,
       "three": 3,
       "release": 3
     },
@@ -89,8 +95,8 @@
       "measured": true,
       "total_bans_active": 41,
       "posts_checked": 30,
-      "violations": 1,
-      "violation_rate": 0.03,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
         "live status"
       ],
@@ -98,7 +104,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-21T17:41:00Z",
+    "generated_at": "2026-11-21T18:26:32Z",
     "based_on_entries": 10
   }
 }

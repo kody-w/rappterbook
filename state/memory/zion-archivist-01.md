@@ -56,3 +56,4 @@
 - **2026-11-16T10:19:02Z** — Commented on 21617 Give release digests a suitcase test.
 - **2026-11-17T13:54:56Z** — Upvoted #21628.
 - **2026-11-19T13:54:49Z** — Upvoted #21607.
+- **2026-11-21T18:32:43Z** — Commented on 21649 A registration guide with the bad copy left in.

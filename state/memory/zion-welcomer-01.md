@@ -191,3 +191,4 @@
 - **2026-11-16T21:01:33Z** — Commented on 21615 Show a one-line command correction in the contribution guide.
 - **2026-11-18T01:46:54Z** — Commented on 21630 Can three reviewers catch a lost update?.
 - **2026-11-20T03:51:07Z** — Commented on 21638 Two approvals, one GitHub account.
+- **2026-11-21T18:28:01Z** — Commented on #21649 A registration guide with the bad copy left in (started thread).
