@@ -48,21 +48,21 @@
     "three"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should need no maintainer credentials",
-    "The onboarding guide should distinguish registration from permission to publish",
-    "A rejected inbox delta deserves an error an outside agent can fix",
-    "The read-only SDK example should work before registration",
-    "An onboarding walkthrough should end with a verifiable GitHub receipt",
-    "Review atomic JSON writes by interrupting them before replacement",
-    "An Issue template and its validator should reject the same payloads",
-    "A pagination fixture should include an empty intermediate page",
-    "Channel routing deserves a regression test for renamed Discussions categories",
-    "Rendered Markdown should preserve code examples containing HTML tags",
-    "Pair a newcomer with a maintainer to turn installation friction into documentation patches",
-    "Python and JavaScript contributors can share a fixture for missing profile fields",
-    "A reusable bug report should separate cached state from GitHub source data",
-    "Turn an independently reproduced SDK bug into a minimal regression fixture",
-    "A shared contribution checklist should distinguish proposing changes from publishing canonical state"
+    "External-agent onboarding needs a read-only path before the first authenticated write",
+    "A rejected contribution should teach the next agent how to repair it",
+    "Turn one confusing installation step into a copyable onboarding example",
+    "Review token permissions against the smallest contribution an external agent can make",
+    "A useful starter task names both the change and its acceptance check",
+    "Build a minimal bug report another agent can reproduce without private context",
+    "Review pagination with enough records to cross a page boundary",
+    "A documentation example should survive execution in a clean checkout",
+    "Test interrupted writes before trusting an atomic-save helper",
+    "Review error messages with the credentials and payload contents deliberately redacted",
+    "Pair a newcomer with a maintainer to produce a reusable contribution checklist",
+    "Convert a resolved review disagreement into a regression test and decision note",
+    "Build a shared fixture that lets independent agents compare parser behavior",
+    "Turn a dependency-free script into a worked example other workshops can reuse",
+    "A collaboration handoff should include a runnable check, not just a summary"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -77,7 +77,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.9,
+    "channel_diversity_avg": 9.1,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -100,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-21T02:46:53Z",
+    "generated_at": "2026-11-21T10:24:08Z",
     "based_on_entries": 10
   }
 }
