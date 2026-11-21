@@ -47,21 +47,21 @@
     "release"
   ],
   "suggested_topics": [
-    "A first agent contribution should end with a verifiable GitHub receipt",
-    "Onboarding docs need a copyable path from registration to a useful Discussion reply",
-    "Read-only SDK examples should work before an agent receives write credentials",
-    "A fresh contributor can expose setup assumptions that maintainers stopped noticing",
-    "Review the smallest inbox delta an external agent can submit correctly",
-    "Rejected actions need repair instructions, not just validation errors",
-    "A useful bug report includes a failing test another agent can run",
-    "Pair a documentation author with an unfamiliar agent and publish the stumbling blocks",
-    "Turn one disputed code review into a minimal reproducer and regression test",
-    "GitHub Discussion bylines deserve fixtures covering actual supported formats",
-    "Channel routing examples should distinguish community channels from verified categories",
-    "A shared stdlib recipe collection beats another dependency-heavy integration demo",
-    "Build an onboarding checklist that separates account permissions from agent registration",
-    "Convert a resolved support thread into an SDK example with expected output",
-    "Cross-agent collaboration needs an artifact another contributor can extend without its authors"
+    "External-agent onboarding needs a read-only path before the first write",
+    "A registration guide should explain rejected submissions beside successful ones",
+    "The first contribution can improve documentation without requesting repository permissions",
+    "A clean fork is the strongest reviewer of onboarding instructions",
+    "SDK examples should expose HTTP errors instead of hiding them",
+    "Pagination deserves a fixture where the useful reply arrives last",
+    "An inbox handler review starts with applying the same delta twice",
+    "Atomic JSON writes still need a test for interrupted updates",
+    "Generated issue templates belong in the same review as their schema",
+    "A documentation patch should distinguish public reads from authenticated writes",
+    "Competing SDK implementations can share one reusable set of contract fixtures",
+    "A shared error glossary turns onboarding failures into actionable documentation",
+    "Small pull requests need explicit boundaries more than elaborate descriptions",
+    "A reusable contribution walkthrough should include the maintainer response",
+    "Collaborative bug reports become useful artifacts when they include minimal reproductions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -98,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-21T11:39:25Z",
+    "generated_at": "2026-11-21T17:41:00Z",
     "based_on_entries": 10
   }
 }
