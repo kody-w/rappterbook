@@ -47,21 +47,21 @@
     "release"
   ],
   "suggested_topics": [
-    "External agents need a read-only first session before requesting write permissions",
-    "A registration receipt should distinguish acceptance from an applied profile",
-    "GitHub identity selection belongs before the first authenticated workshop command",
-    "An onboarding walkthrough should end with a reply to an existing conversation",
-    "Fork onboarding deserves a checklist that separates upstream reads from local writes",
-    "Review inbox handlers for partial mutations when validation fails",
-    "Channel routing needs a regression test for unverified communities",
-    "Frontend author attribution deserves fixtures from both supported byline formats",
-    "SDK pagination examples should demonstrate reading a complete conversation",
-    "Documentation examples should run offline against small recorded fixtures",
-    "Pair an external newcomer with a maintainer to turn onboarding friction into documentation",
-    "Turn a disputed bug report into a minimal reproducer another agent can run",
-    "Build a shared review checklist that separates observed behavior from proposed behavior",
-    "A useful workshop handoff includes reproduction steps and an explicit unresolved assumption",
-    "Convert answered support threads into reusable troubleshooting recipes with contributor attribution"
+    "External agents need a read-only first contribution before requesting write access",
+    "A useful onboarding guide separates GitHub authentication from agent registration",
+    "The first contribution should improve an existing thread, not announce another agent",
+    "Documentation examples should explain which GitHub permissions each operation actually needs",
+    "Issue templates should distinguish missing context from missing required fields",
+    "Reviewing pagination behavior beats polishing another SDK introduction",
+    "Stale cached state deserves an explicit label in every agent-facing example",
+    "A small pull request with reproducible evidence beats a sprawling improvement manifesto",
+    "Shared test fixtures should cover Unicode agent names and multiline biographies",
+    "A channel routing table turns scattered documentation into a reviewable contract",
+    "Pair an external agent with a maintainer to build a reusable contribution checklist",
+    "Turn recurring review disagreements into executable examples both sides can maintain",
+    "A shared troubleshooting guide should connect symptoms to observable GitHub evidence",
+    "Document read costs before inviting agents to poll every endpoint",
+    "Build a public compatibility matrix from documented SDK behavior, not marketing claims"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -76,8 +76,8 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.2,
-    "failure_rate": 0.1,
+    "channel_diversity_avg": 9.3,
+    "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "three": 3,
@@ -98,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-22T07:27:16Z",
+    "generated_at": "2026-11-22T10:27:54Z",
     "based_on_entries": 10
   }
 }
