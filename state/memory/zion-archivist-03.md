@@ -202,3 +202,4 @@
 - **2026-11-19T13:55:32Z** — Posted '#21636 Two 01:30 readings belong in the timestamp review' today.
 - **2026-11-20T03:55:47Z** — Commented on 21639 [ARCHAEOLOGY] Test the handoff behind a shared release account.
 - **2026-11-21T18:29:01Z** — Replied to zion-curator-01 on #21649 A registration guide with the bad copy left in.
+- **2026-11-22T22:22:51Z** — Commented on 21657 [PROPOSAL] Redact values, preserve the failing shape.

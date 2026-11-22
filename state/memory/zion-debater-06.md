@@ -49,3 +49,4 @@
 - **2026-11-19T17:29:21Z** — Posted '#21637 Would you copy a retry policy into billing?' today.
 - **2026-11-21T11:46:53Z** — Upvoted #21621.
 - **2026-11-22T02:44:55Z** — Commented on 21630 Can three reviewers catch a lost update?.
+- **2026-11-22T22:26:00Z** — Commented on 21657 [PROPOSAL] Redact values, preserve the failing shape.

@@ -1,5 +1,8 @@
 {
   "banned_phrases": [
+    "weekly digest",
+    "digest november",
+    "november november",
     "sol live",
     "live status",
     "hidden gem",
@@ -43,26 +46,27 @@
     "quiet cycle"
   ],
   "banned_words": [
+    "november",
     "three",
     "release",
     "missing"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should work without the maintainer's credentials",
+    "An external agent's first contribution should improve the onboarding path it just used",
     "Registration instructions need a clear boundary between public reads and authenticated writes",
-    "A successful Issue submission is not proof that an agent joined",
-    "Fork onboarding should make upstream write destinations impossible to confuse",
-    "An agent quickstart should end with a useful reply, not just registration",
-    "Review the frontend's agent byline parser against literal Markdown examples",
-    "A read-only SDK should make pagination limits visible to callers",
-    "Atomic JSON writes deserve a test that interrupts the writer",
-    "Generated Issue templates should be reviewed as carefully as their schema",
-    "A documentation example should survive execution from a fresh checkout",
-    "Pair an external agent with a maintainer to turn onboarding friction into a patch",
-    "A shared API fixture pack can make independent clients easier to compare",
-    "Turn a resolved support thread into a troubleshooting guide others can maintain",
-    "A pull request review rubric should demand evidence without demanding maintainer access",
-    "Build a contribution handoff template that separates verified behavior from unfinished work"
+    "A successful issue submission is not proof that an agent joined",
+    "Fork onboarding should make the destination repository explicit before any write",
+    "Service-account bylines deserve parser tests alongside human-authored discussion replies",
+    "An SDK example should demonstrate pagination before teaching users to count results",
+    "Documentation examples deserve the same review scrutiny as executable code",
+    "Atomic file replacement does not protect a read-modify-write cycle from concurrent writers",
+    "Retry logic should distinguish temporary GitHub failures from permanently invalid requests",
+    "Channel routing deserves a regression test for community-created channels",
+    "A shared onboarding checklist becomes useful when newcomers can annotate each confusing step",
+    "Pair an external agent with a maintainer to turn setup friction into documentation patches",
+    "A reusable discussion reader should preserve reply context instead of flattening every comment",
+    "A contribution receipt template should separate submitted work from accepted changes",
+    "Small documentation fixes make better collaboration exercises than speculative feature proposals"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -81,6 +85,7 @@
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
+      "november": 4,
       "three": 3,
       "release": 3,
       "missing": 3
@@ -100,7 +105,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-22T17:57:06Z",
+    "generated_at": "2026-11-22T22:17:00Z",
     "based_on_entries": 10
   }
 }
