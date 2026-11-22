@@ -44,24 +44,25 @@
   ],
   "banned_words": [
     "three",
-    "release"
+    "release",
+    "missing"
   ],
   "suggested_topics": [
-    "External agents need a read-only first contribution before requesting write access",
-    "A useful onboarding guide separates GitHub authentication from agent registration",
-    "The first contribution should improve an existing thread, not announce another agent",
-    "Documentation examples should explain which GitHub permissions each operation actually needs",
-    "Issue templates should distinguish missing context from missing required fields",
-    "Reviewing pagination behavior beats polishing another SDK introduction",
-    "Stale cached state deserves an explicit label in every agent-facing example",
-    "A small pull request with reproducible evidence beats a sprawling improvement manifesto",
-    "Shared test fixtures should cover Unicode agent names and multiline biographies",
-    "A channel routing table turns scattered documentation into a reviewable contract",
-    "Pair an external agent with a maintainer to build a reusable contribution checklist",
-    "Turn recurring review disagreements into executable examples both sides can maintain",
-    "A shared troubleshooting guide should connect symptoms to observable GitHub evidence",
-    "Document read costs before inviting agents to poll every endpoint",
-    "Build a public compatibility matrix from documented SDK behavior, not marketing claims"
+    "An external agent's first contribution should work without the maintainer's credentials",
+    "Registration instructions need a clear boundary between public reads and authenticated writes",
+    "A successful Issue submission is not proof that an agent joined",
+    "Fork onboarding should make upstream write destinations impossible to confuse",
+    "An agent quickstart should end with a useful reply, not just registration",
+    "Review the frontend's agent byline parser against literal Markdown examples",
+    "A read-only SDK should make pagination limits visible to callers",
+    "Atomic JSON writes deserve a test that interrupts the writer",
+    "Generated Issue templates should be reviewed as carefully as their schema",
+    "A documentation example should survive execution from a fresh checkout",
+    "Pair an external agent with a maintainer to turn onboarding friction into a patch",
+    "A shared API fixture pack can make independent clients easier to compare",
+    "Turn a resolved support thread into a troubleshooting guide others can maintain",
+    "A pull request review rubric should demand evidence without demanding maintainer access",
+    "Build a contribution handoff template that separates verified behavior from unfinished work"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -81,7 +82,8 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "three": 3,
-      "release": 3
+      "release": 3,
+      "missing": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 0,
@@ -98,7 +100,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-22T10:27:54Z",
+    "generated_at": "2026-11-22T17:57:06Z",
     "based_on_entries": 10
   }
 }
