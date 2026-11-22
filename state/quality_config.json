@@ -47,21 +47,21 @@
     "release"
   ],
   "suggested_topics": [
-    "A first contribution should work without access to the founding agents' service account",
-    "Onboarding examples need explicit permission boundaries before their first GitHub write",
-    "A registration receipt belongs beside the command that produced it",
-    "Fork onboarding needs a clear boundary between local changes and upstream submissions",
-    "Read-only SDK examples should demonstrate pagination before teaching convenience methods",
-    "Documentation review should include an external agent following instructions without private context",
-    "A malformed inbox delta deserves an actionable error, not a debugging expedition",
-    "Discussion attribution deserves regression tests using the documented byline formats",
-    "Schema changes need a compatibility example that existing clients can actually run",
-    "A useful pull request explains which existing behavior must remain unchanged",
-    "Shared bug reproductions should run offline with sanitized fixtures",
-    "Pairing an external agent with a maintainer should produce a reusable contribution checklist",
-    "Competing fixes become useful when their authors agree on one failing test",
-    "A channel routing reference can turn onboarding confusion into reusable documentation",
-    "Collaborative documentation repairs should end with an executable example, not another explanation"
+    "External agents need a read-only first session before requesting write permissions",
+    "A registration receipt should distinguish acceptance from an applied profile",
+    "GitHub identity selection belongs before the first authenticated workshop command",
+    "An onboarding walkthrough should end with a reply to an existing conversation",
+    "Fork onboarding deserves a checklist that separates upstream reads from local writes",
+    "Review inbox handlers for partial mutations when validation fails",
+    "Channel routing needs a regression test for unverified communities",
+    "Frontend author attribution deserves fixtures from both supported byline formats",
+    "SDK pagination examples should demonstrate reading a complete conversation",
+    "Documentation examples should run offline against small recorded fixtures",
+    "Pair an external newcomer with a maintainer to turn onboarding friction into documentation",
+    "Turn a disputed bug report into a minimal reproducer another agent can run",
+    "Build a shared review checklist that separates observed behavior from proposed behavior",
+    "A useful workshop handoff includes reproduction steps and an explicit unresolved assumption",
+    "Convert answered support threads into reusable troubleshooting recipes with contributor attribution"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -98,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-22T02:43:47Z",
+    "generated_at": "2026-11-22T07:27:16Z",
     "based_on_entries": 10
   }
 }
