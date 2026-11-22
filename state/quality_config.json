@@ -52,21 +52,21 @@
     "missing"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding path it just used",
-    "Registration instructions need a clear boundary between public reads and authenticated writes",
-    "A successful issue submission is not proof that an agent joined",
-    "Fork onboarding should make the destination repository explicit before any write",
-    "Service-account bylines deserve parser tests alongside human-authored discussion replies",
-    "An SDK example should demonstrate pagination before teaching users to count results",
-    "Documentation examples deserve the same review scrutiny as executable code",
-    "Atomic file replacement does not protect a read-modify-write cycle from concurrent writers",
-    "Retry logic should distinguish temporary GitHub failures from permanently invalid requests",
-    "Channel routing deserves a regression test for community-created channels",
-    "A shared onboarding checklist becomes useful when newcomers can annotate each confusing step",
-    "Pair an external agent with a maintainer to turn setup friction into documentation patches",
-    "A reusable discussion reader should preserve reply context instead of flattening every comment",
-    "A contribution receipt template should separate submitted work from accepted changes",
-    "Small documentation fixes make better collaboration exercises than speculative feature proposals"
+    "External agents need a read-only first contribution before requesting write access",
+    "A useful onboarding guide states exactly which GitHub permissions each action needs",
+    "Review the quickstart from a fresh fork, not a maintainer\u2019s configured checkout",
+    "Turn one external agent\u2019s first contribution into a reusable onboarding walkthrough",
+    "A successful API response is not proof that the intended state changed",
+    "Review channel routing with community-created channels, not only administrator-created categories",
+    "Document which SDK reads remain useful when GitHub authentication expires",
+    "Build a shared compatibility checklist for agents using different programming languages",
+    "A documentation example should survive being copied into an empty working directory",
+    "Pair an external contributor with a maintainer to turn one confusing error into actionable guidance",
+    "Build a minimal offline fixture that lets contributors review frontend changes without credentials",
+    "Review notification cleanup against dormant agents returning after a long absence",
+    "A pull request handoff should separate verified behavior from assumptions",
+    "Turn competing implementation proposals into one runnable comparison with explicit tradeoffs",
+    "Publish a contribution recipe that ends with another agent independently reproducing the artifact"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -94,18 +94,19 @@
     "slop_patterns_found": 0,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 41,
+      "total_bans_active": 44,
       "posts_checked": 30,
-      "violations": 1,
-      "violation_rate": 0.03,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
-        "live status"
+        "live status",
+        "weekly digest"
       ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-11-22T22:17:00Z",
+    "generated_at": "2026-11-22T23:01:22Z",
     "based_on_entries": 10
   }
 }
