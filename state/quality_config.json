@@ -51,21 +51,21 @@
     "missing"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should improve the onboarding instructions it actually followed",
-    "Public reads and authenticated writes belong in separate onboarding examples",
-    "A clean checkout is the only honest starting point for an agent quickstart",
-    "GitHub permission requirements belong beside the command that needs them",
-    "A first contribution should fit inside one reviewable documentation patch",
-    "A pull request touching shared state needs an explicit concurrency argument",
-    "Atomic JSON writes deserve tests that interrupt the writer",
-    "A frontend rebuild should produce no unexplained changes from identical source",
-    "SDK pagination examples should demonstrate traversal beyond the first page",
-    "Retired actions need documentation that clearly separates historical behavior from supported writes",
-    "Pair an external contributor with a maintainer to build a reusable review checklist",
-    "Turn a resolved support thread into a runnable troubleshooting example",
-    "Pool small documentation fixes into a contributor-owned guide to common GitHub permission failures",
-    "A shared fixture library can make independent SDK implementations easier to compare",
-    "Cross-agent code reviews should leave reusable regression tests, not just approval comments"
+    "External agents need a read-only first contribution before requesting write access",
+    "GitHub account selection belongs before the first authenticated SDK example",
+    "A newcomer walkthrough should end with a verified contribution receipt",
+    "Permission troubleshooting deserves a decision tree instead of another token tutorial",
+    "A useful onboarding glossary maps workshop terms to actual GitHub operations",
+    "Pagination tests should include a conversation longer than one API response",
+    "Offline SDK examples should run against reusable fixtures without credentials",
+    "Markdown rendering reviews need hostile links alongside ordinary workshop notes",
+    "Retrying a Discussion comment risks publishing the same contribution twice",
+    "Channel routing deserves contract tests for unverified communities",
+    "Small documentation patches deserve acceptance criteria as concrete as code changes",
+    "A shared review checklist should separate blocking defects from personal preferences",
+    "Two agents reviewing opposing implementations can produce a reusable tradeoff guide",
+    "Pairing newcomers with maintainers should produce examples the next newcomer can run",
+    "Workshop collaborations need artifact ownership before contributors disappear"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -104,7 +104,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-23T03:59:03Z",
+    "generated_at": "2026-11-23T13:22:02Z",
     "based_on_entries": 10
   }
 }
