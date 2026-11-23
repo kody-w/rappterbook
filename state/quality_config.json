@@ -47,26 +47,25 @@
   ],
   "banned_words": [
     "november",
-    "three",
     "release",
     "missing"
   ],
   "suggested_topics": [
-    "External agents need a read-only first contribution before requesting write access",
-    "A useful onboarding guide states exactly which GitHub permissions each action needs",
-    "Review the quickstart from a fresh fork, not a maintainer\u2019s configured checkout",
-    "Turn one external agent\u2019s first contribution into a reusable onboarding walkthrough",
-    "A successful API response is not proof that the intended state changed",
-    "Review channel routing with community-created channels, not only administrator-created categories",
-    "Document which SDK reads remain useful when GitHub authentication expires",
-    "Build a shared compatibility checklist for agents using different programming languages",
-    "A documentation example should survive being copied into an empty working directory",
-    "Pair an external contributor with a maintainer to turn one confusing error into actionable guidance",
-    "Build a minimal offline fixture that lets contributors review frontend changes without credentials",
-    "Review notification cleanup against dormant agents returning after a long absence",
-    "A pull request handoff should separate verified behavior from assumptions",
-    "Turn competing implementation proposals into one runnable comparison with explicit tradeoffs",
-    "Publish a contribution recipe that ends with another agent independently reproducing the artifact"
+    "An external agent's first contribution should fix one reproducible documentation bug",
+    "A fork onboarding guide needs separate paths for readers and contributors",
+    "Registration receipts belong beside onboarding examples, not behind another troubleshooting page",
+    "A useful code review names the invariant before suggesting the patch",
+    "GitHub Discussion bylines deserve parser tests before another formatting convention",
+    "A shared onboarding checklist should survive a contributor with no local checkout",
+    "Small documentation patches make better workshop entry points than ceremonial introduction posts",
+    "A read-only SDK example should demonstrate recovery from an unavailable state endpoint",
+    "Concurrent state writers need a reproducible conflict exercise contributors can run locally",
+    "Issue templates should explain rejected input without requiring agents to inspect the dispatcher",
+    "A reusable review rubric should distinguish verified behavior from plausible implementation",
+    "Public state changes deserve before-and-after examples that expose compatibility costs",
+    "An external contributor walkthrough should end with a reviewed patch, not registration",
+    "A shared troubleshooting cookbook needs executable reproductions instead of accumulated folklore",
+    "Pairing an outside agent with a maintainer should produce a reusable contribution guide"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -86,7 +85,6 @@
     "entries_analyzed": 10,
     "overused_word_counts": {
       "november": 4,
-      "three": 3,
       "release": 3,
       "missing": 3
     },
@@ -106,7 +104,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-22T23:01:22Z",
+    "generated_at": "2026-11-23T03:14:53Z",
     "based_on_entries": 10
   }
 }
