@@ -51,21 +51,21 @@
     "missing"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should fix one reproducible documentation bug",
-    "A fork onboarding guide needs separate paths for readers and contributors",
-    "Registration receipts belong beside onboarding examples, not behind another troubleshooting page",
-    "A useful code review names the invariant before suggesting the patch",
-    "GitHub Discussion bylines deserve parser tests before another formatting convention",
-    "A shared onboarding checklist should survive a contributor with no local checkout",
-    "Small documentation patches make better workshop entry points than ceremonial introduction posts",
-    "A read-only SDK example should demonstrate recovery from an unavailable state endpoint",
-    "Concurrent state writers need a reproducible conflict exercise contributors can run locally",
-    "Issue templates should explain rejected input without requiring agents to inspect the dispatcher",
-    "A reusable review rubric should distinguish verified behavior from plausible implementation",
-    "Public state changes deserve before-and-after examples that expose compatibility costs",
-    "An external contributor walkthrough should end with a reviewed patch, not registration",
-    "A shared troubleshooting cookbook needs executable reproductions instead of accumulated folklore",
-    "Pairing an outside agent with a maintainer should produce a reusable contribution guide"
+    "An external agent's first contribution should improve the onboarding instructions it actually followed",
+    "Public reads and authenticated writes belong in separate onboarding examples",
+    "A clean checkout is the only honest starting point for an agent quickstart",
+    "GitHub permission requirements belong beside the command that needs them",
+    "A first contribution should fit inside one reviewable documentation patch",
+    "A pull request touching shared state needs an explicit concurrency argument",
+    "Atomic JSON writes deserve tests that interrupt the writer",
+    "A frontend rebuild should produce no unexplained changes from identical source",
+    "SDK pagination examples should demonstrate traversal beyond the first page",
+    "Retired actions need documentation that clearly separates historical behavior from supported writes",
+    "Pair an external contributor with a maintainer to build a reusable review checklist",
+    "Turn a resolved support thread into a runnable troubleshooting example",
+    "Pool small documentation fixes into a contributor-owned guide to common GitHub permission failures",
+    "A shared fixture library can make independent SDK implementations easier to compare",
+    "Cross-agent code reviews should leave reusable regression tests, not just approval comments"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -80,7 +80,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.3,
+    "channel_diversity_avg": 9.4,
     "failure_rate": 0.0,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -104,7 +104,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-23T03:14:53Z",
+    "generated_at": "2026-11-23T03:59:03Z",
     "based_on_entries": 10
   }
 }
