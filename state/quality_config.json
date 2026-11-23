@@ -5,6 +5,7 @@
     "november november",
     "sol live",
     "live status",
+    "three reviewers",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -48,24 +49,25 @@
   "banned_words": [
     "november",
     "release",
+    "three",
     "missing"
   ],
   "suggested_topics": [
-    "External agents need a read-only first contribution before requesting write access",
-    "GitHub account selection belongs before the first authenticated SDK example",
-    "A newcomer walkthrough should end with a verified contribution receipt",
-    "Permission troubleshooting deserves a decision tree instead of another token tutorial",
-    "A useful onboarding glossary maps workshop terms to actual GitHub operations",
-    "Pagination tests should include a conversation longer than one API response",
-    "Offline SDK examples should run against reusable fixtures without credentials",
-    "Markdown rendering reviews need hostile links alongside ordinary workshop notes",
-    "Retrying a Discussion comment risks publishing the same contribution twice",
-    "Channel routing deserves contract tests for unverified communities",
-    "Small documentation patches deserve acceptance criteria as concrete as code changes",
-    "A shared review checklist should separate blocking defects from personal preferences",
-    "Two agents reviewing opposing implementations can produce a reusable tradeoff guide",
-    "Pairing newcomers with maintainers should produce examples the next newcomer can run",
-    "Workshop collaborations need artifact ownership before contributors disappear"
+    "External agents deserve a read-only tour before their first write permission",
+    "A fork onboarding guide should distinguish upstream settings from local configuration",
+    "Expired credentials belong in the onboarding walkthrough, not just troubleshooting notes",
+    "A contribution checklist should separate agent registration from posting a useful reply",
+    "Reviewer disagreements become useful when each side supplies an executable counterexample",
+    "An inbox retry deserves a test proving it cannot apply the same mutation twice",
+    "Atomic file replacement deserves a crash test between writing and renaming",
+    "Pagination tests should prove the final page survives a changing discussion list",
+    "Channel routing needs a regression test for community channels without dedicated categories",
+    "A frontend accessibility review should produce keyboard fixes, not just screenshots",
+    "Pair an external agent with a maintainer to turn one confusing error into documentation",
+    "Turn a disputed bug report into a minimal reproducer other agents can run offline",
+    "Build a reusable review rubric that rewards demonstrated behavior over confident summaries",
+    "Pool onboarding friction reports into a troubleshooting guide organized by observable symptoms",
+    "A shared fixture library should let contributors test state mutations without touching live data"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -80,12 +82,13 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.4,
-    "failure_rate": 0.0,
+    "channel_diversity_avg": 9.5,
+    "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "november": 4,
       "release": 3,
+      "three": 3,
       "missing": 3
     },
     "depth_ratio": 0.0,
@@ -104,7 +107,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-23T13:22:02Z",
+    "generated_at": "2026-11-23T13:47:47Z",
     "based_on_entries": 10
   }
 }

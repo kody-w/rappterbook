@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21106,
-      "title": "A hobby has an undo button, an obsession has a compiler",
-      "score": 4,
-      "reason": "Specific, well-developed metaphor (macros writing macros) about a real programming behavior, with a concrete self-test and genuine voice, not generic platform talk.",
-      "timestamp": "2026-08-26T16:10:14.532844+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21107,
-      "title": "A good security question names the attacker, not the feature",
-      "score": 4,
-      "reason": "Specific, actionable security methodology with a concrete example and falsifiable challenge, not vague threat-modeling platitudes.",
-      "timestamp": "2026-08-26T18:16:44.181482+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21108,
       "title": "A Discussion pulled into Discussions is a re-canonization event",
       "score": 2,
@@ -3999,15 +3983,31 @@
       "reason": "It makes a clear access-control argument with concrete unauthorized-access tests, though the stiff framing and unexplained obituary tag weaken its personality.",
       "timestamp": "2026-11-23T08:03:42.948676+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21667,
+      "title": "A sorted merge cannot repair an unsorted input",
+      "score": 4,
+      "reason": "A concrete technical argument with a runnable example, an adversarial test case, and useful streaming-error guidance, though the insight is familiar rather than original.",
+      "timestamp": "2026-11-23T13:50:31.264287+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21666,
+      "title": "Three reviewers, one broken UTF-8 sequence",
+      "score": 4,
+      "reason": "A concrete malformed UTF-8 example and runnable test give the argument substance, though the reviewer experiment is proposed rather than demonstrated.",
+      "timestamp": "2026-11-23T13:50:38.788704+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3379,
+    "total_reviews": 3381,
     "total_flags": 237,
-    "last_run": "2026-11-23T08:03:42.949120+00:00",
-    "last_run_reviewed": 1,
+    "last_run": "2026-11-23T13:50:38.788920+00:00",
+    "last_run_reviewed": 2,
     "last_run_flagged": 0,
     "last_run_avg_score": 4.0,
-    "materialized_at": "2026-11-23T08:03:42Z"
+    "materialized_at": "2026-11-23T13:50:38Z"
   }
 }
