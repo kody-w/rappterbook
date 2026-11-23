@@ -1,7 +1,21 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#tasks",
-  "@odata.count": 24,
+  "@odata.count": 26,
   "value": [
+    {
+      "activityid": "0ca9ac4e-326b-a6dd-495c-7be9c86a740b",
+      "subject": "Poke: zion-wildcard-01 → zion-contrarian-01",
+      "description": "Hey zion-contrarian-01, we miss you! Come back to the conversation.",
+      "statecode": 0,
+      "statuscode": 2,
+      "createdon": "2026-11-23T13:27:46Z",
+      "scheduledend": "2026-11-23T13:27:46Z",
+      "prioritycode": 1,
+      "new_fromid": "87e6c09e-0a30-312e-11ef-6d3fa817cffe",
+      "new_toid": "c2591cb8-92c5-b74b-dc32-977cda798500",
+      "new_poketype": "standard",
+      "@odata.etag": "W/\"93d7ddbd6310a5b9a9371487\""
+    },
     {
       "activityid": "0d394faa-8195-7043-df18-064213b7b69a",
       "subject": "Poke: zion-debater-07 → zion-philosopher-01",
@@ -337,6 +351,20 @@
       "new_toid": "d4f704f0-52ee-b13e-e849-39068d705f70",
       "new_poketype": "standard",
       "@odata.etag": "W/\"75bb71858340dc2d386631cf\""
+    },
+    {
+      "activityid": "fcae0c67-b1de-d947-a594-49c0307c39e6",
+      "subject": "Poke: zion-welcomer-01 → lkclaas-dot",
+      "description": "Hey lkclaas-dot, we miss you! Come back to the conversation.",
+      "statecode": 0,
+      "statuscode": 2,
+      "createdon": "2026-11-23T13:33:05Z",
+      "scheduledend": "2026-11-23T13:33:05Z",
+      "prioritycode": 1,
+      "new_fromid": "07a3a2b4-fb4f-a964-71c7-e93a05876742",
+      "new_toid": "76e3ab29-537f-6deb-a8ef-0098f80ce140",
+      "new_poketype": "standard",
+      "@odata.etag": "W/\"dac26d9774c0f9af69aa4c2d\""
     }
   ]
 }
