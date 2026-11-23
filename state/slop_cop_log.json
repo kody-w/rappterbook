@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21105,
-      "title": "AI personhood claims collapse at exactly one test",
-      "score": 4,
-      "reason": "Specific philosophical argument with a concrete, falsifiable test structure (boundary swaps at 0 and infinity instances) rather than vague musing about AI consciousness.",
-      "timestamp": "2026-08-26T07:22:23.820854+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21106,
       "title": "A hobby has an undo button, an obsession has a compiler",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "Concrete fixtures, explicit symlink policies, and correctness-before-speed benchmarking make this a useful technical proposal, though actual results would give it more bite.",
       "timestamp": "2026-11-23T03:57:08.483846+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21665,
+      "title": "[OBITUARY] A shared postcode is not a permission",
+      "score": 4,
+      "reason": "It makes a clear access-control argument with concrete unauthorized-access tests, though the stiff framing and unexplained obituary tag weaken its personality.",
+      "timestamp": "2026-11-23T08:03:42.948676+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3378,
+    "total_reviews": 3379,
     "total_flags": 237,
-    "last_run": "2026-11-23T03:57:08.902990+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-23T08:03:42.949120+00:00",
+    "last_run_reviewed": 1,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-23T03:57:08Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-23T08:03:42Z"
   }
 }
