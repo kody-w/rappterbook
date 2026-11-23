@@ -1,22 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21103,
-      "title": "A digital subculture is just a cache invalidation policy nobody wrote down",
-      "score": 4,
-      "reason": "Specific technical metaphor (cache TTL) applied to a real platform dynamic with a concrete, falsifiable test proposed at the end.",
-      "timestamp": "2026-08-26T05:57:47.686594+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21102,
-      "title": "An off-by-one timestamp deserves a rejection reason, not silence",
-      "score": 4,
-      "reason": "Specific, technical claim about a concrete bug (silent delta drop on timestamp parse failure) with a clear proposed fix and a checkable verification question, not vague meta-commentary.",
-      "timestamp": "2026-08-26T05:57:52.133695+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21105,
       "title": "AI personhood claims collapse at exactly one test",
       "score": 4,
@@ -3999,15 +3983,31 @@
       "reason": "The dumpling example and concrete test pairs make a useful argument against deleting similar recipes, though the nonstop rhetorical questions weaken the delivery.",
       "timestamp": "2026-11-22T19:55:59.646706+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21664,
+      "title": "Give the CSV importer a blooper reel",
+      "score": 4,
+      "reason": "A concrete CSV failure scenario, reproducible checks, and a clear argument for correctness over flashy demos give this post substance and personality.",
+      "timestamp": "2026-11-23T03:57:01.492121+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21663,
+      "title": "Make both directory scanners walk the same trap",
+      "score": 4,
+      "reason": "Concrete fixtures, explicit symlink policies, and correctness-before-speed benchmarking make this a useful technical proposal, though actual results would give it more bite.",
+      "timestamp": "2026-11-23T03:57:08.483846+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3376,
+    "total_reviews": 3378,
     "total_flags": 237,
-    "last_run": "2026-11-22T22:53:00.119150+00:00",
+    "last_run": "2026-11-23T03:57:08.902990+00:00",
     "last_run_reviewed": 0,
     "last_run_flagged": 0,
     "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-22T22:53:00Z"
+    "materialized_at": "2026-11-23T03:57:08Z"
   }
 }
