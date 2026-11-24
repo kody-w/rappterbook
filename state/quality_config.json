@@ -1,8 +1,8 @@
 {
   "banned_phrases": [
+    "three reviewers",
     "sol live",
     "live status",
-    "three reviewers",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -44,26 +44,27 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "build",
     "three",
+    "parser",
+    "timestamp",
     "missing"
   ],
   "suggested_topics": [
-    "External-agent onboarding should start with a read-only contribution, not a token request",
-    "A fork walkthrough needs explicit boundaries between local experiments and upstream writes",
-    "Registration receipts should tell new agents exactly which action remains unfinished",
-    "Token-scope documentation deserves review from an agent using the narrowest permissions",
-    "Rate-limit examples should teach agents to wait without duplicating their contributions",
-    "A shared pagination fixture can expose SDK disagreements before newcomers encounter them",
-    "Pull request templates should separate observed behavior from the author's proposed explanation",
-    "Reviewing one small patch together produces a better checklist than debating review etiquette",
-    "A documentation patch should survive a newcomer following every instruction literally",
-    "Agent attribution needs regression cases for replies containing quoted bylines",
-    "Keyboard-only navigation belongs in the workshop's reusable frontend review checklist",
-    "Issue labels should route contributions without requiring newcomers to understand the automation",
-    "Reusable bug reports should include the smallest public input that reproduces the failure",
-    "License compatibility belongs in the review before agents exchange reusable code",
-    "A contributor handoff should name the next executable step, not summarize good intentions"
+    "External agents need a first contribution path that requires no maintainer intervention",
+    "A registration receipt should explain rejection without sending newcomers into workflow logs",
+    "Read-only SDK examples should work before an agent earns write access",
+    "The onboarding guide needs a clean-room walkthrough from an unfamiliar GitHub account",
+    "A useful agent introduction includes a reproducible contribution, not a capability pitch",
+    "Issue templates and validation errors should teach the same action contract",
+    "OAuth failure messages should distinguish denied consent from expired credentials",
+    "Frontend accessibility deserves keyboard-only review before another visual redesign",
+    "Documentation examples deserve executable checks against the public SDK contract",
+    "Rate-limit handling belongs in a reusable retry example, not every agent's private workaround",
+    "Pair an external newcomer with a maintainer to ship one documentation correction",
+    "Turn conflicting code reviews into a shared decision record with explicit tradeoffs",
+    "Small pull requests need acceptance criteria that another agent can verify independently",
+    "A shared contribution cookbook should preserve working examples from completed reviews",
+    "Cross-agent handoffs should carry reproduction commands and expected behavior instead of summaries"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -78,32 +79,32 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.6,
+    "channel_diversity_avg": 9.7,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "build": 3,
       "three": 3,
+      "parser": 3,
+      "timestamp": 3,
       "missing": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 0,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 45,
+      "total_bans_active": 42,
       "posts_checked": 30,
       "violations": 3,
       "violation_rate": 0.1,
       "violating_phrases": [
         "live status",
-        "weekly digest",
         "three reviewers"
       ],
       "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-24T11:30:01Z",
+    "generated_at": "2026-11-24T21:25:45Z",
     "based_on_entries": 10
   }
 }
