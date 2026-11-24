@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pelican riding a bicycle</title><style>html,body{height:100%;margin:0;background:#fff}body{display:flex;align-items:center;justify-content:center}svg{max-width:100vw;max-height:100vh;width:auto;height:auto}</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
+  <rect width="500" height="400" fill="#cfeaf7"/>
+  <rect y="362" width="500" height="38" fill="#8fc97a"/>
+  <circle cx="430" cy="60" r="28" fill="#ffd95a"/>
+
+  <!-- far leg -->
+  <path d="M228 195 L250 245 L224 282" fill="none" stroke="#d98a1f" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- wheels -->
+  <g fill="none" stroke="#222" stroke-width="7">
+    <circle cx="150" cy="300" r="60"/>
+    <circle cx="350" cy="300" r="60"/>
+  </g>
+  <g stroke="#999" stroke-width="1.5">
+    <path d="M150 240V360M90 300H210M108 258L192 342M108 342L192 258"/>
+    <path d="M350 240V360M290 300H410M308 258L392 342M308 342L392 258"/>
+  </g>
+
+  <!-- frame -->
+  <g fill="none" stroke="#d6336c" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 300 L240 300 L220 212 Z"/>
+    <path d="M220 212 L322 212 L240 300"/>
+    <path d="M322 212 L350 300"/>
+    <path d="M322 212 L316 184"/>
+  </g>
+  <path d="M300 180 L334 186" stroke="#222" stroke-width="7" stroke-linecap="round"/>
+  <path d="M200 206 H240" stroke="#222" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- cranks and pedals -->
+  <circle cx="240" cy="300" r="12" fill="#555"/>
+  <path d="M224 282 L256 318" stroke="#555" stroke-width="5" stroke-linecap="round"/>
+  <path d="M214 282 H234 M246 318 H268" stroke="#222" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- pelican: tail, body -->
+  <path d="M175 150 L140 135 L150 158 L135 170 L180 175 Z" fill="#f4f4f4" stroke="#555" stroke-width="2"/>
+  <ellipse cx="225" cy="162" rx="58" ry="40" fill="#fff" stroke="#555" stroke-width="2.5" transform="rotate(-12 225 162)"/>
+
+  <!-- neck and head -->
+  <path d="M262 150 C300 140 268 105 296 88" fill="none" stroke="#555" stroke-width="27" stroke-linecap="round"/>
+  <path d="M262 150 C300 140 268 105 296 88" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="300" cy="84" r="20" fill="#fff" stroke="#555" stroke-width="2.5"/>
+  <path d="M290 66 Q282 52 294 58 Q292 48 302 60" fill="#fff" stroke="#555" stroke-width="2"/>
+
+  <!-- beak and pouch -->
+  <path d="M314 90 Q360 150 418 104 Z" fill="#f6a623" stroke="#b56d10" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M312 76 L420 100 L314 92 Z" fill="#ffc94d" stroke="#b56d10" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="304" cy="80" r="4.5" fill="#222"/>
+  <circle cx="305.500" cy="78.500" r="1.500" fill="#fff"/>
+
+  <!-- wing reaching the handlebar -->
+  <path d="M205 140 Q250 120 312 182 Q262 196 215 180 Q195 162 205 140 Z" fill="#e3e6ea" stroke="#555" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M225 160 Q255 165 285 180 M222 170 Q250 176 272 186" fill="none" stroke="#9aa1a9" stroke-width="2"/>
+
+  <!-- near leg and foot -->
+  <path d="M240 196 L272 262 L256 314" fill="none" stroke="#f6a623" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M244 316 L274 320 L268 310 Z" fill="#f6a623" stroke="#b56d10" stroke-width="1.5"/>
+</svg>
+</body></html>
