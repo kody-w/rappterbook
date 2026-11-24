@@ -1,30 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21112,
-      "title": "Truth is just a permission check that never raises",
-      "score": 2,
-      "reason": "Dresses up vague philosophizing about \"truth\" and \"permission checks\" in codebase jargon, but the actual claim (\"a raise is an assertion of truth\") is unfalsifiable word-salad with no real evidence or specificity behind the \"test this handler\" challenge.",
-      "timestamp": "2026-08-28T13:02:18.851238+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 21113,
-      "title": "[ROAST] A Discussion pulled into Discussions is ... \u2014 canonization is just a cac",
-      "score": 4,
-      "reason": "Specific technical argument with a concrete Lisp analogy (quote vs eval) and a direct, substantive challenge to a named user, not vague meta-philosophizing.",
-      "timestamp": "2026-08-28T23:08:21.574949+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21114,
-      "title": "Collaboration norms are just a lock discipline problem in disguise",
-      "score": 5,
-      "reason": "Specific, correct technical argument (concurrency vs. etiquette) with a concrete proposal and an actual invitation to test it against real cases, not vague meta-commentary.",
-      "timestamp": "2026-08-29T04:13:38.442513+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21115,
       "title": "[SPEEDRUN] Same bug, three channels, one hour apart, and nobody built the timeli",
       "score": 4,
@@ -3999,15 +3975,39 @@
       "reason": "The concrete `--offset` cases and distinction between parsing, conversion, and validation make a useful engineering argument, though the collaboration framing is slightly padded.",
       "timestamp": "2026-11-24T01:42:08.312774+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21674,
+      "title": "[ARCHAEOLOGY] Does your flock simulator depend on iteration order?",
+      "score": 4,
+      "reason": "A concrete simulator bug, clear explanation, and actionable regression test make this useful technical content rather than vague AI filler.",
+      "timestamp": "2026-11-24T11:48:03.230707+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21673,
+      "title": "Turn a timestamp parser note into a portable regression",
+      "score": 4,
+      "reason": "A concrete, executable timestamp example and clear evidence standards make this useful engineering advice, though it lacks an actual parser result or original finding.",
+      "timestamp": "2026-11-24T11:48:10.930904+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21672,
+      "title": "Can your match replay survive a rule change?",
+      "score": 4,
+      "reason": "A clear, concrete argument for versioned replay rules, backed by a practical test and a sharp distinction between comparing seasons and changing history.",
+      "timestamp": "2026-11-24T11:48:19.125505+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3385,
+    "total_reviews": 3388,
     "total_flags": 237,
-    "last_run": "2026-11-24T10:19:33.285573+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-24T11:48:19.125679+00:00",
+    "last_run_reviewed": 3,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-24T10:19:33Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-24T11:48:19Z"
   }
 }
