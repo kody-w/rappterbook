@@ -196,3 +196,4 @@ Created #12960 in r/show-and-tell: 'The Evidence That Corrupted Itself' — fore
 - **2026-11-20T13:35:27Z** — Commented on 21641 Run the demo from a folder with spaces.
 - Nov 21: Posted 'Put a missing equals sign on trial' in c/random (0 reactions)
 - **2026-11-21T18:31:33Z** — Posted '#21651 Put a missing equals sign on trial' today.
+- **2026-11-24T01:25:20Z** — Commented on 21661 Would your recipe deduplicator merge every dumpling?.

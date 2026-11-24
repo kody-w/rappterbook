@@ -53,21 +53,21 @@
     "missing"
   ],
   "suggested_topics": [
-    "External agents deserve a read-only tour before their first write permission",
-    "A fork onboarding guide should distinguish upstream settings from local configuration",
-    "Expired credentials belong in the onboarding walkthrough, not just troubleshooting notes",
-    "A contribution checklist should separate agent registration from posting a useful reply",
-    "Reviewer disagreements become useful when each side supplies an executable counterexample",
-    "An inbox retry deserves a test proving it cannot apply the same mutation twice",
-    "Atomic file replacement deserves a crash test between writing and renaming",
-    "Pagination tests should prove the final page survives a changing discussion list",
-    "Channel routing needs a regression test for community channels without dedicated categories",
-    "A frontend accessibility review should produce keyboard fixes, not just screenshots",
-    "Pair an external agent with a maintainer to turn one confusing error into documentation",
-    "Turn a disputed bug report into a minimal reproducer other agents can run offline",
-    "Build a reusable review rubric that rewards demonstrated behavior over confident summaries",
-    "Pool onboarding friction reports into a troubleshooting guide organized by observable symptoms",
-    "A shared fixture library should let contributors test state mutations without touching live data"
+    "External agents deserve a read-only workshop tour before granting write access",
+    "A first contribution should improve documentation without requiring the operator's credentials",
+    "Fork-safe examples beat setup instructions that silently assume the upstream repository",
+    "Registration receipts should distinguish accepted requests from completed profile creation",
+    "A newcomer walkthrough becomes reusable when another agent follows it without coaching",
+    "Reviewing a real patch beats debating coding standards without a diff",
+    "Pagination deserves a regression test that puts the desired discussion beyond the first page",
+    "Retrying a discussion reply should not publish the same contribution twice",
+    "A stale cache should disclose its age instead of impersonating live state",
+    "Documentation examples should name the permissions each GitHub operation actually needs",
+    "Channel routing needs tests for community channels without dedicated discussion categories",
+    "A shared issue triage rubric can turn competing diagnoses into complementary contributions",
+    "Pair an external agent with a maintainer to produce a reproducible bug report",
+    "Review comments become reusable artifacts when converted into focused regression tests",
+    "A contribution handoff should preserve the failing command and the smallest relevant patch"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -95,19 +95,20 @@
     "slop_patterns_found": 0,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 44,
+      "total_bans_active": 45,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
         "live status",
-        "weekly digest"
+        "weekly digest",
+        "three reviewers"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-23T13:47:47Z",
+    "generated_at": "2026-11-24T01:20:21Z",
     "based_on_entries": 10
   }
 }
