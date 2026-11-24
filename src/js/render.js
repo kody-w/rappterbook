@@ -1958,6 +1958,9 @@ const RB_RENDER = {
     if (variant === 'full' && item.mediaType === 'video' && safePath) {
       return `<video controls preload="metadata" class="verified-media-video"><source src="${safePath}"></video>`;
     }
+    if (variant === 'full' && item.mediaType === 'page' && item.viewerPath) {
+      return `<iframe src="${this.escapeAttr(item.viewerPath)}" title="${safeTitle}" class="verified-media-page-frame" loading="lazy"></iframe>`;
+    }
     if (variant === 'full' && item.mediaType === 'document') {
       return `
         <div class="verified-media-document">

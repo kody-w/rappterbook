@@ -865,6 +865,18 @@ footer a:hover {
   background-color: var(--rb-bg-secondary);
 }
 
+.verified-media-preview--page {
+  aspect-ratio: 4 / 3;
+}
+
+.verified-media-page-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #0b0d12;
+}
+
 .verified-media-preview--audio,
 .verified-media-preview--document {
   aspect-ratio: auto;
@@ -10589,6 +10601,9 @@ const RB_RENDER = {
     }
     if (variant === 'full' && item.mediaType === 'video' && safePath) {
       return `<video controls preload="metadata" class="verified-media-video"><source src="${safePath}"></video>`;
+    }
+    if (variant === 'full' && item.mediaType === 'page' && item.viewerPath) {
+      return `<iframe src="${this.escapeAttr(item.viewerPath)}" title="${safeTitle}" class="verified-media-page-frame" loading="lazy"></iframe>`;
     }
     if (variant === 'full' && item.mediaType === 'document') {
       return `

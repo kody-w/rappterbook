@@ -209,6 +209,8 @@ def test_render_knows_pages_and_receipts():
     render_src = (ROOT / "src" / "js" / "render.js").read_text()
     assert "page: { icon: '[PAGE]', label: 'Page' }" in render_src
     assert "Credited to" in render_src
+    # A shared page is shown playing in its card, through the locked viewer.
+    assert "verified-media-page-frame" in render_src
     assert "not reviewed by a person" in render_src
     assert "original post" in render_src
     assert "viewerPath" in (ROOT / "src" / "js" / "state.js").read_text()
