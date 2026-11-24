@@ -1775,6 +1775,27 @@ class TestSharedPages:
         assert _validated_source_url(pinned.replace("/try.html", "/..%2f..%2fother")) is None
         assert _validated_source_url(pinned + "?x=1") is None
 
+    def test_a_published_file_that_went_missing_is_put_back_only_if_its_bytes_match(self, tmp_path):
+        import hashlib
+        from unittest.mock import patch
+        from actions import media
+        good = b"<!doctype html><html><body>hi</body></html>"
+        entry = {"id": "m1", "status": "published", "source_url": "https://x", "sha256": hashlib.sha256(good).hexdigest(),
+                 "public_path": "media/promptlab/2026-11-24/m1-aaaaaaaa.page.txt"}
+        flags = {"media_submissions": [entry]}
+        with patch.object(media, "_download_media_bytes", return_value=(b"something else", "text/html")):
+            assert media.restore_missing_media(flags, tmp_path) == 0
+        assert not (tmp_path / entry["public_path"]).exists()
+        with patch.object(media, "_download_media_bytes", return_value=(good, "text/html")):
+            assert media.restore_missing_media(flags, tmp_path) == 1
+        assert (tmp_path / entry["public_path"]).read_bytes() == good
+
+    def test_published_files_are_not_ignored_by_git(self):
+        import subprocess
+        root = Path(__file__).resolve().parents[1]
+        out = subprocess.run(["git", "check-ignore", "-q", "docs/media/promptlab/2026-11-24/x.page.txt"], cwd=root)
+        assert out.returncode == 1
+
     def test_the_room_check_switch_takes_only_true_or_false(self, tmp_state):
         self._room(tmp_state, auto=False)
         write_delta(tmp_state / "inbox", "kody-w", "update_channel", {"slug": "promptlab", "media_auto_verify": "false"}, timestamp=RECENT_TS)

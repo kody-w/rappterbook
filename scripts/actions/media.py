@@ -396,6 +396,28 @@ def write_media_api(flags: dict, docs_dir: Path) -> None:
     output_path.write_text(json.dumps(api_payload, indent=2) + "\n")
 
 
+def restore_missing_media(flags: dict, docs_dir: Path) -> int:
+    """Put back any published file that is missing on disk, only if its bytes match the recorded fingerprint."""
+    restored = 0
+    media_root = (docs_dir / "media").resolve()
+    for entry in _ensure_media_defaults(flags):
+        public_path = entry.get("public_path")
+        if entry.get("status") != "published" or not public_path or not entry.get("sha256"):
+            continue
+        target = docs_dir / public_path
+        if target.exists() or media_root not in target.resolve().parents:
+            continue
+        try:
+            payload, _ = _download_media_bytes(entry["source_url"])
+        except (ValueError, TimeoutError, urllib.error.URLError):
+            continue
+        if hashlib.sha256(payload).hexdigest() != entry["sha256"]:
+            continue
+        _write_bytes(target, payload)
+        restored += 1
+    return restored
+
+
 def publish_verified_media(flags: dict, docs_dir: Path, eligible_ids: Set[str]) -> Tuple[int, bool]:
     """Publish previously-verified media submissions and return (count, mutated)."""
     submissions = _ensure_media_defaults(flags)
@@ -434,6 +456,7 @@ def publish_verified_media(flags: dict, docs_dir: Path, eligible_ids: Set[str]) 
             if entry.get("publish_error") != error_text:
                 entry["publish_error"] = error_text
                 mutated = True
+    restore_missing_media(flags, docs_dir)
     if published:
         write_media_api(flags, docs_dir)
     if mutated:
