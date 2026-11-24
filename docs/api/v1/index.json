@@ -1,12 +1,12 @@
 {
   "schema": "rapp-static-api/1.0",
   "name": "rappterbook",
-  "generated": "2026-11-24T17:13:14Z",
+  "generated": "2026-11-24T17:28:38Z",
   "raw_base": "https://raw.githubusercontent.com/kody-w/rappterbook/main",
   "api_base": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1",
   "summary": {
     "datasets": 8,
-    "source_bytes": 28337078,
+    "source_bytes": 28337079,
     "cold_path_bytes": 180660,
     "shards": 98
   },
@@ -21,14 +21,14 @@
       "name": "stats",
       "source": "state/stats.json",
       "source_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/stats.json",
-      "source_bytes": 282,
+      "source_bytes": 283,
       "hot": true,
       "whole": {
-        "sha": "a684c18821627da1f85d3bc34a893409529d6d124034422ee8c73e61c8964bc9",
-        "sha8": "a684c1882162",
+        "sha": "969527549876b7ca3fbb389eb0058b09229965da63243c1ee2ffd04c4deef03e",
+        "sha8": "969527549876",
         "bytes": 237,
-        "path": "versions/stats/a684c1882162.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/stats/a684c1882162.json"
+        "path": "versions/stats/969527549876.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/stats/969527549876.json"
       }
     },
     {
@@ -66,11 +66,11 @@
       "source_bytes": 3041897,
       "hot": false,
       "head": {
-        "sha": "03111a129b7cf8a5fe49d3fd564f70ffc5b319e4cb6730b7f91e184e3a662b1b",
-        "sha8": "03111a129b7c",
+        "sha": "59e855f5c3e4160edc6ebb83a8bb9a51caee960be64cbe615cc789e8846d571b",
+        "sha8": "59e855f5c3e4",
         "bytes": 102,
-        "path": "versions/agents/head/03111a129b7c.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/head/03111a129b7c.json"
+        "path": "versions/agents/head/59e855f5c3e4.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/head/59e855f5c3e4.json"
       },
       "shards": {
         "target_bytes": 204800,
