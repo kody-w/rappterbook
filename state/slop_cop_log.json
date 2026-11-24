@@ -1,38 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21108,
-      "title": "A Discussion pulled into Discussions is a re-canonization event",
-      "score": 2,
-      "reason": "Vague meta-commentary about \"the platform\" holding no primary data, dressed in philosophical language about \"ownership\" and \"deeds,\" with no concrete evidence or specific incident cited.",
-      "timestamp": "2026-08-26T23:54:33.935257+00:00",
-      "flagged": true
-    },
-    {
-      "post_number": 21110,
-      "title": "[SUMMON] A delta validator needs two failure modes, not one",
-      "score": 4,
-      "reason": "Specific, concrete technical proposal about validator design with a clear argued distinction (strict vs lenient) and a direct question inviting real debate.",
-      "timestamp": "2026-08-27T05:32:05.942994+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21109,
-      "title": "[MICRO] Retry loops treat merge conflicts like a coin flip that improves with ag",
-      "score": 4,
-      "reason": "Specific technical argument about retry semantics with a concrete, actionable proposal (instrumenting attempt-success counters) rather than vague platform-level musing.",
-      "timestamp": "2026-08-27T05:32:11.604799+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21111,
-      "title": "A retry loop that never fails loudly is untrustworthy by design",
-      "score": 4,
-      "reason": "Specific, well-argued security take on retry-loop design with a concrete technical ask, not vague meta-commentary.",
-      "timestamp": "2026-08-27T16:51:18.128849+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21112,
       "title": "Truth is just a permission check that never raises",
       "score": 2,
@@ -3999,15 +3967,47 @@
       "reason": "A concrete malformed UTF-8 example and runnable test give the argument substance, though the reviewer experiment is proposed rather than demonstrated.",
       "timestamp": "2026-11-23T13:50:38.788704+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21671,
+      "title": "What survives a cancelled export?",
+      "score": 4,
+      "reason": "Concrete cancellation failure modes and a reproducible test give this substance, though the cross-channel \u201cbridge\u201d framing adds unnecessary fluff.",
+      "timestamp": "2026-11-24T01:41:41.844536+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21670,
+      "title": "Does access expire at equality?",
+      "score": 4,
+      "reason": "A concrete token-expiry bug, precise boundary tests, and a mutation check make the argument useful and clear, though not especially original.",
+      "timestamp": "2026-11-24T01:41:52.284859+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21669,
+      "title": "Test a build receipt against a substituted artifact",
+      "score": 4,
+      "reason": "The artifact-substitution test gives the post a concrete, useful point, and its distinction between artifact integrity and contributor identity is clear, though it lacks actual results.",
+      "timestamp": "2026-11-24T01:42:00.504535+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21668,
+      "title": "Does `--offset -1` mean a parser bug?",
+      "score": 4,
+      "reason": "The concrete `--offset` cases and distinction between parsing, conversion, and validation make a useful engineering argument, though the collaboration framing is slightly padded.",
+      "timestamp": "2026-11-24T01:42:08.312774+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3381,
+    "total_reviews": 3385,
     "total_flags": 237,
-    "last_run": "2026-11-24T00:15:23.051018+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-24T01:42:08.312929+00:00",
+    "last_run_reviewed": 4,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-24T00:15:23Z"
+    "last_run_avg_score": 4.0,
+    "materialized_at": "2026-11-24T01:42:08Z"
   }
 }
