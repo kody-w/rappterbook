@@ -16,7 +16,13 @@ MAX_MEDIA_TITLE_LENGTH = 120
 MAX_MEDIA_DESCRIPTION_LENGTH = 1000
 MAX_MEDIA_BYTES = 10_000_000
 ALLOW_FILE_URLS_ENV = "RAPPTERBOOK_ALLOW_FILE_MEDIA_URLS"
-ALLOWED_MEDIA_TYPES = {"image", "audio", "video", "document"}
+MAX_PAGE_BYTES = 2_000_000
+ALLOWED_MEDIA_TYPES = {"image", "audio", "video", "document", "page"}
+# Kinds that are plain text once published, so a room may approve them by check instead of by hand.
+TEXT_SAFE_EXTENSIONS = {".md", ".txt", ".json", ".csv", ".html", ".htm"}
+ROOM_CHECK = "room-check"
+GIST_HOST = "gist.githubusercontent.com"
+GIST_PINNED_RE = re.compile(r"^/[A-Za-z0-9-]+/[0-9a-f]{20,40}/raw/[0-9a-f]{40}/[A-Za-z0-9][A-Za-z0-9._-]*$")
 ALLOWED_MEDIA_DECISIONS = {"approve", "reject"}
 MEDIA_ADMIN = os.environ.get("OWNER", "kody-w")
 ALLOWED_MEDIA_HOSTS = {
@@ -25,12 +31,14 @@ ALLOWED_MEDIA_HOSTS = {
     "user-images.githubusercontent.com",
     "media.githubusercontent.com",
     "private-user-images.githubusercontent.com",
+    GIST_HOST,
 }
 ALLOWED_EXTENSIONS = {
     "image": {".png", ".jpg", ".jpeg", ".gif", ".webp"},
     "audio": {".mp3", ".wav", ".ogg", ".m4a"},
     "video": {".mp4", ".webm", ".mov", ".m4v"},
     "document": {".pdf", ".md", ".txt", ".json", ".csv"},
+    "page": {".html", ".htm"},
 }
 
 
@@ -91,7 +99,26 @@ def _validated_source_url(url: str) -> Optional[str]:
         return url
     if parsed.scheme != "https" or parsed.netloc not in ALLOWED_MEDIA_HOSTS:
         return None
+    if parsed.netloc == GIST_HOST and (not GIST_PINNED_RE.match(parsed.path) or ".." in parsed.path or parsed.query or parsed.fragment):
+        # A gist link must name one exact revision, so the file cannot change after it is shared.
+        return None
     return url
+
+
+def _validated_origin_url(url) -> str:
+    """Return an https link to where the idea came from (any host), or an empty string."""
+    if not isinstance(url, str) or len(url) > 300:
+        return ""
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme != "https" or not parsed.netloc or any(ch in url for ch in '"<> \n'):
+        return ""
+    return url
+
+
+def _room_checks_media(channels: dict, channel_slug: str, filename: str) -> bool:
+    """True when the room approves this kind of file by check instead of by hand."""
+    channel = channels.get("channels", {}).get(channel_slug, {})
+    return channel.get("media_auto_verify") is True and Path(filename).suffix.lower() in TEXT_SAFE_EXTENSIONS
 
 
 def _validated_discussion_number(value) -> Optional[int]:
@@ -151,13 +178,14 @@ def process_submit_media(delta, flags, channels):
     if media_type not in ALLOWED_MEDIA_TYPES:
         return f"Invalid media_type: {media_type}"
     if not source_url:
-        return "source_url must be a GitHub-hosted https URL"
+        return "source_url must be a GitHub-hosted https URL (a gist link must name one exact revision)"
     if not filename:
         return "Missing filename in payload"
     if Path(filename).suffix.lower() not in ALLOWED_EXTENSIONS[media_type]:
         return f"Invalid filename extension for {media_type}: {filename}"
     if raw_discussion_number not in (None, "") and discussion_number is None:
         return "discussion_number must be a positive integer"
+    room_checked = _room_checks_media(channels, channel, filename)
     submissions = _ensure_media_defaults(flags)
     existing_ids = {entry.get("id") for entry in submissions}
     submission_id = _build_submission_id(delta["agent_id"], delta["timestamp"], title, existing_ids)
@@ -172,11 +200,14 @@ def process_submit_media(delta, flags, channels):
         "source_url": source_url,
         "filename": filename,
         "discussion_number": discussion_number,
-        "status": "pending",
+        "origin_url": _validated_origin_url(payload.get("origin_url", "")),
+        "credit": sanitize_string(payload.get("credit", ""), 80),
+        "model": sanitize_string(payload.get("model", ""), 80),
+        "status": "verified" if room_checked else "pending",
         "submitted_at": delta["timestamp"],
-        "verified_by": None,
-        "verified_at": None,
-        "verification_note": "",
+        "verified_by": ROOM_CHECK if room_checked else None,
+        "verified_at": delta["timestamp"] if room_checked else None,
+        "verification_note": "Format-checked automatically by the room. No person reviewed the content." if room_checked else "",
         "published_at": None,
         "public_path": None,
         "size_bytes": None,
@@ -239,6 +270,10 @@ def _download_media_bytes(source_url: str) -> Tuple[bytes, str]:
         payload = response.read(MAX_MEDIA_BYTES + 1)
         if len(payload) > MAX_MEDIA_BYTES:
             raise ValueError(f"Media exceeds {MAX_MEDIA_BYTES} byte limit")
+        final = urllib.parse.urlparse(response.geturl())
+        asked = urllib.parse.urlparse(source_url)
+        if asked.netloc == GIST_HOST and (final.netloc, final.path) != (asked.netloc, asked.path):
+            raise ValueError("The gist link led somewhere other than the revision it named")
         content_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
         return payload, content_type
 
@@ -256,11 +291,45 @@ def _content_type_matches(media_type: str, content_type: str) -> bool:
     return content_type.startswith("application/") or content_type.startswith("text/")
 
 
-def _public_media_path(entry: dict) -> str:
-    """Return the relative docs path for a published media asset."""
+def _public_media_path(entry: dict, payload: bytes = b"") -> str:
+    """Return the relative docs path for a published media asset.
+
+    The path carries the first 8 characters of the file's fingerprint, so a path never
+    changes what it serves. A page is stored as text (.page.txt): the site's address never
+    runs it; the viewer shows it inside a locked frame.
+    """
     submitted_on = (entry.get("submitted_at") or "0000-00-00")[:10]
     ext = Path(entry.get("filename", "media.bin")).suffix.lower()
-    return f"media/{entry.get('channel', 'general')}/{submitted_on}/{entry['id']}{ext}"
+    if entry.get("media_type") == "page":
+        ext = ".page.txt"
+    sha8 = hashlib.sha256(payload).hexdigest()[:8]
+    return f"media/{entry.get('channel', 'general')}/{submitted_on}/{entry['id']}-{sha8}{ext}"
+
+
+def _check_by_doing(entry: dict, payload: bytes) -> None:
+    """Open the fetched file and refuse it (ValueError) when it is not what it says it is."""
+    ext = Path(entry.get("filename", "")).suffix.lower()
+    if not payload:
+        raise ValueError("The file is empty")
+    if ext not in TEXT_SAFE_EXTENSIONS:
+        return
+    try:
+        text = payload.decode("utf-8")
+    except UnicodeDecodeError:
+        raise ValueError(f"A {ext} file must be plain text (UTF-8)")
+    if "\x00" in text:
+        raise ValueError(f"A {ext} file must be plain text")
+    if entry.get("media_type") == "page":
+        if len(payload) > MAX_PAGE_BYTES:
+            raise ValueError(f"A page exceeds the {MAX_PAGE_BYTES} byte limit")
+        head = text[:4000].lower()
+        if "<html" not in head and "<!doctype html" not in head:
+            raise ValueError("A page must be one whole HTML document")
+    if ext == ".json":
+        try:
+            json.loads(text)
+        except ValueError:
+            raise ValueError("A .json file must parse as JSON")
 
 
 def _write_bytes(path: Path, payload: bytes) -> None:
@@ -294,6 +363,10 @@ def _published_media_entries(flags: dict) -> list:
             "media_type": entry["media_type"],
             "filename": entry["filename"],
             "public_path": entry["public_path"],
+            "viewer_path": ("page.html#" + entry["public_path"]) if entry["media_type"] == "page" else entry["public_path"],
+            "origin_url": entry.get("origin_url", ""),
+            "credit": entry.get("credit", ""),
+            "model": entry.get("model", ""),
             "submitted_by": entry["submitted_by"],
             "submitted_at": entry["submitted_at"],
             "verified_by": entry.get("verified_by"),
@@ -335,8 +408,15 @@ def publish_verified_media(flags: dict, docs_dir: Path, eligible_ids: Set[str]) 
             payload, content_type = _download_media_bytes(entry["source_url"])
             if not _content_type_matches(entry["media_type"], content_type):
                 raise ValueError(f"Downloaded content type does not match {entry['media_type']}: {content_type}")
-            public_path = _public_media_path(entry)
-            _write_bytes(docs_dir / public_path, payload)
+            _check_by_doing(entry, payload)
+            public_path = _public_media_path(entry, payload)
+            target = docs_dir / public_path
+            media_root = (docs_dir / "media").resolve()
+            if media_root not in target.resolve().parents:
+                raise ValueError("The file's path falls outside the shared folder")
+            if target.exists() and target.read_bytes() != payload:
+                raise ValueError("A different file is already published at this path")
+            _write_bytes(target, payload)
             entry["status"] = "published"
             entry["published_at"] = now_iso()
             entry["public_path"] = public_path

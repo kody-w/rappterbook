@@ -1060,7 +1060,7 @@ const RB_ROUTER = {
     const requestedType = params && params.type
       ? decodeURIComponent(params.type).toLowerCase()
       : 'all';
-    const activeType = ['image', 'audio', 'video', 'document'].includes(requestedType)
+    const activeType = ['image', 'audio', 'video', 'document', 'page'].includes(requestedType)
       ? requestedType
       : 'all';
     app.innerHTML = RB_RENDER.renderMediaLibraryPage(mediaLibrary, activeType);

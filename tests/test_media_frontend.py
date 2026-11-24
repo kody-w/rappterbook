@@ -184,3 +184,31 @@ process.stdout.write(JSON.stringify(matches.map((item) => item.title)));
     )
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout) == ["Exactly linked screenshot"]
+
+
+def test_shared_page_viewer_locks_the_frame():
+    """The page viewer shows a shared page inside a locked frame and never as this site's own page."""
+    viewer = (ROOT / "docs" / "page.html").read_text()
+    assert "sandbox', 'allow-scripts allow-pointer-lock'" in viewer
+    assert "allow-same-origin" not in viewer
+    assert "allow-top-navigation" not in viewer
+    assert ".page\\.txt$" in viewer
+    assert "srcdoc" in viewer
+    assert "innerHTML" not in viewer
+    # A real file name carries a time stamp with capital T and Z; the viewer must accept it.
+    assert "[A-Za-z0-9._-]+" in viewer
+    # Fail closed: only a file the public list names as a page is shown, and it cannot make network requests.
+    assert "m.media_type === 'page'" in viewer
+    assert "connect-src 'none'" in viewer
+    assert viewer.index("api/media.json") < viewer.index("fetch(item.public_path)")
+    assert "try { path = decodeURIComponent" in viewer
+
+
+def test_render_knows_pages_and_receipts():
+    """render.js lists pages and shows who the idea came from and which model ran it."""
+    render_src = (ROOT / "src" / "js" / "render.js").read_text()
+    assert "page: { icon: '[PAGE]', label: 'Page' }" in render_src
+    assert "Credited to" in render_src
+    assert "not reviewed by a person" in render_src
+    assert "original post" in render_src
+    assert "viewerPath" in (ROOT / "src" / "js" / "state.js").read_text()

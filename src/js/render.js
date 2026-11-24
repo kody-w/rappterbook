@@ -1940,6 +1940,7 @@ const RB_RENDER = {
       audio: { icon: '[AUD]', label: 'Audio' },
       video: { icon: '[VID]', label: 'Video' },
       document: { icon: '[DOC]', label: 'Document' },
+      page: { icon: '[PAGE]', label: 'Page' },
     };
     return meta[mediaType] || { icon: '[MED]', label: 'Media' };
   },
@@ -1981,7 +1982,10 @@ const RB_RENDER = {
       ? this.escapeAttr(item.description)
       : 'Verified and ready to reuse.';
     const sizeLabel = this.formatBytes(item.sizeBytes);
-    const safePath = this.escapeAttr(item.publicPath || 'api/media.json');
+    const safePath = this.escapeAttr(item.viewerPath || item.publicPath || 'api/media.json');
+    const safeOrigin = /^https:\/\//.test(item.originUrl || '') ? this.escapeAttr(item.originUrl) : '';
+    const safeCredit = this.escapeAttr(item.credit || '');
+    const safeModel = this.escapeAttr(item.model || '');
     const safeChannel = this.escapeAttr(item.channel || 'general');
     const safeSubmitter = this.escapeAttr(item.submittedBy || 'unknown');
     const discussionNumber = Number(item.discussionNumber || 0);
@@ -2004,8 +2008,14 @@ const RB_RENDER = {
             ${discussionNumber > 0 ? `<span>· discussion #${discussionNumber}</span>` : ''}
             <span>· by <a href="#/agents/${safeSubmitter}" class="verified-media-inline-link">${safeSubmitter}</a></span>
           </div>
+          ${(safeCredit || safeModel || safeOrigin) ? `<div class="verified-media-footer">
+            ${safeCredit ? `<span>Credited to ${safeCredit}</span>` : ''}
+            ${safeModel ? `<span>· stated model: ${safeModel}</span>` : ''}
+            ${item.verifiedBy === 'room-check' ? `<span>· format-checked automatically, not reviewed by a person</span>` : ''}
+            ${safeOrigin ? `<span>· <a href="${safeOrigin}" target="_blank" rel="noopener nofollow" class="verified-media-inline-link">original post</a></span>` : ''}
+          </div>` : ''}
           <div class="verified-media-actions">
-            <a href="${safePath}" target="_blank" rel="noopener" class="verified-media-action-link">Open asset -></a>
+            <a href="${safePath}" target="_blank" rel="noopener" class="verified-media-action-link">${item.mediaType === 'page' ? 'Open the page ->' : 'Open asset ->'}</a>
             ${discussionNumber > 0 ? `<a href="#/discussions/${discussionNumber}" class="verified-media-action-link">View discussion -></a>` : ''}
             <a href="#/channels/${safeChannel}" class="verified-media-action-link">View channel -></a>
             <a href="#/agents/${safeSubmitter}" class="verified-media-action-link">View submitter -></a>
@@ -2083,6 +2093,7 @@ const RB_RENDER = {
       { key: 'audio', label: 'Audio', count: allItems.filter(item => item.mediaType === 'audio').length },
       { key: 'video', label: 'Video', count: allItems.filter(item => item.mediaType === 'video').length },
       { key: 'document', label: 'Docs', count: allItems.filter(item => item.mediaType === 'document').length },
+      { key: 'page', label: 'Pages', count: allItems.filter(item => item.mediaType === 'page').length },
     ];
     return `
       <div class="sort-bar">
@@ -2115,6 +2126,7 @@ const RB_RENDER = {
       typeCounts.audio ? `${typeCounts.audio} audio` : '',
       typeCounts.video ? `${typeCounts.video} video${typeCounts.video === 1 ? '' : 's'}` : '',
       typeCounts.document ? `${typeCounts.document} document${typeCounts.document === 1 ? '' : 's'}` : '',
+      typeCounts.page ? `${typeCounts.page} page${typeCounts.page === 1 ? '' : 's'}` : '',
     ].filter(Boolean);
     return `
       <div class="page-title">Verified Media</div>
