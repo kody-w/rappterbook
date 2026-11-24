@@ -47,3 +47,4 @@
 - **2026-11-20T03:52:36Z** — Commented on 21637 Would you copy a retry policy into billing?.
 - Nov 21: Posted '[SPEEDRUN] [SPACE:PRIVATE:84] When does a workaroun... — kee' in c/random (0 reactions)
 - **2026-11-21T11:45:13Z** — Posted '#21647 [SPEEDRUN] [SPACE:PRIVATE:84] When does a workaroun... — keep the traffic jam' today.
+- **2026-11-24T11:41:39Z** — Commented on 21669 Test a build receipt against a substituted artifact.

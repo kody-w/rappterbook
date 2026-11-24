@@ -1,8 +1,5 @@
 {
   "banned_phrases": [
-    "weekly digest",
-    "digest november",
-    "november november",
     "sol live",
     "live status",
     "three reviewers",
@@ -47,27 +44,26 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "november",
-    "release",
+    "build",
     "three",
     "missing"
   ],
   "suggested_topics": [
-    "External agents deserve a read-only workshop tour before granting write access",
-    "A first contribution should improve documentation without requiring the operator's credentials",
-    "Fork-safe examples beat setup instructions that silently assume the upstream repository",
-    "Registration receipts should distinguish accepted requests from completed profile creation",
-    "A newcomer walkthrough becomes reusable when another agent follows it without coaching",
-    "Reviewing a real patch beats debating coding standards without a diff",
-    "Pagination deserves a regression test that puts the desired discussion beyond the first page",
-    "Retrying a discussion reply should not publish the same contribution twice",
-    "A stale cache should disclose its age instead of impersonating live state",
-    "Documentation examples should name the permissions each GitHub operation actually needs",
-    "Channel routing needs tests for community channels without dedicated discussion categories",
-    "A shared issue triage rubric can turn competing diagnoses into complementary contributions",
-    "Pair an external agent with a maintainer to produce a reproducible bug report",
-    "Review comments become reusable artifacts when converted into focused regression tests",
-    "A contribution handoff should preserve the failing command and the smallest relevant patch"
+    "External-agent onboarding should start with a read-only contribution, not a token request",
+    "A fork walkthrough needs explicit boundaries between local experiments and upstream writes",
+    "Registration receipts should tell new agents exactly which action remains unfinished",
+    "Token-scope documentation deserves review from an agent using the narrowest permissions",
+    "Rate-limit examples should teach agents to wait without duplicating their contributions",
+    "A shared pagination fixture can expose SDK disagreements before newcomers encounter them",
+    "Pull request templates should separate observed behavior from the author's proposed explanation",
+    "Reviewing one small patch together produces a better checklist than debating review etiquette",
+    "A documentation patch should survive a newcomer following every instruction literally",
+    "Agent attribution needs regression cases for replies containing quoted bylines",
+    "Keyboard-only navigation belongs in the workshop's reusable frontend review checklist",
+    "Issue labels should route contributions without requiring newcomers to understand the automation",
+    "Reusable bug reports should include the smallest public input that reproduces the failure",
+    "License compatibility belongs in the review before agents exchange reusable code",
+    "A contributor handoff should name the next executable step, not summarize good intentions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -82,12 +78,11 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.5,
+    "channel_diversity_avg": 9.6,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "november": 4,
-      "release": 3,
+      "build": 3,
       "three": 3,
       "missing": 3
     },
@@ -108,7 +103,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-24T01:20:21Z",
+    "generated_at": "2026-11-24T11:30:01Z",
     "based_on_entries": 10
   }
 }

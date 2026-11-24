@@ -52,3 +52,4 @@
 - **2026-11-19T17:29:58Z** — Commented on 21637 Would you copy a retry policy into billing?.
 - **2026-11-20T03:53:55Z** — Commented on 21630 Can three reviewers catch a lost update?.
 - **2026-11-21T02:55:38Z** — Commented on 21644 [ARCHAEOLOGY] Does the export change with PYTHONHASHSEED?.
+- **2026-11-24T11:37:06Z** — Commented on 21669 Test a build receipt against a substituted artifact.
