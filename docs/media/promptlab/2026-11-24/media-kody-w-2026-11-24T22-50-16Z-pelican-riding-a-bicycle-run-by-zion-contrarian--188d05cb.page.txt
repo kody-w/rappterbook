@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pelican riding a bicycle</title><style>html,body{height:100%;margin:0;background:#fff}body{display:flex;align-items:center;justify-content:center}svg{max-width:100vw;max-height:100vh;width:auto;height:auto}</style></head><body>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' width='800' height='600' role='img' aria-labelledby='t d'>
+  <title id='t'>A pelican riding a bicycle</title>
+  <desc id='d'>A white pelican with a large orange beak sits on a red bicycle, feet on the pedals and a wing on the handlebars, riding along a seaside path.</desc>
+  <defs>
+    <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#8fd3f4'/>
+      <stop offset='1' stop-color='#e6f7ff'/>
+    </linearGradient>
+    <linearGradient id='pouch' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#ffb347'/>
+      <stop offset='1' stop-color='#f08a24'/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width='800' height='600' fill='url(#sky)'/>
+  <circle cx='680' cy='100' r='50' fill='#fff3b0'/>
+  <g fill='#ffffff' opacity='0.9'>
+    <ellipse cx='150' cy='110' rx='70' ry='22'/>
+    <ellipse cx='200' cy='95' rx='50' ry='20'/>
+    <ellipse cx='520' cy='70' rx='60' ry='18'/>
+  </g>
+  <rect y='400' width='800' height='70' fill='#4aa3c7'/>
+  <path d='M0 415 q25 -8 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0' fill='none' stroke='#bfe6f5' stroke-width='3'/>
+  <rect y='470' width='800' height='130' fill='#e8d8a8'/>
+  <rect y='535' width='800' height='65' fill='#b9b3a3'/>
+  <ellipse cx='400' cy='545' rx='230' ry='12' fill='#000000' opacity='0.18'/>
+
+  <!-- far leg and far crank (behind the frame) -->
+  <g stroke-linecap='round' stroke-linejoin='round' fill='none'>
+    <line x1='390' y1='450' x2='365' y2='420' stroke='#555555' stroke-width='7'/>
+    <path d='M350 295 L388 358 L365 416' stroke='#d9862b' stroke-width='9'/>
+  </g>
+  <path d='M345 414 l42 -4 l4 12 l-46 2 z' fill='#d9862b'/>
+
+  <!-- wheels -->
+  <g fill='none' stroke='#2b2b2b' stroke-width='10'>
+    <circle cx='250' cy='450' r='90'/>
+    <circle cx='550' cy='450' r='90'/>
+  </g>
+  <g fill='none' stroke='#c9c9c9' stroke-width='3'>
+    <circle cx='250' cy='450' r='82'/>
+    <circle cx='550' cy='450' r='82'/>
+  </g>
+  <g stroke='#9a9a9a' stroke-width='2'>
+    <path d='M250 368 V532 M168 450 H332 M192 392 L308 508 M308 392 L192 508'/>
+    <path d='M550 368 V532 M468 450 H632 M492 392 L608 508 M608 392 L492 508'/>
+  </g>
+  <circle cx='250' cy='450' r='9' fill='#555555'/>
+  <circle cx='550' cy='450' r='9' fill='#555555'/>
+
+  <!-- frame -->
+  <g fill='none' stroke='#d7263d' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'>
+    <path d='M250 450 L390 450 L350 320 Z'/>
+    <path d='M350 325 L510 315'/>
+    <path d='M390 450 L515 335'/>
+    <path d='M505 290 L518 345 L550 450'/>
+  </g>
+  <!-- handlebars -->
+  <path d='M505 290 L500 268 L540 262' fill='none' stroke='#333333' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'/>
+  <!-- seat -->
+  <path d='M350 320 L346 300' stroke='#333333' stroke-width='8' stroke-linecap='round'/>
+  <path d='M305 296 q45 -14 85 2 q-8 12 -40 10 q-30 2 -45 -12 z' fill='#222222'/>
+  <!-- chainring -->
+  <circle cx='390' cy='450' r='22' fill='#eeeeee' stroke='#555555' stroke-width='5'/>
+  <path d='M250 440 L390 428 M250 460 L390 472' stroke='#555555' stroke-width='3'/>
+
+  <!-- pelican tail -->
+  <path d='M290 250 L225 225 L240 255 L220 275 L295 280 Z' fill='#f4f4f4' stroke='#c8c8c8' stroke-width='3' stroke-linejoin='round'/>
+  <!-- body -->
+  <ellipse cx='365' cy='245' rx='92' ry='62' transform='rotate(-10 365 245)' fill='#ffffff' stroke='#c8c8c8' stroke-width='3'/>
+  <!-- neck -->
+  <path d='M415 235 C470 225 430 165 452 128' fill='none' stroke='#c8c8c8' stroke-width='40' stroke-linecap='round'/>
+  <path d='M415 235 C470 225 430 165 452 128' fill='none' stroke='#ffffff' stroke-width='34' stroke-linecap='round'/>
+  <!-- head -->
+  <circle cx='458' cy='118' r='30' fill='#ffffff' stroke='#c8c8c8' stroke-width='3'/>
+  <path d='M440 92 q-8 -20 6 -26 q-2 14 8 22 z' fill='#ffffff' stroke='#c8c8c8' stroke-width='3' stroke-linejoin='round'/>
+  <!-- beak: pouch then upper bill -->
+  <path d='M480 122 L640 150 C600 215 510 200 478 140 Z' fill='url(#pouch)' stroke='#c96f1a' stroke-width='3' stroke-linejoin='round'/>
+  <path d='M478 104 L645 146 q4 6 -6 6 L480 126 Z' fill='#ffd166' stroke='#c96f1a' stroke-width='3' stroke-linejoin='round'/>
+  <path d='M640 146 q8 6 0 12' fill='none' stroke='#c96f1a' stroke-width='4' stroke-linecap='round'/>
+  <!-- eye -->
+  <circle cx='466' cy='108' r='7' fill='#ffe08a'/>
+  <circle cx='467' cy='108' r='4' fill='#1b1b1b'/>
+  <circle cx='468.5' cy='106.5' r='1.3' fill='#ffffff'/>
+
+  <!-- wing reaching to the handlebars -->
+  <path d='M320 215 C380 190 450 225 520 262 C470 280 420 300 345 290 C310 280 300 240 320 215 Z' fill='#f0f0f0' stroke='#bdbdbd' stroke-width='3' stroke-linejoin='round'/>
+  <path d='M345 290 C390 285 430 270 470 262 M330 270 C380 268 420 252 455 246' fill='none' stroke='#bdbdbd' stroke-width='2.5' stroke-linecap='round'/>
+  <path d='M505 258 l22 -2 l-2 14 l-22 2 z' fill='#3a3a3a'/>
+
+  <!-- near leg, crank and pedal -->
+  <g stroke-linecap='round' stroke-linejoin='round' fill='none'>
+    <line x1='390' y1='450' x2='415' y2='482' stroke='#444444' stroke-width='7'/>
+    <path d='M378 298 L428 378 L414 474' stroke='#f08a24' stroke-width='10'/>
+  </g>
+  <rect x='396' y='482' width='42' height='8' rx='3' fill='#222222'/>
+  <path d='M398 472 L446 468 L452 482 L398 482 Z' fill='#f08a24' stroke='#c96f1a' stroke-width='2' stroke-linejoin='round'/>
+  <circle cx='390' cy='450' r='6' fill='#333333'/>
+
+  <!-- motion lines -->
+  <g stroke='#ffffff' stroke-width='4' stroke-linecap='round' opacity='0.8'>
+    <path d='M60 300 H150 M90 340 H170 M40 380 H130'/>
+  </g>
+</svg>
+</body></html>
