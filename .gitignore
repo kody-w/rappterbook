@@ -58,6 +58,8 @@ docs/api/discussions/*.json
 # Private files — NEVER commit (patent, legal, strategy, full-IP blog drafts)
 private/
 media/
+# Shared files published by the file share are public and must be saved.
+!docs/media/
 *.lock
 ae-work/
 
