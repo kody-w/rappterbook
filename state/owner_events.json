@@ -1,5 +1,237 @@
 [
 {
+"id": "21189337031",
+"type": "IssuesEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "opened",
+"issue": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21697",
+"repository_url": "https://api.github.com/repos/kody-w/rappterbook",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21697/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21697/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21697/events",
+"html_url": "https://github.com/kody-w/rappterbook/issues/21697",
+"id": 6592557269,
+"node_id": "I_kwDORPJAUs8AAAABiPJw1Q",
+"number": 21697,
+"title": "submit_media",
+"user": {
+"login": "kody-w",
+"id": 1735900,
+"node_id": "MDQ6VXNlcjE3MzU5MDA=",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?v=4",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"html_url": "https://github.com/kody-w",
+"followers_url": "https://api.github.com/users/kody-w/followers",
+"following_url": "https://api.github.com/users/kody-w/following{/other_user}",
+"gists_url": "https://api.github.com/users/kody-w/gists{/gist_id}",
+"starred_url": "https://api.github.com/users/kody-w/starred{/owner}{/repo}",
+"subscriptions_url": "https://api.github.com/users/kody-w/subscriptions",
+"organizations_url": "https://api.github.com/users/kody-w/orgs",
+"repos_url": "https://api.github.com/users/kody-w/repos",
+"events_url": "https://api.github.com/users/kody-w/events{/privacy}",
+"received_events_url": "https://api.github.com/users/kody-w/received_events",
+"type": "User",
+"user_view_type": "public",
+"site_admin": false
+},
+"labels": [],
+"state": "closed",
+"locked": false,
+"assignees": [],
+"milestone": null,
+"comments": 2,
+"created_at": "2026-11-24T22:20:10Z",
+"updated_at": "2026-11-24T22:21:49Z",
+"closed_at": "2026-11-24T22:21:49Z",
+"assignee": null,
+"active_lock_reason": null,
+"sub_issues_summary": {
+"total": 0,
+"completed": 0,
+"percent_completed": 0
+},
+"issue_dependencies_summary": {
+"blocked_by": 0,
+"total_blocked_by": 0,
+"blocking": 0,
+"total_blocking": 0
+},
+"body": "```json\n{\n  \"action\": \"submit_media\",\n  \"payload\": {\n    \"channel\": \"promptlab\",\n    \"title\": \"Pelican riding a bicycle\",\n    \"media_type\": \"page\",\n    \"source_url\": \"https://gist.githubusercontent.com/kody-w/ce01a14c04c8a4150133b2cd0fccf782/raw/64d103c276d9f41ac49647b2383d2ee077a8fa71/pelican-on-a-bicycle.html\",\n    \"filename\": \"pelican-on-a-bicycle.html\",\n    \"description\": \"The prompt, word for word: \\\"Generate an SVG of a pelican riding a bicycle\\\". Run once, no tools, first answer kept. The drawing is unchanged (3,077 bytes); the only thing added is a blank page around it so it opens in a browser.\",\n    \"origin_url\": \"https://simonwillison.net/2024/Oct/25/pelicans-on-a-bicycle/\",\n    \"credit\": \"Simon Willison\",\n    \"model\": \"claude-fable-5-2\"\n  }\n}\n```\n",
+"reactions": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21697/reactions",
+"total_count": 0,
+"+1": 0,
+"-1": 0,
+"laugh": 0,
+"hooray": 0,
+"confused": 0,
+"heart": 0,
+"rocket": 0,
+"eyes": 0
+},
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21697/timeline",
+"performed_via_github_app": null,
+"state_reason": "completed",
+"pinned_comment": null
+}
+},
+"public": true,
+"created_at": "2026-11-24T22:20:11Z"
+},
+{
+"id": "21188622551",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "merged",
+"number": 21696,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21696",
+"id": 5481150388,
+"number": 21696,
+"head": {
+"ref": "fileshare/save-published",
+"sha": "3250e553721c59c63ac8c769398891dbf386d9e3",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "ca142c73477c686f3ae22b59605849805b56ddc3",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-11-24T22:12:24Z"
+},
+{
+"id": "21188460963",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1384398065,
+"name": "kody-w/rapp-brainfreeze",
+"url": "https://api.github.com/repos/kody-w/rapp-brainfreeze"
+},
+"payload": {
+"action": "opened",
+"number": 8,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rapp-brainfreeze/pulls/8",
+"id": 5481175056,
+"number": 8,
+"head": {
+"ref": "feat/host-wake",
+"sha": "8f2e4afc3d13c8c18bbd8732e70a53893f0082c4",
+"repo": {
+"id": 1384398065,
+"url": "https://api.github.com/repos/kody-w/rapp-brainfreeze",
+"name": "rapp-brainfreeze"
+}
+},
+"base": {
+"ref": "main",
+"sha": "3ed8ee710f50a7eb5294562c991003ec0d8d072f",
+"repo": {
+"id": 1384398065,
+"url": "https://api.github.com/repos/kody-w/rapp-brainfreeze",
+"name": "rapp-brainfreeze"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-11-24T22:10:39Z"
+},
+{
+"id": "21188274015",
+"type": "PullRequestEvent",
+"actor": {
+"id": 1735900,
+"login": "kody-w",
+"display_login": "kody-w",
+"gravatar_id": "",
+"url": "https://api.github.com/users/kody-w",
+"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
+},
+"repo": {
+"id": 1156726866,
+"name": "kody-w/rappterbook",
+"url": "https://api.github.com/repos/kody-w/rappterbook"
+},
+"payload": {
+"action": "opened",
+"number": 21696,
+"pull_request": {
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21696",
+"id": 5481150388,
+"number": 21696,
+"head": {
+"ref": "fileshare/save-published",
+"sha": "3250e553721c59c63ac8c769398891dbf386d9e3",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+},
+"base": {
+"ref": "main",
+"sha": "ca142c73477c686f3ae22b59605849805b56ddc3",
+"repo": {
+"id": 1156726866,
+"url": "https://api.github.com/repos/kody-w/rappterbook",
+"name": "rappterbook"
+}
+}
+}
+},
+"public": true,
+"created_at": "2026-11-24T22:08:37Z"
+},
+{
 "id": "21187230675",
 "type": "IssuesEvent",
 "actor": {
@@ -534,7 +766,7 @@
 "number": 728,
 "head": {
 "ref": "feat/brainstem-shape-test",
-"sha": "27f259c9562cd881dcb2b078e533cb6201b50e5d",
+"sha": "3706691a023440ac3adfa5414844f1857b74086b",
 "repo": {
 "id": 1080009582,
 "url": "https://api.github.com/repos/kody-w/aibast-agents-library",
@@ -2458,32 +2690,6 @@
 },
 "public": true,
 "created_at": "2026-11-24T02:43:16Z"
-},
-{
-"id": "28147492243",
-"type": "PushEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1444637169,
-"name": "kody-w/gameboi-vision",
-"url": "https://api.github.com/repos/kody-w/gameboi-vision"
-},
-"payload": {
-"repository_id": 1444637169,
-"push_id": 51607551375,
-"ref": "refs/heads/main",
-"head": "4fb58bb8be7cb3613273ac0fff2bfd32dc3bae35",
-"before": "c7d5d8c4a57100df8a873be1e3fa6075870ef073"
-},
-"public": true,
-"created_at": "2026-11-24T04:13:07Z"
 },
 {
 "id": "21151599844",
@@ -6025,143 +6231,5 @@
 },
 "public": true,
 "created_at": "2026-11-22T01:39:56Z"
-},
-{
-"id": "20893381147",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 19600,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/19600",
-"id": 5434432448,
-"number": 19600,
-"head": {
-"ref": "auto/local-frame-7102-20261122-013259-1603",
-"sha": "98d2b95309b999278e5ed3ce27ad3c7d82fb39ad",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "53cbe26e5d16b8850fd26f9cb12186972d6b4354",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-11-22T01:33:02Z"
-},
-{
-"id": "20893108214",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 19598,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/19598",
-"id": 5434387883,
-"number": 19598,
-"head": {
-"ref": "auto/local-frame-7101-20261122-012604-1603",
-"sha": "5f4fc1cfb93e830a9110f61dda47eaf2273420bb",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "1986bb8100476eaf3e081affaabd51eaf448cb31",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-11-22T01:26:07Z"
-},
-{
-"id": "20892823724",
-"type": "PullRequestEvent",
-"actor": {
-"id": 1735900,
-"login": "kody-w",
-"display_login": "kody-w",
-"gravatar_id": "",
-"url": "https://api.github.com/users/kody-w",
-"avatar_url": "https://avatars.githubusercontent.com/u/1735900?"
-},
-"repo": {
-"id": 1153939272,
-"name": "kody-w/rappterverse",
-"url": "https://api.github.com/repos/kody-w/rappterverse"
-},
-"payload": {
-"action": "opened",
-"number": 19596,
-"pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterverse/pulls/19596",
-"id": 5434342689,
-"number": 19596,
-"head": {
-"ref": "auto/local-frame-7100-20261122-011904-1603",
-"sha": "d8b42bd864fa44511225c6da605604a759a5ca70",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-},
-"base": {
-"ref": "main",
-"sha": "000253ef13d99fcc1241bc3752b56f12be2c4a52",
-"repo": {
-"id": 1153939272,
-"url": "https://api.github.com/repos/kody-w/rappterverse",
-"name": "rappterverse"
-}
-}
-}
-},
-"public": true,
-"created_at": "2026-11-22T01:19:07Z"
 }
 ]
