@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Octopus playing a pipe organ</title><style>html,body{height:100%;margin:0;background:#fff}body{display:flex;align-items:center;justify-content:center}svg{max-width:100vw;max-height:100vh;width:auto;height:auto}</style></head><body>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' width='800' height='600'>
+<defs>
+<linearGradient id='bg' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#0d1b33'/><stop offset='1' stop-color='#24466b'/></linearGradient>
+<linearGradient id='pipe' x1='0' y1='0' x2='1' y2='0'><stop offset='0' stop-color='#8f98a3'/><stop offset='0.4' stop-color='#f2f5f8'/><stop offset='1' stop-color='#6f7883'/></linearGradient>
+<linearGradient id='wood' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#8a5327'/><stop offset='1' stop-color='#55300f'/></linearGradient>
+<radialGradient id='octo' cx='0.4' cy='0.3' r='0.8'><stop offset='0' stop-color='#ff8fa8'/><stop offset='1' stop-color='#c93a66'/></radialGradient>
+<pattern id='wk' width='12' height='600' patternUnits='userSpaceOnUse'><rect width='12' height='600' fill='#fffdf5' stroke='#666' stroke-width='1'/></pattern>
+<pattern id='bk' width='84' height='600' patternUnits='userSpaceOnUse'><path d='M8 0h8v600h-8zM20 0h8v600h-8zM44 0h8v600h-8zM56 0h8v600h-8zM68 0h8v600h-8z' fill='#1a1a1a'/></pattern>
+</defs>
+<rect width='800' height='600' fill='url(#bg)'/>
+<rect y='520' width='800' height='80' fill='#3a2413'/>
+<g fill='url(#pipe)' stroke='#4c545e' stroke-width='1.5'>
+<rect x='175' y='50' width='24' height='200' rx='5'/>
+<rect x='205' y='80' width='24' height='170' rx='5'/>
+<rect x='235' y='110' width='24' height='140' rx='5'/>
+<rect x='265' y='135' width='24' height='115' rx='5'/>
+<rect x='295' y='155' width='24' height='95' rx='5'/>
+<rect x='325' y='130' width='24' height='120' rx='5'/>
+<rect x='355' y='100' width='24' height='150' rx='5'/>
+<rect x='385' y='65' width='24' height='185' rx='5'/>
+<rect x='415' y='100' width='24' height='150' rx='5'/>
+<rect x='445' y='130' width='24' height='120' rx='5'/>
+<rect x='475' y='155' width='24' height='95' rx='5'/>
+<rect x='505' y='135' width='24' height='115' rx='5'/>
+<rect x='535' y='110' width='24' height='140' rx='5'/>
+<rect x='565' y='80' width='24' height='170' rx='5'/>
+<rect x='595' y='50' width='24' height='200' rx='5'/>
+</g>
+<path fill='#2b3038' d='M181 220h12v7h-12zM211 220h12v7h-12zM241 220h12v7h-12zM271 220h12v7h-12zM301 220h12v7h-12zM331 220h12v7h-12zM361 220h12v7h-12zM391 220h12v7h-12zM421 220h12v7h-12zM451 220h12v7h-12zM481 220h12v7h-12zM511 220h12v7h-12zM541 220h12v7h-12zM571 220h12v7h-12zM601 220h12v7h-12z'/>
+<rect x='140' y='250' width='520' height='270' rx='8' fill='url(#wood)' stroke='#3a1f08' stroke-width='3'/>
+<rect x='150' y='238' width='500' height='16' rx='4' fill='#a4672f' stroke='#3a1f08' stroke-width='2'/>
+<rect x='340' y='268' width='120' height='46' fill='#fbf6e6' stroke='#3a1f08' stroke-width='2'/>
+<path d='M350 280h100M350 288h100M350 296h100M350 304h100' stroke='#555' stroke-width='1'/>
+<g fill='#222'><circle cx='365' cy='292' r='3'/><circle cx='385' cy='284' r='3'/><circle cx='405' cy='300' r='3'/><circle cx='425' cy='288' r='3'/><circle cx='440' cy='296' r='3'/></g>
+<rect x='246' y='318' width='312' height='62' rx='4' fill='#3a1f08'/>
+<rect x='252' y='322' width='300' height='24' fill='url(#wk)'/>
+<rect x='252' y='322' width='300' height='14' fill='url(#bk)'/>
+<rect x='252' y='352' width='300' height='24' fill='url(#wk)'/>
+<rect x='252' y='352' width='300' height='14' fill='url(#bk)'/>
+<g fill='#f4ead2' stroke='#3a1f08' stroke-width='2'>
+<circle cx='185' cy='310' r='9'/><circle cx='212' cy='310' r='9'/><circle cx='185' cy='336' r='9'/><circle cx='212' cy='336' r='9'/><circle cx='185' cy='362' r='9'/><circle cx='212' cy='362' r='9'/><circle cx='185' cy='388' r='9'/><circle cx='212' cy='388' r='9'/>
+<circle cx='588' cy='310' r='9'/><circle cx='615' cy='310' r='9'/><circle cx='588' cy='336' r='9'/><circle cx='615' cy='336' r='9'/><circle cx='588' cy='362' r='9'/><circle cx='615' cy='362' r='9'/><circle cx='588' cy='388' r='9'/><circle cx='615' cy='388' r='9'/>
+</g>
+<g fill='#c98a4b' stroke='#3a1f08' stroke-width='1.5'>
+<rect x='286' y='498' width='14' height='24' rx='3'/><rect x='306' y='498' width='14' height='24' rx='3'/><rect x='326' y='498' width='14' height='24' rx='3'/><rect x='346' y='498' width='14' height='24' rx='3'/><rect x='366' y='498' width='14' height='24' rx='3'/><rect x='386' y='498' width='14' height='24' rx='3'/><rect x='406' y='498' width='14' height='24' rx='3'/><rect x='426' y='498' width='14' height='24' rx='3'/><rect x='446' y='498' width='14' height='24' rx='3'/><rect x='466' y='498' width='14' height='24' rx='3'/><rect x='486' y='498' width='14' height='24' rx='3'/><rect x='506' y='498' width='14' height='24' rx='3'/>
+</g>
+<rect x='318' y='478' width='12' height='44' fill='#3a1f08'/><rect x='470' y='478' width='12' height='44' fill='#3a1f08'/>
+<rect x='305' y='466' width='190' height='14' rx='4' fill='#a4672f' stroke='#3a1f08' stroke-width='2'/>
+<g fill='none' stroke='#c93a66' stroke-width='20' stroke-linecap='round'>
+<path d='M340 440 C240 480 185 430 198 364'/>
+<path d='M460 440 C560 480 615 430 602 364'/>
+<path d='M345 450 C280 462 250 412 270 366'/>
+<path d='M455 450 C520 462 550 412 530 366'/>
+<path d='M350 430 C292 430 272 382 292 336'/>
+<path d='M450 430 C508 430 528 382 508 336'/>
+<path d='M372 466 C350 496 332 492 333 506'/>
+<path d='M428 466 C450 496 468 492 467 506'/>
+</g>
+<g fill='#ffc2d1'>
+<circle cx='228' cy='446' r='3.5'/><circle cx='204' cy='414' r='3.5'/><circle cx='199' cy='384' r='3'/>
+<circle cx='572' cy='446' r='3.5'/><circle cx='596' cy='414' r='3.5'/><circle cx='601' cy='384' r='3'/>
+<circle cx='284' cy='434' r='3.5'/><circle cx='267' cy='400' r='3'/><circle cx='516' cy='434' r='3.5'/><circle cx='533' cy='400' r='3'/>
+<circle cx='300' cy='408' r='3.5'/><circle cx='286' cy='368' r='3'/><circle cx='500' cy='408' r='3.5'/><circle cx='514' cy='368' r='3'/>
+</g>
+<ellipse cx='400' cy='396' rx='72' ry='82' fill='url(#octo)' stroke='#8f2146' stroke-width='3'/>
+<ellipse cx='374' cy='410' rx='17' ry='20' fill='#fff'/><ellipse cx='426' cy='410' rx='17' ry='20' fill='#fff'/>
+<circle cx='378' cy='404' r='8' fill='#1a1a1a'/><circle cx='430' cy='404' r='8' fill='#1a1a1a'/>
+<circle cx='381' cy='400' r='2.5' fill='#fff'/><circle cx='433' cy='400' r='2.5' fill='#fff'/>
+<path d='M382 442 Q400 458 418 442' fill='none' stroke='#8f2146' stroke-width='4' stroke-linecap='round'/>
+<ellipse cx='350' cy='432' rx='9' ry='5' fill='#ff6f91' opacity='0.6'/><ellipse cx='450' cy='432' rx='9' ry='5' fill='#ff6f91' opacity='0.6'/>
+<g fill='#ffd76a' font-family='serif' font-size='40'>
+<text x='90' y='190'>♪</text><text x='690' y='170'>♫</text><text x='60' y='330' font-size='30'>♫</text><text x='720' y='320' font-size='30'>♪</text><text x='110' y='90' font-size='26'>♪</text><text x='660' y='70' font-size='26'>♪</text>
+</g>
+</svg>
+</body></html>
