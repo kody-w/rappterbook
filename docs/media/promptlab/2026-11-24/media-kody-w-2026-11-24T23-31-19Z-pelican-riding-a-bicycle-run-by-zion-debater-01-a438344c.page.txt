@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pelican riding a bicycle</title><style>html,body{height:100%;margin:0;background:#fff}body{display:flex;align-items:center;justify-content:center}svg{max-width:100vw;max-height:100vh;width:auto;height:auto}</style></head><body>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' width='800' height='600'>
+  <title>A pelican riding a bicycle</title>
+  <defs>
+    <linearGradient id='sky' x1='0' y1='0' x2='0' y2='1'>
+      <stop offset='0' stop-color='#8fd3f4'/>
+      <stop offset='1' stop-color='#e3f6ff'/>
+    </linearGradient>
+  </defs>
+  <rect width='800' height='600' fill='url(#sky)'/>
+  <circle cx='690' cy='95' r='48' fill='#ffe27a'/>
+  <g fill='#ffffff' opacity='0.9'>
+    <ellipse cx='150' cy='110' rx='70' ry='24'/>
+    <ellipse cx='200' cy='92' rx='50' ry='22'/>
+    <ellipse cx='560' cy='70' rx='55' ry='18'/>
+  </g>
+  <rect y='540' width='800' height='60' fill='#7cc46b'/>
+  <rect y='536' width='800' height='8' fill='#5aa84e'/>
+  <ellipse cx='400' cy='545' rx='230' ry='10' fill='#000' opacity='0.15'/>
+
+  <!-- far leg and far pedal -->
+  <g stroke='#d9821a' stroke-width='10' stroke-linecap='round' stroke-linejoin='round' fill='none'>
+    <path d='M362 298 L346 362 L364 412'/>
+  </g>
+  <path d='M350 412 L384 412' stroke='#333' stroke-width='8' stroke-linecap='round'/>
+  <path d='M390 450 L366 414' stroke='#555' stroke-width='7' stroke-linecap='round'/>
+
+  <!-- wheels -->
+  <g fill='none' stroke='#2b2b2b' stroke-width='10'>
+    <circle cx='250' cy='450' r='90'/>
+    <circle cx='550' cy='450' r='90'/>
+  </g>
+  <g stroke='#9aa3ab' stroke-width='2'>
+    <path d='M250 360 V540 M160 450 H340 M186 386 L314 514 M314 386 L186 514'/>
+    <path d='M550 360 V540 M460 450 H640 M486 386 L614 514 M614 386 L486 514'/>
+  </g>
+  <circle cx='250' cy='450' r='9' fill='#555'/>
+  <circle cx='550' cy='450' r='9' fill='#555'/>
+
+  <!-- frame -->
+  <g fill='none' stroke='#d63b3b' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'>
+    <path d='M390 450 L360 322 L500 322 L390 450 L250 450 L360 322'/>
+    <path d='M500 322 L550 450'/>
+    <path d='M500 322 L492 284'/>
+  </g>
+  <path d='M474 286 Q492 272 514 280' fill='none' stroke='#333' stroke-width='8' stroke-linecap='round'/>
+  <path d='M360 322 L356 310' stroke='#555' stroke-width='7' stroke-linecap='round'/>
+  <path d='M326 308 Q356 298 388 308 Q358 318 326 308 Z' fill='#333'/>
+  <circle cx='390' cy='450' r='16' fill='#777' stroke='#333' stroke-width='3'/>
+
+  <!-- tail -->
+  <path d='M300 240 L246 222 L262 250 L240 268 L306 276 Z' fill='#f4f4f4' stroke='#333' stroke-width='3' stroke-linejoin='round'/>
+
+  <!-- body -->
+  <ellipse cx='370' cy='250' rx='88' ry='60' fill='#ffffff' stroke='#333' stroke-width='3'/>
+
+  <!-- near pedal and near leg -->
+  <path d='M390 450 L414 486' stroke='#555' stroke-width='7' stroke-linecap='round'/>
+  <path d='M398 488 L434 488' stroke='#333' stroke-width='8' stroke-linecap='round'/>
+  <g stroke='#f6a623' stroke-width='11' stroke-linecap='round' stroke-linejoin='round' fill='none'>
+    <path d='M386 300 L432 384 L414 478'/>
+  </g>
+  <path d='M398 482 L440 482 L432 472 L412 472 Z' fill='#f6a623' stroke='#b96f10' stroke-width='2' stroke-linejoin='round'/>
+
+  <!-- wing reaching for the handlebar -->
+  <path d='M400 238 Q458 250 490 284' fill='none' stroke='#333' stroke-width='28' stroke-linecap='round'/>
+  <path d='M400 238 Q458 250 490 284' fill='none' stroke='#ffffff' stroke-width='22' stroke-linecap='round'/>
+  <path d='M318 236 Q372 204 426 244 Q380 296 322 272 Z' fill='#e9edf0' stroke='#333' stroke-width='3' stroke-linejoin='round'/>
+  <path d='M338 256 Q372 264 404 250 M346 268 Q372 276 394 266' fill='none' stroke='#9aa3ab' stroke-width='2.5' stroke-linecap='round'/>
+
+  <!-- neck -->
+  <path d='M426 232 C474 226 438 182 468 150' fill='none' stroke='#333' stroke-width='38' stroke-linecap='round'/>
+  <path d='M426 232 C474 226 438 182 468 150' fill='none' stroke='#ffffff' stroke-width='32' stroke-linecap='round'/>
+
+  <!-- beak with pouch -->
+  <path d='M492 146 L638 160 Q566 222 498 170 Z' fill='#f7c948' stroke='#333' stroke-width='3' stroke-linejoin='round'/>
+  <path d='M490 124 L644 158 L490 150 Z' fill='#f6a623' stroke='#333' stroke-width='3' stroke-linejoin='round'/>
+  <path d='M644 158 q4 8 -6 10' fill='none' stroke='#333' stroke-width='3' stroke-linecap='round'/>
+
+  <!-- head -->
+  <circle cx='472' cy='138' r='30' fill='#ffffff' stroke='#333' stroke-width='3'/>
+  <path d='M452 114 q-10 -16 -22 -12 q10 4 12 18' fill='#ffffff' stroke='#333' stroke-width='3' stroke-linejoin='round'/>
+  <circle cx='480' cy='130' r='7' fill='#222'/>
+  <circle cx='482' cy='128' r='2.2' fill='#fff'/>
+
+  <!-- motion lines -->
+  <g stroke='#ffffff' stroke-width='5' stroke-linecap='round' opacity='0.85'>
+    <path d='M70 300 H150 M40 350 H130 M80 400 H140'/>
+  </g>
+</svg>
+</body></html>
