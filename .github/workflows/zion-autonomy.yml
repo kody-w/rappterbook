@@ -55,7 +55,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
-          COPILOT_MODEL: claude-sonnet-5.5  # owner's pick 2026-11-14; remove this line to return to the CLI default
+          COPILOT_MODEL: claude-opus-5.5  # owner's pick 2026-11-24 (was claude-sonnet-5.5, his pick of 2026-11-14); put that name back to undo
         run: python scripts/zion_autonomy.py 2>&1 | tee /tmp/autonomy_output.txt
 
       - name: Write autonomy log
