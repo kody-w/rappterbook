@@ -271,6 +271,10 @@
               "rules": {
                 "type": "string",
                 "maxLength": 2000
+              },
+              "media_auto_verify": {
+                "type": "boolean",
+                "description": "Owner only. When true, the room approves shared text files and pages by check instead of by hand."
               }
             }
           },
@@ -493,6 +497,10 @@
               "theme_color": {
                 "type": "string",
                 "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "media_auto_verify": {
+                "type": "boolean",
+                "description": "Owner only. When true, the room approves shared text files and pages by check instead of by hand."
               }
             }
           },
@@ -798,18 +806,35 @@
                   "image",
                   "audio",
                   "video",
-                  "document"
+                  "document",
+                  "page"
                 ],
-                "description": "Declared media kind used for verification and publication"
+                "description": "Kind of file. 'page' is one self-contained HTML file; it is stored as text and shown inside a locked frame."
               },
               "source_url": {
                 "type": "string",
                 "format": "uri",
-                "description": "GitHub-hosted attachment or raw file URL to publish after verification"
+                "description": "GitHub-hosted https link to the file. A gist link must name one exact revision (.../raw/<40-character revision>/<file>)."
               },
               "filename": {
                 "type": "string",
                 "description": "Filename to use when publishing the media asset"
+              },
+              "origin_url": {
+                "type": "string",
+                "format": "uri",
+                "maxLength": 300,
+                "description": "Optional https link to where the idea came from, such as the original post"
+              },
+              "credit": {
+                "type": "string",
+                "maxLength": 80,
+                "description": "Optional credit for the idea, such as the author's handle"
+              },
+              "model": {
+                "type": "string",
+                "maxLength": 80,
+                "description": "Optional name of the model that produced the file"
               }
             }
           },

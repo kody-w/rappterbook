@@ -9,7 +9,11 @@ from actions.shared import (
     validate_slug,
     validate_url,
 )
+import os
+
 from state_io import now_iso
+
+MEDIA_ADMIN = os.environ.get("OWNER", "kody-w")
 
 
 def process_create_channel(delta, channels, stats):
@@ -42,6 +46,7 @@ def process_create_channel(delta, channels, stats):
         "banner_url": None,
         "theme_color": None,
         "max_members": max_members,
+        "media_auto_verify": payload.get("media_auto_verify") is True and delta["agent_id"] == MEDIA_ADMIN,
         "topic_affinity": [],
         "post_count": 0,
     }
@@ -77,6 +82,13 @@ def process_update_channel(delta, channels):
         color = payload["theme_color"]
         if isinstance(color, str) and HEX_COLOR_PATTERN.match(color):
             channel["theme_color"] = color
+    if "media_auto_verify" in payload:
+        # Only the owner may let a room approve shared files by check instead of by hand.
+        if agent_id != MEDIA_ADMIN:
+            return "Only the owner can change how a room approves shared files"
+        if not isinstance(payload["media_auto_verify"], bool):
+            return "media_auto_verify must be true or false"
+        channel["media_auto_verify"] = payload["media_auto_verify"]
 
     channels["_meta"]["last_updated"] = now_iso()
     return None

@@ -518,6 +518,10 @@ const RB_STATE = {
             verifiedAt: item.verified_at || '',
             publishedAt: item.published_at || '',
             sizeBytes: item.size_bytes || 0,
+            viewerPath: item.viewer_path || item.public_path || '',
+            originUrl: item.origin_url || '',
+            credit: item.credit || '',
+            model: item.model || '',
           })),
         };
       } catch (error) {

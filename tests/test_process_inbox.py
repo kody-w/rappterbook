@@ -1680,3 +1680,103 @@ class TestPostedLogRotation:
         rotate_posted_log(posted_log, tmp_state)
         assert len(posted_log["comments"]) == 1
         assert posted_log["comments"][0]["post_title"] == "recent"
+
+
+class TestSharedPages:
+    """The file share takes web pages, stores them as text, and a room can approve by check."""
+
+    PAGE = b"<!doctype html><html><body><h1>hello</h1><script>document.title='x'</script></body></html>"
+
+    def _room(self, tmp_state, auto=False, slug="promptlab"):
+        channels = json.loads((tmp_state / "channels.json").read_text())
+        channels["channels"][slug] = {"slug": slug, "name": "Prompt Lab", "created_by": "kody-w", "moderators": [], "media_auto_verify": auto}
+        (tmp_state / "channels.json").write_text(json.dumps(channels, indent=2))
+
+    def _submit(self, tmp_state, docs_dir, tmp_path, data, name="try.html", kind="page", extra=None, agent="media-agent"):
+        sample = tmp_path / name
+        sample.write_bytes(data)
+        payload = {"channel": "promptlab", "title": "A try", "media_type": kind, "source_url": sample.as_uri(), "filename": name}
+        payload.update(extra or {})
+        write_delta(tmp_state / "inbox", agent, "submit_media", payload, timestamp=RECENT_TS)
+        run_inbox(tmp_state, docs_dir=docs_dir, extra_env={"RAPPTERBOOK_ALLOW_FILE_MEDIA_URLS": "1"})
+        return json.loads((tmp_state / "flags.json").read_text())["media_submissions"][-1]
+
+    def test_page_waits_for_a_person_in_an_ordinary_room(self, tmp_state, docs_dir, tmp_path):
+        self._room(tmp_state, auto=False)
+        entry = self._submit(tmp_state, docs_dir, tmp_path, self.PAGE)
+        assert entry["status"] == "pending"
+        assert entry["verified_by"] is None
+
+    def test_room_check_publishes_a_page_as_text_with_its_receipt(self, tmp_state, docs_dir, tmp_path):
+        self._room(tmp_state, auto=True)
+        entry = self._submit(tmp_state, docs_dir, tmp_path, self.PAGE, extra={
+            "origin_url": "https://x.com/someone/status/123", "credit": "@someone", "model": "claude-fable-5-2", "discussion_number": 7})
+        assert entry["status"] == "verified"
+        assert entry["verified_by"] == "room-check"
+        run_inbox(tmp_state, docs_dir=docs_dir, extra_env={"RAPPTERBOOK_ALLOW_FILE_MEDIA_URLS": "1"})
+        entry = json.loads((tmp_state / "flags.json").read_text())["media_submissions"][-1]
+        assert entry["status"] == "published"
+        assert entry["public_path"].endswith(".page.txt")
+        assert entry["sha256"][:8] in entry["public_path"]
+        assert (docs_dir / entry["public_path"]).read_bytes() == self.PAGE
+        assert not list(docs_dir.rglob("*.html"))
+        item = json.loads((docs_dir / "api" / "media.json").read_text())["media"][0]
+        assert item["viewer_path"] == "page.html#" + entry["public_path"]
+        assert item["origin_url"] == "https://x.com/someone/status/123"
+        assert item["credit"] == "@someone"
+        assert item["model"] == "claude-fable-5-2"
+        assert item["discussion_number"] == 7
+
+    def test_a_file_that_is_not_a_page_is_refused_at_fetch(self, tmp_state, docs_dir, tmp_path):
+        self._room(tmp_state, auto=True)
+        self._submit(tmp_state, docs_dir, tmp_path, b"\x89PNG\r\n\x1a\n\x00\x00binary")
+        run_inbox(tmp_state, docs_dir=docs_dir, extra_env={"RAPPTERBOOK_ALLOW_FILE_MEDIA_URLS": "1"})
+        entry = json.loads((tmp_state / "flags.json").read_text())["media_submissions"][-1]
+        assert entry["status"] == "rejected"
+        assert entry["publish_error"]
+        assert not list(docs_dir.rglob("*.page.txt"))
+
+    def test_plain_text_that_is_not_html_is_refused_as_a_page(self, tmp_state, docs_dir, tmp_path):
+        self._room(tmp_state, auto=True)
+        self._submit(tmp_state, docs_dir, tmp_path, b"just some words, no document")
+        run_inbox(tmp_state, docs_dir=docs_dir, extra_env={"RAPPTERBOOK_ALLOW_FILE_MEDIA_URLS": "1"})
+        entry = json.loads((tmp_state / "flags.json").read_text())["media_submissions"][-1]
+        assert entry["status"] == "rejected"
+        assert "whole HTML document" in entry["publish_error"]
+
+    def test_room_check_never_approves_pictures(self, tmp_state, docs_dir, tmp_path):
+        self._room(tmp_state, auto=True)
+        entry = self._submit(tmp_state, docs_dir, tmp_path, b"fake-png", name="shot.png", kind="image")
+        assert entry["status"] == "pending"
+
+    def test_only_the_owner_can_switch_the_room_check_on(self, tmp_state):
+        self._room(tmp_state, auto=False)
+        channels = json.loads((tmp_state / "channels.json").read_text())
+        channels["channels"]["promptlab"]["created_by"] = "someone-else"
+        (tmp_state / "channels.json").write_text(json.dumps(channels, indent=2))
+        write_delta(tmp_state / "inbox", "someone-else", "update_channel", {"slug": "promptlab", "media_auto_verify": True}, timestamp=RECENT_TS)
+        run_inbox(tmp_state)
+        assert json.loads((tmp_state / "channels.json").read_text())["channels"]["promptlab"]["media_auto_verify"] is False
+        channels = json.loads((tmp_state / "channels.json").read_text())
+        channels["channels"]["promptlab"]["moderators"] = ["kody-w"]
+        (tmp_state / "channels.json").write_text(json.dumps(channels, indent=2))
+        write_delta(tmp_state / "inbox", "kody-w", "update_channel", {"slug": "promptlab", "media_auto_verify": True}, timestamp=RECENT_TS)
+        run_inbox(tmp_state)
+        assert json.loads((tmp_state / "channels.json").read_text())["channels"]["promptlab"]["media_auto_verify"] is True
+
+    def test_gist_links_must_name_one_revision(self):
+        import sys
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from actions.media import _validated_source_url
+        pinned = "https://gist.githubusercontent.com/kody-w/0123456789abcdef0123456789abcdef/raw/" + "a" * 40 + "/try.html"
+        assert _validated_source_url(pinned) == pinned
+        assert _validated_source_url("https://gist.githubusercontent.com/kody-w/0123456789abcdef0123456789abcdef/raw/try.html") is None
+        assert _validated_source_url("https://example.com/try.html") is None
+        assert _validated_source_url(pinned.replace("/try.html", "/..%2f..%2fother")) is None
+        assert _validated_source_url(pinned + "?x=1") is None
+
+    def test_the_room_check_switch_takes_only_true_or_false(self, tmp_state):
+        self._room(tmp_state, auto=False)
+        write_delta(tmp_state / "inbox", "kody-w", "update_channel", {"slug": "promptlab", "media_auto_verify": "false"}, timestamp=RECENT_TS)
+        run_inbox(tmp_state)
+        assert json.loads((tmp_state / "channels.json").read_text())["channels"]["promptlab"]["media_auto_verify"] is False

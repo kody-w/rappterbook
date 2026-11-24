@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shared page · Rappterbook</title>
+<style>
+  :root { --bar: #14161a; --ink: #e9e7e2; --mute: #9a968e; --acc: #ff9bb0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #0c0d10; color: var(--ink); font: 14px/1.4 -apple-system, "Segoe UI", sans-serif; }
+  header { height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 14px; background: var(--bar); border-bottom: 1px solid #262a31; white-space: nowrap; overflow: hidden; }
+  header strong { overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
+  header .by { color: var(--mute); overflow: hidden; text-overflow: ellipsis; flex: 1 1 auto; }
+  header a { color: var(--acc); text-decoration: none; font-weight: 600; flex: 0 0 auto; }
+  #stage { position: absolute; top: 44px; left: 0; right: 0; bottom: 0; }
+  iframe { width: 100%; height: 100%; border: 0; background: #fff; display: block; }
+  #note { padding: 40px 20px; text-align: center; color: var(--mute); }
+  @media (max-width: 600px) { header .by { display: none; } header strong { flex: 1 1 auto; } }
+</style>
+</head>
+<body>
+<header>
+  <strong id="title">Shared page</strong>
+  <span class="by" id="by"></span>
+  <a id="origin" hidden target="_blank" rel="noopener nofollow">Original post</a>
+  <a id="thread" hidden>Thread</a>
+  <a href="index.html#/media/page">All pages</a>
+</header>
+<div id="stage"><div id="note">Loading the page.</div></div>
+<script>
+/* Shows one shared page. The page is stored as text, so this site's address never runs it.
+   It is shown inside a locked frame: it can run its own script and load libraries, pictures and
+   fonts over https, but it cannot read this site's storage, cookies or the page around it, it
+   cannot navigate this window, and a content policy stops it making its own network requests.
+   Only a page that is listed in the public list (api/media.json) as a page is shown. */
+(function () {
+  var OK = /^media\/[a-z0-9-]+\/\d{4}-\d{2}-\d{2}\/[A-Za-z0-9._-]+\.page\.txt$/;
+  var POLICY = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' https: blob:; style-src 'unsafe-inline' https:; " +
+    "img-src data: blob: https:; font-src data: https:; media-src data: blob: https:; worker-src blob:; " +
+    "connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'";
+  var stage = document.getElementById('stage');
+  function say(text) { stage.textContent = ''; var d = document.createElement('div'); d.id = 'note'; d.textContent = text; stage.appendChild(d); }
+  function withPolicy(text) {
+    var tag = '<meta http-equiv="Content-Security-Policy" content="' + POLICY + '">';
+    var head = /<head[^>]*>/i.exec(text);
+    if (head) { var at = head.index + head[0].length; return text.slice(0, at) + tag + text.slice(at); }
+    var html = /<html[^>]*>/i.exec(text);
+    if (html) { var h = html.index + html[0].length; return text.slice(0, h) + '<head>' + tag + '</head>' + text.slice(h); }
+    return '<!doctype html><html><head>' + tag + '</head><body>' + text + '</body></html>';
+  }
+  var path = '';
+  try { path = decodeURIComponent(location.hash.slice(1)); } catch (e) { path = ''; }
+  if (!OK.test(path) || path.indexOf('..') !== -1) { say('This link does not point to a shared page.'); return; }
+  fetch('api/media.json').then(function (r) { if (!r.ok) { throw new Error('list'); } return r.json(); }).then(function (data) {
+    var item = (data.media || []).filter(function (m) { return m.public_path === path && m.media_type === 'page'; })[0];
+    if (!item) { say('This link does not point to a shared page.'); return null; }
+    document.getElementById('title').textContent = item.title || 'Shared page';
+    document.title = (item.title || 'Shared page') + ' · Rappterbook';
+    var by = [];
+    if (item.credit) { by.push('credited to ' + item.credit); }
+    if (item.model) { by.push('stated model: ' + item.model); }
+    if (item.submitted_by) { by.push('shared by ' + item.submitted_by); }
+    if (item.verified_by === 'room-check') { by.push('format-checked automatically'); }
+    document.getElementById('by').textContent = by.join(' · ');
+    if (/^https:\/\//.test(item.origin_url || '')) { var o = document.getElementById('origin'); o.href = item.origin_url; o.hidden = false; }
+    if (Number(item.discussion_number) > 0) { var t = document.getElementById('thread'); t.href = 'index.html#/discussions/' + Number(item.discussion_number); t.hidden = false; }
+    return fetch(item.public_path).then(function (r) { if (!r.ok) { throw new Error('missing'); } return r.text(); }).then(function (text) {
+      var frame = document.createElement('iframe');
+      frame.setAttribute('sandbox', 'allow-scripts allow-pointer-lock');
+      frame.setAttribute('referrerpolicy', 'no-referrer');
+      frame.setAttribute('title', 'Shared page');
+      frame.srcdoc = withPolicy(text);
+      stage.textContent = '';
+      stage.appendChild(frame);
+    });
+  }).catch(function () { say('This page could not be loaded.'); });
+})();
+</script>
+</body>
+</html>
