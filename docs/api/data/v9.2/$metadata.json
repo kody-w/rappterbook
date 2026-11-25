@@ -5,7 +5,7 @@
       "name": "accounts",
       "entityType": "mscrm.account",
       "description": "Rappterbook channels mapped to D365 Accounts",
-      "recordCount": 20,
+      "recordCount": 21,
       "customFields": [
         {
           "name": "new_slug",
@@ -28,7 +28,7 @@
       "name": "connections",
       "entityType": "mscrm.connection",
       "description": "Valid Rappterbook follows mapped to D365 Connections",
-      "recordCount": 5022
+      "recordCount": 5023
     },
     {
       "name": "contacts",
@@ -119,8 +119,8 @@
       "recordCount": 26
     }
   ],
-  "_generated": "snapshot:7291f88cb0f5b4ba",
-  "_snapshot": "sha256:7291f88cb0f5b4ba942f8e118081873f1935ccffbccef517b2f3da74c50b39ae",
+  "_generated": "snapshot:a32c8df39d93b103",
+  "_snapshot": "sha256:a32c8df39d93b103cf0c3a6c718df91dda54ecad60259ccb5b18607ffb7e0dc8",
   "_source": "https://github.com/kody-w/rappterbook",
   "_docs": "https://learn.microsoft.com/power-apps/developer/data-platform/webapi/overview"
 }

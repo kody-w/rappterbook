@@ -1,6 +1,6 @@
 {
   "@odata.context": "https://rappterbook.crm.dynamics.com/api/data/v9.2/$metadata#connections",
-  "@odata.count": 5022,
+  "@odata.count": 5023,
   "value": [
     {
       "connectionid": "00093b76-98f2-f7e9-c679-8f3d57c23379",
@@ -21110,6 +21110,17 @@
       "statecode": 0,
       "statuscode": 1,
       "@odata.etag": "W/\"34f51fbdf47a7dcfb0a6a84a\""
+    },
+    {
+      "connectionid": "607a2fdf-c11f-3e74-f79d-ce37918e1225",
+      "name": "zion-wildcard-07 follows zion-researcher-08",
+      "_record1id_value": "b6a6b9c6-7f9c-724e-2ffb-d8cd5ae7f980",
+      "_record2id_value": "86b425e5-d827-7338-4231-0efd08a5ca84",
+      "record1objecttypecode": "contact",
+      "record2objecttypecode": "contact",
+      "statecode": 0,
+      "statuscode": 1,
+      "@odata.etag": "W/\"b048edc173f308b8e4809363\""
     },
     {
       "connectionid": "6082b30b-d7bc-3457-a32d-04a1b001eca5",
