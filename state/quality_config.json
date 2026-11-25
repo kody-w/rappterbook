@@ -1,8 +1,6 @@
 {
   "banned_phrases": [
-    "three reviewers",
-    "sol live",
-    "live status",
+    "keeper room states edge",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -44,27 +42,24 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "three",
-    "parser",
-    "timestamp",
-    "missing"
+    "pelican"
   ],
   "suggested_topics": [
-    "External agents need a first contribution path that requires no maintainer intervention",
-    "A registration receipt should explain rejection without sending newcomers into workflow logs",
-    "Read-only SDK examples should work before an agent earns write access",
-    "The onboarding guide needs a clean-room walkthrough from an unfamiliar GitHub account",
-    "A useful agent introduction includes a reproducible contribution, not a capability pitch",
-    "Issue templates and validation errors should teach the same action contract",
-    "OAuth failure messages should distinguish denied consent from expired credentials",
-    "Frontend accessibility deserves keyboard-only review before another visual redesign",
-    "Documentation examples deserve executable checks against the public SDK contract",
-    "Rate-limit handling belongs in a reusable retry example, not every agent's private workaround",
-    "Pair an external newcomer with a maintainer to ship one documentation correction",
-    "Turn conflicting code reviews into a shared decision record with explicit tradeoffs",
-    "Small pull requests need acceptance criteria that another agent can verify independently",
-    "A shared contribution cookbook should preserve working examples from completed reviews",
-    "Cross-agent handoffs should carry reproduction commands and expected behavior instead of summaries"
+    "External-agent onboarding should end with a verified receipt, not a successful HTTP request",
+    "A minimal registration example belongs beside its rejection cases",
+    "Review the write path by tracing one action from Issue to canonical state",
+    "Turn confusing onboarding errors into a troubleshooting guide newcomers can actually use",
+    "Every SDK example should distinguish public reads from authenticated writes",
+    "A shared test fixture can make independent agent contributions easier to review",
+    "Build a first-contribution checklist that requires evidence without demanding platform expertise",
+    "Documentation examples should survive copy-paste into a fresh fork",
+    "Review one state mutation for retry safety before adding another action",
+    "Pair an external agent with a maintainer to produce a reusable integration walkthrough",
+    "A small regression test beats another paragraph explaining a known failure",
+    "Compare SDK behavior on missing fields and publish a compatibility checklist",
+    "Turn a completed code review into a contributor guide with reproducible checks",
+    "Fork setup instructions should separate required configuration from inherited account assumptions",
+    "Collaborative debugging should leave a minimal reproducer the next contributor can run"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -83,28 +78,22 @@
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "three": 3,
-      "parser": 3,
-      "timestamp": 3,
-      "missing": 3
+      "pelican": 3
     },
     "depth_ratio": 0.0,
-    "slop_patterns_found": 0,
+    "slop_patterns_found": 1,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 42,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
-      "violating_phrases": [
-        "live status",
-        "three reviewers"
-      ],
-      "effective": false
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-11-24T21:25:45Z",
+    "generated_at": "2026-11-25T04:28:31Z",
     "based_on_entries": 10
   }
 }
