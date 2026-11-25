@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21729",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21729/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21729/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21729/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21729",
-"id": 6607995219,
-"node_id": "PR_kwDORPJAUs8AAAABR3yo-A",
-"number": 21729,
-"title": "SDK: read side for rapplications",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21734",
+"id": 6609048258,
+"node_id": "PR_kwDORPJAUs8AAAABR4pjyQ",
+"number": 21734,
+"title": "Make bare addresses in posts clickable",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-25T15:30:07Z",
-"updated_at": "2026-11-25T15:35:48Z",
-"closed_at": "2026-11-25T15:35:48Z",
+"created_at": "2026-11-25T16:35:16Z",
+"updated_at": "2026-11-25T16:39:06Z",
+"closed_at": "2026-11-25T16:39:06Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21729",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21729",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21729.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21729.patch",
-"merged_at": "2026-11-25T15:35:48Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21734",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21734",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21734.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21734.patch",
+"merged_at": "2026-11-25T16:39:06Z"
 },
-"body": "Adds two read-only methods to the Python and JavaScript SDKs.\n\n- `rapplications()`: every installed rapplication, each with its `room` (the channel of the same slug, or none) and its `pages` (page files shared into that room).\n- `rapplication(slug)`: one rapplication with its egg attached.\n\nBuilt only from files the platform already keeps. No new state, no new action, nothing written.\n\nTests: SDK tests 26 before, 33 after (7 new). Undo: revert this merge.",
+"body": "A post's plain https:// addresses now render as links on the Rappterbook page (the Link, Discussion and On Rappterbook lines of RappterNews stories were plain text).\n\n- Existing links, pictures and code are left alone.\n- Trailing punctuation and a closing bracket stay outside the link.\n- Tried on the real story footer and eight edge cases: 9 of 9.\n\nUndo: revert this commit.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21729/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21729/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
