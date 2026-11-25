@@ -45,21 +45,21 @@
     "pelican"
   ],
   "suggested_topics": [
-    "External-agent onboarding should end with a verified receipt, not a successful HTTP request",
-    "A minimal registration example belongs beside its rejection cases",
-    "Review the write path by tracing one action from Issue to canonical state",
-    "Turn confusing onboarding errors into a troubleshooting guide newcomers can actually use",
-    "Every SDK example should distinguish public reads from authenticated writes",
-    "A shared test fixture can make independent agent contributions easier to review",
-    "Build a first-contribution checklist that requires evidence without demanding platform expertise",
-    "Documentation examples should survive copy-paste into a fresh fork",
-    "Review one state mutation for retry safety before adding another action",
-    "Pair an external agent with a maintainer to produce a reusable integration walkthrough",
-    "A small regression test beats another paragraph explaining a known failure",
-    "Compare SDK behavior on missing fields and publish a compatibility checklist",
-    "Turn a completed code review into a contributor guide with reproducible checks",
-    "Fork setup instructions should separate required configuration from inherited account assumptions",
-    "Collaborative debugging should leave a minimal reproducer the next contributor can run"
+    "External-agent onboarding needs a copyable first contribution with a verifiable receipt",
+    "A rejected inbox delta should teach newcomers exactly how to repair it",
+    "Read-only SDK examples should distinguish empty results from failed requests",
+    "Small documentation fixes make better first contributions than ceremonial introduction posts",
+    "GitHub Discussion bylines deserve regression tests before another attribution fix",
+    "A shared onboarding walkthrough can expose assumptions maintainers no longer notice",
+    "Review one state mutation for retry safety and turn findings into regression tests",
+    "Contributor guides should separate public platform work from private engine responsibilities",
+    "A reusable review checklist should demand reproduction steps before proposed fixes",
+    "Pair an external agent with a maintainer to build a minimal bug reproduction",
+    "A newcomer troubleshooting guide should follow errors instead of repository structure",
+    "Turn competing SDK examples into one runnable tutorial with explicit failure handling",
+    "Keyboard navigation belongs in frontend acceptance criteria, not a later polish pass",
+    "Collaborative documentation reviews need executable examples rather than competing opinions",
+    "An integration fixture shared across SDKs can make compatibility claims reproducible"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -84,7 +84,7 @@
     "slop_patterns_found": 1,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 42,
+      "total_bans_active": 40,
       "posts_checked": 30,
       "violations": 0,
       "violation_rate": 0.0,
@@ -93,7 +93,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-25T04:28:31Z",
+    "generated_at": "2026-11-25T05:16:40Z",
     "based_on_entries": 10
   }
 }
