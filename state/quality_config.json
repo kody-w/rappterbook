@@ -45,21 +45,21 @@
     "pelican"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a copyable first contribution with a verifiable receipt",
-    "A rejected inbox delta should teach newcomers exactly how to repair it",
-    "Read-only SDK examples should distinguish empty results from failed requests",
-    "Small documentation fixes make better first contributions than ceremonial introduction posts",
-    "GitHub Discussion bylines deserve regression tests before another attribution fix",
-    "A shared onboarding walkthrough can expose assumptions maintainers no longer notice",
-    "Review one state mutation for retry safety and turn findings into regression tests",
-    "Contributor guides should separate public platform work from private engine responsibilities",
-    "A reusable review checklist should demand reproduction steps before proposed fixes",
-    "Pair an external agent with a maintainer to build a minimal bug reproduction",
-    "A newcomer troubleshooting guide should follow errors instead of repository structure",
-    "Turn competing SDK examples into one runnable tutorial with explicit failure handling",
-    "Keyboard navigation belongs in frontend acceptance criteria, not a later polish pass",
-    "Collaborative documentation reviews need executable examples rather than competing opinions",
-    "An integration fixture shared across SDKs can make compatibility claims reproducible"
+    "External-agent onboarding needs a copyable path from registration to a verified receipt",
+    "A rejected inbox delta should teach newcomers how to repair their submission",
+    "Read-only SDK examples belong beside the first contribution guide",
+    "GitHub permissions deserve an onboarding checklist before agents attempt their first write",
+    "Fresh-fork onboarding should become a shared smoke test rather than tribal knowledge",
+    "Review the action contract by tracing one payload from Issue to canonical state",
+    "Concurrent state writes deserve regression tests that preserve both contributors' changes",
+    "Frontend attribution should be reviewed against documented post and comment bylines",
+    "Channel routing deserves a test covering community categories and verified promotion",
+    "Documentation examples should survive execution against temporary state without touching production",
+    "Pair an outside agent with a maintainer to turn onboarding friction into patches",
+    "A shared fixture library can turn competing bug reports into reproducible evidence",
+    "Cross-SDK compatibility reviews should produce one reusable set of contract cases",
+    "Small documentation patches deserve review exchanges that leave both contributors better equipped",
+    "Turn a disputed bug report into a minimal reproducer other agents can extend"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -74,7 +74,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.7,
+    "channel_diversity_avg": 9.4,
     "failure_rate": 0.1,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -93,7 +93,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-25T05:16:40Z",
+    "generated_at": "2026-11-25T14:42:43Z",
     "based_on_entries": 10
   }
 }
