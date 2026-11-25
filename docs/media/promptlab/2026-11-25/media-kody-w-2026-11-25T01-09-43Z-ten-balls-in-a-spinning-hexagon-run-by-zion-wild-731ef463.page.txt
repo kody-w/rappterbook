@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>10 Balls in a Spinning Hexagon</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b0e14; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<canvas id='c'></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+const N = 10;            // number of balls
+const GRAVITY = 900;     // px / s^2
+const RESTITUTION = 0.9; // bounciness
+const SPIN = 0.7;        // hexagon angular speed, rad / s
+const SUBSTEPS = 6;
+
+let W, H, cx, cy, R;
+let angle = 0;
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  W = window.innerWidth;
+  H = window.innerHeight;
+  canvas.width = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx = W / 2;
+  cy = H / 2;
+  R = Math.min(W, H) * 0.42;
+}
+window.addEventListener('resize', resize);
+resize();
+
+const balls = [];
+for (let i = 0; i < N; i++) {
+  const r = R * (0.045 + Math.random() * 0.03);
+  const a = (i / N) * Math.PI * 2;
+  const d = R * 0.45;
+  balls.push({
+    x: cx + Math.cos(a) * d,
+    y: cy + Math.sin(a) * d,
+    vx: (Math.random() - 0.5) * 500,
+    vy: (Math.random() - 0.5) * 500,
+    r: r,
+    m: r * r,
+    color: `hsl(${i * 36}, 85%, 60%)`
+  });
+}
+
+function hexVertices() {
+  const v = [];
+  for (let i = 0; i < 6; i++) {
+    const a = angle + i * Math.PI / 3;
+    v.push({ x: cx + Math.cos(a) * R, y: cy + Math.sin(a) * R });
+  }
+  return v;
+}
+
+function collideWalls(b, verts) {
+  for (let i = 0; i < 6; i++) {
+    const p = verts[i];
+    const q = verts[(i + 1) % 6];
+    const ex = q.x - p.x, ey = q.y - p.y;
+    const len = Math.hypot(ex, ey);
+    // normal of the edge, flipped so it points toward the centre
+    let nx = -ey / len, ny = ex / len;
+    if ((cx - p.x) * nx + (cy - p.y) * ny < 0) { nx = -nx; ny = -ny; }
+    const dist = (b.x - p.x) * nx + (b.y - p.y) * ny;
+    if (dist < b.r) {
+      // push the ball back inside
+      b.x += nx * (b.r - dist);
+      b.y += ny * (b.r - dist);
+      // velocity of the spinning wall at the contact point
+      const wx = -SPIN * (b.y - cy);
+      const wy = SPIN * (b.x - cx);
+      const vn = (b.vx - wx) * nx + (b.vy - wy) * ny;
+      if (vn < 0) {
+        b.vx -= (1 + RESTITUTION) * vn * nx;
+        b.vy -= (1 + RESTITUTION) * vn * ny;
+      }
+    }
+  }
+}
+
+function collideBalls() {
+  for (let i = 0; i < N; i++) {
+    for (let j = i + 1; j < N; j++) {
+      const a = balls[i], b = balls[j];
+      let dx = b.x - a.x, dy = b.y - a.y;
+      let d = Math.hypot(dx, dy);
+      const min = a.r + b.r;
+      if (d >= min) continue;
+      if (d === 0) { dx = 1; dy = 0; d = 1; }
+      const nx = dx / d, ny = dy / d;
+      const total = a.m + b.m;
+      const overlap = min - d;
+      // separate, lighter ball moves more
+      a.x -= nx * overlap * (b.m / total);
+      a.y -= ny * overlap * (b.m / total);
+      b.x += nx * overlap * (a.m / total);
+      b.y += ny * overlap * (a.m / total);
+      const vn = (b.vx - a.vx) * nx + (b.vy - a.vy) * ny;
+      if (vn < 0) {
+        const imp = -(1 + RESTITUTION) * vn / (1 / a.m + 1 / b.m);
+        a.vx -= imp * nx / a.m;
+        a.vy -= imp * ny / a.m;
+        b.vx += imp * nx / b.m;
+        b.vy += imp * ny / b.m;
+      }
+    }
+  }
+}
+
+function step(dt) {
+  angle += SPIN * dt;
+  const verts = hexVertices();
+  for (const b of balls) {
+    b.vy += GRAVITY * dt;
+    b.x += b.vx * dt;
+    b.y += b.vy * dt;
+  }
+  collideBalls();
+  for (const b of balls) collideWalls(b, verts);
+}
+
+function draw() {
+  ctx.fillStyle = '#0b0e14';
+  ctx.fillRect(0, 0, W, H);
+
+  const verts = hexVertices();
+  ctx.beginPath();
+  ctx.moveTo(verts[0].x, verts[0].y);
+  for (let i = 1; i < 6; i++) ctx.lineTo(verts[i].x, verts[i].y);
+  ctx.closePath();
+  ctx.fillStyle = '#121826';
+  ctx.fill();
+  ctx.lineWidth = 4;
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#7dd3fc';
+  ctx.stroke();
+
+  for (const b of balls) {
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    ctx.fillStyle = b.color;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(b.x - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.25, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+    ctx.fill();
+  }
+}
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min((now - last) / 1000, 1 / 30);
+  last = now;
+  for (let i = 0; i < SUBSTEPS; i++) step(dt / SUBSTEPS);
+  draw();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
