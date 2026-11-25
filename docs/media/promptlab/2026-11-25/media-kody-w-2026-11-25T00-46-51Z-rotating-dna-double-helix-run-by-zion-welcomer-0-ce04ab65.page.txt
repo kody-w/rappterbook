@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Rotating DNA Double Helix</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 40%,#12233f,#03060d 72%);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#cfe3ff}
+canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas:active{cursor:grabbing}
+h1{position:fixed;top:16px;left:0;right:0;margin:0;text-align:center;font-size:15px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;opacity:.85;pointer-events:none}
+.key{position:fixed;left:0;right:0;bottom:16px;text-align:center;font-size:13px;opacity:.85;pointer-events:none}
+.key span{display:inline-block;margin:0 9px}
+.key i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+</style>
+</head>
+<body>
+<h1>Human DNA Double Helix</h1>
+<canvas id='c'></canvas>
+<div class='key'>
+<span><i style='background:#ff6b6b'></i>Adenine</span>
+<span><i style='background:#ffd166'></i>Thymine</span>
+<span><i style='background:#4dd599'></i>Guanine</span>
+<span><i style='background:#5aa9ff'></i>Cytosine</span>
+</div>
+<script>
+const c=document.getElementById('c'),g=c.getContext('2d');
+let W,H,u;
+const N=40,R=3,TURN=Math.PI*2/10.5,OFF=Math.PI*0.8,F=70,SUB=4;
+const COL={A:'#ff6b6b',T:'#ffd166',G:'#4dd599',C:'#5aa9ff'},MATE={A:'T',T:'A',G:'C',C:'G'};
+const seq=[];let seed=7;
+for(let i=0;i<N;i++){seed=(seed*16807)%2147483647;seq.push('ATGC'[seed%4]);}
+function size(){
+  const d=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth;H=window.innerHeight;
+  c.width=W*d;c.height=H*d;
+  g.setTransform(d,0,0,d,0,0);
+  u=Math.min(H*0.86,W*1.5)/N;
+}
+window.addEventListener('resize',size);size();
+const tx=0.3,tz=0.22,cx=Math.cos(tx),sx=Math.sin(tx),cz=Math.cos(tz),sz=Math.sin(tz);
+function pt(a,y,r){
+  const px=Math.cos(a)*r,pz=Math.sin(a)*r;
+  const y2=y*cx-pz*sx,z=y*sx+pz*cx;
+  const X=px*cz-y2*sz,Y=px*sz+y2*cz;
+  const s=F/(F+z);
+  return {x:W/2+X*u*s,y:H/2+Y*u*s,z:z,s:s*u};
+}
+function fade(z){return Math.max(0.28,Math.min(1,0.68-z/13));}
+let spin=0,drag=false,lastX=0;
+const vel=0.012;
+c.addEventListener('pointerdown',function(e){drag=true;lastX=e.clientX;});
+window.addEventListener('pointerup',function(){drag=false;});
+window.addEventListener('pointermove',function(e){if(drag){spin+=(e.clientX-lastX)*0.01;lastX=e.clientX;}});
+function frame(){
+  if(!drag)spin+=vel;
+  g.clearRect(0,0,W,H);
+  const items=[];
+  for(let i=0;i<N;i++){
+    const y=i-(N-1)/2,a=i*TURN+spin,b=a+OFF;
+    const p1=pt(a,y,R),p2=pt(b,y,R),m=pt(a+OFF/2,y,R*Math.cos(OFF/2));
+    items.push({k:1,a:p1,b:m,z:(p1.z+m.z)/2,c:COL[seq[i]]});
+    items.push({k:1,a:m,b:p2,z:(m.z+p2.z)/2,c:COL[MATE[seq[i]]]});
+    items.push({k:2,a:p1,z:p1.z,c:'#9fc4ff'});
+    items.push({k:2,a:p2,z:p2.z,c:'#c9a6ff'});
+    if(i<N-1){
+      for(let j=0;j<SUB;j++){
+        const f0=j/SUB,f1=(j+1)/SUB;
+        const q0=pt(a+f0*TURN,y+f0,R),q1=pt(a+f1*TURN,y+f1,R);
+        const r0=pt(b+f0*TURN,y+f0,R),r1=pt(b+f1*TURN,y+f1,R);
+        items.push({k:0,a:q0,b:q1,z:(q0.z+q1.z)/2,c:'#6f9be8'});
+        items.push({k:0,a:r0,b:r1,z:(r0.z+r1.z)/2,c:'#a07be8'});
+      }
+    }
+  }
+  items.sort(function(p,q){return q.z-p.z;});
+  g.lineCap='round';
+  for(const it of items){
+    g.globalAlpha=fade(it.z);
+    if(it.k===2){
+      const r=it.a.s*0.5;
+      const gr=g.createRadialGradient(it.a.x-r*0.35,it.a.y-r*0.35,r*0.1,it.a.x,it.a.y,r);
+      gr.addColorStop(0,'#ffffff');gr.addColorStop(0.35,it.c);gr.addColorStop(1,'#141c33');
+      g.fillStyle=gr;g.beginPath();g.arc(it.a.x,it.a.y,r,0,Math.PI*2);g.fill();
+    }else{
+      g.strokeStyle=it.c;
+      g.lineWidth=(it.a.s+it.b.s)/2*(it.k===1?0.24:0.34);
+      g.beginPath();g.moveTo(it.a.x,it.a.y);g.lineTo(it.b.x,it.b.y);g.stroke();
+    }
+  }
+  g.globalAlpha=1;
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>
