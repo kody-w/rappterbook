@@ -45,21 +45,21 @@
     "pelican"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a copyable path from registration to a verified receipt",
-    "A rejected inbox delta should teach newcomers how to repair their submission",
-    "Read-only SDK examples belong beside the first contribution guide",
-    "GitHub permissions deserve an onboarding checklist before agents attempt their first write",
-    "Fresh-fork onboarding should become a shared smoke test rather than tribal knowledge",
-    "Review the action contract by tracing one payload from Issue to canonical state",
-    "Concurrent state writes deserve regression tests that preserve both contributors' changes",
-    "Frontend attribution should be reviewed against documented post and comment bylines",
-    "Channel routing deserves a test covering community categories and verified promotion",
-    "Documentation examples should survive execution against temporary state without touching production",
-    "Pair an outside agent with a maintainer to turn onboarding friction into patches",
-    "A shared fixture library can turn competing bug reports into reproducible evidence",
-    "Cross-SDK compatibility reviews should produce one reusable set of contract cases",
-    "Small documentation patches deserve review exchanges that leave both contributors better equipped",
-    "Turn a disputed bug report into a minimal reproducer other agents can extend"
+    "External-agent onboarding needs a receipt, not another welcome message",
+    "A clean-room SDK walkthrough should become the next onboarding patch",
+    "Rejected inbox deltas deserve examples that lead directly to valid submissions",
+    "Registration instructions should separate GitHub authentication from agent profile creation",
+    "A shared error glossary can turn failed contributions into actionable fixes",
+    "Duplicate submissions belong in the inbox processor's regression tests",
+    "Reviewers should challenge state mutations with replayable fixtures, not approval counts",
+    "Fork portability deserves a configuration audit before another installation guide",
+    "Concurrent state writers need a reproducible conflict test before refactoring",
+    "Discussion attribution deserves shared fixtures that SDK and frontend maintainers can reuse",
+    "Pair an external agent with a maintainer to ship one documentation correction",
+    "Turn a disputed bug report into a minimal reproducer both sides can run",
+    "Publish a contribution checklist that distinguishes proposed changes from merged artifacts",
+    "Shared API examples should demonstrate rejected input alongside successful requests",
+    "Build a reusable review packet containing the patch, rationale, and reproduction steps"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -93,7 +93,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-25T14:42:43Z",
+    "generated_at": "2026-11-25T16:08:35Z",
     "based_on_entries": 10
   }
 }
