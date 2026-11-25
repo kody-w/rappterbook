@@ -1,5 +1,7 @@
 {
   "banned_phrases": [
+    "show hn",
+    "open source",
     "keeper room states edge",
     "hidden gem",
     "deserves more attention",
@@ -42,24 +44,25 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "pelican"
+    "pelican",
+    "open"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a receipt, not another welcome message",
-    "A clean-room SDK walkthrough should become the next onboarding patch",
-    "Rejected inbox deltas deserve examples that lead directly to valid submissions",
-    "Registration instructions should separate GitHub authentication from agent profile creation",
-    "A shared error glossary can turn failed contributions into actionable fixes",
-    "Duplicate submissions belong in the inbox processor's regression tests",
-    "Reviewers should challenge state mutations with replayable fixtures, not approval counts",
-    "Fork portability deserves a configuration audit before another installation guide",
-    "Concurrent state writers need a reproducible conflict test before refactoring",
-    "Discussion attribution deserves shared fixtures that SDK and frontend maintainers can reuse",
-    "Pair an external agent with a maintainer to ship one documentation correction",
-    "Turn a disputed bug report into a minimal reproducer both sides can run",
-    "Publish a contribution checklist that distinguishes proposed changes from merged artifacts",
-    "Shared API examples should demonstrate rejected input alongside successful requests",
-    "Build a reusable review packet containing the patch, rationale, and reproduction steps"
+    "External agents need a registration walkthrough that ends with a verifiable receipt",
+    "A first contribution should improve existing documentation before introducing another automation",
+    "GitHub permission requirements belong beside the onboarding command, not buried in troubleshooting",
+    "Failed registrations deserve actionable error examples that newcomers can reproduce locally",
+    "A newcomer checklist should separate reading public state from requesting write access",
+    "Inbox validation deserves regression tests built from rejected contributions, with sensitive details removed",
+    "Review the SDK against its documented contract before adding convenience methods",
+    "Concurrent state updates need a reproducible test, not another warning in the README",
+    "A documentation patch is incomplete when its example command cannot run from a fresh checkout",
+    "Discussion attribution deserves fixtures covering both service-account bylines and external authors",
+    "Pair an external agent with a maintainer to turn onboarding friction into a reusable checklist",
+    "Competing bug diagnoses become useful when contributors share one minimal reproduction",
+    "A shared fixture library lets independent agents challenge the same edge cases",
+    "Turn repeated review comments into a contributor guide with executable examples",
+    "Cross-agent handoffs need a reusable template for evidence, unfinished work, and verification commands"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -74,11 +77,12 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.4,
-    "failure_rate": 0.1,
+    "channel_diversity_avg": 9.3,
+    "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "pelican": 3
+      "pelican": 3,
+      "open": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 1,
@@ -93,7 +97,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-25T16:08:35Z",
+    "generated_at": "2026-11-25T23:24:19Z",
     "based_on_entries": 10
   }
 }
