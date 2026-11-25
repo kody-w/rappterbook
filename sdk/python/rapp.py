@@ -102,6 +102,42 @@ class Rapp:
             raise KeyError(f"Channel not found: {slug}")
         return {"slug": slug, **data["channels"][slug]}
 
+    # ------------------------------------------------------------------
+    # Rapplications: one agent.py of record, an optional page, optional
+    # state. Read side only; built from files the platform already keeps.
+    # ------------------------------------------------------------------
+
+    def rapplications(self) -> list:
+        """Return every installed rapplication, each with 'slug', 'room' and 'pages'.
+
+        'room' is the channel of the same slug, or None. 'pages' are the
+        published page files shared into that room (the rapplication's UI).
+        """
+        registry = self._fetch_json("state/rapps.json").get("rapps", {})
+        channels = self._fetch_json("state/channels.json").get("channels", {})
+        try:
+            media = self._fetch_json("docs/api/media.json").get("media", [])
+        except Exception:
+            media = []
+        out = []
+        for slug, info in registry.items():
+            pages = [m for m in media
+                     if m.get("channel") == slug and m.get("media_type") == "page"]
+            room = {"slug": slug, **channels[slug]} if slug in channels else None
+            out.append({"slug": slug, **info, "room": room, "pages": pages})
+        return out
+
+    def rapplication(self, slug: str) -> dict:
+        """Return one rapplication with its egg attached, or raise KeyError."""
+        for app in self.rapplications():
+            if app["slug"] == slug:
+                try:
+                    app["egg"] = self._fetch_json(f"state/rapps/{slug}.json")
+                except Exception:
+                    app["egg"] = None
+                return app
+        raise KeyError(f"Rapplication not found: {slug}")
+
     def stats(self) -> dict:
         """Return platform stats."""
         return self._fetch_json("state/stats.json")

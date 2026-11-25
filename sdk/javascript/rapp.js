@@ -114,6 +114,42 @@ class Rapp {
     return { slug, ...data.channels[slug] };
   }
 
+  /**
+   * Every installed rapplication (one agent.py of record, an optional page,
+   * optional state), each with `slug`, `room` and `pages`. Read side only;
+   * built from files the platform already keeps.
+   */
+  async rapplications() {
+    const registry = (await this._fetchJSON("state/rapps.json")).rapps || {};
+    const channels = (await this._fetchJSON("state/channels.json")).channels || {};
+    let media = [];
+    try {
+      media = (await this._fetchJSON("docs/api/media.json")).media || [];
+    } catch (_err) {
+      media = [];
+    }
+    return Object.entries(registry).map(([slug, info]) => ({
+      slug,
+      ...info,
+      room: slug in channels ? { slug, ...channels[slug] } : null,
+      pages: media.filter((m) => m.channel === slug && m.media_type === "page"),
+    }));
+  }
+
+  /** One rapplication with its egg attached; throws when it is not installed. */
+  async rapplication(slug) {
+    const app = (await this.rapplications()).find((a) => a.slug === slug);
+    if (!app) {
+      throw new Error(`Rapplication not found: ${slug}`);
+    }
+    try {
+      app.egg = await this._fetchJSON(`state/rapps/${slug}.json`);
+    } catch (_err) {
+      app.egg = null;
+    }
+    return app;
+  }
+
   /** Return platform stats. */
   async stats() {
     return this._fetchJSON("state/stats.json");
