@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Tearable Cloth</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0d1017; color: #cfd6e4; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+  canvas.cutting { cursor: crosshair; }
+  #hud { position: fixed; left: 12px; bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 8px 12px; background: rgba(20, 25, 36, 0.85); border: 1px solid #2a3244; border-radius: 10px; font-size: 13px; user-select: none; }
+  #hud b { color: #ffffff; font-weight: 600; }
+  button { background: #1f2738; color: #e6ebf5; border: 1px solid #38435c; border-radius: 7px; padding: 5px 11px; font: inherit; cursor: pointer; }
+  button:hover { background: #2a3550; }
+  button.on { background: #b3392f; border-color: #e0574b; }
+</style>
+</head>
+<body>
+<canvas id='c'></canvas>
+<div id='hud'>
+  <span><b>Drag</b> to pull the cloth</span>
+  <span><b>Right-click</b> or hold <b>Shift</b> to cut</span>
+  <button id='cut' type='button'>Cut mode</button>
+  <button id='reset' type='button'>Reset</button>
+</div>
+<script>
+(function () {
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var cutBtn = document.getElementById('cut');
+  var resetBtn = document.getElementById('reset');
+
+  var GRAVITY = 0.38;      // pull added to every free point each step
+  var DAMPING = 0.99;      // how much speed a point keeps each step
+  var ITERATIONS = 5;      // constraint passes per step (more = stiffer)
+  var TEAR_AT = 5;         // a link snaps when stretched past this many rest lengths
+
+  var W = 0, H = 0, dpr = 1, spacing = 12;
+  var points = [], links = [], held = [];
+  var dirty = false, cutMode = false;
+  var mouse = { x: 0, y: 0, sx: 0, sy: 0, vx: 0, vy: 0, down: false, right: false, cutting: false };
+
+  function makeLink(a, b, len) { return { a: a, b: b, len: len, alive: true }; }
+
+  function build() {
+    points = []; links = []; held = [];
+    spacing = Math.max(9, Math.min(14, Math.round(W / 90)));
+    var cols = Math.max(10, Math.floor(Math.min(W * 0.8, 1000) / spacing));
+    var rows = Math.max(8, Math.floor(H * 0.55 / spacing));
+    var x0 = (W - cols * spacing) / 2;
+    var y0 = Math.max(30, H * 0.08);
+    for (var r = 0; r <= rows; r++) {
+      for (var c = 0; c <= cols; c++) {
+        var x = x0 + c * spacing, y = y0 + r * spacing;
+        var p = { x: x, y: y, px: x, py: y, pinned: r === 0 && (c % 2 === 0 || c === cols), held: false, hx: 0, hy: 0 };
+        points.push(p);
+        if (c > 0) links.push(makeLink(points[points.length - 2], p, spacing));
+        if (r > 0) links.push(makeLink(points[(r - 1) * (cols + 1) + c], p, spacing));
+      }
+    }
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    build();
+  }
+
+  // ---- grabbing ----
+  function hold(p) { p.held = true; p.hx = p.x - mouse.x; p.hy = p.y - mouse.y; held.push(p); }
+
+  function grab() {
+    var R = spacing * 2.2, best = null, bestD = 1e9;
+    for (var i = 0; i < points.length; i++) {
+      var p = points[i];
+      if (p.pinned) continue;
+      var d = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+      if (d < R) hold(p);
+      if (d < bestD) { bestD = d; best = p; }
+    }
+    if (!held.length && best && bestD < spacing * 5) hold(best);
+  }
+
+  function release() {
+    for (var i = 0; i < held.length; i++) {
+      var p = held[i];
+      p.held = false;
+      p.px = p.x - mouse.vx;   // let go with the speed of the hand
+      p.py = p.y - mouse.vy;
+    }
+    held = [];
+  }
+
+  // ---- cutting ----
+  function ccw(ax, ay, bx, by, cx, cy) { return (cy - ay) * (bx - ax) > (by - ay) * (cx - ax); }
+
+  function crosses(ax, ay, bx, by, cx, cy, dx, dy) {
+    return ccw(ax, ay, cx, cy, dx, dy) !== ccw(bx, by, cx, cy, dx, dy) &&
+           ccw(ax, ay, bx, by, cx, cy) !== ccw(ax, ay, bx, by, dx, dy);
+  }
+
+  function distToSegment(px, py, ax, ay, bx, by) {
+    var dx = bx - ax, dy = by - ay;
+    var l2 = dx * dx + dy * dy;
+    var t = l2 ? ((px - ax) * dx + (py - ay) * dy) / l2 : 0;
+    if (t < 0) t = 0; else if (t > 1) t = 1;
+    return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+  }
+
+  function slice(x1, y1, x2, y2) {
+    for (var i = 0; i < links.length; i++) {
+      var l = links[i];
+      if (!l.alive) continue;
+      var a = l.a, b = l.b;
+      if (crosses(x1, y1, x2, y2, a.x, a.y, b.x, b.y) || distToSegment(x2, y2, a.x, a.y, b.x, b.y) < 3) {
+        l.alive = false; dirty = true;
+      }
+    }
+  }
+
+  // ---- physics (Verlet integration + distance constraints) ----
+  function step() {
+    var i, p, l, a, b, dx, dy, d, diff, wa, wb, sum;
+
+    mouse.vx = mouse.x - mouse.sx; mouse.vy = mouse.y - mouse.sy;
+    mouse.sx = mouse.x; mouse.sy = mouse.y;
+
+    for (i = 0; i < points.length; i++) {
+      p = points[i];
+      if (p.pinned) continue;
+      if (p.held) {
+        p.x = mouse.x + p.hx; p.y = mouse.y + p.hy;
+        p.px = p.x; p.py = p.y;
+        continue;
+      }
+      var vx = (p.x - p.px) * DAMPING, vy = (p.y - p.py) * DAMPING;
+      p.px = p.x; p.py = p.y;
+      p.x += vx; p.y += vy + GRAVITY;
+      if (p.y > H - 2) { p.y = H - 2; p.px = p.x - vx * 0.5; }
+      if (p.x < 2) p.x = 2; else if (p.x > W - 2) p.x = W - 2;
+    }
+
+    for (var n = 0; n < ITERATIONS; n++) {
+      for (i = 0; i < links.length; i++) {
+        l = links[i];
+        if (!l.alive) continue;
+        a = l.a; b = l.b;
+        dx = b.x - a.x; dy = b.y - a.y;
+        d = Math.sqrt(dx * dx + dy * dy);
+        if (d === 0) continue;
+        if (n === 0 && d > l.len * TEAR_AT) { l.alive = false; dirty = true; continue; }
+        wa = (a.pinned || a.held) ? 0 : 1;
+        wb = (b.pinned || b.held) ? 0 : 1;
+        sum = wa + wb;
+        if (sum === 0) continue;
+        diff = (l.len - d) / d / sum;
+        a.x -= dx * diff * wa; a.y -= dy * diff * wa;
+        b.x += dx * diff * wb; b.y += dy * diff * wb;
+      }
+    }
+
+    if (dirty) {
+      links = links.filter(function (k) { return k.alive; });
+      dirty = false;
+    }
+  }
+
+  // ---- drawing ----
+  function draw() {
+    var i, l, p;
+    ctx.clearRect(0, 0, W, H);
+
+    var tense = [];
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#8fb7ff';
+    ctx.beginPath();
+    for (i = 0; i < links.length; i++) {
+      l = links[i];
+      if (!l.alive) continue;
+      var dx = l.b.x - l.a.x, dy = l.b.y - l.a.y;
+      if (dx * dx + dy * dy > l.len * l.len * 4) { tense.push(l); continue; }
+      ctx.moveTo(l.a.x, l.a.y);
+      ctx.lineTo(l.b.x, l.b.y);
+    }
+    ctx.stroke();
+
+    if (tense.length) {
+      ctx.strokeStyle = '#ff7a6b';   // links close to snapping
+      ctx.beginPath();
+      for (i = 0; i < tense.length; i++) {
+        ctx.moveTo(tense[i].a.x, tense[i].a.y);
+        ctx.lineTo(tense[i].b.x, tense[i].b.y);
+      }
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = '#e6ebf5';
+    for (i = 0; i < points.length; i++) {
+      p = points[i];
+      if (!p.pinned) continue;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    if (mouse.cutting) {
+      ctx.strokeStyle = '#ff5a4d';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 6, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
+  var last = performance.now(), acc = 0;
+  function frame(t) {
+    acc += Math.min(50, t - last);
+    last = t;
+    var n = 0;
+    while (acc >= 16.6 && n < 3) { step(); acc -= 16.6; n++; }
+    if (n === 3) acc = 0;
+    draw();
+    requestAnimationFrame(frame);
+  }
+
+  // ---- input ----
+  function locate(e) {
+    var r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+
+  function isCutting(e) {
+    return e.shiftKey || (mouse.down && (mouse.right || cutMode));
+  }
+
+  canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+
+  canvas.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    var m = locate(e);
+    mouse.x = mouse.sx = m.x; mouse.y = mouse.sy = m.y;
+    mouse.down = true;
+    mouse.right = e.button === 2;
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    mouse.cutting = isCutting(e);
+    canvas.classList.toggle('cutting', mouse.cutting);
+    if (mouse.cutting) slice(m.x, m.y, m.x, m.y);
+    else grab();
+  });
+
+  canvas.addEventListener('pointermove', function (e) {
+    var m = locate(e);
+    var ox = mouse.x, oy = mouse.y;
+    mouse.x = m.x; mouse.y = m.y;
+    mouse.cutting = isCutting(e);
+    canvas.classList.toggle('cutting', mouse.cutting);
+    if (mouse.cutting) {
+      if (held.length) release();
+      slice(ox, oy, m.x, m.y);
+    }
+  });
+
+  function up() {
+    mouse.down = false; mouse.right = false; mouse.cutting = false;
+    canvas.classList.remove('cutting');
+    release();
+  }
+  canvas.addEventListener('pointerup', up);
+  canvas.addEventListener('pointercancel', up);
+
+  cutBtn.addEventListener('click', function () {
+    cutMode = !cutMode;
+    cutBtn.classList.toggle('on', cutMode);
+  });
+  resetBtn.addEventListener('click', build);
+  window.addEventListener('keydown', function (e) { if (e.key === 'r' || e.key === 'R') build(); });
+  window.addEventListener('resize', resize);
+
+  resize();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
