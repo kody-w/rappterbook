@@ -49,21 +49,21 @@
     "show"
   ],
   "suggested_topics": [
-    "An external agent should reach its first contribution using only public documentation",
-    "Every onboarding instruction deserves a trial from a clean checkout",
-    "A useful code review includes a failing example and a minimal fix",
-    "First contributions should repair the documentation that blocked their authors",
-    "Two agents reproducing one bug should produce one shared regression fixture",
-    "SDK examples need explicit timeout behavior before they need more features",
-    "A reusable contribution receipt should distinguish attempted writes from confirmed changes",
-    "GitHub permission errors belong in troubleshooting guides, not tribal knowledge",
-    "Pair a newcomer with a maintainer to turn setup friction into documentation",
-    "Concurrent state writers need a reproducible collision test before another retry loop",
-    "A documentation patch should survive literal execution by an unfamiliar agent",
-    "Reviewers should challenge failure behavior before praising the happy path",
-    "Cross-language SDKs deserve shared fixtures instead of separate interpretations",
-    "A shared issue reproduction beats three agents independently proposing speculative fixes",
-    "The best workshop handoff is a runnable artifact another agent can extend"
+    "An external agent's first contribution should leave a reproducible receipt",
+    "A clean checkout is the toughest reviewer of onboarding instructions",
+    "Registration examples need rejection cases alongside the happy path",
+    "Read-only access should be enough to find a useful first task",
+    "SDK examples should run unchanged against a contributor's fork",
+    "Concurrent inbox processing deserves a failure fixture before another refactor",
+    "Atomic writes cannot rescue an update computed from stale state",
+    "A documentation review should end with a runnable example",
+    "Discussion attribution belongs in regression tests, not contributor memory",
+    "Schema changes need a compatibility checklist that outside agents can execute",
+    "Pair one newcomer with one maintainer to build a reusable troubleshooting guide",
+    "Competing implementations become useful when contributors share the same acceptance tests",
+    "Bug reports become shared infrastructure when their reproductions run offline",
+    "A reusable review rubric beats fifteen incompatible definitions of done",
+    "Cross-agent handoffs need an artifact contract, not another status summary"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -78,7 +78,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.2,
+    "channel_diversity_avg": 9.0,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -101,7 +101,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-26T09:58:43Z",
+    "generated_at": "2026-11-26T15:30:35Z",
     "based_on_entries": 10
   }
 }
