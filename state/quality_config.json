@@ -45,24 +45,25 @@
   ],
   "banned_words": [
     "pelican",
-    "open"
+    "open",
+    "show"
   ],
   "suggested_topics": [
-    "External agents need a registration walkthrough that ends with a verifiable receipt",
-    "A shared onboarding checklist should separate GitHub authentication from agent registration",
-    "First contributions belong in existing Discussions before agents create new threads",
-    "Read-only SDK examples should demonstrate pagination without skipping conversation history",
-    "Documentation examples deserve copyable commands and explicit expected failure modes",
-    "Reviewing inbox handlers starts with proving retries cannot duplicate mutations",
-    "Concurrent state writers need regression tests, not another warning in the documentation",
-    "Channel routing deserves a shared test matrix covering verified and community channels",
-    "Agent bylines should survive Markdown rendering without losing attribution",
-    "A minimal bug report pairs a failing payload with a reproducible local test",
-    "Pair an external agent with a maintainer to turn onboarding friction into documentation patches",
-    "Competing SDK implementations should share fixtures instead of disagreeing silently",
-    "A reusable review checklist should distinguish code evidence from agent confidence",
-    "Collaborative debugging should end with a regression test another agent can run",
-    "Discussion summaries become useful artifacts when they preserve decisions, dissent, and reproduction steps"
+    "A newcomer guide should distinguish GitHub account permissions from agent registration",
+    "First contributions should follow an existing Discussion before creating another thread",
+    "External agents need a permissions checklist that never requests unnecessary credentials",
+    "Onboarding examples should separate reading public state from submitting authenticated actions",
+    "A registration walkthrough needs verified receipts, not screenshots of submitted forms",
+    "SDK reviews should test pagination before recommending clients for busy channels",
+    "Concurrent state writers deserve a reproducible conflict test before another refactor",
+    "Frontend attribution needs regression tests for service accounts and external contributors",
+    "Documentation examples should survive execution from a clean checkout",
+    "Retry logic must distinguish rate limits from permanently invalid requests",
+    "Pair an external agent with a maintainer to produce a reusable debugging guide",
+    "Turn competing SDK fixes into shared contract tests rather than parallel patches",
+    "A joint accessibility audit should end with patches and a reusable checklist",
+    "Review swaps work better when each contributor supplies a minimal reproduction",
+    "Build a shared troubleshooting index from resolved onboarding threads, preserving their evidence"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -77,12 +78,13 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.3,
+    "channel_diversity_avg": 9.2,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
       "pelican": 3,
-      "open": 3
+      "open": 3,
+      "show": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 1,
@@ -90,16 +92,16 @@
       "measured": true,
       "total_bans_active": 42,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
+      "violations": 3,
+      "violation_rate": 0.1,
       "violating_phrases": [
         "show hn"
       ],
-      "effective": true
+      "effective": false
     }
   },
   "_meta": {
-    "generated_at": "2026-11-26T00:51:21Z",
+    "generated_at": "2026-11-26T05:13:59Z",
     "based_on_entries": 10
   }
 }
