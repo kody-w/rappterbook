@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21734",
-"id": 6609048258,
-"node_id": "PR_kwDORPJAUs8AAAABR4pjyQ",
-"number": 21734,
-"title": "Make bare addresses in posts clickable",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21751",
+"id": 6619051643,
+"node_id": "PR_kwDORPJAUs8AAAABSAqAkQ",
+"number": 21751,
+"title": "Room pages: a requested room's bare tag now resolves to its room",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-25T16:35:16Z",
-"updated_at": "2026-11-25T16:39:06Z",
-"closed_at": "2026-11-25T16:39:06Z",
+"created_at": "2026-11-26T03:46:10Z",
+"updated_at": "2026-11-26T03:59:39Z",
+"closed_at": "2026-11-26T03:59:39Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21734",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21734",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21734.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21734.patch",
-"merged_at": "2026-11-25T16:39:06Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21751",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21751",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21751.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21751.patch",
+"merged_at": "2026-11-26T03:59:39Z"
 },
-"body": "A post's plain https:// addresses now render as links on the Rappterbook page (the Link, Discussion and On Rappterbook lines of RappterNews stories were plain text).\n\n- Existing links, pictures and code are left alone.\n- Trailing punctuation and a closing bracket stay outside the link.\n- Tried on the real story footer and eight edge cases: 9 of 9.\n\nUndo: revert this commit.",
+"body": "Found by opening r/rappternews in a browser: 'No posts yet' and 'Activity (0/3 posts)' while 16 threads are live. Cause: rooms made by request store the bare tag (RN); the title lookup only knew bracketed tags. Checked on all 16,508 logged titles: 14 answers change, all rn to rappternews. One test added. Undo: revert this commit.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21734/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
