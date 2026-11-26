@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Paper Airplane Glide</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(#7ec8f0,#d8f0ff);font-family:system-ui,sans-serif}
+canvas{display:block}
+#ui{position:fixed;top:12px;left:12px;background:rgba(255,255,255,.8);padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.6}
+button{margin-top:6px;padding:6px 12px;border:0;border-radius:6px;background:#2b6cb0;color:#fff;cursor:pointer}
+</style>
+</head>
+<body>
+<canvas id='c'></canvas>
+<div id='ui'>
+<div>Speed: <span id='spd'>0</span> m/s</div>
+<div>Altitude: <span id='alt'>0</span> m</div>
+<div>Distance: <span id='dst'>0</span> m</div>
+<div>Wind: <input id='wind' type='range' min='-5' max='5' step='0.5' value='0'></div>
+<div><small>Up/Down arrows pitch the nose</small></div>
+<button id='go'>Throw again</button>
+</div>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');
+let W,H;function rs(){W=c.width=innerWidth;H=c.height=innerHeight}rs();addEventListener('resize',rs);
+const g=9.81,S=0.03,m=0.005,rho=1.2,scale=20;
+let p,clouds=[],keys={},trail=[];
+for(let i=0;i<25;i++)clouds.push({x:Math.random()*3000,y:Math.random()*0.5,r:30+Math.random()*50});
+function reset(){p={x:0,y:15,vx:9,vy:1.5,pitch:0.1,t:0};trail=[]}
+reset();
+document.getElementById('go').onclick=reset;
+addEventListener('keydown',e=>keys[e.key]=true);addEventListener('keyup',e=>keys[e.key]=false);
+function step(dt){
+ if(p.y<=0)return;
+ if(keys.ArrowUp)p.pitch+=0.8*dt;if(keys.ArrowDown)p.pitch-=0.8*dt;
+ const wind=+document.getElementById('wind').value;
+ const rvx=p.vx-wind,rvy=p.vy,v=Math.hypot(rvx,rvy)||0.001;
+ const path=Math.atan2(rvy,rvx);
+ let aoa=p.pitch-path;aoa=Math.max(-0.6,Math.min(0.6,aoa));
+ const stall=Math.abs(aoa)>0.35?0.4:1;
+ const CL=2*Math.PI*aoa*0.5*stall,CD=0.04+0.6*aoa*aoa;
+ const q=0.5*rho*v*v*S,L=q*CL,D=q*CD;
+ const ux=rvx/v,uy=rvy/v;
+ const ax=(-D*ux-L*uy)/m,ay=(-D*uy+L*ux)/m-g;
+ p.vx+=ax*dt;p.vy+=ay*dt;
+ p.pitch+=(path+0.05-p.pitch)*1.5*dt;
+ p.x+=p.vx*dt;p.y+=p.vy*dt;p.t+=dt;
+ if(p.y<0)p.y=0;
+ trail.push([p.x,p.y]);if(trail.length>400)trail.shift();
+}
+function plane(sx,sy,a){
+ x.save();x.translate(sx,sy);x.rotate(-a);
+ x.fillStyle='#fff';x.strokeStyle='#445';x.lineWidth=1.5;
+ x.beginPath();x.moveTo(28,0);x.lineTo(-22,-12);x.lineTo(-14,0);x.lineTo(-22,6);x.closePath();x.fill();x.stroke();
+ x.fillStyle='#dde4ee';x.beginPath();x.moveTo(28,0);x.lineTo(-14,0);x.lineTo(-22,6);x.closePath();x.fill();x.stroke();
+ x.restore();
+}
+function draw(){
+ x.clearRect(0,0,W,H);
+ const camX=p.x*scale-W*0.35,camY=Math.max(0,p.y*scale-H*0.5);
+ x.fillStyle='rgba(255,255,255,.85)';
+ clouds.forEach(cl=>{const sx=((cl.x-camX*0.3)%3000+3000)%3000-200,sy=cl.y*H;x.beginPath();x.arc(sx,sy,cl.r,0,7);x.arc(sx+cl.r*.8,sy+8,cl.r*.7,0,7);x.arc(sx-cl.r*.8,sy+10,cl.r*.6,0,7);x.fill()});
+ const gy=H-40+camY;
+ x.fillStyle='#6abf5a';x.fillRect(0,gy,W,H);
+ x.fillStyle='#4f9a42';for(let i=-1;i<W/60+2;i++){const gx=i*60-(camX%60);x.fillRect(gx,gy,4,10)}
+ x.strokeStyle='rgba(60,60,90,.35)';x.setLineDash([4,6]);x.beginPath();
+ trail.forEach((t,i)=>{const sx=t[0]*scale-camX,sy=gy-t[1]*scale;i?x.lineTo(sx,sy):x.moveTo(sx,sy)});x.stroke();x.setLineDash([]);
+ plane(p.x*scale-camX,gy-p.y*scale-4,p.pitch);
+ if(p.y<=0){x.fillStyle='#223';x.font='bold 22px system-ui';x.fillText('Landed! '+p.x.toFixed(1)+' m',W/2-80,60)}
+ document.getElementById('spd').textContent=Math.hypot(p.vx,p.vy).toFixed(1);
+ document.getElementById('alt').textContent=p.y.toFixed(1);
+ document.getElementById('dst').textContent=p.x.toFixed(1);
+}
+let last=performance.now();
+function loop(n){let dt=Math.min(0.05,(n-last)/1000);last=n;for(let i=0;i<4;i++)step(dt/4);draw();requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
