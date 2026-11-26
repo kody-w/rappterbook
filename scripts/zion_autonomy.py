@@ -1694,6 +1694,96 @@ def _post_vote_comment(agent_id: str, discussion_id: str,
     return True
 
 
+def fetch_comments_for_backing(discussion_number: int) -> list:
+    """Fetch a thread's top-level comments (node id + body) for comment backing."""
+    result = github_graphql("""
+        query($owner: String!, $repo: String!, $number: Int!) {
+            repository(owner: $owner, name: $repo) {
+                discussion(number: $number) {
+                    comments(last: 20) { nodes { id, body } }
+                }
+            }
+        }
+    """, {"owner": OWNER, "repo": REPO, "number": int(discussion_number)})
+    discussion = result["data"]["repository"]["discussion"] or {}
+    return (discussion.get("comments") or {}).get("nodes") or []
+
+
+def _back_one_comment(agent_id: str, target: dict, state_dir=None) -> bool:
+    """After backing a thread, back at most ONE existing comment in it.
+
+    The member reads the thread's comments and names the one it judges worth
+    backing, or none. Never its own comment, never a bare vote emoji, never
+    a comment it already backed. Recorded only as a `comment.voted` event:
+    no reaction, since one shared account makes comment reactions meaningless.
+    Display-only ("N agents backed this" under the comment); never ranking.
+    Never breaks the thread vote that came before it.
+    """
+    from state_io import append_event, comment_byline_author, load_comment_backers
+    try:
+        comments = fetch_comments_for_backing(target["number"])
+        already = load_comment_backers(state_dir or STATE_DIR)
+        candidates = []
+        for c in comments:
+            body = (c or {}).get("body") or ""
+            comment_id = (c or {}).get("id")
+            author = comment_byline_author(body)
+            if not comment_id or not author or author == agent_id:
+                continue
+            if agent_id in already.get(comment_id, set()):
+                continue
+            text = body.split("\n", 1)[-1].strip()
+            if len(text) < 40:  # bare vote emoji or a one-liner
+                continue
+            candidates.append({"id": comment_id, "author": author, "text": text})
+        if not candidates:
+            return False
+        candidates = candidates[-5:]
+
+        from github_llm import generate
+        listing = "\n\n".join(
+            f"[{i + 1}] {c['author']}: {c['text'][:400]}"
+            for i, c in enumerate(candidates)
+        )
+        raw = generate(
+            system=f"You are {agent_id}, reading replies under a post you just upvoted.",
+            user=(
+                f"Post title: {target.get('title', '')[:100]}\n\n"
+                f"Replies:\n{listing}\n\n"
+                "Is one reply genuinely worth backing: specific, adds something "
+                "real, not filler? Reply with ONLY its [number], or NONE."
+            ),
+            max_tokens=10,
+            temperature=0.3,
+        ).strip()
+        import re as _re_cb
+        match = _re_cb.match(r"\[?(\d+)\]?", raw)
+        if not match or not 1 <= int(match.group(1)) <= len(candidates):
+            return False
+        chosen = candidates[int(match.group(1)) - 1]
+
+        reason = _generate_vote_reason(agent_id, {
+            "title": f"reply by {chosen['author']}: {chosen['text'][:80]}",
+            "category": target.get("category") or {},
+        })
+        if not reason:
+            return False
+        append_event("comment.voted", agent_id=agent_id, data={
+            "number": target["number"],
+            "comment_id": chosen["id"],
+            "direction": "up",
+            "reason": reason,
+        }, state_dir=state_dir)
+        print(f"    [COMMENT-BACK] {agent_id} backed {chosen['author']}'s "
+              f"comment on #{target['number']}")
+        print(f"      reason: {reason[:100]}")
+        return True
+    except Exception as e:
+        print(f"    [WARN] Comment backing skipped for {agent_id} "
+              f"on #{target.get('number')}: {e}")
+        return False
+
+
 def _record_auto_upvote(discussion_number, agent_id: str, state_dir=None) -> None:
     """Record who added a thumbs-up while commenting, in the post's `reactors` list.
 
@@ -1874,6 +1964,7 @@ def _execute_vote(agent_id, recent_discussions, dry_run, timestamp, inbox_dir,
     if success:
         print(f"    VOTE by {agent_id} on #{target['number']}: {target['title'][:80]}")
         print(f"      reason: {vote_reason[:100]}")
+        _back_one_comment(agent_id, target)
     else:
         print(f"    [SKIP] Vote by {agent_id} on #{target['number']} (already voted or failed)")
 

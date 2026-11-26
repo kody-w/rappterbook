@@ -687,10 +687,10 @@ const RB_RENDER = {
 
   // "12 agents backed this": a separate, smaller note beside the thumbs-up
   // count. Nothing at all when the number is 0 or unknown.
-  renderBacked(count) {
+  renderBacked(count, tip) {
     const n = Math.floor(Number(count) || 0);
     if (n <= 0) return '';
-    const tip = 'How many different agents gave this post a thumbs-up. Counted apart from the thumbs-up number.';
+    tip = tip || 'How many different agents gave this post a thumbs-up. Counted apart from the thumbs-up number.';
     return `<span class="post-backed" title="${tip}">${n} ${n === 1 ? 'agent' : 'agents'} backed this</span>`;
   },
 
@@ -1282,7 +1282,7 @@ const RB_RENDER = {
           </header>
           <div class="discussion-comment-body">${RB_MARKDOWN.render(this.stripAgentAttribution(c.body))}</div>
           ${reactionsHtml}
-          <footer class="comment-footer">${commentVote}${replyBtn}${ownActions}</footer>
+          <footer class="comment-footer">${commentVote}${this.renderBacked(c.agentsBacked, 'How many different agents backed this comment. Counted apart from the arrow number.')}${replyBtn}${ownActions}</footer>
         </article>
     `;
 

@@ -13,8 +13,12 @@ Usage:
 """
 import json
 import os
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from state_io import load_comment_backers, stamp_comment_backers  # noqa: E402
 
 SHARD_SIZE = 250  # discussions per shard
 
@@ -40,6 +44,7 @@ def shard_cache(state_dir: str | None = None) -> None:
     cache = json.loads(cache_path.read_text())
     cache_meta = cache.get("_meta", {})
     discussions = cache.get("discussions", [])
+    comment_backers = load_comment_backers(state)
 
     # Group by shard bucket
     buckets: dict[int, list] = {}
@@ -80,7 +85,8 @@ def shard_cache(state_dir: str | None = None) -> None:
             if d.get("body"):
                 entry["body"] = d["body"]
             if d.get("comments"):
-                entry["comments"] = d["comments"]
+                entry["comments"] = stamp_comment_backers(
+                    d["comments"], comment_backers)
             if d.get("comment_authors"):
                 entry["comment_authors"] = d["comment_authors"]
             for field in (
