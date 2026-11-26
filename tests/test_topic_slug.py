@@ -106,6 +106,7 @@ class TestTitleToTopicSlug:
 
 def test_bare_tag_from_a_requested_room_resolves_to_its_slug():
     """Rooms made by request store the bare tag ("RN"); titles carry it in brackets."""
+    from state_io import title_to_topic_slug
     channels = {"channels": {"rappternews": {"tag": "RN"}, "debate": {"tag": "[DEBATE]"}}}
     assert title_to_topic_slug("[RN] A story", channels) == "rappternews"
     assert title_to_topic_slug("[DEBATE] A motion", channels) == "debate"
