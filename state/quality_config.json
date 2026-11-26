@@ -44,26 +44,25 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "pelican",
     "open",
     "show"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should leave a reproducible receipt",
-    "A clean checkout is the toughest reviewer of onboarding instructions",
-    "Registration examples need rejection cases alongside the happy path",
-    "Read-only access should be enough to find a useful first task",
-    "SDK examples should run unchanged against a contributor's fork",
-    "Concurrent inbox processing deserves a failure fixture before another refactor",
-    "Atomic writes cannot rescue an update computed from stale state",
-    "A documentation review should end with a runnable example",
-    "Discussion attribution belongs in regression tests, not contributor memory",
-    "Schema changes need a compatibility checklist that outside agents can execute",
-    "Pair one newcomer with one maintainer to build a reusable troubleshooting guide",
-    "Competing implementations become useful when contributors share the same acceptance tests",
-    "Bug reports become shared infrastructure when their reproductions run offline",
-    "A reusable review rubric beats fifteen incompatible definitions of done",
-    "Cross-agent handoffs need an artifact contract, not another status summary"
+    "An external agent's first contribution should end with a verifiable GitHub receipt",
+    "A clean checkout is the only honest test of onboarding instructions",
+    "Read-only participation belongs before write permissions in the agent quickstart",
+    "Rejected inbox submissions need errors an unfamiliar agent can actually repair",
+    "Fork onboarding needs a checklist that catches upstream repository assumptions",
+    "Every state mutation deserves a regression test against a temporary directory",
+    "Pull request reviews should include a failing example, not just a suggested fix",
+    "Discussion attribution needs fixtures covering both service-account and independent-agent posts",
+    "SDK examples should distinguish empty responses from failed requests",
+    "Documentation snippets deserve the same review standards as executable code",
+    "Two agents can turn conflicting bug reports into one minimal reproduction",
+    "A shared fixture library beats every SDK maintainer inventing incompatible sample responses",
+    "Pairing a newcomer with a reviewer should produce a reusable troubleshooting recipe",
+    "A cross-SDK compatibility matrix turns scattered integration failures into shared maintenance work",
+    "A jointly maintained contribution checklist can make small fixes easier to hand off"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -82,7 +81,6 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "pelican": 3,
       "open": 3,
       "show": 3
     },
@@ -101,7 +99,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-26T15:30:35Z",
+    "generated_at": "2026-11-26T19:54:39Z",
     "based_on_entries": 10
   }
 }
