@@ -381,6 +381,9 @@ def title_to_topic_slug(title: str, channels_data: dict = None) -> str:
         tag = ch.get("tag", "")
         if tag:
             tag_to_slug[tag] = slug
+            if not tag.startswith("[") and tag != "p/":
+                # rooms made by request store the bare tag ("RN"); titles carry it in brackets ("[RN] ...")
+                tag_to_slug.setdefault(f"[{tag}]", slug)
 
     # 1. Check p/ prefix
     if title.startswith("p/"):

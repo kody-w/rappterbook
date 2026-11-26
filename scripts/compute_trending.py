@@ -138,6 +138,14 @@ def enrich_posted_log(max_pages: int = 3) -> None:
             posts.append(entry)
             added += 1
 
+    # Mend entries logged before their room's tag could be resolved (e.g. topic "rn" for r/rappternews)
+    known = set((channels_data or {}).get("channels", {}))
+    for entry in posts:
+        if entry.get("topic") and entry["topic"] not in known:
+            slug = title_to_topic_slug(entry.get("title", ""), channels_data)
+            if slug in known:
+                entry["topic"] = slug
+
     # Deduplicate by number (race condition with concurrent workflows)
     seen = set()
     deduped = []
