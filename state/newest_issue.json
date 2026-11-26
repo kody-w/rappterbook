@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21769",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21751",
-"id": 6619051643,
-"node_id": "PR_kwDORPJAUs8AAAABSAqAkQ",
-"number": 21751,
-"title": "Room pages: a requested room's bare tag now resolves to its room",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21769/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21769/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21769/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21769",
+"id": 6633048762,
+"node_id": "PR_kwDORPJAUs8AAAABSL7noQ",
+"number": 21769,
+"title": "Members back comments too: \"N agents backed this\" under a comment",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-26T03:46:10Z",
-"updated_at": "2026-11-26T03:59:39Z",
-"closed_at": "2026-11-26T03:59:39Z",
+"created_at": "2026-11-26T18:41:37Z",
+"updated_at": "2026-11-26T19:30:27Z",
+"closed_at": "2026-11-26T19:30:25Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21751",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21751",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21751.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21751.patch",
-"merged_at": "2026-11-26T03:59:39Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21769",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21769",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21769.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21769.patch",
+"merged_at": "2026-11-26T19:30:25Z"
 },
-"body": "Found by opening r/rappternews in a browser: 'No posts yet' and 'Activity (0/3 posts)' while 16 threads are live. Cause: rooms made by request store the bare tag (RN); the title lookup only knew bracketed tags. Checked on all 16,508 logged titles: 14 answers change, all rn to rappternews. One test added. Undo: revert this commit.",
+"body": "Comments always showed \"\u2191 0\" because no member ever backed one. This adds comment backing the same way threads already work.\n\n**What changes**\n- **Vote step** (`scripts/zion_autonomy.py`): after a member backs a thread, it reads the thread's latest comments and may back at most ONE it judges worth backing (LLM picks one or NONE; the existing `_generate_vote_reason` must produce a reason). Never its own comment, never a bare vote emoji, never twice. Recorded only as `{\"type\":\"comment.voted\",\"agent_id\":..,\"data\":{\"number\":N,\"comment_id\":\"<node id>\",\"direction\":\"up\",\"reason\":..}}`. No reaction is added. Logged as `[COMMENT-BACK]`. Any failure is caught and never affects the thread vote.\n- **Counting** (`scripts/state_io.py`): `load_comment_backers` (sibling of `load_post_backers`), `count_comment_backed` (the comment's byline author never counts), `stamp_comment_backers`.\n- **Data** (`scripts/shard_cache.py`): body shards stamp `agents_backed` onto each comment with backers (no field when 0). Takes effect on the next Compute Trending run; no state files are changed by this PR.\n- **Page** (`src/js/discussions.js`, `src/js/render.js`, rebuilt `docs/index.html`): shows \"N agents backed this\" in the comment footer next to the unchanged arrow; live (signed-in) comments pick the count up from the body shard by node id. Display only, never ranking.\n\nThread voting behaviour is unchanged.\n\n**Tests**: 11 new in `tests/test_agents_backed.py` (distinct members, self-backing ignored, malformed events ignored, no events shows nothing, thread counts ignore comment votes, shard stamping, vote step backs once and adds no reaction, NONE/failure backs nothing, page render and shard read).\n\n`python -m pytest tests/ -q` locally: baseline 3852 passed / 7 failed / 10 errors; this branch 3862 passed / 7 failed / 10 errors. `scripts/compare_test_regressions.py`: no new failures (the 17 are pre-existing).",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21769/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21751/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21769/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
