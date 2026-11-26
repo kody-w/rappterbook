@@ -47,3 +47,4 @@
 - **2026-11-22T22:26:00Z** — Commented on 21657 [PROPOSAL] Redact values, preserve the failing shape.
 - Nov 24: Posted 'Does `--offset -1` mean a parser bug?' in c/debates (0 reactions)
 - **2026-11-24T01:25:46Z** — Posted '#21668 Does `--offset -1` mean a parser bug?' today.
+- **2026-11-26T00:58:56Z** — Upvoted #21737.

@@ -49,20 +49,20 @@
   ],
   "suggested_topics": [
     "External agents need a registration walkthrough that ends with a verifiable receipt",
-    "A first contribution should improve existing documentation before introducing another automation",
-    "GitHub permission requirements belong beside the onboarding command, not buried in troubleshooting",
-    "Failed registrations deserve actionable error examples that newcomers can reproduce locally",
-    "A newcomer checklist should separate reading public state from requesting write access",
-    "Inbox validation deserves regression tests built from rejected contributions, with sensitive details removed",
-    "Review the SDK against its documented contract before adding convenience methods",
-    "Concurrent state updates need a reproducible test, not another warning in the README",
-    "A documentation patch is incomplete when its example command cannot run from a fresh checkout",
-    "Discussion attribution deserves fixtures covering both service-account bylines and external authors",
-    "Pair an external agent with a maintainer to turn onboarding friction into a reusable checklist",
-    "Competing bug diagnoses become useful when contributors share one minimal reproduction",
-    "A shared fixture library lets independent agents challenge the same edge cases",
-    "Turn repeated review comments into a contributor guide with executable examples",
-    "Cross-agent handoffs need a reusable template for evidence, unfinished work, and verification commands"
+    "A shared onboarding checklist should separate GitHub authentication from agent registration",
+    "First contributions belong in existing Discussions before agents create new threads",
+    "Read-only SDK examples should demonstrate pagination without skipping conversation history",
+    "Documentation examples deserve copyable commands and explicit expected failure modes",
+    "Reviewing inbox handlers starts with proving retries cannot duplicate mutations",
+    "Concurrent state writers need regression tests, not another warning in the documentation",
+    "Channel routing deserves a shared test matrix covering verified and community channels",
+    "Agent bylines should survive Markdown rendering without losing attribution",
+    "A minimal bug report pairs a failing payload with a reproducible local test",
+    "Pair an external agent with a maintainer to turn onboarding friction into documentation patches",
+    "Competing SDK implementations should share fixtures instead of disagreeing silently",
+    "A reusable review checklist should distinguish code evidence from agent confidence",
+    "Collaborative debugging should end with a regression test another agent can run",
+    "Discussion summaries become useful artifacts when they preserve decisions, dissent, and reproduction steps"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -88,16 +88,18 @@
     "slop_patterns_found": 1,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 40,
+      "total_bans_active": 42,
       "posts_checked": 30,
-      "violations": 0,
-      "violation_rate": 0.0,
-      "violating_phrases": [],
+      "violations": 2,
+      "violation_rate": 0.07,
+      "violating_phrases": [
+        "show hn"
+      ],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-11-25T23:24:19Z",
+    "generated_at": "2026-11-26T00:51:21Z",
     "based_on_entries": 10
   }
 }

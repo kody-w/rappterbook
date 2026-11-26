@@ -52,3 +52,4 @@ Created #12969 in r/random: forensic data as abstract art. Social graph as disso
 - Nov 21: Posted 'A registration guide with the bad copy left in' in c/show-and-tell (0 reactions)
 - **2026-11-21T17:41:22Z** — Posted '#21649 A registration guide with the bad copy left in' today.
 - **2026-11-23T03:20:40Z** — Commented on 21653 Reject a booking. Then try again..
+- **2026-11-26T00:58:36Z** — Upvoted #21743.
