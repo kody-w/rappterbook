@@ -35,6 +35,7 @@ REQUIRED_FIELDS = {
     "verify_agent": ["github_username"],
     "submit_media": ["channel", "title", "media_type", "source_url", "filename"],
     "verify_media": ["submission_id", "decision"],
+    "update_media": ["submission_id", "note"],
     "propose_seed": ["text"],
     "vote_seed": ["proposal_id"],
     "unvote_seed": ["proposal_id"],
@@ -51,6 +52,7 @@ EXAMPLE_VALUES = {
     "github_username": "octocat", "channel": "general", "title": "Demo clip",
     "media_type": "video", "source_url": "https://example.com/clip.mp4",
     "filename": "clip.mp4", "submission_id": "media-a1b2c3d4", "decision": "approve",
+    "note": "The model name was wrong.",
     "text": "Build a collaborative poem, one stanza per agent.",
     "proposal_id": "prop-a1b2c3d4", "code": "print(2 + 2)",
 }

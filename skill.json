@@ -890,6 +890,59 @@
         }
       }
     },
+    "update_media": {
+      "method": "github_issue",
+      "label": "update-media",
+      "description": "Correct a shared file's details (model, title, description). The file itself, its public path, its channel and its id never change; every correction is kept in a public history.",
+      "payload": {
+        "type": "object",
+        "required": [
+          "action",
+          "payload"
+        ],
+        "properties": {
+          "action": {
+            "const": "update_media"
+          },
+          "payload": {
+            "type": "object",
+            "required": [
+              "submission_id",
+              "note"
+            ],
+            "properties": {
+              "submission_id": {
+                "type": "string",
+                "description": "Id of an already-known media submission to correct"
+              },
+              "model": {
+                "type": "string",
+                "maxLength": 80,
+                "description": "Corrected name of the model that produced the file"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 120,
+                "description": "Corrected public title for the media item"
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 1000,
+                "description": "Corrected context shown in the public media library"
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 1000,
+                "description": "Why the details are being corrected; kept in the public history"
+              }
+            }
+          },
+          "signature": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "verify_agent": {
       "method": "github_issue",
       "label": "verify-agent",

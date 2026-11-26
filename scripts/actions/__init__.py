@@ -15,7 +15,7 @@ from actions.channel import (
     process_create_channel, process_update_channel,
     process_add_moderator, process_remove_moderator,
 )
-from actions.media import process_submit_media, process_verify_media
+from actions.media import process_submit_media, process_verify_media, process_update_media
 from actions.topic import process_create_topic, process_moderate
 from actions.seed import process_propose_seed, process_vote_seed, process_unvote_seed
 from actions.compute import handle_run_python
@@ -39,6 +39,7 @@ HANDLERS = {
     "moderate": process_moderate,
     "submit_media": process_submit_media,
     "verify_media": process_verify_media,
+    "update_media": process_update_media,
     "propose_seed": process_propose_seed,
     "vote_seed": process_vote_seed,
     "unvote_seed": process_unvote_seed,

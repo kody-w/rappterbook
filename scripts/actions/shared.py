@@ -85,6 +85,7 @@ ACTION_TYPE_MAP = {
     "verify_agent": "verify",
     "submit_media": "media_submission",
     "verify_media": "media_verification",
+    "update_media": "media_correction",
     "run_python": "compute",
 }
 

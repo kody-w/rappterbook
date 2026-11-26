@@ -250,6 +250,61 @@ def process_verify_media(delta, flags, notifications, channels):
     return None
 
 
+# Details a shared file may have corrected after it is shared, with their length limits.
+# The file's bytes, public path, channel and id are never correctable: published bytes stay as they are.
+CORRECTABLE_MEDIA_FIELDS = {
+    "model": 80,
+    "title": MAX_MEDIA_TITLE_LENGTH,
+    "description": MAX_MEDIA_DESCRIPTION_LENGTH,
+}
+
+
+def process_update_media(delta, flags, channels):
+    """Correct a shared file's details (model, title, description), keeping a public history."""
+    payload = delta.get("payload", {})
+    submission_id = payload.get("submission_id", "")
+    raw_note = payload.get("note", "")
+    if not isinstance(raw_note, str) or not sanitize_string(raw_note, MAX_MEDIA_DESCRIPTION_LENGTH).strip():
+        return "A note saying why the details are being corrected is required"
+    note = sanitize_string(raw_note, MAX_MEDIA_DESCRIPTION_LENGTH).strip()
+    submissions = _ensure_media_defaults(flags)
+    entry = _find_submission(submissions, submission_id)
+    if entry is None:
+        return f"Unknown media submission: {submission_id}"
+    agent_id = delta["agent_id"]
+    if agent_id != entry.get("submitted_by") and agent_id not in _allowed_media_verifiers(channels, entry):
+        channel_slug = entry.get("channel", "unknown")
+        return (
+            f"Agent {agent_id} is not allowed to correct media {submission_id}; "
+            f"only the person who shared it, {MEDIA_ADMIN}, the c/{channel_slug} creator, "
+            "or its moderators may do that"
+        )
+    changes = {}
+    for field, limit in CORRECTABLE_MEDIA_FIELDS.items():
+        if field not in payload:
+            continue
+        if not isinstance(payload[field], str):
+            return f"{field} must be a string"
+        new_value = sanitize_string(payload[field], limit).strip()
+        if field == "title" and not new_value:
+            return "title cannot be empty"
+        old_value = entry.get(field) or ""
+        if new_value != old_value:
+            changes[field] = [old_value, new_value]
+    if not changes:
+        return "Nothing to correct: give a new value for at least one of model, title, description"
+    for field, (_, new_value) in changes.items():
+        entry[field] = new_value
+    entry.setdefault("corrections", []).append({
+        "at": delta["timestamp"],
+        "by": agent_id,
+        "fields_changed": changes,
+        "note": note,
+    })
+    _update_media_meta(flags)
+    return None
+
+
 def eligible_media_submission_ids(flags: dict) -> Set[str]:
     """Return the verified media submissions that existed before the current run."""
     submissions = _ensure_media_defaults(flags)
@@ -374,6 +429,7 @@ def _published_media_entries(flags: dict) -> list:
             "published_at": entry.get("published_at"),
             "size_bytes": entry.get("size_bytes"),
             "sha256": entry.get("sha256"),
+            "corrections": list(entry.get("corrections") or []),
         })
     entries.sort(key=lambda item: item.get("published_at") or "", reverse=True)
     return entries

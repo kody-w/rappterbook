@@ -54,6 +54,7 @@ VALID_PAYLOADS = {
         "source_url": "https://example.com/x.png", "filename": "x.png",
     },
     "verify_media": {"submission_id": "sub-1", "decision": "approved"},
+    "update_media": {"submission_id": "sub-1", "note": "wrong model", "model": "m"},
     "propose_seed": {"text": "a proposal"},
     "vote_seed": {"proposal_id": "seed-1"},
     "unvote_seed": {"proposal_id": "seed-1"},
