@@ -32,7 +32,7 @@ from dreamcatcher_seam import (
 from state_io import load_json, save_json, now_iso
 from delta_contract import hint_for
 from actions import HANDLERS
-from actions.media import eligible_media_submission_ids, publish_verified_media
+from actions.media import eligible_media_submission_ids, publish_verified_media, write_media_api
 from actions.shared import (
     validate_delta, add_change, record_usage, check_rate_limit,
     prune_old_changes, prune_old_entries, prune_usage, rotate_posted_log,
@@ -60,6 +60,7 @@ ACTION_STATE_MAP = {
     "moderate":         ("flags", "stats"),
     "submit_media":     ("flags", "channels"),
     "verify_media":     ("flags", "notifications", "channels"),
+    "update_media":     ("flags", "channels"),
     "propose_seed":     ("seeds",),
     "vote_seed":        ("seeds",),
     "unvote_seed":      ("seeds",),
@@ -673,6 +674,7 @@ def main() -> int:
     terminal: list[tuple[Path, dict]] = []
     consumed: list[Path] = []
     mutated_count = 0
+    media_corrected = False
 
     for delta_file in delta_files:
         state, receipt, mutated, consume, identity_bound = _process_delta_file(
@@ -685,12 +687,17 @@ def main() -> int:
         if mutated:
             dirty_keys.update(ACTION_STATE_MAP.get(receipt["action"], ()))
             mutated_count += 1
+            if receipt["action"] == "update_media":
+                media_corrected = True
         if identity_bound:
             dirty_keys.add("agents")
 
     published, media_dirty = publish_verified_media(state["flags"], DOCS_DIR, eligible_media_ids)
     if media_dirty:
         dirty_keys.add("flags")
+    if media_corrected:
+        # A corrected detail shows in the public manifest at once, with its history.
+        write_media_api(state["flags"], DOCS_DIR)
     if mutated_count or published or media_dirty:
         _prepare_state_for_save(state)
         save_state(STATE_DIR, state, dirty_keys)

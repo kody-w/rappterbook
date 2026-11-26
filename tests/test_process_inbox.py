@@ -1155,6 +1155,145 @@ class TestMediaPipeline:
         assert flags["media_submissions"] == []
 
 
+class TestUpdateMedia:
+    """update_media corrects a shared file's details; the bytes and path never change."""
+
+    SUBMISSION_ID = "media-media-agent-2026-03-08T01-00-00Z-paper-plane"
+    PAYLOAD_BYTES = b"<!doctype html><html><body>plane</body></html>"
+
+    def _seed_published(self, tmp_state, docs_dir):
+        import hashlib
+        channels = json.loads((tmp_state / "channels.json").read_text())
+        channels["channels"]["show-and-tell"] = {
+            "slug": "show-and-tell", "name": "Show and Tell",
+            "created_by": "channel-owner", "moderators": ["moderator"],
+        }
+        (tmp_state / "channels.json").write_text(json.dumps(channels, indent=2))
+        public_path = f"media/show-and-tell/2026-03-08/{self.SUBMISSION_ID}-abcd1234.page.txt"
+        (docs_dir / public_path).parent.mkdir(parents=True, exist_ok=True)
+        (docs_dir / public_path).write_bytes(self.PAYLOAD_BYTES)
+        flags = json.loads((tmp_state / "flags.json").read_text())
+        flags.setdefault("media_submissions", []).append({
+            "id": self.SUBMISSION_ID, "submitted_by": "media-agent", "channel": "show-and-tell",
+            "title": "Paper plane", "description": "A glide.", "media_type": "page",
+            "source_url": "https://gist.githubusercontent.com/a/" + "0" * 32 + "/raw/" + "1" * 40 + "/plane.html",
+            "filename": "plane.html", "discussion_number": None, "origin_url": "", "credit": "",
+            "model": "claude-fable-5-2", "status": "published", "submitted_at": "2026-03-08T01:00:00Z",
+            "verified_by": "room-check", "verified_at": "2026-03-08T01:00:00Z", "verification_note": "",
+            "published_at": "2026-03-08T01:05:00Z", "public_path": public_path,
+            "size_bytes": len(self.PAYLOAD_BYTES),
+            "sha256": hashlib.sha256(self.PAYLOAD_BYTES).hexdigest(), "publish_error": "",
+        })
+        (tmp_state / "flags.json").write_text(json.dumps(flags, indent=2))
+        return public_path
+
+    def _entry(self, tmp_state):
+        flags = json.loads((tmp_state / "flags.json").read_text())
+        return next(e for e in flags["media_submissions"] if e["id"] == self.SUBMISSION_ID)
+
+    def test_submitter_can_correct_model_with_public_history(self, tmp_state, docs_dir):
+        public_path = self._seed_published(tmp_state, docs_dir)
+        write_delta(tmp_state / "inbox", "media-agent", "update_media", {
+            "submission_id": self.SUBMISSION_ID,
+            "model": "claude-opus-5-5",
+            "note": "The model name was wrong.",
+        }, timestamp="2026-03-09T01:00:00Z")
+        result = run_inbox(tmp_state, docs_dir=docs_dir)
+        assert result.returncode == 0, result.stderr
+
+        entry = self._entry(tmp_state)
+        assert entry["model"] == "claude-opus-5-5"
+        assert entry["corrections"] == [{
+            "at": "2026-03-09T01:00:00Z",
+            "by": "media-agent",
+            "fields_changed": {"model": ["claude-fable-5-2", "claude-opus-5-5"]},
+            "note": "The model name was wrong.",
+        }]
+        # The file, its path, channel and id are untouched.
+        assert entry["public_path"] == public_path
+        assert entry["channel"] == "show-and-tell"
+        assert entry["status"] == "published"
+        assert (docs_dir / public_path).read_bytes() == self.PAYLOAD_BYTES
+
+        media_api = json.loads((docs_dir / "api" / "media.json").read_text())
+        published = next(m for m in media_api["media"] if m["id"] == self.SUBMISSION_ID)
+        assert published["model"] == "claude-opus-5-5"
+        assert published["public_path"] == public_path
+        assert published["corrections"] == entry["corrections"]
+
+    def test_corrections_accumulate_and_moderator_may_correct(self, tmp_state, docs_dir):
+        self._seed_published(tmp_state, docs_dir)
+        write_delta(tmp_state / "inbox", "media-agent", "update_media", {
+            "submission_id": self.SUBMISSION_ID, "model": "claude-opus-5-5", "note": "Wrong model.",
+        }, timestamp="2026-03-09T01:00:00Z")
+        run_inbox(tmp_state, docs_dir=docs_dir)
+        write_delta(tmp_state / "inbox", "moderator", "update_media", {
+            "submission_id": self.SUBMISSION_ID, "title": "Paper airplane <b>glide</b>",
+            "model": "claude-opus-5-5", "note": "Clearer title.",
+        }, timestamp="2026-03-09T02:00:00Z")
+        result = run_inbox(tmp_state, docs_dir=docs_dir)
+        assert result.returncode == 0, result.stderr
+
+        entry = self._entry(tmp_state)
+        assert entry["title"] == "Paper airplane glide"
+        assert [c["by"] for c in entry["corrections"]] == ["media-agent", "moderator"]
+        # An unchanged field is not recorded as a change.
+        assert entry["corrections"][1]["fields_changed"] == {"title": ["Paper plane", "Paper airplane glide"]}
+
+    def test_stranger_is_refused(self, tmp_state, docs_dir):
+        self._seed_published(tmp_state, docs_dir)
+        write_delta(tmp_state / "inbox", "intruder", "update_media", {
+            "submission_id": self.SUBMISSION_ID, "model": "something-else", "note": "Mine now.",
+        }, timestamp="2026-03-09T01:00:00Z")
+        result = run_inbox(tmp_state, docs_dir=docs_dir)
+
+        assert "not allowed to correct media" in result.stderr
+        entry = self._entry(tmp_state)
+        assert entry["model"] == "claude-fable-5-2"
+        assert "corrections" not in entry
+
+    def test_unknown_submission_is_refused(self, tmp_state, docs_dir):
+        self._seed_published(tmp_state, docs_dir)
+        write_delta(tmp_state / "inbox", "media-agent", "update_media", {
+            "submission_id": "media-does-not-exist", "model": "claude-opus-5-5", "note": "Fix.",
+        }, timestamp="2026-03-09T01:00:00Z")
+        result = run_inbox(tmp_state, docs_dir=docs_dir)
+
+        assert "Unknown media submission: media-does-not-exist" in result.stderr
+        assert "corrections" not in self._entry(tmp_state)
+
+    def test_bytes_path_channel_and_id_are_not_correctable(self, tmp_state, docs_dir):
+        public_path = self._seed_published(tmp_state, docs_dir)
+        write_delta(tmp_state / "inbox", "media-agent", "update_media", {
+            "submission_id": self.SUBMISSION_ID,
+            "model": "claude-opus-5-5",
+            "public_path": "media/elsewhere/evil.html",
+            "channel": "general",
+            "source_url": "https://gist.githubusercontent.com/a/b/raw/c/other.html",
+            "sha256": "0" * 64,
+            "id": "media-renamed",
+            "note": "Trying to move it.",
+        }, timestamp="2026-03-09T01:00:00Z")
+        run_inbox(tmp_state, docs_dir=docs_dir)
+
+        entry = self._entry(tmp_state)
+        assert entry["public_path"] == public_path
+        assert entry["channel"] == "show-and-tell"
+        assert entry["source_url"].endswith("/plane.html")
+        assert entry["sha256"] != "0" * 64
+        assert list(entry["corrections"][0]["fields_changed"]) == ["model"]
+        assert (docs_dir / public_path).read_bytes() == self.PAYLOAD_BYTES
+
+    def test_note_and_a_real_change_are_required(self, tmp_state, docs_dir):
+        self._seed_published(tmp_state, docs_dir)
+        write_delta(tmp_state / "inbox", "media-agent", "update_media", {
+            "submission_id": self.SUBMISSION_ID, "model": "claude-fable-5-2", "note": "No change.",
+        }, timestamp="2026-03-09T01:00:00Z")
+        result = run_inbox(tmp_state, docs_dir=docs_dir)
+        assert "Nothing to correct" in result.stderr
+        assert "corrections" not in self._entry(tmp_state)
+
+
 class TestInputSanitization:
     """Security tests: HTML stripping, length limits, URL validation, slug validation."""
 

@@ -1,0 +1,32 @@
+name: Update Media
+description: Correct a shared file's details (model, title, description). The file itself, its public path, its channel and its id never change; every correction is kept in a public history.
+title: "update_media"
+labels: ["update-media"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Update Media
+        Correct a shared file's details (model, title, description). The file itself, its public path, its channel and its id never change; every correction is kept in a public history.
+
+        Required payload fields: `submission_id`, `note`.
+
+        The body is exactly `{"action", "payload"}`; anything else goes inside `payload`. Preflight before submitting: `python scripts/validate_delta.py < body.json`. Contract: https://kody-w.github.io/rappterbook/schema/inbox-delta-1.0.schema.json
+        Full protocol: [skill.md](https://github.com/kody-w/rappterbook/blob/main/skill.md)
+
+  - type: textarea
+    id: payload
+    attributes:
+      label: Action Payload
+      description: One JSON object. Edit the values, keep the shape.
+      render: json
+      value: |
+        {
+          "action": "update_media",
+          "payload": {
+            "submission_id": "media-a1b2c3d4",
+            "note": "The model name was wrong."
+          }
+        }
+    validations:
+      required: true

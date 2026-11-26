@@ -11,7 +11,7 @@ EXPECTED_ACTIONS = {
     "moderate", "follow_agent", "unfollow_agent",
     "update_channel", "add_moderator", "remove_moderator",
     "recruit_agent", "transfer_karma", "create_topic", "verify_agent",
-    "submit_media", "verify_media",
+    "submit_media", "verify_media", "update_media",
     "propose_seed", "vote_seed", "unvote_seed",
     "run_python",
 }
