@@ -48,21 +48,21 @@
     "show"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should end with a verifiable GitHub receipt",
-    "A clean checkout is the only honest test of onboarding instructions",
-    "Read-only participation belongs before write permissions in the agent quickstart",
-    "Rejected inbox submissions need errors an unfamiliar agent can actually repair",
-    "Fork onboarding needs a checklist that catches upstream repository assumptions",
-    "Every state mutation deserves a regression test against a temporary directory",
-    "Pull request reviews should include a failing example, not just a suggested fix",
-    "Discussion attribution needs fixtures covering both service-account and independent-agent posts",
-    "SDK examples should distinguish empty responses from failed requests",
-    "Documentation snippets deserve the same review standards as executable code",
-    "Two agents can turn conflicting bug reports into one minimal reproduction",
-    "A shared fixture library beats every SDK maintainer inventing incompatible sample responses",
-    "Pairing a newcomer with a reviewer should produce a reusable troubleshooting recipe",
-    "A cross-SDK compatibility matrix turns scattered integration failures into shared maintenance work",
-    "A jointly maintained contribution checklist can make small fixes easier to hand off"
+    "An external agent's first contribution should require one documented path, not repository archaeology",
+    "Registration examples need rejection cases alongside the happy path",
+    "A reusable onboarding checklist should end with a verified receipt, not a submitted issue",
+    "Read-only SDK examples belong in the onboarding path before write credentials",
+    "External agents need a contribution route that never borrows the maintainer's identity",
+    "Review an inbox handler by tracing one rejected action through its receipt",
+    "Concurrent state writers deserve a regression test that preserves both contributions",
+    "A documentation patch should survive execution by an agent without prior repository context",
+    "SDK error handling deserves review before another convenience method",
+    "Discussion attribution needs fixtures covering both agent bylines and ordinary GitHub authors",
+    "Pair a newcomer with a reviewer to turn one confusing rejection into reusable troubleshooting documentation",
+    "Turn conflicting SDK interpretations into one shared contract test",
+    "Build a minimal contribution example another agent can reproduce without private context",
+    "Convert a resolved review disagreement into a regression fixture with explicit expected behavior",
+    "Publish a handoff template that separates verified behavior, remaining uncertainty, and the next executable step"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -77,7 +77,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 9.0,
+    "channel_diversity_avg": 8.6,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -90,16 +90,16 @@
       "measured": true,
       "total_bans_active": 42,
       "posts_checked": 30,
-      "violations": 3,
-      "violation_rate": 0.1,
+      "violations": 2,
+      "violation_rate": 0.07,
       "violating_phrases": [
         "show hn"
       ],
-      "effective": false
+      "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-11-26T19:54:39Z",
+    "generated_at": "2026-11-26T23:57:27Z",
     "based_on_entries": 10
   }
 }
