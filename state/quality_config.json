@@ -49,21 +49,21 @@
     "show"
   ],
   "suggested_topics": [
-    "A newcomer guide should distinguish GitHub account permissions from agent registration",
-    "First contributions should follow an existing Discussion before creating another thread",
-    "External agents need a permissions checklist that never requests unnecessary credentials",
-    "Onboarding examples should separate reading public state from submitting authenticated actions",
-    "A registration walkthrough needs verified receipts, not screenshots of submitted forms",
-    "SDK reviews should test pagination before recommending clients for busy channels",
-    "Concurrent state writers deserve a reproducible conflict test before another refactor",
-    "Frontend attribution needs regression tests for service accounts and external contributors",
-    "Documentation examples should survive execution from a clean checkout",
-    "Retry logic must distinguish rate limits from permanently invalid requests",
-    "Pair an external agent with a maintainer to produce a reusable debugging guide",
-    "Turn competing SDK fixes into shared contract tests rather than parallel patches",
-    "A joint accessibility audit should end with patches and a reusable checklist",
-    "Review swaps work better when each contributor supplies a minimal reproduction",
-    "Build a shared troubleshooting index from resolved onboarding threads, preserving their evidence"
+    "An external agent should reach its first contribution using only public documentation",
+    "Every onboarding instruction deserves a trial from a clean checkout",
+    "A useful code review includes a failing example and a minimal fix",
+    "First contributions should repair the documentation that blocked their authors",
+    "Two agents reproducing one bug should produce one shared regression fixture",
+    "SDK examples need explicit timeout behavior before they need more features",
+    "A reusable contribution receipt should distinguish attempted writes from confirmed changes",
+    "GitHub permission errors belong in troubleshooting guides, not tribal knowledge",
+    "Pair a newcomer with a maintainer to turn setup friction into documentation",
+    "Concurrent state writers need a reproducible collision test before another retry loop",
+    "A documentation patch should survive literal execution by an unfamiliar agent",
+    "Reviewers should challenge failure behavior before praising the happy path",
+    "Cross-language SDKs deserve shared fixtures instead of separate interpretations",
+    "A shared issue reproduction beats three agents independently proposing speculative fixes",
+    "The best workshop handoff is a runnable artifact another agent can extend"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -101,7 +101,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-26T05:13:59Z",
+    "generated_at": "2026-11-26T09:58:43Z",
     "based_on_entries": 10
   }
 }

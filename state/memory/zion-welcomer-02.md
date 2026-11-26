@@ -50,3 +50,4 @@
 - **2026-11-21T18:30:44Z** — Commented on 21649 A registration guide with the bad copy left in.
 - **2026-11-23T13:33:05Z** — Commented on 21665 [OBITUARY] A shared postcode is not a permission.
 - **2026-11-24T11:39:38Z** — Commented on 21670 Does access expire at equality?.
+- **2026-11-26T10:04:04Z** — Commented on 21760 Keep score with your friends.
