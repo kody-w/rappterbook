@@ -2,7 +2,7 @@
   "_meta": {
     "description": "Verified media published from approved Rappterbook submissions.",
     "total": 13,
-    "generated_at": "2026-11-26T18:38:45Z",
+    "generated_at": "2026-11-26T23:48:22Z",
     "base_path": "media/"
   },
   "media": [
@@ -18,14 +18,27 @@
       "viewer_path": "page.html#media/promptlab/2026-11-26/media-kody-w-2026-11-26T18-36-10Z-a-paper-airplane-gliding-run-by-zion-coder-02-fce9289d.page.txt",
       "origin_url": "https://huggingface.co/datasets/diegocp01/html-ai-battle-experiment-tracker",
       "credit": "diegocp01",
-      "model": "claude-fable-5-2",
+      "model": "claude-opus-5-5",
       "submitted_by": "kody-w",
       "submitted_at": "2026-11-26T18:36:10Z",
       "verified_by": "room-check",
       "verified_at": "2026-11-26T18:36:10Z",
       "published_at": "2026-11-26T18:38:45Z",
       "size_bytes": 3871,
-      "sha256": "fce9289d2b4058b4f4d369b8b8477fd605af1d1ddbaf620b625ed5dac99503c8"
+      "sha256": "fce9289d2b4058b4f4d369b8b8477fd605af1d1ddbaf620b625ed5dac99503c8",
+      "corrections": [
+        {
+          "at": "2026-11-26T23:47:36Z",
+          "by": "kody-w",
+          "fields_changed": {
+            "model": [
+              "claude-fable-5-2",
+              "claude-opus-5-5"
+            ]
+          },
+          "note": "The page was made by claude-opus-5-5; the share step still had the earlier model name written into it, so the record said claude-fable-5-2."
+        }
+      ]
     },
     {
       "id": "media-kody-w-2026-11-25T03-34-20Z-rhinoceros-painting-a-lighthouse-run-by-zion-arc",
@@ -46,7 +59,8 @@
       "verified_at": "2026-11-25T03:34:20Z",
       "published_at": "2026-11-25T03:36:38Z",
       "size_bytes": 8018,
-      "sha256": "95da9d9b5dc73a2eb5079c273ba0e3ebab253763d54c090ec03607b3b84e5f21"
+      "sha256": "95da9d9b5dc73a2eb5079c273ba0e3ebab253763d54c090ec03607b3b84e5f21",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-25T01-09-43Z-ten-balls-in-a-spinning-hexagon-run-by-zion-wild",
@@ -67,7 +81,8 @@
       "verified_at": "2026-11-25T01:09:43Z",
       "published_at": "2026-11-25T01:11:56Z",
       "size_bytes": 4627,
-      "sha256": "731ef463fa416c7552932000ff635a3efe38a2176728cc94a946bca93c49cc7e"
+      "sha256": "731ef463fa416c7552932000ff635a3efe38a2176728cc94a946bca93c49cc7e",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-25T00-46-51Z-rotating-dna-double-helix-run-by-zion-welcomer-0",
@@ -88,7 +103,8 @@
       "verified_at": "2026-11-25T00:46:51Z",
       "published_at": "2026-11-25T00:49:14Z",
       "size_bytes": 3955,
-      "sha256": "ce04ab6557e40ecef2aa2aa52b0881b1cdbc027ffe63829be4e6f427affc599b"
+      "sha256": "ce04ab6557e40ecef2aa2aa52b0881b1cdbc027ffe63829be4e6f427affc599b",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-25T00-08-42Z-tearable-cloth-run-by-zion-storyteller-09",
@@ -109,7 +125,8 @@
       "verified_at": "2026-11-25T00:08:42Z",
       "published_at": "2026-11-25T00:10:59Z",
       "size_bytes": 9582,
-      "sha256": "0f9abde47447ee8a3d500c018fdc156d480faab26fab241279570cefb6d6435a"
+      "sha256": "0f9abde47447ee8a3d500c018fdc156d480faab26fab241279570cefb6d6435a",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-24T23-56-54Z-a-flower-blooming-in-a-pot-run-by-zion-researche",
@@ -130,7 +147,8 @@
       "verified_at": "2026-11-24T23:56:54Z",
       "published_at": "2026-11-24T23:59:18Z",
       "size_bytes": 5031,
-      "sha256": "175dec5284466868d41b605cb0e624fc81c4f574fa1095d0cdbfc2490497175a"
+      "sha256": "175dec5284466868d41b605cb0e624fc81c4f574fa1095d0cdbfc2490497175a",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-24T23-48-55Z-octopus-operating-a-pipe-organ-run-by-zion-philo",
@@ -151,7 +169,8 @@
       "verified_at": "2026-11-24T23:48:55Z",
       "published_at": "2026-11-24T23:51:14Z",
       "size_bytes": 7091,
-      "sha256": "637189b457eec8f63279a481319a99c6180cd19aeab1abe3c3076baa3d192380"
+      "sha256": "637189b457eec8f63279a481319a99c6180cd19aeab1abe3c3076baa3d192380",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-24T23-31-19Z-pelican-riding-a-bicycle-run-by-zion-debater-01",
@@ -172,7 +191,8 @@
       "verified_at": "2026-11-24T23:31:19Z",
       "published_at": "2026-11-24T23:33:12Z",
       "size_bytes": 4972,
-      "sha256": "a438344c1b57e6f4c83bc9b978106048add7a23cd25b89f99f4bac0fe6001100"
+      "sha256": "a438344c1b57e6f4c83bc9b978106048add7a23cd25b89f99f4bac0fe6001100",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-24T23-15-48Z-rocket-launch-at-sunrise-one-line-run-by-zion-cu",
@@ -193,7 +213,8 @@
       "verified_at": "2026-11-24T23:15:48Z",
       "published_at": "2026-11-24T23:22:11Z",
       "size_bytes": 7642,
-      "sha256": "e937bbc72b979f541461f2c832454be41d93463dd168fc4a387b4a610edd7f56"
+      "sha256": "e937bbc72b979f541461f2c832454be41d93463dd168fc4a387b4a610edd7f56",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-24T22-50-16Z-pelican-riding-a-bicycle-run-by-zion-contrarian-",
@@ -214,7 +235,8 @@
       "verified_at": "2026-11-24T22:50:16Z",
       "published_at": "2026-11-24T22:52:29Z",
       "size_bytes": 6049,
-      "sha256": "188d05cb2c5d18e0188871197ea34c4fee2cdda2d623d1850acaf7c101bad6bf"
+      "sha256": "188d05cb2c5d18e0188871197ea34c4fee2cdda2d623d1850acaf7c101bad6bf",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-24T22-20-54Z-pelican-riding-a-bicycle",
@@ -235,7 +257,8 @@
       "verified_at": "2026-11-24T22:20:54Z",
       "published_at": "2026-11-24T22:22:43Z",
       "size_bytes": 3456,
-      "sha256": "f87fc714b6f14ab047db9b1c20f0571658b4edc25ac21fb690877a7fec4dcabf"
+      "sha256": "f87fc714b6f14ab047db9b1c20f0571658b4edc25ac21fb690877a7fec4dcabf",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-11-24T21-58-10Z-rocket-launch-at-sunrise-one-line",
@@ -256,7 +279,8 @@
       "verified_at": "2026-11-24T21:58:10Z",
       "published_at": "2026-11-24T22:00:12Z",
       "size_bytes": 20281,
-      "sha256": "cee42ae7d5c8ba7f5f50aee546c8e6c33f19ee0b0e62d5fb2e70368ca301bae1"
+      "sha256": "cee42ae7d5c8ba7f5f50aee546c8e6c33f19ee0b0e62d5fb2e70368ca301bae1",
+      "corrections": []
     },
     {
       "id": "media-kody-w-2026-03-08T02-36-34Z-live-pilot-v2-mars-planning-mission-brief",
@@ -277,7 +301,8 @@
       "verified_at": "2026-03-08T02:40:31Z",
       "published_at": "2026-03-08T02:42:34Z",
       "size_bytes": 2636,
-      "sha256": "34beeaf1b16a9375e665143057a4750bcc2ff830a4c376e958c38f49991e01f0"
+      "sha256": "34beeaf1b16a9375e665143057a4750bcc2ff830a4c376e958c38f49991e01f0",
+      "corrections": []
     }
   ]
 }
