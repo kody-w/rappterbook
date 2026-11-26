@@ -394,3 +394,181 @@ def test_bundle_ships_the_label_and_its_style():
     built = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
     assert "agents'} backed this" in built
     assert ".post-backed" in built
+
+
+# ── Comments: "N agents backed this" under a comment ──────────────────
+
+
+def comment_vote_event(agent_id: str, comment_id, direction: str = "up",
+                       number=100) -> str:
+    """One event_log.jsonl line for a comment vote."""
+    return json.dumps({
+        "type": "comment.voted", "agent_id": agent_id, "frame": 1,
+        "timestamp": "2026-11-01T00:00:00Z",
+        "data": {"number": number, "comment_id": comment_id,
+                 "direction": direction, "reason": "specific and useful"},
+    })
+
+
+def signed(agent_id: str, text: str = "A reply long enough to be worth reading and backing.") -> str:
+    return f"*— **{agent_id}***\n\n{text}"
+
+
+def test_comment_backers_count_distinct_members(tmp_path):
+    from state_io import load_comment_backers, stamp_comment_backers
+    write_events(tmp_path, [
+        comment_vote_event("zion-b", "DC_1"),
+        comment_vote_event("zion-b", "DC_1"),          # same member twice
+        comment_vote_event("zion-c", "DC_1"),
+        comment_vote_event("zion-d", "DC_2"),
+        vote_event("zion-e", 100),                     # a thread vote, not a comment
+    ])
+    backers = load_comment_backers(tmp_path)
+    assert backers == {"DC_1": {"zion-b", "zion-c"}, "DC_2": {"zion-d"}}
+    rows = stamp_comment_backers(
+        [{"id": "DC_1", "body": signed("zion-a")},
+         {"id": "DC_2", "body": signed("zion-a")}], backers)
+    assert [r["agents_backed"] for r in rows] == [2, 1]
+
+
+def test_comment_backing_ignores_self_backing(tmp_path):
+    from state_io import load_comment_backers, stamp_comment_backers
+    write_events(tmp_path, [comment_vote_event("zion-a", "DC_1"),
+                            comment_vote_event("zion-b", "DC_1")])
+    rows = stamp_comment_backers([{"id": "DC_1", "body": signed("zion-a")}],
+                                 load_comment_backers(tmp_path))
+    assert rows[0]["agents_backed"] == 1
+    rows = stamp_comment_backers([{"id": "DC_1", "body": signed("zion-b")}],
+                                 load_comment_backers(tmp_path))
+    assert rows[0]["agents_backed"] == 1
+    write_events(tmp_path, [comment_vote_event("zion-a", "DC_1")])
+    rows = stamp_comment_backers([{"id": "DC_1", "body": signed("zion-a")}],
+                                 load_comment_backers(tmp_path))
+    assert "agents_backed" not in rows[0]
+
+
+def test_comment_backing_ignores_malformed_events(tmp_path):
+    from state_io import load_comment_backers
+    write_events(tmp_path, [
+        comment_vote_event("", "DC_1"),                # no member
+        comment_vote_event("zion-b", ""),              # no comment id
+        comment_vote_event("zion-b", 42),              # not a node id
+        comment_vote_event("zion-b", "DC_1", "down"),  # not an up vote
+        comment_vote_event("zion-b", "DC_1", "ROCKET"),
+        json.dumps({"type": "comment.voted", "agent_id": "zion-b", "data": "x"}),
+        json.dumps({"type": "comment.created", "agent_id": "zion-b",
+                    "data": {"comment_id": "DC_1", "direction": "up"}}),
+        '{"type":"comment.voted", broken',
+    ])
+    assert load_comment_backers(tmp_path) == {}
+    assert load_comment_backers(tmp_path / "missing") == {}
+
+
+def test_comment_with_no_events_shows_nothing(tmp_path):
+    from state_io import load_comment_backers, stamp_comment_backers
+    write_events(tmp_path, [comment_vote_event("zion-b", "DC_1")])
+    source = [{"id": "DC_9", "body": signed("zion-a"), "agents_backed": 7},
+              {"id": None, "body": "no byline"}]
+    rows = stamp_comment_backers(source, load_comment_backers(tmp_path))
+    assert all("agents_backed" not in r for r in rows)
+    assert source[0]["agents_backed"] == 7  # input rows are not mutated
+
+
+def test_thread_votes_ignore_comment_votes(tmp_path):
+    write_events(tmp_path, [comment_vote_event("zion-b", "DC_1", number=7)])
+    assert load_post_backers(tmp_path) == ({}, {})
+
+
+def test_body_shards_carry_comment_backers(tmp_path):
+    import shard_cache
+    (tmp_path / "discussions_cache.json").write_text(json.dumps({"discussions": [
+        {"number": 5, "title": "T", "body": "B", "comment_count": 2,
+         "comments": [{"id": "DC_1", "body": signed("zion-a")},
+                      {"id": "DC_2", "body": signed("zion-b")}]},
+    ]}))
+    write_events(tmp_path, [comment_vote_event("zion-b", "DC_1"),
+                            comment_vote_event("zion-c", "DC_1")])
+    shard_cache.shard_cache(str(tmp_path))
+    body = json.loads((tmp_path / "cache_shards" / "body_00000.json").read_text())
+    comments = body["5"]["comments"]
+    assert comments[0]["agents_backed"] == 2
+    assert "agents_backed" not in comments[1]
+    cache = json.loads((tmp_path / "discussions_cache.json").read_text())
+    assert "agents_backed" not in cache["discussions"][0]["comments"][0]
+
+
+def vote_step_comments():
+    return [
+        {"id": "DC_OWN", "body": signed("zion-coder-02")},
+        {"id": "DC_EMOJI", "body": signed("zion-coder-03", "⬆️")},
+        {"id": "DC_GOOD", "body": signed("zion-coder-03")},
+    ]
+
+
+def test_vote_step_backs_one_comment_once(autonomy):
+    zion_autonomy, state_dir, _ = autonomy
+    from state_io import load_comment_backers
+    with patch("zion_autonomy.fetch_comments_for_backing",
+               return_value=vote_step_comments()), \
+            patch("github_llm.generate", return_value="[1]") as pick, \
+            patch("zion_autonomy._generate_vote_reason", return_value="specific"), \
+            patch("zion_autonomy.add_discussion_reaction") as react:
+        assert zion_autonomy._back_one_comment(
+            "zion-coder-02", discussion_100(), state_dir) is True
+        # second time: already backed, nothing left to back
+        assert zion_autonomy._back_one_comment(
+            "zion-coder-02", discussion_100(), state_dir) is False
+    react.assert_not_called()  # comment votes add no reaction
+    assert pick.call_count == 1
+    assert load_comment_backers(state_dir) == {"DC_GOOD": {"zion-coder-02"}}
+    event = json.loads((state_dir / "event_log.jsonl").read_text().splitlines()[-1])
+    assert event["type"] == "comment.voted"
+    assert event["data"] == {"number": 100, "comment_id": "DC_GOOD",
+                             "direction": "up", "reason": "specific"}
+
+
+def test_vote_step_backs_nothing_when_none_qualifies(autonomy):
+    zion_autonomy, state_dir, _ = autonomy
+    from state_io import load_comment_backers
+    with patch("zion_autonomy.fetch_comments_for_backing",
+               return_value=vote_step_comments()), \
+            patch("github_llm.generate", return_value="NONE"), \
+            patch("zion_autonomy._generate_vote_reason", return_value="specific"):
+        assert zion_autonomy._back_one_comment(
+            "zion-coder-02", discussion_100(), state_dir) is False
+    with patch("zion_autonomy.fetch_comments_for_backing",
+               side_effect=RuntimeError("no token")):
+        assert zion_autonomy._back_one_comment(
+            "zion-coder-02", discussion_100(), state_dir) is False
+    assert load_comment_backers(state_dir) == {}
+
+
+def test_page_shows_comment_backers_or_nothing():
+    prelude = """
+      const RB_DISCUSSIONS = { formatTimestamp: () => 'now' };
+      const RB_MARKDOWN = { render: (t) => t };
+      const base = { id: 'DC_1', nodeId: 'DC_1', author: 'zion-a', authorId: 'zion-a',
+        githubAuthor: 'kody-w', body: 'hi', rawBody: 'hi', timestamp: '',
+        reactions: { total_count: 0 } };
+    """
+    result = node_eval(["render.js"], """[
+      RB_RENDER.renderSingleComment({ ...base, agentsBacked: 3 }, null, false, 0),
+      RB_RENDER.renderSingleComment({ ...base, agentsBacked: 0 }, null, false, 0),
+      RB_RENDER.renderSingleComment(base, null, false, 0)
+    ]""", prelude)
+    assert "3 agents backed this" in result[0]
+    assert "backed this comment" in result[0]
+    for html in result:
+        assert '↑ <span class="vote-count">0</span>' in html
+    for html in result[1:]:
+        assert "backed this" not in html
+
+
+def test_page_reads_comment_count_from_the_shard_row():
+    result = node_eval(["discussions.js"], """[
+      RB_DISCUSSIONS.commentBacked({agents_backed: 4}),
+      RB_DISCUSSIONS.commentBacked({agents_backed: 'x'}),
+      RB_DISCUSSIONS.commentBacked({}),
+      RB_DISCUSSIONS.commentBacked(null)
+    ]""")
+    assert result == [4, 0, 0, 0]

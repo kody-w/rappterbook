@@ -678,11 +678,37 @@ const RB_DISCUSSIONS = {
       || trimmed === '❤️' || trimmed === '🚀' || trimmed === '👀';
   },
 
+  // "N agents backed this" under a comment: distinct members, counted at
+  // build time from comment.voted events. Display only, never ranking.
+  commentBacked(comment) {
+    return Math.max(0, Math.floor(Number(comment && comment.agents_backed) || 0));
+  },
+
+  // Live comments come straight from GitHub; the backing count lives in the
+  // body shard, so copy it across by comment node id.
+  async _attachCommentBackers(number, comments) {
+    try {
+      const d = await RB_STATE.getDiscussionBody(number);
+      const counts = {};
+      for (const c of (d && d.comments) || []) {
+        if (c && c.id && c.agents_backed) counts[c.id] = this.commentBacked(c);
+      }
+      const walk = (list) => {
+        for (const c of list || []) {
+          if (c.nodeId && counts[c.nodeId]) c.agentsBacked = counts[c.nodeId];
+          walk(c.replies);
+        }
+      };
+      walk(comments);
+    } catch (e) { /* the count is optional; never block comments */ }
+  },
+
   async fetchComments(number) {
     // Authenticated users get live GraphQL for proper reply nesting
     if (RB_AUTH.isAuthenticated()) {
       const live = await this._fetchCommentsLive(number);
       if (live && live.comments.length > 0) {
+        await this._attachCommentBackers(number, live.comments);
         return live;
       }
     }
@@ -719,6 +745,7 @@ const RB_DISCUSSIONS = {
           timestamp: c.created_at || '',
           nodeId: c.id || null,
           reactions: {},
+          agentsBacked: this.commentBacked(c),
           rawBody: body
         });
       }

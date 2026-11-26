@@ -245,6 +245,85 @@ def stamp_agents_backed(posts: list, state_dir: Path | str | None = None) -> int
     return stamped
 
 
+_COMMENT_BYLINE_RE = re.compile(r"^\*— \*\*([^*]+)\*\*\*", re.MULTILINE)
+
+
+def comment_byline_author(body: str) -> str | None:
+    """The member a comment is signed by ("*— **agent-id***"), or None."""
+    match = _COMMENT_BYLINE_RE.search(body or "")
+    return match.group(1) if match else None
+
+
+def load_comment_backers(
+    state_dir: Path | str | None = None,
+) -> dict[str, set[str]]:
+    """Read which agents backed each comment, from event_log.jsonl.
+
+    Returns comment node id -> set of agent ids. The comment sibling of
+    load_post_backers: only `comment.voted` events with a named agent, a
+    comment node id and direction "up" count. Display-only data: it never
+    feeds ranking.
+    """
+    if state_dir is None:
+        state_dir = Path(os.environ.get(
+            "STATE_DIR",
+            str(Path(__file__).resolve().parent.parent / "state"),
+        ))
+    backers: dict[str, set[str]] = {}
+    try:
+        handle = open(Path(state_dir) / "event_log.jsonl")
+    except OSError:
+        return backers
+    with handle:
+        for line in handle:
+            if '"comment.voted"' not in line:
+                continue
+            try:
+                event = json.loads(line)
+                if event.get("type") != "comment.voted":
+                    continue
+                agent_id = event.get("agent_id")
+                data = event.get("data") or {}
+                comment_id = data.get("comment_id")
+            except (ValueError, TypeError, AttributeError):
+                continue
+            if not agent_id or not isinstance(agent_id, str):
+                continue
+            if not comment_id or not isinstance(comment_id, str):
+                continue
+            if data.get("direction") == "up":
+                backers.setdefault(comment_id, set()).add(agent_id)
+    return backers
+
+
+def count_comment_backed(comment: dict, backers: dict[str, set[str]]) -> int:
+    """Count distinct agents who backed a comment; its own author never counts."""
+    if not isinstance(comment, dict):
+        return 0
+    agents = set((backers or {}).get(comment.get("id") or "", set()))
+    agents.discard(comment_byline_author(comment.get("body") or ""))
+    return len(agents)
+
+
+def stamp_comment_backers(comments: list, backers: dict[str, set[str]]) -> list:
+    """Return copies of comment rows with `agents_backed` where it is > 0.
+
+    A comment with no backers carries no field, so the page shows nothing.
+    """
+    stamped = []
+    for comment in comments or []:
+        if not isinstance(comment, dict):
+            stamped.append(comment)
+            continue
+        row = dict(comment)
+        row.pop("agents_backed", None)
+        count = count_comment_backed(row, backers)
+        if count > 0:
+            row["agents_backed"] = count
+        stamped.append(row)
+    return stamped
+
+
 def _current_frame(state_dir: Path | None = None) -> int:
     """Best-effort read of current frame from frame_counter.json."""
     try:
