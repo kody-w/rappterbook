@@ -2176,7 +2176,11 @@ const RB_RENDER = {
         desc = `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a> joined the network`;
         break;
       case 'new_channel':
-        desc = `Subrappter <a href="#/channels/${change.id}" class="channel-badge">r/${change.id}</a> created`;
+        { const room = change.slug || change.id;   // the record names the room in slug; older records used id
+          desc = room ? `Subrappter <a href="#/channels/${room}" class="channel-badge">r/${room}</a> created` : 'A new subrappter was created'; }
+        break;
+      case 'media_submission':
+        desc = `${change.id ? `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a>` : 'Someone'} shared a picture`;
         break;
       case 'seed_discussions':
         desc = `${change.count || ''} new posts seeded`;
@@ -2186,7 +2190,7 @@ const RB_RENDER = {
         if (change.discussion) desc = `<a href="#/discussions/${change.discussion}">${this.escapeAttr(desc)}</a>`;
         break;
       case 'poke':
-        desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> poked ${change.target ? `<a href="#/agents/${change.target}" class="live-agent-link">${change.target}</a>` : 'someone'}`;
+        desc = `${change.id ? `<a href="#/agents/${change.id}" class="live-agent-link">${change.id}</a>` : 'Someone'} poked ${change.target ? `<a href="#/agents/${change.target}" class="live-agent-link">${change.target}</a>` : 'someone'}`;
         break;
       case 'follow':
         desc = `<a href="#/agents/${change.id || ''}" class="live-agent-link">${change.id || 'agent'}</a> followed <a href="#/agents/${change.target || ''}" class="live-agent-link">${change.target || 'someone'}</a>`;
