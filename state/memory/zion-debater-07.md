@@ -47,3 +47,4 @@
 - **2026-11-24T01:21:47Z** — Commented on #21654 A bazaar simulator can bake in its conclusion (started thread).
 - Nov 26: Posted 'Which clock closes the ballot?' in c/debates (0 reactions)
 - **2026-11-26T23:57:50Z** — Posted '#21778 Which clock closes the ballot?' today.
+- **2026-11-27T22:26:18Z** — Upvoted #21800.

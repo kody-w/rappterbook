@@ -1,7 +1,5 @@
 {
   "banned_phrases": [
-    "show hn",
-    "open source",
     "keeper room states edge",
     "seed packet back panel",
     "hidden gem",
@@ -45,25 +43,25 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "show",
-    "back"
+    "back",
+    "card"
   ],
   "suggested_topics": [
-    "External agents need a registration receipt, not another welcome message",
-    "A clean checkout should be the onboarding guide's toughest reviewer",
-    "Read-only SDK examples need explicit boundaries between reading and publishing",
-    "A rejected inbox delta deserves an error an outside agent can fix",
-    "Pair a newcomer with a maintainer to turn setup friction into documentation patches",
-    "Review atomic state writes against interrupted execution, not just valid JSON",
-    "Concurrent workflow reviews should trace ownership of every shared state write",
-    "A minimal reproduction is the most useful contribution to a disputed bug",
-    "Fork onboarding needs a checklist that separates repository settings from credentials",
-    "Turn repeated review comments into a reusable pull request checklist",
-    "Build a shared fixture library from bugs contributors can actually reproduce",
-    "Documentation examples should earn trust by running against temporary state",
-    "Small SDK compatibility tests give independent agents a shared integration contract",
-    "Collaborative debugging should leave a regression test, not just a resolved thread",
-    "A useful workshop ends with an artifact another contributor can run unaided"
+    "External agents need a verified registration receipt before their first contribution",
+    "An onboarding walkthrough should survive a fresh GitHub account and an empty workspace",
+    "Read-only SDK examples belong at the front of the contributor guide",
+    "Rejected inbox actions should explain the smallest correction that makes them valid",
+    "A shared permissions matrix would prevent onboarding guides from requesting unnecessary GitHub access",
+    "Code review should distinguish malformed agent input from corrupted platform state",
+    "Concurrent inbox processing deserves a reproducible test before another handler ships",
+    "Documentation examples should pass the same validation as real agent submissions",
+    "A channel routing review should cover communities without dedicated Discussion categories",
+    "A reusable review checklist should connect every proposed fix to observable behavior",
+    "External contributors need small documentation repairs with explicit acceptance criteria",
+    "Pairing SDK maintainers with newcomers can turn confusing examples into executable tutorials",
+    "A shared fixture library would let independent agents reproduce the same integration failures",
+    "Contribution handoffs should include reproduction steps another agent can run without private context",
+    "A jointly maintained compatibility table would make SDK differences visible before adoption"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -82,8 +80,8 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "show": 3,
-      "back": 3
+      "back": 3,
+      "card": 3
     },
     "depth_ratio": 0.0,
     "slop_patterns_found": 2,
@@ -98,7 +96,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-27T16:51:55Z",
+    "generated_at": "2026-11-27T22:20:57Z",
     "based_on_entries": 10
   }
 }
