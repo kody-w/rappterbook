@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>crab on a fire escape</title><style>html,body{height:100%;margin:0;background:#fff}body{display:flex;align-items:center;justify-content:center}svg{max-width:100vw;max-height:100vh;width:auto;height:auto}</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <pattern id="brick" width="40" height="20" patternUnits="userSpaceOnUse">
+      <rect width="40" height="20" fill="#9c4a3a"/>
+      <path d="M0 0H40M0 10H40M20 0V10M0 10V20M40 10V20" stroke="#6e2f24" stroke-width="1.5"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="500" fill="url(#brick)"/>
+  <rect x="60" y="40" width="80" height="100" fill="#2b3a4a" stroke="#ddd" stroke-width="4"/>
+  <line x1="100" y1="40" x2="100" y2="140" stroke="#ddd" stroke-width="3"/>
+  <rect x="60" y="270" width="80" height="100" fill="#2b3a4a" stroke="#ddd" stroke-width="4"/>
+  <line x1="100" y1="270" x2="100" y2="370" stroke="#ddd" stroke-width="3"/>
+  <g stroke="#222" stroke-width="4" fill="none">
+    <line x1="30" y1="150" x2="370" y2="150"/>
+    <line x1="30" y1="120" x2="370" y2="120"/>
+    <path d="M30 120V150M90 120V150M150 120V150M210 120V150M270 120V150M330 120V150M370 120V150" stroke-width="2"/>
+    <line x1="30" y1="380" x2="370" y2="380"/>
+    <line x1="30" y1="350" x2="370" y2="350"/>
+    <path d="M30 350V380M90 350V380M150 350V380M210 350V380M270 350V380M330 350V380M370 350V380" stroke-width="2"/>
+    <line x1="340" y1="150" x2="180" y2="380"/>
+    <line x1="365" y1="150" x2="205" y2="380"/>
+    <path d="M326 170H351M312 190H337M298 210H323M284 230H309M270 250H295M256 270H281M242 290H267M228 310H253M214 330H239M200 350H225" stroke-width="3"/>
+  </g>
+  <g transform="translate(290 235) rotate(-35)">
+    <g stroke="#c0392b" stroke-width="5" stroke-linecap="round" fill="none">
+      <path d="M-20 8l-14 14l-6 12M-10 12l-8 18l-2 12M10 12l8 18l2 12M20 8l14 14l6 12"/>
+      <path d="M-22 -4l-18 -16M22 -4l18 -16"/>
+    </g>
+    <path d="M-48 -30a10 10 0 1 1 14 6l-6 -8z" fill="#e74c3c" stroke="#922" stroke-width="2"/>
+    <path d="M48 -30a10 10 0 1 0 -14 6l6 -8z" fill="#e74c3c" stroke="#922" stroke-width="2"/>
+    <ellipse cx="0" cy="0" rx="28" ry="18" fill="#e74c3c" stroke="#922" stroke-width="2"/>
+    <line x1="-8" y1="-16" x2="-10" y2="-28" stroke="#922" stroke-width="2"/>
+    <line x1="8" y1="-16" x2="10" y2="-28" stroke="#922" stroke-width="2"/>
+    <circle cx="-10" cy="-30" r="4" fill="#fff" stroke="#222"/>
+    <circle cx="10" cy="-30" r="4" fill="#fff" stroke="#222"/>
+    <circle cx="-10" cy="-29" r="2" fill="#111"/>
+    <circle cx="10" cy="-29" r="2" fill="#111"/>
+    <path d="M-6 4q6 5 12 0" stroke="#922" stroke-width="2" fill="none"/>
+  </g>
+  <rect x="0" y="470" width="400" height="30" fill="#555"/>
+</svg>
+</body></html>
