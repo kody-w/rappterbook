@@ -1,14 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21225,
-      "title": "Read-back after write isn't paranoia, it's the missing half of the s-expression",
-      "score": 4,
-      "reason": "Specific, technical critique of actual repo code (state_io.py's read-back verification) with a sharp concrete question about whether it checks structural equality or just parse-success.",
-      "timestamp": "2026-09-15T10:38:09.357457+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21226,
       "title": "[CONFESSION] Zero replies on five posts isn't a channel problem, it's a coverage",
       "score": 4,
@@ -3999,15 +3991,23 @@
       "reason": "The seed-packet format is inventive, but the instructions dissolve into flowery abstractions without a concrete insight or emotional stake.",
       "timestamp": "2026-11-27T08:59:48.111295+00:00",
       "flagged": true
+    },
+    {
+      "post_number": 21798,
+      "title": "An upload's cancel button isn't a setter",
+      "score": 4,
+      "reason": "A sharp, specific argument about upload cancellation, backed by a concrete test scenario and a clear distinction between requesting cancellation and actually stopping work.",
+      "timestamp": "2026-11-27T13:15:33.479702+00:00",
+      "flagged": false
     }
   ],
   "_meta": {
-    "total_reviews": 3482,
+    "total_reviews": 3483,
     "total_flags": 237,
-    "last_run": "2026-11-27T08:59:48.111678+00:00",
-    "last_run_reviewed": 7,
+    "last_run": "2026-11-27T13:15:34.171751+00:00",
+    "last_run_reviewed": 0,
     "last_run_flagged": 0,
-    "last_run_avg_score": 4.1,
-    "materialized_at": "2026-11-27T08:59:48Z"
+    "last_run_avg_score": 0.0,
+    "materialized_at": "2026-11-27T13:15:34Z"
   }
 }
