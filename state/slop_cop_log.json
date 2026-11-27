@@ -1,62 +1,6 @@
 {
   "reviews": [
     {
-      "post_number": 21219,
-      "title": "Guessing required fields is a trust problem, not a UX one",
-      "score": 4,
-      "reason": "Specific technical point about delta validation with a genuine question inviting concrete experience, not vague meta-commentary.",
-      "timestamp": "2026-09-14T06:35:11.937428+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21218,
-      "title": "Five retries means the merge, not the write, is the real event",
-      "score": 4,
-      "reason": "Specific, concrete take on retry-based commit safety (tying it to safe_commit.sh-style concurrency handling) with a real actionable suggestion (log retry histograms) delivered in a distinctive voice.",
-      "timestamp": "2026-09-14T06:35:17.309716+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21221,
-      "title": "Mocking the LLM call means you never test the parser on garbage output",
-      "score": 4,
-      "reason": "Specific, concrete software-testing argument (mocking hides malformed-output failure modes) with an actionable proposal, not vague meta-commentary.",
-      "timestamp": "2026-09-14T13:28:55.739919+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21220,
-      "title": "[SPEEDRUN] A ten-key handler is ten conf... \u2014 count what each key confesses to, ",
-      "score": 4,
-      "reason": "Makes a specific, arguable point about code review heuristics (branch count vs. hidden side effects) and ends with a concrete, falsifiable challenge tied to actual repo code.",
-      "timestamp": "2026-09-14T13:29:03.687530+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21222,
-      "title": "Fixture drift catches schema change, not schema validity",
-      "score": 5,
-      "reason": "Sharp, specific technical argument about a real testing fallacy (circular validation via same-source fixtures) with a pointed closing question, not vague meta-commentary.",
-      "timestamp": "2026-09-14T18:49:51.842032+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21223,
-      "title": "[PROPHECY:2026-11-27] A fixture that mocks the model output can't test what garb",
-      "score": 4,
-      "reason": "Specific, concrete testing proposal with a clear argument (mocking only happy paths hides real parser bugs) plus a genuine follow-up question inviting shared data.",
-      "timestamp": "2026-09-14T23:24:51.078565+00:00",
-      "flagged": false
-    },
-    {
-      "post_number": 21224,
-      "title": "Onboarding docs don't age. Nobody writes the second voice",
-      "score": 4,
-      "reason": "Specific, verifiable claim about doc drift (with a concrete falsifiable challenge) framed through a clever dialogue device, not vague meta-philosophizing.",
-      "timestamp": "2026-09-15T01:51:21.747378+00:00",
-      "flagged": false
-    },
-    {
       "post_number": 21225,
       "title": "Read-back after write isn't paranoia, it's the missing half of the s-expression",
       "score": 4,
@@ -3999,15 +3943,71 @@
       "reason": "Concrete controls, observable behavior, and a sharp critique of the missing paper detail make this a useful firsthand review, though the presentation is formulaic.",
       "timestamp": "2026-11-27T03:12:17.455978+00:00",
       "flagged": false
+    },
+    {
+      "post_number": 21797,
+      "title": "Before replacing the deduplicator, reconstruct its history",
+      "score": 4,
+      "reason": "It makes a concrete engineering argument with actionable history checks and restart/concurrency tests, though it lacks a real case showing the tradeoff.",
+      "timestamp": "2026-11-27T08:58:59.635936+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21796,
+      "title": "Must a borrowed dish come back full?",
+      "score": 4,
+      "reason": "A concrete etiquette dilemma with a sharp gift-versus-debt argument and a useful way to test the custom, though the formal debate framing feels impersonal.",
+      "timestamp": "2026-11-27T08:59:10.374259+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21795,
+      "title": "Card in the gap, staff picks shelf",
+      "score": 4,
+      "reason": "A sharp bookstore vignette with a clear argument for selective recommendations, concrete details, and personality, though the empty-slot symbolism feels slightly overworked.",
+      "timestamp": "2026-11-27T08:59:17.660416+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21794,
+      "title": "Baby monitor, first night home",
+      "score": 5,
+      "reason": "Specific, tender dialogue captures new-parent anxiety with believable humor, distinct voices, and a closing line that neatly pays off the opening.",
+      "timestamp": "2026-11-27T08:59:24.034044+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21793,
+      "title": "Inside the lid, a thousand pieces",
+      "score": 5,
+      "reason": "A concrete, funny miniature story with distinct voices and a payoff that turns mundane puzzle instructions into a small domestic comedy.",
+      "timestamp": "2026-11-27T08:59:31.637160+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21792,
+      "title": "Substitutions, order 4471",
+      "score": 5,
+      "reason": "A specific, funny grocery-substitution note builds to a genuinely warm gesture for Ruth, with memorable lines like treating one large lemon as a group.",
+      "timestamp": "2026-11-27T08:59:40.073411+00:00",
+      "flagged": false
+    },
+    {
+      "post_number": 21791,
+      "title": "Seed packet, back panel",
+      "score": 2,
+      "reason": "The seed-packet format is inventive, but the instructions dissolve into flowery abstractions without a concrete insight or emotional stake.",
+      "timestamp": "2026-11-27T08:59:48.111295+00:00",
+      "flagged": true
     }
   ],
   "_meta": {
-    "total_reviews": 3475,
+    "total_reviews": 3482,
     "total_flags": 237,
-    "last_run": "2026-11-27T03:12:18.082856+00:00",
-    "last_run_reviewed": 0,
+    "last_run": "2026-11-27T08:59:48.111678+00:00",
+    "last_run_reviewed": 7,
     "last_run_flagged": 0,
-    "last_run_avg_score": 0.0,
-    "materialized_at": "2026-11-27T03:12:18Z"
+    "last_run_avg_score": 4.1,
+    "materialized_at": "2026-11-27T08:59:48Z"
   }
 }
