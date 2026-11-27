@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset=utf-8><title>Free Throw</title>
+<style>body{margin:0;background:#1b1b2f;display:flex;flex-direction:column;align-items:center;font-family:sans-serif;color:#eee}canvas{background:linear-gradient(#2a2a4a,#3a3a5e 70%,#8b5a2b 70%);border-radius:8px;cursor:pointer;margin-top:12px}p{font-size:20px}</style></head>
+<body><canvas id=c width=800 height=500></canvas><p id=m>Click to shoot</p>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d'),m=document.getElementById('m');
+const G=900,R=12,BX=660,RIM={l:585,r:650,y:260},SX=150,SY=400,FLOOR=470;
+let b,state,net=0,t=0,score=0,shots=0,trail=[];
+function reset(){b={x:SX,y:SY,vx:0,vy:0,hit:false,in:false,rot:0};state='ready';trail=[]}
+reset();
+c.onclick=()=>{if(state!=='ready')return;const T=1.1,tx=BX-R;b.vx=(tx-SX)/T;b.vy=(220-SY-0.5*G*T*T)/T;state='fly';shots++;m.textContent='...'};
+function step(dt){if(state!=='fly'&&state!=='done')return;const py=b.y;b.vy+=G*dt;b.x+=b.vx*dt;b.y+=b.vy*dt;b.rot+=b.vx*dt/R;
+if(!b.hit&&b.x+R>=BX){b.x=BX-R;b.vx*=-0.35;b.vy*=0.9;b.hit=true}
+if(!b.in&&b.vy>0&&py<=RIM.y&&b.y>RIM.y&&b.x>RIM.l&&b.x<RIM.r){b.in=true;score++;net=1;m.textContent='Swish! '+score+' / '+shots}
+if(b.in&&b.y>RIM.y&&b.y<RIM.y+60){b.vx*=0.9;b.x+=((RIM.l+RIM.r)/2-b.x)*0.08}
+if(b.y+R>FLOOR){b.y=FLOOR-R;b.vy*=-0.55;b.vx*=0.7;if(Math.abs(b.vy)<60&&state==='fly'){state='done';setTimeout(reset,700)}}}
+function drawNet(){const top=[],n=7,w=RIM.r-RIM.l;for(let i=0;i<n;i++){const k=i/(n-1);const s=Math.sin(t*25)*net*6;top.push([[RIM.l+k*w,RIM.y],[RIM.l+12+k*(w-24)+s*(k-.5),RIM.y+50+net*18]])}
+x.strokeStyle='#fff';x.lineWidth=1.5;top.forEach(([a,z])=>{x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(z[0],z[1]);x.stroke()});
+for(let j=1;j<=3;j++){x.beginPath();top.forEach(([a,z],i)=>{const k=j/3.3,px=a[0]+(z[0]-a[0])*k,py=a[1]+(z[1]-a[1])*k;i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()}}
+function drawBall(){x.save();x.translate(b.x,b.y);x.rotate(b.rot);x.fillStyle='#e8772e';x.beginPath();x.arc(0,0,R,0,7);x.fill();x.strokeStyle='#3b1a06';x.lineWidth=1.5;x.beginPath();x.moveTo(-R,0);x.lineTo(R,0);x.moveTo(0,-R);x.lineTo(0,R);x.stroke();x.beginPath();x.arc(-R*1.3,0,R,-.8,.8);x.stroke();x.beginPath();x.arc(R*1.3,0,R,2.34,3.94);x.stroke();x.restore()}
+function draw(){x.clearRect(0,0,800,500);
+x.fillStyle='#555';x.fillRect(700,150,12,FLOOR-150);x.fillRect(BX,205,40,8);
+x.fillStyle='rgba(255,255,255,.9)';x.fillRect(BX,160,8,120);x.strokeStyle='#c33';x.lineWidth=2;x.strokeRect(BX-1,215,9,35);
+x.fillStyle='rgba(255,255,255,.25)';trail.forEach(p=>{x.beginPath();x.arc(p[0],p[1],2,0,7);x.fill()});
+x.strokeStyle='#e33';x.lineWidth=4;x.beginPath();x.ellipse((RIM.l+RIM.r)/2,RIM.y,(RIM.r-RIM.l)/2,6,0,Math.PI,2*Math.PI);x.stroke();
+drawBall();drawNet();
+x.strokeStyle='#e33';x.lineWidth=4;x.beginPath();x.ellipse((RIM.l+RIM.r)/2,RIM.y,(RIM.r-RIM.l)/2,6,0,0,Math.PI);x.stroke();
+x.fillStyle='#ddd';x.fillRect(SX-30,FLOOR-2,60,4);x.font='14px sans-serif';x.fillText('free-throw line',SX-45,FLOOR+20)}
+let last=performance.now();
+function loop(now){const dt=Math.min((now-last)/1000,0.033);last=now;t+=dt;for(let i=0;i<4;i++)step(dt/4);if(state==='fly'&&Math.random()<.5)trail.push([b.x,b.y]);net=Math.max(0,net-dt*1.2);draw();requestAnimationFrame(loop)}
+requestAnimationFrame(loop);
+</script></body></html>
