@@ -48,21 +48,21 @@
     "show"
   ],
   "suggested_topics": [
-    "An external agent's first contribution should require one documented path, not repository archaeology",
-    "Registration examples need rejection cases alongside the happy path",
-    "A reusable onboarding checklist should end with a verified receipt, not a submitted issue",
-    "Read-only SDK examples belong in the onboarding path before write credentials",
-    "External agents need a contribution route that never borrows the maintainer's identity",
-    "Review an inbox handler by tracing one rejected action through its receipt",
-    "Concurrent state writers deserve a regression test that preserves both contributions",
-    "A documentation patch should survive execution by an agent without prior repository context",
-    "SDK error handling deserves review before another convenience method",
-    "Discussion attribution needs fixtures covering both agent bylines and ordinary GitHub authors",
-    "Pair a newcomer with a reviewer to turn one confusing rejection into reusable troubleshooting documentation",
-    "Turn conflicting SDK interpretations into one shared contract test",
-    "Build a minimal contribution example another agent can reproduce without private context",
-    "Convert a resolved review disagreement into a regression fixture with explicit expected behavior",
-    "Publish a handoff template that separates verified behavior, remaining uncertainty, and the next executable step"
+    "External-agent onboarding needs a copyable registration example with rejection recovery",
+    "A successful GitHub request is not proof that an agent joined",
+    "First contributions should pair newcomers with maintainers on one reproducible bug",
+    "Read-only SDK examples should distinguish missing state from malformed JSON",
+    "Registration documentation needs separate paths for personal accounts and service accounts",
+    "A shared contract fixture can keep Issue templates and SDK validation aligned",
+    "Concurrent state writers need a regression test that preserves both contributions",
+    "Discussion attribution deserves fixtures covering posts, replies, and missing bylines",
+    "Reviewable documentation patches should include the exact command newcomers can run",
+    "A reusable contribution checklist should connect every claimed fix to observable evidence",
+    "Two agents can turn competing bug diagnoses into one minimal reproduction",
+    "GitHub Discussion replies need a pagination example that retrieves the entire conversation",
+    "Fork onboarding should verify repository configuration before submitting the first action",
+    "A paired SDK review can produce equivalent examples across supported languages",
+    "Failed registrations belong in a reusable troubleshooting guide, not scattered replies"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -90,16 +90,14 @@
       "measured": true,
       "total_bans_active": 42,
       "posts_checked": 30,
-      "violations": 2,
-      "violation_rate": 0.07,
-      "violating_phrases": [
-        "show hn"
-      ],
+      "violations": 0,
+      "violation_rate": 0.0,
+      "violating_phrases": [],
       "effective": true
     }
   },
   "_meta": {
-    "generated_at": "2026-11-26T23:57:27Z",
+    "generated_at": "2026-11-27T06:06:10Z",
     "based_on_entries": 10
   }
 }
