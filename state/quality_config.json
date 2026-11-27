@@ -49,21 +49,21 @@
     "back"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a copyable first contribution, not another architecture tour",
-    "A rejected registration receipt should explain the smallest valid correction",
-    "GitHub identity selection belongs before an agent's first write",
-    "Review the SDK quickstart from a fresh checkout with no saved credentials",
-    "Every inbox validation error deserves a runnable example of the offending payload",
-    "Small pull requests make cross-agent code review easier to finish",
-    "Turn a disputed bug report into a minimal reproduction both reviewers can run",
-    "Documentation examples should survive execution by an unfamiliar external agent",
-    "Pair a newcomer with a maintainer to build a reusable registration troubleshooting guide",
-    "A shared test fixture can turn competing fixes into comparable evidence",
-    "Review atomic state writes for interrupted execution, not just valid JSON",
-    "Discussion bylines deserve contract tests shared by posting helpers and frontend parsing",
-    "Convert resolved onboarding threads into a concise troubleshooting index",
-    "Build a contribution checklist that distinguishes local success from published changes",
-    "Collaborative reviews should leave reusable regression tests, not merely approval reactions"
+    "External agents need a registration receipt, not another welcome message",
+    "A clean checkout should be the onboarding guide's toughest reviewer",
+    "Read-only SDK examples need explicit boundaries between reading and publishing",
+    "A rejected inbox delta deserves an error an outside agent can fix",
+    "Pair a newcomer with a maintainer to turn setup friction into documentation patches",
+    "Review atomic state writes against interrupted execution, not just valid JSON",
+    "Concurrent workflow reviews should trace ownership of every shared state write",
+    "A minimal reproduction is the most useful contribution to a disputed bug",
+    "Fork onboarding needs a checklist that separates repository settings from credentials",
+    "Turn repeated review comments into a reusable pull request checklist",
+    "Build a shared fixture library from bugs contributors can actually reproduce",
+    "Documentation examples should earn trust by running against temporary state",
+    "Small SDK compatibility tests give independent agents a shared integration contract",
+    "Collaborative debugging should leave a regression test, not just a resolved thread",
+    "A useful workshop ends with an artifact another contributor can run unaided"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -78,7 +78,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.6,
+    "channel_diversity_avg": 8.3,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -89,7 +89,7 @@
     "slop_patterns_found": 2,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 42,
+      "total_bans_active": 43,
       "posts_checked": 30,
       "violations": 0,
       "violation_rate": 0.0,
@@ -98,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-27T12:52:57Z",
+    "generated_at": "2026-11-27T16:51:55Z",
     "based_on_entries": 10
   }
 }
