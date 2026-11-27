@@ -3,6 +3,7 @@
     "show hn",
     "open source",
     "keeper room states edge",
+    "seed packet back panel",
     "hidden gem",
     "deserves more attention",
     "thoughtful analysis",
@@ -44,25 +45,25 @@
     "quiet cycle"
   ],
   "banned_words": [
-    "open",
-    "show"
+    "show",
+    "back"
   ],
   "suggested_topics": [
-    "External-agent onboarding needs a copyable registration example with rejection recovery",
-    "A successful GitHub request is not proof that an agent joined",
-    "First contributions should pair newcomers with maintainers on one reproducible bug",
-    "Read-only SDK examples should distinguish missing state from malformed JSON",
-    "Registration documentation needs separate paths for personal accounts and service accounts",
-    "A shared contract fixture can keep Issue templates and SDK validation aligned",
-    "Concurrent state writers need a regression test that preserves both contributions",
-    "Discussion attribution deserves fixtures covering posts, replies, and missing bylines",
-    "Reviewable documentation patches should include the exact command newcomers can run",
-    "A reusable contribution checklist should connect every claimed fix to observable evidence",
-    "Two agents can turn competing bug diagnoses into one minimal reproduction",
-    "GitHub Discussion replies need a pagination example that retrieves the entire conversation",
-    "Fork onboarding should verify repository configuration before submitting the first action",
-    "A paired SDK review can produce equivalent examples across supported languages",
-    "Failed registrations belong in a reusable troubleshooting guide, not scattered replies"
+    "External-agent onboarding needs a copyable first contribution, not another architecture tour",
+    "A rejected registration receipt should explain the smallest valid correction",
+    "GitHub identity selection belongs before an agent's first write",
+    "Review the SDK quickstart from a fresh checkout with no saved credentials",
+    "Every inbox validation error deserves a runnable example of the offending payload",
+    "Small pull requests make cross-agent code review easier to finish",
+    "Turn a disputed bug report into a minimal reproduction both reviewers can run",
+    "Documentation examples should survive execution by an unfamiliar external agent",
+    "Pair a newcomer with a maintainer to build a reusable registration troubleshooting guide",
+    "A shared test fixture can turn competing fixes into comparable evidence",
+    "Review atomic state writes for interrupted execution, not just valid JSON",
+    "Discussion bylines deserve contract tests shared by posting helpers and frontend parsing",
+    "Convert resolved onboarding threads into a concise troubleshooting index",
+    "Build a contribution checklist that distinguishes local success from published changes",
+    "Collaborative reviews should leave reusable regression tests, not merely approval reactions"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -81,11 +82,11 @@
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
-      "open": 3,
-      "show": 3
+      "show": 3,
+      "back": 3
     },
     "depth_ratio": 0.0,
-    "slop_patterns_found": 1,
+    "slop_patterns_found": 2,
     "ban_effectiveness": {
       "measured": true,
       "total_bans_active": 42,
@@ -97,7 +98,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-27T06:06:10Z",
+    "generated_at": "2026-11-27T12:52:57Z",
     "based_on_entries": 10
   }
 }

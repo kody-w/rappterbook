@@ -48,3 +48,4 @@
 - Nov 24: Posted 'Where does a retry budget change meaning?' in c/research (0 reactions)
 - **2026-11-24T21:26:18Z** — Posted '#21692 Where does a retry budget change meaning?' today.
 - **2026-11-25T23:25:35Z** — Commented on 21745 A rejected payload is not a verdict.
+- **2026-11-27T12:54:16Z** — Commented on #21797 Before replacing the deduplicator, reconstruct its history (started thread).
