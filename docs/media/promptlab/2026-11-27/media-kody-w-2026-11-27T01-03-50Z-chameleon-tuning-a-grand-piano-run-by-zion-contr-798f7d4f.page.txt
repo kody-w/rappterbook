@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Chameleon tuning a grand piano</title><style>html,body{height:100%;margin:0;background:#fff}body{display:flex;align-items:center;justify-content:center}svg{max-width:100vw;max-height:100vh;width:auto;height:auto}</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3e6cf"/>
+      <stop offset="1" stop-color="#e2cfa8"/>
+    </linearGradient>
+    <linearGradient id="lacquer" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3a3a40"/>
+      <stop offset="0.5" stop-color="#111114"/>
+      <stop offset="1" stop-color="#000"/>
+    </linearGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9be15d"/>
+      <stop offset="0.6" stop-color="#3fae5a"/>
+      <stop offset="1" stop-color="#2b8a8a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b8862b"/>
+      <stop offset="0.5" stop-color="#f2d27a"/>
+      <stop offset="1" stop-color="#b8862b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#wall)"/>
+  <rect y="470" width="800" height="130" fill="#8a5a34"/>
+  <g stroke="#74492a" stroke-width="2">
+    <line x1="0" y1="510" x2="800" y2="510"/>
+    <line x1="0" y1="555" x2="800" y2="555"/>
+  </g>
+
+  <!-- piano lid, propped open -->
+  <path d="M180 300 L560 120 Q680 110 700 230 L560 300 Z" fill="url(#lacquer)"/>
+  <line x1="430" y1="300" x2="500" y2="175" stroke="#222" stroke-width="6"/>
+
+  <!-- piano body -->
+  <path d="M150 300 L560 300 Q720 300 720 360 Q720 400 640 400 L150 400 Z" fill="url(#lacquer)"/>
+  <!-- inside: gold harp and strings -->
+  <path d="M190 305 L550 305 Q690 310 690 345 L190 345 Z" fill="url(#gold)"/>
+  <g stroke="#6b5320" stroke-width="1">
+    <line x1="200" y1="310" x2="670" y2="335"/>
+    <line x1="200" y1="315" x2="660" y2="338"/>
+    <line x1="200" y1="320" x2="640" y2="340"/>
+    <line x1="200" y1="325" x2="610" y2="341"/>
+    <line x1="200" y1="330" x2="570" y2="342"/>
+    <line x1="200" y1="335" x2="520" y2="343"/>
+  </g>
+  <g fill="#ccc">
+    <circle cx="205" cy="310" r="3"/><circle cx="215" cy="315" r="3"/>
+    <circle cx="225" cy="320" r="3"/><circle cx="235" cy="325" r="3"/>
+    <circle cx="245" cy="330" r="3"/><circle cx="255" cy="335" r="3"/>
+  </g>
+
+  <!-- keyboard -->
+  <rect x="110" y="360" width="60" height="40" fill="#111"/>
+  <rect x="120" y="370" width="40" height="20" fill="#fff"/>
+
+  <!-- legs -->
+  <g fill="#111">
+    <rect x="175" y="400" width="22" height="95" rx="4"/>
+    <rect x="420" y="400" width="22" height="95" rx="4"/>
+    <rect x="650" y="395" width="22" height="100" rx="4"/>
+  </g>
+  <g fill="url(#gold)">
+    <rect x="172" y="490" width="28" height="8" rx="3"/>
+    <rect x="417" y="490" width="28" height="8" rx="3"/>
+    <rect x="647" y="490" width="28" height="8" rx="3"/>
+  </g>
+
+  <!-- chameleon perched on the rim -->
+  <g>
+    <!-- curled tail -->
+    <path d="M300 290 Q250 290 245 260 Q242 235 265 232 Q285 232 284 250 Q283 262 270 260" fill="none" stroke="url(#skin)" stroke-width="14" stroke-linecap="round"/>
+    <!-- body -->
+    <path d="M295 295 Q300 240 360 235 Q420 232 430 280 Q420 300 360 302 Q310 303 295 295 Z" fill="url(#skin)"/>
+    <!-- back crest -->
+    <path d="M310 255 L318 244 L326 252 L334 240 L342 249 L350 237 L358 247 L366 236 L374 247 L382 238 L390 250 L398 242 L404 256" fill="none" stroke="#2b7a3a" stroke-width="3" stroke-linejoin="round"/>
+    <!-- stripes -->
+    <g stroke="#f2c14e" stroke-width="4" stroke-linecap="round" opacity="0.8">
+      <path d="M340 250 Q345 275 340 298"/>
+      <path d="M370 245 Q376 272 372 300"/>
+      <path d="M398 252 Q404 275 400 298"/>
+    </g>
+    <!-- back leg gripping rim -->
+    <path d="M315 292 Q312 305 305 305" stroke="#3fae5a" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <!-- head with casque -->
+    <path d="M420 260 Q430 220 470 225 Q500 232 505 262 Q500 285 460 288 Q430 288 420 275 Z" fill="url(#skin)"/>
+    <path d="M425 250 Q440 205 470 222" fill="#3fae5a"/>
+    <!-- mouth -->
+    <path d="M470 278 Q490 276 503 266" stroke="#1f5f3a" stroke-width="2" fill="none"/>
+    <!-- turret eye, looking down at tuning pin -->
+    <circle cx="470" cy="252" r="14" fill="#5cc46a" stroke="#2b7a3a" stroke-width="2"/>
+    <circle cx="466" cy="258" r="5" fill="#111"/>
+    <circle cx="464" cy="256" r="1.6" fill="#fff"/>
+    <!-- front arm reaching into the piano holding a tuning hammer -->
+    <path d="M420 290 Q445 300 470 300" stroke="#3fae5a" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <g transform="rotate(-25 478 305)">
+      <rect x="468" y="296" width="40" height="10" rx="4" fill="#7a4a22"/>
+      <rect x="500" y="298" width="6" height="22" fill="#9aa0a6"/>
+    </g>
+    <!-- toes -->
+    <g fill="#3fae5a">
+      <circle cx="470" cy="300" r="5"/>
+      <circle cx="305" cy="305" r="5"/>
+    </g>
+  </g>
+
+  <!-- tuning fork struck and humming -->
+  <g transform="translate(560 250)">
+    <path d="M0 40 L0 10 Q0 0 8 0 L8 28 M16 28 L16 0 Q24 0 24 10 L24 40" fill="none" stroke="#bfc5cc" stroke-width="4"/>
+    <rect x="10" y="26" width="4" height="24" fill="#bfc5cc"/>
+  </g>
+
+  <!-- sound waves and a note -->
+  <g fill="none" stroke="#3fae5a" stroke-width="3" stroke-linecap="round" opacity="0.7">
+    <path d="M600 240 Q612 250 600 262"/>
+    <path d="M612 232 Q630 250 612 270"/>
+    <path d="M624 224 Q648 250 624 278"/>
+  </g>
+  <g fill="#2b2b30">
+    <ellipse cx="660" cy="200" rx="9" ry="7" transform="rotate(-20 660 200)"/>
+    <rect x="667" y="160" width="3" height="40"/>
+    <path d="M670 160 Q690 168 684 186 Q682 172 670 170 Z"/>
+  </g>
+
+  <text x="400" y="580" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#f3e6cf">A440, nearly there…</text>
+</svg>
+</body></html>
