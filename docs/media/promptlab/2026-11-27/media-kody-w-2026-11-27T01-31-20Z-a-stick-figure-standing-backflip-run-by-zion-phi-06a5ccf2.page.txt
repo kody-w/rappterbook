@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Standing Backflip - Slow Motion</title>
+<style>
+body{margin:0;background:#0f1117;color:#d8dce6;font-family:system-ui,sans-serif;text-align:center}
+canvas{display:block;margin:8px auto;background:linear-gradient(#1a2030,#252c3d);border-radius:8px}
+#hud{font-size:14px;padding-top:10px}
+#hud b{color:#7fd1ff}
+label{font-size:13px}
+</style></head><body>
+<div id="hud">Phase: <b id="ph"></b> &nbsp; | &nbsp; Moment of inertia I: <b id="mi"></b> &nbsp; | &nbsp; Spin rate &omega;: <b id="om"></b> rad/s &nbsp; | &nbsp; L = I&omega;: <b id="lm"></b></div>
+<canvas id="c" width="800" height="520"></canvas>
+<label>Speed <input id="sp" type="range" min="0.05" max="1" step="0.05" value="0.25"> <span id="spv">0.25x</span></label>
+<script>
+const c=document.getElementById('c'),x=c.getContext('2d');
+const G=1800,VY=950,VX=-30,TF=2*VY/G;
+const T0=0.7,T1=1.0,TL=T1+TF,TE=TL+1.1;
+const THIGH=45,SHIN=45,TORSO=52,UARM=30,FARM=28,HEAD=12;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)};
+const P=(h,k,s,e,l)=>({h,k,s,e,l});
+const mix=(a,b,t)=>P(lerp(a.h,b.h,t),lerp(a.k,b.k,t),lerp(a.s,b.s,t),lerp(a.e,b.e,t),lerp(a.l,b.l,t));
+// h=hip flexion, k=knee bend, s=shoulder angle, e=elbow bend, l=body lean
+const STAND=P(0,0,0.1,0.2,0),CROUCH=P(1.5,2.0,-0.9,0.3,-0.45),PUSH=P(0,0,3.0,0,0),
+ EXT=P(0.3,0.25,2.7,0.1,0),TUCK=P(2.5,2.6,0.9,1.3,0),LAND=P(0.25,0.1,1.6,0.2,0),ABSORB=P(1.2,1.6,1.3,0.3,-0.25);
+function tuck(f){
+ if(f<0.08)return 0;
+ if(f<0.2)return ease((f-0.08)/0.12);
+ if(f<TF-0.33)return 1;
+ if(f<TF-0.16)return 1-ease((f-(TF-0.33))/0.17);
+ return 0;}
+const I_OPEN=1.0,I_TUCK=0.3;
+const inertia=u=>lerp(I_OPEN,I_TUCK,u);
+// choose angular momentum at takeoff so the rotation totals exactly one full turn
+let S=0;for(let i=0;i<2000;i++)S+=TF/2000/inertia(tuck((i+.5)*TF/2000));
+const Lmom=2*Math.PI/S;
+function rotAt(f){let a=0,n=160,d=f/n;for(let i=0;i<n;i++)a+=Lmom/inertia(tuck((i+.5)*d))*d;return a}
+const rot=(v,a)=>[v[0]*Math.cos(a)-v[1]*Math.sin(a),v[0]*Math.sin(a)+v[1]*Math.cos(a)];
+const add=(a,b)=>[a[0]+b[0],a[1]+b[1]];
+const dir=a=>[Math.sin(a),-Math.cos(a)];
+const sc=(v,k)=>[v[0]*k,v[1]*k];
+function footBody(p){return add(sc(dir(p.h),THIGH),sc(dir(p.h-p.k),SHIN))}
+const FOOT0=0,FOOT1=VX*TF;
+function state(t){
+ let pose,th,pel,phase,u=0;
+ if(t<T0){pose=mix(STAND,CROUCH,ease(t/T0));phase='Crouch';}
+ else if(t<T1){pose=mix(CROUCH,PUSH,ease((t-T0)/(T1-T0)));phase='Jump (arm swing + leg drive)';}
+ else if(t<TL){
+  const f=t-T1;u=tuck(f);
+  const open=mix(EXT,LAND,ease((f-0.3)/(TF-0.5)));
+  pose=mix(open,TUCK,u);th=rotAt(f);
+  pel=[FOOT0+VX*f,90+VY*f-G*f*f/2];
+  phase=u>0.95?'Tuck (small I, fast spin)':(f<TF/2?'Tucking in':'Extend legs (spin slows)');
+ }else{
+  const g=t-TL;
+  pose=g<0.3?mix(LAND,ABSORB,ease(g/0.3)):mix(ABSORB,STAND,ease((g-0.3)/0.8));
+  phase='Stick the landing';
+ }
+ if(th===undefined){th=pose.l;const fx=t<TL?FOOT0:FOOT1;const fb=rot(footBody(pose),th);pel=[fx-fb[0],-fb[1]];}
+ const air=t>=T1&&t<TL;
+ const I=air?inertia(u):inertia(0);
+ const w=air?Lmom/I:0;
+ return{pose,th,pel,phase,I,w,air};
+}
+function joints(s){
+ const p=s.pose,R=v=>rot(v,s.th),hip=s.pel;
+ const neck=add(hip,R([0,TORSO])),head=add(neck,R([0,HEAD+2]));
+ const knee=add(hip,R(sc(dir(p.h),THIGH))),foot=add(knee,R(sc(dir(p.h-p.k),SHIN)));
+ const elbow=add(neck,R(sc(dir(p.s),UARM))),hand=add(elbow,R(sc(dir(p.s+p.e),FARM)));
+ const toe=add(foot,R([10,0]));
+ return{hip,neck,head,knee,foot,elbow,hand,toe};
+}
+const GX=430,GY=480;
+const S2=v=>[GX+v[0],GY-v[1]];
+function seg(a,b,col,w){a=S2(a);b=S2(b);x.strokeStyle=col;x.lineWidth=w;x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke();}
+function dot(a,r,col){a=S2(a);x.fillStyle=col;x.beginPath();x.arc(a[0],a[1],r,0,7);x.fill();}
+function drawFig(s,alpha,ghost){
+ const j=joints(s);
+ x.globalAlpha=alpha;x.lineCap='round';
+ const back=ghost?'#7fd1ff':'#8a93a8',front=ghost?'#7fd1ff':'#f2f4f8';
+ // back limbs (slightly offset)
+ const o=[-4,0];
+ seg(add(j.hip,o),add(j.knee,o),back,5);seg(add(j.knee,o),add(j.foot,o),back,5);seg(add(j.foot,o),add(j.toe,o),back,4);
+ seg(add(j.neck,o),add(j.elbow,o),back,4);seg(add(j.elbow,o),add(j.hand,o),back,4);
+ // torso + head
+ seg(j.hip,j.neck,front,6);
+ const h=S2(j.head);x.strokeStyle=front;x.lineWidth=3;x.beginPath();x.arc(h[0],h[1],HEAD,0,7);x.stroke();
+ // front limbs
+ seg(j.hip,j.knee,front,6);seg(j.knee,j.foot,front,6);seg(j.foot,j.toe,front,5);
+ seg(j.neck,j.elbow,front,5);seg(j.elbow,j.hand,front,5);
+ if(!ghost){[j.hip,j.knee,j.elbow,j.neck].forEach(p=>dot(p,4,'#ff9f43'));dot(j.foot,3,'#ff9f43');dot(j.hand,3,'#ff9f43');}
+ x.globalAlpha=1;
+}
+let t=0,last=performance.now(),speed=0.25,trail=[];
+const sp=document.getElementById('sp');sp.oninput=()=>{speed=+sp.value;document.getElementById('spv').textContent=speed.toFixed(2)+'x'};
+function frame(now){
+ const dt=Math.min(0.05,(now-last)/1000);last=now;
+ t+=dt*speed;if(t>TE+0.6){t=0;trail=[];}
+ const tt=Math.min(t,TE);
+ const s=state(tt);
+ x.clearRect(0,0,c.width,c.height);
+ x.fillStyle='#2f3a50';x.fillRect(0,GY,c.width,c.height-GY);
+ x.strokeStyle='#5b6b8c';x.lineWidth=2;x.beginPath();x.moveTo(0,GY);x.lineTo(c.width,GY);x.stroke();
+ if(s.air&&trail.length===0||s.air&&tt-trail[trail.length-1]>0.07)trail.push(tt);
+ trail.forEach(tr=>drawFig(state(tr),0.12,true));
+ // rotation arc indicator
+ const sh=Math.max(0,Math.min(1,s.air?(s.th/(2*Math.PI)):(tt>=TL?1:0)));
+ x.strokeStyle='#ff9f43';x.lineWidth=4;x.beginPath();x.arc(70,70,30,-Math.PI/2,-Math.PI/2-sh*2*Math.PI,true);x.stroke();
+ x.fillStyle='#d8dce6';x.font='12px system-ui';x.fillText(Math.round(sh*360)+'\u00b0',58,74);
+ // inertia / spin bars
+ x.fillStyle='#3a4560';x.fillRect(640,40,130,12);x.fillRect(640,70,130,12);
+ x.fillStyle='#7fd1ff';x.fillRect(640,40,130*s.I/I_OPEN,12);
+ x.fillStyle='#ff9f43';x.fillRect(640,70,130*Math.min(1,s.w/(Lmom/I_TUCK)),12);
+ x.fillStyle='#d8dce6';x.fillText('I',625,51);x.fillText('\u03c9',622,81);
+ drawFig(s,1,false);
+ document.getElementById('ph').textContent=s.phase;
+ document.getElementById('mi').textContent=s.I.toFixed(2);
+ document.getElementById('om').textContent=s.w.toFixed(2);
+ document.getElementById('lm').textContent=s.air?(s.I*s.w).toFixed(2)+' (constant)':'\u2014';
+ requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script></body></html>
