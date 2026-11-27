@@ -8738,16 +8738,32 @@ const RB_RENDER = {
       .filter(token => token.length >= 3 && !this._mediaMatchStopWords.has(token));
   },
 
-  mediaTokenOverlap(post, item) {
+  mediaTokenOverlap(post, item, common) {
     const postTokens = new Set(this.mediaMatchTokens(`${post.title || ''} ${post.body || ''}`));
-    const mediaTokens = this.mediaMatchTokens(
+    const mediaTokens = new Set(this.mediaMatchTokens(
       `${item.title || ''} ${item.description || ''} ${item.filename || ''}`
-    );
+    ));
     let overlap = 0;
     for (const token of mediaTokens) {
+      // A word most of the channel's media share (house boilerplate) says nothing about which one this post is.
+      if (common && common.has(token)) continue;
       if (postTokens.has(token)) overlap += 1;
     }
     return overlap;
+  },
+
+  mediaCommonTokens(items) {
+    const counts = new Map();
+    for (const item of items) {
+      const seen = new Set(this.mediaMatchTokens(`${item.title || ''} ${item.description || ''} ${item.filename || ''}`));
+      for (const token of seen) counts.set(token, (counts.get(token) || 0) + 1);
+    }
+    const limit = Math.max(1, Math.floor(items.length / 3));
+    const common = new Set();
+    for (const [token, count] of counts) {
+      if (count > limit) common.add(token);
+    }
+    return common;
   },
 
   matchPostMedia(post, mediaLibrary, options = {}) {
@@ -8768,14 +8784,20 @@ const RB_RENDER = {
       ? exactLinkedItems
       : sameChannelItems.filter(item => !item.discussionNumber);
 
+    const common = this.mediaCommonTokens(sameChannelItems);
     const scored = candidateItems
       .map(item => {
         const authorId = (post.authorId || post.author || '').toLowerCase();
         const submittedBy = (item.submittedBy || '').toLowerCase();
-        const overlap = this.mediaTokenOverlap(post, item);
+        const overlap = this.mediaTokenOverlap(post, item, common);
+        // Media run on a member's behalf name that member ("run by zion-curator-04"): a strong sign it is this post's own.
+        const namesAuthor = authorId.length >= 6 && `${item.title || ''} ${item.description || ''}`.toLowerCase().includes(authorId);
         const exactDiscussionMatch = postNumber > 0 && Number(item.discussionNumber || 0) === postNumber;
         let score = exactDiscussionMatch ? 100 : 1;
         if (authorId && submittedBy && authorId === submittedBy) {
+          score += 6;
+        }
+        if (namesAuthor) {
           score += 6;
         }
         if (overlap > 0) {

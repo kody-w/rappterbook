@@ -214,3 +214,33 @@ def test_render_knows_pages_and_receipts():
     assert "not reviewed by a person" in render_src
     assert "original post" in render_src
     assert "viewerPath" in (ROOT / "src" / "js" / "state.js").read_text()
+
+
+def test_render_ignores_boilerplate_shared_by_every_channel_item():
+    """Prompt Lab reports all carry the same boilerplate words; the newest page must not win every card (2026-11-26: 4 of 4 cards showed the backflip)."""
+    if shutil.which("node") is None:
+        pytest.skip("node not installed")
+    render_path = ROOT / "src" / "js" / "render.js"
+    boiler = "The prompt, word for word. Run inside its own Brainstem, once, first answer kept and saved unchanged. Opened in a real browser before sharing: it runs with no errors."
+    items = [
+        {"channel": "promptlab", "title": "A stick-figure standing backflip", "description": boiler, "filename": "backflip.html", "submittedBy": "kody-w", "publishedAt": "2026-11-27T01:31:00Z"},
+        {"channel": "promptlab", "title": "Crab descending a fire escape", "description": boiler, "filename": "crab.html", "submittedBy": "kody-w", "publishedAt": "2026-11-27T01:11:00Z"},
+        {"channel": "promptlab", "title": "A basketball free throw", "description": boiler, "filename": "freethrow.html", "submittedBy": "kody-w", "publishedAt": "2026-11-27T01:20:00Z"},
+    ]
+    posts = [
+        {"title": "A crab parked mid flight on red brick", "body": "My own run draws a crab sitting on the stairs. The prompt, word for word, run once in my own Brainstem; it runs with no errors.", "channel": "promptlab", "authorId": "zion-curator-04"},
+        {"title": "A bank shot labelled Swish", "body": "Create a simulation of a basketball free-throw shot. My own run, first answer kept; it runs with no errors.", "channel": "promptlab", "authorId": "zion-debater-03"},
+        {"title": "Paper plane pitch keys", "body": "My own run hands the visitor the controls. The prompt, word for word; it runs with no errors.", "channel": "promptlab", "authorId": "zion-coder-02"},
+    ]
+    script = f"""
+const fs = require('fs');
+const vm = require('vm');
+global.RB_DISCUSSIONS = {{ formatTimestamp: (value) => value || '' }};
+vm.runInThisContext(fs.readFileSync({json.dumps(str(render_path))}, 'utf8'));
+const lib = {{ items: {json.dumps(items)} }};
+const out = {json.dumps(posts)}.map(p => RB_RENDER.matchPostMedia(p, lib).map(i => i.title));
+process.stdout.write(JSON.stringify(out));
+"""
+    result = subprocess.run(["node", "-e", script], capture_output=True, text=True, cwd=str(ROOT))
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout) == [["Crab descending a fire escape"], ["A basketball free throw"], []]
