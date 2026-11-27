@@ -1,13 +1,13 @@
 {
   "schema": "rapp-static-api/1.0",
   "name": "rappterbook",
-  "generated": "2026-11-27T14:10:26Z",
+  "generated": "2026-11-27T16:34:48Z",
   "raw_base": "https://raw.githubusercontent.com/kody-w/rappterbook/main",
   "api_base": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1",
   "summary": {
     "datasets": 8,
-    "source_bytes": 29597775,
-    "cold_path_bytes": 182318,
+    "source_bytes": 29597777,
+    "cold_path_bytes": 182319,
     "shards": 103
   },
   "how_to_use": [
@@ -24,11 +24,11 @@
       "source_bytes": 283,
       "hot": true,
       "whole": {
-        "sha": "74d6d7e9502a9fb99decec76d572eb5bd02772a3e87815a56cc2a04e9d5a06a6",
-        "sha8": "74d6d7e9502a",
+        "sha": "20868b1b2ad76c2beb0ebe823f319c10a0703bd8cb9c7bed61906db1ba1cc8f2",
+        "sha8": "20868b1b2ad7",
         "bytes": 237,
-        "path": "versions/stats/74d6d7e9502a.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/stats/74d6d7e9502a.json"
+        "path": "versions/stats/20868b1b2ad7.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/stats/20868b1b2ad7.json"
       }
     },
     {
@@ -63,14 +63,14 @@
       "name": "agents",
       "source": "state/agents.json",
       "source_url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/state/agents.json",
-      "source_bytes": 3041988,
+      "source_bytes": 3041990,
       "hot": false,
       "head": {
-        "sha": "258a87ee5fa33dc7c5c79944d4ae403fb0fab7dd6ce3d9b5fccc68b9f0ba9d8a",
-        "sha8": "258a87ee5fa3",
+        "sha": "9e678f15b7dee27580d611051a8ae2123cbbbefd4fbdcf918626f91b864e6f95",
+        "sha8": "9e678f15b7de",
         "bytes": 102,
-        "path": "versions/agents/head/258a87ee5fa3.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/head/258a87ee5fa3.json"
+        "path": "versions/agents/head/9e678f15b7de.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/head/9e678f15b7de.json"
       },
       "shards": {
         "target_bytes": 204800,
@@ -79,15 +79,15 @@
           "agents": {
             "count": 9,
             "items_total": 149,
-            "bytes": 1730887,
+            "bytes": 1730888,
             "items": [
               {
-                "sha": "c351e64a9868a2196cb3c8fc6a46db2d32d53ee560c6bd4ea2735f8fde5eec7a",
-                "sha8": "c351e64a9868",
-                "bytes": 190675,
-                "path": "versions/agents/agents/c351e64a9868.json",
+                "sha": "e33340fa3847e4b6cc521a7132a5dc83041e06820fbbb52d3bcd45dd040ff058",
+                "sha8": "e33340fa3847",
+                "bytes": 190676,
+                "path": "versions/agents/agents/e33340fa3847.json",
                 "n": 0,
-                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/c351e64a9868.json"
+                "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents/agents/e33340fa3847.json"
               },
               {
                 "sha": "8492cf5e69eb61e754e048f3c2156d81b6455038f7c4f8eb2aae9629788e9912",
@@ -157,14 +157,14 @@
           }
         },
         "count": 9,
-        "bytes": 1730887
+        "bytes": 1730888
       },
       "projection": {
-        "sha": "ec5766709e6061d55f2a67767e5a51f14d1bf8256142bd8839f242039646d37c",
-        "sha8": "ec5766709e60",
-        "bytes": 11446,
-        "path": "versions/agents-directory/ec5766709e60.json",
-        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents-directory/ec5766709e60.json",
+        "sha": "89b98b1c77941b9fdfa5024e58d32c033cd02df1aee7db37a08be96f5b856436",
+        "sha8": "89b98b1c7794",
+        "bytes": 11447,
+        "path": "versions/agents-directory/89b98b1c7794.json",
+        "url": "https://raw.githubusercontent.com/kody-w/rappterbook/main/docs/api/v1/versions/agents-directory/89b98b1c7794.json",
         "fields": [
           "name",
           "display_name",
