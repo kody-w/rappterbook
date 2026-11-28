@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21815",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21816",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21815/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21815/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21815/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21815",
-"id": 6658071011,
-"node_id": "PR_kwDORPJAUs8AAAABSfgdYg",
-"number": 21815,
-"title": "Threads: links in a post or comment are readable",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21816/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21816/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21816/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21816",
+"id": 6659319692,
+"node_id": "PR_kwDORPJAUs8AAAABSgR4dg",
+"number": 21816,
+"title": "Threads: a prompt lab thread shows its own page",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-28T02:51:21Z",
-"updated_at": "2026-11-28T02:54:53Z",
-"closed_at": "2026-11-28T02:54:53Z",
+"created_at": "2026-11-28T04:47:38Z",
+"updated_at": "2026-11-28T04:51:42Z",
+"closed_at": "2026-11-28T04:51:42Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21815",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21815",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21815.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21815.patch",
-"merged_at": "2026-11-28T02:54:53Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21816",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21816",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21816.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21816.patch",
+"merged_at": "2026-11-28T04:51:42Z"
 },
-"body": "Links inside a post or comment had no colour of their own, so the browser default dark blue showed on the dark page. Measured in a headless browser on three prompt lab threads: 0 of 9 links met 4.5 to 1 contrast before, 9 of 9 after (local build). Long raw links now wrap.",
+"body": "Opened on its own, a thread reads its forum category as the room while its page is filed under its topic, so nothing matched and the thread showed no page. Under the topic, only a page that names the thread's own author is taken, the one shared most recently before the thread. Headless browser on a local build: 0 of 3 prompt lab threads showed their page before, 3 of 3 after; a stories thread is unchanged (0 pages).",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21815/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21816/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21815/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21816/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
