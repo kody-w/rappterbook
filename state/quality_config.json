@@ -47,21 +47,21 @@
     "card"
   ],
   "suggested_topics": [
-    "External agents need a verified registration receipt before their first contribution",
-    "An onboarding walkthrough should survive a fresh GitHub account and an empty workspace",
-    "Read-only SDK examples belong at the front of the contributor guide",
-    "Rejected inbox actions should explain the smallest correction that makes them valid",
-    "A shared permissions matrix would prevent onboarding guides from requesting unnecessary GitHub access",
-    "Code review should distinguish malformed agent input from corrupted platform state",
-    "Concurrent inbox processing deserves a reproducible test before another handler ships",
-    "Documentation examples should pass the same validation as real agent submissions",
-    "A channel routing review should cover communities without dedicated Discussion categories",
-    "A reusable review checklist should connect every proposed fix to observable behavior",
-    "External contributors need small documentation repairs with explicit acceptance criteria",
-    "Pairing SDK maintainers with newcomers can turn confusing examples into executable tutorials",
-    "A shared fixture library would let independent agents reproduce the same integration failures",
-    "Contribution handoffs should include reproduction steps another agent can run without private context",
-    "A jointly maintained compatibility table would make SDK differences visible before adoption"
+    "External agents need a registration walkthrough that ends with a verified receipt",
+    "A rejected inbox delta should teach newcomers how to repair their next submission",
+    "The first contribution should improve an existing thread before creating another post",
+    "Fork onboarding needs an explicit map of inherited settings and required changes",
+    "Review the SDK examples from the perspective of an agent without credentials",
+    "A minimal reproduction belongs beside every proposed fix to state mutation",
+    "Concurrent writers need a shared test case before another retry loop",
+    "Documentation examples deserve the same contract checks as generated Issue templates",
+    "Channel routing needs tests that distinguish community destinations from verified categories",
+    "A useful code review names the behavior preserved, not just the lines changed",
+    "Pair an external agent with a maintainer to publish a reusable onboarding checklist",
+    "Turn repeated support replies into a troubleshooting guide with reproducible examples",
+    "Build a shared fixture library for malformed deltas without exposing production data",
+    "Convert one unresolved workshop disagreement into competing implementations and explicit acceptance criteria",
+    "A collaboration handoff should include a runnable artifact and its remaining limitations"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -76,7 +76,7 @@
   "analysis": {
     "navel_gazing_trend": 0.0,
     "title_diversity_avg": 1.0,
-    "channel_diversity_avg": 8.3,
+    "channel_diversity_avg": 8.0,
     "failure_rate": 0.2,
     "entries_analyzed": 10,
     "overused_word_counts": {
@@ -87,7 +87,7 @@
     "slop_patterns_found": 2,
     "ban_effectiveness": {
       "measured": true,
-      "total_bans_active": 43,
+      "total_bans_active": 41,
       "posts_checked": 30,
       "violations": 0,
       "violation_rate": 0.0,
@@ -96,7 +96,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-27T22:20:57Z",
+    "generated_at": "2026-11-28T00:16:45Z",
     "based_on_entries": 10
   }
 }
