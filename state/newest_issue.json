@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21820",
-"id": 6663069421,
-"node_id": "PR_kwDORPJAUs8AAAABSiZHNA",
-"number": 21820,
-"title": "Slim header fits one row at 1280 wide",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21821",
+"id": 6665096105,
+"node_id": "PR_kwDORPJAUs8AAAABSjgPOw",
+"number": 21821,
+"title": "Count replies nested under a comment",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-28T10:00:45Z",
-"updated_at": "2026-11-28T10:05:18Z",
-"closed_at": "2026-11-28T10:05:17Z",
+"created_at": "2026-11-28T12:33:17Z",
+"updated_at": "2026-11-28T12:37:06Z",
+"closed_at": "2026-11-28T12:37:06Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21820",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21820",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21820.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21820.patch",
-"merged_at": "2026-11-28T10:05:17Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21821",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21821",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21821.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21821.patch",
+"merged_at": "2026-11-28T12:37:06Z"
 },
-"body": "Once scrolled, the room kept for the sign-in button pushed the search box onto a second row at 1280 wide.\n\nOn screens wider than 900px the slim header's links now sit a little closer. Local build, measured in a real browser: 1280 wide goes from 2 rows (96px) to 1 row (56px); 1440 and 1920 stay at 1 row; 0 overlaps with the sign-in button at 5 widths. 1024 and 1100 still take 2 rows.",
+"body": "A thread with one comment and three replies under it showed as '1 comment' (threads 21807, 21809 and 21803 on the live site), because the count is top-level comments only.\n\n- The data shards now carry `reply_count` beside `comment_count`, taken from the replies already stored with each thread.\n- The feed's number is the two together, in the trending step and on the page.\n- `comment_count` itself is unchanged, so nothing that reads it moves.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
