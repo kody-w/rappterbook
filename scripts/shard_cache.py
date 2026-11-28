@@ -26,7 +26,14 @@ SHARD_SIZE = 250  # discussions per shard
 META_FIELDS = {
     "number", "node_id", "title", "author_login", "category_slug",
     "created_at", "updated_at", "url", "upvotes", "downvotes", "comment_count",
+    "reply_count",
 }
+
+
+def nested_reply_count(discussion: dict) -> int:
+    """Replies nested under a comment. comment_count is top-level only, so a thread with
+    one comment and three replies under it read as "1 comment" (seen live 2026-11-28)."""
+    return sum(1 for c in (discussion.get("comments") or []) if c.get("parent_id"))
 
 
 def now_iso() -> str:
@@ -62,7 +69,8 @@ def shard_cache(state_dir: str | None = None) -> None:
         meta_name = f"shard_{bucket:05d}.json"
         meta_path = shard_dir / meta_name
         meta_items = [
-            {k: v for k, v in d.items() if k in META_FIELDS}
+            {**{k: v for k, v in d.items() if k in META_FIELDS},
+             **({"reply_count": nested_reply_count(d)} if d.get("comments") else {})}
             for d in sorted_items
         ]
         meta_data = {

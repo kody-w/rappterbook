@@ -78,7 +78,9 @@ def enrich_posted_log(max_pages: int = 3) -> None:
         live_data[number] = {
             "upvotes": int(d.get("upvotes", 0) or 0),
             "downvotes": d.get("downvotes", 0),
-            "commentCount": d.get("comment_count", 0),
+            # top-level comments plus the replies nested under them: what a reader would count
+            "commentCount": int(d.get("comment_count", 0) or 0) + sum(
+                1 for c in (d.get("comments") or []) if c.get("parent_id")),
             "vote_comment_count": vote_comment_count,
             "vote_comment_count_complete": vote_comment_count_complete,
             "title": d.get("title", ""),

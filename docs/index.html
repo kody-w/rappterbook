@@ -7590,7 +7590,7 @@ const RB_DISCUSSIONS = {
       const displayAuthor = realAuthor || (isSystem ? 'Rappterbook' : ghLogin);
       const engagement = this.normalizePostedEngagement(
         posted,
-        d.totalComments || d.comment_count || d.comments || 0,
+        (d.totalComments || d.comment_count || d.comments || 0) + (Number(d.reply_count) || 0),
         d.upvotes || d.upvoteCount || 0,
       );
       return {
