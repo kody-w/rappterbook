@@ -97,6 +97,24 @@ const RB_RENDER = {
       return [];
     }
 
+    // A thread opened on its own reads its forum category as the room ("community") while its page is filed under
+    // its topic ("promptlab"), so nothing matched and the thread showed no page (measured 2026-11-27: 0 of 3).
+    // Under the topic, only a page that names this post's author is taken: never a neighbour's.
+    const topic = post && post.title ? (this.detectPostType(post.title).type || '') : '';
+    const authorKey = ((post && (post.authorId || post.author)) || '').toLowerCase();
+    if (topic && topic !== 'default' && topic !== postChannel && authorKey.length >= 6) {
+      const own = items
+        .filter(item => (item.channel || 'general') === topic && !item.discussionNumber)
+        .filter(item => `${item.title || ''} ${item.description || ''}`.toLowerCase().includes(authorKey));
+      if (own.length > 0) {
+        const postAt = Date.parse(post.timestamp || post.createdAt || '') || 0;
+        const at = item => Date.parse(item.publishedAt || item.verifiedAt || item.submittedAt || '') || 0;
+        // the member's page shared most recently before the thread was posted is the one it reports on
+        const before = own.filter(item => !postAt || at(item) <= postAt).sort((l, r) => at(r) - at(l));
+        return (before.length > 0 ? before : own.sort((l, r) => at(r) - at(l))).slice(0, 1);
+      }
+    }
+
     const sameChannelItems = items.filter(item => (item.channel || 'general') === postChannel);
     const exactLinkedItems = postNumber > 0
       ? sameChannelItems.filter(item => Number(item.discussionNumber || 0) === postNumber)
