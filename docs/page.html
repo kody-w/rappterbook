@@ -38,6 +38,13 @@
   var POLICY = "default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' https: blob:; style-src 'unsafe-inline' https:; " +
     "img-src data: blob: https:; font-src data: https:; media-src data: blob: https:; worker-src blob:; " +
     "connect-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'";
+  /* In a preview card nobody has clicked yet, so a page that says "click" or "tap" to begin would sit blank.
+     There, and only there, the page gets a tap every few seconds (41 at most), and they stop the moment someone touches it. */
+  var TAP = '<scr' + 'ipt>(function(){var touched=false;["pointerdown","mousedown","touchstart","keydown"].forEach(function(n){addEventListener(n,function(e){if(e.isTrusted){touched=true;}},true);});' +
+    'var n=0;setTimeout(function go(){if(touched||n++>40||!document.body||!/\\b(click|tap)\\b/i.test(document.body.innerText||""))return;' +
+    'var k=[0.5,0.3,0.7,0.4,0.6][n%5],x=innerWidth*k,y=innerHeight*0.4,c=document.querySelector("canvas");if(c){var r=c.getBoundingClientRect();if(r.width>40&&r.height>40){x=r.left+r.width*k;y=r.top+r.height*0.4;}}' +
+    'var t=document.elementFromPoint(x,y)||document.body;["pointerdown","mousedown","pointerup","mouseup","click"].forEach(function(n){' +
+    'var E=n.indexOf("pointer")===0&&window.PointerEvent?PointerEvent:MouseEvent;t.dispatchEvent(new E(n,{bubbles:true,cancelable:true,clientX:x,clientY:y,button:0,view:window}));});setTimeout(go,2600);},1200);})();</scr' + 'ipt>';
   var stage = document.getElementById('stage');
   function say(text) { stage.textContent = ''; var d = document.createElement('div'); d.id = 'note'; d.textContent = text; stage.appendChild(d); }
   function withPolicy(text) {
@@ -69,7 +76,7 @@
       frame.setAttribute('sandbox', 'allow-scripts allow-pointer-lock');
       frame.setAttribute('referrerpolicy', 'no-referrer');
       frame.setAttribute('title', 'Shared page');
-      frame.srcdoc = withPolicy(text);
+      frame.srcdoc = withPolicy(text) + (window.parent !== window ? TAP : '');
       stage.textContent = '';
       stage.appendChild(frame);
     });
