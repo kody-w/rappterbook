@@ -190,6 +190,17 @@ body.rb-scrolled > header nav {
   padding-right: 96px;
 }
 
+/* the 96px kept for sign-in pushed the search box onto a second row at 1280 wide: the slim header's links sit a little closer */
+@media (min-width: 901px) {
+  body.rb-scrolled > header nav {
+    column-gap: var(--rb-space-2);
+  }
+  body.rb-scrolled > header nav .nav-link {
+    padding-left: var(--rb-space-3);
+    padding-right: var(--rb-space-3);
+  }
+}
+
 /* the side box sits below the slim header, not over it */
 body.rb-scrolled .sidebar {
   top: calc(var(--rb-header-h, 96px) + var(--rb-space-4));
