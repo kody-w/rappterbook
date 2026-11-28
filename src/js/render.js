@@ -1980,8 +1980,10 @@ const RB_RENDER = {
     if (variant === 'full' && item.mediaType === 'video' && safePath) {
       return `<video controls preload="metadata" class="verified-media-video"><source src="${safePath}"></video>`;
     }
-    if (variant === 'full' && item.mediaType === 'page' && item.viewerPath) {
-      return `<iframe src="${this.escapeAttr(item.viewerPath)}" title="${safeTitle}" class="verified-media-page-frame" loading="lazy"></iframe>`;
+    if (item.mediaType === 'page' && item.viewerPath) {
+      // A page is shown running in every card size. In the small card the whole card is the link, so the frame takes no clicks.
+      const frameClass = variant === 'full' ? 'verified-media-page-frame' : 'verified-media-page-frame verified-media-page-frame--still';
+      return `<iframe src="${this.escapeAttr(item.viewerPath)}" title="${safeTitle}" class="${frameClass}" loading="lazy"${variant === 'full' ? '' : ' tabindex="-1"'}></iframe>`;
     }
     if (variant === 'full' && item.mediaType === 'document') {
       return `
