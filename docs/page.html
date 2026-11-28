@@ -45,6 +45,16 @@
     'var k=[0.5,0.3,0.7,0.4,0.6][n%5],x=innerWidth*k,y=innerHeight*0.4,c=document.querySelector("canvas");if(c){var r=c.getBoundingClientRect();if(r.width>40&&r.height>40){x=r.left+r.width*k;y=r.top+r.height*0.4;}}' +
     'var t=document.elementFromPoint(x,y)||document.body;["pointerdown","mousedown","pointerup","mouseup","click"].forEach(function(n){' +
     'var E=n.indexOf("pointer")===0&&window.PointerEvent?PointerEvent:MouseEvent;t.dispatchEvent(new E(n,{bubbles:true,cancelable:true,clientX:x,clientY:y,button:0,view:window}));});setTimeout(go,2600);},1200);})();</scr' + 'ipt>';
+  /* In a preview card a small page sat in the top of a tall box with most of the box empty (seen 2026-11-28).
+     There, and only there, a page whose content is much smaller than the box is enlarged to fit it, 2.2 times at most. */
+  var FIT = '<scr' + 'ipt>(function(){function fit(){var b=document.body;if(!b)return;document.documentElement.style.zoom="";var L=1e9,T=1e9,R=0,B=0,n=0,all=b.querySelectorAll("*");' +
+    'for(var i=0;i<all.length&&i<600;i++){var e=all[i],t=e.tagName.toUpperCase();if(t==="SCRIPT"||t==="STYLE"||(e.closest("svg")&&t!=="SVG"))continue;' +
+    'var media=t==="CANVAS"||t==="SVG"||t==="IMG"||t==="VIDEO"||t==="BUTTON"||t==="INPUT";if(!media&&(e.children.length||!(e.textContent||"").trim()))continue;' +
+    'var c=getComputedStyle(e);if(c.display==="none"||c.visibility==="hidden"||c.position==="fixed")continue;var r=e.getBoundingClientRect();if(r.width<2||r.height<2)continue;' +
+    'if(r.width>=innerWidth*0.98&&r.height>=innerHeight*0.98)return;if(!media&&r.width>innerWidth*0.9){var g=document.createRange();g.selectNodeContents(e);r=g.getBoundingClientRect();if(r.width<2)continue;}' +
+    'L=Math.min(L,r.left);T=Math.min(T,r.top);R=Math.max(R,r.right);B=Math.max(B,r.bottom);n++;}' +
+    'if(!n||R<=L||B<=T)return;var z=Math.min(innerHeight/((B-T)+40),innerWidth/((R-L)+40),2.2);if(z>1.15)document.documentElement.style.zoom=z.toFixed(2);}' +
+    'setTimeout(fit,300);setTimeout(fit,1500);})();</scr' + 'ipt>';
   var stage = document.getElementById('stage');
   function say(text) { stage.textContent = ''; var d = document.createElement('div'); d.id = 'note'; d.textContent = text; stage.appendChild(d); }
   function withPolicy(text) {
@@ -76,7 +86,7 @@
       frame.setAttribute('sandbox', 'allow-scripts allow-pointer-lock');
       frame.setAttribute('referrerpolicy', 'no-referrer');
       frame.setAttribute('title', 'Shared page');
-      frame.srcdoc = withPolicy(text) + (window.parent !== window ? TAP : '');
+      frame.srcdoc = withPolicy(text) + (window.parent !== window ? TAP + FIT : '');
       stage.textContent = '';
       stage.appendChild(frame);
     });
