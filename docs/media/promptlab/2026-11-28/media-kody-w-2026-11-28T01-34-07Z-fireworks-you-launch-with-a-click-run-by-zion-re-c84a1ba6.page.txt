@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>New Year's Eve Fireworks</title>
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden}
+canvas{display:block;cursor:crosshair}
+#hint{position:fixed;top:16px;width:100%;text-align:center;color:#9ab;font:15px system-ui,sans-serif;pointer-events:none;letter-spacing:1px}
+#g{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:14px 34px;font:bold 18px system-ui,sans-serif;color:#fff;background:linear-gradient(45deg,#ff2d95,#ffb400);border:0;border-radius:40px;cursor:pointer;box-shadow:0 0 24px #ff2d95aa;transition:transform .15s}
+#g:hover{transform:translateX(-50%) scale(1.06)}
+#g:disabled{opacity:.5;cursor:default}
+</style>
+</head>
+<body>
+<canvas id='c'></canvas>
+<div id='hint'>Click anywhere to launch a rocket</div>
+<button id='g'>Grand Finale</button>
+<script>
+const c=document.getElementById('c'),ctx=c.getContext('2d');
+let W,H;
+function resize(){W=c.width=innerWidth;H=c.height=innerHeight}
+resize();addEventListener('resize',resize);
+
+const rockets=[],parts=[];
+const GRAVITY=0.06,DRAG=0.985;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+
+class Rocket{
+  constructor(tx,ty,h,onBurst){
+    this.x=tx+rnd(-60,60);this.y=H;this.ty=ty;this.h=h;this.onBurst=onBurst;
+    const frames=rnd(50,70);
+    this.vx=(tx-this.x)/frames;this.vy=(ty-H)/frames;this.trail=[];
+  }
+  update(){
+    this.trail.push([this.x,this.y]);if(this.trail.length>10)this.trail.shift();
+    this.x+=this.vx;this.y+=this.vy;
+    if(Math.random()<.5)parts.push(new Particle(this.x,this.y,rnd(-.4,.4),rnd(0,1),40,25,1.2));
+    if(this.y<=this.ty){this.onBurst?this.onBurst(this):burst(this.x,this.y,this.h);return false}
+    return true;
+  }
+  draw(){
+    ctx.strokeStyle=`hsl(${this.h},100%,75%)`;ctx.lineWidth=2.5;ctx.beginPath();
+    this.trail.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));
+    ctx.lineTo(this.x,this.y);ctx.stroke();
+  }
+}
+
+class Particle{
+  constructor(x,y,vx,vy,h,life,size,target){
+    this.x=x;this.y=y;this.vx=vx;this.vy=vy;this.h=h;
+    this.life=this.max=life;this.size=size||2;this.target=target||null;this.age=0;
+  }
+  update(){
+    this.age++;this.life--;
+    if(this.target&&this.age>18&&this.life>70){
+      this.x+=(this.target[0]-this.x)*0.09;this.y+=(this.target[1]-this.y)*0.09;
+      this.vx=this.vy=0;
+    }else{
+      this.vx*=DRAG;this.vy=this.vy*DRAG+GRAVITY;
+      this.x+=this.vx;this.y+=this.vy;
+    }
+    return this.life>0;
+  }
+  draw(){
+    const a=Math.max(0,this.life/this.max);
+    const tw=this.target&&this.life>70?0.75+Math.random()*0.25:a;
+    ctx.fillStyle=`hsla(${this.h},100%,${55+25*tw}%,${tw})`;
+    ctx.beginPath();ctx.arc(this.x,this.y,this.size*(this.target?1.3:a+0.3),0,7);ctx.fill();
+  }
+}
+
+function burst(x,y,h){
+  const n=rnd(90,150),h2=h+rnd(30,120);
+  for(let i=0;i<n;i++){
+    const ang=Math.random()*Math.PI*2,sp=rnd(1,6.5);
+    parts.push(new Particle(x,y,Math.cos(ang)*sp,Math.sin(ang)*sp,Math.random()<.7?h:h2,rnd(60,110),rnd(1.5,2.6)));
+  }
+}
+
+function launch(tx,ty,h,cb){rockets.push(new Rocket(tx,ty,h??Math.random()*360,cb))}
+
+c.addEventListener('click',e=>launch(e.clientX,e.clientY));
+
+function textPoints(str){
+  const o=document.createElement('canvas');o.width=W;o.height=H;
+  const ox=o.getContext('2d');
+  const fs=Math.min(W/6.2,H/3.5);
+  ox.font=`900 ${fs}px Arial Black,Arial,sans-serif`;ox.textAlign='center';ox.textBaseline='middle';
+  ox.fillText(str,W/2,H*0.4);
+  const d=ox.getImageData(0,0,W,H).data,pts=[];
+  const step=Math.max(4,Math.round(fs/16));
+  for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step)if(d[(y*W+x)*4+3]>128)pts.push([x,y]);
+  return pts;
+}
+
+const btn=document.getElementById('g');
+btn.addEventListener('click',()=>{
+  btn.disabled=true;
+  // barrage
+  for(let i=0;i<28;i++)setTimeout(()=>launch(rnd(W*.1,W*.9),rnd(H*.1,H*.5)),i*90);
+  // text
+  setTimeout(()=>{
+    const pts=textPoints('HELLO 2026').sort((a,b)=>a[0]-b[0]);
+    const groups=10,size=Math.ceil(pts.length/groups);
+    for(let g=0;g<groups;g++){
+      const chunk=pts.slice(g*size,(g+1)*size);if(!chunk.length)continue;
+      const cx=chunk.reduce((s,p)=>s+p[0],0)/chunk.length,cy=chunk.reduce((s,p)=>s+p[1],0)/chunk.length;
+      const h=(g*36+rnd(0,20))%360;
+      setTimeout(()=>launch(cx,cy,h,r=>{
+        burst(r.x,r.y,h);
+        chunk.forEach(p=>{
+          const ang=Math.random()*Math.PI*2,sp=rnd(1,4);
+          parts.push(new Particle(r.x,r.y,Math.cos(ang)*sp,Math.sin(ang)*sp,h,rnd(300,340),2,p));
+        });
+      }),g*160);
+    }
+  },2800);
+  // closing salvo
+  for(let i=0;i<20;i++)setTimeout(()=>launch(rnd(W*.05,W*.95),rnd(H*.05,H*.3)),8500+i*120);
+  setTimeout(()=>btn.disabled=false,11500);
+});
+
+function frame(){
+  ctx.globalCompositeOperation='source-over';
+  ctx.fillStyle='rgba(0,0,8,0.2)';ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='lighter';
+  for(let i=rockets.length-1;i>=0;i--){if(!rockets[i].update())rockets.splice(i,1);else rockets[i].draw()}
+  for(let i=parts.length-1;i>=0;i--){if(!parts[i].update())parts.splice(i,1);else parts[i].draw()}
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>
