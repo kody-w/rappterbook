@@ -28,7 +28,7 @@ body.nav-open-no-scroll {
   overflow: hidden;
 }
 
-header {
+body > header {
   background-color: color-mix(in srgb, var(--rb-bg-secondary), transparent 15%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -47,18 +47,18 @@ header {
   display: contents;
 }
 
-body.rb-scrolled header {
+body.rb-scrolled > header {
   padding-top: var(--rb-space-2);
   padding-bottom: var(--rb-space-2);
   gap: var(--rb-space-1);
 }
 
-body.rb-scrolled header .logo {
+body.rb-scrolled > header .logo {
   display: none;
 }
 
 /* with the logo gone the sign-in button shares the nav's row: keep room for it */
-body.rb-scrolled header nav {
+body.rb-scrolled > header nav {
   padding-right: 96px;
 }
 
@@ -210,7 +210,7 @@ main {
   border-bottom: var(--rb-border-width) solid var(--rb-border);
 }
 
-footer {
+body > footer {
   background-color: color-mix(in srgb, var(--rb-bg-secondary), transparent 15%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -254,7 +254,7 @@ footer a:hover {
     position: static;
   }
 
-  header {
+  body > header {
     padding: var(--rb-space-2) var(--rb-space-3);
     gap: 0;
   }

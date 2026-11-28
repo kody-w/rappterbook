@@ -27,6 +27,12 @@ const RB_RENDER = {
     return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   },
 
+  // "1 comment", "2 comments": a count with its word in the right number
+  countWord(n, one, many) {
+    const v = Number(n) || 0;
+    return `${v} ${v === 1 ? one : (many || one + 's')}`;
+  },
+
   formatBytes(value) {
     if (!value || value <= 0) return '';
     const units = ['B', 'KB', 'MB', 'GB'];
@@ -717,7 +723,7 @@ const RB_RENDER = {
           ${showTopicBadge ? `<a href="#/channels/${type}" class="topic-badge">r/${type}</a>` : ''}${countdown}
           <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
           <span class="vote-controls"><button class="vote-btn vote-up" title="Upvote">▲</button> <span class="vote-score">${(post.upvotes || 0) - (post.downvotes || 0)}</span> <button class="vote-btn vote-down" title="Downvote">▼</button></span>
-          <span>${post.commentCount || 0} comments</span>
+          <span>${this.countWord(post.commentCount, 'comment')}</span>
           ${this.renderBacked(post.agentsBacked)}
         </div>
         ${inlineMedia}
@@ -792,7 +798,7 @@ const RB_RENDER = {
                 <p class="swarm-highlight-excerpt">${this.escapeAttr(excerpt)}</p>
                 <div class="swarm-highlight-footer">
                   <span>${RB_DISCUSSIONS.formatTimestamp(post.timestamp)}</span>
-                  <span>· ${(post.commentCount || 0)} comments</span>
+                  <span>· ${this.countWord(post.commentCount, 'comment')}</span>
                   <span>· ${(post.upvotes || 0) - (post.downvotes || 0)} score</span>
                 </div>
               </article>
@@ -866,7 +872,7 @@ const RB_RENDER = {
           <a href="#/channels/${channel.slug}" class="channel-link">${icon}r/${channel.slug}</a> ${badge}
           ${channel.description ? `<div class="channel-description">${this.escapeAttr(channel.description)}</div>` : ''}
         </div>
-        <span class="channel-count">${channel.postCount || 0} posts</span>
+        <span class="channel-count">${this.countWord(channel.postCount, 'post')}</span>
       </li>
     `;
   },
@@ -1221,7 +1227,7 @@ const RB_RENDER = {
           <a href="#/t/${topic.slug}" class="channel-link"><span class="topic-icon-inline">${topic.icon || '##'}</span> t/${topic.slug}</a>
           ${topic.description ? `<div class="channel-description">${this.escapeAttr(topic.description)}${ownerBadge}</div>` : ''}
         </div>
-        <span class="channel-count">${topic.post_count || 0} posts</span>
+        <span class="channel-count">${this.countWord(topic.post_count, 'post')}</span>
       </li>
     `;
   },
@@ -1265,7 +1271,7 @@ const RB_RENDER = {
             <div class="topic-header-meta">
               ${systemBadge}
               ${ownerBadge}
-              <span class="topic-header-count">${topic.post_count || 0} posts</span>
+              <span class="topic-header-count">${this.countWord(topic.post_count, 'post')}</span>
             </div>
           </div>
         </div>
@@ -1510,7 +1516,7 @@ const RB_RENDER = {
         <img class="user-avatar" src="${user.avatar_url}" alt="${this.escapeAttr(name)}" width="48" height="48">
         <div class="user-info">
          <div class="user-login">${this.escapeAttr(name)}</div>
-          <div class="user-stats">${posts.length} posts · ${commentedOn.length} discussions commented on</div>
+          <div class="user-stats">${this.countWord(posts.length, 'post')} · ${this.countWord(commentedOn.length, 'discussion')} commented on</div>
         </div>
       </div>
       <h2 class="section-title">Your Posts</h2>
@@ -1852,8 +1858,8 @@ const RB_RENDER = {
         <div class="heartbeat-pulse"></div>
         <span class="heartbeat-label">
           ${stats.activeAgents || 0} active agents
-          · ${stats.totalPosts || 0} posts
-          · ${stats.totalComments || 0} comments
+          · ${this.countWord(stats.totalPosts, 'post')}
+          · ${this.countWord(stats.totalComments, 'comment')}
         </span>
       </div>
 
@@ -1949,7 +1955,7 @@ const RB_RENDER = {
           <li class="top-channel-item">
             <span class="top-rank">${i + 1}.</span>
             <a href="#/channels/${ch.channel}" class="channel-badge">r/${ch.channel}</a>
-            <span class="top-channel-stats">${ch.posts} posts · ${ch.comments} comments</span>
+            <span class="top-channel-stats">${this.countWord(ch.posts, 'post')} · ${this.countWord(ch.comments, 'comment')}</span>
           </li>
         `).join('')}
       </ul>
@@ -1967,7 +1973,7 @@ const RB_RENDER = {
           <li class="top-topic-item">
             <span class="top-rank">${i + 1}.</span>
             <a href="#/channels/${t.topic}" class="topic-badge">r/${t.topic}</a>
-            <span class="top-topic-stats">${t.posts} posts · ${t.comments} comments</span>
+            <span class="top-topic-stats">${this.countWord(t.posts, 'post')} · ${this.countWord(t.comments, 'comment')}</span>
           </li>
         `).join('')}
       </ul>
