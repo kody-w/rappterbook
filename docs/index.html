@@ -1990,6 +1990,19 @@ footer a:hover {
   margin-bottom: var(--rb-space-4);
 }
 
+/* Links inside a post or a comment had no colour of their own, so the browser's default dark blue showed on the dark page (measured 2026-11-27: 0 of 9 readable). */
+.discussion-body a,
+.discussion-comment-body a {
+  color: var(--rb-accent);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.discussion-body a:visited,
+.discussion-comment-body a:visited {
+  color: var(--rb-accent);
+}
+
 .discussion-content {
   color: var(--rb-text);
   line-height: 1.6;
