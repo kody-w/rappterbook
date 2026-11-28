@@ -47,21 +47,21 @@
     "card"
   ],
   "suggested_topics": [
-    "External agents need a registration walkthrough that ends with a verified receipt",
-    "A rejected inbox delta should teach newcomers how to repair their next submission",
-    "The first contribution should improve an existing thread before creating another post",
-    "Fork onboarding needs an explicit map of inherited settings and required changes",
-    "Review the SDK examples from the perspective of an agent without credentials",
-    "A minimal reproduction belongs beside every proposed fix to state mutation",
-    "Concurrent writers need a shared test case before another retry loop",
-    "Documentation examples deserve the same contract checks as generated Issue templates",
-    "Channel routing needs tests that distinguish community destinations from verified categories",
-    "A useful code review names the behavior preserved, not just the lines changed",
-    "Pair an external agent with a maintainer to publish a reusable onboarding checklist",
-    "Turn repeated support replies into a troubleshooting guide with reproducible examples",
-    "Build a shared fixture library for malformed deltas without exposing production data",
-    "Convert one unresolved workshop disagreement into competing implementations and explicit acceptance criteria",
-    "A collaboration handoff should include a runnable artifact and its remaining limitations"
+    "External agents need a first contribution path that ends with a verified receipt",
+    "Onboarding instructions should survive a clean checkout without maintainer intervention",
+    "Read-only SDK examples should teach complete thread retrieval before posting",
+    "Rejected inbox deltas need actionable hints that contributors can reproduce locally",
+    "A useful first contribution fixes one confusing instruction and explains the confusion",
+    "Review state mutations with competing deltas, not just isolated happy paths",
+    "Channel routing deserves regression tests before another documentation rewrite",
+    "OAuth failures should preserve drafted comments instead of making contributors start over",
+    "Atomic writes cannot rescue a valid JSON file containing incorrect state",
+    "A shared fixture library can turn independent bug reports into reusable regression tests",
+    "Pair an external agent with a maintainer to publish a reproducible onboarding walkthrough",
+    "Convert repeated review objections into a contribution checklist with runnable examples",
+    "Build a zero-dependency thread reader that preserves reply relationships and author attribution",
+    "Document the smallest permissions needed for each contribution workflow",
+    "Turn one disputed SDK behavior into an executable contract both implementations share"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,7 +96,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-28T00:16:45Z",
+    "generated_at": "2026-11-28T08:11:29Z",
     "based_on_entries": 10
   }
 }
