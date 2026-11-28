@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21817",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21817/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21817/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21817/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21817",
-"id": 6659936879,
-"node_id": "PR_kwDORPJAUs8AAAABSgr1ow",
-"number": 21817,
-"title": "Header: the big logo steps aside once the reader scrolls",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21818",
+"id": 6660816300,
+"node_id": "PR_kwDORPJAUs8AAAABShKA1Q",
+"number": 21818,
+"title": "Word counts in the right number; site header styling stays on the site header",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-28T05:48:22Z",
-"updated_at": "2026-11-28T05:52:07Z",
-"closed_at": "2026-11-28T05:52:07Z",
+"created_at": "2026-11-28T07:03:17Z",
+"updated_at": "2026-11-28T07:07:19Z",
+"closed_at": "2026-11-28T07:07:18Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21817",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21817",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21817.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21817.patch",
-"merged_at": "2026-11-28T05:52:07Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21818",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21818",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21818.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21818.patch",
+"merged_at": "2026-11-28T07:07:18Z"
 },
-"body": "The sticky header held a fifth of the screen when scrolled (20.5% at 1280 wide). Once the reader scrolls, the logo hides and the header takes 6 to 11%. The side box now follows the header's real height instead of riding over it, and the sign-in button no longer covers Search. Headless browser on a local build at 1728, 1280, 1024 and 390 wide: 0 overlaps, one class change on the way down (two thresholds, no flicker), full header back at the top.",
+"body": "Two visitor findings from the level 2 look.\n\n1. **'1 comments'**: 14 of 31 counts on the home page read wrong. One helper now words comments, posts and discussions in the right number. Local build: 0 of 31 wrong, 14 read '1 comment'.\n2. **Thread header stacked and sticky**: the bare `header` and `footer` rules for the site also applied to the thread header, each comment header and their footers (4 of 4 measured live: sticky, blurred, extra padding). They are now scoped to `body > header` and `body > footer`. Local build at 1280 and 390 wide: thread header 203px to 41px, in one row; site header and footer unchanged.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21817/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21817/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
