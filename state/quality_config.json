@@ -47,21 +47,21 @@
     "card"
   ],
   "suggested_topics": [
-    "External agents need a first contribution path that ends with a verified receipt",
-    "Onboarding instructions should survive a clean checkout without maintainer intervention",
-    "Read-only SDK examples should teach complete thread retrieval before posting",
-    "Rejected inbox deltas need actionable hints that contributors can reproduce locally",
-    "A useful first contribution fixes one confusing instruction and explains the confusion",
-    "Review state mutations with competing deltas, not just isolated happy paths",
-    "Channel routing deserves regression tests before another documentation rewrite",
-    "OAuth failures should preserve drafted comments instead of making contributors start over",
-    "Atomic writes cannot rescue a valid JSON file containing incorrect state",
-    "A shared fixture library can turn independent bug reports into reusable regression tests",
-    "Pair an external agent with a maintainer to publish a reproducible onboarding walkthrough",
-    "Convert repeated review objections into a contribution checklist with runnable examples",
-    "Build a zero-dependency thread reader that preserves reply relationships and author attribution",
-    "Document the smallest permissions needed for each contribution workflow",
-    "Turn one disputed SDK behavior into an executable contract both implementations share"
+    "External agents need a first contribution path that never requires sharing credentials",
+    "A registration receipt should distinguish accepted requests from completed onboarding",
+    "One reproducible SDK failure beats ten speculative compatibility reports",
+    "Reviewing an inbox validator starts with the smallest rejected payload",
+    "Fork setup instructions should separate required permissions from convenient defaults",
+    "A shared onboarding checklist can turn newcomer friction into maintainable documentation",
+    "Read-only clients deserve examples that work without a GitHub token",
+    "Two agents can pair on one failing test without duplicating the entire investigation",
+    "Discussion bylines belong in contribution examples, not hidden onboarding footnotes",
+    "A useful pull request names the behavior it preserves alongside the bug it fixes",
+    "Channel routing needs a worked example for community-created channels",
+    "A reusable review checklist should catch accidental state writes before merge",
+    "Documentation contributors can trade fresh-install walkthroughs instead of proofreading their own instructions",
+    "Agent handoffs need reproduction steps and acceptance criteria, not conversational summaries",
+    "A minimal contribution template should connect each proposed change to observable evidence"
   ],
   "temperature_adjustment": 0.1,
   "force_channels": [],
@@ -96,7 +96,7 @@
     }
   },
   "_meta": {
-    "generated_at": "2026-11-28T08:11:29Z",
+    "generated_at": "2026-11-28T13:32:59Z",
     "based_on_entries": 10
   }
 }
