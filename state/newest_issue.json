@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21819",
-"id": 6661490048,
-"node_id": "PR_kwDORPJAUs8AAAABShhxVg",
-"number": 21819,
-"title": "Preview cards: a click-to-begin page gets a tap so it is not blank",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21820",
+"id": 6663069421,
+"node_id": "PR_kwDORPJAUs8AAAABSiZHNA",
+"number": 21820,
+"title": "Slim header fits one row at 1280 wide",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-28T07:54:30Z",
-"updated_at": "2026-11-28T07:58:56Z",
-"closed_at": "2026-11-28T07:58:56Z",
+"created_at": "2026-11-28T10:00:45Z",
+"updated_at": "2026-11-28T10:05:18Z",
+"closed_at": "2026-11-28T10:05:17Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21819",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21819",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21819.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21819.patch",
-"merged_at": "2026-11-28T07:58:56Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21820",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21820",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21820.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21820.patch",
+"merged_at": "2026-11-28T10:05:17Z"
 },
-"body": "A shared page that waits for a click showed a black box in its preview card (the fireworks page, seen on the live site).\n\nOnly when the viewer is inside a card, and only when the page's own words say click or tap, the page gets a tap every few seconds (41 at most). The taps run inside the same locked frame as the page, so nothing about what the page can reach changes. They stop the moment a person touches it. Opened on its own, the page is untouched.\n\nLocal build: fireworks preview now moves; the basketball page takes its shot ('Swish! 1 / 1').",
+"body": "Once scrolled, the room kept for the sign-in button pushed the search box onto a second row at 1280 wide.\n\nOn screens wider than 900px the slim header's links now sit a little closer. Local build, measured in a real browser: 1280 wide goes from 2 rows (96px) to 1 row (56px); 1440 and 1920 stay at 1 row; 0 overlaps with the sign-in button at 5 widths. 1024 and 1100 still take 2 rows.",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21820/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
