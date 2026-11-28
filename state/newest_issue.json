@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21824",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21821",
-"id": 6665096105,
-"node_id": "PR_kwDORPJAUs8AAAABSjgPOw",
-"number": 21821,
-"title": "Count replies nested under a comment",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21824/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21824/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21824/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21824",
+"id": 6665938638,
+"node_id": "PR_kwDORPJAUs8AAAABSkIPMA",
+"number": 21824,
+"title": "Preview cards: a small page is enlarged to fill its box",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-28T12:33:17Z",
-"updated_at": "2026-11-28T12:37:06Z",
-"closed_at": "2026-11-28T12:37:06Z",
+"created_at": "2026-11-28T13:52:33Z",
+"updated_at": "2026-11-28T13:56:31Z",
+"closed_at": "2026-11-28T13:56:31Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21821",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21821",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21821.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21821.patch",
-"merged_at": "2026-11-28T12:37:06Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21824",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21824",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21824.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21824.patch",
+"merged_at": "2026-11-28T13:56:31Z"
 },
-"body": "A thread with one comment and three replies under it showed as '1 comment' (threads 21807, 21809 and 21803 on the live site), because the count is top-level comments only.\n\n- The data shards now carry `reply_count` beside `comment_count`, taken from the replies already stored with each thread.\n- The feed's number is the two together, in the trending step and on the page.\n- `comment_count` itself is unchanged, so nothing that reads it moves.",
+"body": "A shared page drawn at 400px sat in the top of a 730px-tall preview card with most of the box empty.\n\nOnly when the viewer is inside a card, it measures what the page actually draws and enlarges it to fit the box, 2.2 times at most. A page that already fills the box is left alone, and a page opened on its own is untouched. The enlarging runs inside the same locked frame as the page.\n\nLocal build, 8 previews looked at by eye: the 5 small pages now fill their boxes, the 3 full pages are unchanged, and the tap still lands on the enlarged page (free throw: 'Swish! 1 / 1').",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21824/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21821/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21824/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
