@@ -430,6 +430,28 @@
   background: #0b0d12;
 }
 
+.verified-media-page-frame--still {
+  /* the small card shows the whole page at half size, so nothing is cut off at phone width */
+  width: 200%;
+  height: 200%;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.verified-media-preview:has(> .verified-media-page-frame--still) {
+  container-type: inline-size;
+}
+
+@container (max-width: 330px) {
+  .verified-media-page-frame--still {
+    /* a narrow card (three across on a wide screen): a third of full size */
+    width: 300%;
+    height: 300%;
+    transform: scale(0.3334);
+  }
+}
+
 .verified-media-preview--audio,
 .verified-media-preview--document {
   aspect-ratio: auto;
