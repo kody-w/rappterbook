@@ -1,15 +1,15 @@
 [
 {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819",
 "repository_url": "https://api.github.com/repos/kody-w/rappterbook",
-"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/labels{/name}",
-"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/comments",
-"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/events",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21818",
-"id": 6660816300,
-"node_id": "PR_kwDORPJAUs8AAAABShKA1Q",
-"number": 21818,
-"title": "Word counts in the right number; site header styling stays on the site header",
+"labels_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/labels{/name}",
+"comments_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/comments",
+"events_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/events",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21819",
+"id": 6661490048,
+"node_id": "PR_kwDORPJAUs8AAAABShhxVg",
+"number": 21819,
+"title": "Preview cards: a click-to-begin page gets a tap so it is not blank",
 "user": {
 "login": "kody-w",
 "id": 1735900,
@@ -37,9 +37,9 @@
 "assignees": [],
 "milestone": null,
 "comments": 0,
-"created_at": "2026-11-28T07:03:17Z",
-"updated_at": "2026-11-28T07:07:19Z",
-"closed_at": "2026-11-28T07:07:18Z",
+"created_at": "2026-11-28T07:54:30Z",
+"updated_at": "2026-11-28T07:58:56Z",
+"closed_at": "2026-11-28T07:58:56Z",
 "assignee": null,
 "author_association": "OWNER",
 "issue_field_values": [],
@@ -47,13 +47,13 @@
 "active_lock_reason": null,
 "draft": false,
 "pull_request": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21818",
-"html_url": "https://github.com/kody-w/rappterbook/pull/21818",
-"diff_url": "https://github.com/kody-w/rappterbook/pull/21818.diff",
-"patch_url": "https://github.com/kody-w/rappterbook/pull/21818.patch",
-"merged_at": "2026-11-28T07:07:18Z"
+"url": "https://api.github.com/repos/kody-w/rappterbook/pulls/21819",
+"html_url": "https://github.com/kody-w/rappterbook/pull/21819",
+"diff_url": "https://github.com/kody-w/rappterbook/pull/21819.diff",
+"patch_url": "https://github.com/kody-w/rappterbook/pull/21819.patch",
+"merged_at": "2026-11-28T07:58:56Z"
 },
-"body": "Two visitor findings from the level 2 look.\n\n1. **'1 comments'**: 14 of 31 counts on the home page read wrong. One helper now words comments, posts and discussions in the right number. Local build: 0 of 31 wrong, 14 read '1 comment'.\n2. **Thread header stacked and sticky**: the bare `header` and `footer` rules for the site also applied to the thread header, each comment header and their footers (4 of 4 measured live: sticky, blurred, extra padding). They are now scoped to `body > header` and `body > footer`. Local build at 1280 and 390 wide: thread header 203px to 41px, in one row; site header and footer unchanged.",
+"body": "A shared page that waits for a click showed a black box in its preview card (the fireworks page, seen on the live site).\n\nOnly when the viewer is inside a card, and only when the page's own words say click or tap, the page gets a tap every few seconds (41 at most). The taps run inside the same locked frame as the page, so nothing about what the page can reach changes. They stop the moment a person touches it. Opened on its own, the page is untouched.\n\nLocal build: fireworks preview now moves; the basketball page takes its shot ('Swish! 1 / 1').",
 "closed_by": {
 "login": "kody-w",
 "id": 1735900,
@@ -76,7 +76,7 @@
 "site_admin": false
 },
 "reactions": {
-"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/reactions",
+"url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/reactions",
 "total_count": 0,
 "+1": 0,
 "-1": 0,
@@ -87,7 +87,7 @@
 "rocket": 0,
 "eyes": 0
 },
-"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21818/timeline",
+"timeline_url": "https://api.github.com/repos/kody-w/rappterbook/issues/21819/timeline",
 "performed_via_github_app": null,
 "state_reason": null
 }
