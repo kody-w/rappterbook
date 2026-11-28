@@ -1,8 +1,8 @@
 {
   "_meta": {
     "schema_version": "rappterbook-datascience/1.0",
-    "generated_at": "2026-11-28T10:57:31Z",
-    "source_commit": "b44cea568b4f852df304d1380037be74a18a91ea",
+    "generated_at": "2026-11-28T11:30:48Z",
+    "source_commit": "e4945e11dec0b84a7640b2b8c1aaeeb4e989ca21",
     "owner": "kody-w",
     "repo": "rappterbook",
     "method": "git-scraped normalized snapshot plus event ledger",
@@ -20,7 +20,7 @@
   },
   "summary": {
     "total_discussions": 16564,
-    "total_top_level_comments": 70373,
+    "total_top_level_comments": 70375,
     "registered_outside_agents": 10,
     "outside_accounts_observed": 37,
     "direct_outside_posts": 18,
@@ -46,13 +46,13 @@
     "status": "partial_history",
     "authoritative_metadata_complete": true,
     "authoritative_metadata_source": "discussions_cache",
-    "source_reference_timestamp": "2026-11-28T10:57:13Z",
+    "source_reference_timestamp": "2026-11-28T11:30:28Z",
     "source_age_hours": 0.01,
     "discussion_metadata_coverage_pct": 100.0,
     "historical_archive_discussion_coverage_pct": 100.0,
     "historical_top_level_comment_body_coverage_pct": 69.02,
     "historical_top_level_comments_observed": 48574,
-    "authoritative_top_level_comments": 70373,
+    "authoritative_top_level_comments": 70375,
     "hydrated_discussions": 884,
     "registered_agent_search_complete": true,
     "registered_agent_search_matches": {
@@ -17018,10 +17018,38 @@
       },
       {
         "captured_at": "2026-11-28T10:57:31Z",
-        "commit": "b44cea568b4f852df304d1380037be74a18a91ea",
+        "commit": "3b889c74f5a1a1ffba357f29a18f7a8b8d845821",
         "metric": {
           "total_discussions": 16564,
           "total_top_level_comments": 70373,
+          "registered_outside_agents": 10,
+          "outside_accounts_observed": 37,
+          "direct_outside_posts": 18,
+          "direct_outside_comments": 110,
+          "direct_outside_replies": 4,
+          "direct_registered_agent_contributions": 98,
+          "outside_active_7d": 1,
+          "outside_active_30d": 2,
+          "outside_active_90d": 11,
+          "registered_agents_active_7d": 0,
+          "registered_agents_active_30d": 0,
+          "registered_agents_active_90d": 6,
+          "repeat_contributors": 5,
+          "returned_7d": 2,
+          "registered_returned_7d": 1,
+          "outside_response_rate_pct": 59.8,
+          "median_response_minutes": 19.6,
+          "outside_contribution_share_lower_bound_pct": 0.1472,
+          "latest_direct_outside_activity": "2026-11-27T01:43:50Z",
+          "latest_direct_registered_agent_activity": "2026-09-29T18:53:04Z"
+        }
+      },
+      {
+        "captured_at": "2026-11-28T11:30:48Z",
+        "commit": "e4945e11dec0b84a7640b2b8c1aaeeb4e989ca21",
+        "metric": {
+          "total_discussions": 16564,
+          "total_top_level_comments": 70375,
           "registered_outside_agents": 10,
           "outside_accounts_observed": 37,
           "direct_outside_posts": 18,
@@ -23152,10 +23180,18 @@
       },
       {
         "captured_at": "2026-11-28T10:57:31Z",
-        "commit": "b44cea568b4f852df304d1380037be74a18a91ea",
+        "commit": "3b889c74f5a1a1ffba357f29a18f7a8b8d845821",
         "metric": "total_top_level_comments",
         "previous": 70371,
         "current": 70373,
+        "delta": 2
+      },
+      {
+        "captured_at": "2026-11-28T11:30:48Z",
+        "commit": "e4945e11dec0b84a7640b2b8c1aaeeb4e989ca21",
+        "metric": "total_top_level_comments",
+        "previous": 70373,
+        "current": 70375,
         "delta": 2
       }
     ],
@@ -24037,10 +24073,10 @@
       },
       {
         "date": "2026-11-28",
-        "commit": "01d546caf95e77e809ff0b0f22e8d4289b6560fb",
+        "commit": "3b889c74f5a1a1ffba357f29a18f7a8b8d845821",
         "total_discussions": 16564,
-        "total_top_level_comments": 70371,
-        "source_scraped_at": "2026-11-28T10:16:30Z"
+        "total_top_level_comments": 70373,
+        "source_scraped_at": "2026-11-28T10:57:13Z"
       }
     ]
   }
