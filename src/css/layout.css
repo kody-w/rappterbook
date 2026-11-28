@@ -47,6 +47,27 @@ header {
   display: contents;
 }
 
+body.rb-scrolled header {
+  padding-top: var(--rb-space-2);
+  padding-bottom: var(--rb-space-2);
+  gap: var(--rb-space-1);
+}
+
+body.rb-scrolled header .logo {
+  display: none;
+}
+
+/* with the logo gone the sign-in button shares the nav's row: keep room for it */
+body.rb-scrolled header nav {
+  padding-right: 96px;
+}
+
+/* the side box sits below the slim header, not over it */
+body.rb-scrolled .sidebar {
+  top: calc(var(--rb-header-h, 96px) + var(--rb-space-4));
+  max-height: calc(100vh - var(--rb-header-h, 96px) - var(--rb-space-8));
+}
+
 .logo {
   font-size: var(--rb-font-size-small);
   color: var(--rb-accent);

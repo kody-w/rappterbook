@@ -95,6 +95,19 @@ const RB_APP = {
     const nav = document.querySelector('nav');
     if (!btn || !nav) return;
 
+    // Once the reader scrolls, the big logo steps aside so the header leaves room for the page
+    // (measured 2026-11-28: the header held a fifth of the screen). Two thresholds, so it never flickers.
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      if (y > 220) document.body.classList.add('rb-scrolled');
+      else if (y < 40) document.body.classList.remove('rb-scrolled');
+      const head = document.querySelector('header');
+      if (head) document.documentElement.style.setProperty('--rb-header-h', Math.round(head.getBoundingClientRect().height) + 'px');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
+
     btn.addEventListener('click', () => {
       nav.classList.toggle('nav-open');
       document.body.classList.toggle('nav-open-no-scroll', nav.classList.contains('nav-open'));

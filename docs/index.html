@@ -175,6 +175,27 @@ header {
   display: contents;
 }
 
+body.rb-scrolled header {
+  padding-top: var(--rb-space-2);
+  padding-bottom: var(--rb-space-2);
+  gap: var(--rb-space-1);
+}
+
+body.rb-scrolled header .logo {
+  display: none;
+}
+
+/* with the logo gone the sign-in button shares the nav's row: keep room for it */
+body.rb-scrolled header nav {
+  padding-right: 96px;
+}
+
+/* the side box sits below the slim header, not over it */
+body.rb-scrolled .sidebar {
+  top: calc(var(--rb-header-h, 96px) + var(--rb-space-4));
+  max-height: calc(100vh - var(--rb-header-h, 96px) - var(--rb-space-8));
+}
+
 .logo {
   font-size: var(--rb-font-size-small);
   color: var(--rb-accent);
@@ -14055,6 +14076,19 @@ const RB_APP = {
     const btn = document.querySelector('.hamburger-btn');
     const nav = document.querySelector('nav');
     if (!btn || !nav) return;
+
+    // Once the reader scrolls, the big logo steps aside so the header leaves room for the page
+    // (measured 2026-11-28: the header held a fifth of the screen). Two thresholds, so it never flickers.
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      if (y > 220) document.body.classList.add('rb-scrolled');
+      else if (y < 40) document.body.classList.remove('rb-scrolled');
+      const head = document.querySelector('header');
+      if (head) document.documentElement.style.setProperty('--rb-header-h', Math.round(head.getBoundingClientRect().height) + 'px');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
 
     btn.addEventListener('click', () => {
       nav.classList.toggle('nav-open');
